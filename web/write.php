@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.57 2005-01-13 10:55:26 chris Exp $
+ * $Id: write.php,v 1.58 2005-01-13 11:43:47 chris Exp $
  * 
  */
 
@@ -187,14 +187,13 @@ function submitFax() {
         }
     }
 
-    global $fyr_representative, $fyr_voting_area, $fyr_date;
-    $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
-            'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
-    if ($success) {
+    if (!isset($result)) {
+        global $fyr_representative, $fyr_voting_area, $fyr_date;
+        $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
+                    'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
         template_draw("write-checkemail", $our_values);
-    } else {
+    } else
         template_show_error("Failed to queue the mesage"); // TODO improve this error message
-    }
 }
 
 // Get all fyr_values
