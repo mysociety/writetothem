@@ -1,26 +1,24 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<HTML>
-<HEAD>
+<html lang="en">
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<TITLE>WriteToThem.com Beta Test - <? print $values['title']; ?></TITLE>
-<LINK REL="STYLESHEET" TYPE="text/css" HREF="style-fymp/fax_style.css">
+<title>WriteToThem.com Beta Test - <? print $values['title']; ?></title>
+<link rel="stylesheet" type="text/css" href="style-fymp/fax_style.css">
 <?
 if ($values['robots']) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <? } ?>
-</HEAD>
-<BODY BGCOLOR="#FFFFFF">
-<DIV ALIGN="center">
+</head>
+<body bgcolor="#ffffff" text="#006666" link="#006666" alink="#999966" vlink="#006666">
+<div align="center">
 
 <?
     if (OPTION_FYR_REFLECT_EMAILS) {
-        print "Test site - this will reflect emails to representatives
-        back to you.";
+            print "<p>Test site - this will reflect emails to representatives back to you.</p>";
     }
 
 ?>
 
-<!-- </font></p> -->
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 
 <TR>
