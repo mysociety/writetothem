@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.50 2004-12-14 19:07:53 chris Exp $
+# $Id: Queue.pm,v 1.51 2004-12-15 14:37:31 chris Exp $
 #
 
 package FYR::Queue;
@@ -232,12 +232,15 @@ sub write ($$$$) {
 # XXX should have a flag for "exceptional" to warn administrators.
 sub logmsg ($$) {
     my ($id, $msg) = @_;
-    FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?, ?)',
+    our $dbh;
+    $dbh ||= FYR::DB::new_dbh();
+    $dbh->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?, ?)',
         {},
         $id,
         time(),
         state($id),
         $msg);
+    $dbh->commit();
 }
 
 # %allowed_transitions
