@@ -4,12 +4,12 @@
 
 use mySociety::DaDem;
 use mySociety::MaPit;
+use mySociety::Config;
 use Data::Dumper;
 
-mySociety::MaPit::configure("http://caesious.beasts.org/~chris/scripts/xmlrpc2");
-mySociety::DaDem::configure("http://caesious.beasts.org/~chris/scripts/xmlrpc");
-#mySociety::MaPit::configure("http://services.mysociety.org/mapit");
-#mySociety::DaDem::configure("http://services.mysociety.org/dadem");
+mySociety::Config::set_file('../conf/general');
+mySociety::MaPit::configure();
+mySociety::DaDem::configure();
 
 $postcode_failed = 0;
 $postcode_impure = 0;
