@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.75 2005-02-16 00:28:14 francis Exp $
+ * $Id: write.php,v 1.76 2005-02-16 00:28:57 francis Exp $
  * 
  */
 
@@ -77,7 +77,7 @@ END;
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
-    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optionally, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
+    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optional, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
 
     $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_phone', 'trim');
