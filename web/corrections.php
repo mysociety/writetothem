@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.5 2005-02-08 15:06:55 francis Exp $
+ * $Id: corrections.php,v 1.6 2005-02-15 11:12:06 francis Exp $
  * 
  */
 
@@ -71,13 +71,13 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
         $newname = $fyr_names[$rep];
         $newparty = $fyr_parties[$rep];
         if ($oldname != $newname || $oldparty != $newparty) {
-            $ret = dadem_store_user_correction($rep, 'modify', $newname, $newparty, $fyr_notes, $fyr_email);
+            $ret = dadem_store_user_correction($fyr_vatype, $rep, 'modify', $newname, $newparty, $fyr_notes, $fyr_email);
             dadem_check_error($ret);
         }
     }
 
     if (isset($fyr_new['name']) && isset($fyr_new['party']) && $fyr_new['name'] && $fyr_new['party']) {
-        $ret = dadem_store_user_correction(null, 'add', $fyr_new['name'], $fyr_new['party'], $fyr_notes, $fyr_email);
+        $ret = dadem_store_user_correction($fyr_vatype, null, 'add', $fyr_new['name'], $fyr_new['party'], $fyr_notes, $fyr_email);
         dadem_check_error($ret);
     }
 
@@ -90,7 +90,7 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
             template_show_error('Trying to delete the only representative?');
             exit;
         }
-        $ret = dadem_store_user_correction($rep_id, 'delete', '', '', $fyr_notes, $fyr_email);
+        $ret = dadem_store_user_correction($fyr_vatype, $rep_id, 'delete', '', '', $fyr_notes, $fyr_email);
         dadem_check_error($ret);
     }
 

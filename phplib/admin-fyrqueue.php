@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.74 2005-02-09 12:08:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.75 2005-02-15 11:12:06 francis Exp $
  * 
  */
 
@@ -663,7 +663,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         }
 ?>
 <p>
-<b>comment</b> adds the text entered as a remark in the message's log
+<b>note</b> adds the text entered as a remark in the message's log
 <br><b>freeze</b> stops delivery to representative, but other stuff
 (such as confirmation message) still happens
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
