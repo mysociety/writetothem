@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.10 2004-11-08 18:09:30 francis Exp $
+ * $Id: queue.php,v 1.11 2004-11-11 12:33:22 chris Exp $
  * 
  */
 
@@ -42,13 +42,14 @@ function msg_create() {
  * Queue a new message for sending. ID is a message-ID obtained from
  * msg_create; SENDER is an associative array containing information about the
  * sender including elements: name, the sender's full name; email, their email
- * address; address, their full postal address; and optionally phone, their
- * phone number. RECIPIENT is the DaDem ID number of the recipient of the
- * message; and TEXT is the text of the message, with only "\n"
- * characters for line breaks. All strings must be encoded in UTF-8.
+ * address; address, their full postal address; postcode, their postcode; and
+ * optionally phone, their phone number. RECIPIENT is the DaDem ID number of
+ * the recipient of the message; and TEXT is the text of the message, with only
+ * "\n" characters for line breaks. All strings must be encoded in UTF-8.
  * Returns true on success or false on failure. */
 function msg_write($id, $sender, $recipient_id, $text) {
     global $fyr_queue_client;
+    /* XXX check contents of sender array */
     debug("QUEUE", "Writing new message id $id to $recipient_id", $sender);
     $result = $fyr_queue_client->call('FYR.Queue.write', array($id, $sender, $recipient_id, $text));
     debug("QUEUE", "Result:", $result);
