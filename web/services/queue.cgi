@@ -6,7 +6,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.17 2005-01-28 22:47:08 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.18 2005-01-31 11:43:23 chris Exp $';
 
 require 5.8.0;
 
@@ -45,10 +45,10 @@ while ($req->Accept() >= 0) {
                 return FYR::Queue::record_questionnaire_answer($_[0], $_[1], $_[2]);
             },
             'FYR.Queue.admin_recent_events' => sub {
-                return FYR::Queue::admin_recent_events($_[0]);
+                return FYR::Queue::admin_recent_events($_[0], $_[1]);
             },
             'FYR.Queue.admin_message_events' => sub {
-                return FYR::Queue::admin_message_events($_[0]);
+                return FYR::Queue::admin_message_events($_[0], $_[1]);
             },
             'FYR.Queue.admin_get_queue' => sub {
                 return FYR::Queue::admin_get_queue($_[0], $_[1]);
