@@ -6,14 +6,14 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.2 2004-10-20 11:06:41 chris Exp $
+# $Id: Queue.pm,v 1.3 2004-10-24 17:13:33 chris Exp $
 #
 
 package FYR::Queue;
 
 use strict;
 
-use Digest::SHA1;
+use Crypt::CBC;
 use Error qw(:try);
 use HTML::Entities;
 use Mail::RFC822::Address;
@@ -46,7 +46,8 @@ Management of queue of messages for FYR.
 Return an ID for a new message.
 
 =cut
-sub create () {
+sub create (;$) {
+    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
     # Assume collision probability == 0.
     return unpack('h20', mySociety::Util::random_bytes(10));
 }
@@ -64,95 +65,96 @@ failure.
 This function commits its changes.
 
 =cut
-sub write ($$$$) {
+sub write ($$$$;$) {
+    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
     my ($id, $sender, $recipient_id, $text) = @_;
+    try {
+        # Get details of the recipient.
+        throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
+        my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
+        throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
 
-    # Get details of the recipient.
-    throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
-    my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-    throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
-
-    # Check that sender contains appropriate information.
-    throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
-    foreach (qw(name email address)) {
-        throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
-    }
-    throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
-
-    $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
-
-    # Give recipient their proper prefixes/suffixes.
-    $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
-
-    # Decide how to send the message.
-    $recipient->{fax} ||= undef;
-    $recipient->{email} ||= undef;
-    if (defined($recipient->{fax}) and defined($recipient->{email})) {
-        if ($recipient->{method} == 0) {
-            if (rand(1) < 0.5) {
-                $recipient->{fax} = undef;
-            } else {
-                $recipient->{email} = undef;
-            }
-        } elsif ($recipient->{method} == 1) {
-            $recipient->{email} = undef;
-        } else {
-            $recipient->{fax} = undef;
+        # Check that sender contains appropriate information.
+        throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
+        foreach (qw(name email address)) {
+            throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
         }
-    }
+        throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
 
-    # XXX should also check that the text bits are valid UTF-8.
-print Dumper($recipient);
-print Dumper($sender);
-    # Queue the message.
-    FYR::DB::dbh()->do(q#
-        insert into message (
-            id,
-            sender_name, sender_email, sender_addr, sender_phone,
-            recipient_id, recipient_name, recipient_position, recipient_email, recipient_fax,
-            message,
-            state,
-            whencreated
-        ) values (
-            ?,
-            ?, ?, ?, ?,
-            ?, ?, ?, ?, ?,
-            ?,
-            'new',
-            ?
-        )#, {},
-        $id,
-        (map { $sender->{$_} || undef } qw(name email address phone)),
-        $recipient_id, (map { $recipient->{$_} || undef } qw(name position email fax)),
-        $text,
-        time());
+        $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
 
-    my $logaddr = $sender->{address};
-    $logaddr =~ s#\n#, #gs;
-    $logaddr =~ s#,+#,#g;
-    $logaddr =~ s#, *$##;
+        # Give recipient their proper prefixes/suffixes.
+        $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
 
-    logmsg($id, sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
-                $sender->{name},
-                $sender->{email},
-                $sender->{phone} ? " $sender->{phone}" : "",
-                $logaddr,
-                $recipient->{name},
-                defined($recipient->{fax}) ? "fax" : "email",
-                $recipient->{fax} || $recipient->{email}));
+        # Decide how to send the message.
+        $recipient->{fax} ||= undef;
+        $recipient->{email} ||= undef;
+        if (defined($recipient->{fax}) and defined($recipient->{email})) {
+            if ($recipient->{method} == 0) {
+                if (rand(1) < 0.5) {
+                    $recipient->{fax} = undef;
+                } else {
+                    $recipient->{email} = undef;
+                }
+            } elsif ($recipient->{method} == 1) {
+                $recipient->{email} = undef;
+            } else {
+                $recipient->{fax} = undef;
+            }
+        }
 
-    FYR::DB::dbh()->commit();
+        # XXX should also check that the text bits are valid UTF-8.
+        
+        # Queue the message.
+        FYR::DB::dbh()->do(q#
+            insert into message (
+                id,
+                sender_name, sender_email, sender_addr, sender_phone,
+                recipient_id, recipient_name, recipient_position, recipient_email, recipient_fax,
+                message,
+                state,
+                whencreated
+            ) values (
+                ?,
+                ?, ?, ?, ?,
+                ?, ?, ?, ?, ?,
+                ?,
+                'new',
+                ?
+            )#, {},
+            $id,
+            (map { $sender->{$_} || undef } qw(name email address phone)),
+            $recipient_id, (map { $recipient->{$_} || undef } qw(name position email fax)),
+            $text,
+            time());
 
-#    send_confirmation_email($id);
+        my $logaddr = $sender->{address};
+        $logaddr =~ s#\n#, #gs;
+        $logaddr =~ s#,+#,#g;
+        $logaddr =~ s#, *$##;
 
-    return $id;
+        logmsg($id, sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
+                    $sender->{name},
+                    $sender->{email},
+                    $sender->{phone} ? " $sender->{phone}" : "",
+                    $logaddr,
+                    $recipient->{name},
+                    defined($recipient->{fax}) ? "fax" : "email",
+                    $recipient->{fax} || $recipient->{email}));
+
+        FYR::DB::dbh()->commit();
+    } otherwise {
+        my $E = shift;
+        warn "rolling back transaction after error: " . $E->text() . "\n";
+        FYR::DB::dbh()->rollback();
+        throw $E;
+    };
+
+    return 1;
 }
 
-=item logmsg ID DIAGNOSTIC
-
-Log a DIAGNOSTIC about the message with the given ID.
-
-=cut
+# logmsg ID DIAGNOSTIC
+# Log a DIAGNOSTIC about the message with the given ID.
 sub logmsg ($$) {
     my ($id, $msg) = @_;
     FYR::DB::dbh()->do('insert into message_log (message_id, state, message) values (?, ?, ?)', {}, $id, state($id), $msg);
@@ -166,6 +168,7 @@ also set the lastupdate field to null.
 
 =cut
 sub state ($;$) {
+    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
     my ($id, $state) = @_;
     my %allowed = qw(
             new     pending
@@ -201,16 +204,20 @@ sub message ($;$) {
     }
 }
 
-# format_mimeword STRING
+# format_mimewords STRING
 # Return STRING, formatted for inclusion in an email header.
-sub format_mimeword ($) {
-    my ($s) = @_;
-    utf8::downgrade($s);
-    if ($s =~ m#[\x00-\x20\x80-\xff]#) {
-        $s = MIME::Words::encode_mimeword($s, 'Q', 'utf-8');
+sub format_mimewords ($) {
+    my ($text) = @_;
+    my $out = '';
+    foreach my $s (split(/(\s+)/, $text)) {
+        utf8::encode($s); # turn to string of bytes
+        if ($s =~ m#[\x00-\x1f\x80-\xff]#) {
+            $s = MIME::Words::encode_mimeword($s, 'Q', 'utf-8');
+        }
+        utf8::decode($s);
+        $out .= $s;
     }
-    utf8::upgrade($s);
-    return $s;
+    return $out;
 }
 
 # format_email_address NAME ADDRESS
@@ -218,7 +225,7 @@ sub format_mimeword ($) {
 # in an email From:/To: header.
 sub format_email_address ($$) {
     my ($name, $addr) = @_;
-    return sprintf('%s <%s>', format_mimeword($name), $addr);
+    return sprintf('%s <%s>', format_mimewords($name), $addr);
 }
 
 # EMAIL_COLUMNS
@@ -271,62 +278,77 @@ sub format_email_body ($) {
     return $text;
 }
 
-# make_representative_email ID
-# Return a MIME::Entity object for the message with the given ID, suitable for
-# immediate sending to the real recipient.
+# make_representative_email MESSAGE
+# Return a MIME::Entity object for the passed MESSAGE (hash of db fields),
+# suitable for immediate sending to the real recipient.
 sub make_representative_email ($) {
-    my ($id) = @_;
-    my $msg = message($id);
+    my ($msg) = (@_);
     return MIME::Entity->build(
             Sender => $msg->{sender_email},
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
-            Subject => "Letter from your constituent " . format_mimeword($msg->{sender_name}),
+            Subject => "Letter from your constituent " . format_mimewords($msg->{sender_name}),
             Type => 'text/plain; charset="utf-8"',
             Data => format_email_body($msg)
         );
 }
 
+# make_token WORD ID
+# Returns a token for WORD (e.g. "bounce", "confirm", etc.) and the given
+# message ID.
+use constant token_iv => 'nk"49{8y';
+sub make_token ($$) {
+    my ($word, $id) = @_;
+    my $rand = sprintf('%04x', int(rand(0xffff)));
+    my $c = Crypt::CBC->new({
+                    key => $word . FYR::DB::secret(),
+                    cipher => 'IDEA',
+                    prepend_iv => 0,
+                    iv => token_iv
+                });
+    return lc("$rand-" . $c->encrypt_hex(pack('h*', "$rand$id")));
+}
+
+# check_token WORD TOKEN
+# If TOKEN is valid, return the ID it encodes. Otherwise return undef.
+sub check_token ($$) {
+    my ($word, $token) = @_;
+    my ($rand, $enc) = ($token =~ m#^([0-9a-f]{4})-([0-9a-f]+)$#) or return undef;
+    my $c = Crypt::CBC->new({
+                    key => $word . FYR::DB::secret(),
+                    cipher => 'IDEA',
+                    prepend_iv => 0,
+                    iv => token_iv
+                });
+    my $dec = unpack('h*', $c->decrypt_hex($enc));
+    return undef if (substr($dec, 0, 4) ne $rand);
+    return substr($dec, 4);
+}
+
 # confirm_token ID
 # Return a suitable token for use in confirming a user's email address.
 sub confirm_token ($) {
-    my ($id) = @_;
-    my $salt = unpack('h*', mySociety::Util::random_bytes(8));
-    my $digest = lc(Digest::SHA1::sha1_hex("$id-$salt-" . FYR::DB::secret()));
-    return "$id-$salt-$digest";
+    return make_token("confirm", $_[0]);
 }
 
 # verify_confirm_token TOKEN
 # Attempt to verify the confirm TOKEN. Returns a message ID on success or undef
 # on failure.
 sub verify_confirm_token ($) {
-    my ($token) = @_;
-    $token = lc($token);    # may go through a channel, e.g. email, which is not case-preserving
-    if (my ($id, $salt, $digest) = ($token =~ m#^([a-f0-9]+)-([a-f0-9]+)-([a-f0-9]+)$#)) {
-        return $id if (lc(Digest::SHA1::sha1_hex("$id-$salt-" . FYR::DB::secret())) eq $digest);
-    }
-    return undef;
+    return check_token("confirm", $_[0]);
 }
 
 # bounce_token ID
 # Return a suitable token for use in processing a bounce message.
 sub bounce_token ($) {
-    my ($id) = @_;
-    my $salt = unpack('h*', mySociety::Util::random_bytes(8));
-    my $digest = lc(Digest::SHA1::sha1_hex("bounce-$id-$salt-" . FYR::DB::secret()));
-    return "bounce-$id-$salt-$digest";
+    return make_token("bounce", $_[0]);
 }
 
 # confirm_bounce_token TOKEN
 # Attempt to verify the bounce TOKEN. Returns a message ID on success or undef
 # on failure.
 sub verify_bounce_token ($) {
-    my ($token) = @_;
-    $token = lc($token);
-    if (my ($id, $salt, $digest) = ($token =~ m#^bounce-([a-f0-9]+)-([a-f0-9]+)-([a-f0-9]+)$#)) {
-        return $id if (lc(Digest::SHA1::sha1_hex("bounce-$id-$salt-" . FYR::DB::secret())) eq $digest);
-    }
-    return undef;
+    return check_token("bounce", $_[0]);
 }
 
 # make_confirmation_email MESSAGE
@@ -347,6 +369,8 @@ sub make_confirmation_email ($) {
                                 FYR::Config::get_value('emailprefix'),
                                 FYR::Config::get_value('emaildomain'));
 
+    # Don't insert linebreaks in the below except for paragraph marks-- let
+    # Text::Wrap do the rest.
     my $text = wrap(EMAIL_COLUMNS, <<EOF);
 
 Please click on the link below to confirm that you wish FaxYourRepresentative.com to send the letter copied at the bottom of this email to $msg->{recipient_name}, your $msg->{recipient_position}:
@@ -381,7 +405,7 @@ EOF
             Sender => $confirm_sender,
             From => format_email_address('FaxYourRepresentative', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf('Please confirm that you want to send a letter to %s', format_mimeword($msg->{recipient_name})),
+            Subject => sprintf('Please confirm that you want to send a letter to %s', format_mimewords($msg->{recipient_name})),
             Data => $text
         );
 }
@@ -413,9 +437,9 @@ sub deliver ($) {
     my ($id) = @_;
     try {
         my $msg = message($id, 1);
-        if (defined($msg->{fax})) {
+        if (defined($msg->{recipient_fax})) {
             throw FYR::Error("Can't send faxes yet");
-        } elsif (defined($msg->{email})) {
+        } elsif (defined($msg->{recipient_email})) {
             my $mail = make_representative_email($msg);
             my $sender = sprintf('%s-%s@%s',
                                 FYR::Config::get_value('emailprefix'),
@@ -423,17 +447,17 @@ sub deliver ($) {
                                 FYR::Config::get_value('emaildomain'));
             my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{recipient_email});
             throw FYR::Error($result) if ($result);
-            logmsg($id, "send mail to recipient $msg->{recipient_email}");
+            logmsg($id, "sent mail to recipient $msg->{recipient_email}");
             state($id, 'sent');
         } else {
             throw FYR::Error("Message '$id' has neither fax nor email recipient");
         }
     } catch FYR::Error with {
         my $E = shift;
-        logmsg($id, "unable to sent message to recipient: $E");
+        logmsg($id, "unable to send message to recipient: " . $E->text());
         state($id, 'ready');    # force update of timestamp
     } finally {
-        FYD::DB::dbh()->commit();
+        FYR::DB::dbh()->commit();
     };
 }
 
@@ -466,6 +490,35 @@ sub run_queue () {
 
     # Now expire old messages etc.
 
+}
+
+=item secret
+
+Wrapper for FYR::DB::secret, for remote clients.
+
+=cut
+sub secret (;$) {
+    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
+    return FYR::DB::secret();
+}
+
+=item confirm_email TOKEN
+
+Confirm a user's email address, based on the TOKEN they've supplied in a URL
+which they've clicked on.
+
+=cut
+sub confirm_email ($;$) {
+    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
+    my ($token) = @_;
+    if (my $id = verify_confirm_token($token)) {
+        state($id, 'ready');
+        logmsg($id, "sender email address confirmed");
+        FYR::DB::dbh()->commit();
+        # poke a sending daemon?
+        return 1;
+    }
+    return 0;
 }
 
 1;
