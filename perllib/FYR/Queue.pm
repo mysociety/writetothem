@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.68 2004-12-21 01:23:33 francis Exp $
+# $Id: Queue.pm,v 1.69 2004-12-21 01:40:09 francis Exp $
 #
 
 package FYR::Queue;
@@ -221,7 +221,6 @@ sub write ($$$$) {
 
         # Check for possible abuse
         my ($abuse_action, $abuse_logmsg) = FYR::AbuseChecks::test(message($id));
-    throw FYR::Error("Die $abuse_action message $abuse_logmsg");
         if ($abuse_action eq 'reject') {
             logmsg($id, "Abuse system rejected message: $abuse_logmsg");
             state($id, 'failed');
