@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.8 2004-11-10 10:41:52 francis Exp $
+# $Id: Queue.pm,v 1.9 2004-11-10 17:30:37 francis Exp $
 #
 
 package FYR::Queue;
@@ -408,7 +408,7 @@ sub make_confirmation_email ($) {
     my ($msg) = @_;
 
     my $token = confirm_token($msg->{id});
-    my $confirm_url = mySociety::Config::get('BASE_URL') . '/confirm.php?token=' . $token;
+    my $confirm_url = mySociety::Config::get('BASE_URL') . '/' . $token;
 
     # Note: (a) don't care about bounces from this mail (they result only from
     # transient failures or abuse; but (b) we can't use a reply to confirm that

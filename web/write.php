@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.23 2004-11-08 18:09:31 francis Exp $
+ * $Id: write.php,v 1.24 2004-11-10 17:30:37 francis Exp $
  * 
  */
 
@@ -32,7 +32,7 @@ class RuleAlteredBodyText extends HTML_QuickForm_Rule {
 // Class representing form they enter message of letter in
 function buildWriteForm()
 {
-    $form = new HTML_QuickForm('writeForm', 'post', 'write.php');
+    $form = new HTML_QuickForm('writeForm', 'post', 'write');
 
     global $fyr_values, $fyr_postcode, $fyr_who;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
@@ -95,7 +95,7 @@ END;
 
 function buildPreviewForm()
 {
-    $form = new HTML_QuickForm('previewForm', 'post', 'write.php');
+    $form = new HTML_QuickForm('previewForm', 'post', 'write');
 
     global $fyr_values;
     add_all_variables_hidden($form, $fyr_values);

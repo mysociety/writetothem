@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.14 2004-11-08 18:09:30 francis Exp $
+ * $Id: index.php,v 1.15 2004-11-10 17:30:37 francis Exp $
  * 
  */
 
@@ -14,7 +14,7 @@ require_once "../phplib/forms.php";
 
 fyr_rate_limit(array());
 
-$form = new HTML_QuickForm('postcodeForm', 'get', 'who.php');
+$form = new HTML_QuickForm('postcodeForm', 'get', 'who');
 $buttons[0] =& HTML_QuickForm::createElement('text', 'pc', null, array('size' => 10, 'maxlength' => 255));
 $buttons[1] =& HTML_QuickForm::createElement('submit', 'go', 'Go');
 $form->addGroup($buttons, 'stuff', '<b>Type Your UK Postcode:</b>', '&nbsp', false); // TODO: don't have bold tags here!
