@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.12 2005-01-07 14:51:08 francis Exp $
+ * $Id: fyr.php,v 1.13 2005-01-11 00:55:08 francis Exp $
  * 
  */
 
@@ -17,7 +17,7 @@ require_once "../../phplib/utility.php";
 require_once "../../phplib/ratty.php";
 require_once "../../phplib/template.php";
 
-template_set_style("../templates/style-fymp");
+template_set_style("../templates/website");
 
 /* fyr_rate_limit IMPORTANT
  * Invoke the rate limiter with the given IMPORTANT variables (e.g. postcode,

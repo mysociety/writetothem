@@ -9,7 +9,7 @@
 if ($_REQUEST['css'] && !preg_match('#"#',$_REQUEST['css'])) {
 	print '@import "'.$_REQUEST['css'].'";'."\n";
 } else { ?>
-@import "/style-fymp/fax_style.css";
+@import "/wtt.css";
 <?php } ?>
 </style>
 <?php
