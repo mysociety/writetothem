@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: SubstringHash.pm,v 1.2 2004-12-20 12:29:42 chris Exp $
+# $Id: SubstringHash.pm,v 1.3 2005-01-17 10:11:04 chris Exp $
 #
 
 package FYR::SubstringHash;
@@ -67,6 +67,9 @@ documents have similarities near one.
 =cut
 sub similarity ($$) {
     my ($a, $b) = @_;
+    # We can't compute similarities when one or the other hash has no entries.
+    # This will occur for the case of very short messages.
+    return 0. if (scalar(keys(%$a)) == 0 || scalar(keys(%$b)) == 0);
     ($a, $b) = ($b, $a) if (scalar(keys(%$a)) < scalar(keys(%$b)));
     my $n = 0;
     foreach (keys %$a) {
