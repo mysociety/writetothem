@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.26 2005-01-13 11:44:52 chris Exp $
+# $Id: AbuseChecks.pm,v 1.27 2005-01-13 12:14:34 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -27,8 +27,8 @@ use Data::Dumper;
 use mySociety::Config;
 use mySociety::Ratty;
 
-use FYR::Queue qw(logmsg);
 use FYR;
+use FYR::Queue;
 use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
@@ -68,7 +68,7 @@ sub google_for_postcode ($) {
 # found.
 sub get_country_from_ip ($) {
     my ($addr) = @_;
-    return 1 if $addr eq "127.0.0.1";
+    return 'localhost' if $addr eq '127.0.0.1';
     our $geoip;
     $geoip ||= new Geo::IP(GEOIP_STANDARD);
     return $geoip->country_code_by_addr($addr);
@@ -161,7 +161,7 @@ my @tests = (
             my ($msg) = @_;
             my $cc = get_country_from_ip($msg->{sender_ipaddr});
             $cc ||= 'unknown';
-            logmsg($msg->{id}, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
+            FYR::Queue::logmsg($msg->{id}, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
             return ( sender_ip_country => $cc );
         },
 
@@ -169,8 +169,9 @@ my @tests = (
         sub ($) {
             my ($msg) = @_;
             my $l1 = length($msg->{message});
-            my $l2 = scalar(split(/[[:space:]]+/, $msg->{message}));
-            logmsg($msg->{id}, sprintf('message length: %d words, %d characters', $l2, $l1));
+            my @words = split(/[[:space:]]+/, $msg->{message});
+            my $l2 = scalar(@words);
+            FYR::Queue::logmsg($msg->{id}, sprintf('message length: %d words, %d characters', $l2, $l1));
             return (
                     message_length_characters => $l1,
                     message_length_words => $l2
@@ -181,7 +182,7 @@ my @tests = (
         sub ($) {
             my ($msg) = @_;
             my $hits = google_for_postcode($msg->{sender_postcode});
-            logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
+            FYR::Queue::logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
                 $msg->{sender_postcode}, $hits))
                 if ($hits > 0);
             return ( postcode_google_hits => $hits );
@@ -197,10 +198,10 @@ my @tests = (
             if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
                 and defined($msg->{recipient_email})
                 and $msg->{sender_email} eq $msg->{recipient_email}) {
-                logmsg($msg->{id}, 'representative appears to be emailing themself');
+                FYR::Queue::logmsg($msg->{id}, 'representative appears to be emailing themself');
                 return ( representative_emailing_self => 'YES' );
             } else {
-                return ( );
+                return ( representative_emailing_self => 'NO' );
             }
         },
 
@@ -208,7 +209,7 @@ my @tests = (
         sub ($) {
             my ($msg) = @_;
             my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg) } get_similar_messages($msg);
-            return ( ) if (!@similar);
+            return ( similarity_max => '0' ) if (!@similar);
 
             my $why = sprintf('message body is very similar to %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);
             for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
@@ -216,6 +217,7 @@ my @tests = (
             }
 
             $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
+            FYR::Queue::logmsg($msg->{id}, $why);
 
             my %res = ( );
             
@@ -227,6 +229,8 @@ my @tests = (
                 my $n = scalar(grep { $_->[1] > $thr } @similar);
                 $res{"similarity_num_$_"} = $n;     # "number of messages more than ... similar to this one"
             }
+
+            return %res;
         }
     );
 
@@ -244,7 +248,7 @@ explain why their message has been rejected.
 =cut
 sub test ($) {
     my ($msg) = @_;
-logmsg($msg->{id}, 'doing abuse checks...');
+FYR::Queue::logmsg($msg->{id}, 'doing abuse checks...');
     my %ratty_values = %$msg;
     foreach my $f (@tests) {
         %ratty_values = (%ratty_values, &$f($msg));
@@ -253,7 +257,7 @@ logmsg($msg->{id}, 'doing abuse checks...');
     # Perform test.
     my ($ruleid, $result) = mySociety::Ratty::test('fyr-abuse', \%ratty_values);
     if (defined($ruleid)) {
-        logmsg($msg->{id}, "fyr-abuse rule $ruleid fired for message; result: $result");
+        FYR::Queue::logmsg($msg->{id}, "fyr-abuse rule $ruleid fired for message; result: $result");
         return $result;
     } else {
         return undef;
