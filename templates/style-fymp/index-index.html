@@ -7,13 +7,12 @@ include "header.php";
 
 <H3>WriteToThem.com Beta Test - <?=$values['title']?></H3>
 
-<p style="color: #ff0000; background-color: #ffffff"><font
-color="#ff0000" size="-1"><strong>This site is new!  We're still testing at the moment.</strong>  We're looking
+<p style="color: #ff0000; background-color: #ffffff"><small><strong>This site is new!  We're still testing at the moment.</strong>  We're looking
 for reports of bugs and any suggestions for making the site
 better.  You can file a problem report in our
  <a
  href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
- system</a>.</p>
+ system</a>.</small></p>
 
 <? if ($values['error']) { ?>
 <p><font color="#ff0000" size="-1">
@@ -87,15 +86,13 @@ better.  You can file a problem report in our
 mile-deep catacombs</a>? &mdash; Nope, just your politicians.  Use them.
 Help them. Write to them!</small></p>-->
 
+<script type="text/javascript"><!--
+<?=javascript_focus_set('postcodeForm', 'pc'); ?>
 
+// -->
+</script>
 <? 
-
-/* Focus the postcode box. Must come after the box is created, obviously. */
-print "<script language=\"javascript\">\n"
-    . "<!--\n"
-    . javascript_focus_set("postcodeForm", "pc") . "\n"
-    . "// -->\n"
-    . "</script>";
+/* The above focuses on the postcode box. Must come after the box is created, obviously. */
 
 include "footer.php";
 

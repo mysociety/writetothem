@@ -1,7 +1,7 @@
 
 <p align="center">
 <a href="/about-feedback">Does It Really Work?</a>   |   
-How To Link To Us | 
+<a href="/about-linktous">How To Link To Us</a> | 
 <a href="/about-guidelines">Guidelines for Campaigners</a>
 </p>
 
