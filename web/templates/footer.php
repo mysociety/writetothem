@@ -26,12 +26,19 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 </DIV>
 
 <div>
+<table border="0" width="100%">
+<tr>
+<td align="left" valign="top">
 <p><font size="-1">
 <a href="http://www.goveval.com/"><img src="images/ge.png" border="0" alt="GovEval"></a><br>
 Contact data for elected representatives <br>
 kindly supplied by <a href="http://www.goveval.com/">GovEval</a></font></p>
 
 <p><font size="-1">This site uses Ordnance Survey data under licence</font></p>
+</td><td align="right" valign="top">
+<font size="-1"><a href="http://www.mysociety.org/"><img src="images/mysociety_sm.gif" border="0" alt="mySociety"></a><br>
+Built by mySociety
+</td></tr></table>
 
 </div>
 

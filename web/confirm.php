@@ -7,10 +7,11 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.1 2004-10-20 12:05:51 francis Exp $
+ * $Id: confirm.php,v 1.2 2004-10-20 15:31:49 chris Exp $
  * 
  */
 
+include_once "../conf/config.php";
 include_once "../phplib/queue.php";
 include_once "../../phplib/utility.php";
 
@@ -22,7 +23,7 @@ if (!$token) {
     exit;
 }
 
-if (msg_confirm_token($token)) {
+if (msg_confirm_email($token)) {
     $fyr_title = "We'll send your fax now";
     include "templates/confirm-accept.html";
 } else {
