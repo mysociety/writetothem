@@ -1,0 +1,12 @@
+Format as for ../emails. Templates are:
+
+  - footer
+
+    Boilerplate attached to the bottom of each fax page. Extra variables are,
+
+      - this_page, the page number of this page;
+
+      - total_pages, the total number of pages in the fax;
+
+      - representative_url, the URL which a representative may visit to forward
+        the fax etc.
