@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.25 2004-11-11 13:46:59 chris Exp $
+ * $Id: write.php,v 1.26 2004-11-15 18:35:23 francis Exp $
  * 
  */
 
@@ -127,17 +127,18 @@ function renderForm($form, $pageName)
     $fyr_form = $renderer->toHtml();
 
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
+    $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
+            'voting_area' => $fyr_voting_area, 'form' => $fyr_form, 
+            'date' => $fyr_date));
+
     if ($pageName == "writeForm") {
         $fyr_title = "Now Write Your Message To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
-        include "../templates/write-write.html";
+        template_draw("write-write", $our_values);
     } else { // previewForm
         // Generate preview
         $fyr_title = "Check Your Message Is Right";
-        ob_start();
-        include "../templates/fax-content.html";
-        $fyr_preview = ob_get_contents();
-        ob_end_clean();
-        include "../templates/write-preview.html";
+        $fyr_preview = template_string("fax-content", $our_values);
+        template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     }
 }
 
@@ -161,8 +162,7 @@ function submitFax() {
     if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
        $fyr_error_message = "There's been a mismatch error.  Sorry about
        this, <a href=\"/\">please start again</a>.";
-       include "../templates/generalerror.html";
-       exit;
+       template_show_error();
     }
 
     $success = msg_write($msgid, 
@@ -175,17 +175,18 @@ function submitFax() {
             ),
             $fyr_values['who'], $fyr_values['body']);
     if ($fyr_error_message = msg_get_error($success)) {
-        include "../templates/generalerror.html";
-        exit;
+        template_show_error();
     }
 
     global $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
+    $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
+            'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
     if ($success) {
         $fyr_title = "Great! Now Check Your Email";
-        include "../templates/write-checkemail.html";
+        template_draw("write-checkemail", $our_values);
     } else {
         $fyr_error_message = "Failed to queue the message";  // TODO improve this error message
-        include "../templates/generalerror.html";
+        template_show_error();
     }
 }
 
@@ -199,8 +200,7 @@ $fyr_who = $fyr_values['who'];
 $fyr_date = strftime('%A %e %B %Y');
 if (!isset($fyr_postcode) || !isset($fyr_who)) {
     $fyr_error_message = "Please <a href=\"/\">start from the beginning</a>.";
-    include "../templates/generalerror.html";
-    exit;
+    template_show_error();
 }
 
 // Rate limiter
@@ -211,8 +211,7 @@ $msgid = $fyr_values['fyr_msgid'];
 if (!isset($msgid)) {
     $msgid = msg_create();
     if ($fyr_error_message = msg_get_error($msgid)) {
-        include "../templates/generalerror.html";
-        exit;
+        template_show_error();
     }
     $fyr_values['fyr_msgid'] = $msgid;
 }
@@ -221,14 +220,12 @@ if (!isset($msgid)) {
 debug("FRONTEND", "Representative $fyr_who");
 $fyr_representative = dadem_get_representative_info($fyr_who);
 if ($fyr_error_message = dadem_get_error($fyr_representative)) {
-    include "../templates/generalerror.html";
-    exit;
+    template_show_error();
 }
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
 $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
 if ($fyr_error_message = mapit_get_error($fyr_voting_area)) {
-    include "../templates/generalerror.html";
-    exit;
+    template_show_error();
 }
 
 // Work out which page we are on, using which submit button was pushed
@@ -269,8 +266,7 @@ else if ($on_page =="sendfax") {
     submitFax();
 } else {
     $fyr_error_message = "On an unknown page";
-    include "../templates/generalerror.html";
-    exit;
+    template_show_error();
 }
 
 ?>

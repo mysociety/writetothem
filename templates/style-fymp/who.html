@@ -1,0 +1,25 @@
+<? include "header.php"; ?>
+
+<H3>FaxYourRepresentative.com - <? global $fyr_title; print $fyr_title; ?> </H3>
+
+<P align="left" style="align: left;">You have several democratic representatives at different levels of government.
+Please choose the most appropriate one to contact, and then click any of the buttons
+marked "Next".</p>
+
+<p align="left"><b>If you aren't sure who to contact, please read <a href="whoadvice1.html">this advice</a>.</b></p>
+
+<table>
+<?
+foreach ($values['reps'] as $row) {
+    list($left_column, $right_column) = $row;
+?>
+    <tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr>
+    <tr><td width="50%"><?=$left_column?></td><td valign="bottom"><?=$right_column?></td></tr> 
+<?
+}
+?>
+</table>
+
+</form>
+
+<? include "footer.php"; ?>

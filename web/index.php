@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.15 2004-11-10 17:30:37 francis Exp $
+ * $Id: index.php,v 1.16 2004-11-15 18:35:23 francis Exp $
  * 
  */
 
@@ -24,7 +24,8 @@ $fyr_form_renderer = new HTML_QuickForm_Renderer_mySociety();
 $form->accept($fyr_form_renderer);
 
 $fyr_title = "Fax or Email Your Democratic Representatives For Free";
-include "../templates/index.html";
+$html = $fyr_form_renderer->toHtml();
+template_draw("index", array("form" => $html));
 
 ?>
 
