@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.74 2004-12-30 15:15:02 francis Exp $
+# $Id: Queue.pm,v 1.75 2004-12-30 17:24:08 francis Exp $
 #
 
 package FYR::Queue;
@@ -1220,6 +1220,9 @@ sub admin_get_message ($) {
         ?");
     $sth->execute($id);
     my $hash_ref = $sth->fetchrow_hashref();
+    my $bounces = FYR::DB::dbh()->selectcol_arrayref("select 
+        bouncetext from message_bounce where message_id = ?", {}, $id);
+    $hash_ref->{bounces} = $bounces;
     return $hash_ref;
 }
 
@@ -1319,6 +1322,20 @@ sub admin_set_message_to_failed_closed ($$) {
     state($id, 'failed_closed');
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     logmsg($id, "$user put message in state 'failed_closed'");
+    FYR::DB::dbh()->commit();
+    return 0;
+}
+
+=item admin_set_message_to_bounce_wait ID USER
+
+Move message ID from bounce_confirm to bounce_wait. 
+USER is the administrators name.
+=cut
+
+sub admin_set_message_to_bounce_wait ($$) {
+    my ($id, $user) = @_;
+    state($id, 'bounce_wait');
+    logmsg($id, "$user put message in state 'bounce_wait'");
     FYR::DB::dbh()->commit();
     return 0;
 }

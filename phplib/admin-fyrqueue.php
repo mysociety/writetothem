@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.23 2004-12-30 15:01:01 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.24 2004-12-30 17:24:08 francis Exp $
  * 
  */
 
@@ -242,6 +242,14 @@ All time stats:
 <br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <?
+            if (count($message['bounces']) > 0) {
+                print "<h2>Bounce Messages Received</h2>";
+                foreach ($message['bounces'] as $bounce) {
+                    print "<hr>";
+                    print "<pre>" . nl2br(htmlspecialchars($bounce)) .  "</pre>";
+                }
+                print "<hr>";
+            }
          } else {
             // Display important messages in queue
             $messages = msg_admin_get_queue($filter);
