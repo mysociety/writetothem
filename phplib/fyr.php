@@ -6,18 +6,27 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.13 2005-01-11 00:55:08 francis Exp $
+ * $Id: fyr.php,v 1.14 2005-01-11 10:19:30 chris Exp $
  * 
  */
 
 // Load configuration file
 require_once "../conf/general";
 
-require_once "../../phplib/utility.php";
+require_once "../../phplib/error.php";
 require_once "../../phplib/ratty.php";
 require_once "../../phplib/template.php";
+require_once "../../phplib/utility.php";
 
 template_set_style("../templates/website");
+
+/* fyr_display_error NUMBER MESSAGE
+ * Display an error message to the user. */
+function fyr_display_error($num, $message) {
+    template_show_error($message);
+}
+
+err_set_handler_display('fyr_display_error');
 
 /* fyr_rate_limit IMPORTANT
  * Invoke the rate limiter with the given IMPORTANT variables (e.g. postcode,
