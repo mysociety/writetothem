@@ -8,7 +8,7 @@
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">
 
-</font></p>
+<!-- </font></p> -->
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 
 <TR><TD align=center>
@@ -19,7 +19,7 @@ for reports of bugs and any suggestions for making the site
 better.  You can file a problem report in our 
  <a
 href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
-system</a>.</p>
+system</a>.</font></p>
 
 </TD></TR>
 
@@ -39,5 +39,5 @@ system</a>.</p>
 </TR>
 </TABLE>
 
-</DIV>
+<!-- </DIV> -->
 

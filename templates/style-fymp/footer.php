@@ -31,7 +31,6 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 	</TR>
 </TABLE><P>
 
-<div align="center">
 <table border="0" width="530">
 <tr>
 <td align="left" valign="top">
@@ -57,7 +56,6 @@ code is available</a> under an open source license.
 </table>
 
 </div>
-
 
 </BODY>
 </HTML>
