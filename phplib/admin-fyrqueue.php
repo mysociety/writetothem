@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.73 2005-02-08 10:13:54 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.74 2005-02-09 12:08:55 francis Exp $
  * 
  */
 
@@ -212,7 +212,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                     mapit_check_error($parentinfo);
                     print '<a href="' .
                        htmlspecialchars(new_url('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
-                        htmlspecialchars("via " . $parentinfo['name'] . " " . $parentinfo['type_name']) . "</a>:<br>";
+                        htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
                 }
                 if ($message['recipient_email'])
                     print htmlspecialchars($message['recipient_email']) . "<br>";
