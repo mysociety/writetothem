@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.54 2005-01-28 22:47:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.55 2005-01-28 22:48:55 francis Exp $
  * 
  */
 
@@ -498,6 +498,7 @@ Summary statistics:
 <br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
 <br><b>fail</b> rejects a message, with no email to the constituent.
 <br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
+<br><b>confirm</b> moves 'pending' to 'ready', the same as user clicking confirm link in email
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <br><b>edit contact details</b> by clicking on the recipient name
 </p>
