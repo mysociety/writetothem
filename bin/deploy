@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.7 2005-02-03 16:07:03 francis Exp $
+# $Id: deploy,v 1.8 2005-02-09 15:17:43 francis Exp $
 #
 
 set -e
@@ -52,8 +52,8 @@ cvs_export $FYR_UNAME $FYR_VHOST $FYR_DEPLOYSPACE
 
 warn "Fixing permissions for mssecure..."
 # for suexec to work on these, when shown from mssecure
-chown -R mssecure $SERVICES_DEPLOYSPACE/mysociety/fyr/web-admin
-chgrp -R mssecure $SERVICES_DEPLOYSPACE/mysociety/fyr/web-admin
+chown -R mssecure $FYR_DEPLOYSPACE/mysociety/fyr/web-admin
+chgrp -R mssecure $FYR_DEPLOYSPACE/mysociety/fyr/web-admin
 
 warn "Checking config files..."
 check_config_files $FYR_DEPLOYSPACE/mysociety/fyr/conf
