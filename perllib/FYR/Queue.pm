@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.129 2005-02-11 09:56:37 chris Exp $
+# $Id: Queue.pm,v 1.130 2005-02-12 03:48:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -271,9 +271,9 @@ sub write ($$$$) {
                 dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
             } else {
                 logmsg($id, 1, "abuse system REJECTED message");
-                # freeze so appears in frozen queue not failing one
+                # mark as frozen so appears as spam
                 dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-                state($id, 'failed');   # XXX or should this be failed_closed?
+                state($id, 'failed_closed');
                 $ret = $abuse_result;
             }
         }
