@@ -13,7 +13,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.8 2004-11-18 21:49:17 chris Exp $
+ * $Id: general-example,v 1.9 2004-11-24 23:11:39 francis Exp $
  * 
  */
 
@@ -52,7 +52,7 @@ define('OPTION_FAX_DEVICE', 'ttyS0');
 // efax(1) options to configure the modem. This is NOT interpreted by the
 // shell.
 define('OPTION_FAX_OPTIONS', '-iZ -i&FE0&D2S7=120 -i&C0 -kZ -iM1L0');
-    // nb -iM1L0 is the speaker config -- see efax(1)
+// nb -iM1L0 is the speaker config -- see efax(1)
 // Sending station ID for faxes. Should be a full international phone number.
 define('OPTION_FAX_STATIONID', '000000000000');
 // Fax header (sent by the fax machine, not written into the fax).

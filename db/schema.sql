@@ -5,8 +5,10 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.11 2004-11-18 22:57:31 chris Exp $
+-- $Id: schema.sql,v 1.12 2004-11-24 23:11:39 francis Exp $
 --
+
+set client_min_messages to error;
 
 -- secret
 -- A random secret.
