@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.37 2004-12-20 20:34:16 francis Exp $
+ * $Id: who.php,v 1.38 2005-01-08 00:03:02 matthew Exp $
  * 
  */
 
@@ -56,82 +56,125 @@ debug_timestamp();
 // render.
 $fyr_representatives = array();
 foreach ($va_display_order as $va_type) {
-    if (!array_key_exists($va_type, $voting_areas))
-        continue;
-    $va_specificid = $voting_areas[$va_type];
+	if (is_array($va_type)) {
+		if (!array_key_exists($va_type[0], $voting_areas))
+			continue;
+	} else {
+		if (!array_key_exists($va_type, $voting_areas))
+			continue;
+	}
 
-    // The voting area is the ward/division. e.g. West Chesterton Electoral Division
-    debug("FRONTEND", "voting area is type $va_type id $va_specificid");
-    $va_info = $voting_areas_info[$va_specificid];
+	unset($va_specificid); unset($va_info);
+	if (is_array($va_type)) {
+		foreach ($va_type as $vat) $va_specificid[] = $voting_areas[$vat];
+		foreach ($va_specificid as $vasid) $va_info[] = $voting_areas_info[$vasid];
+	} else {
+		$va_specificid = $voting_areas[$va_type];
+		// The voting area is the ward/division. e.g. West Chesterton Electoral Division
+		debug("FRONTEND", "voting area is type $va_type id $va_specificid");
+		$va_info = $voting_areas_info[$va_specificid];
+	}
 
-    // The elected body is the overall entity. e.g. Cambridgeshire County
-    // Council. 
-    $eb_type = $va_inside[$va_type];
-    $eb_specificid = $voting_areas[$eb_type];
-    debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
-    $eb_info = $voting_areas_info[$eb_specificid];
+	// The elected body is the overall entity. e.g. Cambridgeshire County
+	// Council.
+	if (is_array($va_type)) {
+		$eb_type = $va_inside[$va_type[0]];
+	} else {
+		$eb_type = $va_inside[$va_type];
+	}
+	$eb_specificid = $voting_areas[$eb_type];
+	debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
+	$eb_info = $voting_areas_info[$eb_specificid];
 
-    // Description of areas of responsibility
-    $eb_info['description'] = $va_responsibility_description[$eb_type];
-    
-    // Count representatives
-    $representatives = $area_representatives[$va_specificid];
-    $rep_count = count($representatives);
+	// Description of areas of responsibility
+	$eb_info['description'] = $va_responsibility_description[$eb_type];
+ 
+	// Count representatives
+	unset($representatives);
+	if (is_array($va_type)) {
+		foreach ($va_specificid as $vasid) $representatives[] = $area_representatives[$vasid];
+		$rep_count = 0;
+		foreach ($representatives as $key => $rep) {
+			$rep_counts[] = count($rep);
+			$rep_count += count($rep);
+			shuffle($representatives[$key]);
+		}
+	} else {
+		$representatives = $area_representatives[$va_specificid];
+		$rep_count = count($representatives);
+		shuffle($representatives);
+	}
 
-    if ($rep_count == 0) continue;
+	if ($rep_count == 0) continue;
 
-    // Create HTML
-    if ($rep_count > 1) {
-        $left_column = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
-        $left_column .= "Your ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
-    } else {
-        $left_column = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
-        $left_column .= "Your ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
-    }
-    $left_column .= "${eb_info['name']}.  ${eb_info['description']}</p>";
+	// Create HTML
+	if (is_array($va_type)) {
+		if ($rep_count > 1) {
+			$text = "<h4>Your {$va_info[0]['rep_name_long_plural']}</h4><p>";
+		} else {
+			$text = "<h4>Your {$va_info[0]['rep_name_long']}</h4><p>";
+		}
+		if ($rep_counts[0]>1) {
+			$text .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+		} else {
+			$text .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
+		}	
+		$text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
+		$text .= display_reps($representatives[0]);
+		$text .= '<p>';
+		if ($rep_counts[1]>1) {
+			$text .= "$rep_counts[1] {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name_plural']} also represent you";
+		} else {
+			$text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
+		}
+		$text .= '.</p>';
+		$text .= display_reps($representatives[1]);
+	} else {
+		if ($rep_count > 1) {
+			$text = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
+			$text .= "Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+		} else {
+			$text = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
+			$text .= "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+		}
+		$text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
-    /* Note categories of representatives who aren't paid for their work.... */
-    if (!$va_salaried[$va_type])
-        $left_column .= "<p><strong>Please remember that unlike MPs or MEPs, your "
-            . (($rep_count > 1)
-                ? "${va_info['rep_name_long_plural']} are"
-                : "${va_info['rep_name_long']} is")
-            . "not paid for the work they do.</strong></p>";
+		/* Note categories of representatives who aren't paid for their work.... */
+		if (!$va_salaried[$va_type])
+			$text .= "<p><strong>Please remember that unlike MPs or MEPs, your "
+				. (($rep_count > 1)
+					? "${va_info['rep_name_long_plural']} are"
+					: "${va_info['rep_name_long']} is")
+				. " not paid for the work they do.</strong></p>";
+		$text .= display_reps($representatives);
+	}
 
-    $right_column = "<p>In your ${va_info['type_name']},
-        <b>${va_info['name']}</b>, you are represented by ";
-    if ($rep_count > 1) {
-        $right_column .= "$rep_count ${va_info['rep_name_plural']}.
-            Please choose one ${va_info['rep_name']} to contact.";
-    } else {
-        $right_column .= "one ${va_info['rep_name']}.";
-    }
-
-    // Rest of representatives
-    $rep_list = '';
-    foreach ($representatives as $rep_specificid) {
-        ++$c;
-        $rep_info = $representatives_info[$rep_specificid];
-	$rep_list .= '<li><a href="'
-                        . htmlspecialchars(new_url('write', 0, 
-                                                'who', $rep_specificid,
-                                                'pc', $fyr_postcode,
-                                                'fyr_extref', fyr_external_referrer()))
-                        . '">'
-                        . htmlspecialchars($rep_info['name'])
-                        . '</a><br>'
-                        . htmlspecialchars($rep_info['party']);
-    }
-    $right_column .= '<ul>' . $rep_list . '</ul>';
-
-    array_push($fyr_representatives, array($left_column, $right_column));
-
-    debug_timestamp();
+	array_push($fyr_representatives, $text);
+	debug_timestamp();
 }
 
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array("reps" => $fyr_representatives, "error" => $fyr_error));
 
 debug_timestamp();
+
+function display_reps($representatives) {
+	global $representatives_info, $fyr_postcode;
+	$rep_list = '';
+	foreach ($representatives as $rep_specificid) {
+		++$c;
+		$rep_info = $representatives_info[$rep_specificid];
+		$rep_list .= '<li><a href="'
+                       . htmlspecialchars(new_url('write', 0, 
+                                              'who', $rep_specificid,
+                                               'pc', $fyr_postcode,
+                                               'fyr_extref', fyr_external_referrer()))
+                       . '">'
+                       . htmlspecialchars($rep_info['name'])
+                       . '</a><br>'
+                       . htmlspecialchars($rep_info['party']);
+	}
+	return '<ul>' . $rep_list . '</ul>';
+}
 ?>
 
