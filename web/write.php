@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.60 2005-01-14 17:43:59 chris Exp $
+ * $Id: write.php,v 1.61 2005-01-18 14:52:00 chris Exp $
  * 
  */
 
@@ -136,6 +136,13 @@ function renderForm($form, $pageName)
         template_draw("write-write", $our_values);
     } else if ($pageName == 'previewForm') {
         // Generate preview
+        /* Horrid. We need to turn leading spaces into non-breaking spaces, so
+         * that indentation appears roughly the same in the preview as it will
+         * in the final fax. So we need to delve into the exciting world of
+         * PHP's preg_replace. Because the text will get escaped for HTML
+         * entities later, present those leading spaces as U+0000A0 NO-BREAK
+         * SPACE. */
+        $our_values['signedbody_indented'] = preg_replace("/^([ \t]+)/me", 'str_repeat(" ", strlen("\\1"))', $our_values['signedbody']);
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     } else {
