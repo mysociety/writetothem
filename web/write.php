@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.2 2004-10-06 14:20:33 francis Exp $
+ * $Id: write.php,v 1.3 2004-10-06 15:21:42 francis Exp $
  * 
  */
 
@@ -18,16 +18,25 @@ include_once "../lib/mapit.php";
 
 // Input data
 $fyr_postcode = get_http_var('pc');
-$who = get_http_var('who');
+$fyr_who = get_http_var('who');
 
+// Find out which representative 
 $matches = array();
-if (!preg_match("/^([0-9]+)$/", $who, $matches)) {
+if (!preg_match("/^([0-9]+)$/", $fyr_who, $matches)) {
     $fyr_error_message = "Parameter who didn't match correct format.";
     include "templates/generalerror.html";
     exit;
 }
 list($dummy_all, $rep_id) = $matches;
 debug("FRONTEND", "Representative $rep_id");
+
+// Check to see if previewing
+$writer_name = get_http_var('writer_name');
+$writer_address1 = get_http_var('writer_address1');
+$writer_address2 = get_http_var('writer_address2');
+$writer_town = get_http_var('writer_town');
+// $fyr_postcode
+$writer_email = get_http_var('writer_email');
 
 // Information specific to this representative
 $fyr_representative = dadem_get_representative_info($rep_id);

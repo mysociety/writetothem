@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: mapit.php,v 1.12 2004-10-06 11:44:43 francis Exp $
+ * $Id: mapit.php,v 1.13 2004-10-06 15:21:42 francis Exp $
  * 
  */
 
@@ -44,6 +44,8 @@ function mapit_strerror($e) {
 /* mapit_get_error R
  * Return FALSE if R indicates success, or an error string otherwise. */
 function mapit_get_error($e) {
+    if (is_string($e))
+        print "Shouldn't have string here: $e";
     if (is_array($e))
         return FALSE;
     else
@@ -87,6 +89,8 @@ function mapit_get_voting_areas($postcode) {
  * of the area (e.g. "VA_CTY"); and name, the name of the area (e.g., "Norfolk
  * County Council"). On failure, returns an error code. */
 function mapit_get_voting_area_info($va_id) {
+    global $va_name;
+
     $stub_data = array(1 => array('type' => VA_CTY, 'name' => 'Cambridgeshire County Council'),
                  2 => array('type' => VA_CED, 'name' => 'West Chesterton ED'),
                  3 => array('type' => VA_DIS, 'name' => 'Cambridge District Council'),
@@ -98,7 +102,7 @@ function mapit_get_voting_area_info($va_id) {
     $ret = $stub_data[$va_id];
     if (!isset($ret)) {
         debug("MAPIT", "Voting area not found id $va_id");
-        return MAPIT_VOTING_AREA_NOT_FOUND;
+        return MAPIT_AREA_NOT_FOUND;
     }
     debug("MAPIT", "Looked up voting area info $va_id");
     debug("MAPITRESULT", "Results:", $ret);

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.4 2004-10-06 14:20:33 francis Exp $
+ * $Id: who.php,v 1.5 2004-10-06 15:21:42 francis Exp $
  * 
  */
 
@@ -32,6 +32,8 @@ if ($fyr_error_message = mapit_get_error($voting_areas)) {
 // text and form text in an array for the template to render.
 $fyr_representatives = array();
 foreach ($voting_areas as $va_type => $va_specificid) {
+    debug("FRONTEND", "voting area is type $va_type id $va_specificid");
+
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     $va_typename = $va_name[$va_type];
     $info = mapit_get_voting_area_info($va_specificid);
@@ -45,9 +47,14 @@ foreach ($voting_areas as $va_type => $va_specificid) {
 
     // The elected body is the overall entity. e.g. Cambridgeshire County Council.
     $eb_type = $va_inside[$va_type];
+    debug("FRONTEND", "electoral body type is $eb_type");
     $eb_typename = $va_name[$eb_type];
-    $eb_specificname = $voting_areas[$eb_type][1];
-
+    $eb_specificid = $voting_areas[$eb_type];
+    $eb_info = mapit_get_voting_area_info($eb_specificid);
+    if (!($fyr_error_message = mapit_get_error($eb_info))) {
+        $eb_specificname = $eb_info['name'];
+    }
+ 
     if ($va_type == VA_DIS) {
         $va_description = "Your District Council is responsible for local services and policy,
             including planning, council housing, building regulation, rubbish

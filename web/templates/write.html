@@ -8,7 +8,7 @@
 &#149;&nbsp;It's a <A HREF="q_a.php3#onlymp" TARGET="_new">waste of
 time</A> writing to <?=$fyr_representative['office']?>s other than your
 own. If this isn't your <?=$fyr_representative['office']?>, your message will be ignored.<BR>
-&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when an <?=$fyr_representative['office']?> can help you - and when they can't. <P>
+&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when a <?=$fyr_representative['office']?> can help you - and when they can't. <P>
 </SPAN>
 <TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" 
 BGCOLOR="#006666">
@@ -24,34 +24,32 @@ BGCOLOR="#006666">
 			<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0">
 			<TR>
 			<TD CLASS="smallb">your name:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="standee_name" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+			<TD><FONT CLASS="form"><INPUT NAME="writer_name" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
 			</TR>
 			<TR>
 			<TD CLASS="smallb">address 1:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="standee_address1" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+			<TD><FONT CLASS="form"><INPUT NAME="writer_address1" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
 			</TR>
 			<TR>
 			<TD CLASS="small">address 2:</TD>			
-			<TD><FONT CLASS="form"><INPUT NAME="standee_address2" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+			<TD><FONT CLASS="form"><INPUT NAME="writer_address2" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
 			</TR>
 			<TR>
 			<TD CLASS="smallb">town:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="standee_town" value="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+			<TD><FONT CLASS="form"><INPUT NAME="writer_town" value="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
 			</TR>
 			<TR>
 			<TD CLASS="smallb">postcode:</TD>
-			<TD><B><?=$fyr_postcode?></B><INPUT NAME="postcode" TYPE="hidden" VALUE="OX1 3DR"></TD>
+			<TD><B><?=$fyr_postcode?></B></TD>
 			</TR>
 			<TR>
 			<TD CLASS="smallb">your email:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="email" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
+			<TD><FONT CLASS="form"><INPUT NAME="writer_email" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
 			</TD>
 			</TR>
-<!--start tom playing adding phone number-->
 			<TR>
 			<TD CLASS="small">phone:</TD>			
-			<TD><FONT CLASS="form"><INPUT NAME="standee_phone" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
-<!--end start tom playing adding phone number-->
+			<TD><FONT CLASS="form"><INPUT NAME="writer_phone" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
 			</TD>
 			</TR>
 			</TABLE><BR><IMG SRC="/images/tiny.gif" WIDTH="250" HEIGHT="1" BORDER="0"></TD>
@@ -65,7 +63,8 @@ BGCOLOR="#006666">
 		</TR>
 		<TR>
 		<TD COLSPAN="2" ALIGN="right" CLASS="smallb">Ready? Press the "Preview" button to continue --> &nbsp;
-<INPUT TYPE="hidden" NAME="who" VALUE="<?=$fyr_representative['id']?>">
+<INPUT TYPE="hidden" NAME="who" VALUE="<?=$fyr_who?>">
+<INPUT TYPE="hidden" NAME="pc" VALUE="<?=$fyr_postcode?>">
 <INPUT TYPE="submit" NAME="SUBMIT" VALUE="preview &nbsp;your &nbsp;Fax &gt;&gt;"><BR><IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
 		</TR></FORM>
 		</TABLE>
@@ -79,6 +78,5 @@ BGCOLOR="#006666">
 <TD><IMG SRC="/images/tiny.gif" WIDTH="525" HEIGHT="1" BORDER="0"></TD>
 </TR>
 </TABLE>
-
 
 <? include "footer.php"; ?>
