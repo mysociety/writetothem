@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.23 2005-01-13 17:06:01 francis Exp $
+ * $Id: general-example,v 1.24 2005-02-21 11:37:29 francis Exp $
  * 
  */
 
@@ -98,5 +98,8 @@ define('OPTION_MAX_BODY_LENGTH', 20000);
 
 // Debug log level for PHP website
 define('OPTION_PHP_DEBUG_LEVEL', 0);
+
+// URLS of admin scripts
+define('OPTION_ADMIN_SERVICES_CGI', 'https://secure.mysociety.org/admin/services');
 
 ?>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.78 2005-02-17 17:13:55 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.79 2005-02-21 11:37:30 francis Exp $
  * 
  */
 
@@ -16,7 +16,6 @@ require_once "../../phplib/utility.php";
 class ADMIN_PAGE_FYR_QUEUE {
     function ADMIN_PAGE_FYR_QUEUE () {
         $this->id = "fyrqueue";
-        $this->name = "Message Queue";
         $this->navname = "Message Queue";
     }
 

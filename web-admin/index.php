@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.17 2005-01-28 17:01:54 matthew Exp $
+ * $Id: index.php,v 1.18 2005-02-21 11:37:30 francis Exp $
  * 
  */
 
@@ -17,6 +17,7 @@ require_once "../../phplib/admin-reps.php";
 require_once "../../phplib/admin-phpinfo.php";
 require_once "../../phplib/admin-serverinfo.php";
 require_once "../../phplib/admin-configinfo.php";
+require_once "../../phplib/admin-embed.php";
 require_once "../../phplib/admin.php";
 
 $pages = array(
@@ -44,7 +45,7 @@ EOF
             ),
     new ADMIN_PAGE_RATTY(
             'fyr-web',
-            "WTT Website",
+            "Web Abuse",
             "These rules limit access to the WriteToThem website.",
             <<<EOF
 An HTML fragment which is displayed to the user in an error page when
@@ -52,7 +53,10 @@ the rule fires. If left blank, the message "Sorry, we are experiencing
 technical difficulties" is displayed.
 EOF
         ),
+    null, // space separator on menu
     new ADMIN_PAGE_REPS,
+    new ADMIN_PAGE_EMBED('fyrmatch', 'Councillor Data', OPTION_ADMIN_SERVICES_CGI . 'match.cgi'),
+    new ADMIN_PAGE_EMBED('fyremails', 'Standard Emails', 'https://secure.mysociety.org/cvstrac/wiki?p=StandardEmails'),
     null, // space separator on menu
     new ADMIN_PAGE_SERVERINFO,
     new ADMIN_PAGE_CONFIGINFO,
