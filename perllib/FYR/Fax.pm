@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.14 2005-02-04 12:46:36 chris Exp $
+# $Id: Fax.pm,v 1.15 2005-02-04 13:21:33 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -78,7 +78,7 @@ use constant FONT_SIZE_BODY => 13;
 use constant FONT_SIZE_FOOTER => 9;
 
 # Text size for the (optional) cover page, in points.
-use constant FONT_SIZE_COVER => 20;
+use constant FONT_SIZE_COVER => 16;
 
 # Space we skip for each line. NB we do this ourselves, rather than relying on
 # the GD linespacing option.
@@ -253,7 +253,7 @@ sub footer_text ($$$$) {
 # Format the cover-page text for a "via" MESSAGE.
 sub cover_text ($) {
     my ($msg) = @_;
-    return FYR::EmailTemplate::format(fax_template('via-coversheet'), FYR::Queue::email_template_params($msg));
+    return FYR::EmailTemplate::format(fax_template('via-coversheet'), FYR::Queue::email_template_params($msg), 1);
 }
 
 # make_pbm_file IMAGE
@@ -341,15 +341,15 @@ sub make_representative_fax ($) {
         }
         
         # At this point, generate a cover sheet if we need one.
-        if ($msg->{via}) {
+        if ($msg->{recipient_via}) {
             $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
             $im->colorAllocate(255, 255, 255);
             $im->colorAllocate(0, 0, 0);
             my $cover = cover_text($msg);
-            my $coverheight = (format_text($im, $cover, LMARGIN_CX, TMARGIN_CY, TEXT_CY, 1, FONT_SIZE_COVER))[0];
-            format_text($im, $cover, LMARGIN_CX, TMARGIN_CY + int((TEXT_CY - $coverheight) / 2), $coverheight + 100, 0, FONT_SIZE_COVER);
-            push(@imgfiles, make_pbm_file($im));
+            my $coverheight = (format_text($im, $cover, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_COVER))[0];
 
+            format_text($im, $cover, LMARGIN_CX, TMARGIN_CY + int((TEXT_CY - $coverheight) / 2), TEXT_CX, $coverheight + 100, 0, FONT_SIZE_COVER);
+            push(@imgfiles, make_pbm_file($im));
         }
 
         # Now go back over each page and write the appropriate footer, and save
