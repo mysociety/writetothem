@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.4 2004-11-08 18:09:30 francis Exp $
+ * $Id: confirm.php,v 1.5 2004-11-09 08:10:04 francis Exp $
  * 
  */
 
@@ -27,7 +27,9 @@ if (!$token) {
 }
 
 $result = msg_confirm_email($token);
-if ($fyr_error_message = msg_get_error($success)) {
+if ($fyr_error_message = msg_get_error($result)) {
+    include "../templates/generalerror.html";
+} else if (!$result) {
     $fyr_title = "Oops... That ain't good...";
     include "../templates/confirm-trouble.html";
 } else {

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.6 2004-11-02 16:44:35 chris Exp $
+# $Id: Queue.pm,v 1.7 2004-11-09 08:10:03 francis Exp $
 #
 
 package FYR::Queue;
@@ -48,8 +48,7 @@ Return an ID for a new message. Message IDs are 20 characters long and consist
 of characters [0-9a-f] only.
 
 =cut
-sub create (;$) {
-    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
+sub create () {
     # Assume collision probability == 0.
     return unpack('h20', mySociety::Util::random_bytes(10));
 }
@@ -67,9 +66,11 @@ failure.
 This function commits its changes.
 
 =cut
-sub write ($$$$;$) {
-    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
-    my ($id, $sender, $recipient_id, $text) = @_;
+sub write ($$$$$) {
+    warn Dumper(@_);
+    my ($x, $id, $sender, $recipient_id, $text) = @_;
+    warn $recipient_id;
+
     try {
         # Get details of the recipient.
         throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
@@ -169,8 +170,7 @@ same as the current state, just update the lastupdate field; if it isn't, then
 also set the lastupdate field to null.
 
 =cut
-sub state ($;$) {
-    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
+sub state ($$) {
     my ($id, $state) = @_;
     my %allowed = qw(
             new     pending
@@ -196,7 +196,7 @@ sub state ($;$) {
 # message ID [LOCK]
 # Return a hash of data about message ID. If LOCK is true, retrieves the fields
 # using SELECT ... FOR UPDATE.
-sub message ($;$) {
+sub message ($$) {
     my ($id, $forupdate) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
     if (my $msg = FYR::DB::dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
@@ -548,8 +548,7 @@ sub run_queue () {
 Wrapper for FYR::DB::secret, for remote clients.
 
 =cut
-sub secret (;$) {
-    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
+sub secret () {
     return FYR::DB::secret();
 }
 
@@ -559,9 +558,8 @@ Confirm a user's email address, based on the TOKEN they've supplied in a URL
 which they've clicked on.
 
 =cut
-sub confirm_email ($;$) {
-    shift if UNIVERSAL::isa($_[0] => __PACKAGE__); # Horrid XMLRPC compatibility
-    my ($token) = @_;
+sub confirm_email ($$) {
+    my ($x,$token) = @_;
     if (my $id = verify_confirm_token($token)) {
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
