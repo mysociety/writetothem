@@ -1,51 +1,25 @@
 <? include "header.php"; ?>
  
-<!--
-<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0" WIDTH="100%">
-<TR>
-<TD WIDTH="90" BGCOLOR="#cccc99"><IMG SRC="/images/mps/450.jpg" WIDTH="90" HEIGHT="117" BORDER="0" ALT="picture of Dr Evan Harris MP"></TD>
-<TD VALIGN="top" BGCOLOR="#cccc99" CLASS="small"><SPAN CLASS="normal"><B>Your Local MP is:</B></SPAN><BR>
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="10" BORDER="0"><BR>
-&#149;&nbsp;Dr Evan Harris<BR>
-
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"><BR>
-&#149;&nbsp;<a href="http://www.libdems.org.uk/" target="_new">Liberal Democrat</A> (<A HREF="http://www.cleanpolitix.com/fund/index.asp?page=top20&i=0&top20=Liberal-Democrat" target="_new">top 20 donors</A>) MP for Oxford West and Abingdon<BR>
-
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"><BR>
-&#149;&nbsp;<B><A HREF="q_a.php3#responsiveness">47.4%</A></B> of recent faxes replied to within 14 days (sample size: 78) <BR> 
-
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"><BR>
-&#149;&nbsp;Read <a href="http://www.publications.parliament.uk/cgi-bin/dialogserverTSO?SEARCHTYPE=PROB&THRESHOLD=0&SAVEDATETYPE=SINCE&SAVEFREETEXT=&SAVEPROP00=T%253dP&SAVESPEAKER=&SAVEPROP01=T%253dB%2CP%253dJ0&SAVEQUESTION=&SAVEPROP02=T%253dP%2CP%253dJ1&SAVENOTQUERY=&SAVEORQUERY=&SAVEANDQUERY=Evan Harris&SAVEPROP09=T%253dB&SAVEB=F9Commons%2520Hansard&SAVEB=&SAVESTARTDATE=20020101&SAVEENDDATE=TODAY&SAVEONDAY=&SAVEONMONTH=&SAVEONYEAR=&SAVESINCEDAY=01&SAVESINCEMONTH=01&SAVESINCEYEAR=2002&SAVEBETWEENDAY1=&SAVEBETWEENMONTH1=&SAVEBETWEENYEAR1=&SAVEBETWEENDAY2=&SAVEBETWEENMONTH2=&SAVEBETWEENYEAR2=&SAVEDB=ukparl&SAVEORGANISE_CODED=R%3Adate&CGIDATETYPE=SINCE&QUERY00=&PROP00=T%3DP&QUERY01=Evan Harris&PROP01=T%3DB%2CP%3DJ0&QUERY02=&PROP02=T%3DP%2CP%3DJ1&QUERY09=&PROP09=T%3DB&ANDQUERY=&ORQUERY=&FREETEXT=&NOTQUERY=&B=F9Commons+Hansard&SPEAKER=Evan Harris&QUESTION=&B=&STARTDATE=20020101&ENDDATE=TODAY&ONDAY=&ONMONTH=&ONYEAR=&DATETYPE=SINCE&SINCEDAY=01&SINCEMONTH=01&SINCEYEAR=2002&BETWEENDAY1=&BETWEENMONTH1=&BETWEENYEAR1=&BETWEENDAY2=&BETWEENMONTH2=&BETWEENYEAR2=&ORGANISE_CODED=R%3Adate&CMD%3Dsearch.run%26FILE%3Dresults.x=46&CMD%3Dsearch.run%26FILE%3Dresults.y=14" target="speeches">your MP's recent Speeches</A> in Parliament (this can be slow...)<BR>
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"><BR>
-&#149;&nbsp;Read <a href="http://www.publicwhip.org.uk/search.php?query=OXX XXX" 
-target="publicwhip_rocks">your MP's Parliamentary attendance and voting records</A><BR>
-<IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"><BR>
-&#149;&nbsp;Your MP's entry in the <A HREF="http://www.parliament.the-stationery-office.co.uk/pa/cm/cmregmem/memi12.htm" target="_blankregister">Register of Members' Interests</A><BR>
-<IMG SRC="/images/tiny.gif" WIDTH="390" HEIGHT="1" BORDER="0">
-</TD></TR>
-</TABLE>
--->
 <H3>FaxYourRepresentative.com - Read This Before Writing Your Fax</H3>
 <SPAN CLASS="bigb">
 &#149;&nbsp;Please be polite, concise and to the point.<BR>
-&#149;&nbsp;By abusing your MP you devalue the service for all users.<BR>
-&#149;&nbsp;<A HREF="q_a.php3#formletters" TARGET="_NEW">Use your own words.</A> MPs will ignore copied and pasted 'identikit' messages.<BR>
-&#149;&nbsp;It's a <A HREF="q_a.php3#onlymp" TARGET="_new">waste of time</A> writing to MPs other than your own. If this isn't your MP, your message will be ignored.<BR>
-&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when an MP can help you - and when they can't. <P>
+&#149;&nbsp;By abusing your <?=$fyr_representative['office']?> you devalue the service for all users.<BR>
+&#149;&nbsp;<A HREF="q_a.php3#formletters" TARGET="_NEW">Use your own words.</A> <?=$fyr_representative['office']?>s will ignore copied and pasted 'identikit' messages.<BR>
+&#149;&nbsp;It's a <A HREF="q_a.php3#onlymp" TARGET="_new">waste of
+time</A> writing to <?=$fyr_representative['office']?>s other than your
+own. If this isn't your <?=$fyr_representative['office']?>, your message will be ignored.<BR>
+&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when an <?=$fyr_representative['office']?> can help you - and when they can't. <P>
 </SPAN>
 <TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" 
 BGCOLOR="#006666">
 	<TR>
 	<TD VALIGN="top">
 			<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0" BGCOLOR="#cccc99">
-		<TR><FORM METHOD="POST" NAME="">
+		<TR><FORM METHOD="POST" NAME="" action="write.php">
 		<TD VALIGN="top"><B>Now Write Your Fax:<BR><BR>
-		Dr Evan Harris<BR>
-		MP for Oxford West and Abingdon<BR>
-		House Of Commons<BR>
-		London<BR>
-		SW1A 0AA</B><BR><BR>
-		Tuesday 5 October 2004		<IMG SRC="/images/tiny.gif" WIDTH="256" HEIGHT="1" BORDER="0"></TD>
+		<?=$fyr_representative['short_office']?> <?=$fyr_representative['name']?><BR>
+        ADDRESS<br>
+		Tuesday 30 February 2004		<IMG SRC="/images/tiny.gif" WIDTH="256" HEIGHT="1" BORDER="0"></TD>
 		<TD VALIGN="top" ALIGN="right">
 			<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0">
 			<TR>
@@ -86,17 +60,12 @@ BGCOLOR="#006666">
 		<TD COLSPAN="2" CLASS="smallb">write your Fax:</SPAN> &nbsp;&nbsp;(<A HREF="q_a.php3#personal" TARGET="_new"><SPAN CLASS="small">read our privacy policy</SPAN></A>)</TD>
 		</TR>
 		<TR>
-		<TD COLSPAN="2"><FONT CLASS="form"><TEXTAREA ROWS="15" COLS="62" MAXLENGTH="5000" NAME="body" CLASS="form" TEXTWRAP="physical">Dear Dr Evan Harris,</TEXTAREA></FONT></TD>
+		<TD COLSPAN="2"><FONT CLASS="form"><TEXTAREA ROWS="15" COLS="62"
+        MAXLENGTH="5000" NAME="body" CLASS="form" TEXTWRAP="physical">Dear <?=$fyr_representative['name']?>,</TEXTAREA></FONT></TD>
 		</TR>
 		<TR>
 		<TD COLSPAN="2" ALIGN="right" CLASS="smallb">Ready? Press the "Preview" button to continue --> &nbsp;
-<INPUT TYPE="hidden" NAME="mp_name" VALUE="Dr Evan Harris">
-<INPUT TYPE="hidden" NAME="region_name" VALUE="Oxford West and Abingdon">
-<!-- OK kids, this might look like it's your MP's fax number... trust us, it ain't...-->
-<INPUT TYPE="hidden" NAME="mp_fax" VALUE="02072164329">
-<INPUT TYPE="hidden" NAME="mp_email" VALUE="">
-<INPUT TYPE="hidden" NAME="faxoremail" VALUE="Fax">
-<INPUT TYPE="hidden" NAME="fax_submit" VALUE="1">
+<INPUT TYPE="hidden" NAME="who" VALUE="<?=$fyr_representative['id']?>">
 <INPUT TYPE="submit" NAME="SUBMIT" VALUE="preview &nbsp;your &nbsp;Fax &gt;&gt;"><BR><IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
 		</TR></FORM>
 		</TABLE>

@@ -4,7 +4,10 @@ Unobvious TODOs:
 Copyright messages and license agreement on source code
 
 Encrypt who=va- in URL
+Probably pc= after the first page or two?
 
 Make sure debug log messages can't print data which should be encrypted ;(
     (maybe not a problem if all /inputs/ are, except for scraping)
+
+Validate HTML
 

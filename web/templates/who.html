@@ -2,13 +2,13 @@
 
 <H3>FaxYourRepresentative.com - <?=$fyr_title?> </H3>
 
-<form method="get" action="write.php">
-
 <P align="left" style="align: left;">You have several democratic representatives at different levels of government.
 Please choose the most appropriate one to contact, and then click any of the buttons
 marked "Next".</p>
 
 <p align="left"><b>If you aren't sure who to contact, please read <a href="whoadvice1.html">this advice</a>.</b></p>
+
+<?=$fyr_form_start?>
 
 <table>
 <?
@@ -21,5 +21,7 @@ foreach ($fyr_representatives as $row) {
 }
 ?>
 </table>
+
+</form>
 
 <? include "footer.php"; ?>

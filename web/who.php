@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.3 2004-10-06 11:44:43 francis Exp $
+ * $Id: who.php,v 1.4 2004-10-06 14:20:33 francis Exp $
  * 
  */
 
@@ -75,6 +75,11 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         <p>Your $rep_name represent you on $eb_specificname.  $va_description.</p>
         ";
 
+    $fyr_form_start = "
+            <form method=\"get\" action=\"write.php\">
+            <input type=\"hidden\" name=\"pc\"
+            value=\"$fyr_postcode\">";
+
     $representatives = dadem_get_representatives($va_specificid);
     if ($fyr_error_message = dadem_get_error($representatives)) {
         debug(WARNING, $fyr_error_message);
@@ -85,7 +90,6 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         <b>$va_specificname</b>, you are represented by $repcount $rep_name.
             Please choose one $rep_name to contact.</p>
             <table style=\"float: left;\">";
-        $c = 0;
         foreach ($representatives as $rep_specificid) {
             ++$c;
             $reprecord = dadem_get_representative_info($rep_specificid);
@@ -97,12 +101,14 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     
             $right_column .= <<<END
                     <tr>
-                        <td valign="top"><input type="radio" name="who" value="va-$va_type-$c"></td>
+                        <td valign="top"><input type="radio" name="who" value="$rep_specificid"></td>
                         <td><b>$rep_specificname</b><br><!--Unknown Party--></td>
                     </tr>
 END;
         }
-        $right_column .= "<td><input style=\"float: right\" type=\"submit\" value=\"Next &gt;&gt;\"> </td></table>";
+        $right_column .= "<td>
+            <input style=\"float: right\" type=\"submit\" value=\"Next &gt;&gt;\"> 
+            </td></table>";
         array_push($fyr_representatives, array($left_column, $right_column));
     }
 }
