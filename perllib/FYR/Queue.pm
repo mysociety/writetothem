@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.80 2005-01-05 12:09:33 francis Exp $
+# $Id: Queue.pm,v 1.81 2005-01-05 14:27:12 chris Exp $
 #
 
 package FYR::Queue;
@@ -310,9 +310,9 @@ sub scrubmessage ($) {
                 update message
                     set recipient_fax = ''
                     where id = ? and recipient_fax is not null#, {}, $id);
-    # The log may also contain personal data.
+    # The log, extra data, and bounce tables may also contain personal data.
     FYR::DB::dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
-    # And the bounce table too.
+    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
     FYR::DB::dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
     logmsg($id, 'Scrubbed message of all personal data');
 }
