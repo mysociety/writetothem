@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.13 2004-12-07 16:12:49 chris Exp $
+ * $Id: general-example,v 1.14 2004-12-07 16:24:40 chris Exp $
  * 
  */
 
@@ -35,10 +35,6 @@ define('OPTION_FYR_QUEUE_DB_PORT', '5432');
 define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
 define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
-
-// Should the queue daemon on this host send emails and/or faxes?
-define('OPTION_FYR_QUEUE_DAEMON_SEND_EMAIL', '0');
-define('OPTION_FYR_QUEUE_DAEMON_SEND_FAX', '0');
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://notfinished.faxyourrepresentative.com');
@@ -76,6 +72,10 @@ define('OPTION_QUEUE_DAEMON_PROCESSES', '5');
 define('OPTION_QUEUE_DAEMON_SOCKET', '/tmp/fyrqd.sock');
 // PID file location
 define('OPTION_QUEUE_DAEMON_PIDFILE', '/var/run/fyrqd.pid');
+
+// Should the queue daemon on this host send emails and/or faxes?
+define('OPTION_QUEUE_DAEMON_SEND_EMAIL', '0');
+define('OPTION_QUEUE_DAEMON_SEND_FAX', '0');
 
 // Limit on length of message
 define('OPTION_MAX_BODY_LENGTH', 20000);
