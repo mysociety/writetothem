@@ -1,4 +1,6 @@
-<? $values['title'] = "Now Select The Representative You'd Like To Contact"; include "header.php"; ?>
+<? $values['title'] = "Now Select The Representative You'd Like To Contact";
+$values['robots'] = 'index, nofollow';
+include "header.php"; ?>
 
 <H3>WriteToThem.com - <?=$values['title'] ?> </H3>
 
@@ -9,6 +11,9 @@
 </p>
 <? } ?>
 
+<? if (!sizeof($values['reps'])) { ?>
+<p><big><em>Sorry, but we've not yet been able to add the data for your area. Please try <a href="http://www.faxyourmp.com/">FaxYourMP</a> and check back with us in a couple of weeks.</em></big></p>
+<? } else { ?>
 
 <P align="left" style="align: left;">You have several democratic representatives at different levels of government. Please choose the most appropriate one to contact.</p>
 
@@ -25,7 +30,6 @@ foreach ($values['reps'] as $row) {
 }
 ?>
 </table>
+<? }
 
-</form>
-
-<? include "footer.php"; ?>
+include "footer.php"; ?>

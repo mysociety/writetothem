@@ -4,6 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <TITLE>WriteToThem.com Beta Test - <? print $values['title']; ?></TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="style-fymp/fax_style.css">
+<?
+if ($values['robots']) { ?>
+<meta name="robots" content="<?=$values['robots'] ?>">
+<? } ?>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">
