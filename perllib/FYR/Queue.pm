@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.105 2005-01-29 02:43:05 francis Exp $
+# $Id: Queue.pm,v 1.106 2005-01-29 02:55:04 francis Exp $
 #
 
 package FYR::Queue;
@@ -1448,6 +1448,7 @@ sub admin_thaw_message ($$) {
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     logmsg($id, "$user thawed message");
     FYR::DB::dbh()->commit();
+    notify_daemon();
     return 0;
 }
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.58 2005-01-29 02:23:29 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.59 2005-01-29 02:55:05 francis Exp $
  * 
  */
 
@@ -521,6 +521,9 @@ Summary statistics:
                 Always shows all important messages, but can show newest or oldest first.
                 <br><b>Recently Created:</b> Most recent messages constituents have made.
                 <br><b>Recently Changed:</b> Messages which something has happened to recently.
+                <br><b>Similar to:</b> Shows messages with bodies similar to a given message.
+                Click on "View similar messages" from a message page to get to this view.  Displays
+                colourful diffs of the differences.
                 <br><b>Contains:</b> Searches the sender details, recipient details and message
                 body.  Enter multiple terms separate by spaces, all must be
                 present to match.  If you query by state name ('pending') or
