@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.23 2004-12-30 10:32:08 francis Exp $
+ * $Id: queue.php,v 1.24 2004-12-30 14:54:00 francis Exp $
  * 
  */
 
@@ -154,43 +154,43 @@ function msg_admin_get_stats() {
     return $result;
 }
 
-/* msg_admin_freeze_message ID
+/* msg_admin_freeze_message ID USER
  * Stops message being actually sent.*/
-function msg_admin_freeze_message($id) {
+function msg_admin_freeze_message($id, $user) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_freeze_message', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_freeze_message', array($id, $user));
     return $result;
 }
 
-/* msg_admin_thaw_message ID
+/* msg_admin_thaw_message ID USER
  * Allows message to be sent.*/
-function msg_admin_thaw_message($id) {
+function msg_admin_thaw_message($id, $user) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_thaw_message', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_thaw_message', array($id, $user));
     return $result;
 }
 
-/* msg_admin_error_message ID
+/* msg_admin_error_message ID USER
  * Abandons all actions, sends delivery failure to constituent.*/
-function msg_admin_error_message($id) {
+function msg_admin_set_message_to_error($id, $user) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_error_message', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_error', array($id, $user));
     return $result;
 }
 
-/* msg_admin_failed_message ID
+/* msg_admin_failed_message ID USER
  * Abandons all actions. */
-function msg_admin_failed_message($id) {
+function msg_admin_set_message_to_failed($id, $user) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_failed_message', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_failed', array($id, $user));
     return $result;
 }
 
-/* msg_admin_failed_closed_message ID
+/* msg_admin_failed_closed_message ID USER
  * Hides a failed message from future admin attention. */
-function msg_admin_failed_closed_message($id) {
+function msg_admin_set_message_to_failed_closed($id, $user) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_failed_closed_message', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_failed_closed', array($id, $user));
     return $result;
 }
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.21 2004-12-30 13:42:38 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.22 2004-12-30 14:54:00 francis Exp $
  * 
  */
 
@@ -31,7 +31,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 <?
 	$c = 1;
             foreach ($messages as $message) {
-		    print '<tr'.($c==1?' class="v"':'').'>';
+                print '<tr'.($c==1?' class="v"':'').'>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
                 print "<td><a href=\"" . $this->self_link . "&id=" .  urlencode($message['id']) . "\">" .  substr($message['id'],0,10) . "<br/>" .  substr($message['id'],10) . "</a></td>";
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
@@ -46,9 +46,9 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 }
                 print "</td>";
                 print "<td>" . 
-                        $message['sender_name'] . "<br>" .
-                        $message['sender_addr'] . "<br>" .
-                        $message['sender_email'] .
+                        htmlspecialchars($message['sender_name']) . "<br>" .
+                        htmlspecialchars($message['sender_addr']) . "<br>" .
+                        htmlspecialchars($message['sender_email']) .
                  "</td>";
                 print "<td>" . 
                         $message['recipient_name'] . "<br>";
@@ -68,11 +68,12 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "<td><span title=\"" .  htmlspecialchars($client_name) . "\">" .
                         $short_client_name . "</span><br>" .
                         "<a href=\"" .
-                        htmlspecialchars($message['sender_referrer']) . "\">" . $simple_ref . "</a><br>" .
+                        htmlspecialchars($message['sender_referrer']) .  "\">" . 
+                        htmlspecialchars($simple_ref) . "</a><br>" .
                  "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
-               print "</tr>";
-	       $c = 1 - $c;
+                print "</tr>";
+                $c = 1 - $c;
             }
 ?>
 </table>
@@ -94,7 +95,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . $recent['state'] . "</td>";
-                print "<td>" . $recent['message'] . "</td>";
+                print "<td>" . htmlspecialchars($recent['message']) . "</td>";
                 print "</tr>";
             }
 ?>
@@ -154,23 +155,23 @@ All time stats:
         if ($id) {
             // Freeze or thaw messages
             if (get_http_var('freeze')) {
-                $result = msg_admin_freeze_message($id);
+                $result = msg_admin_freeze_message($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id frozen</i></b></p>";
             } else if (get_http_var('thaw')) {
-                $result = msg_admin_thaw_message($id);
+                $result = msg_admin_thaw_message($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id thawed</i></b></p>";
             } else if (get_http_var('error')) {
-                $result = msg_admin_error_message($id);
+                $result = msg_admin_set_message_to_error($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id moved to error state</i></b></p>";
             } else if (get_http_var('failed')) {
-                $result = msg_admin_failed_message($id);
+                $result = msg_admin_set_message_to_failed($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id moved to failed state</i></b></p>";
             } else if (get_http_var('failed_closed')) {
-                $result = msg_admin_failed_closed_message($id);
+                $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
             }

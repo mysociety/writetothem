@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.71 2004-12-30 10:32:08 francis Exp $
+# $Id: Queue.pm,v 1.72 2004-12-30 14:54:00 francis Exp $
 #
 
 package FYR::Queue;
@@ -1251,73 +1251,74 @@ sub admin_get_stats () {
     return \%ret;
 }
 
-=item admin_freeze_message ID
+=item admin_freeze_message ID USER
 
-Freezes the message with the given id, so it won't be actually sent to
-the representative until thawed.
+Freezes the message with the given ID, so it won't be actually sent to
+the representative until thawed.  USER is the administrators name.
 
 =cut
-sub admin_freeze_message ($) {
-    my ($id) = @_;
+sub admin_freeze_message ($$) {
+    my ($id, $user) = @_;
     FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-    logmsg($id, "admin froze message");
+    logmsg($id, "$user froze message");
     FYR::DB::dbh()->commit();
     return 0;
 }
 
-=item admin_thaw_message ID
+=item admin_thaw_message ID USER
 
-Thaws the message with the given id, so it will be sent to the
-representative. 
+Thaws the message with the given ID, so it will be sent to the
+representative. USER is the administrators name.
 
 =cut
-sub admin_thaw_message ($) {
-    my ($id) = @_;
+sub admin_thaw_message ($$) {
+    my ($id, $user) = @_;
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
-    logmsg($id, "admin thawed message");
+    logmsg($id, "$user thawed message");
     FYR::DB::dbh()->commit();
     return 0;
 }
 
-=item admin_error_message ID
+=item admin_set_message_to_error ID USER
 
 Moves message with given ID to error state, so aborting any further
 action, and sending delivery failure notification to constituent.
+USER is the administrators name.
 
 =cut
-sub admin_error_message ($) {
-    my ($id) = @_;
+sub admin_set_message_to_error ($$) {
+    my ($id, $user) = @_;
     state($id, 'error');
-    logmsg($id, "admin put message in state 'error'");
+    logmsg($id, "$user put message in state 'error'");
     FYR::DB::dbh()->commit();
     return 0;
 }
 
-=item admin_failed_message ID
+=item admin_set_message_to_failed ID USER
 
 Moves message with given ID to failed state, so aborting any further
-action.  The constituent is not told.
+action.  The constituent is not told.  USER is the administrators name.
 
 =cut
-sub admin_failed_message ($) {
-    my ($id) = @_;
+sub admin_set_message_to_failed ($$) {
+    my ($id, $user) = @_;
     state($id, 'failed');
-    logmsg($id, "admin put message in state 'failed'");
+    logmsg($id, "$user put message in state 'failed'");
     FYR::DB::dbh()->commit();
     return 0;
 }
 
-=item admin_failed_closed_message ID
+=item admin_set_message_to_failed_closed ID USER
 
 Moves message from failed to failed_closed state.  For when
-the admin has dealt with it.
-
+the admin has dealt with it.  USER is the administrators name.
 =cut
-sub admin_failed_closed_message ($) {
-    my ($id) = @_;
+
+sub admin_set_message_to_failed_closed ($$) {
+    my ($id, $user) = @_;
     state($id, 'failed_closed');
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
-    logmsg($id, "admin put message in state 'failed_closed'");
+    logmsg($id, "$user put message in state 'failed_closed'");
     FYR::DB::dbh()->commit();
     return 0;
 }

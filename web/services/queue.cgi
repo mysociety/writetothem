@@ -6,7 +6,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.11 2004-12-30 10:32:08 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.12 2004-12-30 14:54:00 francis Exp $';
 
 require 5.8.0;
 
@@ -60,19 +60,19 @@ while ($req->Accept() >= 0) {
                 return FYR::Queue::admin_get_stats();
             },
             'FYR.Queue.admin_freeze_message' => sub {
-                return FYR::Queue::admin_freeze_message($_[0]);
+                return FYR::Queue::admin_freeze_message($_[0], $_[1]);
             },
             'FYR.Queue.admin_thaw_message' => sub {
-                return FYR::Queue::admin_thaw_message($_[0]);
+                return FYR::Queue::admin_thaw_message($_[0], $_[1]);
             },
-            'FYR.Queue.admin_error_message' => sub {
-                return FYR::Queue::admin_error_message($_[0]);
+            'FYR.Queue.admin_set_message_to_error' => sub {
+                return FYR::Queue::admin_set_message_to_error($_[0], $_[1]);
             },
-            'FYR.Queue.admin_failed_message' => sub {
-                return FYR::Queue::admin_failed_message($_[0]);
+            'FYR.Queue.admin_set_message_to_failed' => sub {
+                return FYR::Queue::admin_set_message_to_failed($_[0], $_[1]);
             },
-            'FYR.Queue.admin_failed_closed_message' => sub {
-                return FYR::Queue::admin_failed_closed_message($_[0]);
+            'FYR.Queue.admin_set_message_to_failed_closed' => sub {
+                return FYR::Queue::admin_set_message_to_failed_closed($_[0], $_[1]);
             }
           );
     $W->exit_if_changed();
