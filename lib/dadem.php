@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.2 2004-10-04 17:26:11 chris Exp $
+ * $Id: dadem.php,v 1.3 2004-10-04 17:49:26 chris Exp $
  * 
  */
 
@@ -42,7 +42,7 @@ $rep_name = array(
 
 /* $rep_suffix
  * Suffix/short name. */
-$rep_name = array(
+$rep_suffix = array(
         VA_LBW  => 'Cllr',
 
         VA_GLA  => 'Mayor', /* "of London"? */
