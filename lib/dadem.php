@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.16 2004-10-06 15:26:01 chris Exp $
+ * $Id: dadem.php,v 1.17 2004-10-06 15:34:29 francis Exp $
  * 
  */
 
@@ -135,7 +135,7 @@ function dadem_get_representative_info($rep_id) {
     $ret = $stub_data[$rep_id];
     if (!isset($ret)) {
         debug("DADEM", "Representative not found id $rep_id");
-        return DADEM_REPRESENTATIVE_NOT_FOUND;
+        return DADEM_REP_NOT_FOUND;
     }
     debug("DADEM", "Looked up info for representative id $rep_id");
     debug("DADEMRESULT", "Results:", $ret);
