@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.30 2004-12-08 23:26:16 matthew Exp $
+ * $Id: who.php,v 1.31 2004-12-08 23:37:53 matthew Exp $
  * 
  */
 
@@ -28,25 +28,16 @@ if (get_http_var('err')) {
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
-print '<!-- ';
-print_r($voting_areas);
-print ' -->';
 mapit_check_error($voting_areas);
 debug_timestamp();
 
 $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
 mapit_check_error($voting_areas_info);
 debug_timestamp();
-print '<!-- ';
-print_r($voting_areas_info);
-print ' -->';
 
 $area_representatives = dadem_get_representatives(array_values($voting_areas));
 dadem_check_error($area_representatives);
 debug_timestamp();
-print '<!-- ';
-print_r($area_representatives);
-print ' -->';
 
 $all_representatives = array();
 foreach (array_values($area_representatives) as $rr) {
