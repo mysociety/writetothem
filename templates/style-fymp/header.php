@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <TITLE>WriteToThem.com - <? print $values['title']; ?></TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="style-fymp/fax_style.css">
 </HEAD>
