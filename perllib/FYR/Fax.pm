@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.12 2005-02-03 17:24:00 chris Exp $
+# $Id: Fax.pm,v 1.13 2005-02-03 18:08:37 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -268,10 +268,9 @@ sub make_pbm_image ($) {
     # pixel screens or whatever, and so is not quite the right thing for
     # thousands-of-pixels-square fax images. But it seems to work.
     my ($h, $name) = mySociety::Util::named_tempfile('.pbm');
-    push(@imgfiles, $name);
     my ($p, $pid) = mySociety::Util::pipe_via('wbmptopbm', $h);
     $h->close() or die "close: $name: $!";;
-    $p->print($pages[$i]->wbmp(1)) or die "write: $name: $!";
+    $p->print($im->wbmp(1)) or die "write: $name: $!";
     $p->close() or die "close: $!";
 
     waitpid($pid, 0);
@@ -358,12 +357,10 @@ sub make_representative_fax ($) {
         for (my $i = 0; $i < @pages; ++$i) {
             $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax});
             my $f = ($i > 0 ? $footerheight : $firstfooterheight);
-
             format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_FOOTER);
             $pages[$i]->setThickness(2);
             $pages[$i]->line(LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f - 10, LMARGIN_CX + TEXT_CX, TMARGIN_CY + TEXT_CY - $f - 10, 1);
-
-            push(@imgfiles, make_pbm_file($im));
+            push(@imgfiles, make_pbm_file($pages[$i]));
         }
     } otherwise {
         my $E = shift;

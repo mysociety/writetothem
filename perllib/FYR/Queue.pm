@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.122 2005-02-03 17:24:00 chris Exp $
+# $Id: Queue.pm,v 1.123 2005-02-03 18:08:37 chris Exp $
 #
 
 package FYR::Queue;
@@ -40,6 +40,7 @@ use utf8;
 use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::DBHandle qw(dbh new_dbh);
+use mySociety::MaPit;
 use mySociety::Util;
 use mySociety::VotingArea;
 use mySociety::StringUtils qw(trim merge_spaces string_diff);
@@ -108,7 +109,7 @@ sub work_out_destination ($) {
     } elsif ($recipient->{method} eq "via") {
         # Representative should be contacted via the elected body on which they
         # sit.
-        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{voting_area});
+        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{area_id});
         my $vainfo = DaDem::get_representatives($ainfo->{parent_area_id});
         throw FYR::Error("Bad return from DaDem looking up contact via info")
             unless (ref($vainfo) eq 'ARRAY');
@@ -227,7 +228,9 @@ sub write ($$$$) {
             ) values (
                 ?,
                 ?, ?, ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?,
+                ?, ?, ?,
+                    ?, ?,
+                    ?,
                 ?,
                 'new',
                 ?, ?,
@@ -285,6 +288,11 @@ sub write ($$$$) {
     return $ret;
 }
 
+my $logmsg_handler;
+sub logmsg_set_handler ($) {
+    $logmsg_handler = $_[0];
+}
+
 # logmsg ID IMPORTANT DIAGNOSTIC
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
 # then mark the log message as exceptional.
@@ -301,6 +309,7 @@ sub logmsg ($$$) {
         $msg,
         $important ? 't' : 'f');
     $dbh->commit();
+    &$logmsg_handler($id, time(), state($id), $msg, $important) if (defined($logmsg_handler));
 }
 
 # %allowed_transitions
@@ -653,16 +662,16 @@ sub email_template ($) {
 # elements from EXTRA.
 sub email_template_params ($%) {
     my ($msg, %params) = @_;
-    foreach (qw(sender_name recipient_name recipient_position recipient_position_plural)) {
+    foreach (qw(sender_name recipient_name recipient_position recipient_position_plural recipient_id)) {
         $params{$_} = $msg->{$_};
     }
-    my $a = "$msg->{sender_address}\n$msg->{sender_postcode}";
+    my $a = $msg->{sender_addr};
     $a =~ s#[,.]?\n+#, #g;
 
     # Also obtain the voting area name -- needed for the via template.
     my $r = mySociety::DaDem::get_representative_info($msg->{recipient_id});
-    my $a = mySociety::MaPit::get_voting_area_info($r->{area_id});
-    $params{recipient_area_name} = $a->{name};
+    my $A = mySociety::MaPit::get_voting_area_info($r->{voting_area});
+    $params{recipient_area_name} = $A->{name};
     
     return \%params;
 }
