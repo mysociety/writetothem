@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.30 2004-11-18 18:28:24 chris Exp $
+# $Id: Queue.pm,v 1.31 2004-11-18 18:55:07 chris Exp $
 #
 
 package FYR::Queue;
@@ -343,7 +343,7 @@ sub format_email_body ($) {
     my ($msg) = @_;
 
     my $addr = $msg->{sender_addr};
-    $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (exists($msg->{sender_phone}));
+    $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
     $addr .= "\n\n" . "Email: $msg->{sender_email}";
     my $text = format_postal_address($addr);
     $text .= "\n\n" . wrap(EMAIL_COLUMNS, $msg->{message});
