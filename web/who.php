@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.58 2005-02-10 16:42:43 francis Exp $
+ * $Id: who.php,v 1.59 2005-02-11 11:12:39 chris Exp $
  * 
  */
 
@@ -188,10 +188,10 @@ function display_reps($representatives) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
         if ($rep_specificid == '2000005') {
-            $rep_list .= '<img src="images/zz99zz.jpeg" align="left">';
+            $rep_list .= '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left">';
             $photo = 1;
         } elseif (array_key_exists('image', $rep_info)) {
-            $rep_list .= '<img src="'.$rep_info['image'].'" align="left">';
+            $rep_list .= '<img alt="" title="Portrait of ' . htmlspecialchars($rep_info['name']) . '" src="' . $rep_info['image'] . '" align="left">';
             $photo = 1;
         }
         $rep_list .= '<a href="'
