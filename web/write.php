@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.8 2004-10-15 09:16:31 francis Exp $
+ * $Id: write.php,v 1.9 2004-10-15 11:30:33 francis Exp $
  * 
  */
 
@@ -51,6 +51,9 @@ if ($action == "preview") {
     $fyr_writer_email_valid = (isset($fyr_writer_email) && strlen($fyr_writer_email) > 0);
     $fyr_writer_phone = get_http_var('writer_phone');
     $fyr_writer_phone_valid = true;
+
+    # We've upgraded to the more secure SHA1 from MD5 that FaxYourMP uses ;)
+    $fyr_writer_signature = sha1($fyr_writer_email);
     
     if ($fyr_writer_name_valid && $fyr_writer_address1_valid &&
         $fyr_writer_town_valid && $fyr_writer_email_valid) {

@@ -1,3 +1,4 @@
+<!--
 <H4>
  12345 faxes sent to date.
 <P>
@@ -5,6 +6,7 @@
 Sending identical copied and pasted "form" letters will do your cause more harm than good...
 <a href="/q_a.php3#formletters">Here's why.</A></B></FONT></P>
 </H4>
+-->
 
 <!--
 	<A HREF="feedback.php3">Does It Really Work?</a>
