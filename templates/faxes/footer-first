@@ -1,0 +1,10 @@
+This is page <?=$values['this_page']?>/<?=$values['total_pages']?>. If you do
+not receive the whole of this transmission, or if there is any problem with
+this fax, please email us on help@writetothem.com or telephone us on XXX-XXXX.
+You can also visit our secure web site at,
+
+  <?=$values['representative_url']?>
+
+to change your options (for instance, to ask to receive emails rather than
+faxes) or to forward this message to one of the constituent's other
+representatives if you are not the appropriate recipient.

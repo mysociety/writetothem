@@ -1,8 +1,11 @@
 Format as for ../emails. Templates are:
 
+  - footer-first
+
   - footer
 
-    Boilerplate attached to the bottom of each fax page. Extra variables are,
+    Boilerplate footer material appended to, respectively, the first and every
+    subsequent page of each fax transmitted. Variables are:
 
       - this_page, the page number of this page;
 
