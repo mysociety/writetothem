@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.33 2004-11-25 15:11:47 francis Exp $
+ * $Id: write.php,v 1.34 2004-11-26 11:07:36 francis Exp $
  * 
  */
 
@@ -214,7 +214,11 @@ if (!isset($fyr_who)) {
 }
 
 // Rate limiter
-fyr_rate_limit(array('postcode' => $fyr_postcode, 'who' => $fyr_who));
+$limit_values = array('postcode' => $fyr_postcode, 'who' => $fyr_who);
+if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
+    $limit_values['body'] = $fyr_values['body'];
+}
+fyr_rate_limit($limit_values);
 
 // Message id for transaction with fax queue
 $msgid = $fyr_values['fyr_msgid'];
