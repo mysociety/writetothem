@@ -33,4 +33,7 @@ Sort out error codes when there is a transport error from XMLRPC, so
 MaPit/DaDem get an error
 To return error object with integer, string
 
+Share constants properly between Perl and PHP
+Make error codes global
+
 
