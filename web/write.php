@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.48 2005-01-04 16:01:58 francis Exp $
+ * $Id: write.php,v 1.49 2005-01-05 20:21:38 chris Exp $
  * 
  */
 
@@ -266,7 +266,7 @@ if (rabx_is_error($success)) {
 
 // Generate signature
 $fyr_values['signature'] = sha1($fyr_values['email']);
-$fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  " (Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
+$fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  "\n(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
