@@ -26,10 +26,10 @@ system</a>.</p>
 <TABLE CELLPADDING="4" CELLSPACING="2" BORDER="0" WIDTH="100%">
 <TR>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/">Home</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/youandyourmp.php3">You &amp; Your MP</A></TD>
+<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-youandyourmp">You &amp; Your MP</A></TD>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-qa">Q&amp;A</A></TD>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-us">About Us</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/contact.php3">Contact Us</A></TD>
+<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-contact">Contact Us</A></TD>
 </TR>
 </TABLE>
 
