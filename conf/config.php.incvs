@@ -10,16 +10,18 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: config.php.incvs,v 1.6 2004-10-28 15:40:06 chris Exp $
+ * $Id: config.php.incvs,v 1.7 2004-10-29 17:57:10 chris Exp $
  * 
  */
 
 /* Where the XML-RPC service for DaDem is. */
+define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
 define('OPTION_DADEM_HOST', 'caesious.beasts.org');
 define('OPTION_DADEM_PORT', 80);
 define('OPTION_DADEM_PATH', '/~chris/scripts/xmlrpc');
 
 /* Where the XML-RPC service for MaPit is. */
+define('OPTION_MAPIT_URL', 'http://services.mysociety.org/mapit');
 define('OPTION_MAPIT_HOST', 'caesious.beasts.org');
 define('OPTION_MAPIT_PORT', 80);
 define('OPTION_MAPIT_PATH', '/~chris/scripts/xmlrpc2');
