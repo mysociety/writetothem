@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.103 2005-01-29 00:32:37 francis Exp $
+# $Id: Queue.pm,v 1.104 2005-01-29 02:23:28 francis Exp $
 #
 
 package FYR::Queue;
@@ -34,6 +34,7 @@ use MIME::Words;
 use POSIX qw(strftime);
 use String::Ediff;
 use Text::Wrap (); # don't pollute our namespace
+use Data::Dumper;
 
 use utf8;
 
@@ -1210,7 +1211,10 @@ FILTER should be:
     1 to return only information about messages which may need operator attention; 
     2 to return messages which recently changed state; 
     3 to return messages which were created recently; 
-    4 to return messages similar to 'msgid' in PARAMS;
+    4 to return messages similar to 'msgid' from PARAMS;
+    5 to return messages matching search 'query' (from PARAMS), where
+         sender and recipient details are searched, as well as
+         matching confirmation tokens.
 PARAMS is a hash of parameters to the filter type.
 
 =cut
@@ -1244,6 +1248,48 @@ sub admin_get_queue ($$) {
         @params = map { $_->[0] } @similar;
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
+    } elsif (int($filter) == 5) {
+        my $tokenfound_id;
+        if (length($params->{query}) >= 20) {
+            $tokenfound_id = check_token("confirm", $params->{query});
+            if (!defined($tokenfound_id)) {
+                $tokenfound_id = check_token("questionnaire", $params->{query});
+            }
+        }
+        if (defined($tokenfound_id)) {
+            $where = "where id = ?";
+            push @params, $tokenfound_id;
+        } else {
+            my $query = merge_spaces($params->{query});
+            my @terms = split m/ /, $query;
+            
+            $where = "where ";
+            $where .= join(" and ", map {
+                my $term = $_;
+                for (1 .. 11) {
+                    push @params, '%'.$term.'%';
+                }
+                for (1 .. 2) {
+                    push @params, $term;
+                }
+                q#
+                         ((sender_name ilike ?) or
+                          (sender_email ilike ?) or
+                          (sender_addr ilike ?) or
+                          (sender_phone ilike ?) or
+                          (sender_postcode ilike ?) or
+                          (sender_ipaddr ilike ?) or
+                          (sender_referrer ilike ?) or
+                          (recipient_name ilike ?) or
+                          (recipient_email ilike ?) or
+                          (recipient_fax ilike ?) or
+                          (message ilike ?) or
+
+                          (recipient_type = ?) or
+                          (state = ?))#;
+            } @terms);
+            $where .= " order by created desc";
+        }
     }
     my $sth = FYR::DB::dbh()->prepare("
             select *, length(message) as message_length from message $where

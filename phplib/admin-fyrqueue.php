@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.57 2005-01-29 00:32:37 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.58 2005-01-29 02:23:29 francis Exp $
  * 
  */
 
@@ -256,7 +256,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Note');
             }
-            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Actions:</b>");
+            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Action:</b>");
             if ($message['frozen']) {
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
@@ -450,6 +450,9 @@ Summary statistics:
             } else if ($view == "similarbody") {
                 $filter = 4;
                 $params['msgid'] = get_http_var('simto');
+            } else if ($view == "search" || get_http_var('search')) {
+                $filter = 5;
+                $params['query'] = get_http_var('query');
             } else { # important
                 $filter = 1;
             }
@@ -463,45 +466,74 @@ Summary statistics:
             }
 
             print "<h2>View messages which: ";
-            print "[Need Action ";
+            print "</h2>";
+
+            $qmenu = "";
+            $qmenu .= "[Need Action ";
             if ($filter == 1)
-                print count($messages);
-            print ": ";
+                $qmenu .= count($messages);
+            $qmenu .= ": ";
             if ($filter == 1 and (!$reverse))
-                print "Newest ";
+                $qmenu .= "Newest ";
             else
-                print "<a href=\"$self_link&amp;view=important\">Newest</a> ";
-            print " | ";
+                $qmenu .= "<a href=\"$self_link&amp;view=important\">Newest</a> ";
+            $qmenu .= " | ";
             if ($filter == 1 and ($reverse))
-                print "Oldest";
+                $qmenu .= "Oldest";
             else
-                print "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
-            print "] ";
+                $qmenu .= "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
+            $qmenu .= "] ";
 
 
             if ($filter != 3)
-                print "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
+                $qmenu .= "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
             else
-                print "[Recently Created] ";
+                $qmenu .= "[Recently Created] ";
             if ($filter != 2)
-                print "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
+                $qmenu .= "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
             else
-                print "[Recently Changed] ";
+                $qmenu .= "[Recently Changed] ";
             if ($filter == 4)
-                print "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
-# Too slow, doesn't really work, so disabled for now
-#            if ($filter != 0)
-#                print "<a href=\"$self_link&amp;view=all\">[Entire Queue]</a> ";
-#            else
-#                print "[Entire Queue] ";
-            print "</h2>";
+                $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
+            $qmenu .= "[Contains ";
+            if ($filter == 5)
+                $qmenu .= count($messages) . " ";
+
+            $form = new HTML_QuickForm('searchForm', 'post', $self_link);
+            $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
+            $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>16));
+            $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
+            $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
+            $form->addGroup($searchgroup, "actiongroup", "",' ', false);
+            admin_render_form($form);
 
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
             $this->print_messages($messages);
-            if ($filter == 2)
+            if ($filter == 2 or $filter == 3)
                 print "<p>...";
+                ?>
+                <h2>Help &mdash; what views/searches are there?</h2>
+                <p>
+                <b>Need Action, Newest/Oldest:</b> Message which need immediate administrator attention.
+                This is either to fix broken addresses, or handle possible cases of abuse.
+                Always shows all important messages, but can show newest or oldest first.
+                <br><b>Recently Created:</b> Most recent messages constituents have made.
+                <br><b>Recently Changed:</b> Messages which something has happened to recently.
+                <br><b>Contains:</b> Searches the sender details, recipient details and message
+                body.  Enter multiple terms separate by spaces, all must be
+                present to match.  If you query by state name ('pending') or
+                representative type ('EUR') you must enter the whole word, case
+                sensitive.  Otherwise queries are case insensitive.  Yes, you
+                can query on the referrer URL.  If you have one, you can enter
+                a confirmation or questionnaire token from an email, such as
+                cqyv7yrisjugc5i5rfz4w75tmnxzi.  Examples: '<b>ready EUR</b>' - all messages to MEPs
+                which are ready to be sent.  '<b>francis theyworkforyou</b>' - probably
+                all messages written by someone called Francis who came to WTT via
+                theyworkforyou.com.
+                </p>
+                <?
         }
 ?>
 <h2>Help &mdash; what do the buttons do?</h2>
