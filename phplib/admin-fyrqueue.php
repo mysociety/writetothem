@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.32 2005-01-05 11:24:16 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.33 2005-01-05 11:58:07 francis Exp $
  * 
  */
 
@@ -75,8 +75,18 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                         htmlspecialchars($message['sender_addr']) . "<br>" .
                         htmlspecialchars($message['sender_email']) .
                  "</td>";
-                print "<td>" . 
-                        $message['recipient_name'] . "<br>";
+
+                $display_name = $message['recipient_name'];
+                $display_name = "";
+                if (!isset($display_name) || $display_name == "") {
+                    $display_name = "scrubbed, id " .
+                    $message['recipient_id'] . ", " .
+                    $message['recipient_type'];
+                }
+                print "<td><a href=\"?page=reps&amp;rep_id=" .
+                    urlencode($message['recipient_id']) . "&amp;pc=" .
+                    urlencode($message['sender_postcode']) . "\">" . 
+                    $display_name . "</a><br>";
                 if ($message['recipient_email']) print $message['recipient_email'] . "<br>";
                 if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
                 print "</td>";
@@ -98,6 +108,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                  "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                 print "</tr>";
+
                 $c = 1 - $c;
             }
 ?>
@@ -185,6 +196,20 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<blockquote>";
                 print nl2br(htmlspecialchars($message['message']));
                 print "</blockquote>";
+            }
+
+            if (is_array($message['questionnaires'])) {
+                print "<h2>Questionnaire Responses</h2>";
+                foreach ($message['questionnaires'] as $q) {
+                    if ($q['question_id'] == 0) {
+                        print "Reply within two/three weeks:";
+                    } elseif ($q['question_id'] == 1) {
+                        print "First time contacted any representative:";
+                    } else {
+                        print $q['question_id'] . ":";
+                    }
+                    print " <b>" . $q['answer'] .  "</b><br>";
+                }
             }
  
             print "<h2>All events for this message:</h2>";

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.78 2005-01-04 18:05:27 francis Exp $
+# $Id: Queue.pm,v 1.79 2005-01-05 11:58:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -1212,14 +1212,27 @@ Returns a hash of information about message with id ID.
 =cut
 sub admin_get_message ($) {
     my ($id) = @_;
+
     my $sth = FYR::DB::dbh()->prepare("select 
         *, length(message) as message_length from message where id =
         ?");
     $sth->execute($id);
     my $hash_ref = $sth->fetchrow_hashref();
+
     my $bounces = FYR::DB::dbh()->selectcol_arrayref("select 
         bouncetext from message_bounce where message_id = ?", {}, $id);
     $hash_ref->{bounces} = $bounces;
+
+    $sth = FYR::DB::dbh()->prepare("select question_id, answer from
+        questionnaire_answer where message_id = ?");
+    $sth->execute($id);
+    my @ret;
+    
+    while (my $hash_ref = $sth->fetchrow_hashref()) {
+        push @ret, $hash_ref;
+    }
+    $hash_ref->{questionnaires} = \@ret;
+
     return $hash_ref;
 }
 
