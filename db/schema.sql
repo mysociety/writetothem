@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.21 2005-01-25 10:39:36 chris Exp $
+-- $Id: schema.sql,v 1.22 2005-01-25 12:04:49 chris Exp $
 --
 
 set client_min_messages to error;
@@ -85,7 +85,11 @@ create table message (
     -- when the message was dispatched to the representative (UNIX time)
     dispatched integer
 );
+
+-- Various indices to make the queue pages quicker.
 create index message_created_idx on message(created);
+create index message_state_idx on message(state);
+create index message_frozen_idx on message(frozen);
 
 -- message_extradata
 -- Additional (opaque) data about each message.
