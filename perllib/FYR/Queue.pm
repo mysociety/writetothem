@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.55 2004-12-16 01:47:07 chris Exp $
+# $Id: Queue.pm,v 1.56 2004-12-16 10:53:27 chris Exp $
 #
 
 package FYR::Queue;
@@ -944,7 +944,7 @@ my %state_action = (
                 # Abandon faxes after a few failures.
                 if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
                     logmsg($id, "abandoning message after $msg->{numactions} failures to send by fax");
-                    state($id, 'failed');
+                    state($id, 'error');
                     return;
                 }
 
