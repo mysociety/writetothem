@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.19 2004-10-06 16:20:20 francis Exp $
+ * $Id: dadem.php,v 1.20 2004-10-06 16:22:49 francis Exp $
  * 
  */
 
@@ -61,7 +61,7 @@ function dadem_get_error($e) {
  * area on success, or an error code on failure. */
 function dadem_get_representatives($va_id) {
     debug("DADEM", "Looking up representatives for voting area id $va_id");
-    return sxr_call(DADEM_HOST, DADEM_PORT, DADEM_PATH, 'DaDem.get_representatives', array($va_id));
+    return sxr_call(OPTION_DADEM_HOST, OPTION_DADEM_PORT, OPTION_DADEM_PATH, 'DaDem.get_representatives', array($va_id));
 }
 
 /* dadem_get_representative_info ID
