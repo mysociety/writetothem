@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.21 2004-11-18 12:46:30 chris Exp $
+# $Id: Queue.pm,v 1.22 2004-11-18 12:47:46 chris Exp $
 #
 
 package FYR::Queue;
@@ -468,7 +468,7 @@ sub send_user_email ($$$) {
 # directory in ../ and ../../. Nasty.
 sub email_template ($) {
     my ($name) = @_;
-    $name = "emails/$name";
+    $name = "templates/emails/$name";
     foreach (qw(.. ../..)) {
         return "$_/$name" if (-e "$_/$name");
     }
