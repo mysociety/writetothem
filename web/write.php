@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.65 2005-02-08 14:34:59 chris Exp $
+ * $Id: write.php,v 1.66 2005-02-10 14:01:58 francis Exp $
  * 
  */
 
@@ -291,7 +291,7 @@ if (rabx_is_error($success)) {
         template_show_error(<<<EOF
 Sorry, we do not have contact details for this representative, so cannot send
 them a message. Please <a href="mailto:help@writetothem.com">email us</a> to
-let us know. Details:
+let us know. Details: 
 EOF
             .  htmlspecialchars($success->text)
         );
