@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.58 2004-12-16 14:21:12 chris Exp $
+# $Id: Queue.pm,v 1.59 2004-12-16 14:44:12 chris Exp $
 #
 
 package FYR::Queue;
@@ -322,10 +322,12 @@ sub state ($;$) {
             FYR::DB::dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
             logmsg($id, "changed state to $state");
 
-            # If the new state is either finished or failed, we also remove any
-            # personal information from the message. Once this is done only the
-            # message ID, recipient ID, and state information remain.
-            if ($state eq 'failed' or $state eq 'finished') {
+            # On moving into the 'finished' state, scrub message of personal
+            # information. Don't do this for 'failed' messages since we want to
+            # keep log and other information around for a bit to debug
+            # problems; the action for the failed state will scrub such
+            # messages later on.
+            if ($state eq 'finished') {
                 scrubmessage($id);
             }
         } else {
@@ -831,14 +833,17 @@ use constant QUESTIONNAIRE_INTERVAL => (14 * DAY);
 # recipient wants to forward it?
 use constant MESSAGE_RETAIN_TIME => (21 * DAY);
 
+# How long do we retain log and other information from a failed message for
+# operator inspection?
+use constant FAILED_RETAIN_TIME => (7 * DAY);
+
 # Total number of times we attempt delivery by fax.
 use constant FAX_DELIVERY_ATTEMPTS => 4;
 
+# Interval between fax sending attempts.
 use constant FAX_DELIVERY_INTERVAL => 600;
 
 use constant FAX_DELIVERY_BACKOFF => 3;
-
-# Interval between fax sending attempts
 
 # Timeouts in the state machine:
 my %state_timeout = (
@@ -886,7 +891,11 @@ my %state_action_interval = (
 
         # How often we attempt delivery of an error report in the face of soft
         # failures.
-        error           => 43200
+        error           => 43200,
+
+        # How often we grind over failed messages to scrub old ones of personal
+        # information.
+        failed          => DAY
     );
 
 
@@ -1023,6 +1032,14 @@ my %state_action = (
                 # Give up -- it's all really bad.
                 logmsg($id, "Unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
                 state($id, 'failed');
+            }
+        },
+
+        failed => sub ($$$) {
+            my ($email, $fax, $id) = @_;
+            my $msg = message($id);
+            if ($msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
+                scrubmessage($id);
             }
         }
     );
