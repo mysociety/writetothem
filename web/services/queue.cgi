@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w -I../../perllib -I../../../perllib
 #
-# server:
+# queue.cgi:
+# RABX server for FYR queue.
 #
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.19 2005-01-31 20:46:27 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.20 2005-02-23 12:46:55 chris Exp $';
 
 require 5.8.0;
 
