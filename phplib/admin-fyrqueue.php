@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.20 2004-12-30 13:41:28 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.21 2004-12-30 13:42:38 francis Exp $
  * 
  */
 
@@ -63,7 +63,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($client_name != "")  {
                     $client_name = gethostbyaddr($client_name);
                 }
-                $short_client_name = trim_characters($client_name, strlen($client_name) - 29, 30); 
+                $short_client_name = trim_characters($client_name, strlen($client_name) - 27, 30); 
 
                 print "<td><span title=\"" .  htmlspecialchars($client_name) . "\">" .
                         $short_client_name . "</span><br>" .
