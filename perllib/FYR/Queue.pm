@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.111 2005-01-29 12:13:02 chris Exp $
+# $Id: Queue.pm,v 1.112 2005-01-31 10:17:06 chris Exp $
 #
 
 package FYR::Queue;
@@ -1181,7 +1181,7 @@ messages.
 sub admin_recent_events ($;$) {
     my ($count, $imp) = @_;
     my $sth = FYR::DB::dbh()->prepare('
-                    select message_id, whenlogged, state, message
+                    select message_id, whenlogged, state, message, exceptional
                       from message_log ' .
                       ($imp ? 'where exceptional' : '')
                     . ' order by order_id desc limit ?');
@@ -1203,7 +1203,7 @@ set.
 sub admin_message_events ($;$) {
     my ($id, $imp) = @_;
     my $sth = FYR::DB::dbh()->prepare('
-                    select message_id, whenlogged, state, message
+                    select message_id, whenlogged, state, message, exceptional
                       from message_log
                      where message_id = ? ' . ($imp ? 'and exceptional' : '') .
                     'order by order_id');
