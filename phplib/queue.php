@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.1 2004-10-19 11:43:13 chris Exp $
+ * $Id: queue.php,v 1.2 2004-10-19 15:48:48 chris Exp $
  * 
  */
 
@@ -34,6 +34,21 @@ function msg_write($id, $sender, $recipient_id, $text) {
  * Get/set the state of the message with the given ID. */
 function msg_state($id, $state = null) {
     return 'pending';
+}
+
+/* msg_secret
+ * Return some secret data suitable for use in verifying transactions
+ * associated with data. */
+function msg_secret() {
+    return 'SECRET';
+}
+
+/* msg_confirm_token TOKEN
+ * Pass the TOKEN, which has been supplied by the user in a URL parameter or
+ * whatever, to the queue to confirm the user's email address. Returns true on
+ * success or false on failure. */
+function msg_confirm_token($token) {
+    return true;
 }
 
 ?>
