@@ -12,6 +12,14 @@ if ($values['robots']) { ?>
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">
 
+<?
+    if (OPTION_FYR_REFLECT_EMAILS) {
+        print "Test site - this will reflect emails to representatives
+        back to you.";
+    }
+
+?>
+
 <!-- </font></p> -->
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 
