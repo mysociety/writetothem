@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.55 2005-01-28 22:48:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.56 2005-01-28 23:49:32 francis Exp $
  * 
  */
 
@@ -433,6 +433,11 @@ Summary statistics:
 <?
             // Decide what message view to show
             $params = array();
+            $reverse = false;
+            if (stristr($view, "_rev")) {
+                $view = str_replace("_rev", "", $view);
+                $reverse = true;
+            }
             if ($view == "all") {
                 $filter = 0;
             } else if ($view == "recentchanged") {
@@ -455,10 +460,22 @@ Summary statistics:
             }
 
             print "<h2>View messages which: ";
-            if ($filter != 1)
-                print "<a href=\"$self_link&amp;view=important\">[Need Attention]</a> ";
+            print "[Need Action ";
+            if ($filter == 1)
+                print count($messages);
+            print ": ";
+            if ($filter == 1 and (!$reverse))
+                print "Newest ";
             else
-                print "[Need Attention " . count($messages) . "] ";
+                print "<a href=\"$self_link&amp;view=important\">Newest</a> ";
+            print " | ";
+            if ($filter == 1 and ($reverse))
+                print "Oldest";
+            else
+                print "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
+            print "] ";
+
+
             if ($filter != 3)
                 print "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
             else
@@ -476,7 +493,9 @@ Summary statistics:
 #                print "[Entire Queue] ";
             print "</h2>";
 
-    
+            if ($reverse) {
+                $messages = array_reverse($messages);
+            }
             $this->print_messages($messages);
             if ($filter == 2)
                 print "<p>...";
