@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.45 2004-12-13 12:17:34 francis Exp $
+# $Id: Queue.pm,v 1.46 2004-12-13 12:21:32 francis Exp $
 #
 
 package FYR::Queue;
@@ -59,14 +59,10 @@ sub create () {
     return unpack('h20', mySociety::Util::random_bytes(10));
 }
 
-=item work_out_destination
-
-Internal use.  Takes a recipient, and uses their contact method to set
-the fax or email fields.  Gives an error if contact method is 
-inconsistent with them, and leaves exactly one of fax or email
-defined.
-
-=cut
+# Internal use.  Takes a recipient, and uses their contact method to set
+# the fax or email fields.  Gives an error if contact method is 
+# inconsistent with them, and leaves exactly one of fax or email
+# defined.
 sub work_out_destination($) {
     my ($recipient) = shift;
     
