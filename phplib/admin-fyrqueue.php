@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.33 2005-01-05 11:58:07 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.34 2005-01-05 12:06:36 francis Exp $
  * 
  */
 
@@ -77,7 +77,6 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                  "</td>";
 
                 $display_name = $message['recipient_name'];
-                $display_name = "";
                 if (!isset($display_name) || $display_name == "") {
                     $display_name = "scrubbed, id " .
                     $message['recipient_id'] . ", " .
