@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.10 2004-12-20 21:34:40 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.11 2004-12-20 22:36:33 matthew Exp $
  * 
  */
 
@@ -26,8 +26,9 @@ class ADMIN_PAGE_FYR_QUEUE {
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
 Change</th><th>State</th><th>Sender</th><th>Recipient</th><th>Length (chars)</th></tr>
 <?
+	$c = 1;
             foreach ($messages as $message) {
-                print "<tr>";
+		    print '<tr'.($c==1?' class="v"':'').'>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
                 print "<td><a href=\"" . $this->self_link . "&id=" .  urlencode($message['id']) . "\">" .  substr($message['id'],0,10) . "<br/>" .  substr($message['id'],10) . "</a></td>";
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
@@ -53,6 +54,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th><th>Length (chars)</th
                 print "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                print "</tr>";
+	       $c = 1 - $c;
             }
 ?>
 </table>
@@ -126,7 +128,7 @@ All time stats:
 ?>
 </td></tr>
 </table>
-
+</td></tr>
 </table>
 
 <?
@@ -162,9 +164,9 @@ All time stats:
 
             if (get_http_var('body')) {
                 print "<h2>Body text of message (only read if you really need to)</h2>";
-                print "<p><blockquote>";
+                print "<blockquote>";
                 print nl2br(htmlspecialchars($message['message']));
-                print "</blockquote></p>";
+                print "</blockquote>";
             }
  
             print "<h2>All events for this message:</h2>";
@@ -193,7 +195,7 @@ All time stats:
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
             admin_render_form($form);
-            print "<p><a href=\"?page=reps&rep_id=" .  urlencode($message['recipient_id']) . "&pc=" .  urlencode($message['sender_postcode']) . "\">Edit contact details</a></p>";
+            print "<p><a href=\"?page=reps&amp;rep_id=" .  urlencode($message['recipient_id']) . "&amp;pc=" .  urlencode($message['sender_postcode']) . "\">Edit contact details</a></p>";
 ?>
 <p>
 <b>freeze</b> stops delivery to representative, but other stuff
@@ -212,10 +214,10 @@ All time stats:
                 $messages = array();
             }
             if ($filter == 1) 
-                $description = "Messages which may need attention: <a href=\"$self_link&filter=0\">[all messages]</a>";
+                $description = "Messages which may need attention: <a href=\"$self_link&amp;filter=0\">[all messages]</a>";
             else
                 $description = "All messages in reverse order of
-                    creation: <a href=\"$self_link&filter=1\">[important
+                    creation: <a href=\"$self_link&amp;filter=1\">[important
                     messages only]</a>";
 
             print "<h2>$description</h2>";
@@ -228,7 +230,7 @@ All time stats:
                     print_r($messages);
                 } else {
                     print "<h2>Messages which have changed recently: <a
-                    href=\"$self_link&filter=0\">[all messages]</a></h2>";
+                    href=\"$self_link&amp;filter=0\">[all messages]</a></h2>";
                     $this->print_messages($messages);
                 }
             }
