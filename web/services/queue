@@ -6,17 +6,18 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue,v 1.1 2004-11-08 18:09:31 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue,v 1.2 2004-11-10 09:50:39 francis Exp $';
 
 use FCGI;
 use FYR;
 use FYR::Queue;
 use mySociety::DaDem;
+use mySociety::Config;
 use RABX;
 use XMLRPC::Transport::HTTP;
 
-#mySociety::DaDem::configure('http://services.mysociety.org/dadem');
-mySociety::DaDem::configure('http://localhost/services/dadem');
+mySociety::Config::set_file('../../conf/general');
+mySociety::DaDem::configure(mySociety::Config::get('OPTION_DADEM_URL'));
 
 use mySociety::WatchUpdate;
 my $W = new mySociety::WatchUpdate();

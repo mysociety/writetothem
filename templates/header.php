@@ -3,7 +3,7 @@
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <TITLE>FaxYourRepresentative.com - <? global $fyr_title; print $fyr_title; ?></TITLE>
-<LINK REL="STYLESHEET" TYPE="text/css" HREF="templates/fax_style.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="style-fymp/fax_style.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">

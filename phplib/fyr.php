@@ -6,11 +6,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.2 2004-10-28 15:07:08 chris Exp $
+ * $Id: fyr.php,v 1.3 2004-11-10 09:50:38 francis Exp $
  * 
  */
 
-require_once "../conf/config.php";
+// Set location of configuration file in MYSOCIETY_FYR_CONFIG_FILE
+require_once "../conf/general";
+
 require_once "../../phplib/ratty.php";
 require_once "../../phplib/utility.php";
 

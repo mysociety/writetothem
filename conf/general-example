@@ -1,16 +1,19 @@
 <?php
 /*
- * config.php.incvs
+ * config-example
+ *
  * Configuration parameters, in PHP syntax. File is also read in by
  * a Perl script, so keep things simple -- in particular, at the moment,
- * mySociety::Config only understands define('...', '...').
+ * mySociety::Config only understands define('...', '...').  So no
+ * commenting out variables, or putting them in if statements.
  *
- * Make a copy of this file called config.php and edit it to suit.
+ * Copy this file to one called config in the same directory.  Or
+ * have multiple config files and use a symlink to change between them.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: config.php.incvs,v 1.8 2004-11-08 18:09:30 francis Exp $
+ * $Id: general-example,v 1.1 2004-11-10 09:50:38 francis Exp $
  * 
  */
 
