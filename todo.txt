@@ -1,0 +1,10 @@
+Unobvious TODOs:
+----------------
+
+Copyright messages and license agreement on source code
+
+Encrypt who=va- in URL
+
+Make sure debug log messages can't print data which should be encrypted ;(
+    (maybe not a problem if all /inputs/ are, except for scraping)
+

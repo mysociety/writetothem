@@ -5,9 +5,11 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: whotofax.php,v 1.6 2004-10-05 16:04:36 francis Exp $
+ * $Id: who.php,v 1.1 2004-10-05 20:35:51 francis Exp $
  * 
  */
+
+$fyr_title = "Now Choose The Representative Responsible for the Topic";
 
 include_once "../lib/mapit.php";
 include_once "../lib/votingarea.php";
@@ -26,7 +28,7 @@ if (is_integer($voting_areas)) {
     if ($voting_areas == MAPIT_BAD_POSTCODE) {
         $fyr_error_message = "'$fyr_postcode' is not a valid postcode.";
     }
-    else if ($voting_areas == MAPIT_NOT_FOUND) {
+    else if ($voting_areas == MAPIT_POSTCODE_NOT_FOUND) {
         $fyr_error_message = "'$fyr_postcode' not found";
     }
     else {
@@ -39,15 +41,27 @@ if (is_integer($voting_areas)) {
 // For each voting area, find all the representatives.  Put descriptive
 // text and form text in an array for the template to render.
 $fyr_representatives = array();
-foreach ($voting_areas as $va_type => $va_value) {
-    list($va_specificid, $va_specificname) = $va_value;
+foreach ($voting_areas as $va_type => $va_specificid) {
+    // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     $va_typename = $va_name[$va_type];
+    $info = mapit_get_voting_area_info($va_specificid);
+    if (is_integer($info)) {
+        if ($info == MAPIT_VOTING_AREA_NOT_FOUND) {
+            $fyr_error_message = "$va_specificid is not a valid voting area id.";
+        } else {
+            $fyr_error_message = "Unknown error looking up voting area $va_specificid.";
+        }
+        include "templates/generalerror.html";
+        exit;
+    }
+    list($dummy, $va_specificname) = $info;
     $rep_suffix = $va_rep_suffix[$va_type];
     $rep_name = $va_rep_name[$va_type];
 
-    $parent_va_type = $va_inside[$va_type];;
-    $parent_va_typename = $va_name[$parent_va_type];
-    $parent_va_specificname = $voting_areas[$parent_va_type][1];
+    // The elected body is the overall entity. e.g. Cambridgeshire County Council.
+    $eb_type = $va_inside[$va_type];
+    $eb_typename = $va_name[$eb_type];
+    $eb_specificname = $voting_areas[$eb_type][1];
 
     if ($va_type == VA_DIS) {
         $va_description = "Your District Council is responsible for local services and policy,
@@ -73,7 +87,7 @@ foreach ($voting_areas as $va_type => $va_value) {
     }
     
     $left_column = "<h4>Your $rep_name</h4>
-        <p>Your $rep_name represent you on $parent_va_specificname.  $va_description.</p>
+        <p>Your $rep_name represent you on $eb_specificname.  $va_description.</p>
         ";
 
     $representatives = dadem_get_representatives($va_type, $va_specificid);
@@ -96,13 +110,23 @@ foreach ($voting_areas as $va_type => $va_value) {
             Please choose one $rep_name to contact.</p>
             <table style=\"float: left;\">";
         $c = 0;
-        foreach ($representatives as $reprecord) {
+        foreach ($representatives as $rep_specificid) {
             ++$c;
-            list($rep_specificid, $rep_specificname, $rep_specificcontactmethod, $rep_specificaddress) = $reprecord;
+            $reprecord = dadem_get_representative_info($rep_specificid);
+            if (is_integer($reprecord)) {
+                if ($info == DADEM_REPRESENTATIVE_NOT_FOUND) {
+                    $fyr_error_message = "$rep_specificid is not a valid representative id.";
+                } else {
+                    $fyr_error_message = "Unknown error looking up representative $rep_specificid.";
+                }
+                include "templates/generalerror.html";
+                exit;
+            }
+            list($dummy, $rep_specificname, $rep_specificcontactmethod, $rep_specificaddress) = $reprecord;
     
             $right_column .= <<<END
                     <tr>
-                        <td valign="top"><input type="radio" name="who" value="$va_typename-$c"></td>
+                        <td valign="top"><input type="radio" name="who" value="va-$va_type-$c"></td>
                         <td><b>$rep_specificname</b><br><!--Unknown Party--></td>
                     </tr>
 END;
@@ -113,7 +137,7 @@ END;
 }
 
 // Display page, using all the fyr_* variables set above.
-include "templates/whotofax.html";
+include "templates/who.html";
 
 ?>
 
