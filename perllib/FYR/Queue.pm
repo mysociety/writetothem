@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.26 2004-11-18 15:44:52 chris Exp $
+# $Id: Queue.pm,v 1.27 2004-11-18 17:24:20 chris Exp $
 #
 
 package FYR::Queue;
@@ -116,11 +116,6 @@ sub write ($$$$) {
 
         # XXX should also check that the text bits are valid UTF-8.
 
-        # DBD::Pg will have begun a new transaction immediately we committed the
-        # last one. That's fine, but it means that any timestamps we use are out
-        # of date. So begin a new one.
-        FYR::DB::dbh()->begin_work();
-        
         # Queue the message.
         FYR::DB::dbh()->do(q#
             insert into message (
@@ -658,11 +653,6 @@ changes.
 sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
-        # DBD::Pg will have begun a new transaction immediately we committed the
-        # last one. That's fine, but it means that any timestamps we use are out
-        # of date. So begin a new one.
-        FYR::DB::dbh()->begin_work();
-
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
         FYR::DB::dbh()->commit();
@@ -685,7 +675,6 @@ sub record_questionnaire_answer ($$$) {
     throw FYR::Error("Bad QUESTION (should be '0')") if ($qn ne '0');
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
-        FYR::DB::dbh()->begin_work();
         FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
         FYR::DB::dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
         logmsg($id, "answer of \"$answer\" received for questionnaire qn #$qn");
@@ -880,12 +869,6 @@ my %state_action = (
 # process_queue
 # Drive the state machine round.
 sub process_queue () {
-
-    # DBD::Pg will have begun a new transaction immediately we committed the
-    # last one. That's fine, but it means that any timestamps we use are out
-    # of date. So begin a new one.
-    FYR::DB::dbh()->begin_work();
-
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
     my $stmt = FYR::DB::dbh()->prepare(
