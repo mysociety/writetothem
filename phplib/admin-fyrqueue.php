@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.51 2005-01-19 02:10:46 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.52 2005-01-19 02:14:08 francis Exp $
  * 
  */
 
@@ -396,7 +396,7 @@ Summary statistics:
 </table>
 </td>
 <td>
-<h3>top referrers<br>last day</h3>
+<h3>top referrers last day</h3>
 <table border=1>
 <?
     foreach ($freq_referrers_day as $row) {
