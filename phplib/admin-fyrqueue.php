@@ -1,11 +1,12 @@
 <?php
 /*
+ * admin-fyrqueue.php:
  * FYR queue admin page.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.59 2005-01-29 02:55:05 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.60 2005-01-29 12:11:02 chris Exp $
  * 
  */
 
@@ -121,12 +122,25 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 # this.checked this .className=
 
                 if (array_key_exists('diff', $message)) {
+                    /* Each element of the array consists either of an array of
+                     * two strings, which are the strings unique to the "from"
+                     * and "to" strings; or a string, representing a common
+                     * part; or null, indicating an elided part. */
                     print '<tr'.($c==1?' class="v"':'').'>';
                     print "<td colspan=9><b>Differences:</b> ";
-                    $diff = htmlspecialchars($message['diff']);
-                    $diff = str_replace("[[", "<", $diff);
-                    $diff = str_replace("]]", ">", $diff);
-                    print $diff;
+                    foreach ($message['diff'] as $elem) {
+                        if (!isset($elem)) {
+                            print '<span class="diffsnipped">[ ... snipped ... ]</span>';
+                        } else if (is_array($elem)) {
+                            print '<span class="difffrom">'
+                                    . htmlspecialchars($elem[0])
+                                    . '</span><span class="diffto">'
+                                    . htmlspecialchars($elem[1])
+                                    . '</span>';
+                        } else {
+                            print htmlspecialchars($elem);
+                        }
+                    }
                     print "</td></tr>";
                 }
 
@@ -227,9 +241,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
-        $view = get_http_var('view');
+        $view = get_http_var('view', 'important');
         $id = get_http_var("id");
-
 
         // Display about id
         if ($id) {
@@ -441,24 +454,17 @@ Summary statistics:
                 $view = str_replace("_rev", "", $view);
                 $reverse = true;
             }
-            if ($view == "all") {
-                $filter = 0;
-            } else if ($view == "recentchanged") {
-                $filter = 2;
-            } else if ($view == "recentcreated") {
-                $filter = 3;
-            } else if ($view == "similarbody") {
-                $filter = 4;
+            
+            /* Set up additional parameters for view if necessary. */
+            if ($view == "similarbody") {
                 $params['msgid'] = get_http_var('simto');
             } else if ($view == "search" || get_http_var('search')) {
-                $filter = 5;
+                $view = "search";
                 $params['query'] = get_http_var('query');
-            } else { # important
-                $filter = 1;
             }
-         
+            
             // Show it
-            $messages = msg_admin_get_queue($filter, $params);
+            $messages = msg_admin_get_queue($view, $params);
             if (msg_get_error($messages)) {
                 print "Error contacting queue:";
                 print_r($messages);
@@ -470,33 +476,33 @@ Summary statistics:
 
             $qmenu = "";
             $qmenu .= "[Need Action ";
-            if ($filter == 1)
+            if ($view == 'important')
                 $qmenu .= count($messages);
             $qmenu .= ": ";
-            if ($filter == 1 and (!$reverse))
+            if ($view == 'important' and (!$reverse))
                 $qmenu .= "Newest ";
             else
                 $qmenu .= "<a href=\"$self_link&amp;view=important\">Newest</a> ";
             $qmenu .= " | ";
-            if ($filter == 1 and ($reverse))
+            if ($view == 'important' and ($reverse))
                 $qmenu .= "Oldest";
             else
                 $qmenu .= "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
             $qmenu .= "] ";
 
 
-            if ($filter != 3)
+            if ($view != 'recentcreated')
                 $qmenu .= "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
             else
                 $qmenu .= "[Recently Created] ";
-            if ($filter != 2)
+            if ($view != 'recentchanged')
                 $qmenu .= "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
             else
                 $qmenu .= "[Recently Changed] ";
-            if ($filter == 4)
+            if ($view  == 'similarbody')
                 $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
             $qmenu .= "[Contains ";
-            if ($filter == 5)
+            if ($view == 'search')
                 $qmenu .= count($messages) . " ";
 
             $form = new HTML_QuickForm('searchForm', 'post', $self_link);
@@ -511,32 +517,32 @@ Summary statistics:
                 $messages = array_reverse($messages);
             }
             $this->print_messages($messages);
-            if ($filter == 2 or $filter == 3)
-                print "<p>...";
-                ?>
-                <h2>Help &mdash; what views/searches are there?</h2>
-                <p>
-                <b>Need Action, Newest/Oldest:</b> Message which need immediate administrator attention.
-                This is either to fix broken addresses, or handle possible cases of abuse.
-                Always shows all important messages, but can show newest or oldest first.
-                <br><b>Recently Created:</b> Most recent messages constituents have made.
-                <br><b>Recently Changed:</b> Messages which something has happened to recently.
-                <br><b>Similar to:</b> Shows messages with bodies similar to a given message.
-                Click on "View similar messages" from a message page to get to this view.  Displays
-                colourful diffs of the differences.
-                <br><b>Contains:</b> Searches the sender details, recipient details and message
-                body.  Enter multiple terms separate by spaces, all must be
-                present to match.  If you query by state name ('pending') or
-                representative type ('EUR') you must enter the whole word, case
-                sensitive.  Otherwise queries are case insensitive.  Yes, you
-                can query on the referrer URL.  If you have one, you can enter
-                a confirmation or questionnaire token from an email, such as
-                cqyv7yrisjugc5i5rfz4w75tmnxzi.  Examples: '<b>ready EUR</b>' - all messages to MEPs
-                which are ready to be sent.  '<b>francis theyworkforyou</b>' - probably
-                all messages written by someone called Francis who came to WTT via
-                theyworkforyou.com.
-                </p>
-                <?
+            if ($view == 'recentchanged' or $view == 'recentcreated')
+                print "<p>..."; /* indicate that this isn't all the messages... */
+            ?>
+            <h2>Help &mdash; what views/searches are there?</h2>
+            <p>
+            <b>Need Action, Newest/Oldest:</b> Message which need immediate administrator attention.
+            This is either to fix broken addresses, or handle possible cases of abuse.
+            Always shows all important messages, but can show newest or oldest first.
+            <br><b>Recently Created:</b> Most recent messages constituents have made.
+            <br><b>Recently Changed:</b> Messages which something has happened to recently.
+            <br><b>Similar to:</b> Shows messages with bodies similar to a given message.
+            Click on "View similar messages" from a message page to get to this view.  Displays
+            colourful diffs of the differences.
+            <br><b>Contains:</b> Searches the sender details, recipient details and message
+            body.  Enter multiple terms separate by spaces, all must be
+            present to match.  If you query by state name ('pending') or
+            representative type ('EUR') you must enter the whole word, case
+            sensitive.  Otherwise queries are case insensitive.  Yes, you
+            can query on the referrer URL.  If you have one, you can enter
+            a confirmation or questionnaire token from an email, such as
+            cqyv7yrisjugc5i5rfz4w75tmnxzi.  Examples: '<b>ready EUR</b>' - all messages to MEPs
+            which are ready to be sent.  '<b>francis theyworkforyou</b>' - probably
+            all messages written by someone called Francis who came to WTT via
+            theyworkforyou.com.
+            </p>
+            <?
         }
 ?>
 <h2>Help &mdash; what do the buttons do?</h2>

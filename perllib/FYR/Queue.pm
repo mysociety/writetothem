@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.109 2005-01-29 10:56:39 chris Exp $
+# $Id: Queue.pm,v 1.110 2005-01-29 12:11:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -32,7 +32,6 @@ use Mail::RFC822::Address;
 use MIME::Entity;
 use MIME::Words;
 use POSIX qw(strftime);
-use String::Ediff;
 use Text::Wrap (); # don't pollute our namespace
 use Data::Dumper;
 
@@ -42,7 +41,7 @@ use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::Util;
 use mySociety::VotingArea;
-use mySociety::StringUtils qw(trim merge_spaces);
+use mySociety::StringUtils qw(trim merge_spaces string_diff);
 
 use FYR;
 use FYR::AbuseChecks;
@@ -1185,7 +1184,7 @@ sub admin_recent_events ($;$) {
                     select message_id, whenlogged, state, message
                       from message_log ' .
                       ($imp ? 'where exceptional' : '')
-                    ' order by order_id desc limit ?');
+                    . ' order by order_id desc limit ?');
     $sth->execute(int($count));
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1217,27 +1216,52 @@ sub admin_message_events ($;$) {
 }
 
 
-=item admin_get_queue FILTER PARAMS
+=item admin_get_queue WHICH PARAMS
 
 Returns an array of hashes of information about each message on the queue.
-FILTER should be: 
-    0 to return all messages; 
-    1 to return only information about messages which may need operator attention; 
-    2 to return messages which recently changed state; 
-    3 to return messages which were created recently; 
-    4 to return messages similar to 'msgid' from PARAMS;
-    5 to return messages matching search 'query' (from PARAMS), where
-         sender and recipient details are searched, as well as
-         matching confirmation tokens.
-PARAMS is a hash of parameters to the filter type.
+WHICH and PARAMS indicates which messages should be returned; values of WHICH
+are as follows:
+
+=over 4
+
+=item all
+
+All messages on the queue.
+
+=item important
+
+Messages which may need operator attention.
+
+=item recentchanged
+
+Up to 100 of the messages which have most recently changed state.
+
+=item recentcreated
+
+Up to 100 of the messages which have recently been created.
+
+=item similarbody
+
+Messages which are similar to the message with ID given in PARAMS->{msgid}.
+
+=item search
+
+Messages which contain terms from PARAMS->{query}. Sender and recipient
+details are searched, as well as matching confirmation tokens.
+
+=back
 
 =cut
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
+
+    my %allowed = map { $_ => 1 } qw(all important recentchanged recentcreated similarbody search);
+    throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
+    
     my $where = "order by created desc";
     my $msg;
     my @params;
-    if (int($filter) == 1) {
+    if ($filter eq 'important') {
         $where = q#
             where (state = 'bounce_confirm'
                     or state = 'failed'
@@ -1248,11 +1272,11 @@ sub admin_get_queue ($$) {
         # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
         # index to do the scan. q.v. comments on the end of,
         #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
-    } elsif (int($filter) == 2) {
+    } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc limit 100";
-    } elsif (int($filter) == 3) {
+    } elsif ($filter eq 'recentcreated') {
         $where = "order by created desc limit 100";
-    } elsif (int($filter) == 4) {
+    } elsif ($filter eq 'similarbody') {
         my $sth2 = FYR::DB::dbh()->prepare("
                 select *, length(message) as message_length from message where id = ?
             ");
@@ -1262,7 +1286,7 @@ sub admin_get_queue ($$) {
         @params = map { $_->[0] } @similar;
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
-    } elsif (int($filter) == 5) {
+    } elsif ($filter eq 'search') {
         my $tokenfound_id;
         if (length($params->{query}) >= 20) {
             $tokenfound_id = check_token("confirm", $params->{query});
@@ -1308,52 +1332,19 @@ sub admin_get_queue ($$) {
         ");
     $sth->execute(@params);
     my @ret;
-    while (my $hash_ref = $sth->fetchrow_hashref()) {
-        if (int($filter) == 4) {
-
-            my $from = $msg->{message};
-            my $to = $hash_ref->{message};
-            $from = merge_spaces($from);
-            $to = merge_spaces($to);
-            $from =~ s/\[\[|\]\]//g; # remove the marker we use for diff
-            $to =~ s/\[\[|\]\]//g;
-            my $ixes = String::Ediff::ediff($from, $to);
-            my @ix = split(" ", $ixes);
-            my $s1at = 0;
-            my $s2at = 0;
-            my $diff; 
-            my $add_diff = sub {
-                my ($class, $string) = @_;
-                return "" if (length($string) == 0);
-                return "[[span class=$class]]" . $string . "[[/span]]";
-            };
-            for (my $i = 0; $i < scalar(@ix); $i+=8) {
-                if ($ix[$i+0] > $s1at) {
-                    $diff .= &$add_diff("difffrom", substr($from, $s1at, $ix[$i+0]-$s1at));
-                }
-                $s1at = $ix[$i+1];
-                if ($ix[$i+4] > $s2at) {
-                    $diff .= &$add_diff("diffto", substr($to, $s2at, $ix[$i+4]-$s2at));
-                }
-                $s2at = $ix[$i+5];
-                my $commonpart = substr($from, $ix[$i+0], $ix[$i+1] - $ix[$i+0]);
-                if (length($commonpart) < 200) {
-                    $diff .= $commonpart;
-                } else {
-                    $diff .= substr($commonpart, 0, 95) . &$add_diff("diffsnip", " [ ...snipped... ] ") . substr($commonpart, -95);
-                }
-            }
-            $diff .= &$add_diff("1", substr($from, $s1at));
-            $diff .= &$add_diff("2", substr($to, $s2at));
-            if ($msg->{id} eq $hash_ref->{id}) {
-                $diff = " This is the message being compared against. ";
-                $diff .= &$add_diff("difffrom", "Text that appears only in this message, ");
-                $diff .= &$add_diff("diffto", "or only in the other message.");
-            }
-            $hash_ref->{diff} = $diff;
+    while (my $other = $sth->fetchrow_hashref()) {
+        if ($filter eq 'similarbody') {
+            # Obtain diff, but elide long common substrings.
+            $other->{diff} = [map {
+                                if (ref($_) || length($_ < 200)) {
+                                    $_;
+                                } elsif (length($_ < 95)) {
+                                    (substr($_, 0, 95), undef, substr($_, -95))
+                                }
+                            } @{string_diff($msg->{message}, $other->{message})}];
         }
-        $hash_ref->{message} = undef;
-        push @ret, $hash_ref;
+        $other->{message} = undef;
+        push @ret, $other;
     }
     return \@ret;
 }
