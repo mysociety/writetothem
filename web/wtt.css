@@ -8,18 +8,33 @@ body {
 	padding: 0;
 }
 
+acroynm {
+	border-bottom: dotted 1px black;
+	cursor: help;
+}
+
 h1#heading {
 	font-size: 200%;
 	padding: 0.4em 10px;
 	text-align: left;
 	margin: 0;
-	color: #ffffff;
-	background-color: #7bc618;
-	border-bottom: solid 2px #527b10;
+	color: #000000;
+	background-color: #dbfd8c; /* #b3d386; */ /* #7bc618; */
+	border-bottom: solid 2px #a5a57c;
 }
 h1#heading a, h1#heading a:link, h1#heading a:visited {
-	color: #ffffff;
+	color: #373f23; /*333f16;*/ /* 252916; */
 	text-decoration: none;
+}
+#postcodeForm {
+	_width: 25em;
+	display: table;
+	margin: 0 auto;
+	text-align: center;
+	border: solid 2px #a5a57c; /* 314208; */
+	padding: 8px;
+	background-color: #d0bf69; /* #b3d386; */
+	color: #000000;
 }
 h2,h3,h4 {
 	text-align: center;
@@ -64,7 +79,7 @@ color: #000000;
 .lightbg {background : #9966cc;
 }
 
-a:link {	color: #639c18; }
+a:link {	color: #843f23; /* #639c18;*/ }
 a:visited {	color: #527b10; }
 a:hover {	color: #000000; }
 
@@ -131,16 +146,6 @@ ol#instructions li#fiv span { background-color: #000066; }
 form {
 	margin: 0;
 }
-#postcodeForm {
-	_width: 25em;
-	display: table;
-	margin: 0 auto;
-	text-align: center;
-	border: solid 2px #314208;
-	padding: 8px;
-	background-color: #94d639;
-	color: #000000;
-}
 #writeForm {
 	_width: 1px;
 	display: table;
@@ -168,3 +173,31 @@ form {
 h3 {
 	margin-top: 0;
 }
+
+#sidebar {
+	float: right;
+	width: 15em;
+	padding: 2px;
+	border: solid 1px #7bc618;
+	background-color: #ccff99;
+	margin: 0 0 1em 10px;
+}
+#sidebar ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#sidebar ul li {
+	margin: 0 0 0.5em 0;
+	padding: 0;
+}
+#sidebar ul ul {
+	list-style-type: disc;
+	margin: 0;
+	padding: 0 0 0 1.5em;
+}
+#sidebar ul ul li {
+	margin: 0;
+	padding: 0;
+}
+
