@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.24 2004-11-10 17:30:37 francis Exp $
+ * $Id: write.php,v 1.25 2004-11-11 13:46:59 chris Exp $
  * 
  */
 
@@ -170,6 +170,7 @@ function submitFax() {
             'name' => $fyr_values['writer_name'],
             'email' => $fyr_values['writer_email'], 
             'address' => $address,
+            'postcode' => $fyr_values['pc'],
             'phone' => $fyr_values['writer_phone'], 
             ),
             $fyr_values['who'], $fyr_values['body']);

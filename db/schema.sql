@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.2 2004-10-20 09:06:14 chris Exp $
+-- $Id: schema.sql,v 1.3 2004-11-11 13:46:59 chris Exp $
 --
 
 -- secret
@@ -20,14 +20,14 @@ create table state (
     name varchar(10) not null primary key
 );
 
--- new: awaiting sending of confirmation email.
 insert into state (name) values ('new');
--- pending: awaiting confirmation of user's email address.
 insert into state (name) values ('pending');
--- ready: ready to be sent.
 insert into state (name) values ('ready');
--- sent: dispatched, awaiting failure message or questionnaire response.
+insert into state (name) values ('bounce_wait');
+insert into state (name) values ('bounce_confirm');
+insert into state (name) values ('error');
 insert into state (name) values ('sent');
+insert into state (name) values ('finished');
 
 -- message
 -- List of messages to be sent.
@@ -39,6 +39,9 @@ create table message (
     sender_email text not null,
     sender_addr text not null,
     sender_phone text,
+    -- this is so that the message can later be forwarded to other
+    -- representatives for the sender
+    sender_postcode text not null,
 
     -- Recipient info; one of email or fax must be non-NULL; the ID
     recipient_id integer not null,      -- DaDem ID
@@ -55,17 +58,24 @@ create table message (
     state text not null references state(name),
 
     -- when the message was originally queued (UNIX time)
-    whencreated integer not null,
+    created integer not null,
 
-    -- when we last changed the state, sent a message to the user to confirm
-    -- their address (UNIX time), or made a delivery attempt
-    lastupdate integer
+    -- when the message last changed state
+    laststatechange integer not null,
+
+    -- when we last sent a message to the user to confirm their address,
+    -- or made a delivery attempt (UNIX time)
+    lastaction integer,
+
+    -- how many actions (delivery attempts or whatever) have taken place while
+    -- the message has been in this state
+    numactions integer not null default (0)
 );
 
 -- message_log
 -- Events relating to each message.
 create table message_log (
-    message_id char(20) not null references message(id),
+    message_id char(20) not null references message(id) on delete cascade,
     whenlogged timestamp(0) without time zone not null default(now()),
     state text not null,     -- state of message when log item added
     message text not null

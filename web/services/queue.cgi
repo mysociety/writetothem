@@ -6,7 +6,9 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.1 2004-11-10 18:21:09 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.2 2004-11-11 13:46:59 chris Exp $';
+
+require 5.8.0;
 
 use FCGI;
 use FYR;
