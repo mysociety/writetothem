@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.76 2005-02-16 23:01:10 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.77 2005-02-17 00:34:17 francis Exp $
  * 
  */
 
@@ -397,8 +397,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
             }
-            if ($message['state'] == 'failed' || $message['frozen'])
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
+            $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if ($message['state'] == 'pending')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
 
@@ -579,12 +578,14 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 $view = str_replace("_rev", "", $view);
                 $reverse = true;
             }
-            
+            if (get_http_var('search')) {
+                $view = "search";
+            }
+
             // Set up additional parameters for view if necessary.
             if ($view == "similarbody") {
                 $params['msgid'] = get_http_var('simto');
-            } else if ($view == "search" || get_http_var('search')) {
-                $view = "search";
+            } else if ($view == "search" || $view == "logsearch") {
                 $params['query'] = get_http_var('query');
             }
             
@@ -605,6 +606,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print " have similar bodies to  " . $this->make_ids_links(get_http_var('simto'));
             } elseif ($view == "search") {
                 print " match search query '" . htmlspecialchars(get_http_var('query')) . "'";
+            } elseif ($view == "logsearch") {
+                print " whose log matches '" . htmlspecialchars(get_http_var('query')) . "'";
             } else {
                 print " are $view";
             }

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.133 2005-02-16 17:17:03 francis Exp $
+# $Id: Queue.pm,v 1.134 2005-02-17 00:34:17 francis Exp $
 #
 
 package FYR::Queue;
@@ -33,6 +33,7 @@ use MIME::Entity;
 use MIME::Words;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
+use Data::Dumper;
 
 use utf8;
 
@@ -275,7 +276,6 @@ sub write ($$$$) {
                 dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
             } else {
                 logmsg($id, 1, "abuse system REJECTED message");
-                # mark as frozen so appears as spam
                 dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
                 state($id, 'failed_closed');
                 $ret = $abuse_result;
@@ -394,7 +394,7 @@ sub state ($;$) {
     if (defined($state)) {
         my ($curr_state, $curr_frozen) = dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
         die "Bad state '$state'" unless (exists($allowed_transitions{$state}));
-        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed')));
+        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed'));
         if ($state ne $curr_state) {
             dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
             logmsg($id, 0, "changed state to $state");
@@ -1177,8 +1177,6 @@ my %state_action = (
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
             if ($msg->{sender_name} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
-                # timed out pending messages go to failed_closed, but may be frozen
-                dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
                 # clear data for privacy
                 scrubmessage($id);
                 # bump timer
@@ -1348,13 +1346,19 @@ Messages which are similar to the message with ID given in PARAMS->{msgid}.
 Messages which contain terms from PARAMS->{query}. Sender and recipient
 details are searched, as well as matching confirmation tokens.
 
+=item logsearch
+
+Messages which contain the string in an item in their message log.  Deliberately
+doesn't strip spaces or punctuation, and looks for whole strings, so you can
+search for ' rule #6 ' and the like.
+
 =back
 
 =cut
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all important failing frozen recentchanged recentcreated similarbody search);
+    my %allowed = map { $_ => 1 } qw(all important failing frozen recentchanged recentcreated similarbody search logsearch);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
@@ -1362,10 +1366,10 @@ sub admin_get_queue ($$) {
     my @params;
     if ($filter eq 'important') {
         $where = q#
-            where (state = 'bounce_confirm'
+            where  state = 'bounce_confirm'
                     or state = 'failed'
                     or state = 'error'
-                    or frozen = 't')
+                    or (frozen = 't' and state <> 'failed_closed')
             order by created desc#;
         # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
         # index to do the scan. q.v. comments on the end of,
@@ -1378,7 +1382,7 @@ sub admin_get_queue ($$) {
                   and frozen = 'f' 
             order by recipient_id, created desc#;
     } elsif ($filter eq 'frozen') {
-        $where = q# where frozen = 't' order by created desc#;
+        $where = q# where frozen = 't' and state <> 'failed_closed' order by created desc#;
     } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc limit 100";
     } elsif ($filter eq 'recentcreated') {
@@ -1433,6 +1437,12 @@ sub admin_get_queue ($$) {
                 );
             $where .= " order by created desc";
         }
+    } elsif ($filter eq 'logsearch') {
+        my $logmatches = dbh()->selectcol_arrayref(q#select message_id from message_log
+            where message ilike '%' || ? || '%'#, {}, $params->{query});
+        push @params, @$logmatches;
+        $where = q#where id in (# . join(',', map { '?' } @$logmatches) . q#) order by created desc#;
+        $where = q#where 1 = 0# if (scalar(@$logmatches) == 0);
     }
     my $sth = dbh()->prepare("
             select *, length(message) as message_length from message $where
@@ -1609,7 +1619,6 @@ sub admin_set_message_to_failed_closed ($$) {
     if ($curr_state ne 'failed_closed') {
         state($id, 'failed_closed');
     }
-    dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     dbh()->commit();
     logmsg($id, 1, "$user put message in state 'failed_closed'");
     return 0;
