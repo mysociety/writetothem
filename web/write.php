@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.20 2004-10-29 10:26:42 chris Exp $
+ * $Id: write.php,v 1.21 2004-11-01 11:17:47 francis Exp $
  * 
  */
 
@@ -150,6 +150,20 @@ function submitFax() {
         $fyr_values['writer_town'] . "\n" .
         $fyr_values['pc'] . "\n";
     $address = str_replace("\n\n", "\n", $address);
+
+    // reverify that the representative represents this postcode
+    $verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
+    if (is_array($verify_voting_area_map)) 
+        $verify_voting_areas = array_values($verify_voting_area_map);
+    else 
+        $verify_voting_areas = array();
+    $verify_rep_info = dadem_get_representative_info($fyr_values['who']);
+    if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
+       $fyr_error_message = "There's been a mismatch error.  Sorry about
+       this, <a href=\"/\">please start again</a>.";
+       include "templates/generalerror.html";
+       exit;
+    }
 
     $success = msg_write($msgid, 
             array( 
