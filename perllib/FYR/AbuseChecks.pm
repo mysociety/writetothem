@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.20 2005-01-07 14:21:18 chris Exp $
+# $Id: AbuseChecks.pm,v 1.21 2005-01-07 17:58:06 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -196,9 +196,8 @@ my @tests = (
             'hold',
             sub ($) {
                 return "Representative is emailing themself"
-                    if ($_[0]->{sender_email} eq $_[0]->{recipient_email}
-                    and !(mySociety::Config::get('FYR_REFLECT_EMAILS'))
-                    );
+                    if (defined($_->{recipient_email}) and $_[0]->{sender_email} eq $_[0]->{recipient_email}
+                        and !(mySociety::Config::get('FYR_REFLECT_EMAILS')));
             }
         ],
 
