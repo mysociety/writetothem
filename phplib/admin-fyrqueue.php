@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.67 2005-02-03 09:55:49 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.68 2005-02-03 11:46:55 francis Exp $
  * 
  */
 
@@ -166,8 +166,13 @@ class ADMIN_PAGE_FYR_QUEUE {
                 print add_tooltip($message['state'], $this->state_help_notes($message['state']));
                 /* Only show frozen flag if the message is in a state this can
                  * affect. */
-                if ($message['frozen'] and ($message['state'] == 'new' or $message['state'] == 'pending' or $message['state'] == 'ready'))
-                    print "<br><b>frozen</b>";
+                if ($message['frozen']) 
+                {
+                    if ($message['state'] == 'new' or $message['state'] == 'pending' or $message['state'] == 'ready')
+                        print "<br><b>frozen</b>";
+                    else
+                        print "<br>frozen";
+                }
 
                 if ($message['numactions'] > 0) {
                     if ($message['state'] == 'pending')  {

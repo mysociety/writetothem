@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.119 2005-02-03 09:55:48 francis Exp $
+# $Id: Queue.pm,v 1.120 2005-02-03 11:46:55 francis Exp $
 #
 
 package FYR::Queue;
@@ -1101,8 +1101,12 @@ my %state_action = (
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
             if ($msg->{sender_name} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
+                # timed out pending messages go to failed_closed, but may be frozen
+                dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+                # clear data for privacy
                 scrubmessage($id);
-                state($id, 'failed_closed');    # bump timer
+                # bump timer
+                state($id, 'failed_closed');
             }
         }
     );
