@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.113 2005-01-31 11:06:06 chris Exp $
+# $Id: Queue.pm,v 1.114 2005-01-31 11:36:49 chris Exp $
 #
 
 package FYR::Queue;
@@ -1352,7 +1352,7 @@ sub admin_get_queue ($$) {
         if ($filter eq 'similarbody') {
             # Obtain diff, but elide long common substrings.
             $other->{diff} = [map {
-                                if (ref($_) || length($_ < 200)) {
+                                if (ref($_) || length($_) < 200) {
                                     $_;
                                 } elsif (length($_ < 95)) {
                                     (substr($_, 0, 95), undef, substr($_, -95))
