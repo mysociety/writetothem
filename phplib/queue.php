@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.22 2004-12-18 13:21:55 francis Exp $
+ * $Id: queue.php,v 1.23 2004-12-30 10:32:08 francis Exp $
  * 
  */
 
@@ -183,6 +183,14 @@ function msg_admin_error_message($id) {
 function msg_admin_failed_message($id) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_failed_message', array($id));
+    return $result;
+}
+
+/* msg_admin_failed_closed_message ID
+ * Hides a failed message from future admin attention. */
+function msg_admin_failed_closed_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_failed_closed_message', array($id));
     return $result;
 }
 

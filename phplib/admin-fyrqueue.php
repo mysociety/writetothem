@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.13 2004-12-21 01:23:33 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.14 2004-12-30 10:32:08 francis Exp $
  * 
  */
 
@@ -143,21 +143,25 @@ All time stats:
         if ($id) {
             // Freeze or thaw messages
             if (get_http_var('freeze')) {
-                print "<p><b><i>Message $id frozen</i></b></p>";
                 $result = msg_admin_freeze_message($id);
                 msg_check_error($result);
+                print "<p><b><i>Message $id frozen</i></b></p>";
             } else if (get_http_var('thaw')) {
-                print "<p><b><i>Message $id thawed</i></b></p>";
                 $result = msg_admin_thaw_message($id);
                 msg_check_error($result);
+                print "<p><b><i>Message $id thawed</i></b></p>";
             } else if (get_http_var('error')) {
-                print "<p><b><i>Message $id moved to error state</i></b></p>";
                 $result = msg_admin_error_message($id);
                 msg_check_error($result);
+                print "<p><b><i>Message $id moved to error state</i></b></p>";
             } else if (get_http_var('failed')) {
-                print "<p><b><i>Message $id moved to failed state</i></b></p>";
                 $result = msg_admin_failed_message($id);
                 msg_check_error($result);
+                print "<p><b><i>Message $id moved to failed state</i></b></p>";
+            } else if (get_http_var('failed_closed')) {
+                $result = msg_admin_failed_closed_message($id);
+                msg_check_error($result);
+                print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
             }
 
             print "<h2>Message id $id <a href=\"$self_link\">[back to message list]</a>:</h2>";
@@ -191,10 +195,15 @@ All time stats:
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
                 if ($message['state'] != 'failed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Failed');
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
+                if ($message['state'] != 'failed_closed')
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Closed');
+                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
             }
-            else
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
+            else {
+                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
+            }
             if (!get_http_var('body'))
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body (only if you have to)');
             else
@@ -210,6 +219,7 @@ All time stats:
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
 <br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
 <br><b>failed</b> rejects a message, with no email to the constituent.
+<br><b>closed</b> marks a failed message so it doesn't appear in important list any more.
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <?
          } else {

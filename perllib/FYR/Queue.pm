@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.70 2004-12-21 01:45:00 francis Exp $
+# $Id: Queue.pm,v 1.71 2004-12-30 10:32:08 francis Exp $
 #
 
 package FYR::Queue;
@@ -274,8 +274,9 @@ my %allowed_transitions = (
         bounce_confirm =>   [qw(bounce_wait error)],
         error =>            [qw(failed)],
         sent =>             [qw(finished)],
-        failed =>           [],
-        finished =>         []
+        failed =>           [qw(failed_closed)],
+        finished =>         [],
+        failed_closed =>    []
     );
 
 # turn this into hash-of-hashes
@@ -1056,6 +1057,11 @@ my %state_action = (
 
         failed => sub ($$$) {
             my ($email, $fax, $id) = @_;
+            # do nothing
+        },
+
+        failed_closed => sub ($$$) {
+            my ($email, $fax, $id) = @_;
             my $msg = message($id);
             if ($msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
                 scrubmessage($id);
@@ -1297,6 +1303,21 @@ sub admin_failed_message ($) {
     my ($id) = @_;
     state($id, 'failed');
     logmsg($id, "admin put message in state 'failed'");
+    FYR::DB::dbh()->commit();
+    return 0;
+}
+
+=item admin_failed_closed_message ID
+
+Moves message from failed to failed_closed state.  For when
+the admin has dealt with it.
+
+=cut
+sub admin_failed_closed_message ($) {
+    my ($id) = @_;
+    state($id, 'failed_closed');
+    FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    logmsg($id, "admin put message in state 'failed_closed'");
     FYR::DB::dbh()->commit();
     return 0;
 }
