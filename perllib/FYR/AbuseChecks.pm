@@ -11,18 +11,19 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.32 2005-01-13 16:59:13 francis Exp $
+# $Id: AbuseChecks.pm,v 1.33 2005-01-14 17:01:57 chris Exp $
 #
 
 package FYR::AbuseChecks;
 
 use strict;
 
+use Data::Dumper;
 use DBD::Pg; # for BLOB (bytea) support
 use Geo::IP;
 use Net::Google::Search;
+use POSIX;  # strftime
 use Storable;
-use Data::Dumper;
 
 use mySociety::Config;
 use mySociety::Ratty;
@@ -272,10 +273,10 @@ sub test ($) {
         sender_ipaddr => [$msg->{sender_ipaddr}, "IP address of constituent"],
         sender_name => [$msg->{sender_name}, "Name of constituent"],
         sender_postcode => [$msg->{sender_postcode}, "Postcode of constituent"],
-        sender_referrer => [$msg->{sender_referrer}, "Webpage which constituent came to our site from"],
+        sender_referrer => [$msg->{sender_referrer}, "Webpage from which constituent came to our site"],
 
         # These aren't much use, but could conceivably be
-        created => [$msg->{created}, "When message was created in Unix time"],
+        created => [POSIX::strftime('%Y-%m-%dT%H:%M:%S', localtime($msg->{created})), "When message was created (local time, ISO format)"],
         id => [$msg->{id}, "Unique identifier of message"],
 
         # These are no use for new messages
@@ -285,7 +286,6 @@ sub test ($) {
         #state => [$msg->{state}, "Always 'new'"],
         # These are no use
         #recipient_position_plural => [$msg->{recipient_position_plural}, "Plural of office held"],
-
     );
 
     # Carry out abuse tests, and store new fields they generate
