@@ -1,12 +1,11 @@
 <?
 /*
- * index.php:
  * Page to ask which representative they would like to contact
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: whotofax.php,v 1.4 2004-10-05 12:14:37 francis Exp $
+ * $Id: whotofax.php,v 1.5 2004-10-05 13:34:52 francis Exp $
  * 
  */
 
@@ -109,24 +108,6 @@ END;
         array_push($fyr_representatives, array($left_column, $right_column));
     }
 }
-
-/* va_responsibility
- * Description of responsibility of areas. */
-$va_name = array(
-        VA_DIS => "Your District Council is responsible for local services
-            and policy, including planning, council housing, building
-            regulation, rubbish collection, and local roads. Some
-            responsibilities, such as recreation facilities, are shared with
-            the County Council.",
-
-        VA_CTY => "Your County Councillor represents you on the
-            Cambridgeshire County Council. Your County Council is
-            responsible for local services, including education, social
-            services, transport and libraries.", 
-
-        
-    );
-
 
 include "templates/whotofax.html";
 

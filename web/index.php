@@ -1,12 +1,11 @@
 <?
 /*
- * index.php:
  * Main page of FaxYourRepresentative
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.4 2004-10-04 18:14:10 francis Exp $
+ * $Id: index.php,v 1.5 2004-10-05 13:34:52 francis Exp $
  * 
  */
 
