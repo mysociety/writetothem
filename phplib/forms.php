@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.5 2004-10-25 15:21:31 francis Exp $
+ * $Id: forms.php,v 1.6 2005-01-11 17:19:04 chris Exp $
  * 
  */
 
@@ -24,9 +24,8 @@ function get_all_variables() {
     $variables = array_merge($_POST, $_GET);
 
     // Look for hidden serialised ones
-    $ser_vars = $variables['mysociety_serialized_variables'];
-    if (isset($ser_vars)) {
-        $set_vars = unserialize(base64_decode($ser_vars));
+    if (array_key_exists('mysociety_serialized_variables', $variables)) {
+        $set_vars = unserialize(base64_decode($variables['mysociety_serialized_variables']));
         debug("SERIALIZE", "mysociety_serialized_variables", $set_vars);
         $variables = array_merge($set_vars, $variables);
     }
