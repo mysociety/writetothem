@@ -10,7 +10,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: config.php.incvs,v 1.4 2004-10-14 14:14:24 chris Exp $
+ * $Id: config.php.incvs,v 1.5 2004-10-20 12:44:13 chris Exp $
  * 
  */
 
@@ -23,5 +23,10 @@ define('OPTION_DADEM_PATH', '/~chris/scripts/xmlrpc');
 define('OPTION_MAPIT_HOST', 'caesious.beasts.org');
 define('OPTION_MAPIT_PORT', 80);
 define('OPTION_MAPIT_PATH', '/~chris/scripts/xmlrpc2');
+
+/* Where the XML-RPC service for the FYR queue is. */
+define('OPTION_QUEUE_HOST', 'caesious.beasts.org');
+define('OPTION_QUEUE_PORT', 80);
+define('OPTION_QUEUE_PATH', '/~chris/tmp/fyr/fcgi/queue');
 
 ?>
