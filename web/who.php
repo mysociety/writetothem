@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.50 2005-01-20 18:27:47 matthew Exp $
+ * $Id: who.php,v 1.51 2005-01-24 21:52:09 matthew Exp $
  * 
  */
 
@@ -124,7 +124,7 @@ foreach ($va_display_order as $va_type) {
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
             $text .= "$rep_counts[1] London Assembly list members also represent you";
-        } else if ($rep_counts[1] > 1) {
+        } elseif ($rep_counts[1] > 1) {
             $text .= "$rep_counts[1] {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name_plural']} also represent you";
         } else {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";

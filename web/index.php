@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.37 2005-01-17 19:28:14 matthew Exp $
+ * $Id: index.php,v 1.38 2005-01-24 21:52:09 matthew Exp $
  * 
  */
 
@@ -16,8 +16,8 @@ require_once "../../phplib/mapit.php";
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
-$form = '<div id="postcodebox"><form action="./" method="get" name="postcodeForm" id="postcodeForm">' . "\n";
-$form .= '<label for="pc"><b>Type Your UK Postcode:</b></label>&nbsp;' . "\n";
+$form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm"><div id="postcodebox">' . "\n";
+$form .= '<label for="pc"><b>First, type your UK postcode:</b></label>&nbsp;' . "\n";
 $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
 $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
 
@@ -28,10 +28,11 @@ $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
 $ref = fyr_external_referrer();
 if (isset($ref))
     $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
-$form .= '</form></div>';
+$form .= '</div></form>';
 
 // Validate postcode, and prepare appropriate page
-$template = "index-index";
+if (isset($_GET['t'])) $template = 'index-'.$_GET['t'];
+else $template = "index-index";
 $error_message = null;
 if ($pc != "" or array_key_exists('pc', $_GET)) {
     /* Test for various special-case postcodes which lie outside the UK. Many

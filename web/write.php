@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.62 2005-01-24 00:21:54 chris Exp $
+ * $Id: write.php,v 1.63 2005-01-24 21:52:09 matthew Exp $
  * 
  */
 
@@ -34,7 +34,6 @@ class RuleAlteredBodyText extends HTML_QuickForm_Rule {
 function buildWriteForm()
 {
     $form = new HTML_QuickForm('writeForm', 'post', 'write');
-
     global $fyr_values, $fyr_postcode, $fyr_who;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
 
@@ -127,6 +126,7 @@ function renderForm($form, $pageName)
 
     // Make HTML
     $fyr_form = $renderer->toHtml();
+    $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
 
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
