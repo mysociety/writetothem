@@ -25,8 +25,8 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 	color: #373f23; /*333f16;*/ /* 252916; */
 	text-decoration: none;
 }
-h2 {
-	margin: 0;
+h2,h3 {
+	margin-top: 0;
 }
 h2,h3,h4 {
 	text-align: center;
@@ -161,9 +161,6 @@ ol#instructions li#fiv span { background-color: #000066; }
 }
 .maincol {
 	border-right: solid 2px #9c8f4f;
-}
-h3 {
-	margin-top: 0;
 }
 
 #sidebar {
