@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.4 2004-11-01 15:23:09 chris Exp $
+# $Id: Queue.pm,v 1.5 2004-11-01 15:24:20 chris Exp $
 #
 
 package FYR::Queue;
@@ -44,7 +44,8 @@ Management of queue of messages for FYR.
 
 =item create
 
-Return an ID for a new message.
+Return an ID for a new message. Message IDs are 20 characters long and consist
+of characters [0-9a-f] only.
 
 =cut
 sub create (;$) {
