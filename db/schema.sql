@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.20 2005-01-25 10:31:33 chris Exp $
+-- $Id: schema.sql,v 1.21 2005-01-25 10:39:36 chris Exp $
 --
 
 set client_min_messages to error;
@@ -136,17 +136,6 @@ insert into message_count_recipient_type (recipient_type, messagecount)
     select recipient_type, count(id) as messagecount
         from message group by recipient_type;
 
--- message_count_sender_referrer
--- Number of messages originating from each referring page
-create table message_count_sender_referrer (
-    sender_referrer text not null primary key,
-    messagecount integer not null default(0)
-);
-
-insert into message_count_sender_referrer (sender_referrer, messagecount)
-    select sender_referrer, count(id) as messagecount
-        from message where sender_referrer is not null group by sender_referrer;
-
 -- trigger which updates the stats tables based on operation on the message
 -- table.
 create function gather_stats() returns trigger as '
@@ -158,11 +147,6 @@ create function gather_stats() returns trigger as '
             update message_count_recipient_type
                 set messagecount = messagecount - 1
                 where recipient_type = old.recipient_type;
-            if old.sender_referrer is not null then
-                update message_count_sender_referrer
-                    set messagecount = messagecount - 1
-                    where sender_referrer = old.sender_referrer;
-            end if;
         end if;
         
         if tg_op = ''INSERT'' or tg_op = ''UPDATE'' then
@@ -191,21 +175,6 @@ create function gather_stats() returns trigger as '
                 update message_count_recipient_type
                     set messagecount = messagecount + 1
                     where recipient_type = new.recipient_type;
-            end if;
-            -- sender referrer
-            if new.sender_referrer is not null then
-                perform messagecount
-                    from message_count_sender_referrer
-                    where sender_referrer = new.sender_referrer
-                    for update;
-                if not found then
-                    insert into message_count_sender_referrer (sender_referrer, messagecount)
-                        values (new.sender_referrer, 1);
-                else
-                    update message_count_sender_referrer
-                        set messagecount = messagecount + 1
-                        where sender_referrer = new.sender_referrer;
-                end if;
             end if;
         end if;
         return null;    -- trigger fired after event, so return value ignored
