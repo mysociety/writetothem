@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.145 2005-03-24 12:18:03 chris Exp $
+# $Id: Queue.pm,v 1.146 2005-03-24 12:23:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -1257,11 +1257,11 @@ sub process_queue ($$) {
                         keys %state_action_interval)
             . q#) and (state <> 'ready' or not frozen) order by random()#);
     } else {
-        $stmt = dbh()->prepare(q#
+        $stmt = dbh()->prepare(sprintf(q#
                 select id, state from message
                 where state = 'ready' and not frozen
                     and (lastaction is null or lastaction < %d)
-                #, time() - $state_action_interval{ready});
+                #, time() - $state_action_interval{ready}));
     }
     $stmt->execute();
     while (my ($id, $state) = $stmt->fetchrow_array()) {
