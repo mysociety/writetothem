@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.68 2005-02-11 11:26:06 matthew Exp $
+ * $Id: write.php,v 1.69 2005-02-11 11:51:19 matthew Exp $
  * 
  */
 
@@ -78,7 +78,6 @@ END;
     $form->applyFilter('writer_email', 'trim');
 
     $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() -+]+$/', null);
     $form->applyFilter('writer_phone', 'trim');
 
     $form->addElement("html", "<tr><td colspan=\"2\"><em style=\"font-size: 80%\">Optional: to let your {$fyr_voting_area['rep_name']} contact you more easily</em></td></tr>"); // CSSify
