@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.24 2004-11-16 15:08:42 francis Exp $
+ * $Id: who.php,v 1.25 2004-11-18 08:58:38 francis Exp $
  * 
  */
 
@@ -53,10 +53,17 @@ if ($fyr_error_message = dadem_get_error($representatives_info)) {
 
 debug_timestamp();
 
+// Sort by number, which happens to be increasing order of geographical
+// size
+$va_types = array_keys($voting_areas);
+sort($va_types);
+
 // For each voting area, find all the representatives.  Put descriptive
 // text and form text in an array for the template to render.
 $fyr_representatives = array();
-foreach ($voting_areas as $va_type => $va_specificid) {
+foreach ($va_types as $va_type) {
+    $va_specificid = $voting_areas[$va_type];
+
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     debug("FRONTEND", "voting area is type $va_type id $va_specificid");
     $va_info = $voting_areas_info[$va_specificid];
@@ -99,6 +106,8 @@ foreach ($voting_areas as $va_type => $va_specificid) {
             \"directives\") and the budget of the European Union, and provides
             oversight of the other decision-making bodies of the Union,
             including the Council of Ministers and the Commission.";
+    } else {
+        $eb_info['description'] = "";
     }
 
     // Count representatives
