@@ -4,38 +4,28 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WriteToThem.com Beta Test - <? print $values['title']; ?></title>
-<link rel="stylesheet" type="text/css" href="style-fymp/fax_style.css">
-<?
+<style type="text/css">
+<?php
+if ($_REQUEST['css'] && !preg_match('#"#',$_REQUEST['css'])) {
+	print '@import "'.$_REQUEST['css'].'";'."\n";
+} else { ?>
+@import "/style-fymp/fax_style.css";
+<?php } ?>
+</style>
+<?php
 if ($values['robots']) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
-<? } ?>
+<?php } ?>
 </head>
-<body bgcolor="#ffffff" text="#006666" link="#006666" alink="#999966" vlink="#006666">
-<div align="center">
-
+<body>
+<h1 id="heading"><a href="/">WriteToThem.com Beta Test</a></h1>
+<div id="content">
 <?
     if (OPTION_FYR_REFLECT_EMAILS) {
-            print "<p>Test site - this will reflect emails to representatives back to you.</p>";
+            print '<p class="warning">Test site - this will reflect emails to representatives back to you.</p>';
     }
 ?>
 
-<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
-
-<TR>
-<TD align=center VALIGN="top">
-<IMG SRC="images/mosaic.gif" WIDTH="529" HEIGHT="12" BORDER="0" ALT="mosaic_strip"><BR><BR>
-</TD>
-
-</TR><TR><TD valign="top">
-<TABLE CELLPADDING="4" CELLSPACING="2" BORDER="0" WIDTH="100%">
-<TR>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/">Home</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-yourrep">Your Representative</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-qa">Q&amp;A</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-us">About Us</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-contact">Contact Us</A></TD>
-</TR>
-</TABLE>
-
-<!-- </DIV> -->
+<!-- Needs to be all on one line to prevent extra whitespace in Firefox -->
+<!-- <ul id="nav"><li><a href="/">Home</a></li><li><a href="/about-yourrep">Your Representative</a></li><li><a href="/about-qa">Q&amp;A</a></li><li><a href="/about-us">About Us</a></li><li><a href="/about-contact">Contact Us</a></li></ul> -->
 

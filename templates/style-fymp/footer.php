@@ -1,9 +1,9 @@
-
-<p align="center">
+</div>
+<!-- <p align="center">
 <a href="/about-feedback">Does It Really Work?</a>   |   
 <a href="/about-linktous">How To Link To Us</a> | 
 <a href="/about-guidelines">Guidelines for Campaigners</a>
-</p>
+</p> -->
 
 <!--
 <H4>
@@ -14,49 +14,24 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 <a href="/q_a.php3#formletters">Here's why.</A></B></FONT></P>
 </H4>
 -->
-
-<!--
-	<A HREF="feedback.php3">Does It Really Work?</a>
-	&nbsp;&nbsp;||&nbsp;&nbsp;		
-	<A HREF="link_to_us.php3">How To Link To Us</a> 
-	&nbsp;&nbsp;||&nbsp;&nbsp;
-	<A HREF="/guidelines.php3">Guidelines for Campaigners</a> 
-	<P>
--->
-<IMG SRC="images/mosaic.gif" WIDTH="529" HEIGHT="12" BORDER="0" ALT="mosaic_strip"><BR><P>
-</TD>
-	</TR>
-	<TR>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="530" HEIGHT="1" BORDER="0"></TD>
-	</TR>
-</TABLE><P>
-
-<table border="0" width="530">
-<tr>
-<td align="left" valign="top">
-<a href="http://www.mysociety.org/"><img src="images/mysociety_sm.gif" border="0" alt="mySociety"></a>
-</td><td align="right" valign="top">
-<a href="http://www.goveval.com/"><img src="images/ge.png" border="0" alt="GovEval"></a>
-</td></tr>
-
-<tr><td colspan=2>
-<p><font size="-1">
-This site is built by <a href="http://www.mysociety.org">mySociety</a>.
+<!-- <div id="footer">
+<a href="http://www.mysociety.org/"><img align="left" src="images/mysociety_sm.gif" border="0" alt="mySociety"></a>
+<a href="http://www.goveval.com/"><img align="right" src="images/ge.png" border="0" alt="GovEval"></a>
+<br clear="all">
+<p>This site is built by <a href="http://www.mysociety.org">mySociety</a>.
 Contact data for elected representatives 
 kindly supplied by <a href="http://www.goveval.com/">GovEval</a>.
 Uses Ordnance Survey data under licence.
-Rest of the site is Copyright (c) 2004 UK Citizens Online Democracy
+Rest of the site is Copyright &copy; 2004 UK Citizens Online Democracy
 and <a href="https://secure.mysociety.org/cvstrac/dir?d=mysociety">source
-code is available</a> under an open source license.
-</font></p>
-
-
-</td></tr>
-
-</table>
-
+code is available</a> under an open source license.</p>
 </div>
-
-</BODY>
-</HTML>
+-->
+<div id="footer">
+Definite links: About
+<br>Possible links from header: Your Rep, Q&amp;A, About Us, Contact Us
+<br>Possible links from footer: Does It Really Work?, Link To Us, Guidelines for Campaigners, MySociety, GovEval, Copyright
+</div>
+</body>
+</html>
 

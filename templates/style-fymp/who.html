@@ -2,12 +2,11 @@
 $values['robots'] = 'index, nofollow';
 include "header.php"; ?>
 
-<H3>WriteToThem.com - <?=$values['title'] ?> </H3>
+<h2><?=$values['title'] ?></h2>
 
 <? if ($values['error']) { ?>
-<p align=center><font color="#ff0000" size="-1">
-<b><?=$values['error']?></b>
-</font>
+<p class="warning">
+<?=$values['error']?>
 </p>
 <? } ?>
 
@@ -15,20 +14,26 @@ include "header.php"; ?>
 <p><big><em>Sorry, but we've not yet been able to add the data for your area. Please try <a href="http://www.faxyourmp.com/">FaxYourMP</a> and check back with us in a couple of weeks.</em></big></p>
 <? } else { ?>
 
-<P align="left" style="align: left;">You have several democratic representatives at different levels of government. Please choose the most appropriate one to contact.</p>
+<p>You have several democratic representatives at different levels of government. <b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
 
-<p align="left"><b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
-
-<table>
+<table style="border: solid 2px #639c18; border-width: 2px 0;" cellpadding="3" cellspacing="0" border="0">
+	<tr valign="top">
 <?
+$c = 0;
+$pc = round(100/sizeof($values['reps']));
 foreach ($values['reps'] as $row) {
-    list($left_column, $right_column) = $row;
-?>
-    <tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr>
-    <tr align="left"><td width="50%"><?=$left_column?></td><td valign="bottom"><?=$right_column?></td></tr> 
-<?
+	print '<td';
+	if (!$c) {
+		print ' id="firstcol"';
+	}
+	if ($c%2==0) {
+		print ' style="background-color: #eeeeee"';
+	}
+	print ' class="maincol" width="' . $pc . '%">' . $row . '</td>';
+	$c++;
 }
 ?>
+</tr>
 </table>
 <? }
 

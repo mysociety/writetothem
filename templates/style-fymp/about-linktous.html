@@ -1,18 +1,9 @@
 <? $values['title'] = "How To Link To Us"; include "header.php"; ?>
 
-<p><font color="#ff0000" size="-1"><strong>This is placeholder text.
-</strong> The about and help pages are not finished yet.
-</p>
+<h2><?=$values['title']?></h2>
+<p>Cut and paste the code below into your own webpage and you will be able to link directly through to our server.</p>
 
-<H3>WriteToThem.com - <?=$values['title']?> </H3>
-<SPAN CLASS="normal">
-
-
-Cut and paste the code below into your own webpage and you will be able to link directly through to our server. <P>
-<table width="500" border="1" cellspacing="0" cellpadding="0" align="center">
-<tr> 
-<td>
-<pre>&lt;form method=&quot;get&quot; action=&quot;http://www.writetothem.com/&quot;&gt;
+<pre style="border: solid 1px #006666; padding: 1px;">&lt;form method=&quot;get&quot; action=&quot;http://www.writetothem.com/&quot;&gt;
 &lt;table border=&quot;0&quot; bgcolor=&quot;#cccc99&quot;&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;b&gt;&nbsp;&lt;a href=&quot;http://www.writetothem.com/&quot;&gt;WriteToThem.com&lt;/a&gt;&lt;/b&gt;&lt;br&gt;
@@ -22,22 +13,20 @@ Cut and paste the code below into your own webpage and you will be able to link 
 &lt;/tr&gt;
 &lt;/table&gt;
 &lt;/form&gt;</pre>
-</td></tr></table>
-<P>
-This will give you a form which looks vaguely like this: <P>
-<FORM METHOD="GET" ACTION="http://www.writetothem.com/">
-<TABLE BORDER="0" BGCOLOR="#cccc99">
-<TR>
-<TD><B> <A HREF="http://www.writetothem.com/">WriteToThem.com</A></B><BR>
-<INPUT NAME="pc" TYPE="text" SIZE="13" Value="Your Postcode">
-<INPUT TYPE="submit" VALUE="Go">
-</TD>
-</TR>
-</TABLE>
-</FORM>
 
-<P>
-Feel free to hack around with the design as much as you like - just make sure you retain the link to www.writetothem.com, so that we get all those lovely Google referrer points, ok? Ta. Any questions, just drop us a line at <a href="mailto:help@writetothem.com">help@writetothem.com</a>
-<P>
+<p>This will give you a form which looks vaguely like this:</p>
+
+<form method="get" action="http://www.writetothem.com/">
+<table border="0" bgcolor="#cccc99">
+<tr>
+<td><b> <a href="http://www.writetothem.com/">WriteToThem.com</a></b><br>
+<input name="pc" type="text" size="13" value="Your Postcode">
+<input type="submit" value="go">
+</td>
+</tr>
+</table>
+</form>
+
+<p>Feel free to hack around with the design as much as you like - just make sure you retain the link to www.writetothem.com, so that we get all those lovely Google referrer points, ok? Ta. Any questions, just drop us a line at <a href="mailto:help@writetothem.com">help@writetothem.com</a>.</p>
 
 <? include "footer.php"; ?>

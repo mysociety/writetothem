@@ -1,6 +1,6 @@
 <? $values['title'] = "Foward " . $values['constituent']['name'] . "'s Message"; include "header.php"; ?>
 
-<H3>WriteToThem.com - <?=$values['title'] ?> </H3>
+<h1><?=$values['title'] ?></h1>
 
 <p>Your constituent, <b><?=$values['constituent']['name']?></b>, has recently
 sent you a message.  If you believe the message is not in your area 
@@ -31,7 +31,5 @@ foreach ($values['forwardreps'] as $row) {
 }
 ?>
 </table>
-
-</form>
 
 <? include "footer.php"; ?>

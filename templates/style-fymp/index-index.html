@@ -3,11 +3,9 @@ $values['title'] = "The Successor to FaxYourMP";
 include "header.php";
 ?>
 
-<div align="center">
+<h2><?=$values['title']?></h2>
 
-<H3>WriteToThem.com Beta Test - <?=$values['title']?></H3>
-
-<p style="color: #ff0000; background-color: #ffffff"><small><strong>This site
+<p class="warning"><small><strong>This site
 is new!  We're still testing at the moment.</strong>  We're looking for reports
 of bugs and any suggestions for making the site
 better.  You can file a problem report using
@@ -17,75 +15,34 @@ better.  You can file a problem report using
  system</a>).
 Alternatively, email <a href="mailto:help@writetothem.com">help@writetothem.com</a>
 and we'll reply as soon as we can.
-</p>
+</small></p>
 
 <? if ($values['error']) { ?>
-<p><font color="#ff0000" size="-1">
+<p class="warning">
 <strong>Please try again.</strong>
 <?=$values['error']?>
 </p>
 <? } ?>
 
-<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0" BGCOLOR="#006666">
-	<TR>
-	<TD><TABLE CELLPADDING="8" CELLSPACING="0" BORDER="0" BGCOLOR="#cccc99">
-        <TR><TD><?=$values['form']?></TD></TR>
-		</TABLE>
-     </TD>
-	</TR>
-</TABLE>
-
-	<P ALIGN="center"><FONT SIZE="-3">If you don't know your Postcode you can try <A HREF="http://www.postcodeanywhere.co.uk/home/newcheckerpopup.aspx" TARGET="_new">this Postcode Finder</A></FONT></P>
-	
-
-	<P><BR>
-<TABLE CELLPADDING="2" CELLSPACING="2" BORDER="0">
-	<TR>
-		<TD CLASS="white" BGCOLOR="#cccc99" ALIGN="center">1</TD>
-		<TD COLSPAN="5"><B>Type in your full UK postcode, then click "Go"</B></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="6"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
-	</TR>
-	<TR>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
-		<TD CLASS="white" BGCOLOR="#999966" ALIGN="center">2</TD>
-		<TD COLSPAN="4"><B>From the list of politicians, choose who to write to</B></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="6"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="2"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
-		<TD CLASS="white" BGCOLOR="#9c9c9c" ALIGN="center">3</TD>
-		<TD COLSPAN="3"><B>Write the letter you want to be sent to them</B></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="6"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="3"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
-		<TD CLASS="white" BGCOLOR="#99cc99" ALIGN="center">4</TD>
-		<TD COLSPAN="2"><B>Click the link in the email we'll send you</B></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="6"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="5" BORDER="0"></TD>
-	</TR>
-	<TR>
-		<TD COLSPAN="4"><IMG SRC="/images/tiny.gif" ALT="" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
-		<TD CLASS="white" BGCOLOR="#000066" ALIGN="center">5</TD>
-		<TD><B>That's it! Your letter has been sent!</B></TD>
-	</TR>
-	<TR>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="14" HEIGHT="1" BORDER="0"></TD>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="14" HEIGHT="1" BORDER="0"></TD>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="14" HEIGHT="1" BORDER="0"></TD>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="14" HEIGHT="1" BORDER="0"></TD>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="14" HEIGHT="1" BORDER="0"></TD>
-		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="200" HEIGHT="1" BORDER="0"></TD>
-	</TR>
-	</TABLE><P>
+<div id="formbox">
+<?=$values['form']?>
 </div>
+
+<p align="center">If you don't know your Postcode you can try <a href="http://www.postcodeanywhere.co.uk/home/newcheckerpopup.aspx">this Postcode Finder</a></p>
+
+<!-- <ol id="instructions">
+	<li id="one"><span>1</span>
+	<B>Type in your full UK postcode, then click "Go"</B>
+	</li>
+	<li id="two"><span>2</span>
+	<B>From the list of politicians, choose who to write to</B>
+	<li id="thr"><span>3</span>
+	<B>Write the letter you want to be sent to them</B>
+	<li id="fou"><span>4</span>
+	<B>Click the link in the email we'll send you</B>
+	<li id="fiv"><span>5</span>
+	<B>That's it! Your letter has been sent!</B>
+</ol> -->
 
 <!--<p><small><a href="http://uk.imdb.com/title/tt0047573/">A horror horde of crawl-and-crush giants clawing out of the earth from
 mile-deep catacombs</a>? &mdash; Nope, just your politicians.  Use them.

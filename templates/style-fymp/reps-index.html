@@ -1,7 +1,7 @@
 <? $values['title'] = $values['voting_area']['rep_prefix'] . " " . $values['representative']['name'] . 
         $values['voting_area']['rep_suffix'] . "'s Control Panel"; include "header.php"; ?>
 
-<H3>WriteToThem.com - <?=$values['title'] ?> </H3>
+<h1><?=$values['title'] ?></h1>
 
 <p>Hello, and welcome to your control
 panel for WriteToThem.com, the website which makes it easy for
@@ -12,7 +12,7 @@ constituents to contact their elected representatives.  If you are not
 or one of their staff, then please <a href="/about-contact">contact us</a>.
 </p>
 
-<h4>Recent messages</h4>
+<h2>Recent messages</h2>
 
 <? $c = count($values['messages']);
 if ($c == 0) { ?>
@@ -39,7 +39,5 @@ if ($c == 0) { ?>
 }
 ?>
 </table>
-
-</form>
 
 <? include "footer.php"; ?>
