@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.8 2004-11-17 11:43:49 chris Exp $
+-- $Id: schema.sql,v 1.9 2004-11-18 17:14:15 chris Exp $
 --
 
 -- secret
@@ -78,10 +78,10 @@ create table message (
 -- message_log
 -- Events relating to each message.
 create table message_log (
-    order_id serial not null primary key, -- for ordering
+    order_id serial not null primary key,   -- for ordering
     message_id char(20) not null references message(id) on delete cascade,
-    whenlogged timestamp(0) without time zone not null default(now()),
-    state text not null,     -- state of message when log item added
+    whenlogged integer not null,            -- UNIX time
+    state text not null,                    -- state of message when log item added
     message text not null
 );
 
