@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.63 2005-01-24 21:52:09 matthew Exp $
+ * $Id: write.php,v 1.64 2005-02-04 13:01:17 matthew Exp $
  * 
  */
 
@@ -73,7 +73,7 @@ END;
     $form->applyFilter('writer_email', 'trim');
 
     $form->addElement('text', 'writer_phone', "Phone: <a href=\"/about-qa#address\" target=\"_blank\">(?)</a>", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() +]+$/', null);
+    $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() -+]+$/', null);
     $form->applyFilter('writer_phone', 'trim');
 
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
