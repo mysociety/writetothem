@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.44 2004-12-20 22:42:07 matthew Exp $
+ * $Id: write.php,v 1.45 2004-12-20 22:43:34 matthew Exp $
  * 
  */
 
@@ -88,7 +88,7 @@ END;
     add_all_variables_hidden($form, $fyr_values);
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'static1', null, 
-            "<b>Ready? Press the \"Preview\" button to continue</b>"); // TODO: remove <b>  from here
+            "<b>Ready? Press the \"Preview\" button to continue</b> "); // TODO: remove <b>  from here
     $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
 
