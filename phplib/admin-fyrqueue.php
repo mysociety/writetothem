@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.62 2005-01-30 14:09:52 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.63 2005-01-31 11:02:42 chris Exp $
  * 
  */
 
@@ -55,25 +55,37 @@ class ADMIN_PAGE_FYR_QUEUE {
     function print_messages($messages, $msgid = null) {
 ?>
 
-<table border=1
-width=100%><tr><th>Created</th><th>ID</th><th>Last State
-Change</th><th>State</th><th>Sender</th><th>Recipient</th>
-<th>Client IP / <br> Referrer</th>
-<th>Length (chars)</th><th>Tick</th>
-</tr>
-<form action="<?=new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto')) ?>" method="post">
+<table border="1" width="100%">
+    <tr>
+        <th>Created</th>
+        <th>ID</th>
+        <th>Last State Change</th>
+        <th>State</th>
+        <th>Sender</th>
+        <th>Recipient</th>
+        <th>Client IP / <br> Referrer</th>
+        <th>Length (chars)</th>
+        <th>Tick</th>
+    </tr>
+    <form action="<?=htmlspecialchars(new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'))) ?>" method="post">
 <?
 	$c = 1;
             foreach ($messages as $message) {
-                print '<tr'.($c==1?' class="v"':'').'>';
+                print '<tr' . ($c==1 ? ' class="v"' : '') . '>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
-                print "<td><a href=\"" . $this->self_link . "&id=" .  urlencode($message['id']) . "\">" .  substr($message['id'],0,10) . "<br/>" .  substr($message['id'],10) . "</a></td>";
+                print '<td><a href="'
+                        . htmlspecialchars(new_url('', false, 'id', $message['id']))
+                        . '">'
+                        .  substr($message['id'], 0, 10) . "<br/>" .  substr($message['id'], 10)
+                        . '</a></td>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
                 print "<td>";
                 print add_tooltip($message['state'], $this->state_help_notes($message['state']));
-                if ($message['frozen']) {
+                /* Only show frozen flag if the message is in a state this can
+                 * affect. */
+                if ($message['frozen'] and $message['state'] == 'new' or $message['state'] == 'pending' or $message['state'] == 'ready')
                     print "<br><b>frozen</b>";
-                }
+
                 if ($message['numactions'] > 0) {
                     if ($message['state'] == 'pending')  {
                         print "<br>" .  ($message['numactions'] - 1) . " ".
@@ -84,15 +96,16 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 
                     }
                 }
-                if ($message['lastaction'] > 0) {
+
+                if ($message['lastaction'] > 0)
                     print "<br>Last: " .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
-                }
+
                 print "</td>";
-                print "<td>" . 
-                        htmlspecialchars($message['sender_name']) . "<br>" .
-                        htmlspecialchars($message['sender_addr']) . "<br>" .
-                        htmlspecialchars($message['sender_email']) .
-                 "</td>";
+                print "<td>"
+                        . htmlspecialchars($message['sender_name']) . "<br>"
+                        . htmlspecialchars($message['sender_addr']) . "<br>"
+                        . htmlspecialchars($message['sender_email'])
+                        . "</td>";
 
                 $display_name = $message['recipient_name'];
                 if (!isset($display_name) || $display_name == "") {
@@ -100,25 +113,27 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                     $message['recipient_id'] . ", " .
                     $message['recipient_type'];
                 }
-                print "<td><a href=\"?page=reps&amp;rep_id=" .
-                    urlencode($message['recipient_id']) . "&amp;pc=" .
-                    urlencode($message['sender_postcode']) . "\">" . 
-                    $display_name . "</a><br>";
-                if ($message['recipient_email']) print $message['recipient_email'] . "<br>";
-                if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
+                print '<td><a href="'
+                        . htmlspecialchars(new_url('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name)
+                        . "</a><br>";
+                if ($message['recipient_email'])
+                    print htmlspecialchars($message['recipient_email']) . "<br>";
+                if ($message['recipient_fax'])
+                    print htmlspecialchars($message['recipient_fax']) . "<br>";
                 print "</td>";
-                $client_name = $message['sender_ipaddr'];
-                $short_client_name = trim_characters($client_name, strlen($client_name) - 27, 30); 
-                if ($client_name != $message['sender_ipaddr']) {
-                    $client_name .= " (" . $message['sender_ipaddr'] . ")";
-                }
 
-                print "<td>" . add_tooltip($short_client_name, $client_name) .
-                        "<br>" . trim_url($message['sender_referrer']) . "</td>";
-                print "<td>" . $message['message_length'] . "</td>";
-                print '<td><input type="checkbox" name="check_' .  $message['id'] . '"
-                    onclick="this.parentNode.parentNode.className=this.checked
-                    ? \'h\' : \''.($c==1?'v':'').'\'" >';
+                print "<td>${message['sender_ipaddr']}<br>"
+                        . trim_url($message['sender_referrer']) . "</td>";
+                print "<td>${message['message_length']}</td>";
+
+                /* Javascript code changes shading of table row for checked
+                 * messages to make them look "selected". */
+                print '<td><input type="checkbox" name="check_'
+                        . $message['id']
+                        . '" onclick="this.parentNode.parentNode.className = this.checked ? \'h\' : \''
+                            . ($c == 1 ? 'v' : '')
+                            . '\'" >';
+
                 print "</tr>";
                 # this.checked this .className=
 
@@ -170,11 +185,15 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 <?
     }
 
+    /* print_message MESSAGE
+     * Print a single message, as for print_messages above. */
     function print_message($message) {
         $this->print_messages(array($message));
     }
 
 
+    /* print_events EVENTS
+     * Print a list of logged EVENTS in a table. */
     function print_events($recents) {
 ?>
 <p>
@@ -186,7 +205,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
-                print "<td>" .  $this->make_ids_links(htmlspecialchars($recent['message'])) . "</td>";
+                print "<td>" . $this->make_ids_links(htmlspecialchars($recent['message'])) . "</td>";
                 print "</tr>";
             }
 ?>
@@ -300,8 +319,9 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
             admin_render_form($form);
-            print "<a href=\"" .  new_url("", true, 'view',
-            'similarbody', 'simto', $id, 'id', null) .  "\">View similar messages</a> ";
+            print '<a href="'
+                    .  htmlspecialchars(new_url("", true, 'view', 'similarbody', 'simto', $id, 'id', null))
+                    .  '">View similar messages</a> ';
 
             // Body text if enabled
             if (get_http_var('body')) {
@@ -327,13 +347,29 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
  
             // Log of what has happened to message
-            print "<h2>All events for this message:</h2>";
-            $recents = msg_admin_message_events($id);
+            $allevents = get_http_var('allevents', 0);
+
+            print '<h2>' .
+                    ($allevents
+                        ? 'All events for this message'
+                        : 'Important events for this message')
+                    . '</h2>';
+
+            print ($allevents
+                    ? '<a href="'
+                        . htmlspecialchars(new_url('', true, 'allevents', null))
+                        . '">View only important events</a>'
+                    : '<a href="'
+                        . htmlspecialchars(new_url('', true, 'allevents', 1))
+                        . '">View all events</a>');
+                    
+            $recents = msg_admin_message_events($id, !$allevents);
             if (msg_get_error($recents)) {
                 print "Error contacting queue:";
                 print_r($recents);
                 $recents = array();
             }
+
             $this->print_events($recents);
 
             if (count($message['bounces']) > 0) {

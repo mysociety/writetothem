@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.35 2005-01-31 10:20:50 chris Exp $
+ * $Id: queue.php,v 1.36 2005-01-31 11:02:42 chris Exp $
  * 
  */
 
@@ -232,7 +232,5 @@ function msg_admin_set_message_to_ready($id, $user) {
     $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_ready', array($id, $user));
     return $result;
 }
-
-
 
 ?>
