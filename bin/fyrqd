@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.2 2004-11-18 20:10:09 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.3 2004-11-25 00:16:59 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -49,6 +49,7 @@ sub run_daemon ($$) {
     if ($seq == 0) {
         print_log('info', "first process running queue");
         FYR::Queue::process_queue();
+        print_log('info', "queue run completed");
     }
 
     # Now run the queue every few minutes, or when notified.
@@ -68,8 +69,13 @@ sub run_daemon ($$) {
                 }
             }
         }
-        print_log('info', "running queue");
-        FYR::Queue::process_queue() if ($doit);
+        # we might have received a signal during select.
+        last if ($foad);
+        if ($doit) {
+            print_log('info', "running queue");
+            FYR::Queue::process_queue();
+            print_log('info', "queue run completed");
+        }
     }
 
     print_log('info', "shutting down after $iter iterations");
