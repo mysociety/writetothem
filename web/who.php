@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.40 2005-01-11 00:29:06 matthew Exp $
+ * $Id: who.php,v 1.41 2005-01-11 00:38:12 matthew Exp $
  * 
  */
 
@@ -139,13 +139,13 @@ foreach ($va_display_order as $va_type) {
 		$text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
 		/* Note categories of representatives who aren't paid for their work.... */
+		$text .= display_reps($representatives);
 		if (!$va_salaried[$va_type])
-			$text .= "<p><strong>Please remember that unlike MPs or MEPs, your "
+			$text .= "<p><em>Please remember that unlike MPs or MEPs, your "
 				. (($rep_count > 1)
 					? "${va_info['rep_name_long_plural']} are"
 					: "${va_info['rep_name_long']} is")
-				. " not paid for the work they do.</strong></p>";
-		$text .= display_reps($representatives);
+				. " not paid for the work they do.</em></p>";
 	}
 
 	array_push($fyr_representatives, $text);

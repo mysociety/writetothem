@@ -31,7 +31,7 @@ code is available</a> under an open source license.</p>
 <a href="/about">About</a>
 | <a href="/about-contactus">Contact Us</a>
 | <a href="/about-guidelines">Guidelines for Campaigners</a>
-| &copy; <a href="http://www.mysociety.org/">mySociety</a> 2005
+| <a href="/about-copyright">&copy; mySociety</a>
 </div>
 </body>
 </html>
