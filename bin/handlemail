@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.11 2005-02-04 17:13:53 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.12 2005-02-04 17:27:55 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -30,8 +30,10 @@ use mySociety::Config;
 BEGIN {
     mySociety::Config::set_file("$FindBin::Bin/../conf/general");
 }
+use mySociety::DBHandle qw(dbh);
 use mySociety::Util qw(print_log);
 
+use FYR;
 use FYR::Queue;
 
 my @lines = ( );
@@ -118,15 +120,15 @@ if ($token eq 'bounce-null') {
     my $msg = FYR::Queue::message($id, 1);    # lock message
     if (!defined($msg)) {
         print_log('err', "bounce received for non-existant message '$id'; discarding");
-        FYR::DB::dbh()->rollback();
+        dbh()->rollback();
     } else {
         # Record the bounce
         FYR::Queue::logmsg($id, "received email bounce message", 1);
-        if ($m->{state} eq 'bounce_wait') {
+        if ($msg->{state} eq 'bounce_wait') {
             FYR::Queue::state($id, 'bounce_confirm');
         }
-        FYR::DB::dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), $m->as_string);
-        FYR::DB::dbh()->commit();
+        dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), $m->as_string);
+        dbh()->commit();
     }
 } else {
     print_log('err', "received bounce with invalid token '$token'; discarding");
