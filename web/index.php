@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.23 2004-11-26 15:55:02 francis Exp $
+ * $Id: index.php,v 1.24 2004-12-08 23:26:16 matthew Exp $
  * 
  */
 
@@ -17,9 +17,9 @@ require_once "../../phplib/mapit.php";
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => $pc));
 
-$form = new HTML_QuickForm('postcodeForm', 'get', 'index');
+$form = new HTML_QuickForm('postcodeForm', 'get', './');
 $buttons[0] =& HTML_QuickForm::createElement('text', 'pc', null, array('size' => 10, 'maxlength' => 255));
-$buttons[1] =& HTML_QuickForm::createElement('submit', 'go', 'Go');
+$buttons[1] =& HTML_QuickForm::createElement('submit', '', 'Go');
 $form->addGroup($buttons, 'stuff', '<b>Type Your UK Postcode:</b>', '&nbsp', false); // TODO: don't have bold tags here!
 $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
 
@@ -28,7 +28,7 @@ $template = "index-index";
 if ($pc != "") {
     $voting_areas = mapit_get_voting_areas($pc);
     if (!rabx_is_error($voting_areas)) {
-        header("Location: who?pc=$pc");
+        header('Location: who?pc='.urlencode($pc));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
