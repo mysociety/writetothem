@@ -2,3 +2,5 @@ Options +ExecCGI
 DirectoryIndex index.php
 AddType application/x-httpd-fastphp .php
 Action application/x-httpd-fastphp /~chris/tmp/fyr/fcgi/php
+
+# RewriteRule ^[2-7A-Za-z]{20,}$ /confirm.php?token=\1
