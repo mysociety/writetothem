@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.10 2005-01-30 13:30:27 chris Exp $
+# $Id: Fax.pm,v 1.11 2005-01-30 13:55:52 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -454,7 +454,7 @@ sub deliver ($) {
             FYR::Queue::logmsg($id, 0, "efax output: $line");
             # Record the pages which efax believes it's sent.
             if ($line =~ m#efax: \d+:\d+ sent -> (.+)#) {
-                delete($unsent{$_});
+                delete($unsent{$1});
             }
         }
         if ($rd->error()) {
