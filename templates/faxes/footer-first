@@ -1,10 +1,6 @@
-This is page <?=$values['this_page']?>/<?=$values['total_pages']?>. If you do
-not receive the whole of this transmission, or if there is any problem with
-this fax, please email us on help@writetothem.com or telephone us on XXX-XXXX.
-You can also visit our secure web site at,
-
-  <?=$values['representative_url']?>
-
-to change your options (for instance, to ask to receive emails rather than
-faxes) or to forward this message to one of the constituent's other
-representatives if you are not the appropriate recipient.
+This is page <?=$values['this_page']?>/<?=$values['total_pages']?>. This
+message was sent by WriteToThem.com, the successor to FaxYourMP.com.
+Writetothem.com is in a testing phase currently. If you have had any
+problems receiving this message, please email help@writetothem.com. See
+www.writetothem.com for details about the new service and what features
+jt will provide.
