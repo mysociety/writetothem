@@ -1,0 +1,38 @@
+#!/usr/bin/perl -w
+#
+# locationstats:
+# Stats about messages we've sent.
+#
+# Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: locationstats,v 1.1 2005-01-19 11:49:37 chris Exp $';
+
+use strict;
+
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use mySociety::Config;
+
+use FYR;
+use FYR::Queue;
+
+mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+
+my $dbh = FYR::DB::dbh();
+
+my @pcs = map { s/\s+//g; uc($_) }
+    @{$dbh->selectcol_arrayref(q#select sender_postcode from message where sender_postcode is not null and sender_postcode <> ''#)};
+my %p = map { $_ => 1 } @pcs;
+my %loc;
+foreach (keys(%p)) {
+    $loc{$_} = mySociety::MaPit::get_location($_);
+    print "$_ -> $loc{$_}->[1], $loc{$_}->[2]\n";
+}
+
