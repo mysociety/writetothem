@@ -6,23 +6,26 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.18 2005-01-31 11:43:23 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.19 2005-01-31 20:46:27 chris Exp $';
 
 require 5.8.0;
 
+BEGIN {
+    use mySociety::Config;
+    mySociety::Config::set_file('../../conf/general');
+}
+
 use FCGI;
-use FYR;
-use FYR::Queue;
-use mySociety::DaDem;
 use RABX;
 
-use mySociety::Config;
-mySociety::Config::set_file('../../conf/general');
-
+use mySociety::DaDem;
 use mySociety::WatchUpdate;
-my $W = new mySociety::WatchUpdate();
+
+use FYR;
+use FYR::Queue;
 
 my $req = FCGI::Request();
+my $W = new mySociety::WatchUpdate();
 
 while ($req->Accept() >= 0) {
     RABX::Server::CGI::dispatch(
