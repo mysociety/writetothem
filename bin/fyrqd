@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.12 2005-02-04 12:19:31 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.13 2005-02-23 13:20:26 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -83,6 +83,8 @@ sub run_daemon ($$$$) {
                     print_log('info', "woken up by external notification");
                 }
             }
+        } else {
+            sleep(600 + rand(600));
         }
         # we might have received a signal during select.
         last if ($foad);
@@ -319,5 +321,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.12 2005-02-04 12:19:31 chris Exp $
+$Id: fyrqd,v 1.13 2005-02-23 13:20:26 chris Exp $
 
