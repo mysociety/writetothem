@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.36 2005-01-31 11:02:42 chris Exp $
+ * $Id: queue.php,v 1.37 2005-01-31 11:10:45 chris Exp $
  * 
  */
 
@@ -132,11 +132,12 @@ function msg_admin_message_events($id, $important = false) {
 /* msg_admin_get_queue FILTER PARAMS
  * Returns array of hashes of recent queue events. Filter should be all, to
  * return all messages; important, to return messages which may need operator
- * attention; recentchanged, to return up to 100 messages which have recently
- * changed state; recentcreated, to return up to 100 of the most recently
- * created messages; similarbody, to return messages whose body text is similar
- * to that given in PARAMS['msgid']; or search, to return messages which
- * contain terms from PARAMS['query']. */
+ * attention; failing, to return messages which are failing/have failed to be
+ * delivered; frozen, to return frozen (abusive) messages; recentchanged, to
+ * return up to 100 messages which have recently changed state; recentcreated,
+ * to return up to 100 of the most recently created messages; similarbody, to
+ * return messages whose body text is similar to that given in PARAMS['msgid'];
+ * or search, to return messages which contain terms from PARAMS['query']. */
 function msg_admin_get_queue($filter, $params) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter, $params));
