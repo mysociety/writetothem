@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.6 2004-11-16 14:25:24 chris Exp $
+-- $Id: schema.sql,v 1.7 2004-11-16 15:01:36 chris Exp $
 --
 
 -- secret
@@ -70,7 +70,10 @@ create table message (
 
     -- how many actions (delivery attempts or whatever) have taken place while
     -- the message has been in this state
-    numactions integer not null default (0)
+    numactions integer not null default (0),
+
+    -- when the message was dispatched to the representative (UNIX time)
+    dispatched integer
 );
 
 -- message_log
@@ -81,5 +84,13 @@ create table message_log (
     whenlogged timestamp(0) without time zone not null default(now()),
     state text not null,     -- state of message when log item added
     message text not null
+);
+
+-- questionnaire_answer
+-- Results of the questionnaire we send to users.
+create table questionnaire_answer (
+    message_id char(20) not null references message(id) on delete cascade,
+    question_id integer not null default(0),    -- reserved for future expansion
+    answer text not null
 );
 
