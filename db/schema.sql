@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.14 2004-12-15 19:02:58 francis Exp $
+-- $Id: schema.sql,v 1.15 2004-12-16 12:16:17 francis Exp $
 --
 
 set client_min_messages to error;
@@ -59,6 +59,8 @@ create table message (
 
     -- State information.
     state text not null references state(name),
+    -- Frozen messages don't leave ready state
+    frozen boolean not null default('f'),
 
     -- when the message was originally queued (UNIX time)
     created integer not null,
@@ -83,7 +85,7 @@ create index message_created_idx on message(created);
 -- Events relating to each message.
 create table message_log (
     order_id serial not null primary key,       -- for ordering
-    message_id char(20) not null references message(id) on delete cascade,
+    message_id char(20) not null,
     exceptional boolean not null default('f'),  -- is an exceptional (error) condition
     whenlogged integer not null,                -- UNIX time
     state text not null,                        -- state of message when log item added

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.19 2004-12-15 19:02:58 francis Exp $
+ * $Id: queue.php,v 1.20 2004-12-16 12:16:17 francis Exp $
  * 
  */
 
@@ -142,5 +142,22 @@ function msg_admin_get_stats() {
     $result = $fyr_queue_client->call('FYR.Queue.admin_get_stats', array());
     return $result;
 }
+
+/* msg_admin_freeze_message ID
+ * Stops message being actually sent.*/
+function msg_admin_freeze_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_freeze_message', array($id));
+    return $result;
+}
+
+/* msg_admin_thaw_message ID
+ * Allows message to be sent.*/
+function msg_admin_thaw_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_thaw_message', array($id));
+    return $result;
+}
+
 
 ?>

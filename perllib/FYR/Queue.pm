@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.56 2004-12-16 10:53:27 chris Exp $
+# $Id: Queue.pm,v 1.57 2004-12-16 12:16:17 francis Exp $
 #
 
 package FYR::Queue;
@@ -25,6 +25,8 @@ use MIME::Words;
 use Text::Wrap (); # don't pollute our namespace
 use POSIX qw(strftime);
 use utf8;
+use DBI;
+#DBI->trace(1);
 
 use mySociety::Config;
 use mySociety::DaDem;
@@ -1054,7 +1056,7 @@ sub process_queue ($$) {
             . join(' or ',
                 map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, time() - $state_action_interval{$_}) }
                     keys %state_action_interval)
-        . ') order by random()');
+        . q#) and (state <> 'ready' or not frozen) order by random()#);
     $stmt->execute();
     while (my ($id, $state) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
@@ -1128,25 +1130,30 @@ sub admin_message_events ($) {
 }
 
 
-=item admin_get_queue IMPORTANT
+=item admin_get_queue FILTER
 
 Returns an array of hashes of information about each message on the queue.
-If IMPORTANT is true, return only information about messages which may need
+If FILTER is 0, return all messages.
+If FILTER is 1, return only information about messages which may need
 operator attention.
+If FILTER is 2, return messages which recently changed state.
 
 =cut
 sub admin_get_queue ($) {
-    my ($important) = @_;
-    my $where = "";
-    if ($important) {
+    my ($filter) = @_;
+    my $where = "order by created desc";
+    if (int($filter) == 1) {
         $where = "where (state = 'bounce_confirm' or state = 'failed' or
-        state = 'error' or (state = 'ready' and numactions > 0))";
+        state = 'error' or (state = 'ready' and numactions > 0) or
+        frozen) order by created desc";
+    } elsif (int($filter) == 2) {
+        $where = "order by laststatechange desc limit 20";
     }
     my $sth = FYR::DB::dbh()->prepare("select 
-        created, id, laststatechange, state, numactions, lastaction,  
-        sender_name, sender_email, sender_postcode,
+        created, id, laststatechange, state, frozen, numactions, lastaction,  
+        sender_name, sender_addr, sender_email, sender_postcode,
         recipient_name, recipient_email, recipient_fax, recipient_type,
-        length(message) as message_length from message $where order by created desc");
+        length(message) as message_length from message $where");
     $sth->execute();
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1155,7 +1162,7 @@ sub admin_get_queue ($) {
     return \@ret;
 }
 
-=item admin_get_queue
+=item admin_get_stats
 
 Returns a hash of statistics about the queue.
 
@@ -1180,6 +1187,34 @@ sub admin_get_stats () {
     $ret{created_24}    = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
 
     return \%ret;
+}
+
+=item admin_freeze_message ID
+
+Freezes the message with the given id, so it won't be actually sent to
+the representative until thawed.
+
+=cut
+sub admin_freeze_message ($) {
+    my ($id) = @_;
+    FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+    logmsg($id, "admin froze message");
+    FYR::DB::dbh()->commit();
+    return 0;
+}
+
+=item admin_thaw_message ID
+
+Thaws the message with the given id, so it will be sent to the
+representative. 
+
+=cut
+sub admin_thaw_message ($) {
+    my ($id) = @_;
+    FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    logmsg($id, "admin thawed message");
+    FYR::DB::dbh()->commit();
+    return 0;
 }
 
 1;
