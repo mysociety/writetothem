@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.135 2005-02-18 14:26:52 chris Exp $
+# $Id: Queue.pm,v 1.136 2005-02-21 12:50:39 chris Exp $
 #
 
 package FYR::Queue;
@@ -74,6 +74,27 @@ sub create () {
     return unpack('h20', mySociety::Util::random_bytes(MESSAGE_ID_LENGTH / 2));
 }
 
+# get_via_representative ID
+# Given a voting area ID, return reference to a hash of information about any
+# 'via' representative (e.g. council) which can be used to contact
+# representatives of that area.
+sub get_via_representative ($) {
+    my ($aid) = @_;
+    my $ainfo = mySociety::MaPit::get_voting_area_info($aid);
+    my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area_id});
+
+    throw FYR::Error("Bad return from DaDem looking up contact via info")
+        unless (ref($vainfo) eq 'ARRAY');
+    throw FYR::Error("More than one via contact (shouldn't happen)")
+        if (@$vainfo > 1);
+    throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
+        if (!@$vainfo);
+
+    my $viainfo = mySociety::DaDem::get_representative_info($vainfo->[0]);
+    $viainfo->{id} = $vainfo->[0];
+    return $viainfo;
+}
+
 # work_out_destination RECIPIENT
 # Internal use. Takes a RECIPIENT (reference to hash of fields), and uses their
 # contact method to set the fax or email fields. Gives an error if contact
@@ -111,17 +132,7 @@ sub work_out_destination ($) {
     } elsif ($recipient->{method} eq "via") {
         # Representative should be contacted via the elected body on which they
         # sit.
-        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{voting_area});
-        my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area_id});
-
-        throw FYR::Error("Bad return from DaDem looking up contact via info")
-            unless (ref($vainfo) eq 'ARRAY');
-        throw FYR::Error("More than one via contact (shouldn't happen)")
-            if (@$vainfo > 1);
-        throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
-            if (!@$vainfo);
-
-        my $viainfo = mySociety::DaDem::get_representative_info($vainfo->[0]);
+        my $viainfo = get_via_representative($recipient->{voting_area});
         throw FYR::Error("Bad contact mehod for via contact (shouldn't happen)")
             if ($viainfo->{method} eq 'via');
         
@@ -1161,11 +1172,32 @@ my %state_action = (
             my $result = send_failure_email($id);
             if ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
                 state($id, 'error');    # bump timer for redelivery
-            } else {
-                # Give up -- it's all really bad.
-                logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
-                state($id, 'failed');
+                return;
             }
+            # Give up -- it's all really bad.
+            logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
+            state($id, 'failed');
+
+            # Now try to mark the contact as failing. It's not guaranteed
+            # that this will succeed, and we can't sensibly do very much if
+            # it doesn't. So just ignore any error.
+            try {
+                # Mark contact as failing.
+                my $msg = message($id);
+                my $method = defined($msg->{recipient_email}) ? 'email' : 'fax';
+                if ($msg->{recipient_via}) {
+                    my $R = mySociety::DaDem::get_representative_info($msg->{recipient_id});
+                    my $viainfo = get_via_representative($R->{voting_area});
+                    mySociety::DaDem::admin_mark_failing_contact($R->{id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
+                    logmsg($id, 1, qq#marked representative 'via' contact ($method to $msg->{"recipient_$method"}) as failing#);
+                } else {
+                    mySociety::DaDem::admin_mark_failing_contact($msg->{recipient_id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
+                    logmsg($id, 1, qq#marked representative contact ($method to $msg->{"recipient_$method"}) as failing#);
+                }
+            } catch Error with {
+                my $E = shift;
+                logmsg($id, 1, "unable to mark contact details as failing: " . $E->text());
+            };
         },
 
 #        failed => sub ($$$) {
