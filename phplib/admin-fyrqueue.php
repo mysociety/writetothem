@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.8 2004-12-20 20:52:15 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.9 2004-12-20 21:33:36 francis Exp $
  * 
  */
 
@@ -163,7 +163,7 @@ All time stats:
             if (get_http_var('body')) {
                 print "<h2>Body text of message (only read if you really need to)</h2>";
                 print "<pre>";
-                print $message['message'];
+                print nl2br(htmlspecialchars($message['message']));
                 print "</pre>";
             }
  
