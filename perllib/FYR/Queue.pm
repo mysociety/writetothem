@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.59 2004-12-16 14:44:12 chris Exp $
+# $Id: Queue.pm,v 1.60 2004-12-16 14:48:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -835,7 +835,7 @@ use constant MESSAGE_RETAIN_TIME => (21 * DAY);
 
 # How long do we retain log and other information from a failed message for
 # operator inspection?
-use constant FAILED_RETAIN_TIME => (7 * DAY);
+use constant FAILED_RETAIN_TIME => MESSAGE_RETAIN_TIME;
 
 # Total number of times we attempt delivery by fax.
 use constant FAX_DELIVERY_ATTEMPTS => 4;
