@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: whotofax.php,v 1.3 2004-10-05 11:57:22 francis Exp $
+ * $Id: whotofax.php,v 1.4 2004-10-05 12:14:37 francis Exp $
  * 
  */
 
@@ -17,7 +17,7 @@ include_once "../lib/utility.php";
 
 $fyr_postcode = get_http_var('pc');
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
-print "postcode $fyr_postcode\n";
+debug("FRONTEND", "postcode is $fyr_postcode");
 
 if (is_integer($voting_areas)) {
     if ($voting_areas == MAPIT_BAD_POSTCODE) {
@@ -84,9 +84,7 @@ foreach ($voting_areas as $va_type => $va_value) {
         else {
             $fyr_error_message = "Unknown error looking up representatives.";
         }
-#        print $fyr_error_message;
-#        include "templates/generalerror.html";
-#        exit;
+        debug(WARNING, $fyr_error_message);
     }
     else {
         $repcount = count($representatives);

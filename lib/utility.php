@@ -8,8 +8,7 @@ General utility functions v1.1 (well, it was).
 function debug ($header, $text="") {
 	// Pass it a brief header word and some debug text and it'll be output.
 
-	// We set ?DEBUGTAG=n in the URL.
-	// (DEBUGTAG is set in config.php).
+	// We set ?debug=n in the URL.
 	// n is a number from (currently) 1 to 4.
 	// This sets what amount of debug information is shown.
 	// For level '1' we show anything that is passed to this function
@@ -17,15 +16,15 @@ function debug ($header, $text="") {
 	// For level '2', anything with a $header in $levels[1] AND $levels[2].
 	// Level '4' shows everything.
 	
-	$debug_level = get_http_var(DEBUGTAG);
+	$debug_level = get_http_var("debug");
 	
 	if ($debug_level != '') {
 	
 		// Set which level shows which types of debug info.
 		$levels = array (
-			1 => array ('SKIN', 'THEUSER', 'TIME', 'SQLERROR', 'PAGE', 'TEMPLATE', 'SEARCH'),
-			2 => array ('SQL', 'EMAIL', 'hansardlist', 'debatelist', 'wranslist'),
-			3 => array ('SQLRESULT')
+			1 => array ('FRONTEND', 'WARNING'),
+			2 => array ('SQL'), // not used yet
+			3 => array ('SQLRESULT') // not used yet
 			// Higher than this: 'DATA', etc.
 		);
 	
