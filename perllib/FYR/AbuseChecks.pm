@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.1 2004-12-15 20:25:16 chris Exp $
+# $Id: AbuseChecks.pm,v 1.2 2004-12-15 20:27:12 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -32,7 +32,7 @@ sub google_for_postcode ($) {
     }
     return 0 if ($nogoogle);
 
-    $pc =~ s# ##g;
+    $pc =~ s#\s##g;
     $pc = uc($pc);
 
     # We need to put the space back in in the right place now.
@@ -42,7 +42,7 @@ sub google_for_postcode ($) {
     
     # ("-site:mysociety.org" is a hack to stop it finding (e.g.) my postcode in
     # checked-in code in CVSTrac.... --chris 20041215)
-    $G->query('', sprintf('%s OR %s writetothem OR faxyourmp -site:mysociety.org', $pc, $pc2));
+    $G->query('', sprintf('%s OR "%s" writetothem OR faxyourmp -site:mysociety.org', $pc, $pc2));
 
     return (scalar($G->results()) > 0);
 }
