@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.12 2004-12-21 00:56:46 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.13 2004-12-21 01:23:33 francis Exp $
  * 
  */
 
@@ -25,8 +25,9 @@ class ADMIN_PAGE_FYR_QUEUE {
 <table border=1
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
 Change</th><th>State</th><th>Sender</th><th>Recipient</th>
-<th>IP / Referrer</th></tr>
+<th>IP / Referrer</th>
 <th>Length (chars)</th>
+</tr>
 <?
 	$c = 1;
             foreach ($messages as $message) {

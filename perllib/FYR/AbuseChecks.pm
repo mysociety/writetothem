@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.6 2004-12-20 20:34:16 francis Exp $
+# $Id: AbuseChecks.pm,v 1.7 2004-12-21 01:23:33 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -15,6 +15,7 @@ use strict;
 
 use Geo::IP;
 use Net::Google::Search;
+use Data::Dumper;
 
 use mySociety::Config;
 
@@ -55,7 +56,7 @@ sub google_for_postcode ($) {
 sub check_ip_country ($) {
     my ($addr) = @_;
     our $G;
-    $G ||= new GeoIP(GEOIP_STANDARD);
+    $G ||= new Geo::IP(GEOIP_STANDARD);
     my $cc = $G->country_code_by_addr($addr);
     return !(defined($cc) and $cc =~ m#^(GB|UK)$#);
 }
@@ -71,8 +72,10 @@ my @tests = (
         [
             'hold',
             sub ($) {
+                warn "in first test";
+                warn $_[0]->{message};
                 return 'ABUSETESTHOLD appears in message body'
-                    if return ($_[0]->{message} =~ m#ABUSETESTHOLD#);
+                    if ($_[0]->{message} =~ m#ABUSETESTHOLD#);
             }
         ],
 
@@ -126,8 +129,8 @@ sub test ($) {
 
     foreach (@tests) {
         my ($what, $f) = @$_;
-        my $why;
-        if (defined($why = &$f($msg))) {
+        my $why = &$f($msg);
+        if ($why) {
             return ($what, $why);
         }
     }

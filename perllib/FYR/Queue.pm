@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.67 2004-12-21 00:56:46 francis Exp $
+# $Id: Queue.pm,v 1.68 2004-12-21 01:23:33 francis Exp $
 #
 
 package FYR::Queue;
@@ -135,7 +135,6 @@ This function is called remotely and commits its changes.
 =cut
 sub write ($$$$) {
     my ($id, $sender, $recipient_id, $text) = @_;
-    warn Dumper($sender);
 
     try {
         # Get details of the recipient.
@@ -222,6 +221,7 @@ sub write ($$$$) {
 
         # Check for possible abuse
         my ($abuse_action, $abuse_logmsg) = FYR::AbuseChecks::test(message($id));
+    throw FYR::Error("Die $abuse_action message $abuse_logmsg");
         if ($abuse_action eq 'reject') {
             logmsg($id, "Abuse system rejected message: $abuse_logmsg");
             state($id, 'failed');
