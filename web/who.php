@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.19 2004-10-29 10:26:34 chris Exp $
+ * $Id: who.php,v 1.20 2004-11-02 16:25:25 chris Exp $
  * 
  */
 
@@ -71,15 +71,18 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     debug("FRONTEND", "voting area is type $va_type id $va_specificid");
     $va_info = $voting_areas_info[$va_specificid];
 
-    // The elected body is the overall entity. e.g. Cambridgeshire County Council.
+    /* The elected body is the overall entity. e.g. Cambridgeshire County
+     * Council. */
     $eb_type = $va_inside[$va_type];
     $eb_specificid = $voting_areas[$eb_type];
     debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
     $eb_info = $voting_areas_info[$eb_specificid];
-    if ($eb_info == null)
+    if ($eb_info == null) {
         // No parent elected body - for now we skip it
         // (Will have to do something about London mayor)
+        debug("FRONTEND", "skipping this EB");
         continue;
+    }
     
     // Lookup table of long description XXX should copy these out of Whittaker's
     // Almanac or whatever.
