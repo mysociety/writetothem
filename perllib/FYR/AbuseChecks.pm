@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.7 2004-12-21 01:23:33 francis Exp $
+# $Id: AbuseChecks.pm,v 1.8 2004-12-21 01:28:53 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -55,9 +55,9 @@ sub google_for_postcode ($) {
 # Return true if the IP ADDRESS is outside the UK.
 sub check_ip_country ($) {
     my ($addr) = @_;
-    our $G;
-    $G ||= new Geo::IP(GEOIP_STANDARD);
-    my $cc = $G->country_code_by_addr($addr);
+    our $geoip;
+    $geoip ||= new Geo::IP(GEOIP_STANDARD);
+    my $cc = $geoip->country_code_by_addr($addr);
     return !(defined($cc) and $cc =~ m#^(GB|UK)$#);
 }
 
