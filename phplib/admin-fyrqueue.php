@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.43 2005-01-12 14:19:56 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.44 2005-01-12 14:24:18 francis Exp $
  * 
  */
 
@@ -322,16 +322,21 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
          } else {
             // Perform actions on checked items
             $sender_emails = array();
+            $sender_full = array();
             foreach ($_POST as $k=>$v) {
                 if (stristr($k, "check_")) {
                     $checkid = str_replace("check_", "", $k);
                     $this->do_actions($checkid);
                     $message = msg_admin_get_message($checkid);
                     array_push($sender_emails, $message['sender_email']);
+                    array_push($sender_full, $message['sender_name'] . 
+                            " &lt;" .  $message['sender_email'] . "&gt;");
                 }
             }
-            print "<p>In case you want to email the senders of those messages: " .
+            print "<p><b>Email list for BCCing:</b><br>" .
                 implode(",", array_unique($sender_emails));
+            print "<p><b>List of names and addresses:</b><br>" .
+                implode("<br>", array_unique($sender_full));
 
              // Display general statistics
             $stats = msg_admin_get_stats();
