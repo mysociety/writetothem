@@ -1,0 +1,18 @@
+#!/usr/bin/perl5.8.5 -w -I../perllib -I../../perllib
+#
+# runqueue:
+# Run the FYR queue.
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: runqueue,v 1.1 2004-10-20 11:11:19 chris Exp $';
+
+use FYR::Queue;
+use mySociety::DaDem;
+
+mySociety::DaDem::configure('http://caesious.beasts.org/~chris/scripts/xmlrpc');
+FYR::Queue::run_queue();
+FYR::DB::dbh()->disconnect();
+
