@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.14 2005-01-04 16:01:58 francis Exp $
+# $Id: AbuseChecks.pm,v 1.15 2005-01-05 14:25:56 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -15,9 +15,12 @@ use strict;
 
 use Geo::IP;
 use Net::Google::Search;
-use Data::Dumper;
+use Storable;
 
 use mySociety::Config;
+
+use FYR::DB;
+use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
 # Return true if the POSTCODE occurs with the terms "faxyourmp" or
@@ -60,6 +63,40 @@ sub check_ip_in_uk ($) {
     $geoip ||= new Geo::IP(GEOIP_STANDARD);
     my $cc = $geoip->country_code_by_addr($addr);
     return defined($cc) and $cc =~ m#^(GB|UK)$#;
+}
+
+# Constants for similarity hashing.
+# Length of substrings we consider.
+use constant SUBSTRING_LENGTH => 32;
+# Number of low bits which must be zero for a hash to be accepted.
+use constant NUM_BITS => 4;
+
+# check_similarity MESSAGE
+# Test MESSAGE for similarity to other messages in the queue.
+sub check_similarity ($) {
+    my ($msg) = @_;
+    # Compute and save hash of this message.
+    my $h = SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
+    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id})
+    FYR::DB::dbh()->do(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#, {}, $msg->{id}, Storable::nfreeze($h));
+    # Retrieve hashes of other messages and compare them.
+    my $stmt = FYR::DB::dbh()->prepare(q#select message_id, data from message_extradata where message_id <> ? and name = 'substringhash'#);
+    $stmt->execute($msg->{id});
+    my $thr = mySociety::Config::get('MAX_MESSAGE_SIMILARITY');
+    my @similar = ( );
+    while (my ($id2, $h2) = $stmt->fetchrow_array()) {
+        $h2 = Storable::thaw($h2);
+        my $similarity = FYR::SubstringHash::similarity($h, $h2);
+        push(@similar, [$id2, $similarity]) if ($similarity > $thr);
+    }
+    return 0 unless (@similar);
+    @similar = sort { $b->[1] <=> $a->[1] } @similar;
+    my $why = "Message body is very similar to #$similar[0]->[0]"
+    for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
+        $why .= ", $similar[$i]->[0]";
+    }
+    $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
+    return $why;
 }
 
 # @tests
@@ -127,6 +164,12 @@ my @tests = (
             }
         ],
 
+        # Body of message similar to other messages in queue.
+        [
+            'hold',
+            \&check_similarity
+        ]
+
     );
 
 =item test MESSAGE
@@ -134,8 +177,9 @@ my @tests = (
 Perform abuse checks on the MESSAGE (hash of database fields). This returns in
 list context one of: 'ok' to indicate that delivery should occur as normal,
 'hold' to indicate that the message should be held for inspection by an
-administrator, or 'reject' to indicate that the message should be discarded; 
-the reason for the admin for the result.
+administrator, or 'reject' to indicate that the message should be discarded;
+and, for 'hold' or 'reject', the reason for the result, to be displayed to the
+administrator.
 
 =cut
 sub test ($) {
