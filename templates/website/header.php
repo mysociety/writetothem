@@ -6,14 +6,14 @@
 <title>WriteToThem.com Beta Test - <? print $values['title']; ?></title>
 <style type="text/css">
 <?php
-if ($_REQUEST['css'] && !preg_match('#"#',$_REQUEST['css'])) {
+if (array_key_exists('css', $_REQUEST) && !preg_match('#"#',$_REQUEST['css'])) {
 	print '@import "'.$_REQUEST['css'].'";'."\n";
 } else { ?>
 @import "/wtt.css";
 <?php } ?>
 </style>
 <?php
-if ($values['robots']) { ?>
+if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
 </head>
