@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.55 2005-02-09 08:37:04 francis Exp $
+ * $Id: who.php,v 1.56 2005-02-09 11:59:50 chris Exp $
  * 
  */
 
@@ -140,10 +140,10 @@ foreach ($va_display_order as $va_type) {
             $text .= "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $text .= "${eb_info['name']}.  ${eb_info['description']}";
-        /* Note categories of representatives who aren't paid for their work.... */
+        /* Note categories of representatives who typically aren't paid for
+         * their work.... */
         if (!$va_salaried[$va_type])
-            $text .= " ${va_info['rep_name_long_plural']} are"
-                . " not paid for the work they do.</p>";
+            $text .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
         $text .= "</p>";
 
         if($va_type == 'WMC') {
@@ -152,6 +152,7 @@ foreach ($va_display_order as $va_type) {
                 $representatives_info[$representatives[0]]['image'] = $matches[1];
         }
         $text .= display_reps($representatives);
+
         if ($va_type == 'WMC') {
             $text .= '<p style="font-size: 80%" id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
         }
