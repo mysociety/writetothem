@@ -13,7 +13,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.2 2004-11-10 10:41:52 francis Exp $
+ * $Id: general-example,v 1.3 2004-11-10 12:44:31 francis Exp $
  * 
  */
 
@@ -37,5 +37,7 @@ define('OPTION_BASE_URL', 'http://caesious.beasts.org/~chris/tmp/fyr');
 define('OPTION_EMAIL_DOMAIN', 'caesious.beasts.org');
 define('OPTION_EMAIL_PREFIX', 'fyr-');
 
+// Debug log level for PHP website
+define('OPTION_PHP_DEBUG_LEVEL', 0);
 
 ?>
