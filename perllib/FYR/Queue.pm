@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.47 2004-12-13 13:20:05 francis Exp $
+# $Id: Queue.pm,v 1.48 2004-12-13 13:32:04 chris Exp $
 #
 
 package FYR::Queue;
@@ -246,7 +246,8 @@ my %allowed_transitions = (
         bounce_confirm =>   [qw(bounce_wait error)],
         error =>            [qw(failed)],
         sent =>             [qw(finished)],
-        failed =>           []
+        failed =>           [],
+        finished =>         []
     );
 
 # turn this into hash-of-hashes
