@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.19 2005-01-13 15:15:38 francis Exp $
+ * $Id: fyr.php,v 1.20 2005-01-13 15:44:24 francis Exp $
  * 
  */
 
@@ -51,7 +51,7 @@ function fyr_rate_limit($important_vars) {
 
     $ret = ratty_test("fyr-web", $important_vars);
     if (isset($ret)) {
-        list($rule, $error_message) = $ret;
+        list($rule, $error_message, $title) = $ret;
         if ($error_message == "") {
             $error_message = "Sorry, we are experiencing technical difficulties.  Please try again later.";
         }

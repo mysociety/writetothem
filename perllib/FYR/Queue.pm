@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.90 2005-01-13 11:44:52 chris Exp $
+# $Id: Queue.pm,v 1.91 2005-01-13 15:44:24 francis Exp $
 #
 
 package FYR::Queue;
@@ -236,6 +236,7 @@ sub write ($$$$) {
             } else {
                 logmsg($id, "abuse system REJECTED message");
                 state($id, 'failed');   # XXX or should this be failed_closed?
+                $ret = $abuse_result;
             }
         }
     
@@ -244,8 +245,6 @@ sub write ($$$$) {
 
         # Wake up the daemon to send the confirmation mail.
         notify_daemon();
-
-        $ret = $abuse_result;
     } otherwise {
         my $E = shift;
         warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";

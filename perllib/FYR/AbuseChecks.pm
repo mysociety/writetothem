@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.30 2005-01-13 15:15:38 francis Exp $
+# $Id: AbuseChecks.pm,v 1.31 2005-01-13 15:44:24 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -257,7 +257,6 @@ explain why their message has been rejected.
 =cut
 sub test ($) {
     my ($msg) = @_;
-FYR::Queue::logmsg($msg->{id}, 'doing abuse checks...');
     my %ratty_values = (
         # Useful fields for sending to Ratty
         message => [$msg->{message}, "Body text of message"],
@@ -295,10 +294,11 @@ FYR::Queue::logmsg($msg->{id}, 'doing abuse checks...');
     }
 
     # Perform test.
-    my ($ruleid, $result) = mySociety::Ratty::test('fyr-abuse', \%ratty_values);
-    if (defined($ruleid)) {
-        FYR::Queue::logmsg($msg->{id}, "fyr-abuse rule $ruleid fired for message; result: $result");
-        return $result;
+    my $result = mySociety::Ratty::test('fyr-abuse', \%ratty_values);
+    if (defined($result)) {
+        my ($ruleid, $action, $title) = @$result;
+        FYR::Queue::logmsg($msg->{id}, "fyr-abuse rule #$ruleid '$title' fired for message; result: $action");
+        return $action;
     } else {
         return undef;
     }

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.46 2005-01-13 11:29:26 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.47 2005-01-13 15:44:24 francis Exp $
  * 
  */
 
@@ -153,6 +153,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 
     function print_events($recents) {
 ?>
+<p>
 <table border=1
 width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <?
@@ -166,6 +167,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
 ?>
 </table>
+</p>
 <?
     }
 
