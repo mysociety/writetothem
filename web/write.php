@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.49 2005-01-05 20:21:38 chris Exp $
+ * $Id: write.php,v 1.50 2005-01-10 13:39:23 francis Exp $
  * 
  */
 
@@ -255,12 +255,29 @@ if (rabx_is_error($success)) {
         message. Please <a href=\"mailto:help@writetothem.com\">email us</a> to let us know.
         Details: " . $success->text);
     if ($success->code == FYR_QUEUE_MESSAGE_SHAME) 
-        template_show_error("
-        Sorry, but " . $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " .
-        $fyr_voting_area['rep_suffix'].  " has told us not to deliver any
-        messages from the constituents of " . $fyr_voting_area['name'] . ".
-        Please <a href=\"mailto:help@writetothem.com\">email us</a> to
-        let us know what you think about this.");
+    {
+        if ($fyr_voting_area['type'] == 'WMC') {
+            template_show_error(
+            $fyr_voting_area['rep_prefix'] . " " .
+            $fyr_representative['name'] . " " .
+            $fyr_voting_area['rep_suffix'].  " has told us not to
+            deliver any messages from the constituents of " .
+            $fyr_voting_area['name'] . ".
+            Instead you can try contacting them via the 
+            <a href=\"http://www.locata.co.uk/commons/\">the Parliament
+            website</a>.  Enter your postcode there to get a phone
+            number, a postal address, and for some MPs a way to contact
+            them by email.
+            ");
+        } else {
+            template_show_error(
+            $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " .
+            $fyr_voting_area['rep_suffix'].  " has told us not to deliver any
+            messages from the constituents of " . $fyr_voting_area['name'] . ".
+            Please <a href=\"mailto:help@writetothem.com\">email us</a> to
+            let us know what you think about this.");
+        }
+    }
     template_show_error($success->text);
 }
 
