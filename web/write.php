@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.14 2004-10-20 08:58:01 francis Exp $
+ * $Id: write.php,v 1.15 2004-10-20 10:44:40 francis Exp $
  * 
  */
 
@@ -19,6 +19,7 @@ require_once 'HTML/QuickForm/Action/Next.php';
 require_once 'HTML/QuickForm/Action/Display.php';
 
 include_once "../conf/config.php";
+include_once "../phplib/queue.php";
 include_once "../../phplib/mapit.php";
 include_once "../../phplib/votingarea.php";
 include_once "../../phplib/dadem.php";
@@ -34,6 +35,7 @@ function default_body_text() {
         global $fyr_representative;
         return 'Dear ' .  $fyr_representative['name'] . ',';
 }
+
 class RuleAlteredBodyText extends HTML_QuickForm_Rule {
     function validate($value, $options) {
         return $value != default_body_text();
@@ -94,6 +96,7 @@ END;
         $this->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62, 'maxlength' => 5000));
         $this->addRule('body', 'Please enter your message', 'required', null, null);
         $this->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
+        $this->applyFilter('body', 'convert_to_unix_newlines');
 
         $this->addElement('hidden', 'pc', $fyr_postcode);
         $this->addElement('hidden', 'who', $fyr_who);
@@ -161,9 +164,32 @@ class ActionDisplayFancy extends HTML_QuickForm_Action_Display
 
 class ActionProcess extends HTML_QuickForm_Action {
     function perform(&$page, $actionName) {
-        echo "Submit successful!  This bit will queue the fax<br>\n<pre>\n";
-        var_dump($page->controller->exportValues());
-        echo "\n</pre>\n";
+        global $fyr_values;
+        $fyr_values = $page->controller->exportValues();
+        $msgid = msg_create();
+
+        $address = 
+            $fyr_values['writer_address1'] . "\n" .
+            $fyr_values['writer_address2'] . "\n" .
+            $fyr_values['writer_town'] . "\n" .
+            $fyr_values['pc'] . "\n";
+        $address = str_replace("\n\n", "\n", $address);
+        $success = msg_write($msgid, 
+                array( 
+                'name' => $fyr_values['writer_name'],
+                'email' => $fyr_values['writer_email'], 
+                'address' => $address,
+                'phone' => $fyr_values['writer_phone'], 
+                ),
+                $fyr_values['who'], $fyr_values['body']);
+    
+        global $fyr_representative, $fyr_voting_area, $fyr_date;
+        if ($success) {
+            include "templates/write-checkemail.html";
+        } else {
+            $fyr_error_message = "Failed to queue the message";  // TODO improve this error message
+            include "templates/generalerror.html";
+        }
     }
 }
 

@@ -6,14 +6,14 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.3 2004-10-20 09:32:06 chris Exp $
+ * $Id: queue.php,v 1.4 2004-10-20 10:44:40 francis Exp $
  * 
  */
 
 /* msg_create
  * Return a string ID for a new outgoing fax/email message. */
 function msg_create() {
-    return sprintf("D%08x%08xYXX", rand(), rand();
+    return sprintf("D%08x%08xYXX", rand(), rand());
 }
 
 /* msg_write ID SENDER RECIPIENT TEXT
@@ -22,9 +22,8 @@ function msg_create() {
  * sender including elements: name, the sender's full name; email, their email
  * address; address, their full postal address; and optionally phone, their
  * phone number. RECIPIENT is the DaDem ID number of the recipient of the
- * message; and TEXT is the text of the message, with line breaks. All strings
- * must be encoded in UTF-8.
- * 
+ * message; and TEXT is the text of the message, with only "\n"
+ * characters for line breaks. All strings must be encoded in UTF-8.
  * Returns true on success or false on failure. */
 function msg_write($id, $sender, $recipient_id, $text) {
     return true;
