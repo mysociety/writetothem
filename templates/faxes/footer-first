@@ -1,6 +1,6 @@
 This is page <?=$values['this_page']?>/<?=$values['total_pages']?>. This
 message was sent by WriteToThem.com, the successor to FaxYourMP.com.
 WriteToThem.com is currently being tested. If you have had any problems
-receiving this message, please email help@writetothem.com. See
-www.writetothem.com for details about the new service and what features it will
-provide.
+receiving this message, please email help@writetothem.com or call +44 (0)845
+333 0160; we'll get back to you as soon as possible. See www.writetothem.com
+for details about the new service and what features it will provide.
