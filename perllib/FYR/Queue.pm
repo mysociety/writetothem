@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.146 2005-03-24 12:23:40 chris Exp $
+# $Id: Queue.pm,v 1.147 2005-03-24 12:29:06 chris Exp $
 #
 
 package FYR::Queue;
@@ -832,6 +832,15 @@ sub make_questionnaire_email ($;$) {
                     email_template($reminder ? 'questionnaire-reminder' : 'questionnaire'),
                     email_template_params($msg, yes_url => $yes_url, no_url => $no_url)
                 );
+
+    # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
+    # present URLs as hyperlinks in email bodies unless we enclose them in
+    # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
+    # we manually make that transformation. Note that we're assuming here that
+    # the confirm URLs have no characters which need to be entity-encoded,
+    # which is bad, evil and wrong but actually true in this case.
+    $text =~ s#(http://.+$)#<a href="$1">$1</a>#mg
+        if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
     return MIME::Entity->build(
             Sender => $questionnaire_sender,
