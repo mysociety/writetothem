@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.8 2005-01-13 23:45:59 matthew Exp $
+ * $Id: forms.php,v 1.9 2005-02-13 14:23:33 francis Exp $
  * 
  */
 
@@ -42,7 +42,7 @@ function add_all_variables_hidden(&$form, $variables) {
     // I tried using a 'hidden' element here, but it refuses to change
     // the value of the contents, just uses the one in _POST rather
     // than the new one.
-    $form->addElement('html', $html_hidden);
+    $form->addElement('html', "<tr><td>$html_hidden</td></tr>");
 }
 
 class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {
