@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.22 2005-01-13 13:45:30 francis Exp $
+ * $Id: general-example,v 1.23 2005-01-13 17:06:01 francis Exp $
  * 
  */
 
@@ -57,8 +57,8 @@ define('OPTION_EMAIL_PREFIX', 'fyr-');
 define('OPTION_GOOGLE_API_KEY', '');
 
 // Maximum similarity between a new message and existing messages before a
-// message is held as a possible cut-and-paste duplicate. Numbers nearer to
-// unity indicate greater similarity.
+// message is noted as being similar to another. Numbers nearer to unity
+// indicate greater similarity.
 define('OPTION_MESSAGE_SIMILARITY_THRESHOLD', '0.50');
 
 // Configuration for fax generation and sending.
