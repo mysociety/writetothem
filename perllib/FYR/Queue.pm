@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.52 2004-12-15 15:35:04 francis Exp $
+# $Id: Queue.pm,v 1.53 2004-12-15 17:02:27 francis Exp $
 #
 
 package FYR::Queue;
@@ -204,6 +204,10 @@ sub write ($$$$) {
         $logaddr =~ s#,+#,#g;
         $logaddr =~ s#, *$##;
 
+        # This goes before logmsg, otherwise the message_log foreign key
+        # constraint gets violated by the new log message.
+        FYR::DB::dbh()->commit();
+
         logmsg($id, sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
                     $sender->{name},
                     $sender->{email},
@@ -212,8 +216,6 @@ sub write ($$$$) {
                     $recipient->{name},
                     defined($recipient->{fax}) ? "fax" : "email",
                     $recipient->{fax} || $recipient->{email}));
-
-        FYR::DB::dbh()->commit();
 
         # Wake up the daemon to send the confirmation mail.
         notify_daemon();
@@ -1107,4 +1109,5 @@ sub admin_get_queue () {
     }
     return \@ret;
 }
+
 1;

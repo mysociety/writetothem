@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.7 2004-12-13 12:17:34 francis Exp $
+# $Id: FYR.pm,v 1.8 2004-12-15 17:02:27 francis Exp $
 #
 
 use strict;
@@ -73,8 +73,8 @@ sub new_dbh () {
     # make sure we have a site shared secret
     if (!$dbh->selectrow_array('select secret from secret for update of secret')) {
         $dbh->do('insert into secret (secret) values (?)', {}, unpack('h*', mySociety::Util::random_bytes(32)));
-        $dbh->commit();
     }
+    $dbh->commit();
 
     return $dbh;
 }
