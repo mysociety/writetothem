@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.36 2004-12-10 11:53:32 matthew Exp $
+ * $Id: write.php,v 1.37 2004-12-13 10:22:32 francis Exp $
  * 
  */
 
@@ -152,18 +152,6 @@ function submitFax() {
         $fyr_values['pc'] . "\n";
     $address = str_replace("\n\n", "\n", $address);
 
-    // reverify that the representative represents this postcode
-    $verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
-    if (is_array($verify_voting_area_map)) 
-        $verify_voting_areas = array_values($verify_voting_area_map);
-    else 
-        $verify_voting_areas = array();
-    $verify_rep_info = dadem_get_representative_info($fyr_values['who']);
-    if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
-       template_show_error("There's been a mismatch error.  Sorry about
-           this, <a href=\"/\">please start again</a>.");
-    }
-
     // check message not too long
     if (strlen($fyr_values['body']) > OPTION_MAX_BODY_LENGTH) {
         template_show_error("Sorry, but your message is a bit too long
@@ -212,6 +200,18 @@ if (!isset($fyr_postcode) || $fyr_postcode == "") {
 if (!isset($fyr_who)) {
     header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
     exit;
+}
+
+// Reverify that the representative represents this postcode
+$verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
+if (is_array($verify_voting_area_map)) 
+    $verify_voting_areas = array_values($verify_voting_area_map);
+else 
+    $verify_voting_areas = array();
+$verify_rep_info = dadem_get_representative_info($fyr_values['who']);
+if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
+   template_show_error("There's been a mismatch error.  Sorry about
+       this, <a href=\"/\">please start again</a>.");
 }
 
 // Rate limiter

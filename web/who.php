@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.31 2004-12-08 23:37:53 matthew Exp $
+ * $Id: who.php,v 1.32 2004-12-13 10:22:32 francis Exp $
  * 
  */
 
@@ -86,8 +86,6 @@ foreach ($va_display_order as $va_type) {
     }
     $left_column .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
-#    $form = new HTML_QuickForm('whoForm', 'post', 'write');
-
     $right_column = "<p>In your ${va_info['type_name']},
         <b>${va_info['name']}</b>, you are represented by ";
     if ($rep_count > 1) {
@@ -102,19 +100,8 @@ foreach ($va_display_order as $va_type) {
     foreach ($representatives as $rep_specificid) {
         ++$c;
         $rep_info = $representatives_info[$rep_specificid];
-#        $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b><br>'
-#	. $rep_info['party'], $rep_specificid);
-#	if ($rep_count == 1) {
-#		$form->setDefaults(array('who' => $rep_specificid));
-#	}
 	$rep_list .= '<li><a href="write?who='.$rep_specificid.'&amp;pc='.urlencode($fyr_postcode).'">'.$rep_info['name'].'</a><br>'.$rep_info['party'];
     }
-
-#    $form->addElement('hidden', 'pc', $fyr_postcode);
-#    $form->addElement('submit', 'next', 'Next >>');
-#    $fyr_form_renderer = new HTML_QuickForm_Renderer_mySociety();
-#    $form->accept($fyr_form_renderer);
-#    $right_column .= $fyr_form_renderer->toHtml();
     $right_column .= '<ul>' . $rep_list . '</ul>';
 
     array_push($fyr_representatives, array($left_column, $right_column));
