@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.27 2004-11-18 17:24:20 chris Exp $
+# $Id: Queue.pm,v 1.28 2004-11-18 18:01:00 chris Exp $
 #
 
 package FYR::Queue;
@@ -174,7 +174,7 @@ sub logmsg ($$) {
     FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?, ?)',
         {},
         $id,
-        strftime('%Y-%m-%d %H:%M:%S', localtime(time())),
+        time(),
         state($id),
         $msg);
 }
