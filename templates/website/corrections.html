@@ -1,0 +1,56 @@
+<? $values['title'] = "Corrections, corrections";
+$values['robots'] = 'noindex, nofollow';
+include "header.php";
+
+$va_info = $values['va_info'];
+
+?>
+
+<h2><?=$values['title'] ?></h2>
+
+<? if ($values['error']) { ?>
+<p class="warning">
+<?=$values['error']?>
+</p>
+<? } ?>
+
+<p>Below are the <?=count($values['reps_info'])!=1?$va_info['rep_name_plural']:$va_info['rep_name'] ?> from <strong><?=$va_info['name'] ?></strong>.
+Please edit any that are incorrect, or select the checkbox for anyone who isn't a councillor in this ward at all.</p>
+
+<form action="corrections" method="post">
+<?php
+
+if (count($values['reps_info'])) {
+print '<table style="margin: 0 auto" border="1" cellpadding="3" cellspacing="0">
+    <tr><th>Current details</th><th>Name</th><th>Party</th><th>Delete?</th></tr>';
+    foreach ($values['reps_info'] as $id => $rep) {
+        print '<tr><td align="right">'.$rep['name'].', '.$rep['party'].':</td><td><input type="text" name="name['.$id.']" size="20" value="'.$rep['name'].'"></td><td><input type="text" name="party['.$id.']" size="20" value="'.$rep['party'].'"></td>';
+        print '<td align="center"><input type="checkbox" name="delete['.$id.']" value="1"></td>';
+        print '</tr>';
+    }
+    print '</table>';
+}
+
+?>
+
+<p>Alternatively, if this ward is missing a councillor, please fill in their details below:</p>
+
+<label for="newname">Missing councillor's name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
+
+<p>If you looked up this information on the web, please tell us the address of the page where you found it, to help us keep up to date:
+<input type="text" name="url" id="url" value="http://" size="50"></p>
+
+<p>Do you have any other information that would be useful to us? (Optional)<br>
+<textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
+
+<p>Lastly, you may optionally give us your email address, so we can contact you if we have any queries with your submission:
+<input type="text" name="email" id="email" value="" size="50"></p>
+
+<p align="right">
+<input type="submit" value="Submit my changes">
+<input type="hidden" name="id" value="<?=$values['id'] ?>">
+</p>
+</form>
+
+<? 
+include "footer.php"; ?>
