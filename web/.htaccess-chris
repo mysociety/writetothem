@@ -1,0 +1,4 @@
+Options +ExecCGI
+DirectoryIndex index.php
+AddType application/x-httpd-fastphp .php
+Action application/x-httpd-fastphp /~chris/tmp/fyr/fcgi/php
