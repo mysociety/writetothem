@@ -6,9 +6,12 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.6 2005-01-05 17:49:15 chris Exp $
+# $Id: Fax.pm,v 1.7 2005-01-05 18:02:36 chris Exp $
 #
 
+# In this context soft errors are those which occur locally (out of disk space,
+# unable to lock serial port), and hard errors are those which occur remotely
+# (number engaged, no carrier).
 package FYR::Fax::HardError;
 use Error;
 @FYR::Fax::HardError::ISA = qw(Error::Simple);
@@ -347,8 +350,8 @@ use constant FAX_HARD_ERROR => 2;
 
 # deliver MESSAGE
 # Send the MESSAGE by fax. Returns one of the FAX_ constants to indicate
-# whether the transaction was successful, failed with a temporary (soft) error,
-# or failed with a hard (permanent) error.
+# whether the transaction was successful, failed with a local (soft) error, or
+# failed with a remote (hard) error.
 sub deliver ($) {
     my ($msg) = @_;
     my $ret = FAX_SOFT_ERROR;
@@ -459,14 +462,14 @@ sub deliver ($) {
                 #
                 if ($st == 1) {
                     # number busy or device in use
-                    throw FYR::Fax::SoftError("fax number was engaged");
+                    throw FYR::Fax::HardError("fax number was engaged");
                 } elsif ($st == 2) {
                     # some kind of fatal error in efax; assume that this is NOT
                     # a fatal error per sending. (?)
                     throw FYR::Fax::SoftError("fatal error in efax");
                 } elsif ($st == 3) {
                     # "Modem protocol error"
-                    throw FYR::Fax::SoftError("modem protocol error (exit status 3) in efax");
+                    throw FYR::Fax::HardError("modem protocol error (exit status 3) in efax");
                 } elsif ($st == 4) {
                     # Modem is not responding.
                     throw FYR::Fax::SoftError("modem is not responding");

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.82 2005-01-05 15:56:11 chris Exp $
+# $Id: Queue.pm,v 1.83 2005-01-05 18:02:36 chris Exp $
 #
 
 package FYR::Queue;
@@ -765,9 +765,9 @@ sub deliver_fax ($) {
     if ($result == FYR::Fax::FAX_SUCCESS) {
         logmsg($id, "delivered message by fax to $msg->{recipient_fax}");
     } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
-        logmsg($id, "temporary failure delivering message by fax to $msg->{recipient_fax}");
+        logmsg($id, "soft failure delivering message by fax to $msg->{recipient_fax}");
     } else {
-        logmsg($id, "permanent failure delivering message by fax to $msg->{recipient_fax}");
+        logmsg($id, "hard failure delivering message by fax to $msg->{recipient_fax}");
     }
     return $result;
 }
@@ -983,10 +983,13 @@ my %state_action = (
                     FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'sent');
                 } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
-                    state($id, 'ready');    # bump timer
+                    # Don't do anything here: this is a temporary, local
+                    # failure.
                 } else {
+                    # Some kind of remote failure. Bump the counter so that we
+                    # can abandon delivery after too many such failures.
                     logmsg($id, "abandoning message after failure to send to representative");
-                    state($id, 'error');
+                    state($id, 'ready');    # bump counter
                 }
             } elsif ($email && defined($msg->{recipient_email})) {
                 my $result = deliver_email($msg);
