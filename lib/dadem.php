@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.17 2004-10-06 15:34:29 francis Exp $
+ * $Id: dadem.php,v 1.18 2004-10-06 15:40:16 francis Exp $
  * 
  */
 
@@ -60,6 +60,7 @@ function dadem_get_error($e) {
  * Return an array of IDs for the representatives for the given voting
  * area on success, or an error code on failure. */
 function dadem_get_representatives($va_id) {
+    debug("DADEM", "Looking up representatives for voting area id $va_id");
     return sxr_call('caesious.beasts.org', 80, '/~chris/scripts/xmlrpc', 'DaDem.get_representatives', array($va_id));
 /*    // Hardwired stub dummy data
     if ($va_id == 2) { // VA_CED
