@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.31 2005-01-04 18:05:28 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.32 2005-01-05 11:24:16 francis Exp $
  * 
  */
 
@@ -135,48 +135,10 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $view = get_http_var('view');
         $id = get_http_var("id");
         
-        // Display general statistics
-        $stats = msg_admin_get_stats();
-        if (msg_get_error($stats)) {
-            print "Error contacting queue:";
-            print_r($stats);
-        }
-
-?>
-<h2>
-Summary statistics: 
-<b><?=$stats["created_1"]?></b> new in last hour,
-<b><?=$stats["created_24"]?></b> new in last day.
-All time stats:
-</h2>
-<table>
-
-<tr><td>
-<table border=1>
-<?
-    foreach ($stats as $k=>$v) {
-        if (stristr($k, "state ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
-    }
-    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
-?>
-</table>
-</td>
-<td>
-<table border=1>
-<?
-    foreach ($stats as $k=>$v) {
-        if (stristr($k, "type ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
-    }
-    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
-?>
-</td></tr>
-</table>
-</td></tr>
-</table>
-
-<?
         // Display about id
         if ($id) {
+            print "<h2><a href=\"$self_link\">[Back to Message List]</a></h2></h2>";
+
             // Freeze or thaw messages
             if (get_http_var('freeze')) {
                 $result = msg_admin_freeze_message($id, http_auth_user());
@@ -209,7 +171,7 @@ All time stats:
             }
 
 
-            print "<h2>Message id $id <a href=\"$self_link\">[back to message list]</a>:</h2>";
+            print "<h2>Message id $id:</h2>";
 
             $message = msg_admin_get_message($id);
             if (msg_get_error($message)) {
@@ -287,7 +249,47 @@ All time stats:
                 }
             }
          } else {
-            // Decide what to show
+            // Display general statistics
+            $stats = msg_admin_get_stats();
+            if (msg_get_error($stats)) {
+                print "Error contacting queue:";
+                print_r($stats);
+            }
+
+?>
+<h2>
+Summary statistics: 
+<b><?=$stats["created_1"]?></b> new in last hour,
+<b><?=$stats["created_24"]?></b> new in last day.
+All time stats:
+</h2>
+<table>
+
+<tr><td>
+<table border=1>
+<?
+    foreach ($stats as $k=>$v) {
+        if (stristr($k, "state ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
+    }
+    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
+?>
+</table>
+</td>
+<td>
+<table border=1>
+<?
+    foreach ($stats as $k=>$v) {
+        if (stristr($k, "type ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
+    }
+    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
+?>
+</td></tr>
+</table>
+</td></tr>
+</table>
+
+<?
+            // Decide what message view to show
             if ($view == "all") {
                 $filter = 0;
             } else if ($view == "recentchanged") {
