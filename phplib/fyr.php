@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.4 2004-11-12 06:11:21 francis Exp $
+ * $Id: fyr.php,v 1.5 2004-11-12 10:02:33 francis Exp $
  * 
  */
 
@@ -23,12 +23,13 @@ require_once "../../phplib/utility.php";
  * otherwise do nothing. */
 function fyr_rate_limit($important_vars) {
     $important_vars['IPADDR'] = $_SERVER['REMOTE_ADDR'];
-    $important_vars['URL'] = invoked_url();
+    $important_vars['SERVER'] = $_SERVER['SERVER_NAME'];
+    $important_vars['PAGE'] = $_SERVER['SCRIPT_NAME'];
     $important_vars['SITE'] = 'fyr';
 
     if (!ratty_test($important_vars)) {
         $fyr_error_message = "Please limit your use of this website.";
-        include "templates/generalerror.html";
+        include "../templates/generalerror.html";
         exit;
     }
 }
