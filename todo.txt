@@ -14,3 +14,5 @@ Validate HTML
 Perhaps strengthen rigour of basic checks for existence of all users
 address details etc.
 
+Ordering of display in who.php
+

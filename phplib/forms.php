@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.1 2004-10-15 16:35:47 francis Exp $
+ * $Id: forms.php,v 1.2 2004-10-18 08:47:13 francis Exp $
  * 
  */
 
@@ -13,26 +13,46 @@ require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/Renderer/Default.php";
 // require_once "HTML/QuickForm/Renderer/QuickHtml.php";
 
-function forms_custom_renderer() {
-    $renderer =& new HTML_QuickForm_Renderer_Default();
-    $renderer->setElementTemplate("
-            <TD CLASS=\"small<!-- BEGIN required -->b<!-- END required -->\">{label}</TD>
-            <TD><FONT CLASS=\"form\"> 
-                {element} 
-                <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><!-- END error --> 
-            </FONT> </TD>
-    ");
-    $renderer->setFormTemplate("
-        <form{attributes}>
-        {content}
-        </form>");
-    $renderer->setRequiredNoteTemplate("");
-    // Not sure what this is for - just set to default for now:
-    $renderer->setHeaderTemplate("
-        <tr>
-            <td style=\"white-space: nowrap; background-color: #CCCCCC;\" align=\"left\" valign=\"top\" colspan=\"2\"><b>{header}</b></td>
-        </tr>");
-    return $renderer;
+class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {
+
+    function HTML_QuickForm_Renderer_mySociety() {
+        $this->HTML_QuickForm_Renderer_Default();
+        $this->setFormTemplate('
+            <form{attributes}>
+            <table border="0">
+            {content}
+            </table>
+            </form>');
+        $this->setElementTemplate('
+                <TR>  
+                <TD CLASS="small<!-- BEGIN required -->b<!-- END required -->">{label}</TD>
+                <TD>
+                    {element} 
+                    <!-- BEGIN error --><span style="color: #ff0000">{error}</span><!-- END error --> 
+                </TD>
+                </TR>
+        ');
+        $this->setRequiredNoteTemplate("");
+        // Not sure what this is for - just set to default for now:
+        $this->setHeaderTemplate('
+            <tr>
+                <td style="white-space: nowrap; background-color: #CCCCCC;" align="left" valign="top" colspan="2"><b>{header}</b></td>
+            </tr>');
+    }
+
+    function markSameRowStart($field) {
+        $this->setElementTemplate(
+            str_replace("</TR>", "", $this->_elementTemplate),
+            $field);
+    }
+
+    function markSameRowEnd() {
+        $this->setElementTemplate(
+            str_replace("<TR>", "", $this->_elementTemplate),
+            $field);
+    }
+
+#function forms_begin_same_row($renderer, 
 }
 
 ?>
