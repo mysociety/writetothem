@@ -6,15 +6,24 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.89 2005-01-13 10:25:54 chris Exp $
+# $Id: Queue.pm,v 1.90 2005-01-13 11:44:52 chris Exp $
 #
 
 package FYR::Queue;
 
 use strict;
 
+# This has to be right at the top. Probably because of a cyclic dependency
+# between this and FYR::AbuseChecks.
+BEGIN {
+    use Exporter;
+    @FYR::Queue::ISA = qw(Exporter);
+    @FYR::Queue::EXPORT_OK = qw(logmsg);
+};
+
 use Convert::Base32;
 use Crypt::CBC;
+use DBI;
 use Error qw(:try);
 use Fcntl;
 use HTML::Entities;
@@ -22,31 +31,21 @@ use IO::Socket;
 use Mail::RFC822::Address;
 use MIME::Entity;
 use MIME::Words;
-use Text::Wrap (); # don't pollute our namespace
 use POSIX qw(strftime);
 use String::Ediff;
+use Text::Wrap (); # don't pollute our namespace
+
 use utf8;
-use DBI;
-#DBI->trace(1);
 
 use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::Util;
 use mySociety::VotingArea;
+
 use FYR;
+use FYR::AbuseChecks;
 use FYR::EmailTemplate;
 use FYR::Fax;
-use FYR::AbuseChecks;
-
-use Data::Dumper;
-
-BEGIN {
-    use Exporter ();
-    our @ISA = qw(Exporter);
-    our @EXPORT_OK = qw(&logmsg);
-}
-our @EXPORT_OK;
-            
 
 =head1 NAME
 
@@ -145,6 +144,7 @@ This function is called remotely and commits its changes.
 sub write ($$$$) {
     my ($id, $sender, $recipient_id, $text) = @_;
 
+    my $ret = undef;
     try {
         # Get details of the recipient.
         throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
@@ -244,6 +244,8 @@ sub write ($$$$) {
 
         # Wake up the daemon to send the confirmation mail.
         notify_daemon();
+
+        $ret = $abuse_result;
     } otherwise {
         my $E = shift;
         warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";
@@ -251,7 +253,7 @@ sub write ($$$$) {
         throw $E;
     };
 
-    return 1;
+    return $ret;
 }
 
 # logmsg ID DIAGNOSTIC

@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.25 2005-01-13 10:25:54 chris Exp $
+# $Id: AbuseChecks.pm,v 1.26 2005-01-13 11:44:52 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -27,8 +27,8 @@ use Data::Dumper;
 use mySociety::Config;
 use mySociety::Ratty;
 
-use FYR;
 use FYR::Queue qw(logmsg);
+use FYR;
 use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
@@ -244,7 +244,7 @@ explain why their message has been rejected.
 =cut
 sub test ($) {
     my ($msg) = @_;
-
+logmsg($msg->{id}, 'doing abuse checks...');
     my %ratty_values = %$msg;
     foreach my $f (@tests) {
         %ratty_values = (%ratty_values, &$f($msg));
