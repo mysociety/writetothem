@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.41 2005-02-11 12:40:15 matthew Exp $
+# $Id: AbuseChecks.pm,v 1.42 2005-02-11 13:14:15 matthew Exp $
 #
 
 package FYR::AbuseChecks;
@@ -260,7 +260,7 @@ explain why their message has been rejected.
 =cut
 sub test ($) {
     my ($msg) = @_;
-    (my $sender_addr_nopostcode = $sender_addr) =~ s/\s+$msg->{sender_postcode}//;
+    (my $sender_addr_nopostcode = $msg->{sender_addr}) =~ s/\s+\Q$msg->{sender_postcode}\E//;
     my %ratty_values = (
         # Useful fields for sending to Ratty
         message => [$msg->{message}, "Body text of message"],
