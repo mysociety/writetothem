@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.53 2005-02-08 15:22:43 francis Exp $
+ * $Id: who.php,v 1.54 2005-02-08 15:35:35 francis Exp $
  * 
  */
 
@@ -139,7 +139,12 @@ foreach ($va_display_order as $va_type) {
             $text = "<h3>Your ${va_info['rep_name_long']}</h3><p>";
             $text .= "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
-        $text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
+        $text .= "${eb_info['name']}.  ${eb_info['description']}";
+        /* Note categories of representatives who aren't paid for their work.... */
+        if (!$va_salaried[$va_type])
+            $text .= " ${va_info['rep_name_long_plural']} are"
+                . " not paid for the work they do.</p>";
+        $text .= "</p>";
 
         if($va_type == 'WMC') {
             $twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
@@ -147,13 +152,6 @@ foreach ($va_display_order as $va_type) {
                 $representatives_info[$representatives[0]]['image'] = $matches[1];
         }
         $text .= display_reps($representatives);
-        /* Note categories of representatives who aren't paid for their work.... */
-        if (!$va_salaried[$va_type])
-            $text .= "<p>Please remember that unlike MPs or MEPs, your "
-                . (($rep_count > 1)
-                    ? "${va_info['rep_name_long_plural']} are"
-                    : "${va_info['rep_name_long']} is")
-                . " not paid for the work they do.</p>";
         if ($va_type == 'WMC') {
             $text .= '<p style="font-size: 80%" id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
         }
