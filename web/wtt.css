@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.12 2005-01-25 18:27:54 matthew Exp $
+ * $Id: wtt.css,v 1.13 2005-02-08 15:22:44 francis Exp $
  * 
  */
 
@@ -94,8 +94,8 @@ a:hover {    color: #000000; }
 
 #content {
     margin: 0 auto;
-    width: expression(document.body.clientWidth > (723/12) * parseInt(document.body.currentStyle.fontSize)?"44em":"auto");
-    max-width: 44em;
+    width: expression(document.body.clientWidth > (904/12) * parseInt(document.body.currentStyle.fontSize)?"55em":"auto");
+    max-width: 55em;
     padding: 10px;
 }
 

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.52 2005-02-08 10:49:54 matthew Exp $
+ * $Id: who.php,v 1.53 2005-02-08 15:22:43 francis Exp $
  * 
  */
 
@@ -149,16 +149,16 @@ foreach ($va_display_order as $va_type) {
         $text .= display_reps($representatives);
         /* Note categories of representatives who aren't paid for their work.... */
         if (!$va_salaried[$va_type])
-            $text .= "<p><em>Please remember that unlike MPs or MEPs, your "
+            $text .= "<p>Please remember that unlike MPs or MEPs, your "
                 . (($rep_count > 1)
                     ? "${va_info['rep_name_long_plural']} are"
                     : "${va_info['rep_name_long']} is")
-                . " not paid for the work they do.</em></p>";
+                . " not paid for the work they do.</p>";
         if ($va_type == 'WMC') {
-            $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+            $text .= '<p style="font-size: 80%" id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
         }
         if (in_array($va_type, array('DIW','CED','LGW','LBW','UTE','UTW','MTW'))) {
-            $text .= '<p><a href="corrections?id='.$va_specificid.'">Do you know of mistakes in the above list?</a></p>';
+            $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_specificid.'">Have you spotted a mistake in the above list?</a></p>';
         }
     }
 
