@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.95 2005-01-19 02:10:46 francis Exp $
+# $Id: Queue.pm,v 1.96 2005-01-19 10:32:24 francis Exp $
 #
 
 package FYR::Queue;
@@ -307,7 +307,9 @@ sub scrubmessage ($) {
                 update message 
                     set sender_name = '', sender_email = '',
                         sender_addr = '', sender_phone = null,
-                        sender_postcode = '', recipient_name = '',
+                        sender_postcode = '', 
+                        sender_ipaddr = '', sender_referrer = null,
+                        recipient_name = '',
                         recipient_email = '', recipient_fax = null,
                         message = ''
                     where id = ?#, {}, $id);
