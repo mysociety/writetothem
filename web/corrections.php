@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.3 2005-02-04 15:00:00 matthew Exp $
+ * $Id: corrections.php,v 1.4 2005-02-04 15:13:08 matthew Exp $
  * 
  */
 
@@ -83,6 +83,10 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     foreach ($fyr_delete as $rep_id => $dummy) {
         if (!in_array($rep_id, $area_reps)) {
             template_show_error('Trying to delete a rep not in this area?');
+            exit;
+        }
+        if (sizeof($area_reps) == 1) {
+            template_show_error('Trying to delete the only representative?');
             exit;
         }
         $out .= "INSERT INTO some_table (rep_id, change, notes, email) VALUES ($rep_id, 'delete', \"$fyr_notes\", \"$fyr_email\")<br>";
