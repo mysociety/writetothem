@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.9 2004-12-21 01:40:09 francis Exp $
+# $Id: AbuseChecks.pm,v 1.10 2004-12-21 02:05:31 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -73,8 +73,6 @@ my @tests = (
         [
             'hold',
             sub ($) {
-                warn "in first test";
-                warn $_[0]->{message};
                 return 'ABUSETESTHOLD appears in message body'
                     if ($_[0]->{message} =~ m#ABUSETESTHOLD#);
             }
