@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.83 2005-01-05 18:02:36 chris Exp $
+# $Id: Queue.pm,v 1.84 2005-01-10 10:01:20 chris Exp $
 #
 
 package FYR::Queue;
@@ -165,7 +165,10 @@ sub write ($$$$) {
                 $recipient->{email} = $sender->{email};
                 $recipient->{fax} = undef;
             }
-        } 
+        }
+
+        # Strip any leading spaces from the address.
+        $sender->{address} = join("\n", map { s#^\s+##; $_ } split("\n", $sender->{address}));
 
         # XXX should also check that the text bits are valid UTF-8.
 
