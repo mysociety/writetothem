@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.25 2004-12-30 17:25:35 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.26 2004-12-30 18:50:09 francis Exp $
  * 
  */
 
@@ -174,6 +174,10 @@ All time stats:
                 $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
+            } else if (get_http_var('bounce_wait')) {
+                $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
+                msg_check_error($result);
+                print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
             } else if (get_http_var('note')) {
                 $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
                 msg_check_error($result);
@@ -243,12 +247,20 @@ All time stats:
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <?
             if (count($message['bounces']) > 0) {
-                print "<h2>Bounce Messages Received</h2>";
+                print "<h2>Bounce Messages</h2>";
                 foreach ($message['bounces'] as $bounce) {
                     print "<hr>";
                     print "<blockquote>" .  nl2br(htmlspecialchars($bounce)) .  "</blockquote>";
                 }
                 print "<hr>";
+                if ($message['state'] == 'bounce_confirm') {
+                    $form = new HTML_QuickForm('bounceForm', 'post', $self_link);
+                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Fatal Delivery Error');
+                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'bounce_wait', 'Temporary Problem');
+                    $form->addGroup($bouncegroup, "bouncegroup", "Which kind of bounce message is this?",' ', false);
+                    $form->addElement('hidden', 'id', $id);
+                    admin_render_form($form);
+                }
             }
          } else {
             // Display important messages in queue

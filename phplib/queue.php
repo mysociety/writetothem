@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.25 2004-12-30 15:01:01 francis Exp $
+ * $Id: queue.php,v 1.26 2004-12-30 18:50:09 francis Exp $
  * 
  */
 
@@ -170,7 +170,7 @@ function msg_admin_thaw_message($id, $user) {
     return $result;
 }
 
-/* msg_admin_error_message ID USER
+/* msg_admin_set_message_to_error ID USER
  * Abandons all actions, sends delivery failure to constituent.*/
 function msg_admin_set_message_to_error($id, $user) {
     global $fyr_queue_client;
@@ -178,7 +178,7 @@ function msg_admin_set_message_to_error($id, $user) {
     return $result;
 }
 
-/* msg_admin_failed_message ID USER
+/* msg_admin_set_message_to_failed ID USER
  * Abandons all actions. */
 function msg_admin_set_message_to_failed($id, $user) {
     global $fyr_queue_client;
@@ -186,11 +186,19 @@ function msg_admin_set_message_to_failed($id, $user) {
     return $result;
 }
 
-/* msg_admin_failed_closed_message ID USER
+/* msg_admin_set_message_to_failed_closed ID USER
  * Hides a failed message from future admin attention. */
 function msg_admin_set_message_to_failed_closed($id, $user) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_failed_closed', array($id, $user));
+    return $result;
+}
+
+/* msg_admin_set_message_to_bounce_wait ID USER
+ * Says bounce message was non fatal. */
+function msg_admin_set_message_to_bounce_wait($id, $user) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_bounce_wait', array($id, $user));
     return $result;
 }
 
