@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.7 2004-11-16 15:01:36 chris Exp $
+-- $Id: schema.sql,v 1.8 2004-11-17 11:43:49 chris Exp $
 --
 
 -- secret
@@ -46,7 +46,6 @@ create table message (
     -- Recipient info; one of email or fax must be non-NULL; the ID
     recipient_id integer not null,      -- DaDem ID
     recipient_name text not null,
-    recipient_position text not null,   -- e.g. "Member of Parliament"
     recipient_type char(3) not null,    -- e.g. "WMC" or whatever
     recipient_email text,
     recipient_fax text,
