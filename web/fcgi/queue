@@ -1,0 +1,29 @@
+#!/usr/bin/perl5.8.5 -w -I../../perllib -I../../../perllib 
+#
+# queue:
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: queue,v 1.1 2004-10-20 12:38:16 chris Exp $';
+
+use strict;
+
+use FCGI;
+use XMLRPC::Transport::HTTP;
+
+use FYR;
+use FYR::Queue;
+
+use mySociety::WatchUpdate;
+my $W = new mySociety::WatchUpdate();
+
+my $req = FCGI::Request();
+
+while ($req->Accept() >= 0) {
+    my $s = XMLRPC::Transport::HTTP::CGI->dispatch_to('FYR::Queue')->handle();
+    $W->exit_if_changed();
+}
+        
+
