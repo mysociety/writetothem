@@ -35,6 +35,11 @@ ol li {
 	margin-bottom: 0.5em;
 }
 
+label {
+	font-weight: bold;
+	cursor: pointer;
+}
+
 .white {
 font-weight: bold; 
 color: #ffffff;
@@ -100,6 +105,7 @@ a:hover {	color: #000000; }
 	text-align: center;
 	width: 75%;
 	margin: 1em auto 0;
+	clear: both;
 }
 ol#instructions {
 	display: table;
@@ -121,14 +127,34 @@ ol#instructions li#two span { background-color: #999966; }
 ol#instructions li#thr span { background-color: #9c9c9c; }
 ol#instructions li#fou span { background-color: #99cc99; }
 ol#instructions li#fiv span { background-color: #000066; }
+
 form {
 	margin: 0;
 }
-#formbox {
+#postcodeForm {
+	_width: 25em;
+	display: table;
+	margin: 0 auto;
+	text-align: center;
+	border: solid 2px #314208;
+	padding: 8px;
+	background-color: #94d639;
+	color: #000000;
+}
+#writeForm {
+	_width: 1px;
 	display: table;
 	margin: 0 auto;
 	border: solid 2px #314208;
 	padding: 8px;
+	background-color: #94d639;
+	color: #000000;
+}
+#preview {
+	width: 33em;
+	margin: 0 auto;
+	border: solid 2px #314208;
+	padding: 5px 5px 15px;
 	background-color: #94d639;
 	color: #000000;
 }
@@ -139,6 +165,6 @@ form {
 .maincol {
 	border-right: solid 2px #314208;
 }
-h4 {
+h3 {
 	margin-top: 0;
 }

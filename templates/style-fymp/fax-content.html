@@ -1,11 +1,6 @@
-<!-- This is the template for the actual text which is sent as a fax 
-     The same template is used for preview and so on -->
-<TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" WIDTH="100%" BGCOLOR="#006666">
-
-<TR>
-<TD>
-    <TABLE CELLSPACING="0" CELLPADDING="5" BORDER="0" WIDTH="100%" BGCOLOR="#cccc99">
-    <TR>
+<div id="preview">
+	<table width="100%" cellpadding="0" cellspacing="0" border="0">
+		<tr>
 
             <TD VALIGN="top" ALIGN="left"><BR><B>FOR THE ATTENTION OF:</B><BR><BR>
     <B>
@@ -22,8 +17,7 @@
 
     <?=$values['writer_name']?><BR>
     <?=$values['writer_address1']?><BR>
-    <?=$values['writer_address2']?>
-    <? if ($values['writer_address2']) print "<BR>";?>
+    <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<BR>";?>
     <?=$values['writer_town']?><BR>
     <?=$values['pc']?><BR>
     <BR>
@@ -38,12 +32,10 @@
     <TR>
 
     <TD COLSPAN="2" ALIGN="left">
-    <P>
+    <p>
     <?=nl2br(htmlspecialchars($values['signedbody']))?>
-    <BR>
-    <IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="10" BORDER="0"></TD>
-
+    </p>
+    </TD>
     </TR>
-    </TABLE></TD>
-</TR>
-</TABLE>
+    </TABLE>
+</div>

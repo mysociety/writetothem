@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.51 2005-01-10 13:55:25 francis Exp $
+ * $Id: write.php,v 1.52 2005-01-11 00:29:06 matthew Exp $
  * 
  */
 
@@ -39,40 +39,40 @@ function buildWriteForm()
 
     // TODO: CSS this:
     $stuff_on_left = <<<END
-            <B>Now Write Your Message:</B><BR><BR>
-            <B>${fyr_voting_area['rep_prefix']}
+            <strong>Now Write Your Message:</strong><br><br>
+            ${fyr_voting_area['rep_prefix']}
             ${fyr_representative['name']}
             ${fyr_voting_area['rep_suffix']}
-            <BR>${fyr_voting_area['name']}
-            <BR><BR>$fyr_date
+            <br>${fyr_voting_area['name']}
+            <br><br>$fyr_date
 END;
 
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
     $form->addElement("html", "<tr><td valign=top>$stuff_on_left</td><td align=right>\n<table>"); // CSSify
 
-    $form->addElement('text', 'writer_name', "your name:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_name', "Your name:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_name', 'Please enter your name', 'required', null, null);
     $form->applyFilter('writer_name', 'trim');
 
-    $form->addElement('text', 'writer_address1', "address 1:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_address1', "Address 1:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
     $form->applyFilter('writer_address1', 'trim');
 
-    $form->addElement('text', 'writer_address2', "address 2:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_address2', "Address 2:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_address2', 'trim');
 
-    $form->addElement('text', 'writer_town', "town:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_town', "Town:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_town', 'Please enter your town', 'required', null, null);
     $form->applyFilter('writer_town', 'trim');
 
-    $form->addElement('static', 'staticpc', 'postcode:', htmlentities($fyr_postcode));
+    $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
 
-    $form->addElement('text', 'writer_email', "email:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_email', "Email:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email', 'Please enter your email', 'required', null, null);
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
-    $form->addElement('text', 'writer_phone', "phone: <a href=\"/about-qa#address\">(?)</a>", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_phone', "Phone: <a href=\"/about-qa#address\">(?)</a>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() +]+$/', null);
     $form->applyFilter('writer_phone', 'trim');
 
@@ -88,7 +88,7 @@ END;
     add_all_variables_hidden($form, $fyr_values);
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'static1', null, 
-            "<b>Ready? Press the \"Preview\" button to continue</b> "); // TODO: remove <b>  from here
+            "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
     $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
 

@@ -5,33 +5,15 @@ $values['title'] = "Now Write Your Message To ".
 
 include "header.php"; ?>
 
-<H3>WriteToThem.com - Read This Before Writing Your Message</H3>
-<p align="left"><SPAN CLASS="bigb">
-&#149;&nbsp;Please be polite, concise and to the point.<BR>
-&#149;&nbsp;By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.<BR>
-&#149;&nbsp;<A HREF="about-qa#formletters" TARGET="_NEW">Use your own
-words.</A> <?=$values['voting_area']['rep_name']?>s will ignore copied and pasted 'identikit' messages.<BR>
-&#149;&nbsp;It's a <A HREF="about-qa#onlyrep" TARGET="_new">waste of
-time</A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your
-own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.<BR>
-&#149;&nbsp;<A HREF="about-yourrep" TARGET="_new">Read this</A> to
-learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.
-</SPAN></p>
-<TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" 
-BGCOLOR="#006666">
-	<TR>
-	<TD VALIGN="top">
-        <TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0" BGCOLOR="#cccc99">
-        <tr><td><?=$values['form'] ?></td></tr>
-        </TABLE>
-	</TD>
-	</TR>
-<P> 
-</TD>
-</TR>
-<TR>
-<TD><IMG SRC="/images/tiny.gif" WIDTH="525" HEIGHT="1" BORDER="0"></TD>
-</TR>
-</TABLE>
+<h2>Read This Before Writing Your Message</h2>
+<ul>
+	<li>Please be polite, concise and to the point.</li>
+	<li>By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.</li>
+	<li><A HREF="about-qa#formletters" TARGET="_NEW">Use your own words.</A> <?=$values['voting_area']['rep_name']?>s will ignore copied and pasted 'identikit' messages.</li>
+	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_new">waste of time</A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.</li>
+	<li><A HREF="about-yourrep" TARGET="_new">Read this</A> to learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.</li>
+</ul>
+
+<?=$values['form'] ?>
 
 <? include "footer.php"; ?>

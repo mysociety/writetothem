@@ -2,14 +2,14 @@
 $values['title'] = "Check Your Message Is Right";
 include "header.php"; ?>
 
-<H3>Now Preview The Message You've Written</H3>
+<h2>Now Preview The Message You've Written</h2>
 
 <?=$values['preview']?> <!-- see fax-content.html-->
 
 <div align="center"><?=$values['form']?></div>
 
-(We will email you asking for confirmation <BR>before we send the Fax to
+<p>(We will email you asking for confirmation before we send the Fax to
 your <?=$values['voting_area']['rep_name']?>)
-<BR>
+</p>
 
 <? include "footer.php"; ?>

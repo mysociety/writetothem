@@ -21,9 +21,13 @@ if ($values['robots']) { ?>
 <h1 id="heading"><a href="/">WriteToThem.com Beta Test</a></h1>
 <div id="content">
 <?
-    if (OPTION_FYR_REFLECT_EMAILS) {
-            print '<p class="warning">Test site - this will reflect emails to representatives back to you.</p>';
-    }
+	if (OPTION_FYR_REFLECT_EMAILS) {
+		print '<p class="warning">Test site - this will reflect emails to representatives back to you.</p>';
+	}
+
+	if (substr($template_name, 0, 5)=='about') {
+		include 'about-sidebar.html';
+	}
 ?>
 
 <!-- Needs to be all on one line to prevent extra whitespace in Firefox -->

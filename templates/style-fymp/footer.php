@@ -28,9 +28,10 @@ code is available</a> under an open source license.</p>
 </div>
 -->
 <div id="footer">
-Definite links: About
-<br>Possible links from header: Your Rep, Q&amp;A, About Us, Contact Us
-<br>Possible links from footer: Does It Really Work?, Link To Us, Guidelines for Campaigners, MySociety, GovEval, Copyright
+<a href="/about">About</a>
+| <a href="/about-contactus">Contact Us</a>
+| <a href="/about-guidelines">Guidelines for Campaigners</a>
+| &copy; <a href="http://www.mysociety.org/">mySociety</a> 2005
 </div>
 </body>
 </html>
