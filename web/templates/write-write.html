@@ -3,56 +3,22 @@
 <H3>FaxYourRepresentative.com - Read This Before Writing Your Fax</H3>
 <SPAN CLASS="bigb">
 &#149;&nbsp;Please be polite, concise and to the point.<BR>
-&#149;&nbsp;By abusing your <?=$fyr_representative['office']?> you devalue the service for all users.<BR>
-&#149;&nbsp;<A HREF="q_a.php3#formletters" TARGET="_NEW">Use your own words.</A> <?=$fyr_representative['office']?>s will ignore copied and pasted 'identikit' messages.<BR>
+&#149;&nbsp;By abusing your <?=$fyr_voting_area['rep_name']?> you devalue the service for all users.<BR>
+&#149;&nbsp;<A HREF="q_a.php3#formletters" TARGET="_NEW">Use your own words.</A> <?=$fyr_voting_area['rep_name']?>s will ignore copied and pasted 'identikit' messages.<BR>
 &#149;&nbsp;It's a <A HREF="q_a.php3#onlymp" TARGET="_new">waste of
-time</A> writing to <?=$fyr_representative['office']?>s other than your
-own. If this isn't your <?=$fyr_representative['office']?>, your message will be ignored.<BR>
-&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when a <?=$fyr_representative['office']?> can help you - and when they can't. <P>
+time</A> writing to <?=$fyr_voting_area['rep_name_plural']?>s other than your
+own. If this isn't your <?=$fyr_voting_area['rep_name']?>, your message will be ignored.<BR>
+&#149;&nbsp;<A HREF="youandyourmp.php3" TARGET="_new">Read this</A> to learn when a <?=$fyr_voting_area['rep_name']?> can help you - and when they can't. <P>
 </SPAN>
 <TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" 
 BGCOLOR="#006666">
 	<TR>
 	<TD VALIGN="top">
-			<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0" BGCOLOR="#cccc99">
-        <TR><TD>
-<? if ($fyr_preview && !$fyr_complete) {
-    print "<b><font color=\"red\">Oops! Sorry, but we need you to fill in:<ul>";
-    if (!$fyr_writer_name_valid)
-        print "<li>your name";
-    if (!$fyr_writer_address_valid)
-        print "<li>your address";
-    if (!$fyr_writer_town_valid)
-        print "<li>your town";
-    if (!$fyr_writer_email_valid)
-        print "<li>your email";
-    print "</ul></font>";
-}
-
-    function display_field($field_desc, $field_urlname, $content, $valid) {
-        global $fyr_preview;
-        print "<TD CLASS=\"smallb\">";
-        if (!$valid && $fyr_preview) 
-            print "<font color=\"red\">";
-        print "$field_desc:";
-        if (!$valid && $fyr_preview) 
-            print "</font>";
-        print "</TD><TD><FONT CLASS=\"form\"><INPUT NAME=\"$field_urlname\"
-            VALUE=\"$content\" TYPE=\"text\" SIZE=\"20\" CLASS=\"form\"></FONT></TD>";
-    }
-?>
-        </TD></TR>
-        <tr><TD VALIGN="top"><B>Now Write Your Fax:</B><BR><BR>
-		<B><?=$fyr_voting_area['rep_prefix']?>
-        <?=$fyr_representative['name']?>
-        <?=$fyr_voting_area['rep_suffix']?> </B>
-        
-        <br><br><?=strftime('%A %e %B %Y')?></td></tr>
-
+        <TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0" BGCOLOR="#cccc99">
         <tr><td><?=$fyr_form ?></td></tr>
+        </TABLE>
 	</TD>
 	</TR>
-	</TABLE>
 <P> 
 </TD>
 </TR>

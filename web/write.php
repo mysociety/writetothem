@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.12 2004-10-18 18:34:38 francis Exp $
+ * $Id: write.php,v 1.13 2004-10-19 16:46:08 francis Exp $
  * 
  */
 
@@ -14,6 +14,7 @@ $fyr_title = "Now Write Your Fax To X MP for X";
 require_once "../phplib/forms.php";
 require_once 'HTML/QuickForm/Controller.php';
 require_once 'HTML/QuickForm/Action.php';
+require_once 'HTML/QuickForm/Rule.php';
 require_once 'HTML/QuickForm/Action/Next.php';
 require_once 'HTML/QuickForm/Action/Display.php';
 
@@ -26,14 +27,38 @@ include_once "../../phplib/utility.php";
 // Start the session
 session_start();
 
+function default_body_text() {
+        global $fyr_representative;
+        return 'Dear ' .  $fyr_representative['name'] . ',';
+}
+class RuleAlteredBodyText extends HTML_QuickForm_Rule {
+    function validate($value, $options) {
+        return $value != default_body_text();
+    }
+}
+
 // Class representing form they enter message of letter in
 class PageWrite extends HTML_QuickForm_Page
 {
     function buildForm()
     {
+        global $fyr_postcode, $fyr_who;
+
         $this->_formBuilt = true;
 
-        // $write_form = new HTML_QuickForm('writeForm', 'post', 'write.php');
+        global $fyr_representative, $fyr_voting_area, $fyr_date;
+        // TODO: CSS this:
+        $stuff_on_left = <<<END
+                <B>Now Write Your Fax:</B><BR><BR>
+                <B>${fyr_voting_area['rep_prefix']}
+                ${fyr_representative['name']}
+                ${fyr_voting_area['rep_suffix']}
+                <BR>${fyr_voting_area['name']}
+                <BR><BR>$fyr_date
+END;
+
+        // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
+        $this->addElement("html", "<tr><td valign=top>$stuff_on_left</td><td align=right>\n<table>"); // CSSify
 
         $this->addElement('text', 'writer_name', "your name:", array('size' => 20, 'maxlength' => 255));
         $this->addRule('writer_name', 'Please enter your name', 'required', null, null);
@@ -50,6 +75,8 @@ class PageWrite extends HTML_QuickForm_Page
         $this->addRule('writer_town', 'Please enter your town', 'required', null, null);
         $this->applyFilter('writer_town', 'trim');
 
+        $this->addElement('static', 'staticpc', 'postcode:', $fyr_postcode);
+
         $this->addElement('text', 'writer_email', "email:", array('size' => 20, 'maxlength' => 255));
         $this->addRule('writer_email', 'Please enter your email', 'required', null, null);
         $this->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
@@ -58,17 +85,21 @@ class PageWrite extends HTML_QuickForm_Page
         $this->addElement('text', 'writer_phone', "phone:", array('size' => 20, 'maxlength' => 255));
         $this->applyFilter('writer_phone', 'trim');
 
-        $this->addElement('textarea', 'body', 'write your Fax:', array('rows' => 15, 'cols' => 62, 'maxlenght' => 5000));
-        $this->addRule('body', 'Please enter your message', 'required', null, null);
+        // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
+        $this->addElement("html", "</table>\n</td></tr>"); // CSSify
 
-        global $fyr_postcode, $fyr_who;
+        $this->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62, 'maxlength' => 5000));
+        $this->addRule('body', 'Please enter your message', 'required', null, null);
+        $this->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
+
         $this->addElement('hidden', 'pc', $fyr_postcode);
         $this->addElement('hidden', 'who', $fyr_who);
 
         $buttons[0] =& HTML_QuickForm::createElement('static', 'static1', null, 
                 "<b>Ready? Press the \"Preview\" button to continue --></b>"); // TODO: remove <b>  from here
         $buttons[1] =& HTML_QuickForm::createElement('submit', $this->getButtonName('next'), 'preview your Fax >>');
-        $this->addGroup($buttons, 'previewstuff', '', '&nbsp', false);
+        $this->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
+
     }
 }
 
@@ -80,7 +111,7 @@ class PagePreview extends HTML_QuickForm_Page
 
         $buttons[0] =& HTML_QuickForm::createElement('submit', $this->getButtonName('back'), '<< edit this Fax');
         $buttons[1] =& HTML_QuickForm::createElement('submit', $this->getButtonName('next'), 'Continue >>');
-        $this->addGroup($buttons, 'buttons', '', '&nbsp', false);
+        $this->addGroup($buttons, 'buttons', '', '&nbsp;', false);
     }
 }
 
@@ -90,33 +121,21 @@ class ActionDisplayFancy extends HTML_QuickForm_Action_Display
     {
         // $renderer =& $page->defaultRenderer();
         $renderer = new HTML_QuickForm_Renderer_mySociety();
+        $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
+        $renderer->setElementTemplate('{element}', 'previewStuff');
+        $renderer->setElementTemplate('<TD colspan=2> 
+        {element} 
+        <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
+        </TD>', 'body');
+        $page->accept($renderer);
         $page->accept($renderer);
 
         global $fyr_form, $fyr_values;
-        $fyr_values =  $page->controller->exportValues();
+        $fyr_values = $page->controller->exportValues();
         $fyr_values['signature'] = sha1($fyr_values['email']);
         debug("FRONTEND", "Form values:", $fyr_values);
 
-        // Find out which representative 
-        $rep_id = $fyr_values['who'];
-        debug("FRONTEND", "Representative $rep_id");
-
-        // Information specific to this representative
-        global $fyr_representative;
-        $fyr_representative = dadem_get_representative_info($rep_id);
-        if ($fyr_error_message = dadem_get_error($fyr_representative)) {
-            include "templates/generalerror.html";
-            exit;
-        }
-
-        // The voting area is the ward/division. e.g. West Chesterton Electoral Division
-        global $fyr_voting_area;
-        $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
-        if ($fyr_error_message = mapit_get_error($fyr_voting_area)) {
-            include "templates/generalerror.html";
-            exit;
-        }
-
+       // Make HTML
         $fyr_form = $renderer->toHtml();
 
         $pageName =  $page->getAttribute('id');
@@ -124,7 +143,7 @@ class ActionDisplayFancy extends HTML_QuickForm_Action_Display
             include "templates/write-write.html";
         } else { // previewForm
             // Generate preview
-            global $fyr_preview;
+            global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
             ob_start();
             include "templates/fax-content.html";
             $fyr_preview = ob_get_contents();
@@ -148,6 +167,8 @@ $pagePreview =& new PagePreview('previewForm');
 $controller =& new HTML_QuickForm_Controller('StateMachine');
 $controller->addPage($pageWrite);
 $controller->addPage($pagePreview);
+$controller->addAction('process', new ActionProcess());
+$controller->addAction('display', new ActionDisplayFancy());
 
 // transfer data from previous forms
 $fyr_postcode = get_http_var('pc');
@@ -155,22 +176,33 @@ $fyr_who = get_http_var('who');
 $data =& $controller->container();
 if ($fyr_postcode)
     $data['values']['writeForm']['pc'] = $fyr_postcode;
+else
+    $fyr_postcode = $controller->exportValue('writeForm', 'pc');
 if ($fyr_who)
     $data['values']['writeForm']['who'] = $fyr_who;
+else
+    $fyr_who = $controller->exportValue('writeForm', 'who');
 
-$controller->addAction('process', new ActionProcess());
-$controller->addAction('display', new ActionDisplayFancy());
+// Information specific to this representative
+debug("FRONTEND", "Representative $fyr_who");
+$fyr_representative = dadem_get_representative_info($fyr_who);
+if ($fyr_error_message = dadem_get_error($fyr_representative)) {
+    include "templates/generalerror.html";
+    exit;
+}
+// The voting area is the ward/division. e.g. West Chesterton Electoral Division
+$fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
+if ($fyr_error_message = mapit_get_error($fyr_voting_area)) {
+    include "templates/generalerror.html";
+    exit;
+}
+
+$fyr_date = strftime('%A %e %B %Y');
+
+$controller->setDefaults(array('body' => default_body_text()));
 
 $controller->run();
 
 exit;
 
-// The elected body is the overall entity. e.g. Cambridgeshire County Council.
-// $eb_type = $va_inside[$va_type];
-// $eb_typename = $va_name[$eb_type];
-// $eb_specificname = $voting_areas[$eb_type][1];
-
-
-
 ?>
-

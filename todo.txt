@@ -1,7 +1,4 @@
-Unobvious TODOs:
-----------------
-
-Copyright messages and license agreement on source code
+copyright messages and license agreement on source code
 
 Encrypt who=va- in URL
 Probably pc= after the first page or two?
@@ -13,6 +10,8 @@ Make sure debug log messages can't print data which should be encrypted ;(
 
 Validate HTML
 
+UTF-8
+
 Perhaps strengthen rigour of basic checks for existence of all users
 address details etc.
 
@@ -20,5 +19,18 @@ Ordering of display in who.php
 
 Consider removing voting_area from dadem return value
 
+content-type utf8 on forms
+strip carriage returns (leave line feeds) in out put data
+
+Get Mr/Mrs data for MPs
+
+Sessions
+http://www.sitepoint.com/blog-post-view.php?id=156260
+record referer and IP addresses the sessions has used and sequence of
+addresses
+
+Sort out error codes when there is a transport error from XMLRPC, so
+MaPit/DaDem get an error
+To return error object with integer, string
 
 

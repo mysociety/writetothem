@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.13 2004-10-18 11:06:23 francis Exp $
+ * $Id: who.php,v 1.14 2004-10-19 16:46:08 francis Exp $
  * 
  */
 
@@ -97,13 +97,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     }
     $left_column .= "${eb_info['name']}.  ${eb_info['description']}.</p>";
 
-    $fyr_form_start = "
-            <form method=\"get\" action=\"write.php\">
-            <input type=\"hidden\" name=\"pc\"
-            value=\"$fyr_postcode\">";
-
-
-    $form = new HTML_QuickForm('whoForm', 'get', 'write.php');
+    $form = new HTML_QuickForm('whoForm', 'post', 'write.php');
 
     $right_column = "<p>In your ${va_info['type_name']},
         <b>${va_info['name']}</b>, you are represented by ";

@@ -3,9 +3,9 @@
  * HTML forms stuff.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: chris@mysociety.org; WWW: http://www.mysociety.org
+ * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.3 2004-10-18 18:34:38 francis Exp $
+ * $Id: forms.php,v 1.4 2004-10-19 16:46:08 francis Exp $
  * 
  */
 
@@ -16,6 +16,7 @@ require_once "HTML/QuickForm/Renderer/Default.php";
 class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {
 
     function HTML_QuickForm_Renderer_mySociety() {
+        // TODO: Properly CSS this
         $this->HTML_QuickForm_Renderer_Default();
         $this->setFormTemplate('
             <form{attributes}>
@@ -28,7 +29,7 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
                 <TD CLASS="small<!-- BEGIN required -->b<!-- END required -->">{label}</TD>
                 <TD>
                     {element} 
-                    <!-- BEGIN error --><span style="color: #ff0000">{error}</span><!-- END error --> 
+                    <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
                 </TD>
                 </TR>
         ');
