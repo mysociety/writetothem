@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.14 2005-01-13 11:29:26 francis Exp $
+ * $Id: index.php,v 1.15 2005-01-13 16:59:13 francis Exp $
  * 
  */
 
@@ -16,16 +16,6 @@ require_once "../../phplib/admin.php";
 
 $pages = array(
     new ADMIN_PAGE_FYR_QUEUE(),
-    new ADMIN_PAGE_RATTY(
-            'fyr-web',
-            "WTT Website",
-            "These rules limit access to the WriteToThem website.",
-            <<<EOF
-An HTML fragment which is displayed to the user in an error page when
-the rule fires. If left blank, the message "Sorry, we are experiencing
-technical difficulties" is displayed.
-EOF
-        ),
     new ADMIN_PAGE_RATTY(
             'fyr-abuse',
             "Message Abuse",
@@ -47,6 +37,16 @@ available.</dd>
 </dl>
 EOF
             ),
+    new ADMIN_PAGE_RATTY(
+            'fyr-web',
+            "WTT Website",
+            "These rules limit access to the WriteToThem website.",
+            <<<EOF
+An HTML fragment which is displayed to the user in an error page when
+the rule fires. If left blank, the message "Sorry, we are experiencing
+technical difficulties" is displayed.
+EOF
+        ),
     new ADMIN_PAGE_REPS,
     null, // space separator on menu
     new ADMIN_PAGE_SERVERINFO,

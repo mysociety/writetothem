@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.31 2005-01-13 15:44:24 francis Exp $
+# $Id: AbuseChecks.pm,v 1.32 2005-01-13 16:59:13 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -208,7 +208,7 @@ my @tests = (
         # Body of message similar to other messages in queue.
         sub ($) {
             my ($msg) = @_;
-            my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg) } get_similar_messages($msg);
+            my @similar = sort { $b->[1] <=> $a->[1] } get_similar_messages($msg);
 
             my %res = ( );
             if (@similar) {
@@ -225,7 +225,7 @@ my @tests = (
 
             my $similarity_max;
             if (@similar) {
-                $similarity_max = $similar[0]->[0];
+                $similarity_max = $similar[0]->[1];
             } else {
                 $similarity_max = undef;
             }
@@ -236,7 +236,7 @@ my @tests = (
             foreach my $thr (qw(0.5 0.6 0.7 0.8 0.9 0.95 0.99)) {
                 next if ($thr < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
                 my $n = scalar(grep { $_->[1] > $thr } @similar);
-                $res{"similarity_num_$thr"} = [$n, "Number of messages more than $thr similar to this one"];
+                $res{"similarity_num_$thr"} = [$n, "Number of messages at least $thr similar to this one"];
             }
 
             return %res;
