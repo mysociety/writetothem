@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.60 2005-01-29 12:11:02 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.61 2005-01-29 12:21:15 chris Exp $
  * 
  */
 
@@ -48,7 +48,11 @@ class ADMIN_PAGE_FYR_QUEUE {
         return $text;
     }
 
-    function print_messages($messages) {
+    /* print_messages MESSAGES [ID]
+     * Print a table giving information about the MESSAGES (array of
+     * associative arrays of message data). If ID is given, it is the ID of the
+     * message being compared against in a "similar messages" search. */
+    function print_messages($messages, $msgid = null) {
 ?>
 
 <table border=1
@@ -126,19 +130,23 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                      * two strings, which are the strings unique to the "from"
                      * and "to" strings; or a string, representing a common
                      * part; or null, indicating an elided part. */
-                    print '<tr'.($c==1?' class="v"':'').'>';
-                    print "<td colspan=9><b>Differences:</b> ";
-                    foreach ($message['diff'] as $elem) {
-                        if (!isset($elem)) {
-                            print '<span class="diffsnipped">[ ... snipped ... ]</span>';
-                        } else if (is_array($elem)) {
-                            print '<span class="difffrom">'
-                                    . htmlspecialchars($elem[0])
-                                    . '</span><span class="diffto">'
-                                    . htmlspecialchars($elem[1])
-                                    . '</span>';
-                        } else {
-                            print htmlspecialchars($elem);
+                    print '<tr'.($c==1?' class="v"':'').'><td colspan = "9">';
+                    print "<b>Differences:</b> ";
+                    if (isset($msgid) and $message['id'] == $msgid) {
+                        print 'This is the message being compared against. <span class="difffrom">Text that appears only in this message, </span><span class="diffto">or only in the other message.</span>';
+                    } else {
+                        foreach ($message['diff'] as $elem) {
+                            if (!isset($elem)) {
+                                print '<span class="diffsnipped">[ ... snipped ... ]</span>';
+                            } else if (is_array($elem)) {
+                                print '<span class="difffrom">'
+                                        . htmlspecialchars($elem[0])
+                                        . '</span><span class="diffto">'
+                                        . htmlspecialchars($elem[1])
+                                        . '</span>';
+                            } else {
+                                print htmlspecialchars($elem);
+                            }
                         }
                     }
                     print "</td></tr>";
@@ -516,7 +524,7 @@ Summary statistics:
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
-            $this->print_messages($messages);
+            $this->print_messages($messages, $view == 'similarbody' ? $params['msgid'] : null);
             if ($view == 'recentchanged' or $view == 'recentcreated')
                 print "<p>..."; /* indicate that this isn't all the messages... */
             ?>
