@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.3 2004-11-10 10:41:52 francis Exp $
+# $Id: FYR.pm,v 1.4 2004-11-22 17:41:00 francis Exp $
 #
 
 use strict;
@@ -15,13 +15,39 @@ package FYR::Error;
 # simplest of all exception classes.
 
 use Error qw(:try);
+use RABX;
 
-@FYR::Error::ISA = qw(Error::Simple);
+@FYR::Error::ISA = qw(RABX::Error);
+
+=head1 CONSTANTS
+
+=head2 Error codes
+
+=over 4
+
+=item MESSAGE_ALREADY_QUEUED
+
+When a message id has already been used to send a message, and a second
+attempt is made to use it.
+
+=item MESSAGE_ALREADY_CONFIRMED
+
+When a message has already been confirmed, and a second attempt is
+made to confirm it.
+
+=back
+
+=cut
+
+use constant MESSAGE_ALREADY_QUEUED  => 4001;
+use constant MESSAGE_ALREADY_CONFIRMED  => 4002;
 
 package FYR::DB;
 
 use mySociety::Util;
 use DBI;
+
+=head1 FUNCTIONS
 
 =item new_dbh
 

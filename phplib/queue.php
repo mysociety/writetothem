@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.14 2004-11-22 12:22:39 francis Exp $
+ * $Id: queue.php,v 1.15 2004-11-22 17:41:00 francis Exp $
  * 
  */
 
@@ -14,7 +14,8 @@ include_once('../../phplib/rabx.php');
 include_once('../../phplib/utility.php');
 
 /* Error codes */
-define('FYR_QUEUE_', 2001);        /* */
+define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);  
+define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);
 
 /* msg_get_error R
  * Return FALSE if R indicates success, or an error string otherwise. */
@@ -62,11 +63,9 @@ function msg_write($id, $sender, $recipient_id, $text) {
     debug("QUEUE", "Writing new message id $id to $recipient_id", $sender);
     $result = $fyr_queue_client->call('FYR.Queue.write', array($id, $sender, $recipient_id, $text));
     debug("QUEUE", "Result:", $result);
-    if (is_array($result)) // TODO replace this with better error handling code
-        return false;
     return $result;
 }
-
+ 
 /* msg_record_questionnaire_answer TOKEN QUESTION ANSWER
  * Record the response to a questionnaire. TOKEN is the user-supplied token;
  * QUESTION should be 0, and ANSWER must be "YES" or "NO". */

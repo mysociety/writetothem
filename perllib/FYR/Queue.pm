@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.36 2004-11-19 10:42:55 chris Exp $
+# $Id: Queue.pm,v 1.37 2004-11-22 17:41:00 francis Exp $
 #
 
 package FYR::Queue;
@@ -123,6 +123,13 @@ sub write ($$$$) {
         $recipient->{type} = $mySociety::VotingArea::id_to_type{$recipient->{type}};
 
         # XXX should also check that the text bits are valid UTF-8.
+
+        # Check to see if message has already been posted
+        my $already_got = FYR::DB::dbh()->selectall_arrayref("select count(*) from message where id = ?", {}, $id);
+        if ($already_got > 0) {
+            throw FYR::Error("You've already sent this message, there's
+                    no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
+        }
 
         # Queue the message.
         FYR::DB::dbh()->do(q#
@@ -677,7 +684,7 @@ changes.
 sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
-        return 0 if (state($id) ne 'pending'); # already confirmed
+        throw FYR::Error("You've already confirmed this message.", FYR::Error::MESSAGE_ALREADY_CONFIRMED) if (state($id) ne 'pending');
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
         FYR::DB::dbh()->commit();

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.30 2004-11-22 12:22:39 francis Exp $
+ * $Id: write.php,v 1.31 2004-11-22 17:41:00 francis Exp $
  * 
  */
 
@@ -179,7 +179,11 @@ function submitFax() {
             'phone' => $fyr_values['writer_phone'], 
             ),
             $fyr_values['who'], $fyr_values['body']);
-    msg_check_error($success);
+    if (rabx_is_error($success)) {
+        if ($success->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
+            template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
+        template_show_error($success->text);
+    }
 
     global $fyr_representative, $fyr_voting_area, $fyr_date;
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 

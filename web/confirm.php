@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.8 2004-11-22 12:22:39 francis Exp $
+ * $Id: confirm.php,v 1.9 2004-11-22 17:41:00 francis Exp $
  * 
  */
 
@@ -25,7 +25,11 @@ if (!$token) {
 }
 
 $result = msg_confirm_email($token);
-msg_check_error($result);
+if (rabx_is_error($result)) {
+    if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED) 
+        template_show_error("Thanks, but you've already confirmed your message.");
+    template_show_error($success->text);
+}
 if (!$result) {
     template_draw("confirm-trouble");
 } else {
