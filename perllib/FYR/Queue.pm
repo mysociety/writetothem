@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.104 2005-01-29 02:23:28 francis Exp $
+# $Id: Queue.pm,v 1.105 2005-01-29 02:43:05 francis Exp $
 #
 
 package FYR::Queue;
@@ -1316,9 +1316,13 @@ sub admin_get_queue ($$) {
                 return "[[span class=$class]]" . $string . "[[/span]]";
             };
             for (my $i = 0; $i < scalar(@ix); $i+=8) {
-                $diff .= &$add_diff("difffrom", substr($from, $s1at, $ix[$i+0]-$s1at));
+                if ($ix[$i+0] > $s1at) {
+                    $diff .= &$add_diff("difffrom", substr($from, $s1at, $ix[$i+0]-$s1at));
+                }
                 $s1at = $ix[$i+1];
-                $diff .= &$add_diff("diffto", substr($to, $s2at, $ix[$i+4]-$s2at));
+                if ($ix[$i+4] > $s2at) {
+                    $diff .= &$add_diff("diffto", substr($to, $s2at, $ix[$i+4]-$s2at));
+                }
                 $s2at = $ix[$i+5];
                 my $commonpart = substr($from, $ix[$i+0], $ix[$i+1] - $ix[$i+0]);
                 if (length($commonpart) < 200) {
