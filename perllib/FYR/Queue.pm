@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.29 2004-11-18 18:18:01 chris Exp $
+# $Id: Queue.pm,v 1.30 2004-11-18 18:28:24 chris Exp $
 #
 
 package FYR::Queue;
@@ -117,7 +117,7 @@ sub write ($$$$) {
 
         # We must save the three-letter code for the representative type in
         # the database, NOT the numeric ID.
-        $recipient->{type} = $mySociety::VotingArea::type_to_id{$recipient->{type}};
+        $recipient->{type} = $mySociety::VotingArea::id_to_type{$recipient->{type}};
 
         # XXX should also check that the text bits are valid UTF-8.
 
