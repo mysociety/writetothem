@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.12 2004-10-06 11:31:14 chris Exp $
+ * $Id: dadem.php,v 1.13 2004-10-06 11:31:57 chris Exp $
  * 
  */
 
@@ -42,7 +42,7 @@ function dadem_strerror($e) {
     else if (!array_key_exists($e, $dadem_error_strings))
         return "Unknown DaDem error";
     else
-        return $dadem_error_strings($e)
+        return $dadem_error_strings($e);
 }
 
 /* dadem_get_error R

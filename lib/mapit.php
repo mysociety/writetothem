@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.10 2004-10-06 11:31:14 chris Exp $
+ * $Id: mapit.php,v 1.11 2004-10-06 11:31:45 chris Exp $
  * 
  */
 
@@ -37,7 +37,7 @@ function mapit_strerror($e) {
     else if (!array_key_exists($e, $dadem_error_strings))
         return "Unknown MaPit error";
     else
-        return $dadem_error_strings($e)
+        return $dadem_error_strings($e);
 }
 
 /* mapit_get_error R
