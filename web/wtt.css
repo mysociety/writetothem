@@ -1,9 +1,6 @@
-/* Normal was 10pt, small 8pt, h4 11pt, h3 13pt */
-
 body {
 	color: #000000;
 	background-color: #ffffff;
-	font-family: "Lucida Grande", "Lucida Sans", Tahoma, Helvetica, Arial, sans-serif;
 	font-family: Tahoma, Helvetica, Arial, sans-serif;
 	margin: 0;
 	padding: 0;
@@ -19,8 +16,6 @@ h1#heading {
 	color: #000000;
 	background-color: #dbfd8c; /* #b3d386; */ /* #7bc618; */
 	border-bottom: solid 2px #a5a57c;
-	d_width: 22em;
-	dmax-width: 22em;
 	font-size: 200%;
 	padding: 0.4em 1em;
 	text-align: left;
@@ -158,14 +153,14 @@ ol#instructions li#fiv span { background-color: #000066; }
 }
 
 #repstable {
-	border: solid 2px #a5a57c;
+	border: solid 2px #9c8f4f;
 	border-width: 2px 0;
 }
 #firstcol {
-	border-left: solid 2px #a5a57c; /* #314208; */
+	border-left: solid 2px #9c8f4f;
 }
 .maincol {
-	border-right: solid 2px #a5a57c; /* 314208; */
+	border-right: solid 2px #9c8f4f;
 }
 h3 {
 	margin-top: 0;
@@ -175,7 +170,7 @@ h3 {
 	float: right;
 	width: 15em;
 	padding: 2px;
-	border: solid 1px #a5a57c; /* 7bc618; */
+	border: solid 1px #9c8f4f;
 	background-color: #d0bf69;
 	margin: 0 0 1em 10px;
 }
