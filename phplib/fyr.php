@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.10 2004-12-17 16:45:50 chris Exp $
+ * $Id: fyr.php,v 1.11 2004-12-22 13:16:01 francis Exp $
  * 
  */
 
@@ -45,7 +45,11 @@ function fyr_rate_limit($important_vars) {
  * Is URL an internal HTTP URL? */
 function fyr_is_internal_url($url) {
     /* XXX nasty and approximate; should parse properly */
-    return preg_match('#^http://([a-z0-9-]+\.)*\Q' . OPTION_WEB_DOMAIN . '\E/#i', $r) ? 1 : 0;
+    if (preg_match('#^http://([a-z0-9-]+\.)*\Q' . OPTION_WEB_DOMAIN .  '\E/#i', $url)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* fyr_external_referrer
@@ -55,13 +59,16 @@ function fyr_is_internal_url($url) {
  * NB spelling of "referrer" in function name. */
 function fyr_external_referrer() {
     $r = get_http_var('fyr_extref');
-    if (isset($r) && preg_match('#^(https?://|news:)#', $r) && !fyr_is_internal_url($r))
+    if (isset($r) && preg_match('#^(https?://|news:)#', $r) && !fyr_is_internal_url($r)) {
         return $r;
+    }
     $r = $_SERVER['HTTP_REFERER'];
-    if (isset($r) && preg_match('#^(https?://|news:)#', $r) && !fyr_is_internal_url($r))
+    if (isset($r) && preg_match('#^(https?://|news:)#', $r) && !fyr_is_internal_url($r)) {
         return $r;
-    else
+    }
+    else {
         return null;
+    }
 }
 
 ?>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.26 2004-12-17 18:34:36 chris Exp $
+ * $Id: index.php,v 1.27 2004-12-22 13:16:01 francis Exp $
  * 
  */
 
@@ -28,7 +28,7 @@ $buttons[1] = &HTML_QuickForm::createElement('submit', '', 'Go');
  * trying to obscure this data. */
 $ref = fyr_external_referrer();
 if (isset($ref))
-    $form->addElement('hidden', 'fyr_extref', $ref);
+    $buttons[2] = &HTML_QuickForm::createElement('hidden', 'fyr_extref', $ref);
 
 $form->addGroup($buttons, 'stuff', '<b>Type Your UK Postcode:</b>', '&nbsp', false); // TODO: don't have bold tags here!
 $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
@@ -68,7 +68,7 @@ if ($pc != "") {
     
     $voting_areas = mapit_get_voting_areas($pc);
     if (!rabx_is_error($voting_areas)) {
-        header('Location: who?pc='.urlencode($pc));
+        header('Location: ' . new_url('who', true));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {

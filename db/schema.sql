@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.16 2004-12-20 15:39:31 chris Exp $
+-- $Id: schema.sql,v 1.17 2004-12-22 13:16:01 francis Exp $
 --
 
 set client_min_messages to error;
@@ -48,7 +48,7 @@ create table message (
 
     -- data for anti-abuse measures
     sender_ipaddr text not null,    -- IP address used to submit the message
-    sender_referrer text not null,  -- any external Referer: header we saw
+    sender_referrer text,  -- any external Referer: header we saw
 
     -- Recipient info; one of email or fax must be non-NULL; the ID
     recipient_id integer not null,      -- DaDem ID

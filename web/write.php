@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.46 2004-12-21 00:56:46 francis Exp $
+ * $Id: write.php,v 1.47 2004-12-22 13:16:01 francis Exp $
  * 
  */
 
@@ -196,7 +196,8 @@ function submitFax() {
 $fyr_values = get_all_variables();
 debug("FRONTEND", "All variables:", $fyr_values);
 $fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
-$fyr_values['fyr_extref'] = fyr_external_referrer();
+if (!isset($fyr_values['fyr_extref']))
+    $fyr_values['fyr_extref'] = fyr_external_referrer();
 
 // Various display and used fields
 $fyr_postcode = $fyr_values['pc'];

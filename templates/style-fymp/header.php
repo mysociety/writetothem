@@ -17,7 +17,6 @@ if ($values['robots']) { ?>
     if (OPTION_FYR_REFLECT_EMAILS) {
             print "<p>Test site - this will reflect emails to representatives back to you.</p>";
     }
-
 ?>
 
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
