@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.22 2004-11-18 12:47:46 chris Exp $
+# $Id: Queue.pm,v 1.23 2004-11-18 12:52:05 francis Exp $
 #
 
 package FYR::Queue;
@@ -680,7 +680,7 @@ not.
 sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
     throw FYR::Error("Bad QUESTION (should be '0')") if ($qn ne '0');
-    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($response !~ /^(yes|no)$/i);
+    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
         FYR::DB::dbh()->do('begin work');
         FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
@@ -967,7 +967,7 @@ Returns an array of hashes of information about each message on the queue.
 
 =cut
 sub admin_get_queue () {
-    my () = @_;
+    () = @_;
     my $sth = FYR::DB::dbh()->prepare('select * from message order by created desc');
     $sth->execute();
     my @ret;
