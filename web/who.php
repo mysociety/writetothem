@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.64 2005-02-15 19:30:03 matthew Exp $
+ * $Id: who.php,v 1.65 2005-02-15 20:39:14 matthew Exp $
  * 
  */
 
@@ -54,6 +54,7 @@ debug_timestamp();
 // descriptive text and form text in an array for the template to
 // render.
 $fyr_representatives = array();
+$fyr_headings = array();
 $fyr_error = null;
 foreach ($va_display_order as $va_type) {
     if (is_array($va_type)) {
@@ -110,9 +111,11 @@ foreach ($va_display_order as $va_type) {
     // Create HTML
     if (is_array($va_type)) {
         if ($rep_count > 1) {
-            $text = "<h3>Your {$va_info[0]['rep_name_long_plural']}</h3><p>";
+            $heading = "<h3>Your {$va_info[0]['rep_name_long_plural']}</h3>";
+            $text = "<p>";
         } else {
-            $text = "<h3>Your {$va_info[0]['rep_name_long']}</h3><p>";
+            $heading = "<h3>Your {$va_info[0]['rep_name_long']}</h3>";
+            $text = "<p>";
         }
         if ($rep_counts[0]>1) {
             $text .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
@@ -133,11 +136,11 @@ foreach ($va_display_order as $va_type) {
         $text .= display_reps($representatives[1]);
     } else {
         if ($rep_count > 1) {
-            $text = "<h3>Your ${va_info['rep_name_long_plural']}</h3><p>";
-            $text .= "Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+            $heading = "<h3>Your ${va_info['rep_name_long_plural']}</h3>";
+            $text = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
-            $text = "<h3>Your ${va_info['rep_name_long']}</h3><p>";
-            $text .= "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+            $heading = "<h3>Your ${va_info['rep_name_long']}</h3>";
+            $text = "<p>Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $text .= "${eb_info['name']}.  ${eb_info['description']}";
         /* Note categories of representatives who typically aren't paid for
@@ -164,12 +167,14 @@ foreach ($va_display_order as $va_type) {
     }
 
     array_push($fyr_representatives, $text);
+    array_push($fyr_headings, $heading);
     debug_timestamp();
 }
 
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
-    "reps" => $fyr_representatives, 
+    "reps" => $fyr_representatives,
+    'headings' => $fyr_headings,
     "error" => $fyr_error,
     ));
 

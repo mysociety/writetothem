@@ -21,19 +21,27 @@ $cols = sizeof($values['reps']);
 <p>You have several elected representatives at different levels of government. <b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
 
 <table id="repstable" cellpadding="5" cellspacing="0" border="0">
-	<tr valign="top">
+    <tr valign="top">
+<?
+$c = 0;
+$pc = round(100/$cols);
+foreach ($values['headings'] as $row) {
+    print '<th scope="col" class="';
+    print ($c) ? 'maincol' : 'firstcol';
+    print '" width="' . $pc . '%">' . $row . '</th>';
+    $c++;
+}
+?>
+    </tr>
+    <tr valign="top">
 <?
 $c = 0;
 $pc = round(100/$cols);
 foreach ($values['reps'] as $row) {
-	print '<td';
-	if (!$c) {
-		print ' id="firstcol"';
-	}
-	if ($c%2==0) {
-	}
-	print ' class="maincol" width="' . $pc . '%">' . $row . '</td>';
-	$c++;
+    print '<td class="';
+    print ($c) ? 'maincol' : 'firstcol';
+    print '">' . $row . '</td>';
+    $c++;
 }
 ?>
 </tr>
