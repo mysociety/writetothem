@@ -35,6 +35,3 @@ if (OPTION_FYR_REFLECT_EMAILS) {
 	}
 ?>
 
-<!-- Needs to be all on one line to prevent extra whitespace in Firefox -->
-<!-- <ul id="nav"><li><a href="/">Home</a></li><li><a href="/about-yourrep">Your Representative</a></li><li><a href="/about-qa">Q&amp;A</a></li><li><a href="/about-us">About Us</a></li><li><a href="/about-contact">Contact Us</a></li></ul> -->
-
