@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.41 2005-01-11 17:27:14 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.42 2005-01-12 12:56:01 francis Exp $
  * 
  */
 
@@ -97,7 +97,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "</td>";
                 $simple_ref = $message['sender_referrer'];
                 $url_bits = parse_url($simple_ref);
-                if ($simple_ref != "" && ($url_bits['path']!='/' || $url_bits['query'])) 
+                if ($simple_ref != "" && ($url_bits['path']!='/' || array_key_exists('query', $url_bits)) )
                     $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
                 $client_name = $message['sender_ipaddr'];
                 if ($client_name != "")  {
@@ -113,6 +113,13 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                  "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                 print "</tr>";
+
+                if (array_key_exists('diff', $message)) {
+                    print '<tr'.($c==1?' class="v"':'').'>';
+                    print "<td colspan=8><b>Differences:</b>";
+                    print $message['diff'];
+                    print "</td></tr>";
+                }
 
                 $c = 1 - $c;
             }
@@ -226,6 +233,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
             admin_render_form($form);
+            print "<a href=\"" .  new_url("", true, 'view',
+            'similarbody', 'simto', $id, 'id', null) .  "\">View similar messages</a> ";
 
             // Body text if enabled
             if (get_http_var('body')) {
@@ -334,25 +343,29 @@ All time stats:
 
 <?
             // Decide what message view to show
+            $params = array();
             if ($view == "all") {
                 $filter = 0;
             } else if ($view == "recentchanged") {
                 $filter = 2;
             } else if ($view == "recentcreated") {
                 $filter = 3;
+            } else if ($view == "similarbody") {
+                $filter = 4;
+                $params['msgid'] = get_http_var('simto');
             } else { # important
                 $filter = 1;
             }
          
             // Show it
-            $messages = msg_admin_get_queue($filter, array());
+            $messages = msg_admin_get_queue($filter, $params);
             if (msg_get_error($messages)) {
                 print "Error contacting queue:";
                 print_r($messages);
                 $messages = array();
             }
 
-            print "<h2>View messages which are: ";
+            print "<h2>View messages which: ";
             if ($filter != 1)
                 print "<a href=\"$self_link&amp;view=important\">[Need Attention]</a> ";
             else
@@ -365,6 +378,9 @@ All time stats:
                 print "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
             else
                 print "[Recently Changed] ";
+            if ($filter == 4)
+                print "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
+
 
 # Too slow, doesn't really work, so disabled for now
 #            if ($filter != 0)

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.85 2005-01-11 16:59:15 francis Exp $
+# $Id: Queue.pm,v 1.86 2005-01-12 12:56:00 francis Exp $
 #
 
 package FYR::Queue;
@@ -24,6 +24,7 @@ use MIME::Entity;
 use MIME::Words;
 use Text::Wrap (); # don't pollute our namespace
 use POSIX qw(strftime);
+use String::Ediff;
 use utf8;
 use DBI;
 #DBI->trace(1);
@@ -1183,12 +1184,15 @@ FILTER should be:
     1 to return only information about messages which may need operator attention; 
     2 to return messages which recently changed state; 
     3 to return messages which were created recently; 
+    4 to return messages similar to 'msgid' in PARAMS;
 PARAMS is a hash of parameters to the filter type.
 
 =cut
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
     my $where = "order by created desc";
+    my $msg;
+    my @params;
     if (int($filter) == 1) {
         $where = "where (state = 'bounce_confirm' or state = 'failed' or
         state = 'error' or (state = 'ready' and numactions > 0) or
@@ -1197,17 +1201,48 @@ sub admin_get_queue ($$) {
         $where = "order by laststatechange desc limit 100";
     } elsif (int($filter) == 3) {
         $where = "order by created desc limit 100";
+    } elsif (int($filter) == 4) {
+        my $sth2 = FYR::DB::dbh()->prepare("select *, length(message) as message_length from message where id = ?");
+        $sth2->execute($params->{msgid});
+        $msg = $sth2->fetchrow_hashref();
+        my @similar = FYR::AbuseChecks::get_similar_messages($msg);
+        $where = "where id in (" . join(",", map { '?' } @similar) .  ")";
+        @params = map { $_->[0] } @similar;
+        $where .= " or id = ?";
+        push @params, $params->{msgid};
     }
     my $sth = FYR::DB::dbh()->prepare("select 
         created, id, laststatechange, state, frozen, numactions, lastaction,  
         sender_name, sender_addr, sender_email, sender_postcode,
         sender_ipaddr, sender_referrer,
         recipient_name, recipient_email, recipient_fax, recipient_type,
-        recipient_id,
+        recipient_id, message,
         length(message) as message_length from message $where");
-    $sth->execute();
+    $sth->execute(@params);
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
+        if (int($filter) == 4) {
+
+            my $from = $msg->{message};
+            my $to = $hash_ref->{message};
+            $from =~ s/[\n\r]//g;
+            $to =~ s/[\n\r]//g;
+            my $ixes = String::Ediff::ediff($from, $to);
+            my @ix = split(" ", $ixes);
+            my $diff; 
+            $diff .= substr($to, 0, $ix[4]) . " ... ";
+            for (my $i = 5; $i + 7 < scalar(@ix); $i+=8) {
+                if ($ix[$i+7] > $ix[$i+0]) {
+                    my $topart = substr($to, $ix[$i+0], $ix[$i+7] - $ix[$i+0]);
+                    $diff .= $topart . " ... ";
+                }
+            }
+            if ($diff eq " ... " and $msg->{id} eq $hash_ref->{id}) {
+                $diff = " This is the message being compared against.";
+            }
+            $hash_ref->{diff} = $diff;
+        }
+        $hash_ref->{message} = undef;
         push @ret, $hash_ref;
     }
     return \@ret;
