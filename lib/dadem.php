@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.4 2004-10-04 17:58:03 chris Exp $
+ * $Id: dadem.php,v 1.5 2004-10-04 18:14:10 francis Exp $
  * 
  */
 
@@ -105,6 +105,7 @@ function dadem_get_representatives($type, $id) {
                 array('Tom Wise', DADEM_CONTACT_EMAIL, 'ukipeast@globalnet.co.uk')
             );
     }
+    return DADEM_BAD_TYPE;
 }
 
 ?>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.5 2004-10-04 17:24:14 chris Exp $
+ * $Id: mapit.php,v 1.6 2004-10-04 18:14:10 francis Exp $
  * 
  */
 
@@ -20,6 +20,8 @@ define('MAPIT_NOT_FOUND', 2);       /* postcode not found */
  * On success, return an array mapping voting/administrative area type to
  * voting area ID and name. On failure, return an error code. */
 function mapit_get_voting_areas($postcode) {
+    global $va_name;
+
     /* remove spaces */
     $postcode = strtoupper(preg_replace('/ +/', '', $postcode, -1));
 
@@ -28,14 +30,11 @@ function mapit_get_voting_areas($postcode) {
     } else if ($postcode == 'CB41EP') {
         return array(VA_CTY => array(1, 'Cambridgeshire County Council'),
                      VA_CED => array(2, 'West Chesterton ED'),
-
                      VA_DIS => array(3, 'Cambridge District Council'),
                      VA_DIW => array(4, 'West Chesterton Ward'),
-
-                     VA_WMP => $va_name(VA_WMP),
+                     VA_WMP => array(0, $va_name[VA_WMP]),
                      VA_WMC => array(5, 'Cambridge'),
-            
-                     VA_EUP => $va_name(VA_EUP),
+                     VA_EUP => array(0, $va_name[VA_EUP]),
                      VA_EUR => array(6, 'Eastern Euro Region')
                 );
     } else {
