@@ -5,11 +5,11 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.15 2004-10-20 10:44:40 francis Exp $
+ * $Id: write.php,v 1.16 2004-10-20 12:05:51 francis Exp $
  * 
  */
 
-$fyr_title = "Now Write Your Fax To X MP for X";
+$fyr_title = "Now Write Your Fax To X Member for X"; // TODO
 
 require_once "../phplib/forms.php";
 require_once 'HTML/QuickForm/Controller.php';

@@ -10,23 +10,17 @@ Make sure debug log messages can't print data which should be encrypted ;(
 
 Validate HTML
 
-UTF-8
-
-Perhaps strengthen rigour of basic checks for existence of all users
-address details etc.
-
-Ordering of display in who.php
+Sorting order of display in who.php
 
 Consider removing voting_area from dadem return value
 
+UTF-8
 content-type utf8 on forms
-strip carriage returns (leave line feeds) in out put data
 
-Get Mr/Mrs data for MPs
-
-Sessions
+Sessions - go through this
 http://www.sitepoint.com/blog-post-view.php?id=156260
-record referer and IP addresses the sessions has used and sequence of
+
+Record referer and IP addresses the sessions has used and sequence of
 addresses
 
 Sort out error codes when there is a transport error from XMLRPC, so
@@ -36,4 +30,10 @@ To return error object with integer, string
 Share constants properly between Perl and PHP
 Make error codes global
 
+Remove spurious stuff from utility.php
+
+Later
+-----
+
+Get Mr/Mrs data for MPs
 
