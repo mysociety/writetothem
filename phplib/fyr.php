@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.15 2005-01-11 10:52:34 chris Exp $
+ * $Id: fyr.php,v 1.16 2005-01-11 11:51:27 chris Exp $
  * 
  */
 
@@ -18,11 +18,21 @@ require_once "../../phplib/ratty.php";
 require_once "../../phplib/template.php";
 require_once "../../phplib/utility.php";
 
+/* Output buffering: PHP's output buffering is broken, because it does not
+ * affect headers. However, it's worth using it anyway, because in the common
+ * case of outputting an HTML page, it allows us to clear any output and
+ * display a clean error page when something goes wrong. Obviously if we're
+ * displaying an error, a redirect, an image or anything else this will break
+ * horribly.*/
+ob_start();
+
 template_set_style("../templates/website");
 
 /* fyr_display_error NUMBER MESSAGE
  * Display an error message to the user. */
 function fyr_display_error($num, $message) {
+    /* Nuke any existing page output to display the error message. */
+    ob_clean();
     template_show_error($message);
 }
 
