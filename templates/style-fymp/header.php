@@ -15,19 +15,6 @@ if ($values['robots']) { ?>
 <!-- </font></p> -->
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 
-<TR><TD align=center>
-<p style="color: #ff0000; background-color: #ffffff"><font color="#ff0000" size="-1"><strong>This site is not finished yet! We're
-just testing at the moment.</strong> Your message will not be sent
-to your democratic representative: just returned to you. We're looking
-for reports of bugs and any suggestions for making the site
-better.  You can file a problem report in our
- <a
- href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
- system</a>.</p>
-
-
-</TD></TR>
-
 <TR>
 <TD align=center VALIGN="top">
 <IMG SRC="images/mosaic.gif" WIDTH="529" HEIGHT="12" BORDER="0" ALT="mosaic_strip"><BR><BR>

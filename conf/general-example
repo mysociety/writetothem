@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.14 2004-12-07 16:24:40 chris Exp $
+ * $Id: general-example,v 1.15 2004-12-13 14:54:31 francis Exp $
  * 
  */
 
@@ -35,6 +35,10 @@ define('OPTION_FYR_QUEUE_DB_PORT', '5432');
 define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
 define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
+
+// Puts in a testing mode where emails are reflected back to
+// sender, rather than sent to their representative.
+define('OPTION_FYR_REFLECT_EMAILS', 1);
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://notfinished.faxyourrepresentative.com');

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.48 2004-12-13 13:32:04 chris Exp $
+# $Id: Queue.pm,v 1.49 2004-12-13 14:54:31 francis Exp $
 #
 
 package FYR::Queue;
@@ -153,10 +153,13 @@ sub write ($$$$) {
         # Decide how to send message
         work_out_destination($recipient);
 
-        # Bodge things so that mails go to sender.
+        # Bodge things so that mails go to sender if in testing
+        # ids > 2000000 are the ZZ9 9ZZ postcode test addresses.
         if ($recipient_id < 2000000) {
-            $recipient->{email} = $sender->{email};
-            $recipient->{fax} = undef;
+            if (mySociety::Config::get('FYR_REFLECT_EMAILS')) {
+                $recipient->{email} = $sender->{email};
+                $recipient->{fax} = undef;
+            }
         } 
 
         # We must save the three-letter code for the representative type in
@@ -580,6 +583,14 @@ sub make_confirmation_email ($;$) {
                 )
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);
+
+    # Add header according to whether site in test mode or not
+    my $reflecting_mails = mySociety::Config::get('FYR_REFLECT_EMAILS');
+    if ($reflecting_mails) {
+        $text = wrap(EMAIL_COLUMNS, "(Note: This is a test site, the message will be sent to yourself not your representative.)") . "\n\n" . $text;
+    } else {
+        $text = wrap(EMAIL_COLUMNS, "WARNING - THIS SITE IS NOW LIVE AND THIS MESSAGE WILL GO TO THE NAMED REPRESENTATIVE - THIS IS NOT A DRILL!") . "\n\n" . $text;
+    }
 
     return MIME::Entity->build(
             Sender => $confirm_sender,
