@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.125 2005-02-08 00:51:19 francis Exp $
+# $Id: Queue.pm,v 1.126 2005-02-08 17:29:39 chris Exp $
 #
 
 package FYR::Queue;
@@ -648,9 +648,9 @@ sub send_user_email ($$$) {
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, 1, "sent $descr mail to $msg->{sender_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-        logmsg($id, 1, "temporary failure sending $descr email to $msg->{sender_email}");
+        logmsg($id, 1, "soft error sending $descr email to $msg->{sender_email}");
     } else {
-        logmsg($id, 1, "permanent failure sending $descr email to $msg->{sender_email}");
+        logmsg($id, 1, "hard error sending $descr email to $msg->{sender_email}");
     }
     return $result;
 }
@@ -847,9 +847,9 @@ sub deliver_email ($) {
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, 1, "delivered message by email to $msg->{recipient_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-        logmsg($id, 1, "temporary failure delivering message by email to $msg->{recipient_email}");
+        logmsg($id, 1, "soft error delivering message by email to $msg->{recipient_email}");
     } else {
-        logmsg($id, 1, "permanent failure delivering message by email to $msg->{recipient_email}");
+        logmsg($id, 1, "hard error delivering message by email to $msg->{recipient_email}");
     }
     return $result;
 }
@@ -959,6 +959,10 @@ use constant FAX_DELIVERY_BACKOFF => 3;
 
 # Timeouts in the state machine:
 my %state_timeout = (
+        # How long a message may be "new" (awaiting sending of confirmation
+        # mail) before it is discarded.
+        new             => DAY,
+
         # How long a message may be "pending" (awaiting confirmation) before it
         # is discarded.
         pending         => DAY * 7,
@@ -1022,11 +1026,9 @@ my %state_action = (
             my $result = send_confirmation_email($id);
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
                 state($id, 'pending');
-            } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-                state($id, 'new');
             } else {
-                logmsg($id, 1, "abandoning message after failure to send confirmation email");
-                state($id, 'failed');
+                # XXX for the moment we do not distinguish soft/hard errors.
+                state($id, 'new');
             }
         },
 
@@ -1043,12 +1045,10 @@ my %state_action = (
                 my $result = send_confirmation_email($id, 1);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     state($id, 'pending');  # bump actions counter
-                } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
-                    # Shouldn't happen in this state.
-                    logmsg($id, 1, "abandoning message after failure to send confirmation email");
-                    state($id, 'failed');
-                } # otherwise no action; we'll get called again whenever the
-                  # queue is next run.
+                } else {
+                    # XXX for the moment we do not distinguish soft/hard errors.
+                    logmsg($id, 1, "error sending confirmation reminder message (will retry)");
+                }
             }
         },
 
@@ -1101,11 +1101,10 @@ my %state_action = (
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'bounce_wait');
-                } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-                    state($id, 'ready');    # bump timer
                 } else {
-                    logmsg($id, 1, "abandoning message after failure to send to representative");
-                    state($id, 'error');
+                    # XXX for the moment we do not distinguish soft/hard errors.
+                    state($id, 'ready');    # bump timer
+                    logmsg($id, 1, "error sending message by email (will retry)");
                 }
             }
         },
