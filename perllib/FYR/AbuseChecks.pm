@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.27 2005-01-13 12:14:34 francis Exp $
+# $Id: AbuseChecks.pm,v 1.28 2005-01-13 12:21:51 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -200,8 +200,6 @@ my @tests = (
                 and $msg->{sender_email} eq $msg->{recipient_email}) {
                 FYR::Queue::logmsg($msg->{id}, 'representative appears to be emailing themself');
                 return ( representative_emailing_self => 'YES' );
-            } else {
-                return ( representative_emailing_self => 'NO' );
             }
         },
 
