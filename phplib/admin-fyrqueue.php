@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.11 2004-12-20 22:36:33 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.12 2004-12-21 00:56:46 francis Exp $
  * 
  */
 
@@ -24,7 +24,9 @@ class ADMIN_PAGE_FYR_QUEUE {
 
 <table border=1
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
-Change</th><th>State</th><th>Sender</th><th>Recipient</th><th>Length (chars)</th></tr>
+Change</th><th>State</th><th>Sender</th><th>Recipient</th>
+<th>IP / Referrer</th></tr>
+<th>Length (chars)</th>
 <?
 	$c = 1;
             foreach ($messages as $message) {
@@ -45,13 +47,17 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th><th>Length (chars)</th
                 print "<td>" . 
                         $message['sender_name'] . "<br>" .
                         $message['sender_addr'] . "<br>" .
-                        $message['sender_email'] . "<br>" .
+                        $message['sender_email'] .
                  "</td>";
                 print "<td>" . 
                         $message['recipient_name'] . "<br>";
                 if ($message['recipient_email']) print $message['recipient_email'] . "<br>";
                 if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
                 print "</td>";
+                print "<td>" . 
+                        $message['sender_ipaddr'] . "<br>" .
+                        $message['sender_referrer'] . "<br>" .
+                 "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                print "</tr>";
 	       $c = 1 - $c;

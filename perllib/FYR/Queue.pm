@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.66 2004-12-18 13:21:55 francis Exp $
+# $Id: Queue.pm,v 1.67 2004-12-21 00:56:46 francis Exp $
 #
 
 package FYR::Queue;
@@ -125,15 +125,17 @@ Write details of a message for sending. ID is the identity of the message,
 SENDER is a reference to hash containing details of the sender including
 elements: name, the sender's full name; email, their email address; address,
 their full postal address; postcode, their post code; and optionally phone,
-their phone number. RECIPIENT is the DaDem ID number of the recipient of the
-message; and TEXT is the text of the message, with line breaks. Returns true on
-success, or an error code on failure.
+their phone number; ipaddr, their IP address; referrer, website that
+referred them to this one. RECIPIENT is the DaDem ID number of the
+recipient of the message; and TEXT is the text of the message, with line
+breaks. Returns true on success, or an error code on failure.
 
 This function is called remotely and commits its changes.
 
 =cut
 sub write ($$$$) {
     my ($id, $sender, $recipient_id, $text) = @_;
+    warn Dumper($sender);
 
     try {
         # Get details of the recipient.
@@ -181,7 +183,8 @@ sub write ($$$$) {
         FYR::DB::dbh()->do(q#
             insert into message (
                 id,
-                sender_name, sender_email, sender_addr, sender_phone, sender_postcode,
+                sender_name, sender_email, sender_addr, sender_phone,
+                sender_postcode, sender_ipaddr, sender_referrer,
                 recipient_id, recipient_name, recipient_type, recipient_email, recipient_fax,
                 message,
                 state,
@@ -189,7 +192,7 @@ sub write ($$$$) {
                 numactions, dispatched
             ) values (
                 ?,
-                ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?, ?, ?,
                 ?, ?, ?, ?, ?,
                 ?,
                 'new',
@@ -197,7 +200,7 @@ sub write ($$$$) {
                 0, null
             )#, {},
             $id,
-            (map { $sender->{$_} || undef } qw(name email address phone postcode)),
+            (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
             $recipient_id, (map { $recipient->{$_} || undef } qw(name type email fax)),
             $text,
             time(), time());
@@ -1189,6 +1192,7 @@ sub admin_get_queue ($) {
     my $sth = FYR::DB::dbh()->prepare("select 
         created, id, laststatechange, state, frozen, numactions, lastaction,  
         sender_name, sender_addr, sender_email, sender_postcode,
+        sender_ipaddr, sender_referrer,
         recipient_name, recipient_email, recipient_fax, recipient_type,
         length(message) as message_length from message $where");
     $sth->execute();
