@@ -6,11 +6,10 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.7 2004-10-20 15:37:57 francis Exp $
+ * $Id: queue.php,v 1.8 2004-10-24 17:12:47 chris Exp $
  * 
  */
 
-include_once('../conf/config.php');
 include_once('../../phplib/simplexmlrpc.php');
 include_once('../../phplib/utility.php');
 
