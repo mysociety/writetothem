@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.52 2005-01-11 00:29:06 matthew Exp $
+ * $Id: write.php,v 1.53 2005-01-11 12:42:18 chris Exp $
  * 
  */
 
@@ -220,8 +220,9 @@ if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
 fyr_rate_limit($limit_values);
 
 // Message id for transaction with fax queue
-$msgid = $fyr_values['fyr_msgid'];
-if (!isset($msgid)) {
+if (array_key_exists('fyr_msgid', $fyr_values))
+    $msgid = $fyr_values['fyr_msgid'];
+else {
     $msgid = msg_create();
     msg_check_error($msgid);
     $fyr_values['fyr_msgid'] = $msgid;
@@ -284,8 +285,11 @@ if (rabx_is_error($success)) {
 }
 
 // Generate signature
-$fyr_values['signature'] = sha1($fyr_values['email']);
-$fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  "\n(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
+if (array_key_exists('writer_email', $fyr_values) && array_key_exists('body', $fyr_values)) {
+    $fyr_values['signature'] = sha1($fyr_values['writer_email']);
+    $fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  "\n(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
+} else if (array_key_exists('body', $fyr_values))
+    $fyr_values['signedbody'] = $fyr_values['body'];
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
