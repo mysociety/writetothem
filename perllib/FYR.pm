@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.4 2004-11-22 17:41:00 francis Exp $
+# $Id: FYR.pm,v 1.5 2004-12-07 14:19:49 chris Exp $
 #
 
 use strict;
@@ -55,10 +55,18 @@ Return a new handle on the database.
 
 =cut
 sub new_dbh () {
-    my $dbh = DBI->connect('dbi:Pg:dbname=' .  mySociety::Config::get('FYR_QUEUE_DB_NAME'),
+
+    my $host = mySociety::Config::get('FYR_QUEUE_DB_HOST', undef);
+    my $port = mySociety::Config::get('FYR_QUEUE_DB_PORT', undef);
+    
+    my $connstr = 'dbi:Pg:dbname=' .  mySociety::Config::get('FYR_QUEUE_DB_NAME');
+    $connstr .= ",host=$host" if (defined($host));
+    $connstr .= ",port=$port" if (defined($port));
+
+    my $dbh = DBI->connect($connstr,
                         mySociety::Config::get('FYR_QUEUE_DB_USER'),
                         mySociety::Config::get('FYR_QUEUE_DB_PASS'),
-                        { RaiseError => 1, AutoCommit => 0 });
+                        { RaiseError => 1, AutoCommit => 0, PrintWarn => 0, PrintError => 0 });
 
     # make sure we have a site shared secret
     if (!$dbh->selectrow_array('select secret from secret for update of secret')) {

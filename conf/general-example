@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.11 2004-12-07 14:10:34 chris Exp $
+ * $Id: general-example,v 1.12 2004-12-07 14:19:49 chris Exp $
  * 
  */
 
@@ -27,6 +27,11 @@ define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
 define('OPTION_FYR_QUEUE_URL', 'http://notfinished.faxyourrepresentative.com/services/queue');
 
 // PostgreSQL database for FYR queue
+/*
+// Host and port for database, if it is on a remote machine.
+define('OPTION_FYR_QUEUE_DB_HOST', 'dbhost');
+define('OPTION_FYR_QUEUE_DB_PORT', '5432');
+*/
 define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
 define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
