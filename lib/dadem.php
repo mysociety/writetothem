@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.14 2004-10-06 11:44:43 francis Exp $
+ * $Id: dadem.php,v 1.15 2004-10-06 13:32:53 francis Exp $
  * 
  */
 
@@ -97,34 +97,35 @@ function dadem_get_representatives($va_id) {
  * with the given ID. This array contains elements type, the type of the area
  * for which they're elected (and hence what type of representative they are);
  * name, their name; contact_method, either 'fax' or 'email', and either an
- * element 'email' or 'fax' giving their address or number respectively. On
- * failure, returns an error code. */
+ * element 'email' or 'fax' giving their address or number respectively. 
+ * voting_area, the id of the voting area they represent.
+ * On failure, returns an error code. */
 function dadem_get_representative_info($rep_id) {
     /* XXX extend this with further stub data. */
     $stub_data = array(
-        1 => array('type' => VA_CED, 'name' => 'Maurice Leeke', 
+        1 => array('name' => 'Maurice Leeke', 'type' => VA_CED, 'voting_area' => 2,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'Maurice.Leeke@cambridgeshire.gov.uk'),
-        2 => array('type' => VA_DIW, 'name' => 'Diane Armstrong', 
+        2 => array('name' => 'Diane Armstrong', 'type' => VA_DIW, 'voting_area' => 4,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'diane_armstrong@tiscali.co.uk'),
-        3 => array('type' => VA_DIW, 'name' => 'Max Boyce',
+        3 => array('name' => 'Max Boyce','type' => VA_DIW, 'voting_area' => 4,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'maxboyce@cix.co.uk'),
-        4 => array('type' => VA_DIW, 'name' => 'Ian Nimmo-Smith',
+        4 => array('name' => 'Ian Nimmo-Smith','type' => VA_DIW, 'voting_area' => 4,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ian@monksilver.com'),
-        5 => array('type' => VA_WMC, 'name' => 'Anne Campbell',
+        5 => array('name' => 'Anne Campbell','type' => VA_WMC, 'voting_area' => 6,
                 'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441223311315'),
-        6 => array('type' => VA_EUR, 'name' => 'Geoffrey Van Orden',
+        6 => array('name' => 'Geoffrey Van Orden','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+3222849332'),
-        7 => array('type' => VA_EUR, 'name' => 'Jeffrey Titford',
+        7 => array('name' => 'Jeffrey Titford','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441245252071'),
-        8 => array('type' => VA_EUR, 'name' => 'Richard Howitt',
+        8 => array('name' => 'Richard Howitt','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'richard.howitt@geo2.poptel.org.uk'),
-        9 => array('type' => VA_EUR, 'name' => 'Robert Sturdy',
+        9 => array('name' => 'Robert Sturdy','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'rsturdy@europarl.eu.int'),
-        10 => array('type' => VA_EUR, 'name' => 'Andrew Duff',
+        10 => array('name' => 'Andrew Duff','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'mep@andrewduffmep.org'),
-        11 => array('type' => VA_EUR, 'name' => 'Christopher Beazley',
+        11 => array('name' => 'Christopher Beazley','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441920485805'),
-        12 => array('type' => VA_EUR, 'name' => 'Tom Wise',
+        12 => array('name' => 'Tom Wise','type' => VA_EUR, 'voting_area' => 8,
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ukipeast@globalnet.co.uk')
     );
     $ret = $stub_data[$rep_id];
