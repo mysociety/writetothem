@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.52 2005-01-19 02:14:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.53 2005-01-28 22:35:08 francis Exp $
  * 
  */
 
@@ -132,7 +132,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
             if (count($messages) > 1) {
 ?><tr><td colspan=9><b>Ticked items:</b>
         <input size="20" name="notebody" type="text" /> 
-        <input name="note" value="Comment" type="submit" />
+        <input name="note" value="Note" type="submit" />
         &nbsp; <b>Action:</b>
         <input name="freeze" value="Freeze" type="submit" />
         <input name="thaw" value="Thaw" type="submit" />
@@ -233,7 +233,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             print "<h2><a href=\"$self_link\">[Back to Message List]</a></h2></h2>";
 
             // Display general information
-            print "<h2>Message id $id:</h2>";
+            print "<h2>Message id " . $this->make_ids_links($id) . ":</h2>";
 
             $message = msg_admin_get_message($id);
             if (msg_get_error($message)) {
@@ -246,11 +246,9 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
             if (!get_http_var('note')) {
                 $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Comment');
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Note');
             }
             $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Actions:</b>");
-            if ($message['state'] == 'failed')
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if ($message['frozen']) {
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
@@ -263,6 +261,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
             }
+            if ($message['state'] == 'failed' || $message['frozen'])
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if (!get_http_var('body'))
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.100 2005-01-26 14:28:56 chris Exp $
+# $Id: Queue.pm,v 1.101 2005-01-28 22:35:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -344,7 +344,7 @@ sub state ($;$) {
     if (defined($state)) {
         my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
         die "Bad state '$state'" unless (exists($allowed_transitions{$state}));
-        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error')));
+        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed')));
         if ($state ne $curr_state) {
             FYR::DB::dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
             logmsg($id, "changed state to $state");
