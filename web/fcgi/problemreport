@@ -1,0 +1,122 @@
+#!/usr/bin/perl -w
+#
+# problemreport:
+#
+# Copyright (c) 2004 Chris Lightfoot. All rights reserved.
+# Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.1 2004-12-13 19:47:52 chris Exp $';
+
+use strict;
+
+use CGI;
+use CGI::Fast;
+use HTTP::Request;
+use HTTP::Response;
+use LWP::UserAgent;
+use Mail::RFC822::Address;
+
+my $ua = new LWP::UserAgent;
+
+sub check_all_params ($$) {
+    my ($q, $p) = @_;
+    my $short = $q->param('short');
+    my $good = 1;
+    $short ||= '';
+    $short =~ s/^\s+//;
+    $short =~ s/\s+$//;
+    if ($short eq '') {
+        $p->{short} = "Please enter a short description of the problem";
+        $good = 0;
+    } elsif (length($short) > 70) {
+        $p->{short} = "Please make your description a bit shorter &mdash; you can put a more detailed description in below";
+    }
+
+    my $long = $q->param('long');
+    $long ||= '';
+    $long =~ s/^\s+//;
+    $long =~ s/\s+$//;
+    if ($long eq '') {
+        $q->param('long', $short);
+    }
+
+    my $email = $q->param('email');
+    $email ||= '';
+    $email =~ s/^\s+//;
+    $email =~ s/\s+$//;
+    if ($email ne '') {
+        if (!Mail::RFC822::Address::valid($email)) {
+            $p->{email} = "Please either enter a valid email address, or leave it blank";
+            $good = 0;
+        }
+    }
+
+    return $good;
+}
+
+sub urlescape ($) {
+    my ($t) = @_;
+    $t =~ s#([^A-Z0-9])#sprintf('%%%02x', ord($1))#ge;
+    return $t;
+}
+
+sub submit_problem_to_cvstrac ($) {
+    my ($q) = @_;
+    my $cvstrac_url = 'https://secure.mysociety.org/cvstrac/tktnew';
+    my $postdata;
+
+    my $e = $q->param('email');
+    $e ||= '';
+    $postdata =
+        't=' . $q->param('short')
+        . '&y=code&v=1&r=1&w=&p=1&s=fyr-web&c=' . urlescape($e)
+        . '&d=' . $q->param('page') . urlescape("\n" . $q->param('long'))
+        . '&submit=Submit';
+    
+    my $req = new HTTP::Request(POST => $cvstrac_url);
+    $req->content_type('application/x-www-form-urlencoded');
+    $req->content($postdata);
+
+    my $res = $ua->request($req);
+print STDERR $res->status_line(), $res->content();
+    return $res->is_success();
+}
+
+while (my $q = new CGI::Fast()) {
+    my %probs;
+    if (check_all_params($q, \%probs)) {
+        submit_problem_to_cvstrac($q);
+        # XXX should trap errors...
+        
+            print $q->header(),
+                $q->start_html('WriteToThem.com - report a problem'),
+                $q->p("<strong>Thank you!</strong> We've received your description of the problem you've found, and will fix it as soon as we can. If you gave an email address, we'll tell you when we've sorted it out."),
+                $q->p('You can now <a href="http://www.writetothem.com/">go back to WriteToThem.com</a> or to <a href="http://www.faxyourmp.com/">FaxYourMP.com</a>.'),
+                $q->end_html();
+    } else {
+        print $q->header(),
+            $q->start_html('WriteToThem.com - report a problem'),
+            $q->h1("WriteToThem.com - report a problem"),
+            $q->p("We're sorry that our site hasn't worked quite as well as it should have! We'd be very grateful if you'd tell us what went wrong, so that we can fix it."),
+            $q->start_form(-method => 'POST'),
+            $q->hidden(-name => 'page'),
+
+            $q->p("<strong>What went wrong?</strong> (short version)<br/>",
+                $q->textfield(-name => 'short', -size => 70, maxlength => 70),
+                (exists($probs{short}) ? "<br/>$probs{short}" : "")),
+
+            $q->p("<strong>If you need to, please give a more detailed description:</strong><br/>",
+                $q->textarea(-name => 'long', -columns => 50, -rows => 10),
+                (exists($probs{long}) ? "<br/>$probs{long}" : "")),
+
+            $q->p("<strong>If you'd like us to contact you when we fix this problem, please give us your email address:</strong><br/>",
+                $q->textfield(-name => 'email', -size => 70),
+                (exists($probs{email}) ? "<br/>$probs{email}" : "")),
+
+            $q->submit(-name => 'Report the problem', -value => 'Report the problem'),
+            $q->end_form(),
+            $q->end_html();
+    }
+}
+
