@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.75 2004-12-30 17:24:08 francis Exp $
+# $Id: Queue.pm,v 1.76 2004-12-30 19:46:20 francis Exp $
 #
 
 package FYR::Queue;
@@ -166,10 +166,6 @@ sub write ($$$$) {
                 $recipient->{fax} = undef;
             }
         } 
-
-        # We must save the three-letter code for the representative type in
-        # the database, NOT the numeric ID.
-        $recipient->{type} = $mySociety::VotingArea::id_to_type{$recipient->{type}};
 
         # XXX should also check that the text bits are valid UTF-8.
 
@@ -375,8 +371,8 @@ sub message ($;$) {
     $forupdate = defined($forupdate) ? ' for update' : '';
     if (my $msg = FYR::DB::dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
         # Add some convenience fields.
-        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$mySociety::VotingArea::type_to_id{$msg->{recipient_type}}};
-        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$mySociety::VotingArea::type_to_id{$msg->{recipient_type}}};
+        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
+        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
         return $msg;
     } else {
         throw FYR::Error("No message '$id'.");

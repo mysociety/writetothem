@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.26 2004-12-30 18:50:09 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.27 2004-12-30 19:46:20 francis Exp $
  * 
  */
 
@@ -37,9 +37,11 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
                 print "<td>";
                 print $message['state'];
-                print "<br>". $message['numactions'] . " attempts";
                 if ($message['frozen']) {
                     print "<br><b>frozen</b>";
+                }
+                if ($message['numactions'] > 0) {
+                    print "<br>". $message['numactions'] . " attempts";
                 }
                 if ($message['lastaction'] > 0) {
                     print "<br>Last: " .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
