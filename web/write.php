@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.67 2005-02-11 11:12:17 chris Exp $
+ * $Id: write.php,v 1.68 2005-02-11 11:26:06 matthew Exp $
  * 
  */
 
@@ -24,9 +24,14 @@ function default_body_text() {
         return "Dear " .  $fyr_representative['name'] . ",\n\n\n\nYours sincerely,\n\n";
 }
 
+function default_body_regex() {
+        global $fyr_representative;
+        return '^Dear ' .  $fyr_representative['name'] . ',\s+Yours sincerely,\s+';
+}
+
 class RuleAlteredBodyText extends HTML_QuickForm_Rule {
     function validate($value, $options) {
-        return $value != default_body_text();
+        return !preg_match('#'.default_body_regex().'#', $value);
     }
 }
 
@@ -129,10 +134,14 @@ function renderForm($form, $pageName)
     $fyr_form = $renderer->toHtml();
     $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
 
+    $prime_minister = false;
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
+    if ($fyr_values['who'] == 1702) {
+        $prime_minister = true;
+    }
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form, 
-            'date' => $fyr_date));
+            'date' => $fyr_date, 'prime_minister' => $prime_minister));
 
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);
