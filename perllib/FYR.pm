@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.5 2004-12-07 14:19:49 chris Exp $
+# $Id: FYR.pm,v 1.6 2004-12-07 14:23:30 chris Exp $
 #
 
 use strict;
@@ -60,8 +60,8 @@ sub new_dbh () {
     my $port = mySociety::Config::get('FYR_QUEUE_DB_PORT', undef);
     
     my $connstr = 'dbi:Pg:dbname=' .  mySociety::Config::get('FYR_QUEUE_DB_NAME');
-    $connstr .= ",host=$host" if (defined($host));
-    $connstr .= ",port=$port" if (defined($port));
+    $connstr .= ";host=$host" if (defined($host));
+    $connstr .= ";port=$port" if (defined($port));
 
     my $dbh = DBI->connect($connstr,
                         mySociety::Config::get('FYR_QUEUE_DB_USER'),
