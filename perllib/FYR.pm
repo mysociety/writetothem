@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.10 2005-01-31 20:31:14 chris Exp $
+# $Id: FYR.pm,v 1.11 2005-01-31 20:49:06 chris Exp $
 #
 
 use strict;
@@ -58,7 +58,7 @@ BEGIN {
             User => mySociety::Config::get('FYR_QUEUE_DB_USER'),
             Password => mySociety::Config::get('FYR_QUEUE_DB_PASS'),
             Host => mySociety::Config::get('FYR_QUEUE_DB_HOST', undef),
-            Port => mySociety::Config::get('FYR_QUEUE_DB_PASS', undef)
+            Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef)
         );
 
     if (!dbh()->selectrow_array('select secret from secret for update of secret')) {
