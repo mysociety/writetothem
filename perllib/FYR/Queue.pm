@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.136 2005-02-21 12:50:39 chris Exp $
+# $Id: Queue.pm,v 1.137 2005-02-22 10:24:29 chris Exp $
 #
 
 package FYR::Queue;
@@ -26,6 +26,7 @@ use Crypt::CBC;
 use DBI;
 use Error qw(:try);
 use Fcntl;
+use FindBin;
 use HTML::Entities;
 use IO::Socket;
 use Mail::RFC822::Address;
@@ -682,11 +683,9 @@ sub send_user_email ($$$) {
 # directory in ../ and ../../. Nasty.
 sub email_template ($) {
     my ($name) = @_;
-    $name = "templates/emails/$name";
-    foreach (qw(.. ../..)) {
-        return "$_/$name" if (-e "$_/$name");
-    }
-    die "unable to locate email template for '$name'";
+    my $fn = "$FindBin::Bin/../templates/faxes/$name"
+    die "unable to locate email template '$name'" if (!-e $fn);
+    return $fn;
 }
 
 # email_template_params MESSAGE EXTRA

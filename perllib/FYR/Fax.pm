@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.18 2005-02-21 15:07:08 chris Exp $
+# $Id: Fax.pm,v 1.19 2005-02-22 10:24:29 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -27,6 +27,7 @@ use strict;
 use Errno;
 use Error qw(:try);
 use Fcntl;
+use FindBin;
 use GD;
 use HTML::Entities;
 use IO::Pipe;
@@ -115,11 +116,9 @@ Create fax bitmaps; send same.
 # directory in ../ and ../../. Nasty.
 sub fax_template ($) {
     my ($name) = @_;
-    $name = "templates/faxes/$name";
-    foreach (qw(.. ../..)) {
-        return "$_/$name" if (-e "$_/$name");
-    }
-    die "unable to locate fax template for '$name'";
+    my $fn = "$FindBin::Bin/../templates/faxes/$name"
+    die "unable to locate fax template for '$name'" if (!-e $fn);
+    return $fn;
 }
 
 
