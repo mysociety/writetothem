@@ -28,10 +28,23 @@ code is available</a> under an open source license.</p>
 </div>
 -->
 <div id="footer">
-<a href="/about-qa">Help</a>
-| <a href="/about-contact">Contact Us</a>
-| <a href="/about-guidelines">Guidelines for Campaigners</a>
-| <a href="/about-copyright">Copyright</a>
+<? $links = array(
+    '/about-qa'=>'Help',
+    '/about-contact' => 'Contact Us',
+    '/about-guidelines' => 'Guidelines for Campaigners',
+    '/about-copyright' => 'Copyright'
+);
+foreach ($links as $uri => $text) {
+    $f = '';
+    if ($_SERVER['REQUEST_URI'] != $uri)
+        $f .= '<a href="' . $uri . '">';
+    $f .= $text;
+    if ($_SERVER['REQUEST_URI'] != $uri)
+        $f .= '</a>';
+    $footer[] = $f;
+}
+print join(' | ', $footer);
+?>
 </div>
 </body>
 </html>

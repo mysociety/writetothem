@@ -18,13 +18,14 @@ if (array_key_exists('robots', $values)) { ?>
 <?php } ?>
 </head>
 <body><a name="top" id="top"></a>
-<h1 id="heading"><a href="/">WriteToThem.com</a> 
-<?
-	if (OPTION_FYR_REFLECT_EMAILS) {
-        print " - Staging Site";
-	} else {
-        print "- Beta Test";
-    }
+<h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
+WriteToThem.com<?
+if ($_SERVER['REQUEST_URI']!='/') print '</a>';
+if (OPTION_FYR_REFLECT_EMAILS) {
+    print " - Staging Site";
+} else {
+    print "- Beta Test";
+}
 ?>
 </h1>
 <div id="content">

@@ -1,25 +1,37 @@
 <div id="sidebar">
 <ul>
-		<li>WriteToThem.com Help
-	<ul>
-		<li><a href="/about-qa">Questions and Answers</a></li>
-		<li><a href="/about-yourrep">Who should I write to?</a></li>
-		<li><a href="/about-feedback">Does it work?</a></li>
-		<li><a href="/about-elsewhere">British Overseas Territories</a></li>
-	</ul>
-	</li>
-	<li>Running a Campaign
-	<ul>
-		<li><a href="/about-guidelines">Guidelines for campaigning</a></li>
-		<li><a href="/about-linktous">Link to us</a></li>
-	</ul>
-	</li>
-	<li>Who Runs WriteToThem.com?
-	<ul>
-		<li><a href="/about-us">About us</a></li>
-		<li><a href="/about-copyright">Copyright</a></li>
-		<li><a href="/about-contact">Contact us</a></li>
-	</ul>
-	</li>
+<?php
+
+$links = array('WriteToThem.com Help' => array(
+    '/about-qa' => 'Questions and Answers',
+    '/about-yourrep' => 'Who should I write to?',
+    '/about-feedback' => 'Does it work?',
+    '/about-elsewhere' => 'British Overseas Territories'
+    ), 'Running a Campaign' => array(
+    '/about-guidelines' => 'Guidelines for campaigning',
+    '/about-linktous' => 'Link to us'
+    ), 'Who Runs WriteToThem.com?' => array(
+    '/about-us' => 'About us',
+    '/about-copyright' => 'Copyright',
+    '/about-contact' => 'Contact us'
+) );
+
+foreach ($links as $title => $arr) {
+    print '<li>' . $title . "\n";
+    print "<ul>\n";
+    foreach ($arr as $uri=>$text) {
+        print '<li>';
+        if ($_SERVER['REQUEST_URI'] != $uri)
+            print '<a href="' . $uri . '">';
+        print $text;
+        if ($_SERVER['REQUEST_URI'] != $uri)
+            print '</a>';
+        print "</li>\n";
+    }
+    print "</ul>\n";
+    print "</li>\n";
+}
+
+?>
 </ul>
 </div>
