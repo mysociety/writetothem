@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.13 2005-02-03 18:08:37 chris Exp $
+# $Id: Fax.pm,v 1.14 2005-02-04 12:46:36 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -256,10 +256,10 @@ sub cover_text ($) {
     return FYR::EmailTemplate::format(fax_template('via-coversheet'), FYR::Queue::email_template_params($msg));
 }
 
-# make_pbm_image IMAGE
+# make_pbm_file IMAGE
 # Create a PBM file on-disk containing the contents of IMAGE, and return its
 # name.
-sub make_pbm_image ($) {
+sub make_pbm_file ($) {
     my ($im) = @_;
     
     # Nasty. We need to create a PBM file on disk, but getting bitmapped data
