@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.130 2005-02-12 03:48:07 francis Exp $
+# $Id: Queue.pm,v 1.131 2005-02-12 20:31:22 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1407,7 +1407,7 @@ sub admin_get_queue ($$) {
             
             $where = "where ";
             $where .= join(" and ", map {
-                        for (1 .. 13) {
+                        for (my $i=1; $i<=13; ++$i) {
                             push(@params, $_)
                         }
                         q#
