@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.18 2004-11-17 12:29:59 chris Exp $
+# $Id: Queue.pm,v 1.19 2004-11-18 10:59:16 chris Exp $
 #
 
 package FYR::Queue;
@@ -170,6 +170,7 @@ sub write ($$$$) {
 
 # logmsg ID DIAGNOSTIC
 # Log a DIAGNOSTIC about the message with the given ID.
+# XXX should have a flag for "exceptional" to warn administrators.
 sub logmsg ($$) {
     my ($id, $msg) = @_;
     FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?)',
@@ -338,6 +339,8 @@ sub format_postal_address ($) {
 sub format_email_body ($) {
     my ($msg) = @_;
     my $text = format_postal_address($msg->{sender_addr});
+    $text .= "\n\n" . format_postal_address("Phone: $msg->{sender_phone}") if (exists($msg->{sender_phone}));
+    $text .= "\n\n" . format_postal_address("Email: $msg->{sender_email}");
     $text .= "\n\n" . wrap(EMAIL_COLUMNS, $msg->{message});
     return $text;
 }
@@ -490,7 +493,7 @@ sub make_confirmation_email ($;$) {
     $reminder ||= 0;
 
     my $token = make_token("confirm", $msg->{id});
-    my $confirm_url = mySociety::Config::get('BASE_URL') . '/' . $token;
+    my $confirm_url = mySociety::Config::get('BASE_URL') . '/C/' . $token;
 
     # Note: (a) don't care about bounces from this mail (they result only from
     # transient failures or abuse; but (b) we can't use a reply to confirm that
