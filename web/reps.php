@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: reps.php,v 1.2 2004-11-18 14:29:36 francis Exp $
+ * $Id: reps.php,v 1.3 2004-11-22 12:22:39 francis Exp $
  * 
  */
 
@@ -73,25 +73,17 @@ if ($action == 'index') {
         // Find all the districts/constituencies and so on (we call them "voting
         // areas") for the postcode
         $voting_areas = mapit_get_voting_areas($fyr_postcode);
-        if ($fyr_error_message = mapit_get_error($voting_areas)) {
-            template_show_error();
-        }
+        mapit_check_error($voting_areas);
         $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
-        if ($fyr_error_message = mapit_get_error($voting_areas_info)) {
-            template_show_error();
-        }
+        mapit_check_error($voting_areas_info);
         $area_representatives = dadem_get_representatives(array_values($voting_areas));
-        if ($fyr_error_message = dadem_get_error($area_representatives)) {
-            template_show_error();
-        }
+        dadem_check_error($area_representatives);
         $all_representatives = array();
         foreach (array_values($area_representatives) as $rr) {
             $all_representatives = array_merge($all_representatives, $rr);
         }
         $representatives_info = dadem_get_representatives_info($all_representatives);
-        if ($fyr_error_message = dadem_get_error($representatives_info)) {
-            template_show_error();
-        }
+        dadem_check_error($representatives_info);
 
         debug_timestamp();
 

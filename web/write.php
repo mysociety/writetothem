@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.29 2004-11-22 11:29:13 francis Exp $
+ * $Id: write.php,v 1.30 2004-11-22 12:22:39 francis Exp $
  * 
  */
 
@@ -142,7 +142,7 @@ function renderForm($form, $pageName)
 }
 
 function submitFax() {
-    global $fyr_values, $msgid, $fyr_error_message;
+    global $fyr_values, $msgid;
 
     $address = 
         $fyr_values['writer_address1'] . "\n" .
@@ -159,17 +159,15 @@ function submitFax() {
         $verify_voting_areas = array();
     $verify_rep_info = dadem_get_representative_info($fyr_values['who']);
     if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
-       $fyr_error_message = "There's been a mismatch error.  Sorry about
-       this, <a href=\"/\">please start again</a>.";
-       template_show_error();
+       template_show_error("There's been a mismatch error.  Sorry about
+           this, <a href=\"/\">please start again</a>.");
     }
 
     // check message not too long
     if (strlen($fyr_values['body']) > OPTION_MAX_BODY_LENGTH) {
-        $fyr_error_message = "Sorry, but your message is a bit too long
+        template_show_error("Sorry, but your message is a bit too long
         for our service.  Please make it shorter, or contact your
-        representative by some other means.";
-        template_show_error();
+        representative by some other means.");
     }
 
     $success = msg_write($msgid, 
@@ -181,9 +179,7 @@ function submitFax() {
             'phone' => $fyr_values['writer_phone'], 
             ),
             $fyr_values['who'], $fyr_values['body']);
-    if ($fyr_error_message = msg_get_error($success)) {
-        template_show_error();
-    }
+    msg_check_error($success);
 
     global $fyr_representative, $fyr_voting_area, $fyr_date;
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
@@ -191,8 +187,7 @@ function submitFax() {
     if ($success) {
         template_draw("write-checkemail", $our_values);
     } else {
-        $fyr_error_message = "Failed to queue the message";  // TODO improve this error message
-        template_show_error();
+        template_show_error("Failed to queue the mesage"); // TODO improve this error message
     }
 }
 
@@ -206,8 +201,7 @@ $fyr_postcode = $fyr_values['pc'];
 $fyr_who = $fyr_values['who'];
 $fyr_date = strftime('%A %e %B %Y');
 if (!isset($fyr_postcode) || !isset($fyr_who)) {
-    $fyr_error_message = "Please <a href=\"/\">start from the beginning</a>.";
-    template_show_error();
+    template_show_error("Please <a href=\"/\">start from the beginning</a>.");
 }
 
 // Rate limiter
@@ -217,23 +211,17 @@ fyr_rate_limit(array('postcode' => $fyr_postcode, 'who' => $fyr_who));
 $msgid = $fyr_values['fyr_msgid'];
 if (!isset($msgid)) {
     $msgid = msg_create();
-    if ($fyr_error_message = msg_get_error($msgid)) {
-        template_show_error();
-    }
+    msg_check_error($msgid);
     $fyr_values['fyr_msgid'] = $msgid;
 }
 
 // Information specific to this representative
 debug("FRONTEND", "Representative $fyr_who");
 $fyr_representative = dadem_get_representative_info($fyr_who);
-if ($fyr_error_message = dadem_get_error($fyr_representative)) {
-    template_show_error();
-}
+dadem_check_error($fyr_representative);
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
 $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
-if ($fyr_error_message = mapit_get_error($fyr_voting_area)) {
-    template_show_error();
-}
+mapit_check_error($fyr_voting_area);
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
@@ -272,8 +260,7 @@ else if ($on_page == "preview") {
 else if ($on_page =="sendfax") {
     submitFax();
 } else {
-    $fyr_error_message = "On an unknown page";
-    template_show_error();
+    template_show_error("On an unknown page");
 }
 
 ?>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.13 2004-11-17 12:29:59 chris Exp $
+ * $Id: queue.php,v 1.14 2004-11-22 12:22:39 francis Exp $
  * 
  */
 
@@ -23,6 +23,15 @@ function msg_get_error($e) {
         return FALSE;
     else
         return $e->text;
+}
+
+/* msg_check_error R
+ * If R indicates failure, displays error message and stops procesing.
+ */
+function msg_check_error($data) {
+    if ($error_message = msg_get_error($data)) {
+        template_show_error($error_message);
+    }
 }
 
 

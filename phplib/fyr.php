@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.8 2004-11-22 11:24:09 francis Exp $
+ * $Id: fyr.php,v 1.9 2004-11-22 12:22:39 francis Exp $
  * 
  */
 
@@ -30,17 +30,15 @@ function fyr_rate_limit($important_vars) {
     $important_vars['PAGE'] = $_SERVER['SCRIPT_NAME'];
     $important_vars['SITE'] = 'fyr';
 
-    global $fyr_error_message;
     $ret = ratty_test($important_vars);
     if (isset($ret)) {
-        list($rule, $fyr_error_message) = $ret;
-        if ($fyr_error_message == "") {
-            $fyr_error_message = "Sorry, we are experiencing technical difficulties.  Please try again later.";
+        list($rule, $error_message) = $ret;
+        if ($error_message == "") {
+            $error_message = "Sorry, we are experiencing technical difficulties.  Please try again later.";
         }
-        $fyr_error_message .= "\n<!-- ratty the rate limiter rule #$rule limit exceeded -->\n";
-        template_show_error();
+        $error_message .= "\n<!-- ratty the rate limiter rule #$rule limit exceeded -->\n";
+        template_show_error($error_message);
     }
-    print_r($fyr_error_message);
 }
 
 ?>
