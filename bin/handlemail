@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.1 2004-12-07 12:50:57 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.2 2004-12-07 16:55:48 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -31,15 +31,14 @@ use mySociety::Util qw(print_log);
 
 use FYR::Queue;
 
-my @lines;
+mySociety::Config::set_file('../conf/general');
 
-$_ = STDIN->getline();
-chomp();
-push(@lines, $_) if ($_ !~ m#^From #);
+my @lines = ( );
 
 while (defined($_ = STDIN->getline())) {
     chomp();
-    push(@lines, $_);
+    # Skip any From_ line-- we don't need it.
+    push(@lines, $_) unless (@lines == 0 and m#^From #);
 }
 
 if (STDIN->error()) {
@@ -59,6 +58,11 @@ if (!defined($m)) {
 # 'The "Return-Path:" header field contains a pair of angle brackets
 # that enclose an optional addr-spec.'
 my $return_path = $m->head()->get("Return-Path");
+
+if (!defined($return_path)) {
+    print_log('err', "message had no Return-Path; discarding");
+    exit(0);
+}
 
 if ($return_path !~ m#<>#) {
     # This is not a bounce message. We discard it.
@@ -85,7 +89,7 @@ if (!defined($a)) {
 }
 
 my $prefix = mySociety::Config::get("EMAIL_PREFIX");
-if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get(EMAIL_DOMAIN))) {
+if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get("EMAIL_DOMAIN"))) {
     # Not one of our bounces; discard.
     print_log('info', "bounce sent to '" . $a->address() . "' is not for us; discarding");
     exit(0);
