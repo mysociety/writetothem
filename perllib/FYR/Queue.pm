@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.35 2004-11-19 10:37:14 chris Exp $
+# $Id: Queue.pm,v 1.36 2004-11-19 10:42:55 chris Exp $
 #
 
 package FYR::Queue;
@@ -164,6 +164,9 @@ sub write ($$$$) {
                     $recipient->{fax} || $recipient->{email}));
 
         FYR::DB::dbh()->commit();
+
+        # Wake up the daemon to send the confirmation mail.
+        notify_daemon();
     } otherwise {
         my $E = shift;
         warn "rolling back transaction after error: " . $E->text() . "\n";
