@@ -1,0 +1,211 @@
+#!/bin/sh
+#
+# deploy:
+# Update installation of FYR (writetothem) from CVS.
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+# $Id: deploy,v 1.1 2004-12-13 10:54:38 chris Exp $
+#
+
+set -e
+
+# Server this script checks it is being run upon
+EXPECTED_HOST=very.unfortu.net
+
+# Location of mysociety/bin scripts
+MYSOCIETY_BIN=`pwd`
+
+# User to load test schema
+PSQL_SCHEMATEST_USER=pgsql
+
+die () {
+    echo "deploy:" "$@" 1>&2
+    exit 1
+}
+
+warn () {
+    echo "deploy:" "$@" 1>&2
+}
+
+FYR_VHOST=$1
+[ x$FYR_VHOST = x ] && die "specify target vhost directory as single argument"
+[ ! -d $FYR_VHOST ] && die "specify target vhost directory as single argument"
+
+# Fax Your Representative
+FYR_NAME="WriteToThem.com"
+FYR_UNAME=fyr
+FYR_DEPLOYSPACE=$FYR_VHOST/deployspace
+hostname=$( echo $FYR_VHOST | sed 's@/$@@' | sed 's@^.*/@@' )
+
+# Main body of script
+main () {
+    # Currently just FYR and services to update
+
+    fmt << END
+    This will update services.mysociety and $hostname
+    from CVS and gracefully restart Apache.  It will warn you first if
+    any database schemas need upgrading, or config files fixing.  These
+    get fixed in the deploy space, i.e. the place where the "cvs export"
+    happens to, before copying over to the live server.
+
+    You should ensure that fyrqd is not running when this script is run.
+
+    Press RETURN to continue.
+END
+    read DUMMY
+
+    warn "Exporting from CVS..."
+    cvs_export $FYR_UNAME $FYR_VHOST $FYR_DEPLOYSPACE
+
+    warn "Checking config files..."
+    check_config_files $FYR_DEPLOYSPACE/mysociety/fyr/conf
+
+    warn "Checking database schemas..."
+    read_conf $FYR_DEPLOYSPACE/mysociety/fyr/conf/general
+    check_pgsql_schema $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS
+
+    warn "Stopping services..."
+    down_notice $FYR_VHOST $FYR_NAME
+
+    warn "Rsyncing new data files..."
+    rsync_across $FYR_DEPLOYSPACE $FYR_VHOST
+
+    warn "Starting services..."
+    apachectl graceful
+    up_notice $FYR_VHOST
+}
+
+# Check we are root@$EXPECTED_HOST
+check_who_where () {
+    if [ ! -d "../../mysociety/bin" ] 
+    then 
+        die "must run with mysociety/bin as current directory"
+    fi
+    if [ "`id -u`" != "0" ]
+    then
+        die "must run as root"
+    fi
+
+    if [ `hostname` != "$EXPECTED_HOST" ]
+    then
+        die "this script is only for $EXPECTED_HOST"
+    fi
+}
+
+# Exports from CVS into the deploy space, erasing whatever was there
+# already.  Copies current config files from the vhost. 
+# $1 - user name to su to 
+# $2 - path to vhost, where live server is
+# $3 - path to deploy space, GETS ERASED FIRST
+cvs_export () {
+    cd $3
+    rm -fr mysociety
+    export CVSROOT=/usr/local/cvs
+    su $1 -c "cvs -Q export -r HEAD -d mysociety mysociety"
+
+    # Copy over config files
+    cd $2
+    for X in mysociety/*/conf/general 
+    do
+        cp $X $3/$X
+    done
+}
+
+# Copies from the deploy space to the live space using rsync,
+# deleting spurious files in live space.
+# $1 - path to deploy space
+# $2 - path to vhost, where live server is, GETS OVERWRITTEN BY DEPLOY SPACE
+rsync_across () {
+    rsync --exclude=down.html --delete -a $1/mysociety/ $2/mysociety
+}
+
+# Marks a vhost as being down for maintenance.
+# $1 - path to vhost
+# $2 - display name of website
+down_notice () {
+    cat >$1/docs/.down.html.new <<END
+<html>
+<head>
+<title>$2 - Down for Maintenance</title>
+</head>
+<body>
+<p>Sorry, but $2 is currently not available.  We're doing a spot of
+maintenance.  Check back in a few minutes, and everything should be
+restored to order.  Thanks for your patience!
+<p> &mdash; the <a href="http://www.mysociety.org/">mySociety</a> developers
+</body>
+</html>
+END
+    mv $1/docs/.down.html.new $1/docs/down.html
+}
+
+# Removes the file which displays a vhost as being down for maintenance.
+# $1 - path to vhost
+up_notice () {
+    rm $1/docs/down.html
+}
+
+# Checks config file has all options
+# $1 - path to conf folder with general and general-example in it
+check_config_files () {
+    cd $MYSOCIETY_BIN
+    ./compareconfig.pl $1/general $1/general-example || die "configuration files differ"
+    cd -
+}
+
+# Tests if the schema in a file is the same as in a postgra postgresql
+# database.
+# $1 - schema file
+# $2 - pgsql db name
+# $3 - pgsql db user
+# $4 - pgsql db pass
+check_pgsql_schema () {
+    CVS_SCHEMA_FILE=`mktemp /tmp/ms-deploy-cvsschema.XXXXXX`
+    CURRENT_SCHEMA_FILE=`mktemp /tmp/ms-deploy-currentschema.XXXXXX`
+
+    # load file schema into a temporary place to dump it
+    # in the same format as ...
+    dropdb -q -U $PSQL_SCHEMATEST_USER schematest || warn "schematest already dropped, continuing"
+    createdb -q -U $PSQL_SCHEMATEST_USER schematest
+    psql --file=$1 -U $PSQL_SCHEMATEST_USER -q schematest
+    pg_dump -s -U $PSQL_SCHEMATEST_USER schematest | egrep -v "^--|SET SESSION AUTHORIZATION|\\connect - " > $CVS_SCHEMA_FILE
+
+    # ... the live database dump
+    pg_dump -s -U $3 $4 | egrep -v "^--|SET SESSION AUTHORIZATION|\\connect - " > $CURRENT_SCHEMA_FILE
+
+    # Note:  Using sort here is completely evil.  It is because
+    # older verions of pg_dump don't output the tables in a stable
+    # order.  The above code would get confused it a column was moved
+    # from one table to another with no other changes.  Hopefully this
+    # is unlikely.  More recent pgsql have a fixed pg_dump.  Or a Perl
+    # script could be used to compare schemas.
+    # If you hate this send us a patch ;)  Better actually release a
+    # comprehensive schema comparing tool...
+    cat $CVS_SCHEMA_FILE | sort > $CVS_SCHEMA_FILE.sorted
+    cat $CURRENT_SCHEMA_FILE | sort > $CURRENT_SCHEMA_FILE.sorted
+
+    # Compare them
+    if ! diff $CVS_SCHEMA_FILE.sorted $CURRENT_SCHEMA_FILE.sorted
+    then
+        warn "Schema in CVS differs from that in pgsql database, you need to update it"
+        warn "database: $2; user: $3 schema: $1"
+        warn "CVS schema: $CVS_SCHEMA_FILE; current schema: $CURRENT_SCHEMA_FILE"
+        exit 1
+    fi
+}
+
+# Reads in config file
+# Currently doesn't read in numeric values
+# $1 - config file
+read_conf () {
+    # XXX use of mktemp here not safe; should make a temporary directory
+    CONF_SOURCE=`mktemp /tmp/ms-deploy-configsource.XXXXXX`
+    cat $1 | grep define | egrep -v "^\/\/" | sed "s/define('\(.*\)', '\(.*\)'.*/\1=\"\2\"/" | egrep -v "define|mySociety::Config" >$CONF_SOURCE
+    . $CONF_SOURCE
+}
+
+check_who_where
+main
+
