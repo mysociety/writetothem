@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.69 2005-02-03 14:52:28 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.70 2005-02-03 17:20:30 francis Exp $
  * 
  */
 
@@ -37,6 +37,7 @@ class ADMIN_PAGE_FYR_QUEUE {
     }
 
     function make_ids_links($text) {
+        $text = htmlspecialchars($text);
         // Message ids e.g. 0361593135850d75745e
         $text = preg_replace("/([a-f0-9]{20})/", 
                 "<a href=\"" .  $this->self_link . "&id=\$1\">\$1</a>", 
@@ -114,9 +115,6 @@ class ADMIN_PAGE_FYR_QUEUE {
             $qmenu .= "<a href=\"$this->self_link&amp;view=recentchanged\">[Recent Changed]</a> ";
         else
             $qmenu .= "[Recent Changed] ";
-
-        if ($view  == 'similarbody')
-            $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
 
         $qmenu .= "[Contains ";
 
@@ -599,7 +597,15 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $this->render_bar($view, $reverse, $id);
 
             // Display messages
-            print "<h2>Messages which are $view " . count($messages) . ": </h2>";
+            print "<h2>Messages which";
+            if ($view == "similarbody") {
+                print " have similar bodies to  " . $this->make_ids_links(get_http_var('simto'));
+            } elseif ($view == "search") {
+                print " match search query '" . htmlspecialchars(get_http_var('query')) . "'";
+            } else {
+                print " are $view";
+            }
+            print " (" . count($messages) . " of them): </h2>";
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
