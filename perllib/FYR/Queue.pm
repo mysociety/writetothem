@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.63 2004-12-16 18:33:22 francis Exp $
+# $Id: Queue.pm,v 1.64 2004-12-17 10:50:51 francis Exp $
 #
 
 package FYR::Queue;
@@ -638,7 +638,7 @@ sub make_confirmation_email ($;$) {
 
     return MIME::Entity->build(
             Sender => $confirm_sender,
-            From => format_email_address('FaxYourRepresentative', $confirm_sender),
+            From => format_email_address('WriteToThem', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
             Type => 'text/plain; charset="utf-8"',
@@ -678,7 +678,7 @@ sub make_failure_email ($) {
 
     return MIME::Entity->build(
             Sender => $failure_sender,
-            From => format_email_address('FaxYourRepresentative', $failure_sender),
+            From => format_email_address('WriteToThem', $failure_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
             Type => 'text/plain; charset="utf-8"',
@@ -716,7 +716,7 @@ sub make_questionnaire_email ($;$) {
 
     return MIME::Entity->build(
             Sender => $questionnaire_sender,
-            From => format_email_address('FaxYourRepresentative', $questionnaire_sender),
+            From => format_email_address('WriteToThem', $questionnaire_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
             Type => 'text/plain; charset="utf-8"',

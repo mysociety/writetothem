@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.4 2004-11-19 12:25:44 francis Exp $
+ * $Id: index.php,v 1.5 2004-12-17 10:50:51 francis Exp $
  * 
  */
 
@@ -24,7 +24,7 @@ $pages = array(
     new ADMIN_PAGE_PHPINFO,
 );
 
-admin_page_display("FaxYourRepresentative", $pages);
+admin_page_display("WriteToThem", $pages);
 
 ?>
 
