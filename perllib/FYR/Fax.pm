@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.20 2005-02-23 13:12:32 chris Exp $
+# $Id: Fax.pm,v 1.21 2005-03-07 10:05:34 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -27,6 +27,7 @@ use strict;
 use Errno;
 use Error qw(:try);
 use Fcntl;
+use File::stat;
 use FindBin;
 use GD;
 use HTML::Entities;
@@ -303,7 +304,7 @@ sub make_pbm_file ($) {
         my $err = $!;
         unlink($name);
         die "stat of temp file failed with: $err";
-    } elsif ($st->st_size < (($im->width() * $im->height()) / 8.)) {
+    } elsif ($st->size() < (($im->width() * $im->height()) / 8.)) {
         unlink($name);
         die "temporary file is too small (" . $st->size() . " bytes)";
     }
