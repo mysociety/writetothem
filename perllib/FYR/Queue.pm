@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.54 2004-12-15 19:02:58 francis Exp $
+# $Id: Queue.pm,v 1.55 2004-12-16 01:47:07 chris Exp $
 #
 
 package FYR::Queue;
@@ -271,15 +271,29 @@ foreach (keys %allowed_transitions) {
 # any bounce messages (since they usually contain quoted text).
 sub scrubmessage ($) {
     my ($id) = @_;
+    # We delete any information which has to do with the sender or their
+    # message, except for information about the recipient which is needed for
+    # our statistics gathering. At the end of this operation the message will
+    # contain only the recipient ID and type, and a placeholder which indicates
+    # whether the letter was delivered by fax or email.
     FYR::DB::dbh()->do(q#
                 update message set
-                        sender_name = '', sender_email = '',
+                    set sender_name = '', sender_email = '',
                         sender_addr = '', sender_phone = null,
                         sender_postcode = '', recipient_name = '',
-                        recipient_type = '',
                         recipient_email = '', recipient_fax = null,
                         message = ''
                     where id = ?#, {}, $id);
+    # Scrub delivery information but make sure we can still tell how the
+    # message was sent.
+    FYR::DB::dbh()->do(q#
+                update message
+                    set recipient_email = ''
+                    where id = ? and recipient_email is not null#, {}, $id);
+    FYR::DB::dbh()->do(q#
+                update message
+                    set recipient_fax = ''
+                    where id = ? and recipient_fax is not null#, {}, $id);
     # The log may also contain personal data.
     FYR::DB::dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
     # And the bounce table too.
@@ -795,7 +809,9 @@ sub record_questionnaire_answer ($$$) {
 # Implementation of the state machine.
 #
 
-use constant DAY => 86400;
+use constant HOUR => 3600;
+
+use constant DAY => (24 * HOUR);
 
 # How many confirmation mails may be sent, in total.
 use constant NUM_CONFIRM_MESSAGES => 2;
@@ -1079,8 +1095,9 @@ sub notify_daemon () {
 
 =item admin_recent_events COUNT
 
-Returns an array of hashes of information about recent queue events.
-Specify the number of events you'd like.
+Returns an array of hashes of information about the most recent COUNT queue
+events.
+
 =cut
 sub admin_recent_events ($) {
     my ($count) = @_;
@@ -1093,10 +1110,11 @@ sub admin_recent_events ($) {
     return \@ret;
 }
 
-=item admin_message_events COUNT
+=item admin_message_events ID
 
 Returns an array of hashes of information about events for given message
-id.  Specify the message id.
+ID.
+
 =cut
 sub admin_message_events ($) {
     my ($id) = @_;
@@ -1110,25 +1128,25 @@ sub admin_message_events ($) {
 }
 
 
-=item admin_get_queue FILTER
+=item admin_get_queue IMPORTANT
 
 Returns an array of hashes of information about each message on the queue.
-Set FILTER to 1 to get only important message, 0 to get all messages.
+If IMPORTANT is true, return only information about messages which may need
+operator attention.
 
 =cut
 sub admin_get_queue ($) {
-    warn Dumper(@_);
-    my ($filter) = @_;
+    my ($important) = @_;
     my $where = "";
-    if (int($filter) == 1) {
+    if ($important) {
         $where = "where (state = 'bounce_confirm' or state = 'failed' or
         state = 'error' or (state = 'ready' and numactions > 0))";
     }
-    my $sth = FYR::DB::dbh()->prepare('select 
+    my $sth = FYR::DB::dbh()->prepare("select 
         created, id, laststatechange, state, numactions, lastaction,  
         sender_name, sender_email, sender_postcode,
         recipient_name, recipient_email, recipient_fax, recipient_type,
-        length(message) as message_length from message ' . $where . ' order by created desc');
+        length(message) as message_length from message $where order by created desc");
     $sth->execute();
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1139,28 +1157,27 @@ sub admin_get_queue ($) {
 
 =item admin_get_queue
 
-Returns an hash of statistics about the queue.
+Returns a hash of statistics about the queue.
 
 =cut
 sub admin_get_stats () {
-    () = @_;
     my %ret;
 
     my $rows = FYR::DB::dbh()->selectall_arrayref('select recipient_type, count(*) from message group by recipient_type', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
-        $ret{'type '. $type} = $count;
+        $ret{"type $type"} = $count;
     }
 
     $rows = FYR::DB::dbh()->selectall_arrayref('select state, count(*) from message group by state', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
-        $ret{'state '. $type} = $count;
+        $ret{"state $type"} = $count;
     }
 
-    $ret{'message_count'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message', {}));
-    $ret{'created_1'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - 60*60*1)); 
-    $ret{'created_24'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - 60*60*24)); 
+    $ret{message_count} = FYR::DB::dbh()->selectrow_array('select count(*) from message', {});
+    $ret{created_1}     = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
+    $ret{created_24}    = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
 
     return \%ret;
 }
