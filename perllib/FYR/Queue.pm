@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.99 2005-01-26 14:25:44 chris Exp $
+# $Id: Queue.pm,v 1.100 2005-01-26 14:28:56 chris Exp $
 #
 
 package FYR::Queue;
@@ -1080,16 +1080,17 @@ my %state_action = (
             }
         },
 
-        failed => sub ($$$) {
-            my ($email, $fax, $id) = @_;
-            # do nothing
-        },
+#        failed => sub ($$$) {
+#            my ($email, $fax, $id) = @_;
+#            # do nothing
+#        },
 
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
             if ($msg->{sender_name} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
                 scrubmessage($id);
+                state($id, 'failed_closed');    # bump timer
             }
         }
     );
