@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.23 2004-11-18 12:52:05 francis Exp $
+# $Id: Queue.pm,v 1.24 2004-11-18 13:33:14 chris Exp $
 #
 
 package FYR::Queue;
@@ -128,14 +128,16 @@ sub write ($$$$) {
                 recipient_id, recipient_name, recipient_type, recipient_email, recipient_fax,
                 message,
                 state,
-                created, laststatechange, numactions, dispatched
+                created, laststatechange,
+                numactions, dispatched
             ) values (
                 ?,
                 ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?,
                 ?,
                 'new',
-                ?, ?, 0, null
+                ?, ?,
+                0, null
             )#, {},
             $id,
             (map { $sender->{$_} || undef } qw(name email address phone postcode)),
