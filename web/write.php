@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.21 2004-11-01 11:17:47 francis Exp $
+ * $Id: write.php,v 1.22 2004-11-02 16:42:53 chris Exp $
  * 
  */
 
@@ -39,7 +39,7 @@ function buildWriteForm()
 
     // TODO: CSS this:
     $stuff_on_left = <<<END
-            <B>Now Write Your Fax:</B><BR><BR>
+            <B>Now Write Your Message:</B><BR><BR>
             <B>${fyr_voting_area['rep_prefix']}
             ${fyr_representative['name']}
             ${fyr_voting_area['rep_suffix']}
@@ -87,7 +87,7 @@ END;
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'static1', null, 
             "<b>Ready? Press the \"Preview\" button to continue --></b>"); // TODO: remove <b>  from here
-    $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Fax >>');
+    $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
 
     return $form;
@@ -100,7 +100,7 @@ function buildPreviewForm()
     global $fyr_values;
     add_all_variables_hidden($form, $fyr_values);
 
-    $buttons[0] =& HTML_QuickForm::createElement('submit', 'submitWrite', '<< edit this Fax');
+    $buttons[0] =& HTML_QuickForm::createElement('submit', 'submitWrite', '<< edit this Message');
     $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitSendFax', 'Continue >>');
     $form->addGroup($buttons, 'buttons', '', '&nbsp;', false);
 
@@ -128,11 +128,11 @@ function renderForm($form, $pageName)
 
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
     if ($pageName == "writeForm") {
-        $fyr_title = "Now Write Your Fax To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
+        $fyr_title = "Now Write Your Message To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
         include "templates/write-write.html";
     } else { // previewForm
         // Generate preview
-        $fyr_title = "Check Your Fax Is Right";
+        $fyr_title = "Check Your Message Is Right";
         ob_start();
         include "templates/fax-content.html";
         $fyr_preview = ob_get_contents();
