@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.45 2005-01-13 15:15:38 francis Exp $
+ * $Id: who.php,v 1.46 2005-01-14 20:42:40 matthew Exp $
  * 
  */
 
@@ -140,6 +140,11 @@ foreach ($va_display_order as $va_type) {
 		$text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
 		/* Note categories of representatives who aren't paid for their work.... */
+		if($va_type == 'WMC') {
+			$twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
+			preg_match('#<img src="/images/mps/(\d+.jpg)"#', $twfy, $matches);
+			$representatives_info[$representatives[0]]['image'] = $matches[1];
+		}
 		$text .= display_reps($representatives);
 		if (!$va_salaried[$va_type])
 			$text .= "<p><em>Please remember that unlike MPs or MEPs, your "
@@ -147,6 +152,9 @@ foreach ($va_display_order as $va_type) {
 					? "${va_info['rep_name_long_plural']} are"
 					: "${va_info['rep_name_long']} is")
 				. " not paid for the work they do.</em></p>";
+		if ($va_type == 'WMC') {
+			$text .= '<p style="clear: left"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+		}
 	}
 
 	array_push($fyr_representatives, $text);
@@ -163,7 +171,11 @@ function display_reps($representatives) {
 	$rep_list = '';
 	foreach ($representatives as $rep_specificid) {
 		$rep_info = $representatives_info[$rep_specificid];
-		$rep_list .= '<li><a href="'
+		$rep_list .= '<li>';
+		if (array_key_exists('image', $rep_info)) {
+			$rep_list .= '<img src="http://www.theyworkforyou.com/images/mps/'.$rep_info['image'].'" align="left" style="margin-right: 5px;">';
+		}
+		$rep_list .= '<a href="'
                        . htmlspecialchars(new_url('write', 0, 
                                               'who', $rep_specificid,
                                                'pc', $fyr_postcode,
@@ -174,7 +186,7 @@ function display_reps($representatives) {
 		if (array_key_exists('party', $rep_info))
                        $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
 	}
-	return '<ul>' . $rep_list . '</ul>';
+	return '<ul'.(array_key_exists('image', $rep_info)?' style="list-style-type:none; margin-left:0; padding-left:0.5em;"':'').'>' . $rep_list . '</ul>';
 }
 ?>
 
