@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.15 2004-10-19 17:20:10 francis Exp $
+ * $Id: who.php,v 1.16 2004-10-19 17:25:49 francis Exp $
  * 
  */
 
@@ -17,6 +17,10 @@ include_once "../conf/config.php";
 include_once "../../phplib/utility.php";
 include_once "../../phplib/dadem.php";
 include_once "../../phplib/mapit.php";
+
+// Destroy session data
+session_start();
+session_destroy();
 
 // Input data
 $fyr_postcode = get_http_var('pc');
