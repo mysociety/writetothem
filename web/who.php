@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.6 2004-10-14 15:49:22 francis Exp $
+ * $Id: who.php,v 1.7 2004-10-15 14:54:47 francis Exp $
  * 
  */
 
@@ -28,59 +28,64 @@ if ($fyr_error_message = mapit_get_error($voting_areas)) {
     include "templates/generalerror.html";
     exit;
 }
+print_r($voting_areas);
 
 // For each voting area, find all the representatives.  Put descriptive
 // text and form text in an array for the template to render.
 $fyr_representatives = array();
 foreach ($voting_areas as $va_type => $va_specificid) {
-    debug("FRONTEND", "voting area is type $va_type id $va_specificid");
-
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
-    $va_typename = $va_name[$va_type];
-    $info = mapit_get_voting_area_info($va_specificid);
-    if ($fyr_error_message = mapit_get_error($info)) {
+    debug("FRONTEND", "voting area is type $va_type id $va_specificid");
+    $va_info = mapit_get_voting_area_info($va_specificid);
+    if ($fyr_error_message = mapit_get_error($va_info)) {
         include "templates/generalerror.html";
         exit;
     }
-    $va_specificname = $info['name'];
-    $rep_suffix = $va_rep_suffix[$va_type];
-    $rep_name = $va_rep_name[$va_type];
+    $va_info['type_name'] = $va_name[$va_type];
+    $va_info['rep_name'] = $va_rep_name[$va_type];
+    $va_info['rep_suffix'] = $va_rep_suffix[$va_type];
 
     // The elected body is the overall entity. e.g. Cambridgeshire County Council.
     $eb_type = $va_inside[$va_type];
-    debug("FRONTEND", "electoral body type is $eb_type");
-    $eb_typename = $va_name[$eb_type];
     $eb_specificid = $voting_areas[$eb_type];
+    debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
     $eb_info = mapit_get_voting_area_info($eb_specificid);
-    if (!($fyr_error_message = mapit_get_error($eb_info))) {
-        $eb_specificname = $eb_info['name'];
+    if ($fyr_error_message = mapit_get_error($eb_info)) {
+        // No parent elected body - for now we skip it
+        // (Will have to do something about London mayor)
+        continue;
     }
- 
-    if ($va_type == VA_DIS) {
-        $va_description = "Your District Council is responsible for local services and policy,
+    $eb_info['type_name'] = $va_name[$eb_type];
+    
+    // Lookup table of long description
+    if ($eb_type == VA_DIS) {
+        $eb_info['description'] = "Your District Council is responsible for local services and policy,
             including planning, council housing, building regulation, rubbish
             collection, and local roads. Some responsibilities, such as
             recreation facilities, are shared with the County Council.";
     }
-    else if ($va_type == VA_CTY) {
-        $va_description = "Your County Council is responsible for local
+    else if ($eb_type == VA_CTY) {
+        $eb_info['description'] = "Your County Council is responsible for local
         services, including education, social services, transport and
         libraries.";
     }
-    else if ($va_type == VA_WMP) {
-        $va_description = "The House of Commons is responsible for
+    else if ($eb_type == VA_WMP) {
+        $eb_info['description'] = "The House of Commons is responsible for
         making laws in the UK and for overall scrutiny of all aspects of
         government.";
     }
-    else if ($va_type == VA_EUR) {
-        $va_description = "They scrutinise European laws (called
+    else if ($eb_type == VA_EUR) {
+        $eb_info['description'] = "They scrutinise European laws (called
         \"directives\") and the budget of the European Union, and provides
         oversight of the other decision-making bodies of the Union,
         including the Council of Ministers and the Commission.";
     }
+
     
-    $left_column = "<h4>Your $rep_name</h4>
-        <p>Your $rep_name represent you on $eb_specificname.  $va_description.</p>
+    // Create HTML
+    $left_column = "<h4>Your ${va_info['rep_name']}</h4>
+        <p>Your ${va_info['rep_name']} represent you on
+        ${eb_info['name']}. ${eb_info['description']}.</p>
         ";
 
     $fyr_form_start = "
@@ -90,35 +95,34 @@ foreach ($voting_areas as $va_type => $va_specificid) {
 
     $representatives = dadem_get_representatives($va_specificid);
     if ($fyr_error_message = dadem_get_error($representatives)) {
-        debug(WARNING, $fyr_error_message);
+        include "templates/generalerror.html";
+        exit;
     }
-    else {
-        $repcount = count($representatives);
-        $right_column = "<p>In your $va_typename,
-        <b>$va_specificname</b>, you are represented by $repcount $rep_name.
-            Please choose one $rep_name to contact.</p>
-            <table style=\"float: left;\">";
-        foreach ($representatives as $rep_specificid) {
-            ++$c;
-            $reprecord = dadem_get_representative_info($rep_specificid);
-            if ($fyr_error_message = dadem_get_error($reprecord)) {
-                include "templates/generalerror.html";
-                exit;
-            }
-            $rep_specificname = $reprecord['name'];
-    
-            $right_column .= <<<END
-                    <tr>
-                        <td valign="top"><input type="radio" name="who" value="$rep_specificid"></td>
-                        <td><b>$rep_specificname</b><br><!--Unknown Party--></td>
-                    </tr>
-END;
+
+    $rep_count = count($representatives);
+    $right_column = "<p>In your ${va_info['type_name']},
+    <b>${va_info['name']}</b>, you are represented by $rep_count ${va_info['rep_name']}.
+        Please choose one ${va_info['rep_name']} to contact.</p>
+        <table style=\"float: left;\">";
+    foreach ($representatives as $rep_specificid) {
+        ++$c;
+        $rep_info = dadem_get_representative_info($rep_specificid);
+        if ($fyr_error_message = dadem_get_error($rep_info)) {
+            include "templates/generalerror.html";
+            exit;
         }
-        $right_column .= "<td>
-            <input style=\"float: right\" type=\"submit\" value=\"Next &gt;&gt;\"> 
-            </td></table>";
-        array_push($fyr_representatives, array($left_column, $right_column));
+
+        $right_column .= <<<END
+                <tr>
+                    <td valign="top"><input type="radio" name="who" value="$rep_specificid"></td>
+                    <td><b>${rep_info['name']}</b><br><!--Unknown Party--></td>
+                </tr>
+END;
     }
+    $right_column .= "<td>
+        <input style=\"float: right\" type=\"submit\" value=\"Next &gt;&gt;\"> 
+        </td></table>";
+    array_push($fyr_representatives, array($left_column, $right_column));
 }
 
 // Display page, using all the fyr_* variables set above.
