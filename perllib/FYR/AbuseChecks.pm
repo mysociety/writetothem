@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.24 2005-01-13 02:34:01 chris Exp $
+# $Id: AbuseChecks.pm,v 1.25 2005-01-13 10:25:54 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -28,6 +28,7 @@ use mySociety::Config;
 use mySociety::Ratty;
 
 use FYR;
+use FYR::Queue qw(logmsg);
 use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
@@ -206,7 +207,7 @@ my @tests = (
         # Body of message similar to other messages in queue.
         sub ($) {
             my ($msg) = @_;
-            my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg);
+            my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg) } get_similar_messages($msg);
             return ( ) if (!@similar);
 
             my $why = sprintf('message body is very similar to %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);

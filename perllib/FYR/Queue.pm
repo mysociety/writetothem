@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.88 2005-01-13 02:34:01 chris Exp $
+# $Id: Queue.pm,v 1.89 2005-01-13 10:25:54 chris Exp $
 #
 
 package FYR::Queue;
@@ -39,6 +39,14 @@ use FYR::Fax;
 use FYR::AbuseChecks;
 
 use Data::Dumper;
+
+BEGIN {
+    use Exporter ();
+    our @ISA = qw(Exporter);
+    our @EXPORT_OK = qw(&logmsg);
+}
+our @EXPORT_OK;
+            
 
 =head1 NAME
 
