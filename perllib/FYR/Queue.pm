@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.42 2004-12-07 19:40:48 chris Exp $
+# $Id: Queue.pm,v 1.43 2004-12-07 19:44:30 chris Exp $
 #
 
 package FYR::Queue;
@@ -644,7 +644,7 @@ sub deliver_email ($) {
     die "attempt to deliver message $id while in state '" . state($id) . "' (should be 'ready')"
         unless (state($id) eq 'ready');
     my $mail = make_representative_email($msg);
-    my $sender = sprintf('%s-%s@%s',
+    my $sender = sprintf('%s%s@%s',
                             mySociety::Config::get('EMAIL_PREFIX'),
                             make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
