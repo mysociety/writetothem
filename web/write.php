@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.74 2005-02-15 19:30:03 matthew Exp $
+ * $Id: write.php,v 1.75 2005-02-16 00:28:14 francis Exp $
  * 
  */
 
@@ -77,11 +77,13 @@ END;
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
+    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optionally, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
+
     $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_phone', 'trim');
 
-    // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
-    $form->addElement("html", "</table>\n<em style=\"font-size: 80%\">Optional: to let your {$fyr_voting_area['rep_name']} contact you more easily</em></td></tr>"); // CSSify
+    // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
+    $form->addElement("html", "</table>\n</td></tr>");
 
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
@@ -118,10 +120,15 @@ function renderForm($form, $pageName)
         $renderer =& new HTML_QuickForm_Renderer_mySociety();
         $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
         $renderer->setElementTemplate('{element}', 'previewStuff');
-        $renderer->setElementTemplate('<TR><TD colspan=2> 
-    {element} 
-    <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
-    </TD></TR>', 'body');
+        $renderer->setElementTemplate('
+        <!-- BEGIN error -->
+        <TR><TD colspan=2>
+        <span style="color: #ff0000"><br>{error}:</span>
+        </TD></TR>
+        <!-- END error --> 
+        <TR><TD colspan=2> 
+        {element} 
+        </TD></TR>', 'body');
         $form->accept($renderer);
 
     // Make HTML
