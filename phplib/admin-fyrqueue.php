@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.40 2005-01-11 16:43:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.41 2005-01-11 17:27:14 francis Exp $
  * 
  */
 
@@ -217,10 +217,11 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
-
-            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, "&nbsp;");
-            $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
-            $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Add Comment');
+            if (!get_http_var('note')) {
+                $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, "&nbsp;");
+                $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Add Comment');
+            }
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
