@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.7 2004-10-14 15:49:22 francis Exp $
+ * $Id: write.php,v 1.8 2004-10-15 09:16:31 francis Exp $
  * 
  */
 
@@ -47,7 +47,6 @@ if ($action == "preview") {
     $fyr_writer_address2_valid = true;
     $fyr_writer_town = get_http_var('writer_town');
     $fyr_writer_town_valid = (isset($fyr_writer_town) && strlen($fyr_writer_town) > 0);
-    // $fyr_postcode
     $fyr_writer_email = get_http_var('writer_email');
     $fyr_writer_email_valid = (isset($fyr_writer_email) && strlen($fyr_writer_email) > 0);
     $fyr_writer_phone = get_http_var('writer_phone');
@@ -59,6 +58,11 @@ if ($action == "preview") {
     }
 
     $fyr_body = get_http_var('body');
+
+    if ($fyr_complete) {
+
+    }
+
 }
 
 // Information specific to this representative
@@ -67,7 +71,6 @@ if ($fyr_error_message = dadem_get_error($fyr_representative)) {
     include "templates/generalerror.html";
     exit;
 }
-print_r($fyr_representative);
 $va_id = $fyr_representative['voting_area'];
 
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
