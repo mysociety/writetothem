@@ -1,0 +1,3 @@
+Options +ExecCGI
+SetHandler fastcgi-script
+

@@ -1,2 +1,3 @@
 #!/bin/sh
-PHPRC=/etc/php4/fcgi exec /software/bin/php4
+PEAR_EXTENSION_DIR=/usr/local/share/pear exec /usr/local/bin/php "$@"
+
