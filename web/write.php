@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.53 2005-01-11 12:42:18 chris Exp $
+ * $Id: write.php,v 1.54 2005-01-12 13:24:48 chris Exp $
  * 
  */
 
@@ -195,6 +195,10 @@ function submitFax() {
 // Get all fyr_values
 $fyr_values = get_all_variables();
 debug("FRONTEND", "All variables:", $fyr_values);
+if (!array_key_exists('pc', $fyr_values) || $fyr_values['pc'] == "") {
+    template_show_error("Please <a href=\"/\">start from the beginning</a>.");
+    exit;
+}
 $fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
 if (!isset($fyr_values['fyr_extref']))
     $fyr_values['fyr_extref'] = fyr_external_referrer();
@@ -203,10 +207,7 @@ if (!isset($fyr_values['fyr_extref']))
 $fyr_postcode = $fyr_values['pc'];
 $fyr_who = $fyr_values['who'];
 $fyr_date = strftime('%A %e %B %Y');
-if (!isset($fyr_postcode) || $fyr_postcode == "") {
-    template_show_error("Please <a href=\"/\">start from the beginning</a>.");
-    exit;
-}
+
 if (!isset($fyr_who)) {
     header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
     exit;
