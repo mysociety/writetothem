@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.15 2004-11-22 17:41:00 francis Exp $
+ * $Id: queue.php,v 1.16 2004-12-13 12:17:34 francis Exp $
  * 
  */
 
@@ -16,6 +16,8 @@ include_once('../../phplib/utility.php');
 /* Error codes */
 define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);  
 define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);
+define('FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA', 4003);
+define('FYR_QUEUE_MESSAGE_SHAME', 4004); /* Represenative does not want to be contacted */
 
 /* msg_get_error R
  * Return FALSE if R indicates success, or an error string otherwise. */
@@ -65,7 +67,16 @@ function msg_write($id, $sender, $recipient_id, $text) {
     debug("QUEUE", "Result:", $result);
     return $result;
 }
- 
+
+/* msg_recipient_test RECIPIENT
+ * Tests fax/email exist for contact method, throws errors on failure.
+ * RECIPIENT is the DaDem ID number of the recipient of the message.*/
+function msg_recipient_test($recipient_id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.recipient_test', array($recipient_id));
+    return $result;
+}
+  
 /* msg_record_questionnaire_answer TOKEN QUESTION ANSWER
  * Record the response to a questionnaire. TOKEN is the user-supplied token;
  * QUESTION should be 0, and ANSWER must be "YES" or "NO". */

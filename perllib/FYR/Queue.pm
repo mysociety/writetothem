@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.44 2004-12-09 12:29:20 chris Exp $
+# $Id: Queue.pm,v 1.45 2004-12-13 12:17:34 francis Exp $
 #
 
 package FYR::Queue;
@@ -59,6 +59,64 @@ sub create () {
     return unpack('h20', mySociety::Util::random_bytes(10));
 }
 
+=item work_out_destination
+
+Internal use.  Takes a recipient, and uses their contact method to set
+the fax or email fields.  Gives an error if contact method is 
+inconsistent with them, and leaves exactly one of fax or email
+defined.
+
+=cut
+sub work_out_destination($) {
+    my ($recipient) = shift;
+    
+    # Normalise any false values to undef
+    $recipient->{fax} ||= undef; 
+    $recipient->{email} ||= undef;
+
+    # Decide how to send the message.
+    if ($recipient->{method} eq "either") {
+        throw FYR::Error("Either contact method specified, but fax not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
+        throw FYR::Error("Either contact method specified, but email not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
+        if (rand(1) < 0.5) {
+            $recipient->{fax} = undef;
+        } else {
+            $recipient->{email} = undef;
+        }
+    } elsif ($recipient->{method} eq "fax") {
+        throw FYR::Error("Fax contact method specified, but not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
+        $recipient->{email} = undef;
+    } elsif ($recipient->{method} eq "email") {
+        throw FYR::Error("Email contact method specified, but not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
+        $recipient->{fax} = undef;
+    } elsif ($recipient->{method} eq "shame") {
+        throw FYR::Error("Representative has told us they do not want WriteToThem.com to deliver messages for them.", FYR::Error::MESSAGE_SHAME);
+    } else {
+        throw FYR::Error("Unknown contact method '" .  $recipient->{method} . "'.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
+    }
+}
+
+=item recipient_test RECIPIENT
+
+Verifies the contact method of the recipient.  Throws an error if they 
+do not have a fax or email address corresponding to the contact method
+set for them.  RECIPIENT is the DaDem ID number of the recipient.
+
+=cut
+sub recipient_test ($) {
+    my ($recipient_id) = @_;
+
+    # Get details of the recipient.
+    throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
+    my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
+    throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
+
+    # Decide how to send message
+    work_out_destination($recipient);
+
+    return 1
+}
+
 =item write ID SENDER RECIPIENT TEXT
 
 Write details of a message for sending. ID is the identity of the message,
@@ -94,29 +152,14 @@ sub write ($$$$) {
         # Give recipient their proper prefixes/suffixes.
         $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
 
+        # Decide how to send message
+        work_out_destination($recipient);
+
+        # Bodge things so that mails go to sender.
         if ($recipient_id < 2000000) {
-            # Bodge things so that mails go to sender.
             $recipient->{email} = $sender->{email};
             $recipient->{fax} = undef;
-        } else {
-            # Dummy data: actually send.
-            # Decide how to send the message.
-            $recipient->{fax} ||= undef;
-            $recipient->{email} ||= undef;
-            if (defined($recipient->{fax}) and defined($recipient->{email})) {
-                if ($recipient->{method} == 0) {
-                    if (rand(1) < 0.5) {
-                        $recipient->{fax} = undef;
-                    } else {
-                        $recipient->{email} = undef;
-                    }
-                } elsif ($recipient->{method} == 1) {
-                    $recipient->{email} = undef;
-                } else {
-                    $recipient->{fax} = undef;
-                }
-            }
-        }
+        } 
 
         # We must save the three-letter code for the representative type in
         # the database, NOT the numeric ID.

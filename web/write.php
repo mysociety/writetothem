@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.37 2004-12-13 10:22:32 francis Exp $
+ * $Id: write.php,v 1.38 2004-12-13 12:17:34 francis Exp $
  * 
  */
 
@@ -202,18 +202,6 @@ if (!isset($fyr_who)) {
     exit;
 }
 
-// Reverify that the representative represents this postcode
-$verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
-if (is_array($verify_voting_area_map)) 
-    $verify_voting_areas = array_values($verify_voting_area_map);
-else 
-    $verify_voting_areas = array();
-$verify_rep_info = dadem_get_representative_info($fyr_values['who']);
-if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
-   template_show_error("There's been a mismatch error.  Sorry about
-       this, <a href=\"/\">please start again</a>.");
-}
-
 // Rate limiter
 $limit_values = array('postcode' => $fyr_postcode, 'who' => $fyr_who);
 if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
@@ -236,6 +224,37 @@ dadem_check_error($fyr_representative);
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
 $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
 mapit_check_error($fyr_voting_area);
+
+// Reverify that the representative represents this postcode
+$verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
+if (is_array($verify_voting_area_map)) 
+    $verify_voting_areas = array_values($verify_voting_area_map);
+else 
+    $verify_voting_areas = array();
+if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
+   template_show_error("There's been a mismatch error.  Sorry about
+       this, <a href=\"/\">please start again</a>.");
+}
+
+// Check the contact method exists
+$success = msg_recipient_test($fyr_values['who']);
+if (rabx_is_error($success)) {
+    if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) 
+        template_show_error("Sorry, we do not have contact
+        details for this representative, so cannot send them a
+        message. Please <a href=\"mailto:help@writetothem.com\">email us</a> to let us know.
+        Details: " . $success->text);
+    if ($success->code == FYR_QUEUE_MESSAGE_SHAME) 
+        template_show_error("
+        Sorry, but " . $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " .
+        $fyr_voting_area['rep_suffix'].  " has told us not to deliver any
+        messages from the constituents of " . $fyr_voting_area['name'] . ".
+        Please <a href=\"mailto:help@writetothem.com\">email us</a> to
+        let us know what you think about this.");
+    template_show_error($success->text);
+}
+
+
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
