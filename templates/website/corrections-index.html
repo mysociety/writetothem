@@ -36,12 +36,12 @@ if (count($values['reps_info'])) {
     }
     print '</table>';
 }
+?>
 
-if (count($values['reps_info']) > 1) { ?>
 <p>Alternatively, if this <?=$va_info['type_name'] ?> is missing a <?=$va_info['rep_name'] ?>, please fill in their details below:</p>
 
 <label for="newname">Missing <?=$va_info['rep_name'] ?>'s name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
-<? } ?>
+
 <p>If you looked up this information on the web, please tell us the address of the page where you found it:
 <input type="text" name="url" id="url" value="http://" size="50"></p>
 
