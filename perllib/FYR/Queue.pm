@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.17 2004-11-17 11:48:09 chris Exp $
+# $Id: Queue.pm,v 1.18 2004-11-17 12:29:59 chris Exp $
 #
 
 package FYR::Queue;
@@ -172,7 +172,12 @@ sub write ($$$$) {
 # Log a DIAGNOSTIC about the message with the given ID.
 sub logmsg ($$) {
     my ($id, $msg) = @_;
-    FYR::DB::dbh()->do('insert into message_log (message_id, state, message) values (?, ?, ?)', {}, $id, state($id), $msg);
+    FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?)',
+        {},
+        $id,
+        strftime('%Y-%m-%d %H:%M:%S', localtime(time())),
+        state($id),
+        $msg);
 }
 
 # %allowed_transitions
@@ -193,8 +198,6 @@ foreach (keys %allowed_transitions) {
     my $x = { map { $_ => 1 } @{$allowed_transitions{$_}} };
     $allowed_transitions{$_} = $x;
 }
-
-
 
 =item state ID [STATE]
 
@@ -436,38 +439,6 @@ sub check_token ($$) {
     return $id;
 }
 
-# confirm_token ID
-# Return a suitable token for use in confirming a user's email address.
-sub confirm_token ($) {
-    return make_token("confirm", $_[0]);
-}
-
-# verify_confirm_token TOKEN
-# Attempt to verify the confirm TOKEN. Returns a message ID on success or undef
-# on failure.
-sub verify_confirm_token ($) {
-    return check_token("confirm", $_[0]);
-}
-
-# bounce_token ID
-# Return a suitable token for use in processing a bounce message.
-sub bounce_token ($) {
-    return make_token("bounce", $_[0]);
-}
-
-# confirm_bounce_token TOKEN
-# Attempt to verify the bounce TOKEN. Returns a message ID on success or undef
-# on failure.
-sub verify_bounce_token ($) {
-    return check_token("bounce", $_[0]);
-}
-
-# questionnaire_token ID
-# Return a suitable token to get send to the user for the questionnaire script.
-sub questionnaire_token ($) {
-    return make_token("questionnaire", $_[0]);
-}
-
 # send_user_email ID DESCRIPTION MAIL
 # Send MAIL (should be a MIME::Entity object) to the user who submitted the
 # given message ID. DESCRIPTION says what the mail is, for instance
@@ -518,7 +489,7 @@ sub make_confirmation_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
 
-    my $token = confirm_token($msg->{id});
+    my $token = make_token("confirm", $msg->{id});
     my $confirm_url = mySociety::Config::get('BASE_URL') . '/' . $token;
 
     # Note: (a) don't care about bounces from this mail (they result only from
@@ -529,8 +500,6 @@ sub make_confirmation_email ($;$) {
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
-    # Don't insert linebreaks in the below except for paragraph marks-- let
-    # Text::Wrap do the rest.
     my $text = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm' : 'confirm-reminder'),
                     email_template_params($msg, confirm_url => $confirm_url)
@@ -553,7 +522,7 @@ sub make_confirmation_email ($;$) {
 sub send_confirmation_email ($;$) {
     my ($id, $reminder) = @_;
     $reminder ||= 0;
-    my $msg = message($id, $reminder);
+    my $msg = message($id);
     return send_user_email($id, 'confirmation' . ($reminder ? ' reminder' : ''), make_confirmation_email($msg, $reminder));
 }
 
@@ -568,8 +537,6 @@ sub make_failure_email ($) {
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
-    # Don't insert linebreaks in the below except for paragraph marks-- let
-    # Text::Wrap do the rest.
     my $text = FYR::EmailTemplate::format(
                     email_template('failure'),
                     email_template_params($msg)
@@ -601,7 +568,7 @@ sub make_questionnaire_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
 
-    my $token = questionnaire_token($msg->{id});
+    my $token = make_token("questionnaire", $msg->{id});
     my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
     my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
 
@@ -641,7 +608,7 @@ sub deliver_email ($) {
     my $mail = make_representative_email($msg);
     my $sender = sprintf('%s-%s@%s',
                             mySociety::Config::get('EMAIL_PREFIX'),
-                            bounce_token($id),
+                            make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
     my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{recipient_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
@@ -681,7 +648,7 @@ changes.
 =cut
 sub confirm_email ($) {
     my ($token) = @_;
-    if (my $id = verify_confirm_token($token)) {
+    if (my $id = check_token("confirm", $token)) {
         # DBD::Pg will have begun a new transaction immediately we committed the
         # last one. That's fine, but it means that any timestamps we use are out
         # of date. So begin a new one.
@@ -694,6 +661,30 @@ sub confirm_email ($) {
         return 1;
     }
     return 0;
+}
+
+=item record_questionnaire_answer TOKEN QUESTION RESPONSE
+
+Record a user's response to a questionnaire question. TOKEN is the token sent
+them in the questionnaire email; QUESTION must be 0 and RESPONSE must be "YES",
+indicating that they have received a reply, or "NO", indicating that they have
+not.
+
+=cut
+sub record_questionnaire_answer ($$$) {
+    my ($token, $qn, $answer) = @_;
+    throw FYR::Error("Bad QUESTION (should be '0')") if ($qn ne '0');
+    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($response !~ /^(yes|no)$/i);
+    if (my $id = check_token("questionnaire", $token)) {
+        FYR::DB::dbh()->do('begin work');
+        FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
+        FYR::DB::dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
+        logmsg($id, "answer of \"$answer\" received for questionnaire qn #$qn");
+        FYR::DB::dbh()->commit();
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 #
@@ -942,6 +933,10 @@ sub notify_daemon () {
     $s->print("\0") or return;
     $s->close();
 }
+
+#
+# Administrative interface
+#
 
 =item admin_recent_events COUNT
 
