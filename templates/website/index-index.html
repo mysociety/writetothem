@@ -14,7 +14,14 @@ include "header.php";
 
 <?=$values['form']?>
 
+<?  if (OPTION_FYR_REFLECT_EMAILS) { ?>
+    <p align="center"><b>Note:</b> This is a test version of the
+    site.  Messages will <b>not</b> be delivered to representatives.
+    Instead a copy will be sent to you as if you were the
+    representative, so you can see what it looks like.
+<?  } else { ?>
 <p align="center">If you don't know your Postcode you can try <a href="http://www.postcodeanywhere.co.uk/home/newcheckerpopup.aspx">this Postcode Finder</a></p>
+<?  } ?>
 
 <!-- <p class="warning"><small><strong>This site
 is new!  We're still testing at the moment.</strong>  We're looking for reports

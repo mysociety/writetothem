@@ -18,13 +18,17 @@ if (array_key_exists('robots', $values)) { ?>
 <?php } ?>
 </head>
 <body><a name="top" id="top">
-<h1 id="heading"><a href="/">WriteToThem.com</a> - Beta Test</h1>
-<div id="content">
+<h1 id="heading"><a href="/">WriteToThem.com</a> 
 <?
 	if (OPTION_FYR_REFLECT_EMAILS) {
-		#		print '<p class="warning">Test site - this will reflect emails to representatives back to you.</p>';
-	}
-
+        print " - Staging Site";
+	} else {
+        print "- Beta Test";
+    }
+?>
+</h1>
+<div id="content">
+<?
 	if (substr($template_name, 0, 5)=='about') {
 		include 'about-sidebar.html';
 	}
