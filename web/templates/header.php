@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<TITLE>FaxYourRepresentative.com - <?=$fyr_title?></TITLE>
+<TITLE>FaxYourRepresentative.com - <? global $fyr_title; print $fyr_title; ?></TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="templates/fax_style.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">

@@ -5,11 +5,9 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.16 2004-10-20 12:05:51 francis Exp $
+ * $Id: write.php,v 1.17 2004-10-20 13:43:06 francis Exp $
  * 
  */
-
-$fyr_title = "Now Write Your Fax To X Member for X"; // TODO
 
 require_once "../phplib/forms.php";
 require_once 'HTML/QuickForm/Controller.php';
@@ -147,12 +145,14 @@ class ActionDisplayFancy extends HTML_QuickForm_Action_Display
        // Make HTML
         $fyr_form = $renderer->toHtml();
 
+        global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
         $pageName =  $page->getAttribute('id');
         if ($pageName == "writeForm") {
+            $fyr_title = "Now Write Your Fax To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
             include "templates/write-write.html";
         } else { // previewForm
             // Generate preview
-            global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
+            $fyr_title = "Check Your Fax Is Right";
             ob_start();
             include "templates/fax-content.html";
             $fyr_preview = ob_get_contents();
@@ -183,8 +183,9 @@ class ActionProcess extends HTML_QuickForm_Action {
                 ),
                 $fyr_values['who'], $fyr_values['body']);
     
-        global $fyr_representative, $fyr_voting_area, $fyr_date;
+        global $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
         if ($success) {
+            $fyr_title = "Great! Now Check Your Email";
             include "templates/write-checkemail.html";
         } else {
             $fyr_error_message = "Failed to queue the message";  // TODO improve this error message

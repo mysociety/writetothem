@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.16 2004-10-19 17:25:49 francis Exp $
+ * $Id: who.php,v 1.17 2004-10-20 13:43:06 francis Exp $
  * 
  */
 
@@ -94,10 +94,10 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     
     // Create HTML
     if ($rep_count > 1) {
-        $left_column = "<h4>Your ${va_info['rep_name_plural']}</h4><p>";
+        $left_column = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
         $left_column .= "Your ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
     } else {
-        $left_column = "<h4>Your ${va_info['rep_name']}</h4><p>";
+        $left_column = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
         $left_column .= "Your ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
     }
     $left_column .= "${eb_info['name']}.  ${eb_info['description']}.</p>";
