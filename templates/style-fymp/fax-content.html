@@ -39,7 +39,7 @@
 
     <TD COLSPAN="2">
     <P>
-    <?=nl2br($values['body'])?>
+    <?=nl2br(htmlentities($values['body']))?>
     <p><FONT SIZE="-3"><B><?=$values['signature']?> &nbsp;&nbsp; (Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)</B></FONT>
     <BR>
     <IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="10" BORDER="0"></TD>
