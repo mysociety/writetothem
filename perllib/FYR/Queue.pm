@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.132 2005-02-15 10:40:43 chris Exp $
+# $Id: Queue.pm,v 1.133 2005-02-16 17:17:03 francis Exp $
 #
 
 package FYR::Queue;
@@ -1365,7 +1365,6 @@ sub admin_get_queue ($$) {
             where (state = 'bounce_confirm'
                     or state = 'failed'
                     or state = 'error'
-                    or (state = 'ready' and numactions > 0)
                     or frozen = 't')
             order by created desc#;
         # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
@@ -1375,8 +1374,7 @@ sub admin_get_queue ($$) {
         $where = q#
             where (state = 'bounce_confirm'
                     or state = 'failed'
-                    or state = 'error'
-                    or (state = 'ready' and numactions > 0))
+                    or state = 'error')
                   and frozen = 'f' 
             order by recipient_id, created desc#;
     } elsif ($filter eq 'frozen') {
