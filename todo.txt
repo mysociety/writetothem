@@ -35,6 +35,9 @@ Remove spurious stuff from utility.php
 
 Put all emails from Perl in separate template files
 
+London Assembly London-wide members (create new LAE type by analogy with
+WAE/SPE) and put them there. How to lay them out? There are loads of them....
+
 Name all PHP scripts without extension
 
 Later
