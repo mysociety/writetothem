@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.9 2004-10-05 20:35:51 francis Exp $
+ * $Id: dadem.php,v 1.10 2004-10-06 11:08:12 francis Exp $
  * 
  */
 
@@ -61,18 +61,30 @@ function dadem_get_representatives($va_type, $va_id) {
 
 function dadem_get_representative_info($rep_id) {
     $stub_data = array(
-        1 => array(VA_CED, 'Maurice Leeke', DADEM_CONTACT_EMAIL, 'Maurice.Leeke@cambridgeshire.gov.uk'),
-        2 => array(VA_DIW, 'Diane Armstrong', DADEM_CONTACT_EMAIL, 'diane_armstrong@tiscali.co.uk'),
-        3 => array(VA_DIW, 'Max Boyce', DADEM_CONTACT_EMAIL, 'maxboyce@cix.co.uk'),
-        4 => array(VA_DIW, 'Ian Nimmo-Smith', DADEM_CONTACT_EMAIL, 'ian@monksilver.com'),
-        5 => array(VA_WMC, 'Anne Campbell', DADEM_CONTACT_FAX, '+441223311315'),
-        6 => array(VA_EUR, 'Geoffrey Van Orden', DADEM_CONTACT_FAX, '+3222849332'),
-        7 => array(VA_EUR, 'Jeffrey Titford', DADEM_CONTACT_FAX, '+441245252071'),
-        8 => array(VA_EUR, 'Richard Howitt', DADEM_CONTACT_EMAIL, 'richard.howitt@geo2.poptel.org.uk'),
-        9 => array(VA_EUR, 'Robert Sturdy', DADEM_CONTACT_EMAIL, 'rsturdy@europarl.eu.int'),
-        10 => array(VA_EUR, 'Andrew Duff', DADEM_CONTACT_EMAIL, 'mep@andrewduffmep.org'),
-        11 => array(VA_EUR, 'Christopher Beazley', DADEM_CONTACT_FAX, '+441920485805'),
-        12 => array(VA_EUR, 'Tom Wise', DADEM_CONTACT_EMAIL, 'ukipeast@globalnet.co.uk')
+        1 => array('type' => VA_CED, 'name' => 'Maurice Leeke', 
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'Maurice.Leeke@cambridgeshire.gov.uk'),
+        2 => array('type' => VA_DIW, 'name' => 'Diane Armstrong', 
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'diane_armstrong@tiscali.co.uk'),
+        3 => array('type' => VA_DIW, 'name' => 'Max Boyce',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'maxboyce@cix.co.uk'),
+        4 => array('type' => VA_DIW, 'name' => 'Ian Nimmo-Smith',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ian@monksilver.com'),
+        5 => array('type' => VA_WMC, 'name' => 'Anne Campbell',
+                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441223311315'),
+        6 => array('type' => VA_EUR, 'name' => 'Geoffrey Van Orden',
+                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+3222849332'),
+        7 => array('type' => VA_EUR, 'name' => 'Jeffrey Titford',
+                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441245252071'),
+        8 => array('type' => VA_EUR, 'name' => 'Richard Howitt',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'richard.howitt@geo2.poptel.org.uk'),
+        9 => array('type' => VA_EUR, 'name' => 'Robert Sturdy',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'rsturdy@europarl.eu.int'),
+        10 => array('type' => VA_EUR, 'name' => 'Andrew Duff',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'mep@andrewduffmep.org'),
+        11 => array('type' => VA_EUR, 'name' => 'Christopher Beazley',
+                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441920485805'),
+        12 => array('type' => VA_EUR, 'name' => 'Tom Wise',
+                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ukipeast@globalnet.co.uk')
     );
     $ret = $stub_data[$rep_id];
     if (!isset($ret)) {

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.1 2004-10-05 20:35:51 francis Exp $
+ * $Id: who.php,v 1.2 2004-10-06 11:08:12 francis Exp $
  * 
  */
 
@@ -54,7 +54,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         include "templates/generalerror.html";
         exit;
     }
-    list($dummy, $va_specificname) = $info;
+    $va_specificname = $info['name'];
     $rep_suffix = $va_rep_suffix[$va_type];
     $rep_name = $va_rep_name[$va_type];
 
@@ -122,7 +122,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
                 include "templates/generalerror.html";
                 exit;
             }
-            list($dummy, $rep_specificname, $rep_specificcontactmethod, $rep_specificaddress) = $reprecord;
+            $rep_specificname = $reprecord['name'];
     
             $right_column .= <<<END
                     <tr>

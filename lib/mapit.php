@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.8 2004-10-05 20:35:51 francis Exp $
+ * $Id: mapit.php,v 1.9 2004-10-06 11:08:12 francis Exp $
  * 
  */
 
@@ -49,14 +49,14 @@ function mapit_get_voting_areas($postcode) {
 }
 
 function mapit_get_voting_area_info($va_id) {
-    $stub_data = array(1 => array(VA_CTY, 'Cambridgeshire County Council'),
-                 2 => array(VA_CED, 'West Chesterton ED'),
-                 3 => array(VA_DIS, 'Cambridge District Council'),
-                 4 => array(VA_DIW, 'West Chesterton Ward'),
-                 5 => array(VA_WMP, $va_name[VA_WMP]),
-                 6 => array(VA_WMC, 'Cambridge'),
-                 7 => array(VA_EUP, $va_name[VA_EUP]),
-                 8 => array(VA_EUR, 'Eastern Euro Region'));
+    $stub_data = array(1 => array('type' => VA_CTY, 'name' => 'Cambridgeshire County Council'),
+                 2 => array('type' => VA_CED, 'name' => 'West Chesterton ED'),
+                 3 => array('type' => VA_DIS, 'name' => 'Cambridge District Council'),
+                 4 => array('type' => VA_DIW, 'name' => 'West Chesterton Ward'),
+                 5 => array('type' => VA_WMP, 'name' => $va_name[VA_WMP]),
+                 6 => array('type' => VA_WMC, 'name' => 'Cambridge'),
+                 7 => array('type' => VA_EUP, 'name' => $va_name[VA_EUP]),
+                 8 => array('type' => VA_EUR, 'name' => 'Eastern Euro Region'));
     $ret = $stub_data[$va_id];
     if (!isset($ret)) {
         debug("MAPIT", "Voting area not found id $va_id");
