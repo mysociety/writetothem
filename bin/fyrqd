@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.7 2004-12-07 19:56:57 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.8 2004-12-13 09:25:19 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -89,6 +89,7 @@ my $socketpath = mySociety::Config::get('QUEUE_DAEMON_SOCKET', '/tmp/fyrqd.sock'
 my $pidfilepath = mySociety::Config::get('QUEUE_DAEMON_PIDFILE', '/var/run/fyrqd.pid');
 my $email = mySociety::Config::get('QUEUE_DAEMON_SEND_EMAIL', 0);
 my $fax = mySociety::Config::get('QUEUE_DAEMON_SEND_FAX', 0);
+my $once = 0;
 my $nodetach = 0;
 my $help = 0;
 if (!GetOptions(
@@ -97,6 +98,7 @@ if (!GetOptions(
         'pidfile=s' =>      \$pidfilepath,
         'email' =>          \$email,
         'fax' =>            \$fax,
+        'once' =>           \$once,
         'debug' =>          \$nodetach,
         'help' =>           \$help
     )) {
@@ -107,6 +109,11 @@ if (!GetOptions(
 
 if ($help) {
     pod2usage(-exitval => 0, -verbose => 1);
+    exit(0);
+}
+
+if ($once) {
+    FYR::Queue::process_queue($email, $fax);
     exit(0);
 }
 
@@ -284,6 +291,10 @@ the config file, or 5.
 =item --fax
 
 Send faxes or emails respectively. Default is neither.
+
+=item --once
+
+Run the queue once, then exit.
 
 =back
 
