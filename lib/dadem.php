@@ -6,18 +6,43 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.10 2004-10-06 11:08:12 francis Exp $
+ * $Id: dadem.php,v 1.11 2004-10-06 11:25:54 chris Exp $
  * 
  */
 
 include_once('votingarea.php');
 
-define('DADEM_BAD_TYPE', 1);  /* bad area type */
-define('DADEM_UNKNOWN_AREA', 2);   /* unknown area */
-define('DADEM_REPRESENTATIVE_NOT_FOUND', 3);   /* unknown representative id */
+define('DADEM_BAD_TYPE', 1);            /* bad area type */
+define('DADEM_UNKNOWN_AREA', 2);        /* unknown area */
+define('DADEM_REP_NOT_FOUND', 3);       /* unknown representative id */
+define('DADEM_AREA_WITHOUT_REPS', 4);   /* not an area for which representatives are returned */
+
+$dadem_error_strings = array(
+    DADEM_BAD_TYPE          =>  'Bad area type',
+    DADEM_UNKNOWN_AREA      =>  'Unknown area',
+    DADEM_REP_NOT_FOUND     =>  'Representative not found',
+    DADEM_AREA_WITHOUT_REPS =>  'Not an area type for which representatives are returned'
+);
 
 define('DADEM_CONTACT_FAX', 101);
 define('DADEM_CONTACT_EMAIL', 102);
+
+/* dadem_is_error R
+ * Does R (the return value from another DaDem function) indicate an error? */
+function dadem_is_error($e) {
+    return is_integer($e);
+}
+
+/* dadem_strerror CODE
+ * Return a human-readable string describing CODE. */
+function dadem_strerror($e) {
+    if (!is_integer($e))
+        return "Success";
+    else if (!array_key_exists($e, $dadem_error_strings))
+        return "Unknown DaDem error";
+    else
+        return $dadem_error_strings($e)
+}
 
 // TODO: In theory, this shouldn't take the type
 /* dadem_get_representatives TYPE ID
@@ -59,7 +84,15 @@ function dadem_get_representatives($va_type, $va_id) {
     return DADEM_BAD_TYPE;
 }
 
+/* dadem_get_representative_info ID
+ * On success, returns an array giving information about the representative
+ * with the given ID. This array contains elements type, the type of the area
+ * for which they're elected (and hence what type of representative they are);
+ * name, their name; contact_method, either 'fax' or 'email', and either an
+ * element 'email' or 'fax' giving their address or number respectively. On
+ * failure, returns an error code. */
 function dadem_get_representative_info($rep_id) {
+    /* XXX extend this with further stub data. */
     $stub_data = array(
         1 => array('type' => VA_CED, 'name' => 'Maurice Leeke', 
                 'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'Maurice.Leeke@cambridgeshire.gov.uk'),
