@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: simplexmlrpc.php,v 1.3 2004-10-06 17:07:37 chris Exp $
+ * $Id: simplexmlrpc.php,v 1.4 2004-10-06 19:20:28 chris Exp $
  * 
  */
 
@@ -31,13 +31,13 @@ function array_is_list($a) {
  * of XML_RPC objects. */
 function sxr_marshall($val) {
     if (is_int($val))
-        return new xmlrpcval($val, 'int');
+        return new XML_RPC_Value($val, 'int');
     else if (is_bool($val))
-        return new xmlrpcval($val, 'bool');
+        return new XML_RPC_Value($val, 'bool');
     else if (is_float($val))
-        return new xmlrpcval($val, 'double');
+        return new XML_RPC_Value($val, 'double');
     else if (is_string($val))
-        return new xmlrpcval($val, 'string');
+        return new XML_RPC_Value($val, 'string');
     else if (is_array($val)) {
         /* Now we're screwed. XMLRPC distinguishes between "structs", which
          * are associative arrays, and "arrays", which are lists. PHP doesn't.
@@ -47,13 +47,13 @@ function sxr_marshall($val) {
             foreach ($val as $i) {
                 array_push($a, sxr_marshall($i));
             }
-            return new xmlrpcval($a, 'array');
+            return new XML_RPC_Value($a, 'array');
         } else {
             $a = array();
             foreach ($val as $k => $v) {
                 $a[$k] = sxr_marshall($v);
             }
-            return new xmlrpcval($a, 'struct');
+            return new XML_RPC_Value($a, 'struct');
         }
     }
 }
@@ -62,6 +62,7 @@ function sxr_marshall($val) {
  * Take an XML-RPC expression of a value VAL, and return its representation in
  * native PHP types. */
 function sxr_unmarshall($val) {
+print "sxr_unmarshall($val)\n";
     if ($val->kindOf() == 'scalar')
         return $val->scalarval();
     else if ($val->kindOf() == 'array') {
@@ -92,18 +93,20 @@ function sxr_call($host, $port, $path, $func, $params) {
         $sxr_clients[$key] = new XML_RPC_Client($path, $host, $port);
 
     $p = array();
-    foreach ($params as $i) {
-        array_push($p, new XML_RPC_Value($i, 'int')); /* XXX fix! */
-    }
+    if (is_array($params)) {
+        foreach ($params as $i) {
+            array_push($p, XML_RPC_encode($i)); #sxr_marshall($i));
+        }
+    } else
+        $p[0] = $params;
 
     $req = new XML_RPC_Message($func, $p);
-
     $resp = $sxr_clients[$key]->send($req);
 
     if ($resp->faultCode())
         return FALSE;
     else
-        return sxr_unmarshall($resp->value());
+        return XML_RPC_decode($resp->value());
 }
 
 ?>
