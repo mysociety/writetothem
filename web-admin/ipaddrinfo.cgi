@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.1 2005-01-31 13:57:31 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.2 2005-01-31 14:03:03 chris Exp $';
 
 use strict;
 
@@ -28,7 +28,7 @@ while (my $q = new CGI::Fast()) {
     STDOUT->autoflush(1);
     my $addr = $q->param('ipaddr');
     print $q->header(),
-            $q->start_html($addr ? "IP address lookup" : "IP address lookup: $addr"),
+            $q->start_html($addr ? "IP address lookup: $addr" : "IP address lookup"),
             $q->start_form(-method => 'GET'),
             $q->p(
                 "Look up:",
