@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.76 2004-12-30 19:46:20 francis Exp $
+# $Id: Queue.pm,v 1.77 2005-01-04 13:30:45 francis Exp $
 #
 
 package FYR::Queue;
@@ -627,13 +627,11 @@ sub make_confirmation_email ($;$) {
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);
 
-    # Add header according to whether site in test mode or not
+    # Add header if site in test mode
     my $reflecting_mails = mySociety::Config::get('FYR_REFLECT_EMAILS');
     if ($reflecting_mails) {
-        $text = wrap(EMAIL_COLUMNS, "(Note: This is a test site, the message will be sent to yourself not your representative.)") . "\n\n" . $text;
-    } else {
-        $text = wrap(EMAIL_COLUMNS, "WARNING - THIS SITE IS NOW LIVE AND THIS MESSAGE WILL GO TO THE NAMED REPRESENTATIVE - THIS IS NOT A DRILL!") . "\n\n" . $text;
-    }
+        $text = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $text;
+    } 
 
     return MIME::Entity->build(
             Sender => $confirm_sender,
