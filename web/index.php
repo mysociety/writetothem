@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.40 2005-02-08 11:05:14 matthew Exp $
+ * $Id: index.php,v 1.41 2005-02-10 08:55:28 francis Exp $
  * 
  */
 
@@ -95,7 +95,7 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
-        $error_message = "Sorry, we need your complete UK postcode (for example, 'N5 2PL') to identify your elected representatives.";
+        $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
         $template = "index-advice";
     }
     else if ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
