@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.72 2005-02-07 23:59:59 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.73 2005-02-08 10:13:54 chris Exp $
  * 
  */
 
@@ -303,7 +303,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
-                print "<td>" . $this->make_ids_links(htmlspecialchars($recent['message'])) . "</td>";
+                print "<td>" . $this->make_ids_links($recent['message']) . "</td>";
                 print "</tr>";
             }
 ?>
