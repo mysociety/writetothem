@@ -6,6 +6,8 @@ Copyright messages and license agreement on source code
 Encrypt who=va- in URL
 Probably pc= after the first page or two?
 
+Perhaps verify postcode again when fax is submitted
+
 Make sure debug log messages can't print data which should be encrypted ;(
     (maybe not a problem if all /inputs/ are, except for scraping)
 
@@ -15,4 +17,8 @@ Perhaps strengthen rigour of basic checks for existence of all users
 address details etc.
 
 Ordering of display in who.php
+
+Consider removing voting_area from dadem return value
+
+
 

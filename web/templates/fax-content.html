@@ -1,0 +1,46 @@
+<!-- This is the template for the actual text which is sent as a fax 
+     The same template is used for preview and so on -->
+<TABLE CELLSPACING="0" CELLPADDING="2" BORDER="0" WIDTH="100%" BGCOLOR="#006666">
+
+<TR>
+<TD>
+    <TABLE CELLSPACING="0" CELLPADDING="5" BORDER="0" WIDTH="100%" BGCOLOR="#cccc99">
+    <TR>
+
+            <TD VALIGN="top" ALIGN="left"><BR><B>FOR THE ATTENTION OF:</B><BR><BR>
+    <B><?=$fyr_representative['name']?>
+    <BR><?=$fyr_voting_area['rep_name']?> 
+    <BR>ADDRESS<BR>
+    <BR>
+    DATE      </B>
+    </TD>
+    <TD VALIGN="top" ALIGN="right">
+    <BR><BR>
+
+    <?=$fyr_values['writer_name']?><BR>
+    <?=$fyr_values['writer_address1']?><BR>
+    <?=$fyr_values['writer_address2']?><BR>
+    <?=$fyr_values['writer_town']?><BR>
+    <?=$fyr_values['writer_pc']?><BR>
+    <BR>
+    <?=$fyr_values['writer_email']?>
+    <?=$fyr_values['writer_phone']?>
+    </TD>
+    </TR>
+    <TR>
+    <TD COLSPAN="2"><IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
+    </TR>
+
+    <TR>
+
+    <TD COLSPAN="2">
+    Dear <?=$fyr_representative['name']?>,     <P>
+    <?=$fyr_values['body']?>
+    <p><FONT SIZE="-3"><B><?=$fyr_values['signature']?> &nbsp;&nbsp; (Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)</B></FONT>
+    <BR>
+    <IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="10" BORDER="0"></TD>
+
+    </TR>
+    </TABLE></TD>
+</TR>
+</TABLE>

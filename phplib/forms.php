@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.2 2004-10-18 08:47:13 francis Exp $
+ * $Id: forms.php,v 1.3 2004-10-18 18:34:38 francis Exp $
  * 
  */
 
@@ -39,20 +39,6 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
                 <td style="white-space: nowrap; background-color: #CCCCCC;" align="left" valign="top" colspan="2"><b>{header}</b></td>
             </tr>');
     }
-
-    function markSameRowStart($field) {
-        $this->setElementTemplate(
-            str_replace("</TR>", "", $this->_elementTemplate),
-            $field);
-    }
-
-    function markSameRowEnd() {
-        $this->setElementTemplate(
-            str_replace("<TR>", "", $this->_elementTemplate),
-            $field);
-    }
-
-#function forms_begin_same_row($renderer, 
 }
 
 ?>
