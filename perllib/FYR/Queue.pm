@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.14 2004-11-15 17:37:50 chris Exp $
+# $Id: Queue.pm,v 1.15 2004-11-16 15:01:09 chris Exp $
 #
 
 package FYR::Queue;
@@ -125,21 +125,21 @@ sub write ($$$$$) {
             insert into message (
                 id,
                 sender_name, sender_email, sender_addr, sender_phone, sender_postcode,
-                recipient_id, recipient_name, recipient_position, recipient_email, recipient_fax,
+                recipient_id, recipient_name, recipient_position, recipient_type, recipient_email, recipient_fax,
                 message,
                 state,
-                created, laststatechange, numactions
+                created, laststatechange, numactions, dispatched
             ) values (
                 ?,
                 ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?, ?,
                 ?,
                 'new',
-                ?, ?, 0
+                ?, ?, 0, null
             )#, {},
             $id,
             (map { $sender->{$_} || undef } qw(name email address phone postcode)),
-            $recipient_id, (map { $recipient->{$_} || undef } qw(name position email fax)),
+            $recipient_id, (map { $recipient->{$_} || undef } qw(name position type email fax)),
             $text,
             time(), time());
 
@@ -216,14 +216,15 @@ sub state ($$) {
             logmsg($id, "changed state to $state");
 
             # If the new state is either finished or failed, we also remove any
-            # personal information from the message.
+            # personal information from the message. Once this is done only the
+            # message ID, recipient ID, and state information remain.
             if ($state eq 'failed' or $state eq 'finished') {
                 FYR::DB::dbh()->do(q#
                             update message set
                                     sender_name = '', sender_email = '',
                                     sender_addr = '', sender_phone = null,
                                     sender_postcode = '', recipient_name = '',
-                                    recipient_position = '',
+                                    recipient_position = '', recipient_type = '',
                                     recipient_email = '', recipient_fax = null,
                                     message = ''
                                 where id = ?#, $id);
@@ -371,9 +372,10 @@ sub make_representative_email ($) {
 use constant token_iv => 'nk"49{8y';
 
 # Shorten common token types to single characters.
-my %token_wormap = qw(
-        confirm C
-        bounce  B
+my %token_wordmap = qw(
+        confirm         C
+        bounce          B
+        questionnaire   Q
     );
 
 # make_token WORD ID
@@ -384,7 +386,7 @@ my %token_wormap = qw(
 sub make_token ($$) {
     my ($word, $id) = @_;
 
-    $word = $token_wormap{$word} if (exists($token_wormap{$word}));
+    $word = $token_wordmap{$word} if (exists($token_wordmap{$word}));
 
     # Try to keep these as short as possible. In particular, since the message
     # ID itself is composed only of characters [0-9a-f], pack it into the
@@ -410,7 +412,7 @@ sub check_token ($$) {
     $token = lc($token);
     return undef if ($token !~ m#^[2-7a-z]{20,}$#);
     
-    $word = $token_wormap{$word} if (exists($token_wormap{$word}));
+    $word = $token_wordmap{$word} if (exists($token_wordmap{$word}));
 
     my ($rand, $enc) = unpack('na*', Convert::Base32::decode_base32($token));
 
@@ -457,6 +459,12 @@ sub verify_bounce_token ($) {
     return check_token("bounce", $_[0]);
 }
 
+# questionnaire_token ID
+# Return a suitable token to get send to the user for the questionnaire script.
+sub questionnaire_token ($) {
+    return make_token("questionnaire", $_[0]);
+}
+
 # send_user_email ID DESCRIPTION MAIL
 # Send MAIL (should be a MIME::Entity object) to the user who submitted the
 # given message ID. DESCRIPTION says what the mail is, for instance
@@ -483,7 +491,6 @@ sub send_user_email ($$$) {
 # which will be sent.
 sub make_confirmation_email ($;$) {
     my ($msg, $reminder) = @_;
-
     $reminder ||= 0;
 
     my $token = confirm_token($msg->{id});
@@ -551,11 +558,11 @@ EOF
 sub send_confirmation_email ($;$) {
     my ($id, $reminder) = @_;
     $reminder ||= 0;
-    my $msg = message($id, 1);
-    return send_user_email($id, 'confirmation', make_confirmation_email($msg, $reminder));
+    my $msg = message($id, $reminder);
+    return send_user_email($id, 'confirmation' . ($reminder ? ' reminder' : ''), make_confirmation_email($msg, $reminder));
 }
 
-# make_failure_email ID
+# make_failure_email MESSAGE
 # Return a MIME::Entity object for the given MESSAGE (reference to hash of db
 # fields), suitable for sending to the constituent to warn them that their
 # message could not be delivered.
@@ -600,6 +607,76 @@ sub send_failure_email ($) {
     my $msg = message($id);
     return send_user_email($id, 'failure report', make_failure_email($msg));
 }
+
+# make_questionnaire_email MESSAGE [REMINDER]
+# Return a MIME::Entity object for the given MESSAGE, asking the user to fill
+# in a questionnaire. If REMINDER is true, this is a reminder mail.
+sub make_questionnaire_email ($;$) {
+    my ($msg, $reminder) = @_;
+    $reminder ||= 0;
+
+    my $token = questionnaire_token($msg->{id});
+    my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
+    my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
+
+    my $questionnaire_sender = sprintf('%sbounce-null@%s',
+                                mySociety::Config::get('EMAIL_PREFIX'),
+                                mySociety::Config::get('EMAIL_DOMAIN'));
+
+    my $howlong = 'Two weeks';
+    if ($reminder) {
+        $howlong = 'A few weeks';
+        $reminder = qq#(This is a reminder email. It seems that the first one didn't reach you.)\n\n#;
+    } else {
+        $reminder = '';
+    }
+
+    # Don't insert linebreaks in the below except for paragraph marks-- let
+    # Text::Wrap do the rest.
+    my $text = wrap(EMAIL_COLUMNS,
+        <<EOF);
+Hi,
+
+$reminder
+$howlong ago we sent your letter to $msg->{recipient_name}, your $msg->{recipient_position}.
+
+- If you HAVE had a reply, please click on the link below:
+
+    $yes_url
+
+- If you HAVE NOT had a reply, please click on the link below:
+
+    $no_url
+
+Unlike most other workers in the public sector, the performance of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} is not measured and published. With your help, we'd like to fix this curious anomaly.
+
+Your feedback will allow us to publish performance tables of the responsiveness of all the politicians in the UK. The majority of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} respond promptly and diligently to the needs and views of their constituents. They deserve credit and respect for their conscientiousness.
+
+Likewise, we're keen to expose the minority of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} who don't seem to give a damn.
+
+Rest assured that we will not store ANY data that could be used to identify you. We do not keep a copy of the letter you sent to your $msg->{recipient_position}.
+
+-- the FaxYourRepresentative.com team
+
+EOF
+
+    return MIME::Entity->build(
+            Sender => $questionnaire_sender,
+            From => format_email_address('FaxYourRepresentative', $questionnaire_sender),
+            To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
+            Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position})
+        );
+}
+
+# send_questionnaire_email ID [REMINDER]
+# Send a (possibly REMINDER) failure report to the sender of message ID.
+sub send_failure_email ($;$) {
+    my ($id, $reminder) = @_;
+    $reminder ||= 0;
+    my $msg = message($id);
+    return send_user_email($id, 'questionnaire' . ($reminder ? ' reminder' : ''), make_questionnaire_email($msg, $reminder));
+}
+
 
 # deliver_email MESSAGE
 # Attempt to deliver the MESSAGE by email.
@@ -673,6 +750,19 @@ use constant DAY => 86400;
 # How many confirmation mails may be sent, in total.
 use constant NUM_CONFIRM_MESSAGES => 2;
 
+# How many questionnaire mails are sent, in total.
+use constant NUM_QUESTIONNAIRE_MESSAGES => 2;
+
+# How long after sending the message do we send the questionnaire email?
+use constant QUESTIONNAIRE_DELAY => (14 * DAY);
+
+# How often after that we send a questionnaire reminder.
+use constant QUESTIONNAIRE_INTERVAL => (14 * DAY);
+
+# How long after sending the message do we retain its text in case the
+# recipient wants to forward it?
+use constant MESSAGE_RETAIN_TIME => (21 * DAY);
+
 # Timeouts in the state machine:
 my %state_timeout = (
         # How long a message may be "pending" (awaiting confirmation) before it
@@ -686,11 +776,6 @@ my %state_timeout = (
         # How long we wait for a bounce to be received before assuming that the
         # message was delivered successfully.
         bounce_wait     => DAY * 2,
-
-        # How long after a message has been sent we hang around waiting for
-        # questionnaire responses and allowing the recipient to forward the
-        # message to other representatives for the sender.
-        sent            => DAY * 21,
 
         # How long we hang around trying to deliver a failure report back to
         # the user for a failed message.
@@ -718,9 +803,9 @@ my %state_action_interval = (
         # How often we attempt delivery in the face of soft failures.
         ready           => 1800,
 
-        # How often we attempt delivery of a questionnaire in the face of soft
-        # failures.
-        sent            => 1800,
+        # How often we grind over sent messages to send questionnaires or
+        # expire messages into the "finished" state.
+        sent            => DAY,
 
         # How often we attempt delivery of an error report in the face of soft
         # failures.
@@ -748,18 +833,22 @@ my %state_action = (
 
         pending => sub ($) {
             my ($id) = @_;
-            # Send reminder confirmation if necessary. Note that actions($id)
-            # is the number of reminders sent in the pending state, not the
-            # total number.
-            if (1 + actions($id) < NUM_CONFIRM_MESSAGES) {
-                my $result = send_confirmation_email($id);
+            # Send reminder confirmation if necessary. We don't send one
+            # immediately on entering this state, but do thereafter.
+            if (actions($id) == 0) {
+                # Bump action counter but don't do anything else.
+                state($id, 'pending');
+                return;
+            } elsif (actions($id) < NUM_CONFIRM_MESSAGES) {
+                my $result = send_confirmation_email($id, 1);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     state($id, 'pending');  # bump actions counter
                 } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
                     # Shouldn't happen in this state.
                     logmsg($id, "abandoning message after failure to send confirmation email");
                     state($id, 'failed');
-                } # otherwise no action
+                } # otherwise no action; we'll get called again whenever the
+                  # queue is next run.
             }
         },
 
@@ -770,12 +859,16 @@ my %state_action = (
             if (defined($msg->{recipient_fax})) {
                 my $result = deliver_fax($msg);
                 if (!$result) {
-                    logmsg($id, "abandoning message after failure to sent to representative");
+                    logmsg($id, "abandoning message after failure to send to representative");
                     state($id, 'error');
+                } else {
+                    FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
+                    state($id, 'sent');
                 }
             } else {
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                    FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'bounce_wait');
                 } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
                     state($id, 'ready');    # bump timer
@@ -788,9 +881,30 @@ my %state_action = (
 
         sent => sub ($) {
             my ($id) = @_;
-            # XXX This is where we send the questionnaire email, but that's not
-            # implemented yet.
-            if (actions($id) == 0) {
+            my $msg = message($id);
+
+            # If we haven't got a questionnaire response, and it's been long
+            # enough since the message was sent or since the last questionnaire
+            # email was sent, then send another one.
+            my ($dosend, $reminder) = (0, 0); 
+            if (0 == scalar(FYR::DB::dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
+                if (actions($id) == 0 && $msg->{dispatched} < (time() - QUESTIONNAIRE_DELAY)) {
+                    $dosend = 1;
+                } elsif (actions($id) < NUM_QUESTIONNAIRE_MESSAGES && $msg->{lastaction} < (time() - QUESTIONNAIRE_INTERVAL)) {
+                    $dosend = $reminder = 1;
+                }
+            }
+
+            if ($dosend) {
+                my $result = send_questionnaire_email($id, $reminder);
+                if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                    state($id, 'sent');
+                } # should trap hard error case
+            }
+         
+            # If we've had the message for long enough, then 
+            if ($msg->{dispatched} < (time() - MESSAGE_RETAIN_TIME)) {
+                state($id, 'finished');
             }
         },
 
