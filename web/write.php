@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.59 2005-01-13 15:15:38 francis Exp $
+ * $Id: write.php,v 1.60 2005-01-14 17:43:59 chris Exp $
  * 
  */
 
@@ -134,10 +134,19 @@ function renderForm($form, $pageName)
 
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);
-    } else { // previewForm
+    } else if ($pageName == 'previewForm') {
         // Generate preview
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
+    } else {
+        template_show_error(
+                'Sorry. An error has occurred: pageName "'
+                    . htmlspecialchars($pageName) .
+                '". Please get in touch with us at
+                <a href="mailto:help@writetothem.com">help@writetothem.com</a>,
+                quoting this message. You can <a href="/">try again from the
+                beginning</a>.'
+            );
     }
 }
 
@@ -178,22 +187,20 @@ function submitFax() {
             if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
+                /* XXX this should be logged! */
                 template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
             header("Location: /$result");
-            exit;
         }
-    }
-
-    if (!isset($result)) {
+    } else {
+        /* Show them the "check your email and click the link" template. */
         global $fyr_representative, $fyr_voting_area, $fyr_date;
         $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
                     'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
         template_draw("write-checkemail", $our_values);
-    } else
-        template_show_error("Failed to queue the mesage"); // TODO improve this error message
+    }
 }
 
 // Get all fyr_values
@@ -257,34 +264,32 @@ if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
 $success = msg_recipient_test($fyr_values['who']);
 if (rabx_is_error($success)) {
     if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) 
-        template_show_error("Sorry, we do not have contact
-        details for this representative, so cannot send them a
-        message. Please <a href=\"mailto:help@writetothem.com\">email us</a> to let us know.
-        Details: " . $success->text);
-    if ($success->code == FYR_QUEUE_MESSAGE_SHAME) 
-    {
+        template_show_error(<<<EOF
+Sorry, we do not have contact details for this representative, so cannot send
+them a message. Please <a href="mailto:help@writetothem.com">email us</a> to
+let us know. Details:
+EOF
+            .  htmlspecialchars($success->text)
+        );
+    else if ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
         if ($fyr_voting_area['type'] == 'WMC') {
-            template_show_error(
-            $fyr_voting_area['rep_prefix'] . " " .
-            $fyr_representative['name'] . " " .
-            $fyr_voting_area['rep_suffix'].  " has told us not to
-            deliver any messages from the constituents of " .
-            $fyr_voting_area['name'] . ".
-            Instead you can try contacting them via the 
-            <a
-            href=\"http://www.locata.co.uk/cgi-bin/phpdriver?MIval=hoc_search&postcode="
-            . urlencode($fyr_postcode) . "\">the Parliament
-            website</a>.  There you will get a phone
-            number, a postal address, and for some MPs a way to contact
-            them by email.
-            ");
+            $url = 'http://www.locata.co.uk/cgi-bin/phpdriver?MIval=hoc_search&postcode=' . urlencode($fyr_postcode);
+            template_show_error(<<<EOF
+$fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
+has told us not to deliver any messages from the constituents of
+$fyr_voting_area[name]. Instead you can try contacting them via
+<a href="$url">the Parliament website</a>. There you will get a phone number, a
+postal address, and for some MPs a way to contact them by email.
+EOF
+                );
         } else {
-            template_show_error(
-            $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " .
-            $fyr_voting_area['rep_suffix'].  " has told us not to deliver any
-            messages from the constituents of " . $fyr_voting_area['name'] . ".
-            Please <a href=\"mailto:help@writetothem.com\">email us</a> to
-            let us know what you think about this.");
+            template_show_error(<<<EOF
+$fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
+has told us not to deliver any messages from the constituents of
+$fyr_voting_area[name]. Please <a href="mailto:help@writetothem.com">email
+us</a> to let us know what you think about this.
+EOF
+                );
         }
     }
     template_show_error($success->text);
@@ -293,7 +298,12 @@ if (rabx_is_error($success)) {
 // Generate signature
 if (array_key_exists('writer_email', $fyr_values) && array_key_exists('body', $fyr_values)) {
     $fyr_values['signature'] = sha1($fyr_values['writer_email']);
-    $fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  "\n(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
+    $fyr_values['signedbody'] = <<<EOF
+$fyr_values[body]
+
+$fyr_values[signature]
+(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)
+EOF;
 } else if (array_key_exists('body', $fyr_values))
     $fyr_values['signedbody'] = $fyr_values['body'];
 
@@ -303,8 +313,7 @@ $on_page = "write";
 if (isset($fyr_values['submitWrite'])) {
     $on_page = "write";
     unset($fyr_values['submitWrite']);
-}
-else if (isset($fyr_values['submitPreview'])) {
+} else if (isset($fyr_values['submitPreview'])) {
     unset($fyr_values['submitPreview']);
     $writeForm = buildWriteForm();
     if ($writeForm->validate()) {
@@ -312,8 +321,7 @@ else if (isset($fyr_values['submitPreview'])) {
     } else {
         $on_page = "write";
     }
-}
-else if (isset($fyr_values['submitSendFax'])) {
+} else if (isset($fyr_values['submitSendFax'])) {
     $on_page = "sendfax";
     unset($fyr_values['submitSendFax']);
 }
@@ -325,16 +333,21 @@ if ($on_page == "write") {
     $writeForm->setDefaults(array('body' => default_body_text()));
     $writeForm->setConstants($fyr_values);
     renderForm($writeForm, "writeForm");
-}
-else if ($on_page == "preview") {
+} else if ($on_page == "preview") {
     $previewForm = buildPreviewForm();
     $previewForm->setConstants($fyr_values);
     renderForm($previewForm, "previewForm");
-}
-else if ($on_page =="sendfax") {
+} else if ($on_page =="sendfax") {
     submitFax();
 } else {
-    template_show_error("On an unknown page");
+    template_show_error(
+            'Sorry. An error has occurred: on_page "'
+                . htmlspecialchars($on_page) .
+            '". Please get in touch with us at
+            <a href="mailto:help@writetothem.com">help@writetothem.com</a>,
+            quoting this message. You can <a href="/">try again from the
+            beginning</a>.'
+        );
 }
 
 ?>
