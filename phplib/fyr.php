@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.17 2005-01-12 17:19:11 chris Exp $
+ * $Id: fyr.php,v 1.18 2005-01-13 10:46:31 chris Exp $
  * 
  */
 
@@ -32,7 +32,8 @@ template_set_style("../templates/website");
  * Display an error message to the user. */
 function fyr_display_error($num, $message) {
     /* Nuke any existing page output to display the error message. */
-    ob_clean();
+    if (OPTION_PHP_DEBUG_LEVEL == 0)
+        ob_clean();
     template_show_error($message);
 }
 
