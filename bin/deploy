@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.1 2004-12-13 10:54:38 chris Exp $
+# $Id: deploy,v 1.2 2004-12-13 11:04:11 chris Exp $
 #
 
 set -e
@@ -15,7 +15,7 @@ set -e
 EXPECTED_HOST=very.unfortu.net
 
 # Location of mysociety/bin scripts
-MYSOCIETY_BIN=`pwd`
+FYR_BIN=`pwd`
 
 # User to load test schema
 PSQL_SCHEMATEST_USER=pgsql
@@ -79,9 +79,9 @@ END
 
 # Check we are root@$EXPECTED_HOST
 check_who_where () {
-    if [ ! -d "../../mysociety/bin" ] 
+    if [ ! -d "../../../mysociety/fyr/bin" ] 
     then 
-        die "must run with mysociety/bin as current directory"
+        die "must run with mysociety/fyr/bin as current directory"
     fi
     if [ "`id -u`" != "0" ]
     then
@@ -150,7 +150,7 @@ up_notice () {
 # Checks config file has all options
 # $1 - path to conf folder with general and general-example in it
 check_config_files () {
-    cd $MYSOCIETY_BIN
+    cd $FYR_BIN/../../bin
     ./compareconfig.pl $1/general $1/general-example || die "configuration files differ"
     cd -
 }
