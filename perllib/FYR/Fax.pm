@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.17 2005-02-10 14:50:45 chris Exp $
+# $Id: Fax.pm,v 1.18 2005-02-21 15:07:08 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -284,6 +284,31 @@ sub make_pbm_file ($) {
             die "wbmptopbm exited with status " . ($? >> 8);
         }
     }
+
+    # Now we might be in serious trouble. The fucking idiot who wrote wbmptopbm
+    # bothered to *test* for write errors (as might occur on a full filesystem)
+    # but didn't actually return an exit code about them:
+    #
+    #     # df -h .
+    #     Filesystem            Size  Used Avail Use% Mounted on
+    #     /tmp/fullfs          1003k 1003k     0 100% /mnt/fullfs
+    #     # cat fish.wbmp | wbmptopbm > fish.pbm && echo success
+    #     wbmptopbm: a file read or write error occurred at some point
+    #     wbmtopbm exited successfully
+    #
+    # So to check that this succeeded, we ought to parse the file to make sure
+    # it's (at least) the correct size etc. But just looking at the file size
+    # will catch the common cases.
+    my $st = stat($name);
+    if (!defined($st)) {
+        my $err = $!;
+        unlink($name);
+        die "stat of temp file failed with: $err";
+    } elsif ($st->st_size < (($im->width() * $im->height()) / 8.)) {
+        unlink($name);
+        die "temporary file is too small (" . $st->size() . " bytes)";
+    }
+
 
     return $name;
 }
