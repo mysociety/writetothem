@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.147 2005-03-24 12:29:06 chris Exp $
+# $Id: Queue.pm,v 1.148 2005-03-30 15:37:07 chris Exp $
 #
 
 package FYR::Queue;
@@ -1154,10 +1154,10 @@ my %state_action = (
             # email was sent, then send another one.
             my ($dosend, $reminder) = (0, 0); 
             if (0 == scalar(dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
-                if (actions($id) == 0) {
-                    $dosend = 1 if ($msg->{dispatched} < (time() - QUESTIONNAIRE_DELAY));
-                } elsif (actions($id) < NUM_QUESTIONNAIRE_MESSAGES) { 
-                    $dosend = $reminder = 1 if ($msg->{lastaction} < (time() - QUESTIONNAIRE_INTERVAL));
+                if (actions($id) == 14) {
+                    $dosend = 1;
+                } elsif (actions($id) == 21) {
+                    $dosend = $reminder = 1;
                 }
             }
 
