@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.7 2005-01-11 19:52:19 matthew Exp $
+ * $Id: forms.php,v 1.8 2005-01-13 23:45:59 matthew Exp $
  * 
  */
 
@@ -38,7 +38,7 @@ function get_all_variables() {
 function add_all_variables_hidden(&$form, $variables) {
     debug("SERIALIZE", "Writing hidden vars:", $variables);
     $ser_vars = base64_encode(serialize($variables));
-    $html_hidden = "<input name=\"mysociety_serialized_variables\" type=\"hidden\" value=\"$ser_vars\" \/>";
+    $html_hidden = "<input name=\"mysociety_serialized_variables\" type=\"hidden\" value=\"$ser_vars\">";
     // I tried using a 'hidden' element here, but it refuses to change
     // the value of the contents, just uses the one in _POST rather
     // than the new one.
