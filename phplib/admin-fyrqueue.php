@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.17 2004-12-30 12:49:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.18 2004-12-30 12:50:11 francis Exp $
  * 
  */
 
@@ -239,7 +239,8 @@ All time stats:
                 $messages = array();
             }
             if ($filter == 1) 
-                $description = "Messages which may need attention: <a href=\"$self_link&amp;filter=0\">[all messages]</a>";
+                $description = "Messages which may need attention " .  count($messages) .
+                ": <a href=\"$self_link&amp;filter=0\">[all messages]</a>";
             else
                 $description = "All messages in reverse order of
                     creation: <a href=\"$self_link&amp;filter=1\">[important
