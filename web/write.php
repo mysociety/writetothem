@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.40 2004-12-16 18:36:18 chris Exp $
+ * $Id: write.php,v 1.41 2004-12-17 16:19:59 chris Exp $
  * 
  */
 
@@ -20,7 +20,7 @@ require_once "../../phplib/utility.php";
 
 function default_body_text() {
         global $fyr_representative;
-        return "Dear " .  $fyr_representative['name'] . ",\n\n";
+        return "Dear " .  $fyr_representative['name'] . ",\n\n\n\nYours sincerely,\n\n";
 }
 
 class RuleAlteredBodyText extends HTML_QuickForm_Rule {
