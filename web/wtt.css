@@ -162,6 +162,17 @@ ol#instructions li#fiv span { background-color: #000066; }
 .maincol {
 	border-right: solid 2px #9c8f4f;
 }
+#repstable ul#photo {
+	list-style-type: none;
+	margin-left: 0;
+	padding-left: 0.5em;
+}
+#repstable img {
+	margin-right: 5px;
+}
+#repstable p#twfy {
+	clear: left;
+}
 
 #sidebar {
 	float: right;

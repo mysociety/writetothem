@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.46 2005-01-14 20:42:40 matthew Exp $
+ * $Id: who.php,v 1.47 2005-01-14 22:59:41 matthew Exp $
  * 
  */
 
@@ -153,7 +153,7 @@ foreach ($va_display_order as $va_type) {
 					: "${va_info['rep_name_long']} is")
 				. " not paid for the work they do.</em></p>";
 		if ($va_type == 'WMC') {
-			$text .= '<p style="clear: left"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+			$text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
 		}
 	}
 
@@ -173,7 +173,7 @@ function display_reps($representatives) {
 		$rep_info = $representatives_info[$rep_specificid];
 		$rep_list .= '<li>';
 		if (array_key_exists('image', $rep_info)) {
-			$rep_list .= '<img src="http://www.theyworkforyou.com/images/mps/'.$rep_info['image'].'" align="left" style="margin-right: 5px;">';
+			$rep_list .= '<img src="http://www.theyworkforyou.com/images/mps/'.$rep_info['image'].'" align="left">';
 		}
 		$rep_list .= '<a href="'
                        . htmlspecialchars(new_url('write', 0, 
@@ -186,7 +186,7 @@ function display_reps($representatives) {
 		if (array_key_exists('party', $rep_info))
                        $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
 	}
-	return '<ul'.(array_key_exists('image', $rep_info)?' style="list-style-type:none; margin-left:0; padding-left:0.5em;"':'').'>' . $rep_list . '</ul>';
+	return '<ul'.(array_key_exists('image', $rep_info)?' id="photo"':'').'>' . $rep_list . '</ul>';
 }
 ?>
 
