@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.61 2005-01-29 12:21:15 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.62 2005-01-30 14:09:52 chris Exp $
  * 
  */
 
@@ -108,9 +108,6 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
                 print "</td>";
                 $client_name = $message['sender_ipaddr'];
-                if ($client_name != "")  {
-                    $client_name = gethostbyaddr($client_name);
-                }
                 $short_client_name = trim_characters($client_name, strlen($client_name) - 27, 30); 
                 if ($client_name != $message['sender_ipaddr']) {
                     $client_name .= " (" . $message['sender_ipaddr'] . ")";
