@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.114 2005-01-31 11:36:49 chris Exp $
+# $Id: Queue.pm,v 1.115 2005-01-31 11:50:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -1354,7 +1354,7 @@ sub admin_get_queue ($$) {
             $other->{diff} = [map {
                                 if (ref($_) || length($_) < 200) {
                                     $_;
-                                } elsif (length($_ < 95)) {
+                                } else {
                                     (substr($_, 0, 95), undef, substr($_, -95))
                                 }
                             } @{string_diff($msg->{message}, $other->{message})}];
