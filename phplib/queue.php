@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.8 2004-10-24 17:12:47 chris Exp $
+ * $Id: queue.php,v 1.9 2004-10-25 15:21:31 francis Exp $
  * 
  */
 
@@ -32,7 +32,7 @@ function msg_create() {
  * characters for line breaks. All strings must be encoded in UTF-8.
  * Returns true on success or false on failure. */
 function msg_write($id, $sender, $recipient_id, $text) {
-    debug("QUEUE", "Writing new message");
+    debug("QUEUE", "Writing new message id $id to $recipient_id", $sender);
     $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.write', array($id, $sender, $recipient_id, $text));
     debug("QUEUE", "Result:", $result);
     if (is_array($result)) // TODO replace this with better error handling code

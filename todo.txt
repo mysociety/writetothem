@@ -1,7 +1,18 @@
 copyright messages and license agreement on source code
 
-Encrypt who=va- in URL
+Make msgid anywhereon write.php where you don't have it already
+    - reset all other fields and show first page
+Register id at start of fax writing form.
+Encrypt who= in URL
 Probably pc= after the first page or two?
+Sessions - go through this
+http://www.sitepoint.com/blog-post-view.php?id=156260
+
+Anti-spam:
+Make people reenter details each time
+Rate limit by IP
+Rate limit by Postcode
+Rate limit per representative
 
 Perhaps verify postcode again when fax is submitted
 
@@ -16,9 +27,6 @@ Consider removing voting_area from dadem return value
 
 UTF-8
 content-type utf8 on forms
-
-Sessions - go through this
-http://www.sitepoint.com/blog-post-view.php?id=156260
 
 Record referer and IP addresses the sessions has used and sequence of
 addresses
@@ -39,6 +47,8 @@ London Assembly London-wide members (create new LAE type by analogy with
 WAE/SPE) and put them there. How to lay them out? There are loads of them....
 
 Name all PHP scripts without extension
+
+Test entering HTML etc. into a fax
 
 Later
 -----

@@ -5,13 +5,46 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.4 2004-10-19 16:46:08 francis Exp $
+ * $Id: forms.php,v 1.5 2004-10-25 15:21:31 francis Exp $
  * 
  */
 
 require_once "HTML/QuickForm.php";
+require_once "HTML/QuickForm/Rule.php";
 require_once "HTML/QuickForm/Renderer/Default.php";
-// require_once "HTML/QuickForm/Renderer/QuickHtml.php";
+
+// Returns an array with all POST and GET variables, and any hidden form
+// variables which were saved with function add_all_variables_hidden
+// below.
+function get_all_variables() {
+    debug("SERIALIZE", "_GET", $_GET);
+    debug("SERIALIZE", "_POST", $_POST);
+
+    // All post and get variables, get have priority
+    $variables = array_merge($_POST, $_GET);
+
+    // Look for hidden serialised ones
+    $ser_vars = $variables['mysociety_serialized_variables'];
+    if (isset($ser_vars)) {
+        $set_vars = unserialize(base64_decode($ser_vars));
+        debug("SERIALIZE", "mysociety_serialized_variables", $set_vars);
+        $variables = array_merge($set_vars, $variables);
+    }
+    
+    unset($variables['mysociety_serialized_variables']);
+    return $variables;
+}
+
+// Saves all variables in one simple form variable.
+function add_all_variables_hidden(&$form, $variables) {
+    debug("SERIALIZE", "Writing hidden vars:", $variables);
+    $ser_vars = base64_encode(serialize($variables));
+    $html_hidden = "<input name=\"mysociety_serialized_variables\" type=\"hidden\" value=\"$ser_vars\" \/>";
+    // I tried using a 'hidden' element here, but it refuses to change
+    // the value of the contents, just uses the one in _POST rather
+    // than the new one.
+    $form->addElement('html', $html_hidden);
+}
 
 class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {
 
