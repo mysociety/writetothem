@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.9 2004-10-15 11:30:33 francis Exp $
+ * $Id: write.php,v 1.10 2004-10-18 07:34:31 francis Exp $
  * 
  */
 
@@ -16,7 +16,6 @@ include_once "../../phplib/mapit.php";
 include_once "../../phplib/votingarea.php";
 include_once "../../phplib/dadem.php";
 include_once "../../phplib/utility.php";
-
 
 // Input data
 $fyr_postcode = get_http_var('pc');

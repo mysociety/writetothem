@@ -5,11 +5,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.9 2004-10-15 17:14:00 francis Exp $
+ * $Id: who.php,v 1.10 2004-10-18 07:34:31 francis Exp $
  * 
  */
 
 $fyr_title = "Now Choose The Representative Responsible for the Topic";
+
+require_once "../phplib/forms.php";
 
 include_once "../conf/config.php";
 include_once "../../phplib/utility.php";
@@ -97,6 +99,9 @@ foreach ($voting_areas as $va_type => $va_specificid) {
             <input type=\"hidden\" name=\"pc\"
             value=\"$fyr_postcode\">";
 
+
+$form = new HTML_QuickForm('whoForm', 'get', 'write.php');
+
     $right_column = "<p>In your ${va_info['type_name']},
         <b>${va_info['name']}</b>, you are represented by ";
     if ($rep_count > 1) {
@@ -105,7 +110,6 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     } else {
         $right_column .= "one ${va_info['rep_name']}.";
     }
-    $right_column .= "</p> <table style=\"float: left;\">";
 
     // Rest of representatives
     foreach ($representatives as $rep_specificid) {
@@ -115,17 +119,14 @@ foreach ($voting_areas as $va_type => $va_specificid) {
             include "templates/generalerror.html";
             exit;
         }
-
-        $right_column .= <<<END
-                <tr>
-                    <td valign="top"><input type="radio" name="who" value="$rep_specificid"></td>
-                    <td><b>${rep_info['name']}</b><br><!--Unknown Party--></td>
-                </tr>
-END;
+        $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b>', $rep_specificid);
     }
-    $right_column .= "<td>
-        <input style=\"float: right\" type=\"submit\" value=\"Next &gt;&gt;\"> 
-        </td></table>";
+
+    $form->addElement('submit', 'next', 'Next >>');
+    $fyr_form_renderer = new HTML_QuickForm_Renderer_mySociety();
+    $form->accept($fyr_form_renderer);
+    $right_column .= $fyr_form_renderer->toHtml();
+
     array_push($fyr_representatives, array($left_column, $right_column));
 }
 
