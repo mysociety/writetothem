@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.137 2005-02-22 10:24:29 chris Exp $
+# $Id: Queue.pm,v 1.138 2005-02-23 11:32:25 chris Exp $
 #
 
 package FYR::Queue;
@@ -1177,26 +1177,28 @@ my %state_action = (
             logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
             state($id, 'failed');
 
-            # Now try to mark the contact as failing. It's not guaranteed
-            # that this will succeed, and we can't sensibly do very much if
-            # it doesn't. So just ignore any error.
-            try {
-                # Mark contact as failing.
-                my $msg = message($id);
-                my $method = defined($msg->{recipient_email}) ? 'email' : 'fax';
-                if ($msg->{recipient_via}) {
-                    my $R = mySociety::DaDem::get_representative_info($msg->{recipient_id});
-                    my $viainfo = get_via_representative($R->{voting_area});
-                    mySociety::DaDem::admin_mark_failing_contact($R->{id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
-                    logmsg($id, 1, qq#marked representative 'via' contact ($method to $msg->{"recipient_$method"}) as failing#);
-                } else {
-                    mySociety::DaDem::admin_mark_failing_contact($msg->{recipient_id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
-                    logmsg($id, 1, qq#marked representative contact ($method to $msg->{"recipient_$method"}) as failing#);
-                }
-            } catch Error with {
-                my $E = shift;
-                logmsg($id, 1, "unable to mark contact details as failing: " . $E->text());
-            };
+            # Now try to mark the contact as failing, if the message is not
+            # frozen. It's not guaranteed that this will succeed, and we can't
+            # sensibly do very much if it doesn't. So just ignore any error.
+            my $msg = message($id);
+            if (!$msg->{frozen}) {
+                try {
+                    my $msg = message($id);
+                    my $method = defined($msg->{recipient_email}) ? 'email' : 'fax';
+                    if ($msg->{recipient_via}) {
+                        my $R = mySociety::DaDem::get_representative_info($msg->{recipient_id});
+                        my $viainfo = get_via_representative($R->{voting_area});
+                        mySociety::DaDem::admin_mark_failing_contact($R->{id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
+                        logmsg($id, 1, qq#marked representative 'via' contact ($method to $msg->{"recipient_$method"}) as failing#);
+                    } else {
+                        mySociety::DaDem::admin_mark_failing_contact($msg->{recipient_id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
+                        logmsg($id, 1, qq#marked representative contact ($method to $msg->{"recipient_$method"}) as failing#);
+                    }
+                } catch Error with {
+                    my $E = shift;
+                    logmsg($id, 1, "unable to mark contact details as failing: " . $E->text());
+                };
+            }
         },
 
 #        failed => sub ($$$) {
