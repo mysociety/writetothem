@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.81 2005-01-05 14:27:12 chris Exp $
+# $Id: Queue.pm,v 1.82 2005-01-05 15:56:11 chris Exp $
 #
 
 package FYR::Queue;
@@ -1172,11 +1172,9 @@ sub admin_message_events ($) {
 =item admin_get_queue FILTER
 
 Returns an array of hashes of information about each message on the queue.
-If FILTER is 0, return all messages.
-If FILTER is 1, return only information about messages which may need
-operator attention.
-If FILTER is 2, return messages which recently changed state.
-If FILTER is 3, return messages which recently created state.
+FILTER should be: 0 to return all messages; 1 to return only information about
+messages which may need operator attention; 2 to return messages which recently
+changed state; or 3 to return messages which were created recently.
 
 =cut
 sub admin_get_queue ($) {
@@ -1268,7 +1266,7 @@ sub admin_get_stats () {
 =item admin_freeze_message ID USER
 
 Freezes the message with the given ID, so it won't be actually sent to
-the representative until thawed.  USER is the administrators name.
+the representative until thawed. USER is the administrator's name.
 
 =cut
 sub admin_freeze_message ($$) {
@@ -1281,8 +1279,8 @@ sub admin_freeze_message ($$) {
 
 =item admin_thaw_message ID USER
 
-Thaws the message with the given ID, so it will be sent to the
-representative. USER is the administrators name.
+Thaws the message with the given ID, so it will be sent to the representative.
+USER is the administrator's name.
 
 =cut
 sub admin_thaw_message ($$) {
@@ -1295,9 +1293,9 @@ sub admin_thaw_message ($$) {
 
 =item admin_set_message_to_error ID USER
 
-Moves message with given ID to error state, so aborting any further
-action, and sending delivery failure notification to constituent.
-USER is the administrators name.
+Moves message with given ID to error state, so aborting any further action, and
+sending a delivery failure notice to the constituent. USER is the
+administrator's name.
 
 =cut
 sub admin_set_message_to_error ($$) {
@@ -1310,8 +1308,8 @@ sub admin_set_message_to_error ($$) {
 
 =item admin_set_message_to_failed ID USER
 
-Moves message with given ID to failed state, so aborting any further
-action.  The constituent is not told.  USER is the administrators name.
+Moves message with given ID to failed state, aborting any further action. The
+constituent is not told. USER is the administrator's name.
 
 =cut
 sub admin_set_message_to_failed ($$) {
@@ -1324,10 +1322,10 @@ sub admin_set_message_to_failed ($$) {
 
 =item admin_set_message_to_failed_closed ID USER
 
-Moves message from failed to failed_closed state.  For when
-the admin has dealt with it.  USER is the administrators name.
-=cut
+Moves message from failed to failed_closed state to indicate that it has been
+dealt with by an administrator. USER is the administrator's name.
 
+=cut
 sub admin_set_message_to_failed_closed ($$) {
     my ($id, $user) = @_;
     state($id, 'failed_closed');
@@ -1339,8 +1337,9 @@ sub admin_set_message_to_failed_closed ($$) {
 
 =item admin_set_message_to_bounce_wait ID USER
 
-Move message ID from bounce_confirm to bounce_wait. 
-USER is the administrators name.
+Move message ID from bounce_confirm to bounce_wait. USER is the name of the
+administrator making the change.
+
 =cut
 
 sub admin_set_message_to_bounce_wait ($$) {
@@ -1353,9 +1352,10 @@ sub admin_set_message_to_bounce_wait ($$) {
 
 =item admin_add_note_to_message ID USER NOTE
 
-Add text in NOTE to the message log for the message.
-=cut
+Add text in NOTE to the message log for the message ID; USER is the name of the
+administrator leaving the note.
 
+=cut
 sub admin_add_note_to_message ($$$) {
     my ($id, $user, $note) = @_;
     logmsg($id, "$user added note: $note");
