@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.69 2005-02-11 11:51:19 matthew Exp $
+ * $Id: write.php,v 1.70 2005-02-11 14:54:28 matthew Exp $
  * 
  */
 
@@ -80,10 +80,8 @@ END;
     $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_phone', 'trim');
 
-    $form->addElement("html", "<tr><td colspan=\"2\"><em style=\"font-size: 80%\">Optional: to let your {$fyr_voting_area['rep_name']} contact you more easily</em></td></tr>"); // CSSify
-
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
-    $form->addElement("html", "</table>\n</td></tr>"); // CSSify
+    $form->addElement("html", "</table>\n<em style=\"font-size: 80%\">Optional: to let your {$fyr_voting_area['rep_name']} contact you more easily</em></td></tr>"); // CSSify
 
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
