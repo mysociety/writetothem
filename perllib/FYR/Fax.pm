@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.4 2004-12-09 12:29:20 chris Exp $
+# $Id: Fax.pm,v 1.5 2004-12-17 16:16:48 chris Exp $
 #
 
 package FYR::Fax::HardError;
@@ -249,7 +249,7 @@ sub make_representative_fax ($) {
 
     my @imgfiles = ( );
 
-    my $url = 'https://secure.writetothem.com/Roign243ohn4h8n8n9n32h4nh';
+    my $url = '<not yet available -- sorry>';
 
     try {
         my @pages = ( );
@@ -266,7 +266,7 @@ sub make_representative_fax ($) {
         $text = footer_text(2, 99, $url);
         my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
 
-        my $addr = $msg->{sender_addr};
+        my $addr = $msg->{sender_name} . "\n" . $msg->{sender_addr};
         $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
         $addr .= "\n\n" . "Email: $msg->{sender_email}";
 
