@@ -6,12 +6,13 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.11 2004-10-06 11:25:54 chris Exp $
+ * $Id: dadem.php,v 1.12 2004-10-06 11:31:14 chris Exp $
  * 
  */
 
 include_once('votingarea.php');
 
+/* Error codes */
 define('DADEM_BAD_TYPE', 1);            /* bad area type */
 define('DADEM_UNKNOWN_AREA', 2);        /* unknown area */
 define('DADEM_REP_NOT_FOUND', 3);       /* unknown representative id */
@@ -42,6 +43,15 @@ function dadem_strerror($e) {
         return "Unknown DaDem error";
     else
         return $dadem_error_strings($e)
+}
+
+/* dadem_get_error R
+ * Return FALSE if R indicates success, or an error string otherwise. */
+function dadem_get_error($e) {
+    if (is_array($e))
+        return FALSE;
+    else
+        return dadem_strerror($e);
 }
 
 // TODO: In theory, this shouldn't take the type
