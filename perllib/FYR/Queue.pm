@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.112 2005-01-31 10:17:06 chris Exp $
+# $Id: Queue.pm,v 1.113 2005-01-31 11:06:06 chris Exp $
 #
 
 package FYR::Queue;
@@ -1232,6 +1232,14 @@ All messages on the queue.
 
 Messages which may need operator attention.
 
+=item failing
+
+Messages which are failing or have failed to be delivered, for any reason.
+
+=item frozen
+
+Messages which are frozen in states new, pending or ready.
+
 =item recentchanged
 
 Up to 100 of the messages which have most recently changed state.
@@ -1255,7 +1263,7 @@ details are searched, as well as matching confirmation tokens.
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all important recentchanged recentcreated similarbody search);
+    my %allowed = map { $_ => 1 } qw(all important failing frozen recentchanged recentcreated similarbody search);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
@@ -1272,6 +1280,14 @@ sub admin_get_queue ($$) {
         # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
         # index to do the scan. q.v. comments on the end of,
         #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
+    } elsif ($filter eq 'failing') {
+        $where = q#
+            where (state = 'ready' and not frozen and numactions > 0)
+                  or state = 'failed'#;
+    } elsif ($filter eq 'frozen') {
+        $where = q#
+            where frozen = 't'
+                  and (state = 'new' or state = 'pending' or state = 'ready')#;
     } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc limit 100";
     } elsif ($filter eq 'recentcreated') {
