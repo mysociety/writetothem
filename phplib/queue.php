@@ -6,14 +6,20 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.4 2004-10-20 10:44:40 francis Exp $
+ * $Id: queue.php,v 1.5 2004-10-20 12:43:56 chris Exp $
  * 
  */
+
+include_once('simplexmlrpc.php');
+include_once('utility.php');
 
 /* msg_create
  * Return a string ID for a new outgoing fax/email message. */
 function msg_create() {
-    return sprintf("D%08x%08xYXX", rand(), rand());
+    debug("QUEUE", "Getting new message ID");
+    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.create', array());
+    debug("QUEUE", "New ID is $result");
+    return $result;
 }
 
 /* msg_write ID SENDER RECIPIENT TEXT
@@ -26,28 +32,31 @@ function msg_create() {
  * characters for line breaks. All strings must be encoded in UTF-8.
  * Returns true on success or false on failure. */
 function msg_write($id, $sender, $recipient_id, $text) {
-    return true;
-}
-
-/* msg_state ID [STATE]
- * Get/set the state of the message with the given ID. */
-function msg_state($id, $state = null) {
-    return 'pending';
+    debug("QUEUE", "Writing new message");
+    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.write', array($id, $sender, $recipient_id, $text));
+    debug("QUEUE", "Result is $result");
+    return $result;
 }
 
 /* msg_secret
  * Return some secret data suitable for use in verifying transactions
- * associated with data. */
+ * associated with a message. */
 function msg_secret() {
-    return 'SECRET';
+    debug("QUEUE", "Getting secret");
+    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.secret', array());
+    debug("QUEUE", "Retrieved (very hush-hush) secret");
+    return $result;
 }
 
-/* msg_confirm_token TOKEN
+/* msg_confirm_email TOKEN
  * Pass the TOKEN, which has been supplied by the user in a URL parameter or
  * whatever, to the queue to confirm the user's email address. Returns true on
  * success or false on failure. */
-function msg_confirm_token($token) {
-    return true;
+function msg_confirm_email($token) {
+    debug("QUEUE", "Confirming email");
+    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.confirm_email', array($token));
+    debug("QUEUE", "Result is $result");
+    return $result;
 }
 
 ?>
