@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.134 2005-02-17 00:34:17 francis Exp $
+# $Id: Queue.pm,v 1.135 2005-02-18 14:26:52 chris Exp $
 #
 
 package FYR::Queue;
@@ -1179,9 +1179,9 @@ my %state_action = (
             if ($msg->{sender_name} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
-                # bump timer
-                state($id, 'failed_closed');
             }
+            # bump timer
+            state($id, 'failed_closed');
         }
     );
 
