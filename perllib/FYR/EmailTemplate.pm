@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: EmailTemplate.pm,v 1.1 2004-11-16 16:29:51 chris Exp $
+# $Id: EmailTemplate.pm,v 1.2 2004-11-18 13:27:57 chris Exp $
 #
 
 package FYR::EmailTemplate;
@@ -29,14 +29,15 @@ Formatting of emails from plain-text templates.
 
 =over 4
 
-=item format TEMPLATE VALUES
+=item format TEMPLATE VALUES [NOWRAP]
 
 TEMPLATE is the filename of an email template; VALUES is a reference to a hash
-of the values which will be filled in in it.
+of the values which will be filled in in it. If NOWRAP is true, no wrapping of
+the output text will be performed.
 
 =cut
-sub format ($$) {
-    my ($template, $values) = @_;
+sub format ($$;$) {
+    my ($template, $values, $nowrap) = @_;
     my $f = new IO::File($template, O_RDONLY) or die "$template: $!";
 
     my $text = '';
@@ -66,6 +67,8 @@ sub format ($$) {
     $f->close();
     
     $text .= "\n\n";
+
+    return $text if ($nowrap);
 
     local($Text::Wrap::columns = 72);
     local($Text::Wrap::huge = 'overflow');
