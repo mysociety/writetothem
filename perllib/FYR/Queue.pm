@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.123 2005-02-03 18:08:37 chris Exp $
+# $Id: Queue.pm,v 1.124 2005-02-04 12:37:26 chris Exp $
 #
 
 package FYR::Queue;
@@ -33,7 +33,6 @@ use MIME::Entity;
 use MIME::Words;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
-use Data::Dumper;
 
 use utf8;
 
@@ -80,6 +79,7 @@ sub create () {
 # defined. Sets the RECIPIENT->{via} if the message is to be sent via the
 # elected body's Democratic Services or similar contact, and sets up fax and
 # email fields for that delivery.
+sub work_out_destination ($);
 sub work_out_destination ($) {
     my ($recipient) = @_;
    
@@ -109,22 +109,25 @@ sub work_out_destination ($) {
     } elsif ($recipient->{method} eq "via") {
         # Representative should be contacted via the elected body on which they
         # sit.
-        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{area_id});
-        my $vainfo = DaDem::get_representatives($ainfo->{parent_area_id});
+        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{voting_area});
+        my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area_id});
+
         throw FYR::Error("Bad return from DaDem looking up contact via info")
             unless (ref($vainfo) eq 'ARRAY');
         throw FYR::Error("More than one via contact (shouldn't happen)")
             if (@$vainfo > 1);
         throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
             if (!@$vainfo);
+
+        my $viainfo = mySociety::DaDem::get_representative_info($vainfo->[0]);
         throw FYR::Error("Bad contact mehod for via contact (shouldn't happen)")
-            if ($vainfo->[0]->{method} eq 'via');
+            if ($viainfo->{method} eq 'via');
         
         foreach (qw(method fax email)) {
-            $recipient->{$_} = $vainfo->[0]->{$_};
+            $recipient->{$_} = $viainfo->{$_};
         }
         $recipient->{via} = 1;
-        work_out_recipient($recipient);
+        work_out_destination($recipient);
     } elsif ($recipient->{method} eq "unknown") {
         throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
     } else {
@@ -517,11 +520,13 @@ sub format_email_body ($) {
 sub make_representative_email ($) {
     my ($msg) = (@_);
 
+    my $subject = "Letter from your constituent $msg->{sender_name}";
     my $bodytext = '';
 
     # If this is being sent via some contact, we need to add blurb to the top
     # to that effect.
     if ($msg->{recipient_via}) {
+        $subject = "Letter from constituent $msg->{sender_name} to $msg->{recipient_name}";
         $bodytext = FYR::EmailTemplate::format(
                 email_template('via-coversheet'),
                 email_template_params($msg, representative_url => '')
@@ -531,11 +536,14 @@ sub make_representative_email ($) {
     return MIME::Entity->build(
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
-            Subject => "Letter from your constituent " . format_mimewords($msg->{sender_name}),
+            Subject => format_mimewords($subject),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_email.
             Encoding => 'quoted-printable',
-            Data => format_email_body($msg)
+            Data =>
+                $bodytext
+                . "\n\n"
+                . format_email_body($msg)
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . FYR::EmailTemplate::format(
                     email_template('footer'),
@@ -662,11 +670,10 @@ sub email_template ($) {
 # elements from EXTRA.
 sub email_template_params ($%) {
     my ($msg, %params) = @_;
-    foreach (qw(sender_name recipient_name recipient_position recipient_position_plural recipient_id)) {
+    foreach (qw(sender_name sender_addr recipient_name recipient_position recipient_position_plural recipient_id)) {
         $params{$_} = $msg->{$_};
     }
-    my $a = $msg->{sender_addr};
-    $a =~ s#[,.]?\n+#, #g;
+    $params{sender_addr} =~ s#[,.]?\n+#, #g;
 
     # Also obtain the voting area name -- needed for the via template.
     my $r = mySociety::DaDem::get_representative_info($msg->{recipient_id});
