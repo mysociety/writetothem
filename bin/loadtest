@@ -1,0 +1,153 @@
+#!/usr/bin/perl -w
+#
+# loadtest:
+#
+# Copyright (c) 2005 Chris Lightfoot. All rights reserved.
+# Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: loadtest,v 1.1 2005-02-24 15:49:44 chris Exp $';
+
+use strict;
+
+require 5.008_000;
+
+use Data::Dumper;
+use POSIX qw(strftime);
+use Time::HiRes qw(time);
+use WWW::Mechanize;
+
+$| = 1;
+
+sub t () {
+    return strftime('%Y%m%dT%H%M%S', localtime(time()));
+}
+
+sub Do ($$) {
+    my ($what, $how) = @_;
+    my $t1 = time();
+    my $r;
+    $r = &$how;
+    if (!$r->is_success()) {
+        printf "%s %s: status = %s\n", t(), $what, $r->status_line();
+        die sprintf("%s: %f FAILED\n", $what, time() - $t1);
+    }
+    printf "%s $what: %f\n", t(), time() - $t1;
+    return $r;
+}
+
+sub do_transaction ($) {
+    my $postcode = shift;
+
+    my $m = new WWW::Mechanize();
+    Do("$postcode: front-page", sub {
+        $m->get('http://staging.writetothem.com/')
+    });
+
+    die "$postcode: front-page: bad\n"
+        unless ($m->content() =~ m#First, type your UK postcode#);
+
+    sleep(5);
+
+    my $r = Do("$postcode: submit-postcode", sub {
+        $m->submit_form(
+                form_number => 1,
+                fields => {
+                    pc => $postcode
+                });
+    });
+
+    die "$postcode: submit-postcode: bad\n"
+        unless ($m->content() =~ m#Now select the representative you#);
+
+    # find link to MP
+    my ($mpname) = ($m->content() =~ m#Find out more about (.+) at TheyWorkForYou\.com#);
+    die "$postcode: find-mp-name: no match\n" unless (defined($mpname));
+
+    sleep(5);
+
+    Do("$postcode: follow-link-to-mp", sub {
+        $m->follow_link(text_regex => qr/\Q$mpname\E/);
+    });
+
+    die "$postcode: follow-link-to-mp: bad\n"
+        unless ($m->content() =~ m#Read this before writing your#);
+
+    # Time to write the letter.
+    sleep(60);
+
+    Do("$postcode: preview-letter", sub {
+        $m->submit_form(
+                form_number => 1,
+                fields => {
+                    writer_name => 'Test Testy McTest',
+                    writer_address1 => '1, The Shrubbery',
+                    writer_address2 => 'Much Wailing In The Fields',
+                    writer_town => 'Test Town',
+                    writer_email => 'dev-null@very.unfortu.net',
+                    body => <<EOF
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean adipiscing pede sed diam. Morbi vel sem nec justo volutpat porta. Nulla sit amet ipsum eu erat pellentesque rhoncus. Etiam et velit a nunc consectetuer pharetra. Cras malesuada. Nam suscipit commodo quam. Fusce nulla. Praesent enim. Suspendisse potenti. Sed sodales tincidunt pede. Quisque sodales rutrum sem. Sed auctor venenatis mauris. Morbi eu augue. Etiam suscipit est sit amet tortor. Nulla massa. Integer id odio.
+
+Donec sagittis rhoncus wisi. Praesent blandit, purus vitae tempus hendrerit, arcu purus lobortis ligula, et pharetra nibh quam sed sapien. Sed porta accumsan nibh. Nulla odio. Aenean id felis ut odio volutpat pulvinar. Maecenas egestas, dui et auctor tempor, nunc sapien placerat nulla, ut vestibulum augue mi mattis leo. Mauris dui libero, condimentum ut, lacinia id, suscipit eu, odio. Duis sit amet mi. Donec magna justo, tempus sit amet, elementum a, auctor ut, eros. Pellentesque justo. Integer ac est. Aenean suscipit sem. Duis molestie. Nam placerat.
+
+Cras id lacus. Quisque in felis luctus ipsum iaculis placerat. Donec eu neque nec eros blandit nonummy. In sit amet neque. Maecenas fringilla tortor ac orci. Aliquam justo dolor, dapibus non, faucibus non, tempor tempus, augue. Sed lacus metus, dictum ac.
+EOF
+                },
+                button => 'submitPreview');
+    });
+
+    die "$postcode: preview-letter: bad\n"
+        unless ($m->content() =~ m#Now Preview The Message#);
+
+    # Time for punter to review preview.
+    sleep(10);
+
+    Do("$postcode: confirm-letter", sub {
+        $m->click('submitSendFax');
+    });
+
+    die "$postcode: confirm-letter: bad\n"
+        unless ($m->content() =~ m#Now check your email#);
+}
+
+sub do_test_run ($$$) {
+    my ($pc, $off, $step) = @_;
+    sleep(rand(30));
+    while ($off < @$pc) {
+        my $t1 = time();
+        if (!defined(eval {
+                local $SIG{__DIE__};
+                do_transaction($pc->[$off]);
+                1;
+            })) {
+            print t() . " $@";
+            print t() . " $pc->[$off]: FAILED\n";
+            sleep(80 - (time() - $t1));
+        }
+        $off += $step;
+    }
+}
+
+open(P, "$ENV{HOME}/random-postcodes") or die "~/random-postcodes: $!";
+my @postcodes = <P> or die "~/random-postcodes: $!";
+chomp(@postcodes);
+close(P) or die "~/random-postcodes: $!";
+
+my $children = $ARGV[0];
+$children ||= 10;
+
+my $i;
+for ($i = 0; $i < $children; ++$i) {
+    my $childpid = fork();
+    if ($childpid == 0) {
+        do_test_run(\@postcodes, $i, $children);
+        exit(0);
+    }
+}
+
+print STDERR "waiting for children to finish... ";
+for ($i = 0; $i < $children; ++$i) {
+    wait();
+    print STDERR "$i ";
+}
+print STDERR "done.\n";
