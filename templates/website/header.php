@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_URI']!='/') print '</a>';
 if (OPTION_FYR_REFLECT_EMAILS) {
     print " - Staging Site";
 } else {
-    print "- Beta Test";
+    print " - Beta Test";
 }
 ?>
 </h1>
