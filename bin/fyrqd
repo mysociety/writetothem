@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.11 2005-02-03 11:46:55 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.12 2005-02-04 12:19:31 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -37,6 +37,18 @@ use FYR::Queue;
 
 # Variable set in signal handler to indicate termination.
 my $foad = 0;
+
+# logmsg_handler ID TIME STATE MESSAGE IMPORTANT
+# Callback for logmsg, so that we can log fyrqd messages to the system log or
+# standard error for easier debugging.
+sub logmsg_handler ($$$$$) {
+    my ($id, $time, $state, $msg, $important) = @_;
+    print_log($important ? 'info' : 'notice',
+            "message $id($state): $msg");
+    print_log($important ? 'info' : 'notice',
+            "last message delayed by " . (time() - $time) . " seconds")
+                if ($time > time() + 5);
+}
 
 # run_daemon EMAIL FAX SEQUENCE SOCKET
 # Actual guts of the thing. SEQUENCE is the total number of daemon processes
@@ -112,6 +124,8 @@ if ($help) {
     pod2usage(-exitval => 0, -verbose => 1);
     exit(0);
 }
+
+FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 if ($once) {
     FYR::Queue::process_queue($email, $fax);
@@ -305,5 +319,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.11 2005-02-03 11:46:55 francis Exp $
+$Id: fyrqd,v 1.12 2005-02-04 12:19:31 chris Exp $
 
