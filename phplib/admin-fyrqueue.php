@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.38 2005-01-08 00:06:27 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.39 2005-01-08 10:26:59 matthew Exp $
  * 
  */
 
@@ -65,10 +65,10 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($message['numactions'] > 0) {
                     if ($message['state'] == 'pending')  {
                         print "<br>" .  ($message['numactions'] - 1) . " ".
-                        make_plural("reminder", ($message['numactions'] - 1));
+                        make_plural(($message['numactions'] - 1), 'reminder');
                     } else {
                         print "<br>". $message['numactions'] . " " .
-                        make_plural("attempt", $message['numactions']);
+                        make_plural($message['numactions'], 'attempt');
 
                     }
                 }
