@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.62 2005-02-13 13:55:09 francis Exp $
+ * $Id: who.php,v 1.63 2005-02-13 16:57:57 matthew Exp $
  * 
  */
 
@@ -188,15 +188,14 @@ function display_reps($representatives) {
                                         'fyr_extref', fyr_external_referrer()))
                 . '">';
         if ($rep_specificid == '2000005') {
-            $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0"></a>';
+            $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0">';
             $photo = 1;
         } elseif (array_key_exists('image', $rep_info)) {
-            $rep_list .= $a . '<img alt="" title="Portrait of ' . htmlspecialchars($rep_info['name']) . '" src="' . $rep_info['image'] . '" align="left"></a>';
+            $rep_list .= $a . '<img alt="" title="Portrait of ' . htmlspecialchars($rep_info['name']) . '" src="' . $rep_info['image'] . '" align="left">';
             $photo = 1;
         }
-        $rep_list .= $a
-                       . htmlspecialchars($rep_info['name'])
-                       . '</a>';
+        if ($photo == 0) $rep_list .= $a;
+        $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
         if (array_key_exists('party', $rep_info))
                        $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
     }
