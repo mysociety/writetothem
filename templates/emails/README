@@ -13,9 +13,14 @@ Values which are available in all emails are:
 
   - recipient_position, their position, e.g. "MP";
 
-  - recipient_position_plural, plural form of position, e.g. "MPs"; and
+  - recipient_position_plural, plural form of position, e.g. "MPs";
 
-  - sender_name, the full name of the sender as they supplied it.
+  - recipient_area_name, their voting area, e.g. "Sedgefield";
+
+  - sender_name, the full name of the sender as they supplied it; and
+
+  - sender_address, the sender's address, formatted with commas between each
+    line.
 
 The text of each message should be formatted with blank lines between
 paragraphs; all text will be filled/wrapped to an appropriate width before
