@@ -6,15 +6,15 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.3 2004-12-16 18:33:22 francis Exp $
+# $Id: AbuseChecks.pm,v 1.4 2004-12-17 19:17:56 chris Exp $
 #
 
 package FYR::AbuseChecks;
 
 use strict;
 
+use Geo::IP;
 use Net::Google::Search;
-use Data::Dumper;
 
 use mySociety::Config;
 
@@ -46,12 +46,71 @@ sub google_for_postcode ($) {
     my $googlesearch = sprintf('%s OR "%s" writetothem OR faxyourmp -site:mysociety.org', $pc, $pc2);
     $G->query('', $googlesearch);
     my $results = $G->results();
-    #warn Dumper($results);
-    #warn $googlesearch;
-    #warn scalar(@$results);
 
     return (scalar(@$results) > 0);
 }
+
+# check_ip_country ADDRESS
+# Return true if the IP ADDRESS is outside the UK.
+sub check_ip_country ($) {
+    my ($addr) = @_;
+    our $G;
+    $G ||= new GeoIP(GEOIP_STANDARD);
+    my $cc = $G->country_code_by_addr($addr);
+    return !(defined($cc) and $cc =~ m#^(GB|UK)$#);
+}
+
+# @tests
+# List of tests to apply to messages. Each entry in the array should be a
+# reference to a list of: action ('hold' or 'drop') and a code reference, which
+# should return an explanatory message if the test succeeds for this message.
+# Tests are applied in the order given and the first which succeeds for a
+# message determines its fate.
+my @tests = (
+        # Debugging test cases
+        [
+            'hold',
+            sub ($) {
+                return 'ABUSETESTHOLD appears in message body'
+                    if return ($_[0]->{message} =~ m#ABUSETESTHOLD#);
+            }
+        ],
+
+        [
+            'reject',
+             sub ($) {
+                return "ABUSETESTREJECT appears in message body"
+                    if ($_[0]->{message} =~ m#ABUSETESTREJECT#);
+            },
+        ],
+
+        # IP address outside UK
+        [
+            'hold',
+            sub ($) {
+                return qq#IP address $_[0]->{sender_ipaddr} is not in the UK#
+                    if (!check_ip_country($_[0]->{sender_ipaddr}));
+            }
+        ]
+
+        # Extremely short messages
+        [
+            'hold',
+            sub ($) {
+                return "Message is extremely short"
+                    if (length($msg->{message}) - length($msg->{recipient_name}) < 50);
+            }
+        ],
+
+        # Check for postcodes advertised on Google
+        [
+            'hold',
+            sub ($) {
+                return qq#Postcode "$_[0]->{sender_postcode}" appears in Google with term "faxyourmp" or "writetothem"#
+                    if (google_for_postcode($_[0]->{sender_postcode}));
+            }
+        ]
+    );
 
 =item test MESSAGE
 
@@ -65,18 +124,12 @@ the reason for the admin for the result.
 sub test ($) {
     my ($msg) = @_;
 
-    # Debug options
-    if ($msg->{message} =~ m/ABUSETESTHOLD/) {
-        return ('hold', 'ABUSETESTHOLD present in message body');
+    foreach (@tests) {
+        my ($what, $f) = @$_;
+        if (defined($why = &$f($msg))) {
+            return ($what, $why);
+        }
     }
-    if ($msg->{message} =~ m/ABUSETESTREJECT/) {
-        return ('reject', 'ABUSETESTREJECT present in message body');
-    }
-
-    # See if postcode mentioned on interweb
-    return ('hold', 'Postcode appears in Google with term "faxyourmp" or "writetothem"') if (google_for_postcode($msg->{sender_postcode}));
-
-    # XXX flesh out with dynamic anti-spam rules
 
     return ('ok', undef);
 }
