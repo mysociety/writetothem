@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.19 2004-12-30 13:40:38 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.20 2004-12-30 13:41:28 francis Exp $
  * 
  */
 
@@ -62,7 +62,6 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 $client_name = $message['sender_ipaddr'];
                 if ($client_name != "")  {
                     $client_name = gethostbyaddr($client_name);
-                    $client_name = "host217-43-191-66.range217-43.btcentralplus.com";
                 }
                 $short_client_name = trim_characters($client_name, strlen($client_name) - 29, 30); 
 
