@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.127 2005-02-09 18:48:56 chris Exp $
+# $Id: Queue.pm,v 1.128 2005-02-10 18:11:03 chris Exp $
 #
 
 package FYR::Queue;
@@ -945,7 +945,7 @@ use constant NUM_QUESTIONNAIRE_MESSAGES => 2;
 use constant QUESTIONNAIRE_DELAY => (14 * DAY);
 
 # How often after that we send a questionnaire reminder.
-use constant QUESTIONNAIRE_INTERVAL => (14 * DAY);
+use constant QUESTIONNAIRE_INTERVAL => (7 * DAY);
 
 # How long after sending the message do we retain its text in case the
 # recipient wants to forward it?
@@ -1013,7 +1013,7 @@ my %state_action_interval = (
 
         # How often we attempt delivery of an error report in the face of soft
         # failures.
-        error           => 43200,
+        error           => DAY / 2,
 
         # How often we grind over failed messages to scrub old ones of personal
         # information.
