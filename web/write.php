@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.4 2004-10-06 15:27:41 francis Exp $
+ * $Id: write.php,v 1.5 2004-10-06 16:20:20 francis Exp $
  * 
  */
 
@@ -30,20 +30,24 @@ if (!preg_match("/^([0-9]+)$/", $fyr_who, $matches)) {
 list($dummy_all, $rep_id) = $matches;
 debug("FRONTEND", "Representative $rep_id");
 
-// Check to see if previewing
+// Check to see if previewing or another mode
 $action = get_http_var('act');
 $fyr_preview = false;
 $fyr_complete = false;
 if ($action == "preview") {
-    $preview = true;
+    $fyr_preview = true;
+
     $writer_name = get_http_var('writer_name');
+    $writer_name_valid = (isset($writer_name) && strlen($writer_name) > 0);
     $writer_address1 = get_http_var('writer_address1');
     $writer_address2 = get_http_var('writer_address2');
     $writer_town = get_http_var('writer_town');
     // $fyr_postcode
     $writer_email = get_http_var('writer_email');
-
-    $fyr_complete = true;
+    
+    if ($writer_name_valid) {
+        $fyr_complete = true;
+    }
 }
 
 // Information specific to this representative

@@ -1,0 +1,19 @@
+<?php
+/*
+ * Configuration parameters, in PHP syntax.  File is also read in by
+ * a Perl script, so keep things uniform.  Make a copy of this
+ * file called config.php and edit it to suit.
+ * 
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org; WWW: http://www.mysociety.org
+ *
+ * $Id: config.php.incvs,v 1.1 2004-10-06 16:20:20 francis Exp $
+ * 
+ */
+
+/* Where the XML-RPC service for DaDem is */
+define('DADEM_HOST', 'caesious.beasts.org');
+define('DADEM_PORT', 80);
+define('DADEM_PATH', '/~chris/scripts/xmlrpc');
+
+

@@ -7,13 +7,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.18 2004-10-06 15:40:16 francis Exp $
+ * $Id: dadem.php,v 1.19 2004-10-06 16:20:20 francis Exp $
  * 
  */
 
 include_once('votingarea.php');
-
 include_once('simplexmlrpc.php');
+include_once('../conf/config.php');
 
 /* Error codes */
 define('DADEM_UNKNOWN_AREA', 1);        /* unknown area */
@@ -61,40 +61,7 @@ function dadem_get_error($e) {
  * area on success, or an error code on failure. */
 function dadem_get_representatives($va_id) {
     debug("DADEM", "Looking up representatives for voting area id $va_id");
-    return sxr_call('caesious.beasts.org', 80, '/~chris/scripts/xmlrpc', 'DaDem.get_representatives', array($va_id));
-/*    // Hardwired stub dummy data
-    if ($va_id == 2) { // VA_CED
-        $ret = array(
-                1,
-            );
-    } else if ($va_id == 4) { // VA_DIW
-        $ret = array(
-                2,
-                3,
-                4,
-            );
-    } else if ($va_id == 6) { // VA_WMC
-        $ret = array(
-                5,
-            );
-    } else if ($va_id == 8) { // VA_EUR
-        $ret = array(
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-            );
-    }
-    if (isset($ret)) {
-        debug("DADEM", "Looked up representatives for voting area id $va_id");
-        debug("DADEMRESULT", "Results:", $ret);
-        return $ret;
-    }
-    debug("DADEM", "Unknown area id $va_id");
-    return DADEM_UNKNOWN_AREA;*/
+    return sxr_call(DADEM_HOST, DADEM_PORT, DADEM_PATH, 'DaDem.get_representatives', array($va_id));
 }
 
 /* dadem_get_representative_info ID
