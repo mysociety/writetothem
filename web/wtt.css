@@ -96,7 +96,7 @@ a:hover {	color: #000000; }
 	border-top: solid 1px #527b10;
 	font-size: 90%;
 	text-align: center;
-	width: 50%;
+	width: 75%;
 	margin: 1em auto 0;
 	clear: both;
 }
@@ -127,7 +127,7 @@ ol#instructions li#fiv span { background-color: #000066; }
 #postcodeForm {
 	_width: 25em;
 	display: table;
-	margin: 1em auto;
+	margin: 1.5em auto 1em;
 	text-align: center;
 	border: solid 2px #9c8f4f; /* #a5a57c; */ /* 314208; */
 	padding: 8px;
