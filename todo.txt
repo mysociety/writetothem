@@ -11,3 +11,6 @@ Make sure debug log messages can't print data which should be encrypted ;(
 
 Validate HTML
 
+Perhaps strengthen rigour of basic checks for existence of all users
+address details etc.
+
