@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.4 2005-01-11 16:14:51 chris Exp $
+ * $Id: about.php,v 1.5 2005-01-11 16:49:28 chris Exp $
  * 
  */
 
@@ -17,14 +17,20 @@ require_once "../phplib/fyr.php";
  *   /$template_name
  * to
  *   /about.php?page=$template_name
- * for about-... and problem-... templates.
+ * for about-... and problem-... templates. We also allow access to the
+ * write-checkemail template, because that's handy for debugging.
  */
 
 $page = get_http_var("page");
-if (!isset($page) || !preg_match('/^(?:about|problem)-[a-z]+$/', $page))
+if (!isset($page) || (!preg_match('/^(?:about|problem)-[a-z]+$/', $page) && $page != 'write-checkemail'))
     $page = 'index';
-
+    
 $values = array();
+
+if ($page = 'write-checkemail')
+    /* Fill in some other values as required. */
+    $values['voting_area'] = array('rep_name' => 'MP' /* ... XXX */);
+
 
 /* Don't want problem pages to be indexed, really. */
 if (preg_match('/^problem-/', $page))
