@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.65 2004-12-17 16:18:09 chris Exp $
+# $Id: Queue.pm,v 1.66 2004-12-18 13:21:55 francis Exp $
 #
 
 package FYR::Queue;
@@ -330,9 +330,9 @@ update the laststatechange field. If a message is moved to the "failed" or
 sub state ($;$) {
     my ($id, $state) = @_;
     if (defined($state)) {
-        my $curr_state = FYR::DB::dbh()->selectrow_array('select state from message where id = ? for update', {}, $id);
+        my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
         die "Bad state '$state'" unless (exists($allowed_transitions{$state}));
-        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state});
+        die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error')));
         if ($state ne $curr_state) {
             FYR::DB::dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
             logmsg($id, "changed state to $state");
@@ -1199,6 +1199,22 @@ sub admin_get_queue ($) {
     return \@ret;
 }
 
+=item admin_get_message ID
+
+Returns a hash of information about message with id ID.
+
+=cut
+sub admin_get_message ($) {
+    my ($id) = @_;
+    my $sth = FYR::DB::dbh()->prepare("select 
+        *, length(message) as message_length from message where id =
+        ?");
+    $sth->execute($id);
+    my $hash_ref = $sth->fetchrow_hashref();
+    return $hash_ref;
+}
+
+
 =item admin_get_stats
 
 Returns a hash of statistics about the queue.
@@ -1253,5 +1269,34 @@ sub admin_thaw_message ($) {
     FYR::DB::dbh()->commit();
     return 0;
 }
+
+=item admin_error_message ID
+
+Moves message with given ID to error state, so aborting any further
+action, and sending delivery failure notification to constituent.
+
+=cut
+sub admin_error_message ($) {
+    my ($id) = @_;
+    state($id, 'error');
+    logmsg($id, "admin put message in state 'error'");
+    FYR::DB::dbh()->commit();
+    return 0;
+}
+
+=item admin_failed_message ID
+
+Moves message with given ID to failed state, so aborting any further
+action.  The constituent is not told.
+
+=cut
+sub admin_failed_message ($) {
+    my ($id) = @_;
+    state($id, 'failed');
+    logmsg($id, "admin put message in state 'failed'");
+    FYR::DB::dbh()->commit();
+    return 0;
+}
+
 
 1;

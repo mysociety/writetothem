@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.21 2004-12-16 18:33:22 francis Exp $
+ * $Id: queue.php,v 1.22 2004-12-18 13:21:55 francis Exp $
  * 
  */
 
@@ -129,12 +129,22 @@ function msg_admin_message_events($id) {
 
 /* msg_admin_get_queue FILTER
  * Returns array of hashes of recent queue events. 
- * Set FILTER to 0 for all events, or 1 for only important ones.*/
+ * Set FILTER to 0 for all events, 1 for only important ones, or 2 for
+ * recently changed ones.*/
 function msg_admin_get_queue($filter) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter));
     return $result;
 }
+
+/* msg_admin_get_message ID
+ * Returns hash of info about message with id ID. */
+function msg_admin_get_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_get_message', array($id));
+    return $result;
+}
+
 
 /* msg_admin_get_stats
  * Returns hash of statistics about queue. */
@@ -159,6 +169,23 @@ function msg_admin_thaw_message($id) {
     $result = $fyr_queue_client->call('FYR.Queue.admin_thaw_message', array($id));
     return $result;
 }
+
+/* msg_admin_error_message ID
+ * Abandons all actions, sends delivery failure to constituent.*/
+function msg_admin_error_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_error_message', array($id));
+    return $result;
+}
+
+/* msg_admin_failed_message ID
+ * Abandons all actions. */
+function msg_admin_failed_message($id) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_failed_message', array($id));
+    return $result;
+}
+
 
 
 ?>
