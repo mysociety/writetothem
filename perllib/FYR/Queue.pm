@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.51 2004-12-15 14:37:31 chris Exp $
+# $Id: Queue.pm,v 1.52 2004-12-15 15:35:04 francis Exp $
 #
 
 package FYR::Queue;
@@ -769,14 +769,14 @@ sub confirm_email ($) {
 =item record_questionnaire_answer TOKEN QUESTION RESPONSE
 
 Record a user's response to a questionnaire question. TOKEN is the token sent
-them in the questionnaire email; QUESTION must be 0 and RESPONSE must be "YES",
-indicating that they have received a reply, or "NO", indicating that they have
-not.
+them in the questionnaire email; QUESTION must be 0 or 1 and RESPONSE
+must be "YES", indicating that they have received a reply, or "NO",
+indicating that they have not.
 
 =cut
 sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
-    throw FYR::Error("Bad QUESTION (should be '0')") if ($qn ne '0');
+    throw FYR::Error("Bad QUESTION (should be '0' or '1')") if ($qn ne '0' and $qn ne '1');
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
         FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.17 2004-12-14 20:29:55 chris Exp $
+ * $Id: queue.php,v 1.18 2004-12-15 15:35:04 francis Exp $
  * 
  */
 
@@ -81,7 +81,7 @@ function msg_recipient_test($recipient_id) {
  * QUESTION should be 0, and ANSWER must be "YES" or "NO". */
 function msg_record_questionnaire_answer($token, $qn, $answer) {
     global $fyr_queue_client;
-    debug("QUEUE", "Recordng answer");
+    debug("QUEUE", "Recording answer");
     $result = $fyr_queue_client->call('FYR.Queue.record_questionnaire_answer', array($token, $qn, $answer));
     debug("QUEUE", "Result: ", $result);
     return $result;
