@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.56 2005-01-13 02:36:48 chris Exp $
+ * $Id: write.php,v 1.57 2005-01-13 10:55:26 chris Exp $
  * 
  */
 
@@ -170,23 +170,21 @@ function submitFax() {
             ),
             $fyr_values['who'], 
             $fyr_values['signedbody']);
+
+    /* $result is an RABX error, the name of a template to redirect to, or null
+     * on success. */
     if (isset($result)) {
         if (rabx_is_error($result)) {
             if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
+            else
+                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
             header("Location: /$result");
             exit;
         }
-        if ($success->code == FYR_QUEUE_MESSAGE_SUSPECTED_ABUSE) 
-            template_show_error("Sorry, but we've had to reject your
-            message.  Please see if you have broken any of our <a
-            href=\"about-guidelines\">Guidelines for Campaigning</a>.
-            If you don't think that you have, then contact us at <a
-            href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
-        template_show_error($success->text);
     }
 
     global $fyr_representative, $fyr_voting_area, $fyr_date;
