@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.77 2005-01-04 13:30:45 francis Exp $
+# $Id: Queue.pm,v 1.78 2005-01-04 18:05:27 francis Exp $
 #
 
 package FYR::Queue;
@@ -1176,6 +1176,7 @@ If FILTER is 0, return all messages.
 If FILTER is 1, return only information about messages which may need
 operator attention.
 If FILTER is 2, return messages which recently changed state.
+If FILTER is 3, return messages which recently created state.
 
 =cut
 sub admin_get_queue ($) {
@@ -1186,7 +1187,9 @@ sub admin_get_queue ($) {
         state = 'error' or (state = 'ready' and numactions > 0) or
         frozen) order by created desc";
     } elsif (int($filter) == 2) {
-        $where = "order by laststatechange desc limit 20";
+        $where = "order by laststatechange desc limit 100";
+    } elsif (int($filter) == 3) {
+        $where = "order by created desc limit 100";
     }
     my $sth = FYR::DB::dbh()->prepare("select 
         created, id, laststatechange, state, frozen, numactions, lastaction,  

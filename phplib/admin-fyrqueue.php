@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.30 2005-01-04 16:50:36 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.31 2005-01-04 18:05:28 francis Exp $
  * 
  */
 
@@ -132,8 +132,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
-        $filter = get_http_var('filter');
-        if ($filter == "0") $filter = 0; else $filter = 1;
+        $view = get_http_var('view');
         $id = get_http_var("id");
         
         // Display general statistics
@@ -288,36 +287,49 @@ All time stats:
                 }
             }
          } else {
-            // Display important messages in queue
+            // Decide what to show
+            if ($view == "all") {
+                $filter = 0;
+            } else if ($view == "recentchanged") {
+                $filter = 2;
+            } else if ($view == "recentcreated") {
+                $filter = 3;
+            } else { # important
+                $filter = 1;
+            }
+         
+            // Show it
             $messages = msg_admin_get_queue($filter);
             if (msg_get_error($messages)) {
                 print "Error contacting queue:";
                 print_r($messages);
                 $messages = array();
             }
-            if ($filter == 1) 
-                $description = "Messages which may need attention " .  count($messages) .
-                ": <a href=\"$self_link&amp;filter=0\">[all messages]</a>";
+
+            print "<h2>View messages which are: ";
+            if ($filter != 1)
+                print "<a href=\"$self_link&amp;view=important\">[Important]</a> ";
             else
-                $description = "All messages in reverse order of
-                    creation: <a href=\"$self_link&amp;filter=1\">[important
-                    messages only]</a>";
+                print "[Important " . count($messages) . "] ";
+            if ($filter != 3)
+                print "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
+            else
+                print "[Recently Created] ";
+            if ($filter != 2)
+                print "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
+            else
+                print "[Recently Changed] ";
 
-            print "<h2>$description</h2>";
+# Too slow, doesn't really work, so disabled for now
+#            if ($filter != 0)
+#                print "<a href=\"$self_link&amp;view=all\">[Entire Queue]</a> ";
+#            else
+#                print "[Entire Queue] ";
+            print "</h2>";
+
             $this->print_messages($messages);
-
-            if ($filter == 1) {
-                $messages = msg_admin_get_queue(2);
-                if (msg_get_error($messages)) {
-                    print "Error contacting queue:";
-                    print_r($messages);
-                } else {
-                    // Display recently changed messages
-                    print "<h2>Messages which have changed recently: <a
-                    href=\"$self_link&amp;filter=0\">[all messages]</a></h2>";
-                    $this->print_messages($messages);
-                }
-            }
+            if ($filter == 2)
+                print "<p>...";
         ?>
 <h2>What do the states mean?</h2>
 <p>Point the mouse a state name in the table above for extra description.
