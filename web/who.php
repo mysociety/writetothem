@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.41 2005-01-11 00:38:12 matthew Exp $
+ * $Id: who.php,v 1.42 2005-01-11 12:06:07 chris Exp $
  * 
  */
 
@@ -54,6 +54,7 @@ debug_timestamp();
 // descriptive text and form text in an array for the template to
 // render.
 $fyr_representatives = array();
+$fyr_error = null;
 foreach ($va_display_order as $va_type) {
 	if (is_array($va_type)) {
 		if (!array_key_exists($va_type[0], $voting_areas))
