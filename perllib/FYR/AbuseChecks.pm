@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.12 2005-01-03 12:49:05 francis Exp $
+# $Id: AbuseChecks.pm,v 1.13 2005-01-04 11:17:37 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -111,13 +111,17 @@ my @tests = (
                 return qq#Postcode "$_[0]->{sender_postcode}" appears in Google with term "faxyourmp" or "writetothem"#
                     if (google_for_postcode($_[0]->{sender_postcode}));
             }
-        ]
+        ],
 
-        # Representative emailing themselves
+        # Representative emailing themself
+        # TODO Actually look this up in DaDem, as it won't work if they
+        # are somebody who is faxed, even if we know their email.
+        # This can also spot representatives emailing each other, is
+        # that useful?
         [
             'hold',
             sub ($) {
-                return "Representative is emailing themselves"
+                return "Representative is emailing themself"
                     if ($_[0]->{sender_email} eq $_[0]->{recipient_email});
             }
         ],
