@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.18 2004-12-30 12:50:11 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.19 2004-12-30 13:40:38 francis Exp $
  * 
  */
 
@@ -60,10 +60,14 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($simple_ref != "") 
                     $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
                 $client_name = $message['sender_ipaddr'];
-                if ($client_name != "") 
+                if ($client_name != "")  {
                     $client_name = gethostbyaddr($client_name);
-                print "<td>" . 
-                        $client_name . "<br>" .
+                    $client_name = "host217-43-191-66.range217-43.btcentralplus.com";
+                }
+                $short_client_name = trim_characters($client_name, strlen($client_name) - 29, 30); 
+
+                print "<td><span title=\"" .  htmlspecialchars($client_name) . "\">" .
+                        $short_client_name . "</span><br>" .
                         "<a href=\"" .
                         htmlspecialchars($message['sender_referrer']) . "\">" . $simple_ref . "</a><br>" .
                  "</td>";
