@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.28 2005-01-13 12:21:51 chris Exp $
+# $Id: AbuseChecks.pm,v 1.29 2005-01-13 13:45:30 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -127,7 +127,7 @@ sub get_similar_messages ($) {
              and message_extradata.name = 'substringhash'
         #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
-    my $thr = mySociety::Config::get('MAX_MESSAGE_SIMILARITY');
+    my $thr = mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD');
     my @similar = ( );
 
     my $pc = uc($msg->{sender_postcode});
@@ -162,7 +162,8 @@ my @tests = (
             my $cc = get_country_from_ip($msg->{sender_ipaddr});
             $cc ||= 'unknown';
             FYR::Queue::logmsg($msg->{id}, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
-            return ( sender_ip_country => $cc );
+            return ( sender_ip_country => [$cc, 
+                "Country of constituent's IP address, or localhost if 127.0.0.1"] );
         },
 
         # Length of message, in characters and words
@@ -173,8 +174,8 @@ my @tests = (
             my $l2 = scalar(@words);
             FYR::Queue::logmsg($msg->{id}, sprintf('message length: %d words, %d characters', $l2, $l1));
             return (
-                    message_length_characters => $l1,
-                    message_length_words => $l2
+                    message_length_characters => [$l1, 'Number of characters in the message, including salutation and signature'],
+                    message_length_words => [$l2, 'Number of words in the message, where words are separated by whitespace']
                 );
         },
 
@@ -183,9 +184,8 @@ my @tests = (
             my ($msg) = @_;
             my $hits = google_for_postcode($msg->{sender_postcode});
             FYR::Queue::logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
-                $msg->{sender_postcode}, $hits))
-                if ($hits > 0);
-            return ( postcode_google_hits => $hits );
+                $msg->{sender_postcode}, $hits)) if ($hits > 0);
+            return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode with either 'faxyourmp' or 'writetothem'"] );
         },
         
         # Representative emailing themself
@@ -195,37 +195,48 @@ my @tests = (
         # that useful?
         sub ($) {
             my ($msg) = @_;
+            my $rep_self = undef;
             if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
                 and defined($msg->{recipient_email})
                 and $msg->{sender_email} eq $msg->{recipient_email}) {
                 FYR::Queue::logmsg($msg->{id}, 'representative appears to be emailing themself');
-                return ( representative_emailing_self => 'YES' );
+                $rep_self = 'YES';
             }
+            return ( representative_emailing_self => [$rep_self, 'Present if representative appears to be emailing themself'] );
         },
 
         # Body of message similar to other messages in queue.
         sub ($) {
             my ($msg) = @_;
             my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg) } get_similar_messages($msg);
-            return ( similarity_max => '0' ) if (!@similar);
-
-            my $why = sprintf('message body is very similar to %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);
-            for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
-                $why .= sprintf(", %s (%.2f similar)", $similar[$i]->[0], $similar[$i]->[1]);
-            }
-
-            $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
-            FYR::Queue::logmsg($msg->{id}, $why);
 
             my %res = ( );
-            
+            if (@similar) {
+                my $why = sprintf('message body is very similar to %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);
+                for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
+                    $why .= sprintf(", %s (%.2f similar)", $similar[$i]->[0], $similar[$i]->[1]);
+                }
+
+                $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
+                FYR::Queue::logmsg($msg->{id}, $why);
+            }
+
             # Generate a bunch of useful metrics
-            $res{similarity_max} = $similar[0]->[0];
+
+            my $similarity_max;
+            if (@similar) {
+                $similarity_max = $similar[0]->[0];
+            } else {
+                $similarity_max = undef;
+            }
+            $similarity_max = [$similarity_max, 
+                'Similarity score of message whose body is most similar to this one, or absent if none is more than ' .  
+                mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD')];
 
             foreach my $thr (qw(0.5 0.6 0.7 0.8 0.9 0.95 0.99)) {
-                next if ($_ > mySociety::Config::get('MAX_MESSAGE_SIMILARITY'));
+                next if ($_ < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
                 my $n = scalar(grep { $_->[1] > $thr } @similar);
-                $res{"similarity_num_$_"} = $n;     # "number of messages more than ... similar to this one"
+                $res{"similarity_num_$_"} = [$n, "Number of messages more than $_ similar to this one"];
             }
 
             return %res;
@@ -247,7 +258,38 @@ explain why their message has been rejected.
 sub test ($) {
     my ($msg) = @_;
 FYR::Queue::logmsg($msg->{id}, 'doing abuse checks...');
-    my %ratty_values = %$msg;
+    my %ratty_values = (
+        # Useful fields for sending to Ratty
+        message => [$msg->{message}, "Body text of message"],
+
+        recipient_email => [$msg->{recipient_email}, "Email address of representative"],
+        recipient_id => [$msg->{recipient_id}, "DaDem identifier of representative"],
+        recipient_name => [$msg->{recipient_name}, "Name of representative"],
+        recipient_position => [$msg->{recipient_position}, "Office held by representative"],
+        recipient_type => [$msg->{recipient_type}, "Type of voting area representative represents"],
+
+        sender_addr => [$msg->{sender_addr}, "Postal address of constituent"],
+        sender_email => [$msg->{sender_email}, "Email address of constituent"],
+        sender_ipaddr => [$msg->{sender_ipaddr}, "IP address of constituent"],
+        sender_name => [$msg->{sender_name}, "Name of constituent"],
+        sender_postcode => [$msg->{sender_postcode}, "Postcode of constituent"],
+        sender_referrer => [$msg->{sender_referrer}, "Webpage which constituent came to our site from"],
+
+        # These aren't much use, but could conceivably be
+        created => [$msg->{created}, "When message was created in Unix time"],
+        id => [$msg->{id}, "Unique identifier of message"],
+
+        # These are no use for new messages
+        #frozen => [$msg->{frozen}, "Whether message is frozen, always 0"],
+        #laststatechange => [$msg->{laststatechange}, "When message last changed state"],
+        #numactions => [$msg->{numactions}, "Number of actions since last state change"],
+        #state => [$msg->{state}, "Always 'new'"],
+        # These are no use
+        #recipient_position_plural => [$msg->{recipient_position_plural}, "Plural of office held"],
+
+    );
+
+    # Carry out abuse tests, and store new fields they generate
     foreach my $f (@tests) {
         %ratty_values = (%ratty_values, &$f($msg));
     }
