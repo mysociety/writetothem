@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.142 2005-03-07 10:49:40 chris Exp $
+# $Id: Queue.pm,v 1.143 2005-03-07 18:45:19 chris Exp $
 #
 
 package FYR::Queue;
@@ -1127,7 +1127,6 @@ my %state_action = (
         sent => sub ($$$) {
             my ($email, $fax, $id) = @_;
             return unless ($email);
-
             my $msg = message($id);
 
             # If we haven't got a questionnaire response, and it's been long
@@ -1146,7 +1145,6 @@ my %state_action = (
                 my $result = send_questionnaire_email($id, $reminder);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     logmsg($id, 1, "sent questionnaire " . ($reminder ? 'reminder ' : '') . "email");
-                    state($id, 'sent');
                 } # should trap hard error case
             }
          
@@ -1154,6 +1152,9 @@ my %state_action = (
             # information and mark it finished.
             if ($msg->{dispatched} < (time() - MESSAGE_RETAIN_TIME)) {
                 state($id, 'finished');
+            } else {
+                # Bump timer in any case.
+                state($id, 'sent');
             }
         },
 
@@ -1235,14 +1236,22 @@ sub process_queue ($$) {
 
     # Actions. These are slow (potentially) so lock row-by-row. Process
     # messages in a random order, so that bad ones don't block everything.
-    $stmt = dbh()->prepare(
-        'select id, state from message where ('
-            . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
-        . ') and (lastaction is null or '
-            . join(' or ',
-                map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, time() - $state_action_interval{$_}) }
-                    keys %state_action_interval)
-        . q#) and (state <> 'ready' or not frozen) order by random()#);
+    if ($email) {
+        $stmt = dbh()->prepare(
+            'select id, state from message where ('
+                . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
+            . ') and (lastaction is null or '
+                . join(' or ',
+                    map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, time() - $state_action_interval{$_}) }
+                        keys %state_action_interval)
+            . q#) and (state <> 'ready' or not frozen) order by random()#);
+    } else {
+        $stmt = dbh()->prepare(q#
+                select id, state from message
+                where state = 'ready' and not frozen
+                    and (lastaction is null or lastaction < %d)
+                #, time() - $state_action_interval{ready});
+    }
     $stmt->execute();
     while (my ($id, $state) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
