@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.39 2005-02-03 15:38:48 francis Exp $
+ * $Id: index.php,v 1.40 2005-02-08 11:05:14 matthew Exp $
  * 
  */
 
@@ -107,7 +107,21 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
     }
 }
 
-template_draw($template, array("form" => $form, "error" => $error_message));
+template_draw($template, array(
+        "title" => "Email or fax your Councillors, MP, MEP or MSP plus Welsh or London Assembly Member for free",
+        "blurb-top" => <<<END
+    <h2>Contact your
+Councillors,
+<acronym title="Member of Parliament">MP</acronym>, 
+<acronym title="Members of the European Parliament">MEPs</acronym>,
+<acronym title="Members of the Scottish Parliament">MSPs</acronym>, or
+<br>Welsh and London Assembly Members 
+for free</h2>
+END
+,
+        "form" => $form, 
+        "error" => $error_message
+    ));
 
 ?>
 
