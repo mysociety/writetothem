@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.57 2005-02-10 09:12:02 francis Exp $
+ * $Id: who.php,v 1.58 2005-02-10 16:42:43 francis Exp $
  * 
  */
 
@@ -152,9 +152,10 @@ foreach ($va_display_order as $va_type) {
         $text .= "</p>";
 
         if($va_type == 'WMC') {
-            $twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
+            /*$twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
             if (preg_match('#<img src="/images/mps/(\d+.jpg)"#', $twfy, $matches))
-                $representatives_info[$representatives[0]]['image'] = $matches[1];
+                $representatives_info[$representatives[0]]['image'] = $matches[1];*/
+            $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
         $text .= display_reps($representatives);
 
@@ -190,7 +191,7 @@ function display_reps($representatives) {
             $rep_list .= '<img src="images/zz99zz.jpeg" align="left">';
             $photo = 1;
         } elseif (array_key_exists('image', $rep_info)) {
-            $rep_list .= '<img src="http://www.theyworkforyou.com/images/mps/'.$rep_info['image'].'" align="left">';
+            $rep_list .= '<img src="'.$rep_info['image'].'" align="left">';
             $photo = 1;
         }
         $rep_list .= '<a href="'
