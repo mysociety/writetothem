@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.79 2005-02-21 11:37:30 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.80 2005-02-23 14:59:44 francis Exp $
  * 
  */
 
@@ -140,14 +140,14 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>Length (chars)</th>
         <th>Tick</th>
     </tr>
-    <form action="<?=htmlspecialchars(new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'))) ?>" method="post">
+    <form action="<?=htmlspecialchars(new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
 <?
 	$c = 1;
             foreach ($messages as $message) {
                 print '<tr' . ($c==1 ? ' class="v"' : '') . '>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
                 print '<td><a href="'
-                        . htmlspecialchars(new_url('', false, 'id', $message['id']))
+                        . $this->self_link . "&id=".urlencode($message['id'])
                         . '">'
                         .  substr($message['id'], 0, 10) . "<br/>" .  substr($message['id'], 10)
                         . '</a></td>';
