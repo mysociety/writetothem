@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.27 2004-12-22 13:16:01 francis Exp $
+ * $Id: index.php,v 1.28 2005-01-08 12:11:22 matthew Exp $
  * 
  */
 
@@ -41,6 +41,7 @@ if ($pc != "") {
      * here rather than passing them down to MaPit. See
      * http://en.wikipedia.org/wiki/Postcode#Overseas_Territories */
     $pc2 = preg_replace('/\\s+/', '', strtoupper($pc));
+    $pc22 = substr($pc2, 0, 2); $pc23 = substr($pc2, 0, 3);
     $otmap = array(
             'FIQQ1ZZ' => 'falklands',
             'SIQQ1ZZ' => 'southgeorgia',
@@ -53,11 +54,11 @@ if ($pc != "") {
     $ot = null;
     if (array_key_exists($pc2, $otmap)) {
         $ot = $otmap[$pc2];
-    } else if (preg_match('/^JE/', $pc2)) {
+    } elseif ($pc22 == 'JE') {
         $ot = 'jersey';
-    } else if (preg_match('/^GY/', $pc2)) {
+    } elseif ($pc22 == 'GY') {
         $ot = 'guernsey';
-    } else if (preg_match('/^IM/', $pc2)) {
+    } elseif ($pc22 == 'IM') {
         $ot = 'isleofman';
     }
 
@@ -65,6 +66,29 @@ if ($pc != "") {
         header("Location: about-overseasterritories#$ot");
         exit;
     }
+
+	$specialmap = array(
+		'GIR0AA' => 'giro',
+		'G1R0AA' => 'giro',
+		'SANTA1' => 'santa'
+	);
+	$ft = null;
+	if (array_key_exists($pc2, $specialmap)) {
+		$ft = $specialmap[$pc2];
+	} elseif ($pc22 == 'AM') {
+		$ft = 'archers';
+	} elseif ($pc22 == 'FX') {
+		$ft = 'training';
+	} elseif ($pc23 == 'RE1') {
+		$ft = 'reddwarf';
+	} elseif ($pc23 == 'E20') {
+		$ft = 'eastenders';
+	}
+
+	if (isset($ft)) {
+		header("Location: about-special#$ft");
+		exit;
+	}
     
     $voting_areas = mapit_get_voting_areas($pc);
     if (!rabx_is_error($voting_areas)) {
