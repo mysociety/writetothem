@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.19 2004-11-18 10:59:16 chris Exp $
+# $Id: Queue.pm,v 1.20 2004-11-18 12:45:08 chris Exp $
 #
 
 package FYR::Queue;
@@ -338,9 +338,11 @@ sub format_postal_address ($) {
 # We honour every carriage return, and wrap lines.
 sub format_email_body ($) {
     my ($msg) = @_;
-    my $text = format_postal_address($msg->{sender_addr});
-    $text .= "\n\n" . format_postal_address("Phone: $msg->{sender_phone}") if (exists($msg->{sender_phone}));
-    $text .= "\n\n" . format_postal_address("Email: $msg->{sender_email}");
+
+    my $addr = $msg->{sender_addr};
+    $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (exists($msg->{sender_phone}));
+    $addr .= "\n\n" . "Email: $msg->{sender_email}";
+    my $text = format_postal_address($addr);
     $text .= "\n\n" . wrap(EMAIL_COLUMNS, $msg->{message});
     return $text;
 }
@@ -464,7 +466,7 @@ sub send_user_email ($$$) {
 # email_template NAME
 # Find the email template with the given NAME. We look for the templates
 # directory in ../ and ../../. Nasty.
-sub email_template ($$) {
+sub email_template ($) {
     my ($name) = @_;
     foreach (qw(.. ../..)) {
         return "$_/$name" if (-e "$_/$name");
@@ -595,7 +597,7 @@ sub make_questionnaire_email ($;$) {
 
 # send_questionnaire_email ID [REMINDER]
 # Send a (possibly REMINDER) failure report to the sender of message ID.
-sub send_failure_email ($;$) {
+sub send_questionnaire_email ($;$) {
     my ($id, $reminder) = @_;
     $reminder ||= 0;
     my $msg = message($id);
