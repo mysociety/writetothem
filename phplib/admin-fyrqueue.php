@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.77 2005-02-17 00:34:17 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.78 2005-02-17 17:13:55 chris Exp $
  * 
  */
 
@@ -264,7 +264,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         <input name="freeze" value="Freeze" type="submit" />
         <input name="thaw" value="Thaw" type="submit" />
         <input name="error" value="Error" type="submit" />
-        <input name="failed" value="Fail" type="submit" /> 
+        <input name="failed" value="Fail silently" type="submit" />
         <input name="failed_closed" value="Fail Close" type="submit" /> 
 </td><tr>
 <?
@@ -389,7 +389,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
                 if ($message['state'] != 'failed' and $message['state'] != 'failed_closed')
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail');
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail silently');
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
             }
