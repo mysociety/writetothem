@@ -1,16 +1,19 @@
 <?php
 /*
- * Interact with DaDem.  Roughly speaking, look up representatives in
+ * dadem.php:
+ * Interact with DaDem. Roughly speaking, look up representatives in
  * office for a voting area.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.15 2004-10-06 13:32:53 francis Exp $
+ * $Id: dadem.php,v 1.16 2004-10-06 15:26:01 chris Exp $
  * 
  */
 
 include_once('votingarea.php');
+
+include_once('simplexmlrpc.php');
 
 /* Error codes */
 define('DADEM_UNKNOWN_AREA', 1);        /* unknown area */
@@ -57,7 +60,8 @@ function dadem_get_error($e) {
  * Return an array of IDs for the representatives for the given voting
  * area on success, or an error code on failure. */
 function dadem_get_representatives($va_id) {
-    // Hardwired stub dummy data
+    return sxr_call('caesious.beasts.org', 80, '/~chris/scripts/xmlrpc', 'DaDem.get_representatives', array($va_id));
+/*    // Hardwired stub dummy data
     if ($va_id == 2) { // VA_CED
         $ret = array(
                 1,
@@ -89,7 +93,7 @@ function dadem_get_representatives($va_id) {
         return $ret;
     }
     debug("DADEM", "Unknown area id $va_id");
-    return DADEM_UNKNOWN_AREA;
+    return DADEM_UNKNOWN_AREA;*/
 }
 
 /* dadem_get_representative_info ID
