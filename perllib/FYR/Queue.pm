@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.131 2005-02-12 20:31:22 matthew Exp $
+# $Id: Queue.pm,v 1.132 2005-02-15 10:40:43 chris Exp $
 #
 
 package FYR::Queue;
@@ -67,9 +67,10 @@ Return an ID for a new message. Message IDs are 20 characters long and consist
 of characters [0-9a-f] only.
 
 =cut
+use constant MESSAGE_ID_LENGTH => 20;
 sub create () {
     # Assume collision probability == 0.
-    return unpack('h20', mySociety::Util::random_bytes(10));
+    return unpack('h20', mySociety::Util::random_bytes(MESSAGE_ID_LENGTH / 2));
 }
 
 # work_out_destination RECIPIENT
@@ -172,6 +173,9 @@ This function is called remotely and commits its changes.
 =cut
 sub write ($$$$) {
     my ($id, $sender, $recipient_id, $text) = @_;
+
+    throw FYR::Error("Bad ID specified")
+        unless ($id =~ m/^[0-9a-f]{20}$/i);
 
     my $ret = undef;
     try {
@@ -639,6 +643,7 @@ sub check_token ($$) {
     my $rand2 = unpack('n', substr($dec, length($word), 2));
     return undef if ($rand2 != $rand);
     my $id = unpack('h*', substr($dec, length($word) + 2));
+    return undef if (length($id) != MESSAGE_ID_LENGTH);
     return $id;
 }
 
