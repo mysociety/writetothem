@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.18 2005-01-05 15:13:55 chris Exp $
+# $Id: AbuseChecks.pm,v 1.19 2005-01-05 19:20:07 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -17,6 +17,7 @@ use DBD::Pg; # for BLOB (bytea) support
 use Geo::IP;
 use Net::Google::Search;
 use Storable;
+use Data::Dumper;
 
 use mySociety::Config;
 
@@ -76,8 +77,9 @@ use constant NUM_BITS => 4;
 # Test MESSAGE for similarity to other messages in the queue.
 sub check_similarity ($) {
     my ($msg) = @_;
+
     # Compute and save hash of this message.
-    my $h = SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
+    my $h = FYR::SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
     FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
     # Horrid. To insert a value into a BYTEA column we need to do a little
     # parameter-binding dance:
@@ -97,9 +99,10 @@ sub check_similarity ($) {
     }
     return 0 unless (@similar);
     @similar = sort { $b->[1] <=> $a->[1] } @similar;
-    my $why = "Message body is very similar to $similar[0]->[0]";
+    my $why = sprintf("Message body is very similar to $similar[0]->[0] (%.2f similar)", 
+        $similar[0]->[1]);
     for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
-        $why .= ", $similar[$i]->[0]";
+        $why .= sprintf(", $similar[$i]->[0] (%.2f similar)", $similar[$i]->[1]);
     }
     $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
     return $why;
@@ -166,7 +169,9 @@ my @tests = (
             'hold',
             sub ($) {
                 return "Representative is emailing themself"
-                    if ($_[0]->{sender_email} eq $_[0]->{recipient_email});
+                    if ($_[0]->{sender_email} eq $_[0]->{recipient_email}
+                    and !(mySociety::Config::get('FYR_REFLECT_EMAILS'))
+                    );
             }
         ],
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.35 2005-01-05 12:12:37 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.36 2005-01-05 19:20:07 francis Exp $
  * 
  */
 
@@ -33,6 +33,12 @@ class ADMIN_PAGE_FYR_QUEUE {
         'failed_closed' => 'Delivery failed, admin has dealt with it',
         );
         return $map[$state];
+    }
+
+    function make_ids_links($text) {
+        return preg_replace("/([a-f0-9]{20})/", 
+                "<a href=\"" .  $this->self_link . "&id=\$1\">\$1</a>", 
+                $text);
     }
 
     function print_messages($messages) {
@@ -130,7 +136,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
-                print "<td>" . htmlspecialchars($recent['message']) . "</td>";
+                print "<td>" .  $this->make_ids_links(htmlspecialchars($recent['message'])) . "</td>";
                 print "</tr>";
             }
 ?>
