@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.79 2005-01-05 11:58:07 francis Exp $
+# $Id: Queue.pm,v 1.80 2005-01-05 12:09:33 francis Exp $
 #
 
 package FYR::Queue;
@@ -1196,6 +1196,7 @@ sub admin_get_queue ($) {
         sender_name, sender_addr, sender_email, sender_postcode,
         sender_ipaddr, sender_referrer,
         recipient_name, recipient_email, recipient_fax, recipient_type,
+        recipient_id,
         length(message) as message_length from message $where");
     $sth->execute();
     my @ret;
