@@ -8,6 +8,10 @@
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">
 
+</font></p>
+<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
+
+<TR><TD align=center>
 <p><font color="#ff0000" size="-1"><strong>This site is not finished yet! We're
 just testing at the moment.</strong> Your message will not be sent
 to your democratic representative: just returned to you. We're looking
@@ -17,8 +21,8 @@ better.  You can file a problem report in our
 href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
 system</a>.</p>
 
-</font></p>
-<TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
+</TD></TR>
+
 <TR>
 <TD VALIGN="top">
 <IMG SRC="images/mosaic.gif" WIDTH="529" HEIGHT="12" BORDER="0" ALT="mosaic_strip"><BR><BR>
@@ -26,7 +30,7 @@ system</a>.</p>
 <TABLE CELLPADDING="4" CELLSPACING="2" BORDER="0" WIDTH="100%">
 <TR>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/">Home</A></TD>
-<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-youandyourmp">You &amp; Your MP</A></TD>
+<TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-youandyourmp">Your Representative</A></TD>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-qa">Q&amp;A</A></TD>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-us">About Us</A></TD>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/about-contact">Contact Us</A></TD>

@@ -39,8 +39,8 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 </td><td align="right" valign="top">
 <a href="http://www.goveval.com/"><img src="images/ge.png" border="0" alt="GovEval"></a>
 </td></tr>
-</table>
 
+<tr><td colspan=2>
 <p><font size="-1">
 This site is built by <a href="http://www.mysociety.org">mySociety</a>.
 Contact data for elected representatives 
@@ -50,6 +50,11 @@ Rest of the site is Copyright (c) 2004 UK Citizens Online Democracy
 and <a href="https://secure.mysociety.org/cvstrac/dir?d=mysociety">source
 code is available</a> under an open source license.
 </font></p>
+
+
+</td></tr>
+
+</table>
 
 </div>
 
