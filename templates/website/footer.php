@@ -1,6 +1,6 @@
 </div>
 <div id="footer">
-The new FaxYourMP.  Built by <a href="http://www.mysociety.org/">mySociety</a>.  Data kindly provided by <a href="http://www.goveval.com/">GovEval</a>.
+The new FaxYourMP.  <a href="/about-us">Built by mySociety</a>.  <a href="about-copyright">Data by GovEval</a>.
 <br>
 <? $links = array(
     '/about-qa'=>'Help',
