@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.6 2004-10-20 13:18:03 francis Exp $
+ * $Id: queue.php,v 1.7 2004-10-20 15:37:57 francis Exp $
  * 
  */
 
@@ -35,7 +35,9 @@ function msg_create() {
 function msg_write($id, $sender, $recipient_id, $text) {
     debug("QUEUE", "Writing new message");
     $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.write', array($id, $sender, $recipient_id, $text));
-    debug("QUEUE", "Result is $result");
+    debug("QUEUE", "Result:", $result);
+    if (is_array($result)) // TODO replace this with better error handling code
+        return false;
     return $result;
 }
 
@@ -56,7 +58,7 @@ function msg_secret() {
 function msg_confirm_email($token) {
     debug("QUEUE", "Confirming email");
     $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.confirm_email', array($token));
-    debug("QUEUE", "Result is $result");
+    debug("QUEUE", "Result:", $result);
     return $result;
 }
 
