@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.5 2004-12-17 16:16:48 chris Exp $
+# $Id: Fax.pm,v 1.6 2005-01-05 17:49:15 chris Exp $
 #
 
 package FYR::Fax::HardError;
@@ -486,7 +486,7 @@ sub deliver ($) {
     } catch FYR::Fax::SoftError with {
         my $E = shift;
         FYR::Queue::logmsg($id, $E->text());
-        $ret - FAX_SOFT_ERROR;
+        $ret = FAX_SOFT_ERROR;
     } finally {
         # whatever happens, nuke the lockfile and all the image files.
         foreach ($lockfilename, @imgfiles) {
