@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.2 2004-12-13 19:54:45 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.3 2004-12-13 19:55:54 chris Exp $';
 
 use strict;
 
@@ -72,7 +72,7 @@ sub submit_problem_to_cvstrac ($) {
     $postdata =
         't=' . $q->param('short')
         . '&y=code&v=1&r=1&w=&p=1&s=fyr-web&c=' . urlescape($e)
-        . '&d=' . $q->param('page') . urlescape("\n" . $q->param('long'))
+        . '&d=' . urlescape($q->param('page') . "\n" . $q->remote_host() . "\n" . $q->param('long'))
         . '&submit=Submit';
     
     my $req = new HTTP::Request(POST => $cvstrac_url);
