@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.75 2005-02-15 11:12:06 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.76 2005-02-16 23:01:10 francis Exp $
  * 
  */
 
@@ -88,18 +88,10 @@ class ADMIN_PAGE_FYR_QUEUE {
 
         // Bar to change view
         $qmenu = "";
-        $qmenu .= "[Frozen";
-        $qmenu .= ": ";
-        if ($view == 'frozen' and (!$reverse))
-            $qmenu .= "Newest ";
+        if ($view == 'frozen')
+            $qmenu .= "[Frozen] ";
         else
-            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen\">Newest</a> ";
-        $qmenu .= " | ";
-        if ($view == 'frozen' and ($reverse))
-            $qmenu .= "Oldest";
-        else
-            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen_rev\">Oldest</a>";
-        $qmenu .= "] ";
+            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen\">[Frozen]</a> ";
 
         if ($view != 'failing')
             $qmenu .= "<a href=\"$this->self_link&amp;view=failing\">[Failing]</a> ";
@@ -363,7 +355,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
-        $view = get_http_var('view', 'failing');
+        $view = get_http_var('view', 'frozen');
         $id = get_http_var("id");
 
         // Display about id
@@ -628,9 +620,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             ?>
             <h2>Help &mdash; what views/searches are there?</h2>
             <p>
-            <b>Frozen, Newest/Oldest:</b> Message which are frozen, most likely
-            due to possible abuse.  Always shows all frozen messages, but can
-            show newest or oldest first.
+            <b>Frozen:</b> Message which are frozen, most likely
+            due to possible abuse.
             <br><b>Failing:</b> Messages for which delivery is failing, most like
             incorrect contact details.  Sorted by recipient.
             <br><b>Recently Created:</b> Most recent messages constituents have made.
