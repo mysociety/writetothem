@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.34 2004-11-18 23:17:47 chris Exp $
+# $Id: Queue.pm,v 1.35 2004-11-19 10:37:14 chris Exp $
 #
 
 package FYR::Queue;
@@ -923,13 +923,13 @@ sub process_queue () {
         # still meets the criteria for sending. Do things this way round so
         # that we can have several queue-running daemons operating
         # simultaneously.
-        my $msg = message($id, 1);
-        next if ($msg->{state} ne $state
-                    or !exists($state_action{$msg->{state}})
-                    or (defined($msg->{lastaction})
-                        and $msg->{lastaction} > time() - $state_action_interval{$msg->{state}}));
         try {
-            &{$state_action{$state}}($id);
+            my $msg = message($id, 1);
+            if ($msg->{state} eq $state
+                and (!defined($msg->{lastaction})
+                    or $msg->{lastaction} < time() - $state_action_interval{$state})) {
+                &{$state_action{$state}}($id);
+            }
         } catch FYR::Error with {
             my $E = shift;
             logmsg($id, "error while processing message: $E");
