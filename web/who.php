@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.59 2005-02-11 11:12:39 chris Exp $
+ * $Id: who.php,v 1.60 2005-02-11 11:17:26 chris Exp $
  * 
  */
 
@@ -187,19 +187,20 @@ function display_reps($representatives) {
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
+        $a = '<a href="' .
+                    htmlspecialchars(new_url('write', 0,
+                                        'who', $rep_specificid,
+                                        'pc', $fyr_postcode,
+                                        'fyr_extref', fyr_external_referrer()))
+                . '">';
         if ($rep_specificid == '2000005') {
-            $rep_list .= '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left">';
+            $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0"></a>';
             $photo = 1;
         } elseif (array_key_exists('image', $rep_info)) {
-            $rep_list .= '<img alt="" title="Portrait of ' . htmlspecialchars($rep_info['name']) . '" src="' . $rep_info['image'] . '" align="left">';
+            $rep_list .= $a . '<img alt="" title="Portrait of ' . htmlspecialchars($rep_info['name']) . '" src="' . $rep_info['image'] . '" align="left">';
             $photo = 1;
         }
-        $rep_list .= '<a href="'
-                       . htmlspecialchars(new_url('write', 0, 
-                                              'who', $rep_specificid,
-                                               'pc', $fyr_postcode,
-                                               'fyr_extref', fyr_external_referrer()))
-                       . '">'
+        $rep_list .= $a
                        . htmlspecialchars($rep_info['name'])
                        . '</a>';
         if (array_key_exists('party', $rep_info))
