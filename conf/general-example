@@ -13,17 +13,17 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.4 2004-11-11 13:46:59 chris Exp $
+ * $Id: general-example,v 1.5 2004-11-15 13:47:09 fyr Exp $
  * 
  */
 
 // Where the DaDem, MaPit and Ratty services are.
 define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
 define('OPTION_MAPIT_URL', 'http://services.mysociety.org/mapit');
-define('OPTION_RATTY_URL', 'http://caesious.beasts.org/~chris/scripts/ratty');
+define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
 
 // Where the FYR queue service is.
-define('OPTION_FYR_QUEUE_URL', 'http://services.mysociety.org/fyr/queue');
+define('OPTION_FYR_QUEUE_URL', 'http://notfinished.faxyourrepresentative.com/services/queue');
 
 // PostgreSQL database for FYR queue
 define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
@@ -31,10 +31,10 @@ define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
 
 // Top-level URL of current website
-define('OPTION_BASE_URL', 'http://caesious.beasts.org/~chris/tmp/fyr');
+define('OPTION_BASE_URL', 'http://notfinished.faxyourrepresentative.com');
 
 // Domain name for emails to current website
-define('OPTION_EMAIL_DOMAIN', 'caesious.beasts.org');
+define('OPTION_EMAIL_DOMAIN', 'faxyourrepresentative.com');
 // Prefix of return-path local part. All mail for EMAIL_PREFIX(.*)@EMAIL_DOMAIN
 // must be delivered to the bounce processing scripts.
 define('OPTION_EMAIL_PREFIX', 'fyr-');
