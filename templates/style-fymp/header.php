@@ -24,9 +24,11 @@ system</a>.</p>
 </TD></TR>
 
 <TR>
-<TD VALIGN="top">
+<TD align=center VALIGN="top">
 <IMG SRC="images/mosaic.gif" WIDTH="529" HEIGHT="12" BORDER="0" ALT="mosaic_strip"><BR><BR>
+</TD>
 
+</TR><TR><TD valign="top">
 <TABLE CELLPADDING="4" CELLSPACING="2" BORDER="0" WIDTH="100%">
 <TR>
 <TD BGCOLOR="#cccc99" ALIGN="center"><A HREF="/">Home</A></TD>
