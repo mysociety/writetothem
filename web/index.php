@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.33 2005-01-13 15:15:38 francis Exp $
+ * $Id: index.php,v 1.34 2005-01-13 18:36:43 matthew Exp $
  * 
  */
 
@@ -16,10 +16,10 @@ require_once "../../phplib/mapit.php";
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
-$form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm">';
-$form .= '<label for="pc"><b>Type Your UK Postcode:</b></label>&nbsp;';
-$form .= '<input type="text" name="pc" value="'.htmlentities($pc).'" id="pc" size="10" maxlength="255">';
-$form .= '&nbsp;<input type="submit" value="Go">';
+$form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm">' . "\n";
+$form .= '<label for="pc"><b>Type Your UK Postcode:</b></label>&nbsp;' . "\n";
+$form .= '<input type="text" name="pc" value="'.htmlentities($pc).'" id="pc" size="10" maxlength="255"/>' . "\n";
+$form .= '&nbsp;<input type="submit" value="Go"/>' . "\n";
 
 /* Record referer. We want to pass this onto the queue later, as an anti-abuse
  * measure, so it should be propagated through all the later pages. Obviously
@@ -27,7 +27,7 @@ $form .= '&nbsp;<input type="submit" value="Go">';
  * trying to obscure this data. */
 $ref = fyr_external_referrer();
 if (isset($ref))
-	$form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
+	$form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'"/>';
 $form .= '</form>';
 
 // Validate postcode, and prepare appropriate page

@@ -17,7 +17,7 @@ if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
 </head>
-<body><a name="top" id="top">
+<body><a name="top" id="top"></a>
 <h1 id="heading"><a href="/">WriteToThem.com</a> 
 <?
 	if (OPTION_FYR_REFLECT_EMAILS) {
