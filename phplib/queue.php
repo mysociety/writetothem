@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.32 2005-01-13 11:29:26 francis Exp $
+ * $Id: queue.php,v 1.33 2005-01-19 02:10:46 francis Exp $
  * 
  */
 
@@ -154,6 +154,15 @@ function msg_admin_get_stats() {
     $result = $fyr_queue_client->call('FYR.Queue.admin_get_stats', array());
     return $result;
 }
+
+/* msg_admin_get_popular_referrers TIME
+ * Lists frequent referring URLs in last TIME seconds. */
+function msg_admin_get_popular_referrers($secs) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_get_popular_referrers', array($secs));
+    return $result;
+}
+
 
 /* msg_admin_freeze_message ID USER
  * Stops message being actually sent.*/

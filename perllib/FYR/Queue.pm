@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.94 2005-01-18 13:05:37 chris Exp $
+# $Id: Queue.pm,v 1.95 2005-01-19 02:10:46 francis Exp $
 #
 
 package FYR::Queue;
@@ -1327,6 +1327,21 @@ sub admin_get_stats () {
 
     return \%ret;
 }
+
+=item admin_get_popular_referrers TIME
+
+Returns list of pairs of popular referrers and how many times they appeared
+in the last TIME seconds.
+
+=cut
+sub admin_get_popular_referrers($) {
+    my ($secs) = @_;
+    my $result = FYR::DB::dbh()->selectall_arrayref('select sender_referrer, count(*) as c from message 
+        where created > ? group by sender_referrer order by c desc', {},time() - $secs);
+
+    return $result;
+}
+
 
 =item admin_freeze_message ID USER
 

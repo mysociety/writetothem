@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.50 2005-01-18 20:06:32 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.51 2005-01-19 02:10:46 francis Exp $
  * 
  */
 
@@ -102,13 +102,6 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($message['recipient_email']) print $message['recipient_email'] . "<br>";
                 if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
                 print "</td>";
-                $simple_ref = $message['sender_referrer'];
-                $url_bits = parse_url($simple_ref);
-                if (array_key_exists('path', $url_bits) && array_key_exists('scheme', $url_bits) && array_key_exists('host', $url_bits))
-                {
-                    if ($simple_ref != "" && ($url_bits['path'] != '/' || array_key_exists('query', $url_bits)) )
-                        $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
-                }
                 $client_name = $message['sender_ipaddr'];
                 if ($client_name != "")  {
                     $client_name = gethostbyaddr($client_name);
@@ -119,11 +112,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 }
 
                 print "<td>" . add_tooltip($short_client_name, $client_name) .
-                        "<br>" .
-                        "<a href=\"" .
-                        htmlspecialchars($message['sender_referrer']) .  "\">" . 
-                        htmlspecialchars($simple_ref) . "</a><br>" .
-                 "</td>";
+                        "<br>" . trim_url($message['sender_referrer']) . "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                 print '<td><input type="checkbox" name="check_' .  $message['id'] . '"
                     onclick="this.parentNode.parentNode.className=this.checked
@@ -362,12 +351,23 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print_r($stats);
             }
 
+            $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
+            if (msg_get_error($freq_referrers_day)) {
+                print "Error contacting queue:";
+                print_r($freq_referrers_day);
+            }
+/*            $freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
+            if (msg_get_error($freq_referrers_week)) {
+                print "Error contacting queue:";
+                print_r($freq_referrers_week);
+            } */
+
+
 ?>
 <h2>
 Summary statistics: 
 <b><?=$stats["created_1"]?></b> new in last hour,
-<b><?=$stats["created_24"]?></b> new in last day.
-All time stats:
+<b><?=$stats["created_24"]?></b> new in last day
 </h2>
 <table>
 
@@ -393,9 +393,33 @@ All time stats:
     }
     print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
 ?>
-</td></tr>
 </table>
-</td></tr>
+</td>
+<td>
+<h3>top referrers<br>last day</h3>
+<table border=1>
+<?
+    foreach ($freq_referrers_day as $row) {
+        if ($row[1] > 1 && $row[0] != "") {
+            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
+        }
+    }
+?>
+</table>
+</td>
+<!--<td>
+<h3>top referrers<br>last week</h3>
+<table border=1>
+<?
+/*    foreach ($freq_referrers_week as $row) {
+        if ($row[1] > 2 && $row[0] != "") {
+            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
+        }
+    }*/
+?>
+</table>
+</td>-->
+</tr>
 </table>
 
 <?
