@@ -35,6 +35,13 @@ Emails and the available variables are:
 
     The text of the constituent's letter is appended to the confirmation mail.
 
+  - footer
+
+    Appended to the mail sent to the representative. Extra variables are,
+
+      - representative_url, the URL which a representative may visit to forward
+        the email etc.
+
   - failure
 
     Sent to the user if delivery of their letter failed. No extra variables.

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.49 2004-12-13 14:54:31 francis Exp $
+# $Id: Queue.pm,v 1.50 2004-12-14 19:07:53 chris Exp $
 #
 
 package FYR::Queue;
@@ -59,11 +59,12 @@ sub create () {
     return unpack('h20', mySociety::Util::random_bytes(10));
 }
 
-# Internal use.  Takes a recipient, and uses their contact method to set
-# the fax or email fields.  Gives an error if contact method is 
-# inconsistent with them, and leaves exactly one of fax or email
-# defined.
-sub work_out_destination($) {
+# work_out_destination RECIPIENT
+# Internal use.  Takes a RECIPIENT (reference to hash of fields), and uses
+# their contact method to set the fax or email fields.  Gives an error if
+# contact method is inconsistent with them, and leaves exactly one of fax or
+# email defined.
+sub work_out_destination ($) {
     my ($recipient) = shift;
     
     # Normalise any false values to undef
@@ -430,6 +431,11 @@ sub make_representative_email ($) {
             Subject => "Letter from your constituent " . format_mimewords($msg->{sender_name}),
             Type => 'text/plain; charset="utf-8"',
             Data => format_email_body($msg)
+                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . FYR::EmailTemplate::format(
+                    email_template('footer'),
+                    email_template_params($msg, representative_url => '') # XXX
+                )
         );
 }
 
