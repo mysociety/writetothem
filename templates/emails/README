@@ -1,0 +1,56 @@
+Emails sent to constituents by the queue. For consistency we interpret these
+and interpret variables like
+
+    <?=$values['name_of_variable']?>
+
+(the superficial similarity to PHP is intentional) but that is the ONLY syntax
+supported.
+
+Values which are available in all emails are:
+
+  - recipient_name, the name of the representative to whom the original letter
+    was addressed, e.g. "Tony Blair";
+
+  - recipient_position, their position, e.g. "MP";
+
+  - recipient_position_plural, plural form of position, e.g. "MPs"; and
+
+  - sender_name, the full name of the sender as they supplied it.
+
+The text of each message should be formatted with blank lines between
+paragraphs; all text will be filled/wrapped to an appropriate width before
+sending.
+
+Emails and the available variables are:
+
+  - confirm
+  - confirm-reminder
+
+    Sent to the user to ask them to confirm their email address. Extra variables
+    are,
+
+      - confirm_url, the URL which they should click to confirm their address.
+
+    -reminder is the reminder mail, sent one day after the original.
+
+    The text of the constituent's letter is appended to the confirmation mail.
+
+  - failure
+
+    Sent to the user if delivery of their letter failed. No extra variables.
+    
+    The text of the constituent's letter is appended to the failure notice.
+
+  - questionnaire
+  - questionnaire-reminder
+
+    Sent to the user two weeks after their letter is sent, to ask them whether
+    they have had a reply from their representative. Extra variables are,
+
+      - yes_url, the URL they should click to indicate that they have received
+        a reply; and
+
+      - no_url, the URL they should click to indicate that they have not
+        received a reply.
+    
+    -reminder is the reminder mail, send one week after the original.
