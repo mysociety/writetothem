@@ -17,6 +17,8 @@ Values which are available in all emails are:
 
   - recipient_area_name, their voting area, e.g. "Sedgefield";
 
+  - recipient_id, the ID of the recipient;
+
   - sender_name, the full name of the sender as they supplied it; and
 
   - sender_address, the sender's address, formatted with commas between each
