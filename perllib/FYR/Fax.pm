@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.8 2005-01-19 11:46:26 chris Exp $
+# $Id: Fax.pm,v 1.9 2005-01-29 10:38:50 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -366,7 +366,7 @@ sub deliver ($) {
     die "attempted fax delivery for message $msg->{id} without fax recipient"
         unless (exists($msg->{recipient_fax}) and defined($msg->{recipient_fax}));
 
-    FYR::Queue::logmsg($id, "attempting delivery by fax to $msg->{recipient_fax}");
+    FYR::Queue::logmsg($id, 1, "attempting delivery by fax to $msg->{recipient_fax}");
 
     # First, try to lock the fax device. If that doesn't work, then soft-fail.
     #
@@ -377,10 +377,10 @@ sub deliver ($) {
     if (!$f) {
         if ($!{EEXIST}) {
             # Device was locked.
-            FYR::Queue::logmsg($id, "not faxing: sending device is locked");
+            FYR::Queue::logmsg($id, 1, "not faxing: sending device is locked");
             return FAX_SOFT_ERROR;
         } else {
-            FYR::Queue::logmsg($id, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $lockfilename: $!");
+            FYR::Queue::logmsg($id, 1, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $lockfilename: $!");
             # This probably indicates that something on the system is broken
             # (on fire, eh?) but does not indicate that the message is
             # undeliverable.
@@ -412,7 +412,7 @@ sub deliver ($) {
         if ($number =~ m#([^\d])#) {
             throw FYR::Fax::HardError("recipient number contains bad character '$1'; unable to send by fax");
         } else {
-            FYR::Queue::logmsg($id, "recipient's dialing number is $number");
+            FYR::Queue::logmsg($id, 0, "recipient's dialing number is $number");
         }
 
         # We call efax(1) directly rather than via the fax(1) wrapper, because
@@ -447,7 +447,7 @@ sub deliver ($) {
         # Read output from efax, and log it.
         while (defined(my $line = $rd->getline())) {
             chomp($line);
-            FYR::Queue::logmsg($id, "efax output: $line");
+            FYR::Queue::logmsg($id, 0, "efax output: $line");
         }
         if ($rd->error()) {
             throw FYR::Fax::SoftError("read from efax: $!");
@@ -490,11 +490,11 @@ sub deliver ($) {
         }
     } catch FYR::Fax::HardError with {
         my $E = shift;
-        FYR::Queue::logmsg($id, $E->text());
+        FYR::Queue::logmsg($id, 1, $E->text());
         $ret = FAX_HARD_ERROR;
     } catch FYR::Fax::SoftError with {
         my $E = shift;
-        FYR::Queue::logmsg($id, $E->text());
+        FYR::Queue::logmsg($id, 1, $E->text());
         $ret = FAX_SOFT_ERROR;
     } finally {
         # whatever happens, nuke the lockfile and all the image files.

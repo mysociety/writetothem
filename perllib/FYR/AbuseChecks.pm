@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.36 2005-01-21 19:57:46 chris Exp $
+# $Id: AbuseChecks.pm,v 1.37 2005-01-29 10:38:50 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -163,7 +163,7 @@ my @tests = (
             my ($msg) = @_;
             my $cc = get_country_from_ip($msg->{sender_ipaddr});
             $cc ||= 'unknown';
-            FYR::Queue::logmsg($msg->{id}, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
+            FYR::Queue::logmsg($msg->{id}, 0, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
             return ( sender_ip_country => [$cc, 
                 "Country of constituent's IP address, or localhost if 127.0.0.1"] );
         },
@@ -174,7 +174,7 @@ my @tests = (
             my $l1 = length($msg->{message});
             my @words = split(/[[:space:]]+/, $msg->{message});
             my $l2 = scalar(@words);
-            FYR::Queue::logmsg($msg->{id}, sprintf('message length: %d words, %d characters', $l2, $l1));
+            FYR::Queue::logmsg($msg->{id}, 0, sprintf('message length: %d words, %d characters', $l2, $l1));
             return (
                     message_length_characters => [$l1, 'Number of characters in the message, including salutation and signature'],
                     message_length_words => [$l2, 'Number of words in the message, where words are separated by whitespace']
@@ -185,7 +185,7 @@ my @tests = (
         sub ($) {
             my ($msg) = @_;
             my $hits = google_for_postcode($msg->{sender_postcode});
-            FYR::Queue::logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
+            FYR::Queue::logmsg($msg->{id}, 0, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
                 $msg->{sender_postcode}, $hits)) if ($hits > 0);
             return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode and faxyourmp/writetothem"] );
         },
@@ -201,7 +201,7 @@ my @tests = (
             if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
                 and defined($msg->{recipient_email})
                 and $msg->{sender_email} eq $msg->{recipient_email}) {
-                FYR::Queue::logmsg($msg->{id}, 'representative appears to be emailing themself');
+                FYR::Queue::logmsg($msg->{id}, 0, 'representative appears to be emailing themself');
                 $rep_self = 'YES';
             }
             return ( representative_emailing_self => [$rep_self, 'Present if representative appears to be emailing themself'] );
@@ -220,7 +220,7 @@ my @tests = (
                 }
 
                 $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
-                FYR::Queue::logmsg($msg->{id}, $why);
+                FYR::Queue::logmsg($msg->{id}, 0, $why);
             }
 
             # Generate a bunch of useful metrics
@@ -298,7 +298,7 @@ sub test ($) {
     my $result = mySociety::Ratty::test('fyr-abuse', \%ratty_values);
     if (defined($result)) {
         my ($ruleid, $action, $title) = @$result;
-        FYR::Queue::logmsg($msg->{id}, "fyr-abuse rule #$ruleid '$title' fired for message; result: $action");
+        FYR::Queue::logmsg($msg->{id}, 1, "fyr-abuse rule #$ruleid '$title' fired for message; result: $action");
         return $action;
     } else {
         return undef;

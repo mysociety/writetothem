@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.106 2005-01-29 02:55:04 francis Exp $
+# $Id: Queue.pm,v 1.107 2005-01-29 10:38:50 chris Exp $
 #
 
 package FYR::Queue;
@@ -220,7 +220,8 @@ sub write ($$$$) {
         $logaddr =~ s#,+#,#g;
         $logaddr =~ s#, *$##;
 
-        logmsg($id, sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
+        logmsg($id, 1,
+                    sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
                     $sender->{name},
                     $sender->{email},
                     $sender->{phone} ? " $sender->{phone}" : "",
@@ -233,10 +234,10 @@ sub write ($$$$) {
         my $abuse_result = FYR::AbuseChecks::test(message($id));
         if (defined($abuse_result)) {
             if ($abuse_result eq 'freeze') {
-                logmsg($id, "abuse system froze message");
+                logmsg($id, 1, "abuse system froze message");
                 FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
             } else {
-                logmsg($id, "abuse system REJECTED message");
+                logmsg($id, 1, "abuse system REJECTED message");
                 state($id, 'failed');   # XXX or should this be failed_closed?
                 $ret = $abuse_result;
             }
@@ -257,19 +258,20 @@ sub write ($$$$) {
     return $ret;
 }
 
-# logmsg ID DIAGNOSTIC
-# Log a DIAGNOSTIC about the message with the given ID.
-# XXX should have a flag for "exceptional" to warn administrators.
-sub logmsg ($$) {
-    my ($id, $msg) = @_;
+# logmsg ID IMPORTANT DIAGNOSTIC
+# Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
+# then mark the log message as exceptional.
+sub logmsg ($$$) {
+    my ($id, $important, $msg) = @_;
     our $dbh;
     $dbh ||= FYR::DB::new_dbh();
-    $dbh->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?, ?)',
+    $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional) values (?, ?, ?, ?, ?)',
         {},
         $id,
         time(),
         state($id),
-        $msg);
+        $msg,
+        $important ? 't' : 'f');
     $dbh->commit();
 }
 
@@ -329,7 +331,7 @@ sub scrubmessage ($) {
     FYR::DB::dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
     FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
     FYR::DB::dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
-    logmsg($id, 'Scrubbed message of all personal data');
+    logmsg($id, 1, 'Scrubbed message of all personal data');
 }
 
 =item state ID [STATE]
@@ -349,7 +351,7 @@ sub state ($;$) {
         die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed')));
         if ($state ne $curr_state) {
             FYR::DB::dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
-            logmsg($id, "changed state to $state");
+            logmsg($id, 0, "changed state to $state");
 
             # On moving into the 'finished' state, scrub message of personal
             # information. Don't do this for 'failed' messages since we want to
@@ -585,11 +587,11 @@ sub send_user_email ($$$) {
     my $msg = message($id);
     my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{sender_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
-        logmsg($id, "sent $descr mail to $msg->{sender_email}");
+        logmsg($id, 1, "sent $descr mail to $msg->{sender_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-        logmsg($id, "temporary failure sending $descr email to $msg->{sender_email}");
+        logmsg($id, 1, "temporary failure sending $descr email to $msg->{sender_email}");
     } else {
-        logmsg($id, "permanent failure sending $descr email to $msg->{sender_email}");
+        logmsg($id, 1, "permanent failure sending $descr email to $msg->{sender_email}");
     }
     return $result;
 }
@@ -777,11 +779,11 @@ sub deliver_email ($) {
                             mySociety::Config::get('EMAIL_DOMAIN'));
     my $result = mySociety::Util::send_email($mail->stringify(), $sender, $msg->{recipient_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
-        logmsg($id, "delivered message by email to $msg->{recipient_email}");
+        logmsg($id, 1, "delivered message by email to $msg->{recipient_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-        logmsg($id, "temporary failure delivering message by email to $msg->{recipient_email}");
+        logmsg($id, 1, "temporary failure delivering message by email to $msg->{recipient_email}");
     } else {
-        logmsg($id, "permanent failure delivering message by email to $msg->{recipient_email}");
+        logmsg($id, 1, "permanent failure delivering message by email to $msg->{recipient_email}");
     }
     return $result;
 }
@@ -793,11 +795,11 @@ sub deliver_fax ($) {
     my $id = $msg->{id};
     my $result = FYR::Fax::deliver($msg);
     if ($result == FYR::Fax::FAX_SUCCESS) {
-        logmsg($id, "delivered message by fax to $msg->{recipient_fax}");
+        logmsg($id, 1, "delivered message by fax to $msg->{recipient_fax}");
     } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
-        logmsg($id, "soft failure delivering message by fax to $msg->{recipient_fax}");
+        logmsg($id, 1, "soft failure delivering message by fax to $msg->{recipient_fax}");
     } else {
-        logmsg($id, "hard failure delivering message by fax to $msg->{recipient_fax}");
+        logmsg($id, 1, "hard failure delivering message by fax to $msg->{recipient_fax}");
     }
     return $result;
 }
@@ -823,7 +825,7 @@ sub confirm_email ($) {
     if (my $id = check_token("confirm", $token)) {
         throw FYR::Error("You've already confirmed this message.", FYR::Error::MESSAGE_ALREADY_CONFIRMED) if (state($id) ne 'pending');
         state($id, 'ready');
-        logmsg($id, "sender email address confirmed");
+        logmsg($id, 1, "sender email address confirmed");
         FYR::DB::dbh()->commit();
         notify_daemon();
         return 1;
@@ -846,7 +848,7 @@ sub record_questionnaire_answer ($$$) {
     if (my $id = check_token("questionnaire", $token)) {
         FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
         FYR::DB::dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
-        logmsg($id, "answer of \"$answer\" received for questionnaire qn #$qn");
+        logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
         FYR::DB::dbh()->commit();
         return 1;
     } else {
@@ -957,7 +959,7 @@ my %state_action = (
             } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
                 state($id, 'new');
             } else {
-                logmsg($id, "abandoning message after failure to send confirmation email");
+                logmsg($id, 1, "abandoning message after failure to send confirmation email");
                 state($id, 'failed');
             }
         },
@@ -977,7 +979,7 @@ my %state_action = (
                     state($id, 'pending');  # bump actions counter
                 } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
                     # Shouldn't happen in this state.
-                    logmsg($id, "abandoning message after failure to send confirmation email");
+                    logmsg($id, 1, "abandoning message after failure to send confirmation email");
                     state($id, 'failed');
                 } # otherwise no action; we'll get called again whenever the
                   # queue is next run.
@@ -998,7 +1000,7 @@ my %state_action = (
 
                 # Abandon faxes after a few failures.
                 if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
-                    logmsg($id, "abandoning message after $msg->{numactions} failures to send by fax");
+                    logmsg($id, 1, "abandoning message after $msg->{numactions} failures to send by fax");
                     state($id, 'error');
                     return;
                 }
@@ -1015,10 +1017,11 @@ my %state_action = (
                 } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
                     # Don't do anything here: this is a temporary, local
                     # failure.
+                    logmsg($id, 0, "local failure in fax sending");
                 } else {
                     # Some kind of remote failure. Bump the counter so that we
                     # can abandon delivery after too many such failures.
-                    logmsg($id, "abandoning message after failure to send to representative");
+                    logmsg($id, 1, "remote failure in fax sending");
                     state($id, 'ready');    # bump counter
                 }
             } elsif ($email && defined($msg->{recipient_email})) {
@@ -1029,7 +1032,7 @@ my %state_action = (
                 } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
                     state($id, 'ready');    # bump timer
                 } else {
-                    logmsg($id, "abandoning message after failure to send to representative");
+                    logmsg($id, 1, "abandoning message after failure to send to representative");
                     state($id, 'error');
                 }
             }
@@ -1077,7 +1080,7 @@ my %state_action = (
                 state($id, 'error');    # bump timer for redelivery
             } else {
                 # Give up -- it's all really bad.
-                logmsg($id, "Unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
+                logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
                 state($id, 'failed');
             }
         },
@@ -1146,7 +1149,7 @@ sub process_queue ($$) {
             }
         } catch FYR::Error with {
             my $E = shift;
-            logmsg($id, "error while processing message: $E");
+            logmsg($id, 1, "error while processing message: $E");
         } finally {
             FYR::DB::dbh()->commit();
         };
@@ -1432,7 +1435,7 @@ the representative until thawed. USER is the administrator's name.
 sub admin_freeze_message ($$) {
     my ($id, $user) = @_;
     FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-    logmsg($id, "$user froze message");
+    logmsg($id, 1, "$user froze message");
     FYR::DB::dbh()->commit();
     return 0;
 }
@@ -1446,7 +1449,7 @@ USER is the administrator's name.
 sub admin_thaw_message ($$) {
     my ($id, $user) = @_;
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
-    logmsg($id, "$user thawed message");
+    logmsg($id, 1, "$user thawed message");
     FYR::DB::dbh()->commit();
     notify_daemon();
     return 0;
@@ -1465,7 +1468,7 @@ sub admin_set_message_to_error ($$) {
     if ($curr_state ne 'error') {
         state($id, 'error');
     }
-    logmsg($id, "$user put message in state 'error'");
+    logmsg($id, 1, "$user put message in state 'error'");
     FYR::DB::dbh()->commit();
     return 0;
 }
@@ -1482,7 +1485,7 @@ sub admin_set_message_to_failed ($$) {
     if ($curr_state ne 'failed') {
         state($id, 'failed');
     }
-    logmsg($id, "$user put message in state 'failed'");
+    logmsg($id, 1, "$user put message in state 'failed'");
     FYR::DB::dbh()->commit();
     return 0;
 }
@@ -1500,7 +1503,7 @@ sub admin_set_message_to_failed_closed ($$) {
         state($id, 'failed_closed');
     }
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
-    logmsg($id, "$user put message in state 'failed_closed'");
+    logmsg($id, 1, "$user put message in state 'failed_closed'");
     FYR::DB::dbh()->commit();
     return 0;
 }
@@ -1515,7 +1518,7 @@ administrator making the change.
 sub admin_set_message_to_bounce_wait ($$) {
     my ($id, $user) = @_;
     state($id, 'bounce_wait');
-    logmsg($id, "$user put message in state 'bounce_wait'");
+    logmsg($id, 1, "$user put message in state 'bounce_wait'");
     FYR::DB::dbh()->commit();
     return 0;
 }
@@ -1528,7 +1531,7 @@ administrator leaving the note.
 =cut
 sub admin_add_note_to_message ($$$) {
     my ($id, $user, $note) = @_;
-    logmsg($id, "$user added note: $note");
+    logmsg($id, 1, "$user added note: $note");
     return 0;
 }
 
@@ -1538,11 +1541,10 @@ Move message ID (from, probably, pending) to ready. USER is the name of the
 administrator making the change.
 
 =cut
-
 sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
     state($id, 'ready');
-    logmsg($id, "$user put message in state 'ready'");
+    logmsg($id, 1, "$user put message in state 'ready'");
     FYR::DB::dbh()->commit();
     notify_daemon();
     return 0;
