@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.6 2004-10-04 18:14:10 francis Exp $
+ * $Id: mapit.php,v 1.7 2004-10-05 16:04:36 francis Exp $
  * 
  */
 
@@ -26,9 +26,10 @@ function mapit_get_voting_areas($postcode) {
     $postcode = strtoupper(preg_replace('/ +/', '', $postcode, -1));
 
     if (!preg_match('/[A-Z]{1,2}[0-9]{1,4}[A-Z]{1,2}/', $postcode)) {
+        debug("MAPIT", "Badly formed postcode $postcode");
         return MAPIT_BAD_POSTCODE;
     } else if ($postcode == 'CB41EP') {
-        return array(VA_CTY => array(1, 'Cambridgeshire County Council'),
+        $ret = array(VA_CTY => array(1, 'Cambridgeshire County Council'),
                      VA_CED => array(2, 'West Chesterton ED'),
                      VA_DIS => array(3, 'Cambridge District Council'),
                      VA_DIW => array(4, 'West Chesterton Ward'),
@@ -37,7 +38,11 @@ function mapit_get_voting_areas($postcode) {
                      VA_EUP => array(0, $va_name[VA_EUP]),
                      VA_EUR => array(6, 'Eastern Euro Region')
                 );
+        debug("MAPIT", "Looked up postcode $postcode");
+        debug("MAPITRESULT", "Results:", $ret);
+        return $ret;
     } else {
+        debug("MAPIT", "Postcode not found $postcode");
         return MAPIT_NOT_FOUND;
     }
 }

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: whotofax.php,v 1.5 2004-10-05 13:34:52 francis Exp $
+ * $Id: whotofax.php,v 1.6 2004-10-05 16:04:36 francis Exp $
  * 
  */
 
@@ -14,7 +14,11 @@ include_once "../lib/votingarea.php";
 include_once "../lib/dadem.php";
 include_once "../lib/utility.php";
 
+// Input data
 $fyr_postcode = get_http_var('pc');
+
+// Find all the districts/constituencies and so on (we call them "voting
+// areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 debug("FRONTEND", "postcode is $fyr_postcode");
 
@@ -32,8 +36,9 @@ if (is_integer($voting_areas)) {
     exit;
 }
 
+// For each voting area, find all the representatives.  Put descriptive
+// text and form text in an array for the template to render.
 $fyr_representatives = array();
-
 foreach ($voting_areas as $va_type => $va_value) {
     list($va_specificid, $va_specificname) = $va_value;
     $va_typename = $va_name[$va_type];
@@ -43,7 +48,6 @@ foreach ($voting_areas as $va_type => $va_value) {
     $parent_va_type = $va_inside[$va_type];;
     $parent_va_typename = $va_name[$parent_va_type];
     $parent_va_specificname = $voting_areas[$parent_va_type][1];
-    # print "<p>$va_specificname is a $va_typename representatives: \n";
 
     if ($va_type == VA_DIS) {
         $va_description = "Your District Council is responsible for local services and policy,
@@ -94,8 +98,7 @@ foreach ($voting_areas as $va_type => $va_value) {
         $c = 0;
         foreach ($representatives as $reprecord) {
             ++$c;
-            list($rep_specificname, $rep_specificcontactmethod, $rep_specificaddress) = $reprecord;
-            # print "$rep_specificname $va_rep_suffix is a $rep_name contactable at $rep_specificaddress";
+            list($rep_specificid, $rep_specificname, $rep_specificcontactmethod, $rep_specificaddress) = $reprecord;
     
             $right_column .= <<<END
                     <tr>
@@ -109,6 +112,7 @@ END;
     }
 }
 
+// Display page, using all the fyr_* variables set above.
 include "templates/whotofax.html";
 
 ?>

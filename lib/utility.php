@@ -5,7 +5,7 @@ General utility functions v1.1 (well, it was).
 
 */
 
-function debug ($header, $text="") {
+function debug ($header, $text="", $complex_variable=null) {
 	// Pass it a brief header word and some debug text and it'll be output.
 
 	// We set ?debug=n in the URL.
@@ -15,6 +15,7 @@ function debug ($header, $text="") {
 	// with a $header in $levels[1].
 	// For level '2', anything with a $header in $levels[1] AND $levels[2].
 	// Level '4' shows everything.
+    // $complex_variable is dumped in full, so you can put arrays/hashes here
 	
 	$debug_level = get_http_var("debug");
 	
@@ -22,9 +23,9 @@ function debug ($header, $text="") {
 	
 		// Set which level shows which types of debug info.
 		$levels = array (
-			1 => array ('FRONTEND', 'WARNING'),
-			2 => array ('SQL'), // not used yet
-			3 => array ('SQLRESULT') // not used yet
+			1 => array ('FRONTEND', 'WARNING', 'MAPIT', 'DADEM'),
+			2 => array ('SQL', 'MAPITRESULT', 'DADEMRESULT'), // SQL not used yet
+			3 => array ('SQLRESULT') // SQLRESULT not used yet
 			// Higher than this: 'DATA', etc.
 		);
 	
@@ -43,8 +44,13 @@ function debug ($header, $text="") {
 		
 		// If we can show this header, then, er, show it.
 		if ( in_array($header, $allowed_headers) || $debug_level >= 4) {
-	
-			print "<p><span style=\"color:#039;\"><strong>$header</strong></span> $text</p>\n";	
+            	
+			print "<p><span style=\"color:#039;\"><strong>$header</strong></span> $text";
+            if (isset($complex_variable)) {
+                print "</p><p>";
+                vardump($complex_variable);
+            }
+            print "</p>\n";	
 		}
 	}
 }
