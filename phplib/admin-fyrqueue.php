@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.68 2005-02-03 11:46:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.69 2005-02-03 14:52:28 francis Exp $
  * 
  */
 
@@ -63,13 +63,14 @@ class ADMIN_PAGE_FYR_QUEUE {
 
         // Quick referrers
         $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
+/*      # for testing  
         $freq_referrers_day = array(
         array("http://www.faxyourmp.com/youandyourmp.php3", 7),
         array("http://www.google.co.uk/search?hl=en&q=fax+your+mp&meta=", 4),
         array("http://www.stophumantraffic.org/writemp.html", 2),
         array("http://www.google.co.uk/search?hl=en&q=faxyourmp&meta=", 2),
         array("http://www.google.co.uk/search?hl=en&client=firefox-a&rls=org.mozilla%3Aen-GB%3Aofficial_s&q=local+mp&btnG=Search&meta=", 2)
-        );
+        );*/
         if (msg_get_error($freq_referrers_day)) {
             print "Error contacting queue:";
             print_r($freq_referrers_day);
