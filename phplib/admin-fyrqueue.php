@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.7 2004-12-20 20:34:16 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.8 2004-12-20 20:52:15 francis Exp $
  * 
  */
 
@@ -24,8 +24,7 @@ class ADMIN_PAGE_FYR_QUEUE {
 
 <table border=1
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
-Change</th><th>State</th><th>Postcode</th><th>Sender</th><th>Recipient</th><th>Message
-length (chars)</th></tr>
+Change</th><th>State</th><th>Sender</th><th>Recipient</th><th>Length (chars)</th></tr>
 <?
             foreach ($messages as $message) {
                 print "<tr>";
@@ -42,7 +41,6 @@ length (chars)</th></tr>
                     print "<br>Last: " .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
                 }
                 print "</td>";
-                print "<td>" . $message['sender_postcode'] . "</td>";
                 print "<td>" . 
                         $message['sender_name'] . "<br>" .
                         $message['sender_addr'] . "<br>" .
