@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.13 2005-01-13 02:33:11 chris Exp $
+ * $Id: index.php,v 1.14 2005-01-13 11:29:26 francis Exp $
  * 
  */
 
@@ -21,9 +21,9 @@ $pages = array(
             "WTT Website",
             "These rules limit access to the WriteToThem website.",
             <<<EOF
-HTML fragment to be displayed to user on error page when rule fires. If left
-blank, the message "Sorry, we are experiencing technical difficulties" is
-displayed.
+An HTML fragment which is displayed to the user in an error page when
+the rule fires. If left blank, the message "Sorry, we are experiencing
+technical difficulties" is displayed.
 EOF
         ),
     new ADMIN_PAGE_RATTY(

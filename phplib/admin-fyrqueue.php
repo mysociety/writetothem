@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.45 2005-01-12 14:42:42 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.46 2005-01-13 11:29:26 francis Exp $
  * 
  */
 
@@ -48,7 +48,7 @@ class ADMIN_PAGE_FYR_QUEUE {
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
 Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 <th>Client IP / <br> Referrer</th>
-<th>Length (chars)</th>
+<th>Length (chars)</th><th>Tick</th>
 </tr>
 <form action="<?=new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto')) ?>" method="post">
 <?
@@ -291,17 +291,19 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
             $this->print_events($recents);
 ?>
-<h2>Help</h2>
+<h2>Help &mdash; what do the buttons do?</h2>
 <p>
-<b>state meanings</b>, point the mouse to find out what they are
-<br><b>edit contact details</b> by clicking on the recipient name
-<br><b>freeze</b> stops delivery to representative, but other stuff
+<b>freeze</b> stops delivery to representative, but other stuff
 (such as confirmation message) still happens
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
 <br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
 <br><b>fail</b> rejects a message, with no email to the constituent.
 <br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
+<br><b>edit contact details</b> by clicking on the recipient name
+</p>
+<p>To find out <b>state meanings</b>, point the mouse to find out what they are
+</p>
 <?
             if (count($message['bounces']) > 0) {
                 print "<h2>Bounce Messages</h2>";
@@ -434,7 +436,7 @@ All time stats:
             if ($filter == 2)
                 print "<p>...";
         ?>
-<h2>What do the states mean?</h2>
+<h2>Help &mdash; what do the states mean?</h2>
 <p>Point the mouse a state name in the table above for extra description.
 Here is a diagram of state changes:
 <p><img src="queue-state-machine.png">
