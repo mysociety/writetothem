@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.44 2005-01-12 14:24:18 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.45 2005-01-12 14:42:42 francis Exp $
  * 
  */
 
@@ -333,10 +333,12 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                             " &lt;" .  $message['sender_email'] . "&gt;");
                 }
             }
-            print "<p><b>Email list for BCCing:</b><br>" .
-                implode(",", array_unique($sender_emails));
-            print "<p><b>List of names and addresses:</b><br>" .
-                implode("<br>", array_unique($sender_full));
+            if (count($sender_emails) > 0) {
+                print "<p><b>Email list for BCCing:</b><br>" .
+                    implode(",", array_unique($sender_emails));
+                print "<p><b>List of names and addresses:</b><br>" .
+                    implode("<br>", array_unique($sender_full));
+            }
 
              // Display general statistics
             $stats = msg_admin_get_stats();
