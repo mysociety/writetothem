@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.42 2005-02-11 13:14:15 matthew Exp $
+# $Id: AbuseChecks.pm,v 1.43 2005-02-16 01:33:32 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -111,7 +111,8 @@ sub get_similar_messages ($) {
     # parameter-binding dance:
     my $s = dbh()->prepare(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#);
     $s->bind_param(1, $msg->{id});
-    $s->bind_param(2, Storable::nfreeze($h), { pg_type => DBD::Pg::PG_BYTEA });
+    my $ser = Storable::nfreeze($h); # XXX no need for the temporary variable, except that we are getting "Bad free() ignored" errors, and want to know if it's Storable or DBD::Pg which is causing them....
+    $s->bind_param(2, $ser, { pg_type => DBD::Pg::PG_BYTEA });
     $s->execute();
 
     # Retrieve hashes of other messages and compare them. We don't want to
