@@ -1,11 +1,12 @@
 <?
 /*
+ * write.php:
  * Page where they enter details, write their message, and preview it
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.61 2005-01-18 14:52:00 chris Exp $
+ * $Id: write.php,v 1.62 2005-01-24 00:21:54 chris Exp $
  * 
  */
 
@@ -141,8 +142,20 @@ function renderForm($form, $pageName)
          * in the final fax. So we need to delve into the exciting world of
          * PHP's preg_replace. Because the text will get escaped for HTML
          * entities later, present those leading spaces as U+0000A0 NO-BREAK
-         * SPACE. */
-        $our_values['signedbody_indented'] = preg_replace("/^([ \t]+)/me", 'str_repeat(" ", strlen("\\1"))', $our_values['signedbody']);
+         * SPACE. But we can't use the obvious combination of preg_replace, the
+         * "e modifier" and str_repeat, because preg_replace with the "e
+         * modifier" is not safe, since the subexpressions are injected into
+         * the expression by textual substitution(!). So instead we perform
+         * repeated substitutions until there are no further changes. This is
+         * a complete pain, but then that's what you get for using a language
+         * with a rubbish API and no functional features. */
+        $t1 = $our_values['signedbody'];
+        $t2 = null;
+        do {
+            $t2 = $t1;
+            $t1 = preg_replace('/^((?: )*)( )/m', '\1 ', $t2);
+        } while ($t1 != $t2);
+        $our_values['signedbody_indented'] = $t1;
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     } else {
