@@ -23,9 +23,9 @@ if (array_key_exists('robots', $values)) { ?>
 WriteToThem.com<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';
 if (OPTION_FYR_REFLECT_EMAILS) {
-    print " - Staging Site";
+    print ' <span id="betatest">Staging Site</span>';
 } else {
-    print " - Beta Test";
+    print ' <span id="betatest">Beta Test</span>';
 }
 ?>
 </h1>

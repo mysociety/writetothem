@@ -19,6 +19,7 @@
     <?=$values['writer_address1']?><BR>
     <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<BR>";?>
     <?=$values['writer_town']?><BR>
+    <?=$values['writer_county']?><? if ($values['writer_county']) print "<BR>";?>
     <?=$values['pc']?><BR>
     <BR>
     <?=$values['writer_email']?><BR>
@@ -33,7 +34,7 @@
 
     <TD COLSPAN="2" ALIGN="left">
     <p>
-    <?=nl2br(htmlspecialchars($values['signedbody_indented']))?>
+    <?=nl2br(htmlspecialchars($values['body_indented']))?>
     </p>
     </TD>
     </TR>

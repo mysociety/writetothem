@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.76 2005-02-16 00:28:57 francis Exp $
+ * $Id: write.php,v 1.77 2005-02-16 18:31:38 matthew Exp $
  * 
  */
 
@@ -44,7 +44,7 @@ function buildWriteForm()
 
     // TODO: CSS this:
     $stuff_on_left = <<<END
-            <strong>Now Write Your Message:</strong><br><br>
+            <strong>Now Write Your Message:</strong> <small>(* means required)</small><br><br>
             ${fyr_voting_area['rep_prefix']}
             ${fyr_representative['name']}
             ${fyr_voting_area['rep_suffix']}
@@ -55,29 +55,32 @@ END;
     // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
     $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
 
-    $form->addElement('text', 'writer_name', "Your name:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_name', 'Please enter your name', 'required', null, null);
     $form->applyFilter('writer_name', 'trim');
 
-    $form->addElement('text', 'writer_address1', "Address 1:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_address1', "Address 1:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
     $form->applyFilter('writer_address1', 'trim');
 
     $form->addElement('text', 'writer_address2', "Address 2:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_address2', 'trim');
 
-    $form->addElement('text', 'writer_town', "Town:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_town', "Town/City:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_town', 'Please enter your town', 'required', null, null);
     $form->applyFilter('writer_town', 'trim');
 
+    $form->addElement('text', 'writer_county', 'County:', array('size' => 20, 'maxlength' => 255));
+    $form->applyFilter('writer_county', 'trim');
+
     $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
 
-    $form->addElement('text', 'writer_email', "Email:", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_email', "Email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
-    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optional, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
+    #    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optional, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
 
     $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_phone', 'trim');
@@ -163,13 +166,13 @@ function renderForm($form, $pageName)
          * repeated substitutions until there are no further changes. This is
          * a complete pain, but then that's what you get for using a language
          * with a rubbish API and no functional features. */
-        $t1 = $our_values['signedbody'];
+        $t1 = $our_values['body'];
         $t2 = null;
         do {
             $t2 = $t1;
             $t1 = preg_replace('/^((?: )*)( )/m', '\1 ', $t2);
         } while ($t1 != $t2);
-        $our_values['signedbody_indented'] = $t1;
+        $our_values['body_indented'] = $t1;
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     } else {
@@ -191,6 +194,7 @@ function submitFax() {
         $fyr_values['writer_address1'] . "\n" .
         $fyr_values['writer_address2'] . "\n" .
         $fyr_values['writer_town'] . "\n" .
+        $fyr_values['writer_county'] . "\n" .
         $fyr_values['pc'] . "\n";
     $address = str_replace("\n\n", "\n", $address);
 
