@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.63 2005-01-31 11:02:42 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.64 2005-01-31 11:09:56 chris Exp $
  * 
  */
 
@@ -531,17 +531,29 @@ Summary statistics:
                 $qmenu .= "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
             $qmenu .= "] ";
 
+            if ($view != 'failing')
+                $qmenu .= "<a href=\"$self_link&amp;view=failing\">[Failing/failed]</a> ";
+            else
+                $qmenu .= "[Failing/failed] ";
+
+            if ($view != 'frozen')
+                $qmenu .= "<a href=\"$self_link&amp;view=frozen\">[Frozen]</a> ";
+            else
+                $qmenu .= "[Frozen] ";
 
             if ($view != 'recentcreated')
                 $qmenu .= "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
             else
                 $qmenu .= "[Recently Created] ";
+                
             if ($view != 'recentchanged')
                 $qmenu .= "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
             else
                 $qmenu .= "[Recently Changed] ";
+
             if ($view  == 'similarbody')
                 $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
+
             $qmenu .= "[Contains ";
             if ($view == 'search')
                 $qmenu .= count($messages) . " ";
