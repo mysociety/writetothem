@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.110 2005-01-29 12:11:02 chris Exp $
+# $Id: Queue.pm,v 1.111 2005-01-29 12:13:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -940,7 +940,7 @@ my %state_action_interval = (
 
         # How often we grind over failed messages to scrub old ones of personal
         # information.
-        failed          => DAY
+        failed_closed   => DAY
     );
 
 
