@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.108 2005-01-29 10:43:30 chris Exp $
+# $Id: Queue.pm,v 1.109 2005-01-29 10:56:39 chris Exp $
 #
 
 package FYR::Queue;
@@ -1279,29 +1279,27 @@ sub admin_get_queue ($$) {
             
             $where = "where ";
             $where .= join(" and ", map {
-                my $term = $_;
-                for (1 .. 11) {
-                    push @params, '%'.$term.'%';
-                }
-                for (1 .. 2) {
-                    push @params, $term;
-                }
-                q#
-                         ((sender_name ilike ?) or
-                          (sender_email ilike ?) or
-                          (sender_addr ilike ?) or
-                          (sender_phone ilike ?) or
-                          (sender_postcode ilike ?) or
-                          (sender_ipaddr ilike ?) or
-                          (sender_referrer ilike ?) or
-                          (recipient_name ilike ?) or
-                          (recipient_email ilike ?) or
-                          (recipient_fax ilike ?) or
-                          (message ilike ?) or
-
-                          (recipient_type = ?) or
-                          (state = ?))#;
-            } @terms);
+                        for (1 .. 13) {
+                            push(@params, $_)
+                        }
+                        q#
+                             ((recipient_type = ?) or 
+                              (state = ?) or
+                             
+                              (sender_name ilike '%' || ? || '%') or
+                              (sender_email ilike '%' || ? || '%') or
+                              (sender_addr ilike '%' || ? || '%') or
+                              (sender_phone ilike '%' || ? || '%') or
+                              (sender_postcode ilike '%' || ? || '%') or
+                              (sender_ipaddr ilike '%' || ? || '%') or
+                              (sender_referrer ilike '%' || ? || '%') or
+                              (recipient_name ilike '%' || ? || '%') or
+                              (recipient_email ilike '%' || ? || '%') or
+                              (recipient_fax ilike '%' || ? || '%') or
+                              (message ilike '%' || ? || '%'))
+                        #
+                    } @terms
+                );
             $where .= " order by created desc";
         }
     }
