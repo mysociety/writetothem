@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.40 2004-12-06 16:38:15 chris Exp $
+# $Id: Queue.pm,v 1.41 2004-12-07 13:47:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -214,6 +214,28 @@ foreach (keys %allowed_transitions) {
     $allowed_transitions{$_} = $x;
 }
 
+# scrubmessage ID
+# Remove all personal data from message ID. This includes the text of the
+# letter, any log messages (since they may contain email addresses etc.), and
+# any bounce messages (since they usually contain quoted text).
+sub scrubmessage ($) {
+    my ($id) = @_;
+    FYR::DB::dbh()->do(q#
+                update message set
+                        sender_name = '', sender_email = '',
+                        sender_addr = '', sender_phone = null,
+                        sender_postcode = '', recipient_name = '',
+                        recipient_type = '',
+                        recipient_email = '', recipient_fax = null,
+                        message = ''
+                    where id = ?#, {}, $id);
+    # The log may also contain personal data.
+    FYR::DB::dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
+    # And the bounce table too.
+    FYR::DB::dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
+    logmsg($id, 'Scrubbed message of all personal data');
+}
+
 =item state ID [STATE]
 
 Get/change the state of the message with the given ID to STATE. If STATE is the
@@ -237,16 +259,7 @@ sub state ($;$) {
             # personal information from the message. Once this is done only the
             # message ID, recipient ID, and state information remain.
             if ($state eq 'failed' or $state eq 'finished') {
-                FYR::DB::dbh()->do(q#
-                            update message set
-                                    sender_name = '', sender_email = '',
-                                    sender_addr = '', sender_phone = null,
-                                    sender_postcode = '', recipient_name = '',
-                                    recipient_type = '',
-                                    recipient_email = '', recipient_fax = null,
-                                    message = ''
-                                where id = ?#, {}, $id);
-                logmsg($id, 'Scrubbed message of all personal data');
+                scrubmessage($id);
             }
         } else {
             FYR::DB::dbh()->do('update message set lastaction = ?, numactions = numactions + 1 where id = ?', {}, time(), $id);
