@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.24 2004-12-30 14:54:00 francis Exp $
+ * $Id: queue.php,v 1.25 2004-12-30 15:01:01 francis Exp $
  * 
  */
 
@@ -191,6 +191,14 @@ function msg_admin_set_message_to_failed($id, $user) {
 function msg_admin_set_message_to_failed_closed($id, $user) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_failed_closed', array($id, $user));
+    return $result;
+}
+
+/* msg_admin_add_note_to_message ID USER NOTE
+ * Adds a comment to a message. */
+function msg_admin_add_note_to_message($id, $user, $note) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_add_note_to_message', array($id, $user, $note));
     return $result;
 }
 

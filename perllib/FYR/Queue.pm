@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.72 2004-12-30 14:54:00 francis Exp $
+# $Id: Queue.pm,v 1.73 2004-12-30 15:01:01 francis Exp $
 #
 
 package FYR::Queue;
@@ -1320,6 +1320,17 @@ sub admin_set_message_to_failed_closed ($$) {
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     logmsg($id, "$user put message in state 'failed_closed'");
     FYR::DB::dbh()->commit();
+    return 0;
+}
+
+=item admin_add_note_to_message ID USER NOTE
+
+Add text in NOTE to the message log for the message.
+=cut
+
+sub admin_add_note_to_message ($$$) {
+    my ($id, $user, $note) = @_;
+    logmsg($id, "$user added note: $note");
     return 0;
 }
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.22 2004-12-30 14:54:00 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.23 2004-12-30 15:01:01 francis Exp $
  * 
  */
 
@@ -174,7 +174,12 @@ All time stats:
                 $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
                 msg_check_error($result);
                 print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
+            } else if (get_http_var('note')) {
+                $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
+                msg_check_error($result);
+                print "<p><b><i>Note added to message $id</i></b></p>";
             }
+
 
             print "<h2>Message id $id <a href=\"$self_link\">[back to message list]</a>:</h2>";
 
@@ -222,6 +227,9 @@ All time stats:
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
+
+            $form->addElement('textarea', 'notebody', null, array('rows' => 2, 'cols' => 60));
+            $form->addElement('submit', 'note', 'Add Comment (to the log)');
             admin_render_form($form);
             print "<p><a href=\"?page=reps&amp;rep_id=" .  urlencode($message['recipient_id']) . "&amp;pc=" .  urlencode($message['sender_postcode']) . "\">Edit contact details</a></p>";
 ?>
