@@ -1,9 +1,15 @@
 <?php
 
 /*
-General utility functions v1.1 (well, it was).
-
-*/
+ * General utility functions.  Taken from the TheyWorkForYou.com source
+ * code, and licensed under a BSD-style license.
+ * 
+ * Mainly: Copyright (c) 2003-2004, FaxYourMP Ltd 
+ * Parts are: Copyright (c) 2004 UK Citizens Online Democracy
+ *
+ * $Id: utility.php,v 1.4 2004-10-06 11:51:14 francis Exp $
+ * 
+ */
 
 function debug ($header, $text="", $complex_variable=null) {
 	// Pass it a brief header word and some debug text and it'll be output.

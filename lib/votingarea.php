@@ -1,14 +1,13 @@
 <?php
 /*
- * votingarea.php:
  * Stuff about voting and administrative areas.  "Voting Area" is the
  * terminology we use to mean any geographical region for which an
  * elected representative is returned.
  * 
- * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
- * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: votingarea.php,v 1.2 2004-10-05 11:57:22 francis Exp $
+ * $Id: votingarea.php,v 1.3 2004-10-06 11:51:14 francis Exp $
  * 
  */
 
