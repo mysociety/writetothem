@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.4 2004-12-13 19:57:56 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.5 2004-12-13 20:33:52 matthew Exp $';
 
 use strict;
 
@@ -32,6 +32,7 @@ sub check_all_params ($$) {
         $good = 0;
     } elsif (length($short) > 70) {
         $p->{short} = "Please make your description a bit shorter &mdash; you can put a more detailed description in below";
+	$good = 0;
     }
 
     my $long = $q->param('long');
