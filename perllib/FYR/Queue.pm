@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.107 2005-01-29 10:38:50 chris Exp $
+# $Id: Queue.pm,v 1.108 2005-01-29 10:43:30 chris Exp $
 #
 
 package FYR::Queue;
@@ -1172,15 +1172,20 @@ sub notify_daemon () {
 # Administrative interface
 #
 
-=item admin_recent_events COUNT
+=item admin_recent_events COUNT [IMPORTANT]
 
 Returns an array of hashes of information about the most recent COUNT queue
-events.
+events. If IMPORTANT is true, only return information about "exceptional"
+messages.
 
 =cut
-sub admin_recent_events ($) {
-    my ($count) = @_;
-    my $sth = FYR::DB::dbh()->prepare('select message_id, whenlogged, state, message from message_log order by order_id desc limit ?');
+sub admin_recent_events ($;$) {
+    my ($count, $imp) = @_;
+    my $sth = FYR::DB::dbh()->prepare('
+                    select message_id, whenlogged, state, message
+                      from message_log ' .
+                      ($imp ? 'where exceptional' : '')
+                    ' order by order_id desc limit ?');
     $sth->execute(int($count));
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1189,14 +1194,20 @@ sub admin_recent_events ($) {
     return \@ret;
 }
 
-=item admin_message_events ID
+=item admin_message_events ID [IMPORTANT]
 
-Returns an array of hashes of information about events for given message ID.
+Returns an array of hashes of information about events for given message ID. If
+IMPORTANT is true, only request messages for which the "exceptional" flag is
+set.
 
 =cut
-sub admin_message_events ($) {
-    my ($id) = @_;
-    my $sth = FYR::DB::dbh()->prepare('select message_id, whenlogged, state, message from message_log where message_id = ? order by order_id');
+sub admin_message_events ($;$) {
+    my ($id, $imp) = @_;
+    my $sth = FYR::DB::dbh()->prepare('
+                    select message_id, whenlogged, state, message
+                      from message_log
+                     where message_id = ? ' . ($imp ? 'and exceptional' : '') .
+                    'order by order_id');
     $sth->execute($id);
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
