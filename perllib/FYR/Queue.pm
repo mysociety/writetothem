@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.141 2005-02-25 12:12:02 matthew Exp $
+# $Id: Queue.pm,v 1.142 2005-03-07 10:49:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -367,13 +367,8 @@ sub scrubmessage ($) {
     # whether the letter was delivered by fax or email.
     dbh()->do(q#
                 update message 
-                    set sender_name = '', sender_email = '',
-                        sender_addr = '', sender_phone = null,
-                        sender_postcode = '', 
-                        sender_ipaddr = '', sender_referrer = null,
-                        recipient_name = '',
-                        recipient_email = '', recipient_fax = null,
-                        message = ''
+                    set sender_ipaddr = '', sender_referrer = null,
+                        message = '[ removed message of ' || length(message) || ' characters]'
                     where id = ?#, {}, $id);
     # Scrub delivery information but make sure we can still tell how the
     # message was sent.
@@ -386,10 +381,9 @@ sub scrubmessage ($) {
                     set recipient_fax = ''
                     where id = ? and recipient_fax is not null#, {}, $id);
     # The log, extra data, and bounce tables may also contain personal data.
-    dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
     dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
     dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
-    logmsg($id, 1, 'Scrubbed message of all personal data');
+    logmsg($id, 1, 'Scrubbed message of (some) personal data');
 }
 
 =item state ID [STATE]
@@ -1268,6 +1262,10 @@ sub process_queue ($$) {
         } catch FYR::Error with {
             my $E = shift;
             logmsg($id, 1, "error while processing message: $E");
+        } catch Error with {
+            my $E = shift;
+            logmsg($id, 1, "unexpected error (type " . ref($E) . ") while processing message: $E");
+            $E->throw();
         } finally {
             dbh()->commit();
         };
