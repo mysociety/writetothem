@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.55 2005-01-12 23:33:52 matthew Exp $
+ * $Id: write.php,v 1.56 2005-01-13 02:36:48 chris Exp $
  * 
  */
 
@@ -158,7 +158,7 @@ function submitFax() {
         representative by some other means.");
     }
 
-    $success = msg_write($msgid, 
+    $result = msg_write($msgid, 
             array( 
             'name' => $fyr_values['writer_name'],
             'email' => $fyr_values['writer_email'], 
@@ -170,9 +170,16 @@ function submitFax() {
             ),
             $fyr_values['who'], 
             $fyr_values['signedbody']);
-    if (rabx_is_error($success)) {
-        if ($success->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
-            template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
+    if (isset($result)) {
+        if (rabx_is_error($result)) {
+            if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
+                template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
+        } else {
+            /* Result is the name of a template page to be shown to the user.
+             * XXX For the moment assume that we can just redirect to it. */
+            header("Location: /$result");
+            exit;
+        }
         if ($success->code == FYR_QUEUE_MESSAGE_SUSPECTED_ABUSE) 
             template_show_error("Sorry, but we've had to reject your
             message.  Please see if you have broken any of our <a
