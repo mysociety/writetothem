@@ -88,3 +88,7 @@ a:hover { font-family:  Verdana, Arial, Helvetica;
 color: #999966;
 font-weight: bold;
 }
+
+ul, li {
+	text-align: left;
+}
