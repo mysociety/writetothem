@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.6 2004-12-18 13:21:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.7 2004-12-20 20:34:16 francis Exp $
  * 
  */
 
@@ -195,6 +195,7 @@ All time stats:
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
             admin_render_form($form);
+            print "<p><a href=\"?page=reps&rep_id=" .  urlencode($message['recipient_id']) . "&pc=" .  urlencode($message['sender_postcode']) . "\">Edit contact details</a></p>";
 ?>
 <p>
 <b>freeze</b> stops delivery to representative, but other stuff
@@ -219,7 +220,7 @@ All time stats:
                     creation: <a href=\"$self_link&filter=1\">[important
                     messages only]</a>";
 
-            print "<h2><?=$description?></h2>";
+            print "<h2>$description</h2>";
             $this->print_messages($messages);
 
             if ($filter == 1) {
@@ -228,7 +229,8 @@ All time stats:
                     print "Error contacting queue:";
                     print_r($messages);
                 } else {
-                    $description = "Messages which have changed recently: <a href=\"$self_link&filter=0\">[all messages]</a>";
+                    print "<h2>Messages which have changed recently: <a
+                    href=\"$self_link&filter=0\">[all messages]</a></h2>";
                     $this->print_messages($messages);
                 }
             }

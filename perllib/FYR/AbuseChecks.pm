@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.5 2004-12-20 20:10:55 chris Exp $
+# $Id: AbuseChecks.pm,v 1.6 2004-12-20 20:34:16 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -91,7 +91,7 @@ my @tests = (
                 return qq#IP address $_[0]->{sender_ipaddr} is not in the UK#
                     if (!check_ip_country($_[0]->{sender_ipaddr}));
             }
-        ]
+        ],
 
         # Extremely short messages
         [
@@ -126,6 +126,7 @@ sub test ($) {
 
     foreach (@tests) {
         my ($what, $f) = @$_;
+        my $why;
         if (defined($why = &$f($msg))) {
             return ($what, $why);
         }
