@@ -1,12 +1,12 @@
 <?php
 /*
- * mapit.php:
- * Interact with MapIt.
+ * Interact with MapIt.  Roughly speaking, postcode lookup of voting
+ * areas.
  * 
- * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
- * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: mapit.php,v 1.11 2004-10-06 11:31:45 chris Exp $
+ * $Id: mapit.php,v 1.12 2004-10-06 11:44:43 francis Exp $
  * 
  */
 
@@ -32,12 +32,13 @@ function mapit_is_error($e) {
 /* mapit_strerror CODE
  * Return a human-readable string describing CODE. */
 function mapit_strerror($e) {
+    global $mapit_error_strings;
     if (!is_integer($e))
         return "Success";
-    else if (!array_key_exists($e, $dadem_error_strings))
+    else if (!array_key_exists($e, $mapit_error_strings))
         return "Unknown MaPit error";
     else
-        return $dadem_error_strings($e);
+        return $mapit_error_strings[$e];
 }
 
 /* mapit_get_error R

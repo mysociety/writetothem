@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.2 2004-10-06 11:08:12 francis Exp $
+ * $Id: who.php,v 1.3 2004-10-06 11:44:43 francis Exp $
  * 
  */
 
@@ -18,22 +18,12 @@ include_once "../lib/utility.php";
 
 // Input data
 $fyr_postcode = get_http_var('pc');
+debug("FRONTEND", "postcode is $fyr_postcode");
 
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
-debug("FRONTEND", "postcode is $fyr_postcode");
-
-if (is_integer($voting_areas)) {
-    if ($voting_areas == MAPIT_BAD_POSTCODE) {
-        $fyr_error_message = "'$fyr_postcode' is not a valid postcode.";
-    }
-    else if ($voting_areas == MAPIT_POSTCODE_NOT_FOUND) {
-        $fyr_error_message = "'$fyr_postcode' not found";
-    }
-    else {
-        $fyr_error_message = "Unknown error looking up postcode.";
-    }
+if ($fyr_error_message = mapit_get_error($voting_areas)) {
     include "templates/generalerror.html";
     exit;
 }
@@ -45,12 +35,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     $va_typename = $va_name[$va_type];
     $info = mapit_get_voting_area_info($va_specificid);
-    if (is_integer($info)) {
-        if ($info == MAPIT_VOTING_AREA_NOT_FOUND) {
-            $fyr_error_message = "$va_specificid is not a valid voting area id.";
-        } else {
-            $fyr_error_message = "Unknown error looking up voting area $va_specificid.";
-        }
+    if ($fyr_error_message = mapit_get_error($info)) {
         include "templates/generalerror.html";
         exit;
     }
@@ -90,17 +75,8 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         <p>Your $rep_name represent you on $eb_specificname.  $va_description.</p>
         ";
 
-    $representatives = dadem_get_representatives($va_type, $va_specificid);
-    if (is_integer($representatives)) {
-        if ($representatives == DADEM_BAD_TYPE) {
-            $fyr_error_message = "Bad representative type $va_type.";
-        }
-        else if ($representatives == DADEM_UNKNOWN) {
-            $fyr_error_message = "Unknown representative.";
-        }
-        else {
-            $fyr_error_message = "Unknown error looking up representatives.";
-        }
+    $representatives = dadem_get_representatives($va_specificid);
+    if ($fyr_error_message = dadem_get_error($representatives)) {
         debug(WARNING, $fyr_error_message);
     }
     else {
@@ -113,12 +89,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         foreach ($representatives as $rep_specificid) {
             ++$c;
             $reprecord = dadem_get_representative_info($rep_specificid);
-            if (is_integer($reprecord)) {
-                if ($info == DADEM_REPRESENTATIVE_NOT_FOUND) {
-                    $fyr_error_message = "$rep_specificid is not a valid representative id.";
-                } else {
-                    $fyr_error_message = "Unknown error looking up representative $rep_specificid.";
-                }
+            if ($fyr_error_message = dadem_get_error($reprecord)) {
                 include "templates/generalerror.html";
                 exit;
             }

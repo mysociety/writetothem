@@ -1,26 +1,24 @@
 <?php
 /*
- * dadem.php:
- * Interact with DaDem.
+ * Interact with DaDem.  Roughly speaking, look up representatives in
+ * office for a voting area.
  * 
- * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
- * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.13 2004-10-06 11:31:57 chris Exp $
+ * $Id: dadem.php,v 1.14 2004-10-06 11:44:43 francis Exp $
  * 
  */
 
 include_once('votingarea.php');
 
 /* Error codes */
-define('DADEM_BAD_TYPE', 1);            /* bad area type */
-define('DADEM_UNKNOWN_AREA', 2);        /* unknown area */
-define('DADEM_REP_NOT_FOUND', 3);       /* unknown representative id */
-define('DADEM_AREA_WITHOUT_REPS', 4);   /* not an area for which representatives are returned */
+define('DADEM_UNKNOWN_AREA', 1);        /* unknown area */
+define('DADEM_REP_NOT_FOUND', 2);       /* unknown representative id */
+define('DADEM_AREA_WITHOUT_REPS', 3);   /* not an area for which representatives are returned */
 
 $dadem_error_strings = array(
-    DADEM_BAD_TYPE          =>  'Bad area type',
-    DADEM_UNKNOWN_AREA      =>  'Unknown area',
+    DADEM_UNKNOWN_AREA      =>  'Unknown voting area',
     DADEM_REP_NOT_FOUND     =>  'Representative not found',
     DADEM_AREA_WITHOUT_REPS =>  'Not an area type for which representatives are returned'
 );
@@ -37,12 +35,13 @@ function dadem_is_error($e) {
 /* dadem_strerror CODE
  * Return a human-readable string describing CODE. */
 function dadem_strerror($e) {
+    global $dadem_error_strings;
     if (!is_integer($e))
         return "Success";
     else if (!array_key_exists($e, $dadem_error_strings))
         return "Unknown DaDem error";
     else
-        return $dadem_error_strings($e);
+        return $dadem_error_strings[$e];
 }
 
 /* dadem_get_error R
@@ -54,27 +53,26 @@ function dadem_get_error($e) {
         return dadem_strerror($e);
 }
 
-// TODO: In theory, this shouldn't take the type
-/* dadem_get_representatives TYPE ID
- * Return an array of (ID, name, type of contact information, contact
- * information) for the representatives for the given TYPE of area with the
- * given ID on success, or an error code on failure. */
-function dadem_get_representatives($va_type, $va_id) {
-    if ($va_type == VA_CED) {
+/* dadem_get_representatives VOTING_AREA_ID
+ * Return an array of IDs for the representatives for the given voting
+ * area on success, or an error code on failure. */
+function dadem_get_representatives($va_id) {
+    // Hardwired stub dummy data
+    if ($va_id == 2) { // VA_CED
         $ret = array(
                 1,
             );
-    } else if ($va_type == VA_DIW) {
+    } else if ($va_id == 4) { // VA_DIW
         $ret = array(
                 2,
                 3,
                 4,
             );
-    } else if ($va_type == VA_WMC) {
+    } else if ($va_id == 6) { // VA_WMC
         $ret = array(
                 5,
             );
-    } else if ($va_type == VA_EUR) {
+    } else if ($va_id == 8) { // VA_EUR
         $ret = array(
                 6,
                 7,
@@ -86,12 +84,12 @@ function dadem_get_representatives($va_type, $va_id) {
             );
     }
     if (isset($ret)) {
-        debug("DADEM", "Looked up representatives for voting area type $va_type id $va_id");
+        debug("DADEM", "Looked up representatives for voting area id $va_id");
         debug("DADEMRESULT", "Results:", $ret);
         return $ret;
     }
-    debug("DADEM", "Representative bad type $type id $va_id");
-    return DADEM_BAD_TYPE;
+    debug("DADEM", "Unknown area id $va_id");
+    return DADEM_UNKNOWN_AREA;
 }
 
 /* dadem_get_representative_info ID
