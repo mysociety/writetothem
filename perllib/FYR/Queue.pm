@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.5 2004-11-01 15:24:20 chris Exp $
+# $Id: Queue.pm,v 1.6 2004-11-02 16:44:35 chris Exp $
 #
 
 package FYR::Queue;
@@ -424,19 +424,19 @@ sub make_confirmation_email ($) {
     # Text::Wrap do the rest.
     my $text = wrap(EMAIL_COLUMNS, <<EOF);
 
-Please click on the link below to confirm that you wish FaxYourRepresentative.com to send the letter copied at the bottom of this email to $msg->{recipient_name}, your $msg->{recipient_position}:
+Please click on the link below to confirm that you wish FaxYourRepresentative.com to send the message copied at the bottom of this email to $msg->{recipient_name}, your $msg->{recipient_position}:
 
     $confirm_url
 
 If your email program does not let you click on this link, just copy and paste it into your web browser and hit return.
 
-We'll send you a confirmation email once your letter has been dispatched successfully. If for some reason we can't send your letter, we will email you with details of how to contact your $msg->{recipient_position} by more traditional, albeit less fun, means.
+We'll send you a confirmation email once your message has been dispatched successfully. If for some reason we can't send your message, we will email you with details of how to contact your $msg->{recipient_position} by more traditional, albeit less fun, means.
 
-A copy of your letter is pasted to the bottom of this email.
+A copy of your message is pasted to the bottom of this email.
 
 Please feel free to email us on info\@FaxYourRepresentative.com with any comments, problems or suggestions. And don't forget to let your friends and family know about www.FaxYourRepresentative.com !
 
-If you did not request that a letter be sent to $msg->{recipient_name}, please let us know by sending an email to abuse\@FaxYourRepresentative.com
+If you did not request that a message be sent to $msg->{recipient_name}, please let us know by sending an email to abuse\@FaxYourRepresentative.com
 
 Don't worry; nothing will be sent without your permission.
 
@@ -445,7 +445,7 @@ Don't worry; nothing will be sent without your permission.
 
 -----------------------------------------------------------------------
 
-A copy of your letter follows:
+A copy of your message follows:
 
 
 EOF
@@ -456,7 +456,7 @@ EOF
             Sender => $confirm_sender,
             From => format_email_address('FaxYourRepresentative', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf('Please confirm that you want to send a letter to %s', format_mimewords($msg->{recipient_name})),
+            Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
             Data => $text
         );
 }
@@ -514,7 +514,7 @@ sub deliver ($) {
 
 =item run_queue
 
-Run the queue, sending confirmation emails and delivering real letters.
+Run the queue, sending confirmation emails and delivering real messages.
 
 =cut
 sub run_queue () {
