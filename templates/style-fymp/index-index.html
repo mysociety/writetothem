@@ -7,6 +7,13 @@ include "header.php";
 
 <H3>WriteToThem.com - <?=$values['title']?></H3>
 
+<? if ($values['error']) { ?>
+<p><font color="#ff0000" size="-1">
+<strong>Please try again.</strong>
+<?=$values['error']?>
+</p>
+<? } ?>
+
 <TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0" BGCOLOR="#006666">
 	<TR>
 	<TD><TABLE CELLPADDING="8" CELLSPACING="0" BORDER="0" BGCOLOR="#cccc99">

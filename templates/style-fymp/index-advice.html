@@ -1,0 +1,70 @@
+<?
+$values['title'] = "Fax Or Email Your Democratic Representatives For Free";
+include "header.php";
+?>
+
+<div align="center">
+
+<H3>WriteToThem.com - <?=$values['title']?></H3>
+
+<? if ($values['error']) { ?>
+<p><font color="#ff0000" size="-1">
+<b><?=$values['error']?></b>
+</font>
+See below for some suggestions on getting the postcode right.
+</p>
+<? } ?>
+
+<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0" BGCOLOR="#006666">
+	<TR>
+	<TD><TABLE CELLPADDING="8" CELLSPACING="0" BORDER="0" BGCOLOR="#cccc99">
+        <TR><TD><?=$values['form']?></TD></TR>
+		</TABLE>
+     </TD>
+	</TR>
+</TABLE>
+
+</div>
+
+    <p>
+   <b>Did you type the letter 'O' instead of a zero?</b>
+   <br>
+   This is an easy mistake to make. The most likely culprit is the first
+   digit in the second part of the code. You need to put, for example:
+   N8 0NP  rather than N8 ONP.
+   <p>
+   <b>Did you type the letter 'I' instead of a figure 1?</b>
+   <br>
+   Like the error above, this is easy enough to do. Again, the most
+   likely culprit is the first digit in the second part of the code. You
+   need to put, for example: BD3 1RF rather than BD3 IRF.
+   <p>
+   <b>If neither of the above applies, but you're still having no luck,
+   try these tips:</b>
+   <ul>
+   <li>It is quite possible the Royal Mail has changed this postcode (it
+   is surprisingly common). You can check  with them direct at <a
+   href="http://www.royalmail.co.uk/paf/">http://www.royalmail.co.uk/paf/</a></li>
+   </ul>
+   <b>Worries you can rule out:</b>
+   <ul>
+   <li>It makes no difference whether you leave a space between the two
+   parts of the postcode: we will recognise it either way.</li>
+   <li>It makes no difference whether you use capital letters or
+   not.</li>
+   </ul>
+
+   <P>
+	
+<? 
+
+/* Focus the postcode box. Must come after the box is created, obviously. */
+print "<script language=\"javascript\">\n"
+    . "<!--\n"
+    . javascript_focus_set("postcodeForm", "pc") . "\n"
+    . "// -->\n"
+    . "</script>";
+
+include "footer.php";
+
+?>
