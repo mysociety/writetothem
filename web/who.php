@@ -5,17 +5,16 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.7 2004-10-15 14:54:47 francis Exp $
+ * $Id: who.php,v 1.8 2004-10-15 16:35:47 francis Exp $
  * 
  */
 
 $fyr_title = "Now Choose The Representative Responsible for the Topic";
 
 include_once "../conf/config.php";
-include_once "../../phplib/mapit.php";
-include_once "../../phplib/votingarea.php";
-include_once "../../phplib/dadem.php";
+include_once "../phplib/reps.php";
 include_once "../../phplib/utility.php";
+include_once "../../phplib/dadem.php";
 
 // Input data
 $fyr_postcode = get_http_var('pc');
@@ -28,7 +27,6 @@ if ($fyr_error_message = mapit_get_error($voting_areas)) {
     include "templates/generalerror.html";
     exit;
 }
-print_r($voting_areas);
 
 // For each voting area, find all the representatives.  Put descriptive
 // text and form text in an array for the template to render.
@@ -41,9 +39,6 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         include "templates/generalerror.html";
         exit;
     }
-    $va_info['type_name'] = $va_name[$va_type];
-    $va_info['rep_name'] = $va_rep_name[$va_type];
-    $va_info['rep_suffix'] = $va_rep_suffix[$va_type];
 
     // The elected body is the overall entity. e.g. Cambridgeshire County Council.
     $eb_type = $va_inside[$va_type];
@@ -55,7 +50,6 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         // (Will have to do something about London mayor)
         continue;
     }
-    $eb_info['type_name'] = $va_name[$eb_type];
     
     // Lookup table of long description
     if ($eb_type == VA_DIS) {
@@ -74,36 +68,46 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         making laws in the UK and for overall scrutiny of all aspects of
         government.";
     }
-    else if ($eb_type == VA_EUR) {
+    else if ($eb_type == VA_EUP) {
         $eb_info['description'] = "They scrutinise European laws (called
         \"directives\") and the budget of the European Union, and provides
         oversight of the other decision-making bodies of the Union,
         including the Council of Ministers and the Commission.";
     }
 
+    // Count representatives
+    $representatives = dadem_get_representatives($va_specificid);
+    if ($fyr_error_message = dadem_get_error($representatives)) {
+        include "templates/generalerror.html";
+        exit;
+    }
+    $rep_count = count($representatives);
     
     // Create HTML
-    $left_column = "<h4>Your ${va_info['rep_name']}</h4>
-        <p>Your ${va_info['rep_name']} represent you on
-        ${eb_info['name']}. ${eb_info['description']}.</p>
-        ";
+    $left_column = "<h4>Your ${va_info['rep_name']}</h4><p>";
+    if ($rep_count > 1) {
+        $left_column .= "Your ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+    } else {
+        $left_column .= "Your ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+    }
+    $left_column .= "${eb_info['name']}.  ${eb_info['description']}.</p>";
 
     $fyr_form_start = "
             <form method=\"get\" action=\"write.php\">
             <input type=\"hidden\" name=\"pc\"
             value=\"$fyr_postcode\">";
 
-    $representatives = dadem_get_representatives($va_specificid);
-    if ($fyr_error_message = dadem_get_error($representatives)) {
-        include "templates/generalerror.html";
-        exit;
-    }
-
-    $rep_count = count($representatives);
     $right_column = "<p>In your ${va_info['type_name']},
-    <b>${va_info['name']}</b>, you are represented by $rep_count ${va_info['rep_name']}.
-        Please choose one ${va_info['rep_name']} to contact.</p>
-        <table style=\"float: left;\">";
+        <b>${va_info['name']}</b>, you are represented by ";
+    if ($rep_count > 1) {
+        $right_column .= "$rep_count ${va_info['rep_name_plural']}.
+            Please choose one ${va_info['rep_name']} to contact.";
+    } else {
+        $right_column .= "one ${va_info['rep_name']}.";
+    }
+    $right_column .= "</p> <table style=\"float: left;\">";
+
+    // Rest of representatives
     foreach ($representatives as $rep_specificid) {
         ++$c;
         $rep_info = dadem_get_representative_info($rep_specificid);
