@@ -1,11 +1,11 @@
 <?php
 /*
- * PHP info admin page.
+ * FYR queue admin page.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.37 2005-01-07 08:03:04 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.38 2005-01-08 00:06:27 francis Exp $
  * 
  */
 
