@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.11 2005-01-30 13:55:52 chris Exp $
+# $Id: Fax.pm,v 1.12 2005-02-03 17:24:00 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -74,8 +74,11 @@ use constant LMARGIN_CX => int((FAX_PAGE_CX - A4_WIDTH * H_RESOLUTION) / 2 + A4_
 # Text size for the body text, in points.
 use constant FONT_SIZE_BODY => 13;
 
-# Smallprint font size, in points.
-use constant FONT_SIZE_SMALL => 9;
+# Text size for the page footers, in points.
+use constant FONT_SIZE_FOOTER => 9;
+
+# Text size for the (optional) cover page, in points.
+use constant FONT_SIZE_COVER => 20;
 
 # Space we skip for each line. NB we do this ourselves, rather than relying on
 # the GD linespacing option.
@@ -246,6 +249,45 @@ sub footer_text ($$$$) {
     return $text;
 }
 
+# cover_text MESSAGE
+# Format the cover-page text for a "via" MESSAGE.
+sub cover_text ($) {
+    my ($msg) = @_;
+    return FYR::EmailTemplate::format(fax_template('via-coversheet'), FYR::Queue::email_template_params($msg));
+}
+
+# make_pbm_image IMAGE
+# Create a PBM file on-disk containing the contents of IMAGE, and return its
+# name.
+sub make_pbm_image ($) {
+    my ($im) = @_;
+    
+    # Nasty. We need to create a PBM file on disk, but getting bitmapped data
+    # out of GD is not trivial. We use the "WBMP" format (part of the WAP
+    # specification, apparently). This is designed for mobile phones with 2x3
+    # pixel screens or whatever, and so is not quite the right thing for
+    # thousands-of-pixels-square fax images. But it seems to work.
+    my ($h, $name) = mySociety::Util::named_tempfile('.pbm');
+    push(@imgfiles, $name);
+    my ($p, $pid) = mySociety::Util::pipe_via('wbmptopbm', $h);
+    $h->close() or die "close: $name: $!";;
+    $p->print($pages[$i]->wbmp(1)) or die "write: $name: $!";
+    $p->close() or die "close: $!";
+
+    waitpid($pid, 0);
+
+    if ($?) {
+        # Something went wrong.
+        if ($? & 127) {
+            die "wbmptopbm died with signal " . ($? & 127);
+        } else {
+            die "wbmptopbm exited with status " . ($? >> 8);
+        }
+    }
+
+    return $name;
+}
+
 =item make_representative_fax MESSAGE
 
 Generates page images suitable for sending MESSAGE to its recipient by fax.
@@ -271,9 +313,9 @@ sub make_representative_fax ($) {
         # is just to figure out how much space it takes up, so that we can
         # subtract that from the space available for the text.
         my $text = footer_text(1, 99, $url, $msg->{recipient_fax});
-        my $firstfooterheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
+        my $firstfooterheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_FOOTER))[0];
         $text = footer_text(2, 99, $url, $msg->{recipient_fax});
-        my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
+        my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_FOOTER))[0];
 
         my $addr = $msg->{sender_name} . "\n" . $msg->{sender_addr};
         $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
@@ -298,6 +340,18 @@ sub make_representative_fax ($) {
             $im->colorAllocate(0, 0, 0);
             $text = $text2;
         }
+        
+        # At this point, generate a cover sheet if we need one.
+        if ($msg->{via}) {
+            $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
+            $im->colorAllocate(255, 255, 255);
+            $im->colorAllocate(0, 0, 0);
+            my $cover = cover_text($msg);
+            my $coverheight = (format_text($im, $cover, LMARGIN_CX, TMARGIN_CY, TEXT_CY, 1, FONT_SIZE_COVER))[0];
+            format_text($im, $cover, LMARGIN_CX, TMARGIN_CY + int((TEXT_CY - $coverheight) / 2), $coverheight + 100, 0, FONT_SIZE_COVER);
+            push(@imgfiles, make_pbm_file($im));
+
+        }
 
         # Now go back over each page and write the appropriate footer, and save
         # the pages to temporary PBM files whose names we return.
@@ -305,37 +359,12 @@ sub make_representative_fax ($) {
             $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax});
             my $f = ($i > 0 ? $footerheight : $firstfooterheight);
 
-            format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_SMALL);
+            format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_FOOTER);
             $pages[$i]->setThickness(2);
             $pages[$i]->line(LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f - 10, LMARGIN_CX + TEXT_CX, TMARGIN_CY + TEXT_CY - $f - 10, 1);
 
-            # Nasty. We need to create a PBM file on disk, but getting
-            # bitmapped data out of GD is not trivial. We use the "WBMP" format
-            # (part of the WAP specification, apparently). This is designed for
-            # mobile phones with 2x3 pixel screens or whatever, and so is not
-            # quite the right thing for thousands-of-pixels-square fax images.
-            # But it seems to work.
-            my ($h, $name) = mySociety::Util::named_tempfile('.pbm');
-            push(@imgfiles, $name);
-            my ($p, $pid) = mySociety::Util::pipe_via('wbmptopbm', $h);
-            $h->close() or die "close: $name: $!";;
-            $p->print($pages[$i]->wbmp(1)) or die "write: $name: $!";
-            $p->close() or die "close: $!";
-
-            waitpid($pid, 0);
-
-            if ($?) {
-                # Something went wrong.
-                if ($? & 127) {
-                    die "wbmptopbm died with signal " . ($? & 127);
-                } else {
-                    die "wbmptopbm exited with status " . ($? >> 8);
-                }
-            }
-
-            # else OK.
+            push(@imgfiles, make_pbm_file($im));
         }
-
     } otherwise {
         my $E = shift;
         # Something went wrong; clean up the temporary files.

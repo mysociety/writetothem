@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.121 2005-02-03 15:40:24 chris Exp $
+# $Id: Queue.pm,v 1.122 2005-02-03 17:24:00 chris Exp $
 #
 
 package FYR::Queue;
@@ -76,7 +76,9 @@ sub create () {
 # Internal use. Takes a RECIPIENT (reference to hash of fields), and uses their
 # contact method to set the fax or email fields. Gives an error if contact
 # method is inconsistent with them, and leaves exactly one of fax or email
-# defined.
+# defined. Sets the RECIPIENT->{via} if the message is to be sent via the
+# elected body's Democratic Services or similar contact, and sets up fax and
+# email fields for that delivery.
 sub work_out_destination ($) {
     my ($recipient) = @_;
    
@@ -505,6 +507,18 @@ sub format_email_body ($) {
 # suitable for immediate sending to the real recipient.
 sub make_representative_email ($) {
     my ($msg) = (@_);
+
+    my $bodytext = '';
+
+    # If this is being sent via some contact, we need to add blurb to the top
+    # to that effect.
+    if ($msg->{recipient_via}) {
+        $bodytext = FYR::EmailTemplate::format(
+                email_template('via-coversheet'),
+                email_template_params($msg, representative_url => '')
+            );
+    }
+    
     return MIME::Entity->build(
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
@@ -642,6 +656,14 @@ sub email_template_params ($%) {
     foreach (qw(sender_name recipient_name recipient_position recipient_position_plural)) {
         $params{$_} = $msg->{$_};
     }
+    my $a = "$msg->{sender_address}\n$msg->{sender_postcode}";
+    $a =~ s#[,.]?\n+#, #g;
+
+    # Also obtain the voting area name -- needed for the via template.
+    my $r = mySociety::DaDem::get_representative_info($msg->{recipient_id});
+    my $a = mySociety::MaPit::get_voting_area_info($r->{area_id});
+    $params{recipient_area_name} = $a->{name};
+    
     return \%params;
 }
 
