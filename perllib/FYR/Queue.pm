@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.41 2004-12-07 13:47:40 chris Exp $
+# $Id: Queue.pm,v 1.42 2004-12-07 19:40:48 chris Exp $
 #
 
 package FYR::Queue;
@@ -380,7 +380,6 @@ sub format_email_body ($) {
 sub make_representative_email ($) {
     my ($msg) = (@_);
     return MIME::Entity->build(
-            Sender => $msg->{sender_email},
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
             Subject => "Letter from your constituent " . format_mimewords($msg->{sender_name}),
@@ -649,7 +648,7 @@ sub deliver_email ($) {
                             mySociety::Config::get('EMAIL_PREFIX'),
                             make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
-    my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{recipient_email});
+    my $result = mySociety::Util::send_email($mail->stringify(), $sender, $msg->{recipient_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, "delivered message by email to $msg->{recipient_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
