@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.26 2004-11-15 18:35:23 francis Exp $
+ * $Id: write.php,v 1.27 2004-11-16 15:08:43 francis Exp $
  * 
  */
 
@@ -126,17 +126,15 @@ function renderForm($form, $pageName)
     // Make HTML
     $fyr_form = $renderer->toHtml();
 
-    global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
+    global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form, 
             'date' => $fyr_date));
 
     if ($pageName == "writeForm") {
-        $fyr_title = "Now Write Your Message To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
         template_draw("write-write", $our_values);
     } else { // previewForm
         // Generate preview
-        $fyr_title = "Check Your Message Is Right";
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     }
@@ -178,11 +176,10 @@ function submitFax() {
         template_show_error();
     }
 
-    global $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
+    global $fyr_representative, $fyr_voting_area, $fyr_date;
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
             'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
     if ($success) {
-        $fyr_title = "Great! Now Check Your Email";
         template_draw("write-checkemail", $our_values);
     } else {
         $fyr_error_message = "Failed to queue the message";  // TODO improve this error message

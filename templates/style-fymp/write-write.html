@@ -1,4 +1,9 @@
-<? include "header.php"; ?>
+<? 
+$values['title'] = "Now Write Your Message To ". 
+    $values['representative']['name'] . " " .
+    $values['voting_area']['rep_name'] . " for " . $values['voting_area']['name'];
+
+include "header.php"; ?>
 
 <H3>FaxYourRepresentative.com - Read This Before Writing Your Fax</H3>
 <SPAN CLASS="bigb">

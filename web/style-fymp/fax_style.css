@@ -1,4 +1,3 @@
-<STYLE>
 BODY { background : #ffffff;
 }
 
@@ -6,12 +5,14 @@ H3 { font-family: Verdana, Arial, Helvetica;
 font-size: 13pt;
 font-weight: bold; 
 color: #006666;
+text-align: center;
 }
 
 H4 { font-family: Verdana, Arial, Helvetica;
 font-size: 11pt;
 font-weight: bold; 
 color: #006666;
+text-align: center;
 }
 
 td { font-family: Verdana, Arial, Helvetica;
@@ -87,5 +88,3 @@ a:hover { font-family:  Verdana, Arial, Helvetica;
 color: #999966;
 font-weight: bold;
 }
-
-</STYLE>

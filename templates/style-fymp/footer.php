@@ -23,7 +23,6 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 		<TD><IMG SRC="/images/tiny.gif" ALT="" WIDTH="530" HEIGHT="1" BORDER="0"></TD>
 	</TR>
 </TABLE><P>
-</DIV>
 
 <div align="center">
 <table border="0" width="530">
