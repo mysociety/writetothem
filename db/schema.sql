@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.23 2005-01-27 11:10:03 francis Exp $
+-- $Id: schema.sql,v 1.24 2005-02-03 15:40:23 chris Exp $
 --
 
 set client_min_messages to error;
@@ -58,6 +58,9 @@ create table message (
     recipient_email text,
     recipient_fax text,
     check((recipient_email is not null and recipient_fax is null) or (recipient_fax is not null and recipient_email is null)),
+    -- true if this is being sent via some other contact point, for instance a
+    -- Democratic Services office
+    recipient_via boolean not null default('f'),
 
     -- Text of message (UTF-8 with line-breaks).
     message text not null,

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.120 2005-02-03 11:46:55 francis Exp $
+# $Id: Queue.pm,v 1.121 2005-02-03 15:40:24 chris Exp $
 #
 
 package FYR::Queue;
@@ -73,13 +73,15 @@ sub create () {
 }
 
 # work_out_destination RECIPIENT
-# Internal use.  Takes a RECIPIENT (reference to hash of fields), and uses
-# their contact method to set the fax or email fields.  Gives an error if
-# contact method is inconsistent with them, and leaves exactly one of fax or
-# email defined.
+# Internal use. Takes a RECIPIENT (reference to hash of fields), and uses their
+# contact method to set the fax or email fields. Gives an error if contact
+# method is inconsistent with them, and leaves exactly one of fax or email
+# defined.
 sub work_out_destination ($) {
-    my ($recipient) = shift;
-    
+    my ($recipient) = @_;
+   
+    $recipient->{via} = 0 if (!exists($recipient->{via}));
+
     # Normalise any false values to undef
     $recipient->{fax} ||= undef; 
     $recipient->{email} ||= undef;
@@ -101,9 +103,28 @@ sub work_out_destination ($) {
         $recipient->{fax} = undef;
     } elsif ($recipient->{method} eq "shame") {
         throw FYR::Error("Representative has told us they do not want WriteToThem.com to deliver messages for them.", FYR::Error::MESSAGE_SHAME);
+    } elsif ($recipient->{method} eq "via") {
+        # Representative should be contacted via the elected body on which they
+        # sit.
+        my $ainfo = mySociety::MaPit::get_voting_area_info($recipient->{voting_area});
+        my $vainfo = DaDem::get_representatives($ainfo->{parent_area_id});
+        throw FYR::Error("Bad return from DaDem looking up contact via info")
+            unless (ref($vainfo) eq 'ARRAY');
+        throw FYR::Error("More than one via contact (shouldn't happen)")
+            if (@$vainfo > 1);
+        throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
+            if (!@$vainfo);
+        throw FYR::Error("Bad contact mehod for via contact (shouldn't happen)")
+            if ($vainfo->[0]->{method} eq 'via');
+        
+        foreach (qw(method fax email)) {
+            $recipient->{$_} = $vainfo->[0]->{$_};
+        }
+        $recipient->{via} = 1;
+        work_out_recipient($recipient);
     } elsif ($recipient->{method} eq "unknown") {
         throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
-     } else {
+    } else {
         throw FYR::Error("Unknown contact method '" .  $recipient->{method} . "'.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
     }
 }
@@ -135,10 +156,10 @@ Write details of a message for sending. ID is the identity of the message,
 SENDER is a reference to hash containing details of the sender including
 elements: name, the sender's full name; email, their email address; address,
 their full postal address; postcode, their post code; and optionally phone,
-their phone number; ipaddr, their IP address; referrer, website that
-referred them to this one. RECIPIENT is the DaDem ID number of the
-recipient of the message; and TEXT is the text of the message, with line
-breaks. Returns true on success, or an error code on failure.
+their phone number; ipaddr, their IP address; referrer, website that referred
+them to this one. RECIPIENT is the DaDem ID number of the recipient of the
+message; and TEXT is the text of the message, with line breaks. Returns true on
+success, or an error code on failure.
 
 This function is called remotely and commits its changes.
 
@@ -194,7 +215,9 @@ sub write ($$$$) {
                 id,
                 sender_name, sender_email, sender_addr, sender_phone,
                 sender_postcode, sender_ipaddr, sender_referrer,
-                recipient_id, recipient_name, recipient_type, recipient_email, recipient_fax,
+                recipient_id, recipient_name, recipient_type,
+                    recipient_email, recipient_fax,
+                    recipient_via,
                 message,
                 state,
                 created, laststatechange,
@@ -210,7 +233,9 @@ sub write ($$$$) {
             )#, {},
             $id,
             (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
-            $recipient_id, (map { $recipient->{$_} || undef } qw(name type email fax)),
+            $recipient_id,
+                (map { $recipient->{$_} || undef } qw(name type email fax)),
+                $recipient->{via} ? 't' : 'f',
             $text,
             time(), time());
 
