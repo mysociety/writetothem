@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.13 2005-01-04 11:17:37 francis Exp $
+# $Id: AbuseChecks.pm,v 1.14 2005-01-04 16:01:58 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -95,12 +95,13 @@ my @tests = (
             }
         ],
 
-        # Extremely short messages
+        # Extremely short messages, allow for length of signature (about 150)
         [
             'hold',
             sub ($) {
                 return "Message is extremely short"
-                    if (length($_[0]->{message}) - length($_[0]->{recipient_name}) < 100);
+                    if (length($_[0]->{message}) - length($_[0]->{recipient_name}
+                        ) < 250);
             }
         ],
 

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.47 2004-12-22 13:16:01 francis Exp $
+ * $Id: write.php,v 1.48 2005-01-04 16:01:58 francis Exp $
  * 
  */
 
@@ -122,7 +122,6 @@ function renderForm($form, $pageName)
     $form->accept($renderer);
 
     global $fyr_form, $fyr_values;
-    $fyr_values['signature'] = sha1($fyr_values['email']);
     debug("FRONTEND", "Form values:", $fyr_values);
 
     // Make HTML
@@ -169,7 +168,8 @@ function submitFax() {
             'referrer' => $fyr_values['fyr_extref'],
             'ipaddr' =>  $_SERVER['REMOTE_ADDR']
             ),
-            $fyr_values['who'], $fyr_values['body']);
+            $fyr_values['who'], 
+            $fyr_values['signedbody']);
     if (rabx_is_error($success)) {
         if ($success->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
             template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
@@ -264,7 +264,9 @@ if (rabx_is_error($success)) {
     template_show_error($success->text);
 }
 
-
+// Generate signature
+$fyr_values['signature'] = sha1($fyr_values['email']);
+$fyr_values['signedbody'] = $fyr_values['body'] . "\n\n" .  $fyr_values['signature'] .  " (Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)";
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
