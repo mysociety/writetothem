@@ -1,4 +1,7 @@
 <? include "header.php"; ?>
+
+<? if ($fyr_preview) print "Preview";
+   if ($fyr_complete) print "Complete"; ?>
  
 <H3>FaxYourRepresentative.com - Read This Before Writing Your Fax</H3>
 <SPAN CLASS="bigb">
@@ -15,6 +18,33 @@ BGCOLOR="#006666">
 	<TR>
 	<TD VALIGN="top">
 			<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0" BGCOLOR="#cccc99">
+        <TR><TD>
+<? if ($fyr_preview && !$fyr_complete) {
+    print "<b><font color=\"red\">Oops! Sorry, but we need you to fill in:<ul>";
+    if (!$fyr_writer_name_valid)
+        print "<li>your name";
+    if (!$fyr_writer_address_valid)
+        print "<li>your address";
+    if (!$fyr_writer_town_valid)
+        print "<li>your town";
+    if (!$fyr_writer_email_valid)
+        print "<li>your email";
+    print "</ul></font>";
+}
+
+    function display_field($field_desc, $field_urlname, $content, $valid) {
+        global $fyr_preview;
+        print "<TD CLASS=\"smallb\">";
+        if (!$valid && $fyr_preview) 
+            print "<font color=\"red\">";
+        print "$field_desc:";
+        if (!$valid && $fyr_preview) 
+            print "</font>";
+        print "</TD><TD><FONT CLASS=\"form\"><INPUT NAME=\"$field_urlname\"
+            VALUE=\"$content\" TYPE=\"text\" SIZE=\"20\" CLASS=\"form\"></FONT></TD>";
+    }
+?>
+        </TD></TR>
 		<TR><FORM METHOD="POST" NAME="" action="write.php">
 		<TD VALIGN="top"><B>Now Write Your Fax:<BR><BR>
 		<?=$fyr_representative['short_office']?> <?=$fyr_representative['name']?><BR>
@@ -23,33 +53,27 @@ BGCOLOR="#006666">
 		<TD VALIGN="top" ALIGN="right">
 			<TABLE CELLPADDING="2" CELLSPACING="0" BORDER="0">
 			<TR>
-			<TD CLASS="smallb">your name:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="writer_name" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+            <? display_field("your name", "writer_name", $fyr_writer_name, $fyr_writer_name_valid); ?>
 			</TR>
 			<TR>
-			<TD CLASS="smallb">address 1:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="writer_address1" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+            <? display_field("address 1", "writer_address1", $fyr_writer_address1, $fyr_writer_address1_valid); ?>
 			</TR>
 			<TR>
-			<TD CLASS="small">address 2:</TD>			
-			<TD><FONT CLASS="form"><INPUT NAME="writer_address2" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+            <? display_field("address 2", "writer_address2", $fyr_writer_address2, $fyr_writer_address2_valid); ?>
 			</TR>
 			<TR>
-			<TD CLASS="smallb">town:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="writer_town" value="" TYPE="text" SIZE="20" CLASS="form"></FONT></TD>
+            <? display_field("town", "writer_town", $fyr_writer_town, $fyr_writer_town_valid); ?>
 			</TR>
 			<TR>
 			<TD CLASS="smallb">postcode:</TD>
 			<TD><B><?=$fyr_postcode?></B></TD>
 			</TR>
 			<TR>
-			<TD CLASS="smallb">your email:</TD>
-			<TD><FONT CLASS="form"><INPUT NAME="writer_email" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
+            <? display_field("email", "writer_email", $fyr_writer_email, $fyr_writer_email_valid); ?>
 			</TD>
 			</TR>
 			<TR>
-			<TD CLASS="small">phone:</TD>			
-			<TD><FONT CLASS="form"><INPUT NAME="writer_phone" VALUE="" TYPE="text" SIZE="20" CLASS="form"></FONT>
+            <? display_field("phone", "writer_phone", $fyr_writer_phone, $fyr_writer_phone_valid); ?>
 			</TD>
 			</TR>
 			</TABLE><BR><IMG SRC="/images/tiny.gif" WIDTH="250" HEIGHT="1" BORDER="0"></TD>

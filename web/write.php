@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.5 2004-10-06 16:20:20 francis Exp $
+ * $Id: write.php,v 1.6 2004-10-06 17:44:41 francis Exp $
  * 
  */
 
@@ -37,17 +37,26 @@ $fyr_complete = false;
 if ($action == "preview") {
     $fyr_preview = true;
 
-    $writer_name = get_http_var('writer_name');
-    $writer_name_valid = (isset($writer_name) && strlen($writer_name) > 0);
-    $writer_address1 = get_http_var('writer_address1');
-    $writer_address2 = get_http_var('writer_address2');
-    $writer_town = get_http_var('writer_town');
+    $fyr_writer_name = get_http_var('writer_name');
+    $fyr_writer_name_valid = (isset($fyr_writer_name) && strlen($fyr_writer_name) > 0);
+    $fyr_writer_address1 = get_http_var('writer_address1');
+    $fyr_writer_address1_valid = (isset($fyr_writer_address1) && strlen($fyr_writer_address1) > 0);
+    $fyr_writer_address2 = get_http_var('writer_address2');
+    $fyr_writer_address2_valid = true;
+    $fyr_writer_town = get_http_var('writer_town');
+    $fyr_writer_town_valid = (isset($fyr_writer_town) && strlen($fyr_writer_town) > 0);
     // $fyr_postcode
-    $writer_email = get_http_var('writer_email');
+    $fyr_writer_email = get_http_var('writer_email');
+    $fyr_writer_email_valid = (isset($fyr_writer_email) && strlen($fyr_writer_email) > 0);
+    $fyr_writer_phone = get_http_var('writer_phone');
+    $fyr_writer_phone_valid = true;
     
-    if ($writer_name_valid) {
+    if ($fyr_writer_name_valid && $fyr_writer_address1_valid &&
+        $fyr_writer_town_valid && $fyr_writer_email_valid) {
         $fyr_complete = true;
     }
+
+    $fyr_body = get_http_var('body');
 }
 
 // Information specific to this representative
