@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.28 2004-11-22 12:22:39 francis Exp $
+ * $Id: who.php,v 1.29 2004-11-22 17:58:33 francis Exp $
  * 
  */
 
@@ -21,6 +21,9 @@ $fyr_postcode = get_http_var('pc');
 debug("FRONTEND", "postcode is $fyr_postcode");
 debug_timestamp();
 fyr_rate_limit(array('postcode' => $fyr_postcode));
+if (get_http_var('err')) {
+    $fyr_error = "Please select a representative before clicking Next.";
+}
 
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
@@ -112,7 +115,7 @@ foreach ($va_display_order as $va_type) {
 }
 
 // Display page, using all the fyr_* variables set above.
-template_draw("who", array("reps" => $fyr_representatives));
+template_draw("who", array("reps" => $fyr_representatives, "error" => $fyr_error));
 
 debug_timestamp();
 ?>

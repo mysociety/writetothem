@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.31 2004-11-22 17:41:00 francis Exp $
+ * $Id: write.php,v 1.32 2004-11-22 17:58:33 francis Exp $
  * 
  */
 
@@ -204,8 +204,13 @@ $fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
 $fyr_postcode = $fyr_values['pc'];
 $fyr_who = $fyr_values['who'];
 $fyr_date = strftime('%A %e %B %Y');
-if (!isset($fyr_postcode) || !isset($fyr_who)) {
+if (!isset($fyr_postcode) || $fyr_postcode == "") {
     template_show_error("Please <a href=\"/\">start from the beginning</a>.");
+    exit;
+}
+if (!isset($fyr_who)) {
+    header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
+    exit;
 }
 
 // Rate limiter

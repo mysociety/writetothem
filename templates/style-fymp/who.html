@@ -2,6 +2,14 @@
 
 <H3>WriteToThem.com - <?=$values['title'] ?> </H3>
 
+<? if ($values['error']) { ?>
+<p align=center><font color="#ff0000" size="-1">
+<b><?=$values['error']?></b>
+</font>
+</p>
+<? } ?>
+
+
 <P align="left" style="align: left;">You have several democratic representatives at different levels of government.
 Please choose the most appropriate one to contact, and then click any of the buttons
 marked "Next".</p>
