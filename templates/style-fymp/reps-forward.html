@@ -2,10 +2,13 @@
 
 <H3>WriteToThem.com - <?=$values['title'] ?> </H3>
 
-<p>Your constituent, <?=$values['constituent']['name']?>, has recently
+<p>Your constituent, <b><?=$values['constituent']['name']?></b>, has recently
 sent you a message.  If you believe the message is not in your area 
 of responsibility, and should be sent to a different representative,
 then you can forward it to them here.
+
+<p>Message says: <i>"<?=$values['message']['body']?>
+"</i>
 
 <p>Please choose the representative who can best help your constituent
 with their message.  Then click any of the buttons marked "Forward

@@ -12,17 +12,30 @@ constituents to contact their elected representatives.  If you are not
 or one of their staff, then please <a href="/about-contact">contact us</a>.
 </p>
 
-<p align="left"><b>If you aren't sure who to forward the message to,
-please read <a href="whoadvice1.html">this advice</a>.</b></p>
+<h4>Recent messages</h4>
 
-<table>
+<? $c = count($values['messages']);
+if ($c == 0) { ?>
+    There are no messages which you have recently received that you
+    could forward.
 <?
-foreach ($values['messages'] as $row) {
-    list($left_column, $right_column) = $row;
+} else {
 ?>
-    <tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr>
-    <tr><td width="50%"><?=$left_column?></td><td valign="bottom"><?=$right_column?></td></tr> 
+<table>
+<hr>
+<?  foreach ($values['messages'] as $message) { ?>
+    <!--<tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr>
+    <tr><td width="50%"><?=$left_column?></td><td
+    valign="bottom"><?=$right_column?></td></tr> -->
+    <b><?=$message['name']?></b> wrote
+    "<?=$message['short_body']?>"
+    <br><a href="<?=$message['url']?>">Click here to
+    forward this message to another of <?=$message['name']?>'s
+    representatives who would be better placed to deal with
+    the query than you</a>
+    <hr>
 <?
+    }
 }
 ?>
 </table>
