@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.6 2004-12-07 17:08:14 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.7 2004-12-07 19:56:57 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -32,7 +32,7 @@ use mySociety::Util qw(print_log);
 
 use FYR::Queue;
 
-mySociety::Config::set_file('../conf/general');
+mySociety::Config::set_file("$FindBin::Bin/../conf/general");
 
 # Variable set in signal handler to indicate termination.
 my $foad = 0;
