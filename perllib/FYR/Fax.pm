@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.7 2005-01-05 18:02:36 chris Exp $
+# $Id: Fax.pm,v 1.8 2005-01-19 11:46:26 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -115,7 +115,7 @@ sub fax_template ($) {
     foreach (qw(.. ../..)) {
         return "$_/$name" if (-e "$_/$name");
     }
-    die "unable to locate email template for '$name'";
+    die "unable to locate fax template for '$name'";
 }
 
 
@@ -228,12 +228,18 @@ sub format_postal_address ($$) {
     return $y;
 }
 
-sub footer_text ($$$) {
-    my ($page, $total, $url) = @_;
+# footer_text PAGE TOTAL URL FAX
+# Return footer text for the fax; PAGE is the current page number (from 1);
+# TOTAL is the total number of pages; URL is the URL a representative may visit
+# to forward the message to others; and FAX is the fax number to which the fax
+# is being delivered.
+sub footer_text ($$$$) {
+    my ($page, $total, $url, $number) = @_;
     my $text = FYR::EmailTemplate::format(fax_template($page == 1 ? 'footer-first' : 'footer'), {
                         this_page => $page,
                         total_pages => $total,
-                        representative_url => $url
+                        representative_url => $url,
+                        representative_fax => $number
                     }, 1);
     $text =~ s#\n+#\n#sg;
     $text =~ s#\n$##s;
@@ -264,9 +270,9 @@ sub make_representative_fax ($) {
         # First thing to do is to format the fax footers. The purpose of this
         # is just to figure out how much space it takes up, so that we can
         # subtract that from the space available for the text.
-        my $text = footer_text(1, 99, $url);
+        my $text = footer_text(1, 99, $url, $msg->{recipient_fax});
         my $firstfooterheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
-        $text = footer_text(2, 99, $url);
+        $text = footer_text(2, 99, $url, $msg->{recipient_fax});
         my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
 
         my $addr = $msg->{sender_name} . "\n" . $msg->{sender_addr};
@@ -296,7 +302,7 @@ sub make_representative_fax ($) {
         # Now go back over each page and write the appropriate footer, and save
         # the pages to temporary PBM files whose names we return.
         for (my $i = 0; $i < @pages; ++$i) {
-            $text = footer_text($i + 1, scalar(@pages), $url);
+            $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax});
             my $f = ($i > 0 ? $footerheight : $firstfooterheight);
 
             format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_SMALL);
