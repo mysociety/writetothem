@@ -7,13 +7,16 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.2 2004-10-20 15:31:49 chris Exp $
+ * $Id: confirm.php,v 1.3 2004-10-28 10:53:19 francis Exp $
  * 
  */
 
-include_once "../conf/config.php";
-include_once "../phplib/queue.php";
-include_once "../../phplib/utility.php";
+require_once "../phplib/fyr.php";
+require_once "../phplib/queue.php";
+
+require_once "../../phplib/utility.php";
+
+fyr_rate_limit(array());
 
 $token = get_http_var('token');
 if (!$token) {

@@ -5,18 +5,18 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.18 2004-10-25 15:21:31 francis Exp $
+ * $Id: write.php,v 1.19 2004-10-28 10:53:19 francis Exp $
  * 
  */
 
+require_once "../phplib/fyr.php";
 require_once "../phplib/forms.php";
+require_once "../phplib/queue.php";
 
-include_once "../conf/config.php";
-include_once "../phplib/queue.php";
-include_once "../../phplib/mapit.php";
-include_once "../../phplib/votingarea.php";
-include_once "../../phplib/dadem.php";
-include_once "../../phplib/utility.php";
+require_once "../../phplib/mapit.php";
+require_once "../../phplib/votingarea.php";
+require_once "../../phplib/dadem.php";
+require_once "../../phplib/utility.php";
 
 function default_body_text() {
         global $fyr_representative;
@@ -174,13 +174,6 @@ function submitFax() {
 $fyr_values = get_all_variables();
 debug("FRONTEND", "All variables:", $fyr_values);
 
-// Message id for transaction with fax queue
-$msgid = $fyr_values['fyr_msgid'];
-if (!isset($msgid)) {
-    $msgid = msg_create();
-    $fyr_values['fyr_msgid'] = $msgid;
-}
-
 // Various display and used fields
 $fyr_postcode = strtoupper(trim($fyr_values['pc']));
 $fyr_who = $fyr_values['who'];
@@ -189,6 +182,16 @@ if (!isset($fyr_postcode) || !isset($fyr_who)) {
     $fyr_error_message = "Please <a href=\"/\">start from the beginning</a>.";
     include "templates/generalerror.html";
     exit;
+}
+
+// Rate limiter
+fyr_rate_limit(array('pc' => $fyr_postcode, 'who' => $fyr_who));
+
+// Message id for transaction with fax queue
+$msgid = $fyr_values['fyr_msgid'];
+if (!isset($msgid)) {
+    $msgid = msg_create();
+    $fyr_values['fyr_msgid'] = $msgid;
 }
 
 // Information specific to this representative

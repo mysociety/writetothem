@@ -1,10 +1,5 @@
 copyright messages and license agreement on source code
 
-Make msgid anywhereon write.php where you don't have it already
-    - reset all other fields and show first page
-Register id at start of fax writing form.
-Encrypt who= in URL
-Probably pc= after the first page or two?
 Sessions - go through this
 http://www.sitepoint.com/blog-post-view.php?id=156260
 
@@ -14,7 +9,7 @@ Rate limit by IP
 Rate limit by Postcode
 Rate limit per representative
 
-Perhaps verify postcode again when fax is submitted
+Verify postcode again when fax is submitted
 
 Make sure debug log messages can't print data which should be encrypted ;(
     (maybe not a problem if all /inputs/ are, except for scraping)

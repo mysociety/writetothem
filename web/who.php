@@ -5,18 +5,18 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.17 2004-10-20 13:43:06 francis Exp $
+ * $Id: who.php,v 1.18 2004-10-28 10:53:19 francis Exp $
  * 
  */
 
 $fyr_title = "Now Choose The Representative Responsible for the Topic";
 
 require_once "../phplib/forms.php";
+require_once "../phplib/fyr.php";
 
-include_once "../conf/config.php";
-include_once "../../phplib/utility.php";
-include_once "../../phplib/dadem.php";
-include_once "../../phplib/mapit.php";
+require_once "../../phplib/utility.php";
+require_once "../../phplib/dadem.php";
+require_once "../../phplib/mapit.php";
 
 // Destroy session data
 session_start();
@@ -25,6 +25,7 @@ session_destroy();
 // Input data
 $fyr_postcode = get_http_var('pc');
 debug("FRONTEND", "postcode is $fyr_postcode");
+fyr_rate_limit(array('pc' => $fyr_postcode));
 
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode

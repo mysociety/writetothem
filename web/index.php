@@ -5,11 +5,14 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.12 2004-10-25 15:21:31 francis Exp $
+ * $Id: index.php,v 1.13 2004-10-28 10:53:19 francis Exp $
  * 
  */
 
+require_once "../phplib/fyr.php";
 require_once "../phplib/forms.php";
+
+fyr_rate_limit(array());
 
 $form = new HTML_QuickForm('postcodeForm', 'get', 'who.php');
 $buttons[0] =& HTML_QuickForm::createElement('text', 'pc', null, array('size' => 10, 'maxlength' => 255));
