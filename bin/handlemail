@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.6 2004-12-09 12:28:56 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.7 2004-12-17 16:28:56 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -112,8 +112,8 @@ if ($token eq 'bounce-null') {
     # Just discard this one;
     exit(0);
 } elsif (defined(my $id = FYR::Queue::check_token('bounce', $token))) {
-    my $m = FYR::Queue::message($id, 1);    # lock message
-    if (!defined($m)) {
+    my $msg = FYR::Queue::message($id, 1);    # lock message
+    if (!defined($msg)) {
         print_log('err', "bounce received for non-existant message '$id'; discarding");
         FYR::DB::dbh()->rollback();
         exit(0);
@@ -123,12 +123,10 @@ if ($token eq 'bounce-null') {
         if ($m->{state} eq 'bounce_wait') {
             FYR::Queue::state($id, 'bounce_confirm');
         }
-        FYR::DB::dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines));
+        FYR::DB::dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), $m->as_string);
         FYR::DB::dbh()->commit();
     }
 } else {
     print_log('err', "received bounce with invalid token '$token'; discarding");
     exit(0);
 }
-
-
