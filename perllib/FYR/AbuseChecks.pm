@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.10 2004-12-21 02:05:31 francis Exp $
+# $Id: AbuseChecks.pm,v 1.11 2005-01-03 12:46:31 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -112,6 +112,16 @@ my @tests = (
                     if (google_for_postcode($_[0]->{sender_postcode}));
             }
         ]
+
+        # Representative emailing themselves
+        [
+            'hold',
+            sub ($) {
+                return "Representative is emailing themselves"
+                    if ($_[0]->{sender_email} eq $_[0]->{recipient_email});
+            }
+        ],
+
     );
 
 =item test MESSAGE
