@@ -6,9 +6,11 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.2 2004-10-04 16:34:26 chris Exp $
+ * $Id: mapit.php,v 1.3 2004-10-04 17:04:19 chris Exp $
  * 
  */
+
+include('votingarea.php');
 
 /* Error codes */
 define('MAPIT_BAD_POSTCODE', 1);    /* not in the format of a postcode */
