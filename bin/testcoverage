@@ -1,0 +1,69 @@
+#!/usr/bin/perl -I../perllib -I../../perllib
+
+# Takes postcodes, one per line, on stdin
+
+use mySociety::DaDem;
+use mySociety::MaPit;
+use Data::Dumper;
+
+mySociety::MaPit::configure("http://caesious.beasts.org/~chris/scripts/xmlrpc2");
+mySociety::DaDem::configure("http://caesious.beasts.org/~chris/scripts/xmlrpc");
+#mySociety::MaPit::configure("http://services.mysociety.org/mapit");
+#mySociety::DaDem::configure("http://services.mysociety.org/dadem");
+
+$postcode_failed = 0;
+$postcode_impure = 0;
+$postcode_ok = 0;
+$rep_count_total = 0;
+$rep_ok_total = 0;
+while(<>) {
+    chomp;
+    print $_ . "\n";
+
+    # Find the voting areas for that postcode
+    my $voting_areas = mySociety::MaPit::get_voting_areas($_);
+    if (ref($voting_areas) eq "") {
+        print "failed lookup\n";
+        $postcode_failed++;
+        next;
+    } 
+    die if (ref($voting_areas) ne "HASH");
+    
+    # Loop through voting areas
+    my $rep_count = 0;
+    my $rep_ok = 0;
+    while(($key, $value) = each(%$voting_areas)) {
+        # Get representatives for each voting area
+        my $reps = mySociety::DaDem::get_representatives($value);
+         
+        foreach $rep (@$reps) {
+            #print $rep . "\n";
+            my $rep_info = mySociety::DaDem::get_representative_info($rep);
+            $rep_count++;
+            if (ref($rep_info) eq "") {
+                print "FAILED rep info on $rep_info\n";
+            } else {
+#                print Dumper($rep_info);
+                if ($rep_info->{'email'} || $rep_info->{'fax'} ) {
+#                    print "OK\n";
+                    $rep_ok++;
+                } else {
+                    print Dumper($rep_info);
+                    print "NOT OK\n";
+                }
+            }
+        }
+    }
+
+    print "$rep_ok OK out of $rep_count\n";
+    $rep_count_total += $rep_count;
+    $rep_ok_total += $rep_ok;
+    if ($rep_ok == $rep_count) {
+        $postcode_ok++; 
+    } else { 
+        $postcode_impure++;
+    }
+    print "POSTCODE OK: $postcode_ok IMPURE: $postcode_impure FAIL: $postcode_failed\n";
+    print "REPS OK: $rep_ok_total COUNT: $rep_count_total\n";
+}
+
