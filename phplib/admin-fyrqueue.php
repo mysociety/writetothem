@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.49 2005-01-17 17:56:47 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.50 2005-01-18 20:06:32 francis Exp $
  * 
  */
 
@@ -104,13 +104,19 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "</td>";
                 $simple_ref = $message['sender_referrer'];
                 $url_bits = parse_url($simple_ref);
-                if ($simple_ref != "" && ($url_bits['path']!='/' || array_key_exists('query', $url_bits)) )
-                    $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
+                if (array_key_exists('path', $url_bits) && array_key_exists('scheme', $url_bits) && array_key_exists('host', $url_bits))
+                {
+                    if ($simple_ref != "" && ($url_bits['path'] != '/' || array_key_exists('query', $url_bits)) )
+                        $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
+                }
                 $client_name = $message['sender_ipaddr'];
                 if ($client_name != "")  {
                     $client_name = gethostbyaddr($client_name);
                 }
                 $short_client_name = trim_characters($client_name, strlen($client_name) - 27, 30); 
+                if ($client_name != $message['sender_ipaddr']) {
+                    $client_name .= " (" . $message['sender_ipaddr'] . ")";
+                }
 
                 print "<td>" . add_tooltip($short_client_name, $client_name) .
                         "<br>" .
