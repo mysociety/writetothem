@@ -1,4 +1,4 @@
-FROM: <?=$values['sender_name'?>, <?=$values['sender_address']?>
+FROM: <?=$values['sender_name']?>, <?=$values['sender_addr']?>
 
 PLEASE FORWARD TO: <?=$values['recipient_name']?>
 

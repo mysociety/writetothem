@@ -21,8 +21,7 @@ Values which are available in all emails are:
 
   - sender_name, the full name of the sender as they supplied it; and
 
-  - sender_address, the sender's address, formatted with commas between each
-    line.
+  - sender_addr, the sender's address, formatted with commas between each line.
 
 The text of each message should be formatted with blank lines between
 paragraphs; all text will be filled/wrapped to an appropriate width before
