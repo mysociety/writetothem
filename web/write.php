@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.39 2004-12-16 18:33:22 francis Exp $
+ * $Id: write.php,v 1.40 2004-12-16 18:36:18 chris Exp $
  * 
  */
 
@@ -175,7 +175,7 @@ function submitFax() {
             template_show_error("Sorry, but we've had to reject your
             message.  Please see if you have broken any of our <a
             href=\"about-guidelines\">Guidelines for Campaigning</a>.
-            If you don't think that you have, then contact us <a
+            If you don't think that you have, then contact us at <a
             href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
         template_show_error($success->text);
     }
