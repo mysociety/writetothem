@@ -1,11 +1,12 @@
 <?
 /*
+ * who.php:
  * Page to ask which representative they would like to contact
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.35 2004-12-17 15:28:49 chris Exp $
+ * $Id: who.php,v 1.36 2004-12-20 14:54:28 chris Exp $
  * 
  */
 
@@ -17,7 +18,10 @@ require_once "../../phplib/dadem.php";
 require_once "../../phplib/mapit.php";
 
 // Input data
+
+// Postcode
 $fyr_postcode = get_http_var('pc');
+
 debug("FRONTEND", "postcode is $fyr_postcode");
 debug_timestamp();
 fyr_rate_limit(array('postcode' => $fyr_postcode));
@@ -108,7 +112,15 @@ foreach ($va_display_order as $va_type) {
     foreach ($representatives as $rep_specificid) {
         ++$c;
         $rep_info = $representatives_info[$rep_specificid];
-	$rep_list .= '<li><a href="write?who='.$rep_specificid.'&amp;pc='.urlencode($fyr_postcode).'">'.$rep_info['name'].'</a><br>'.$rep_info['party'];
+	$rep_list .= '<li><a href="'
+                        . htmlspecialchars(new_url('write', 0, 
+                                                'who', $rep_specificid,
+                                                'pc', $fyr_postcode,
+                                                'fyr_extref', fyr_get_external_referrer()))
+                        . '">'
+                        . htmlspecialchars($rep_info['name'])
+                        . '</a><br>'
+                        . htmlspecialchars($rep_info['party']);
     }
     $right_column .= '<ul>' . $rep_list . '</ul>';
 
