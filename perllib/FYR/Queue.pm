@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.102 2005-01-28 22:47:07 francis Exp $
+# $Id: Queue.pm,v 1.103 2005-01-29 00:32:37 francis Exp $
 #
 
 package FYR::Queue;
@@ -41,6 +41,7 @@ use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::Util;
 use mySociety::VotingArea;
+use mySociety::StringUtils qw(trim merge_spaces);
 
 use FYR;
 use FYR::AbuseChecks;
@@ -1254,20 +1255,38 @@ sub admin_get_queue ($$) {
 
             my $from = $msg->{message};
             my $to = $hash_ref->{message};
-            $from =~ s/[\n\r]//g;
-            $to =~ s/[\n\r]//g;
+            $from = merge_spaces($from);
+            $to = merge_spaces($to);
+            $from =~ s/\[\[|\]\]//g; # remove the marker we use for diff
+            $to =~ s/\[\[|\]\]//g;
             my $ixes = String::Ediff::ediff($from, $to);
             my @ix = split(" ", $ixes);
+            my $s1at = 0;
+            my $s2at = 0;
             my $diff; 
-            $diff .= substr($to, 0, $ix[4]) . " ... ";
-            for (my $i = 5; $i + 7 < scalar(@ix); $i+=8) {
-                if ($ix[$i+7] > $ix[$i+0]) {
-                    my $topart = substr($to, $ix[$i+0], $ix[$i+7] - $ix[$i+0]);
-                    $diff .= $topart . " ... ";
+            my $add_diff = sub {
+                my ($class, $string) = @_;
+                return "" if (length($string) == 0);
+                return "[[span class=$class]]" . $string . "[[/span]]";
+            };
+            for (my $i = 0; $i < scalar(@ix); $i+=8) {
+                $diff .= &$add_diff("difffrom", substr($from, $s1at, $ix[$i+0]-$s1at));
+                $s1at = $ix[$i+1];
+                $diff .= &$add_diff("diffto", substr($to, $s2at, $ix[$i+4]-$s2at));
+                $s2at = $ix[$i+5];
+                my $commonpart = substr($from, $ix[$i+0], $ix[$i+1] - $ix[$i+0]);
+                if (length($commonpart) < 200) {
+                    $diff .= $commonpart;
+                } else {
+                    $diff .= substr($commonpart, 0, 95) . &$add_diff("diffsnip", " [ ...snipped... ] ") . substr($commonpart, -95);
                 }
             }
-            if ($diff eq " ... " and $msg->{id} eq $hash_ref->{id}) {
-                $diff = " This is the message being compared against.";
+            $diff .= &$add_diff("1", substr($from, $s1at));
+            $diff .= &$add_diff("2", substr($to, $s2at));
+            if ($msg->{id} eq $hash_ref->{id}) {
+                $diff = " This is the message being compared against. ";
+                $diff .= &$add_diff("difffrom", "Text that appears only in this message, ");
+                $diff .= &$add_diff("diffto", "or only in the other message.");
             }
             $hash_ref->{diff} = $diff;
         }

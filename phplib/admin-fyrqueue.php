@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.56 2005-01-28 23:49:32 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.57 2005-01-29 00:32:37 francis Exp $
  * 
  */
 
@@ -122,8 +122,11 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 
                 if (array_key_exists('diff', $message)) {
                     print '<tr'.($c==1?' class="v"':'').'>';
-                    print "<td colspan=9><b>Differences:</b>";
-                    print $message['diff'];
+                    print "<td colspan=9><b>Differences:</b> ";
+                    $diff = htmlspecialchars($message['diff']);
+                    $diff = str_replace("[[", "<", $diff);
+                    $diff = str_replace("]]", ">", $diff);
+                    print $diff;
                     print "</td></tr>";
                 }
 
