@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.7 2004-11-09 08:10:03 francis Exp $
+# $Id: Queue.pm,v 1.8 2004-11-10 10:41:52 francis Exp $
 #
 
 package FYR::Queue;
@@ -67,9 +67,7 @@ This function commits its changes.
 
 =cut
 sub write ($$$$$) {
-    warn Dumper(@_);
     my ($x, $id, $sender, $recipient_id, $text) = @_;
-    warn $recipient_id;
 
     try {
         # Get details of the recipient.
@@ -410,15 +408,15 @@ sub make_confirmation_email ($) {
     my ($msg) = @_;
 
     my $token = confirm_token($msg->{id});
-    my $confirm_url = FYR::Config::get_value('baseurl') . '/confirm.php?token=' . $token;
+    my $confirm_url = mySociety::Config::get('BASE_URL') . '/confirm.php?token=' . $token;
 
     # Note: (a) don't care about bounces from this mail (they result only from
     # transient failures or abuse; but (b) we can't use a reply to confirm that
     # a fax should be sent because a broken server which sends bounces to the
     # From: address would then automatically confirm any email address.
     my $confirm_sender = sprintf('%sbounce-null@%s',
-                                FYR::Config::get_value('emailprefix'),
-                                FYR::Config::get_value('emaildomain'));
+                                mySociety::Config::get('EMAIL_PREFIX'),
+                                mySociety::Config::get('EMAIL_DOMAIN'));
 
     # Don't insert linebreaks in the below except for paragraph marks-- let
     # Text::Wrap do the rest.
@@ -493,9 +491,9 @@ sub deliver ($) {
         } elsif (defined($msg->{recipient_email})) {
             my $mail = make_representative_email($msg);
             my $sender = sprintf('%s-%s@%s',
-                                FYR::Config::get_value('emailprefix'),
+                                mySociety::Config::get('EMAIL_PREFIX'),
                                 bounce_token($id),
-                                FYR::Config::get_value('emaildomain'));
+                                mySociety::Config::get('EMAIL_DOMAIN'));
             my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{recipient_email});
             throw FYR::Error($result) if ($result);
             logmsg($id, "sent mail to recipient $msg->{recipient_email}");

@@ -6,8 +6,10 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.2 2004-10-20 11:06:41 chris Exp $
+# $Id: FYR.pm,v 1.3 2004-11-10 10:41:52 francis Exp $
 #
+
+use strict;
 
 package FYR::Error;
 # simplest of all exception classes.
@@ -15,31 +17,6 @@ package FYR::Error;
 use Error qw(:try);
 
 @FYR::Error::ISA = qw(Error::Simple);
-
-package FYR::Config;
-# configuration -- we need to flesh this out later.
-
-my %config = (
-        dbname => 'fyr',
-        dbuser => 'fyr',
-        dbpass => '',
-        baseurl => 'http://caesious.beasts.org/~chris/tmp/fyr',
-        emaildomain => 'caesious.beasts.org',
-        emailprefix => 'fyr-'
-    );
-
-=item get_value NAME [DEFAULT]
-
-Return the value with the given NAME, or, if it not specified, DEFAULT, or, if
-that is not specified, undef.
-
-=cut
-sub get_value ($;$) {
-    my ($name, $def) = @_;
-    my $x = $config{$name} || $def;
-    die "No config value for '$name', and no default" unless (defined($x));
-    return $x;
-}
 
 package FYR::DB;
 
@@ -52,9 +29,9 @@ Return a new handle on the database.
 
 =cut
 sub new_dbh () {
-    my $dbh = DBI->connect('dbi:Pg:dbname=' . FYR::Config::get_value('dbname', 'fyr'),
-                        FYR::Config::get_value('dbuser', 'fyr'),
-                        FYR::Config::get_value('dbpass', ''),
+    my $dbh = DBI->connect('dbi:Pg:dbname=' .  mySociety::Config::get('FYR_QUEUE_DB_NAME'),
+                        mySociety::Config::get('FYR_QUEUE_DB_USER'),
+                        mySociety::Config::get('FYR_QUEUE_DB_PASS'),
                         { RaiseError => 1, AutoCommit => 0 });
 
     # make sure we have a site shared secret
