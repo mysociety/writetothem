@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.27 2004-11-16 15:08:43 francis Exp $
+ * $Id: write.php,v 1.28 2004-11-18 13:14:45 francis Exp $
  * 
  */
 
@@ -78,9 +78,10 @@ END;
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
     $form->addElement("html", "</table>\n</td></tr>"); // CSSify
 
-    $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62, 'maxlength' => 5000));
+    $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
+    $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
     $form->applyFilter('body', 'convert_to_unix_newlines');
 
     add_all_variables_hidden($form, $fyr_values);
@@ -141,7 +142,7 @@ function renderForm($form, $pageName)
 }
 
 function submitFax() {
-    global $fyr_values, $msgid;
+    global $fyr_values, $msgid, $fyr_error_message;
 
     $address = 
         $fyr_values['writer_address1'] . "\n" .
@@ -161,6 +162,14 @@ function submitFax() {
        $fyr_error_message = "There's been a mismatch error.  Sorry about
        this, <a href=\"/\">please start again</a>.";
        template_show_error();
+    }
+
+    // check message not too long
+    if (strlen($fyr_values['body']) > OPTION_MAX_BODY_LENGTH) {
+        $fyr_error_message = "Sorry, but your message is a bit too long
+        for our service.  Please make it shorter, or contact your
+        representative by some other means.";
+        template_show_error();
     }
 
     $success = msg_write($msgid, 

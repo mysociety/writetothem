@@ -1,0 +1,34 @@
+<? $values['title'] = "Foward " . $values['constituent']['name'] . "'s Message"; include "header.php"; ?>
+
+<H3>WriteToThem.com - <?=$values['title'] ?> </H3>
+
+<p>Your constituent, <?=$values['constituent']['name']?>, has recently
+sent you a message.  If you believe the message is not in your area 
+of responsibility, and should be sent to a different representative,
+then you can forward it to them here.
+
+<p>Please choose the representative who can best help your constituent
+with their message.  Then click any of the buttons marked "Forward
+Message".  If you aren't sure who to forward the message to, please read
+<a href="whoadvice1.html">this advice</a>.
+</p>
+
+<p>To go back to the control panel for
+other WriteToThem.com options, <a href="reps">click here</a>.
+</p>
+
+<table>
+<?
+foreach ($values['forwardreps'] as $row) {
+    list($left_column, $right_column) = $row;
+?>
+    <tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr>
+    <tr><td width="50%"><?=$left_column?></td><td valign="bottom"><?=$right_column?></td></tr> 
+<?
+}
+?>
+</table>
+
+</form>
+
+<? include "footer.php"; ?>

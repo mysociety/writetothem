@@ -1,11 +1,12 @@
 <?
 /*
- * Page to ask which representative they would like to contact
+ * Interface for representatives - forwarding messages, changing email
+ * vs. fax preference and so on.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.27 2004-11-18 13:14:45 francis Exp $
+ * $Id: reps.php,v 1.1 2004-11-18 13:14:45 francis Exp $
  * 
  */
 
@@ -17,10 +18,17 @@ require_once "../../phplib/dadem.php";
 require_once "../../phplib/mapit.php";
 
 // Input data
-$fyr_postcode = get_http_var('pc');
+$fyr_postcode = "zz99zz";
+$fyr_who = 2000002;
 debug("FRONTEND", "postcode is $fyr_postcode");
+debug("FRONTEND", "who is $fyr_who");
 debug_timestamp();
-fyr_rate_limit(array('postcode' => $fyr_postcode));
+fyr_rate_limit(array('postcode' => $fyr_postcode, 'who' => $fyr_who));
+
+// Look up info about the representative who is using the interface
+$representative = dadem_get_representative_info($fyr_who);
+$voting_area = mapit_get_voting_area_info($representative['voting_area']);
+$constituent = array('name' => 'Sammy Streetwise');
 
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
@@ -28,20 +36,14 @@ $voting_areas = mapit_get_voting_areas($fyr_postcode);
 if ($fyr_error_message = mapit_get_error($voting_areas)) {
     template_show_error();
 }
-debug_timestamp();
-
 $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
 if ($fyr_error_message = mapit_get_error($voting_areas_info)) {
     template_show_error();
 }
-debug_timestamp();
-
 $area_representatives = dadem_get_representatives(array_values($voting_areas));
 if ($fyr_error_message = dadem_get_error($area_representatives)) {
     template_show_error();
 }
-debug_timestamp();
-
 $all_representatives = array();
 foreach (array_values($area_representatives) as $rr) {
     $all_representatives = array_merge($all_representatives, $rr);
@@ -72,28 +74,30 @@ foreach ($va_display_order as $va_type) {
     $eb_specificid = $voting_areas[$eb_type];
     debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
     $eb_info = $voting_areas_info[$eb_specificid];
-
+    
     // Description of areas of responsibility
     $eb_info['description'] = $va_responsibility_description[$eb_type];
-    
+
     // Count representatives
     $representatives = $area_representatives[$va_specificid];
     $rep_count = count($representatives);
 
     // Create HTML
     if ($rep_count > 1) {
-        $left_column = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
-        $left_column .= "Your ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+        $left_column = "<h4>${constituent['name']}'s ${va_info['rep_name_long_plural']}</h4><p>";
+        $left_column .= "${constituent['name']}'s
+        ${va_info['rep_name_plural']} are representatives on ${eb_info['attend_prep']} ";
     } else {
-        $left_column = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
-        $left_column .= "Your ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+        $left_column = "<h4>${constituent['name']}'s ${va_info['rep_name_long']}</h4><p>";
+        $left_column .= "${constituent['name']}'s ${va_info['rep_name']}
+        represents them ${eb_info['attend_prep']} ";
     }
     $left_column .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
-    $form = new HTML_QuickForm('whoForm', 'post', 'write');
+    $form = new HTML_QuickForm('whoForm', 'post', 'reps');
 
-    $right_column = "<p>In your ${va_info['type_name']},
-        <b>${va_info['name']}</b>, you are represented by ";
+    $right_column = "<p>In ${constituent['name']}'s ${va_info['type_name']},
+        <b>${va_info['name']}</b>, they are represented by ";
     if ($rep_count > 1) {
         $right_column .= "$rep_count ${va_info['rep_name_plural']}.
             Please choose one ${va_info['rep_name']} to contact.";
@@ -105,12 +109,15 @@ foreach ($va_display_order as $va_type) {
     foreach ($representatives as $rep_specificid) {
         ++$c;
         $rep_info = $representatives_info[$rep_specificid];
-        $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b><br>'
-            . $rep_info['party'], $rep_specificid);
+        if ($rep_specificid == $fyr_who)
+            $form->addElement('static', '', null, $rep_info['name'] . ' is you!', $rep_specificid);
+        else
+            $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b><br>'
+                . $rep_info['party'], $rep_specificid);
     }
 
     $form->addElement('hidden', 'pc', $fyr_postcode);
-    $form->addElement('submit', 'next', 'Next >>');
+    $form->addElement('submit', 'next', 'Forward Message >>');
     $fyr_form_renderer = new HTML_QuickForm_Renderer_mySociety();
     $form->accept($fyr_form_renderer);
     $right_column .= $fyr_form_renderer->toHtml();
@@ -121,7 +128,10 @@ foreach ($va_display_order as $va_type) {
 }
 
 // Display page, using all the fyr_* variables set above.
-template_draw("who", array("reps" => $fyr_representatives));
+template_draw("reps-forward", array("representative" => $representative, 
+    "voting_area" => $voting_area, 
+    "constituent" => $constituent, 
+    "forwardreps" => $fyr_representatives));
 
 debug_timestamp();
 ?>
