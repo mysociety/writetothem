@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.96 2005-01-19 10:32:24 francis Exp $
+# $Id: Queue.pm,v 1.97 2005-01-25 10:31:33 chris Exp $
 #
 
 package FYR::Queue;
@@ -1311,19 +1311,19 @@ Returns a hash of statistics about the queue.
 sub admin_get_stats () {
     my %ret;
 
-    my $rows = FYR::DB::dbh()->selectall_arrayref('select recipient_type, count(*) from message group by recipient_type', {});
+    my $rows = FYR::DB::dbh()->selectall_arrayref('select recipient_type, messagecount from message_count_recipient_type', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
         $ret{"type $type"} = $count;
     }
 
-    $rows = FYR::DB::dbh()->selectall_arrayref('select state, count(*) from message group by state', {});
+    $rows = FYR::DB::dbh()->selectall_arrayref('select state, messagecount from message_count_state', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
         $ret{"state $type"} = $count;
     }
 
-    $ret{message_count} = FYR::DB::dbh()->selectrow_array('select count(*) from message', {});
+    $ret{message_count} = FYR::DB::dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
     $ret{created_1}     = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
     $ret{created_24}    = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
 
@@ -1338,8 +1338,11 @@ in the last TIME seconds.
 =cut
 sub admin_get_popular_referrers($) {
     my ($secs) = @_;
-    my $result = FYR::DB::dbh()->selectall_arrayref('select sender_referrer, count(*) as c from message 
-        where created > ? group by sender_referrer order by c desc', {},time() - $secs);
+    my $result = FYR::DB::dbh()->selectall_arrayref('
+        select sender_referrer, count(*) as c from message 
+            where created > ?
+            group by sender_referrer
+            order by c desc', {}, time() - $secs);
 
     return $result;
 }

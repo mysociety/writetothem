@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.19 2005-01-14 18:41:49 chris Exp $
+-- $Id: schema.sql,v 1.20 2005-01-25 10:31:33 chris Exp $
 --
 
 set client_min_messages to error;
@@ -105,8 +105,116 @@ create table message_log (
     state text not null,                        -- state of message when log item added
     message text not null
 );
+
 create index message_log_order_id_idx on message_log(order_id);
 create index message_log_message_id_idx on message_log(message_id);
+
+-- statistics about messages
+-- Postgres is very slow at doing select count(...) from tables (because it has
+-- to visit and lock every row) so we accumulate statistics about messages in a
+-- set of message_count_... tables and return these.
+
+-- message_count_state
+-- Number of messages in each state.
+create table message_count_state (
+    state text not null references state(name),
+    messagecount integer not null default (0)
+);
+
+insert into message_count_state (state, messagecount)
+    select state, count(id) as messagecount
+        from message group by state;
+
+-- message_count_recipient_type
+-- Number of messages to each type of recipient.
+create table message_count_recipient_type (
+    recipient_type char(3) not null primary key,
+    messagecount integer not null default(0)
+);
+
+insert into message_count_recipient_type (recipient_type, messagecount)
+    select recipient_type, count(id) as messagecount
+        from message group by recipient_type;
+
+-- message_count_sender_referrer
+-- Number of messages originating from each referring page
+create table message_count_sender_referrer (
+    sender_referrer text not null primary key,
+    messagecount integer not null default(0)
+);
+
+insert into message_count_sender_referrer (sender_referrer, messagecount)
+    select sender_referrer, count(id) as messagecount
+        from message where sender_referrer is not null group by sender_referrer;
+
+-- trigger which updates the stats tables based on operation on the message
+-- table.
+create function gather_stats() returns trigger as '
+    begin
+        if tg_op = ''UPDATE'' or tg_op = ''DELETE'' then
+            update message_count_state
+                set messagecount = messagecount - 1
+                where state = old.state;
+            update message_count_recipient_type
+                set messagecount = messagecount - 1
+                where recipient_type = old.recipient_type;
+            if old.sender_referrer is not null then
+                update message_count_sender_referrer
+                    set messagecount = messagecount - 1
+                    where sender_referrer = old.sender_referrer;
+            end if;
+        end if;
+        
+        if tg_op = ''INSERT'' or tg_op = ''UPDATE'' then
+            -- state
+            perform messagecount -- perform is like select into ... but without returning a result...
+                from message_count_state
+                where state = new.state
+                for update;
+            if not found then
+                insert into message_count_state (state, messagecount)
+                    values (new.state, 1);
+            else
+                update message_count_state
+                    set messagecount = messagecount + 1
+                    where state = new.state;
+            end if;
+            -- recipient type
+            perform messagecount
+                from message_count_recipient_type
+                where recipient_type = new.recipient_type
+                for update;
+            if not found then
+                insert into message_count_recipient_type (recipient_type, messagecount)
+                    values (new.recipient_type, 1);
+            else
+                update message_count_recipient_type
+                    set messagecount = messagecount + 1
+                    where recipient_type = new.recipient_type;
+            end if;
+            -- sender referrer
+            if new.sender_referrer is not null then
+                perform messagecount
+                    from message_count_sender_referrer
+                    where sender_referrer = new.sender_referrer
+                    for update;
+                if not found then
+                    insert into message_count_sender_referrer (sender_referrer, messagecount)
+                        values (new.sender_referrer, 1);
+                else
+                    update message_count_sender_referrer
+                        set messagecount = messagecount + 1
+                        where sender_referrer = new.sender_referrer;
+                end if;
+            end if;
+        end if;
+        return null;    -- trigger fired after event, so return value ignored
+    end;
+' language 'plpgsql';
+
+create trigger message_gather_stats
+    after insert or update or delete on message
+    for each row execute procedure gather_stats();
 
 -- questionnaire_answer
 -- Results of the questionnaire we send to users.
