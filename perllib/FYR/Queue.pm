@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.16 2004-11-17 11:40:11 chris Exp $
+# $Id: Queue.pm,v 1.17 2004-11-17 11:48:09 chris Exp $
 #
 
 package FYR::Queue;
@@ -69,8 +69,8 @@ success, or an error code on failure.
 This function is called remotely and commits its changes.
 
 =cut
-sub write ($$$$$) {
-    my ($x, $id, $sender, $recipient_id, $text) = @_;
+sub write ($$$$) {
+    my ($id, $sender, $recipient_id, $text) = @_;
 
     try {
         # Get details of the recipient.
@@ -125,7 +125,7 @@ sub write ($$$$$) {
             insert into message (
                 id,
                 sender_name, sender_email, sender_addr, sender_phone, sender_postcode,
-                recipient_id, recipient_name, recipient_position, recipient_type, recipient_email, recipient_fax,
+                recipient_id, recipient_name, recipient_type, recipient_email, recipient_fax,
                 message,
                 state,
                 created, laststatechange, numactions, dispatched
@@ -139,7 +139,7 @@ sub write ($$$$$) {
             )#, {},
             $id,
             (map { $sender->{$_} || undef } qw(name email address phone postcode)),
-            $recipient_id, (map { $recipient->{$_} || undef } qw(name position type email fax)),
+            $recipient_id, (map { $recipient->{$_} || undef } qw(name type email fax)),
             $text,
             time(), time());
 
@@ -224,7 +224,7 @@ sub state ($$) {
                                     sender_name = '', sender_email = '',
                                     sender_addr = '', sender_phone = null,
                                     sender_postcode = '', recipient_name = '',
-                                    recipient_position = '', recipient_type = '',
+                                    recipient_type = '',
                                     recipient_email = '', recipient_fax = null,
                                     message = ''
                                 where id = ?#, $id);
@@ -256,6 +256,9 @@ sub message ($;$) {
     my ($id, $forupdate) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
     if (my $msg = FYR::DB::dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
+        # Add some convenience fields.
+        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{type}};
+        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{type}};
         return $msg;
     } else {
         throw FYR::Error("No message '$id'.");
@@ -500,10 +503,9 @@ sub email_template ($$) {
 # elements from EXTRA.
 sub email_template_params ($%) {
     my ($msg, %params) = @_;
-    $params{sender_name} = $msg->{sender_name};
-    $params{recipient_name} = $msg->{recipient_name};
-    $params{recipient_position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
-    $params{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$recipient->{type}};
+    foreach (qw(sender_name recipient_name recipient_position recipient_position_plural)) {
+        $params{$_} = $msg->{$_};
+    }
     return \%params;
 }
 
@@ -677,8 +679,8 @@ which they've clicked on. This function is called remotely and commits its
 changes.
 
 =cut
-sub confirm_email ($$) {
-    my ($x,$token) = @_;
+sub confirm_email ($) {
+    my ($token) = @_;
     if (my $id = verify_confirm_token($token)) {
         # DBD::Pg will have begun a new transaction immediately we committed the
         # last one. That's fine, but it means that any timestamps we use are out
@@ -947,8 +949,8 @@ Returns an array of hashes of information about recent queue events.
 Specify the number of events you'd like.
 
 =cut
-sub admin_recent_events ($$) {
-    my ($x,$count) = @_;
+sub admin_recent_events ($) {
+    my ($count) = @_;
     my $sth = FYR::DB::dbh()->prepare('select * from message_log order by order_id desc limit '. int($count));
     $sth->execute();
     my @ret;
@@ -963,8 +965,8 @@ sub admin_recent_events ($$) {
 Returns an array of hashes of information about each message on the queue.
 
 =cut
-sub admin_get_queue ($) {
-    my ($x) = @_;
+sub admin_get_queue () {
+    my () = @_;
     my $sth = FYR::DB::dbh()->prepare('select * from message order by created desc');
     $sth->execute();
     my @ret;
