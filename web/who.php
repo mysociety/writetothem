@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.25 2004-11-18 08:58:38 francis Exp $
+ * $Id: who.php,v 1.26 2004-11-18 10:16:42 francis Exp $
  * 
  */
 
@@ -53,33 +53,25 @@ if ($fyr_error_message = dadem_get_error($representatives_info)) {
 
 debug_timestamp();
 
-// Sort by number, which happens to be increasing order of geographical
-// size
-$va_types = array_keys($voting_areas);
-sort($va_types);
-
-// For each voting area, find all the representatives.  Put descriptive
-// text and form text in an array for the template to render.
+// For each voting area in order, find all the representatives.  Put
+// descriptive text and form text in an array for the template to
+// render.
 $fyr_representatives = array();
-foreach ($va_types as $va_type) {
+foreach ($va_display_order as $va_type) {
+    if (!array_key_exists($va_type, $voting_areas))
+        continue;
     $va_specificid = $voting_areas[$va_type];
 
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     debug("FRONTEND", "voting area is type $va_type id $va_specificid");
     $va_info = $voting_areas_info[$va_specificid];
 
-    /* The elected body is the overall entity. e.g. Cambridgeshire County
-     * Council. */
+    // The elected body is the overall entity. e.g. Cambridgeshire County
+    // Council. 
     $eb_type = $va_inside[$va_type];
     $eb_specificid = $voting_areas[$eb_type];
     debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
     $eb_info = $voting_areas_info[$eb_specificid];
-    if ($eb_info == null) {
-        // No parent elected body - for now we skip it
-        // (Will have to do something about London mayor)
-        debug("FRONTEND", "skipping this EB");
-        continue;
-    }
     
     // Lookup table of long description XXX should copy these out of Whittaker's
     // Almanac or whatever.
@@ -122,7 +114,7 @@ foreach ($va_types as $va_type) {
         $left_column = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
         $left_column .= "Your ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
     }
-    $left_column .= "${eb_info['name']}.  ${eb_info['description']}.</p>";
+    $left_column .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
     $form = new HTML_QuickForm('whoForm', 'post', 'write');
 
