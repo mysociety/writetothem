@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.12 2005-01-13 02:19:23 chris Exp $
+ * $Id: index.php,v 1.13 2005-01-13 02:33:11 chris Exp $
  * 
  */
 
@@ -40,7 +40,10 @@ delivery); or</dd>
 <dd>to drop (abandon) the message and display the named <em>TEMPLATE</em>
 (for instance 'problem-similar' will display
 <a href="http://www.writetothem.com/problem-similar">the notice about
-cut-and-paste messages</a>).</dd>
+cut-and-paste messages</a>). Use
+"<a href="http://www.writetothem.com/problem-generic">problem-generic</a>"
+if no more specific explanation of why the message was rejected is
+available.</dd>
 </dl>
 EOF
             ),
