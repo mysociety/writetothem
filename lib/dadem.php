@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.3 2004-10-04 17:49:26 chris Exp $
+ * $Id: dadem.php,v 1.4 2004-10-04 17:58:03 chris Exp $
  * 
  */
 
@@ -93,6 +93,16 @@ function dadem_get_representatives($type, $id) {
     } else if ($type == VA_WMC) {
         return array(
                 array('Anne Campbell', DADEM_CONTACT_FAX, '+441223311315')
+            );
+    } else if ($type == VA_EUR) {
+        return array(
+                array('Geoffrey Van Orden', DADEM_CONTACT_FAX, '+3222849332'),
+                array('Jeffrey Titford', DADEM_CONTACT_FAX, '+441245252071'),
+                array('Richard Howitt', DADEM_CONTACT_EMAIL, 'richard.howitt@geo2.poptel.org.uk'),
+                array('Robert Sturdy', DADEM_CONTACT_EMAIL, 'rsturdy@europarl.eu.int'),
+                array('Andrew Duff', DADEM_CONTACT_EMAIL, 'mep@andrewduffmep.org'),
+                array('Christopher Beazley', DADEM_CONTACT_FAX, '+441920485805'),
+                array('Tom Wise', DADEM_CONTACT_EMAIL, 'ukipeast@globalnet.co.uk')
             );
     }
 }
