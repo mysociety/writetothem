@@ -7,6 +7,17 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <DIV ALIGN="center">
+
+<p><font color="#ff0000" size="-1"><strong>This site is not finished yet! We're
+just testing at the moment.</strong> Your message will not be sent
+to your democratic representative: just returned to you. We're looking
+for reports of bugs and any suggestions for making the site
+better.  You can file a problem report in our 
+ <a
+href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
+system</a>.</p>
+
+</font></p>
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 <TR>
 <TD VALIGN="top" ALIGN="center">
@@ -22,3 +33,4 @@
 </TR>
 </TABLE>
 -->
+
