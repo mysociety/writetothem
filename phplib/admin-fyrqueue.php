@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.24 2004-12-30 17:24:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.25 2004-12-30 17:25:35 francis Exp $
  * 
  */
 
@@ -246,7 +246,7 @@ All time stats:
                 print "<h2>Bounce Messages Received</h2>";
                 foreach ($message['bounces'] as $bounce) {
                     print "<hr>";
-                    print "<pre>" . nl2br(htmlspecialchars($bounce)) .  "</pre>";
+                    print "<blockquote>" .  nl2br(htmlspecialchars($bounce)) .  "</blockquote>";
                 }
                 print "<hr>";
             }
