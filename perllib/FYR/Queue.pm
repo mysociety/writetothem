@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.13 2004-11-15 17:18:37 chris Exp $
+# $Id: Queue.pm,v 1.14 2004-11-15 17:37:50 chris Exp $
 #
 
 package FYR::Queue;
@@ -114,6 +114,11 @@ sub write ($$$$$) {
         $recipient->{fax} = undef;
 
         # XXX should also check that the text bits are valid UTF-8.
+
+        # DBD::Pg will have begun a new transaction immediately we committed the
+        # last one. That's fine, but it means that any timestamps we use are out
+        # of date. So begin a new one.
+        FYR::DB::dbh()->do('begin work');
         
         # Queue the message.
         FYR::DB::dbh()->do(q#
@@ -645,6 +650,11 @@ changes.
 sub confirm_email ($$) {
     my ($x,$token) = @_;
     if (my $id = verify_confirm_token($token)) {
+        # DBD::Pg will have begun a new transaction immediately we committed the
+        # last one. That's fine, but it means that any timestamps we use are out
+        # of date. So begin a new one.
+        FYR::DB::dbh()->do('begin work');
+
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
         FYR::DB::dbh()->commit();
@@ -801,6 +811,11 @@ my %state_action = (
 # process_queue
 # Drive the state machine round.
 sub process_queue () {
+
+    # DBD::Pg will have begun a new transaction immediately we committed the
+    # last one. That's fine, but it means that any timestamps we use are out
+    # of date. So begin a new one.
+    FYR::DB::dbh()->do('begin work');
 
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
