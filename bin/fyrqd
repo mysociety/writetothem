@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.1 2004-11-15 11:20:38 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.2 2004-11-18 20:10:09 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -133,15 +133,15 @@ sub block_sigchld ($) {
 my %children;
 
 # Simple signal handler to set a flag when we should quit/restart.
-$SIG{TERM} = $SIG{HUP} = sub ($) {
-    $foad = $_[0];
-};
+$SIG{TERM} = $SIG{INT} = $SIG{HUP} = sub {
+        $foad = eval "POSIX::SIG$_[0]"; # sooooo ugly.
+    };
 
 # Make sure we can wait for expired child processes.
 $SIG{CHLD} = sub { };
 
 my $num = 0;
-while (!$foad) {
+while ($foad == 0) {
     block_sigchld(1);
     while (scalar(keys(%children)) < $numprocesses) {
         my $pid = fork();
@@ -171,28 +171,41 @@ while (!$foad) {
         next;
     }
     
+    # Previously perl had the usual behaviour over signals: arrival of a signal
+    # would cause system calls to return with EINTR. However, since perl 5.7.3,
+    # it supports "deferred signals", which are intended to make perl signal
+    # handling safe (presumably, by running signal handlers synchronously). As
+    # part of this change the maintainers decided that some system calls would
+    # be interruptible, and some would not (see perlipc(3)). One of the calls
+    # which is no longer restartable is wait(2). So we can't just call wait
+    # here, since then the loop would hang for ever. Instead, call waitpid in
+    # a loop to collect expired children, and then sleep. Hopefully, signals
+    # will interrupt sleep, but just in case, don't sleep for too long....
     block_sigchld(0);
-    
-    my $terminated = wait();
+    my $terminated;
+    while ((my $terminated = waitpid(-1, WNOHANG)) > 0) {
+        block_sigchld(1);
 
-    block_sigchld(1);
-
-    if (exists($children{$terminated})) {
-        if ($? & 127) {
-            print_log('err', "child process, PID $terminated, killed by signal " . ($? & 127));
-        } elsif ($? >> 8) {
-            print_log('err', "child process, PID $terminated, exited with error status " . ($? >> 8));
-        } else {
-            print_log('info', "child process, PID $terminated, exited normally");
+        if (exists($children{$terminated})) {
+            if ($? & 127) {
+                print_log('err', "child process, PID $terminated, killed by signal " . ($? & 127));
+            } elsif ($? >> 8) {
+                print_log('err', "child process, PID $terminated, exited with error status " . ($? >> 8));
+            } else {
+                print_log('info', "child process, PID $terminated, exited normally");
+            }
+            
+            if ($children{$terminated} > time() - 10) {
+                print_log('err', "child process, PID $terminated, lived for only " . (time() - $children{$terminated}) . " seconds; holding off before restarting it");
+                sleep(5); # XXX we won't reap other children during this time, obviously
+            }
+            
+            delete($children{$terminated});
         }
-        
-        if ($children{$terminated} > time() - 10) {
-            print_log('err', "child process, PID $terminated, lived for only " . (time() - $children{$terminated}) . " seconds; holding off before restarting it");
-            sleep(5); # XXX we won't reap other children during this time, obviously
-        }
-        
-        delete($children{$terminated});
+        block_sigchld(0);
     }
+
+    sleep(5);
 }
 
 kill(SIGTERM, keys %children);
