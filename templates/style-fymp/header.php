@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<TITLE>WriteToThem.com - <? print $values['title']; ?></TITLE>
+<TITLE>WriteToThem.com Beta Test - <? print $values['title']; ?></TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="style-fymp/fax_style.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
@@ -12,14 +12,7 @@
 <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="0" WIDTH="530">
 
 <TR><TD align=center>
-<p><font color="#ff0000" size="-1"><strong>This site is not finished yet! We're
-just testing at the moment.</strong> Your message will not be sent
-to your democratic representative: just returned to you. We're looking
-for reports of bugs and any suggestions for making the site
-better.  You can file a problem report in our 
- <a
-href="https://secure.mysociety.org/cvstrac/index">ticket-tracking
-system</a>.</font></p>
+<p style="color: #ff0000; background-color: #ffffff"><strong>This site is in testing. Please use it and <a href="mailto:feedback@mysociety.org">let us know</a> what needs fixing before we launch.</strong></p>
 
 </TD></TR>
 

@@ -1,11 +1,20 @@
-<?  $values['title'] = "Great! Now Check Your Email"; include "header.php"; ?>
-
-<H3>Nearly Done! Now check your email...</H3>
-<P>
-We have emailed a copy of your message to your email address for
-authentication.<P>
-We will only send the message to your <?=$values['voting_area']['rep_name']?> 
-once you have clicked on the link found in this email.<P>
-<P> 
-
-<? include "footer.php"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>WriteToThem.com - Now Check Your Email</title>
+<link rel="stylesheet" type="text/css" href="style-fymp/fax_style.css">
+<style type="text/css">
+body, p {
+	font-family: Verdana, Arial, Helvetica;
+	color: #006666;
+}
+</style>
+</head>
+<body bgcolor="#ffffff" text="#006666" link="006666" alink="999966" vlink="006666">
+<div align="center">
+<h1>Nearly Done! Now check your email...</H1>
+<p>You must now click on the link within the email we've just sent you -<br>if you do not, your message to your <?=$values['voting_area']['rep_name']?> will not be sent.</p>
+</div>
+</body>
+</html>
