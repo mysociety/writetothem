@@ -1,11 +1,12 @@
 <?php
 /*
+ * fyr.php:
  * General purpose functions specific to FYR.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.1 2004-10-28 10:53:19 francis Exp $
+ * $Id: fyr.php,v 1.2 2004-10-28 15:07:08 chris Exp $
  * 
  */
 
@@ -13,7 +14,15 @@ require_once "../conf/config.php";
 require_once "../../phplib/ratty.php";
 require_once "../../phplib/utility.php";
 
+/* fyr_rate_limit IMPORTANT
+ * Invoke the rate limiter with the given IMPORTANT variables (e.g. postcode,
+ * representative ID, etc.), as well as the script's URL and the calling IP
+ * address, and return an error page if the request trips a rate limit;
+ * otherwise do nothing. */
 function fyr_rate_limit($important_vars) {
+    $important_vars['IPADDR'] = $_SERVER['REMOTE_ADDR'];
+    $important_vars['URL'] = invoked_url();
+
     if (!ratty_test($important_vars)) {
         $fyr_error_message = "Please limit your use of this website.";
         include "templates/generalerror.html";
