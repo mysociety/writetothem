@@ -7,12 +7,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.21 2004-10-06 17:11:46 chris Exp $
+ * $Id: dadem.php,v 1.22 2004-10-08 14:05:04 chris Exp $
  * 
  */
 
 include_once('votingarea.php');
 include_once('simplexmlrpc.php');
+include_once('utility.php');
 include_once('../conf/config.php');
 
 /* Error codes */
