@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.22 2004-11-25 01:24:14 fyr Exp $
+ * $Id: index.php,v 1.23 2004-11-26 15:55:02 francis Exp $
  * 
  */
 
@@ -41,7 +41,7 @@ if ($pc != "") {
     }
     else {
         $error_message = $voting_areas->text;
-        $template = "index-advice";
+        template_show_error($error_message);
     }
 }
 
