@@ -21,7 +21,7 @@ $cols = sizeof($values['reps']);
 <p>You have several elected representatives at different levels of government. <b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
 
 <table id="repstable" cellpadding="5" cellspacing="0" border="0">
-    <tr valign="top">
+    <tr valign="middle">
 <?
 $c = 0;
 $pc = round(100/$cols);
@@ -36,7 +36,6 @@ foreach ($values['headings'] as $row) {
     <tr valign="top">
 <?
 $c = 0;
-$pc = round(100/$cols);
 foreach ($values['reps'] as $row) {
     print '<td class="';
     print ($c) ? 'maincol' : 'firstcol';
