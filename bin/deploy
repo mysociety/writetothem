@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.10 2005-03-17 18:14:10 francis Exp $
+# $Id: deploy,v 1.11 2005-03-17 18:14:51 francis Exp $
 #
 
 set -e
@@ -60,7 +60,7 @@ check_config_files $FYR_DEPLOYSPACE/mysociety/fyr/conf
 
 warn "Checking database schemas..."
 read_conf $FYR_DEPLOYSPACE/mysociety/fyr/conf/general
-#check_pgsql_schema $FYR_QUEUE_DB_UNIX_USER $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS 
+check_pgsql_schema $FYR_QUEUE_DB_UNIX_USER $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS 
 
 warn "Stopping services..."
 down_notice $FYR_VHOST $FYR_NAME
