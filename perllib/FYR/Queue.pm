@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.116 2005-01-31 11:54:16 chris Exp $
+# $Id: Queue.pm,v 1.117 2005-01-31 12:55:36 chris Exp $
 #
 
 package FYR::Queue;
@@ -996,6 +996,12 @@ my %state_action = (
                 # will *really* irritate people and we don't want to annoy them
                 # too much....
                 # 
+                
+                # Don't attempt to send faxes outside reasonably sane hours --
+                # if we have a typo in a phone number we don't want to call the
+                # victim at all hours of the night.
+                my $hour = (localtime(time()))[2];
+                return if ($hour < 8 || $hour > 20);
 
                 # Abandon faxes after a few failures.
                 if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
