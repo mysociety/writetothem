@@ -1,0 +1,118 @@
+#!/usr/bin/perl -w
+#
+# handlemail:
+# Handle an individual incoming mail message.
+#
+# This script should be invoked through the .forward mechanism. It processes
+# bounce messages and saves their text in the database for review by an
+# administrator.
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.1 2004-12-07 12:50:57 chris Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+chdir($FindBin::Bin) or die "$FindBin::Bin: chdir: $!";
+use lib '../perllib';
+use lib '../../perllib';
+
+use IO::Handle;
+use Mail::Address;
+use Mail::Internet;
+use Mail::Header;
+
+use mySociety::Util qw(print_log);
+
+use FYR::Queue;
+
+my @lines;
+
+$_ = STDIN->getline();
+chomp();
+push(@lines, $_) if ($_ !~ m#^From #);
+
+while (defined($_ = STDIN->getline())) {
+    chomp();
+    push(@lines, $_);
+}
+
+if (STDIN->error()) {
+    # Failed to read it; should defer.
+    print_log('err', "read message from standard input: $!; deferring");
+    exit(75);   # EX_TEMPFAIL
+}
+
+my $m = new Mail::Internet(\@lines);
+if (!defined($m)) {
+    # Unable to parse message; should drop.
+    print_log('err', "unable to parse message from standard input; discarding");
+    exit(1);
+}
+
+# RFC2822:
+# 'The "Return-Path:" header field contains a pair of angle brackets
+# that enclose an optional addr-spec.'
+my $return_path = $m->head()->get("Return-Path");
+
+if ($return_path !~ m#<>#) {
+    # This is not a bounce message. We discard it.
+    print_log('info', "message was not a bounce message; discarding");
+    exit(0);
+}
+
+# Now we have a bounce. We need to know the address to which it was sent so
+# that we can distinguish VERP bounces (which must be recorded) from others
+# which we don't care about.
+my $to = $m->head()->get("To");
+
+if (!defined($to)) {
+    # Not a lot we can do without an address to parse.
+    print_log('err', "received bounce message had no To: header; discarding");
+    exit(0);
+}
+
+my ($a) = Mail::Address->parse($to);
+
+if (!defined($a)) {
+    # Couldn't parse first To: address.
+    print_log('err', "unable to parse address from To: header '$to' in received bounce message; discarding");
+}
+
+my $prefix = mySociety::Config::get("EMAIL_PREFIX");
+if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get(EMAIL_DOMAIN))) {
+    # Not one of our bounces; discard.
+    print_log('info', "bounce sent to '" . $a->address() . "' is not for us; discarding");
+    exit(0);
+}
+
+my ($token) = ($a->user() =~ m#^\Q$prefix\E(.*)#);
+
+if ($token eq 'bounce-null') {
+    # Just discard this one;
+    exit(0);
+} elsif (defined(my $id = FYR::Queue::check_token('bounce', $token))) {
+    my $state = FYR::Queue::state($id, 1);
+    if (!defined($state)) {
+        print_log('err', "bounce received for non-existant message '$id'; discarding");
+        exit(0);
+    } else {
+        # Record the bounce
+        FYR::Queue::logmsg($id, "received email bounce message");
+        if ($state eq 'bounce_wait') {
+            FYR::Queue::state($id, 'bounce_confirm');
+        }
+        FYR::DB::dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines));
+        FYR::DB::dbh()->commit();
+    }
+} else {
+    print_log('err', "received bounce with invalid token '$token'; discarding");
+    exit(0);
+}
+
+

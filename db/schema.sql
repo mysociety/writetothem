@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.12 2004-11-24 23:11:39 francis Exp $
+-- $Id: schema.sql,v 1.13 2004-12-07 12:50:57 chris Exp $
 --
 
 set client_min_messages to error;
@@ -97,3 +97,10 @@ create table questionnaire_answer (
     answer text not null
 );
 
+-- message_bounce
+-- Bounce messages received for emailed messages.
+create table message_bounce (
+    message_id char(20) not null references message(id) on delete cascade,
+    whenreceived integer not null,
+    bouncetext text not null
+);
