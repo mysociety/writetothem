@@ -13,7 +13,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.6 2004-11-18 13:14:45 francis Exp $
+ * $Id: general-example,v 1.7 2004-11-18 16:02:36 chris Exp $
  * 
  */
 
@@ -38,6 +38,12 @@ define('OPTION_EMAIL_DOMAIN', 'faxyourrepresentative.com');
 // Prefix of return-path local part. All mail for EMAIL_PREFIX(.*)@EMAIL_DOMAIN
 // must be delivered to the bounce processing scripts.
 define('OPTION_EMAIL_PREFIX', 'fyr-');
+
+// Configuration for fax generation and sending.
+// Truetype font for writing faxes
+define('OPTION_FAX_FONT', '/home/chris/projects/mysociety/cvs/mysociety/fyr/data/Cyberbit.ttf');
+// Devices to use for fax sending, separated by :
+define('OPTION_FAX_DEVICES', 'ttyS0');
 
 // Configuration of the queue management daemon:
 // Number of worker processes
