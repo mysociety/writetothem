@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.16 2004-12-13 12:17:34 francis Exp $
+ * $Id: queue.php,v 1.17 2004-12-14 20:29:55 chris Exp $
  * 
  */
 
@@ -29,8 +29,7 @@ function msg_get_error($e) {
 }
 
 /* msg_check_error R
- * If R indicates failure, displays error message and stops procesing.
- */
+ * If R indicates failure, displays error message and stops processing. */
 function msg_check_error($data) {
     if ($error_message = msg_get_error($data)) {
         template_show_error($error_message);
@@ -63,7 +62,7 @@ function msg_write($id, $sender, $recipient_id, $text) {
     global $fyr_queue_client;
     /* XXX check contents of sender array */
     debug("QUEUE", "Writing new message id $id to $recipient_id", $sender);
-    $result = $fyr_queue_client->call('FYR.Queue.write', array($id, $sender, $recipient_id, $text));
+    $result = $fyr_queue_client->call('FYR.Queue.write', array($id, $sender, $recipient_id, $text), 1);
     debug("QUEUE", "Result:", $result);
     return $result;
 }
