@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.18 2005-01-13 10:46:31 chris Exp $
+ * $Id: fyr.php,v 1.19 2005-01-13 15:15:38 francis Exp $
  * 
  */
 
@@ -45,10 +45,9 @@ err_set_handler_display('fyr_display_error');
  * address, and return an error page if the request trips a rate limit;
  * otherwise do nothing. */
 function fyr_rate_limit($important_vars) {
-    $important_vars['IPADDR'] = $_SERVER['REMOTE_ADDR'];
-    $important_vars['SERVER'] = $_SERVER['SERVER_NAME'];
-    $important_vars['PAGE'] = $_SERVER['SCRIPT_NAME'];
-    $important_vars['SITE'] = 'fyr';
+    $important_vars['IPADDR'] = array($_SERVER['REMOTE_ADDR'], "IP address");
+    $important_vars['SERVER'] = array($_SERVER['SERVER_NAME'], "Web server");
+    $important_vars['PAGE'] = array($_SERVER['SCRIPT_NAME'], "Web page");
 
     $ret = ratty_test("fyr-web", $important_vars);
     if (isset($ret)) {

@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.29 2005-01-13 13:45:30 francis Exp $
+# $Id: AbuseChecks.pm,v 1.30 2005-01-13 15:15:38 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -185,7 +185,7 @@ my @tests = (
             my $hits = google_for_postcode($msg->{sender_postcode});
             FYR::Queue::logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
                 $msg->{sender_postcode}, $hits)) if ($hits > 0);
-            return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode with either 'faxyourmp' or 'writetothem'"] );
+            return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode and faxyourmp/writetothem"] );
         },
         
         # Representative emailing themself
@@ -229,14 +229,14 @@ my @tests = (
             } else {
                 $similarity_max = undef;
             }
-            $similarity_max = [$similarity_max, 
-                'Similarity score of message whose body is most similar to this one, or absent if none is more than ' .  
+            $res{similarity_max} = [$similarity_max, 
+                'Similarity score of the message whose body is most similar to this one, or absent if none is more than ' .  
                 mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD')];
 
             foreach my $thr (qw(0.5 0.6 0.7 0.8 0.9 0.95 0.99)) {
-                next if ($_ < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
+                next if ($thr < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
                 my $n = scalar(grep { $_->[1] > $thr } @similar);
-                $res{"similarity_num_$_"} = [$n, "Number of messages more than $_ similar to this one"];
+                $res{"similarity_num_$thr"} = [$n, "Number of messages more than $thr similar to this one"];
             }
 
             return %res;

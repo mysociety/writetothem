@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: reps.php,v 1.3 2004-11-22 12:22:39 francis Exp $
+ * $Id: reps.php,v 1.4 2005-01-13 15:15:38 francis Exp $
  * 
  */
 
@@ -34,7 +34,8 @@ $messages = array(
 $fyr_postcode = "zz99zz";
 debug("FRONTEND", "who is $fyr_who");
 debug("FRONTEND", "postcode is $fyr_postcode");
-fyr_rate_limit(array('postcode' => $fyr_postcode, 'who' => $fyr_who));
+fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been typed in"), 
+                     'who' => array($fyr_who, "Representative id from DaDem")));
 
 // What to do
 $action = get_http_var('action');

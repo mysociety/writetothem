@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.32 2005-01-12 09:04:32 francis Exp $
+ * $Id: index.php,v 1.33 2005-01-13 15:15:38 francis Exp $
  * 
  */
 
@@ -14,7 +14,7 @@ require_once "../phplib/fyr.php";
 require_once "../../phplib/mapit.php";
 
 $pc = get_http_var("pc");
-fyr_rate_limit(array("postcode" => $pc));
+fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
 $form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm">';
 $form .= '<label for="pc"><b>Type Your UK Postcode:</b></label>&nbsp;';

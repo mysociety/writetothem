@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.44 2005-01-12 23:33:51 matthew Exp $
+ * $Id: who.php,v 1.45 2005-01-13 15:15:38 francis Exp $
  * 
  */
 
@@ -23,7 +23,7 @@ $fyr_postcode = get_http_var('pc');
 
 debug("FRONTEND", "postcode is $fyr_postcode");
 debug_timestamp();
-fyr_rate_limit(array('postcode' => $fyr_postcode));
+fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been typed in ")));
 if (get_http_var('err')) {
     $fyr_error = "Please select a representative before clicking Next.";
 }

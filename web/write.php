@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.58 2005-01-13 11:43:47 chris Exp $
+ * $Id: write.php,v 1.59 2005-01-13 15:15:38 francis Exp $
  * 
  */
 
@@ -218,9 +218,10 @@ if (!isset($fyr_who)) {
 }
 
 // Rate limiter
-$limit_values = array('postcode' => $fyr_postcode, 'who' => $fyr_who);
+$limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"), 
+                     'who' => array($fyr_who, "Representative id from DaDem"));
 if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
-    $limit_values['body'] = $fyr_values['body'];
+    $limit_values['body'] = array($fyr_values['body'], "Body text of message");
 }
 fyr_rate_limit($limit_values);
 
