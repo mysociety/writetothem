@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.1 2005-02-04 13:53:59 matthew Exp $
+ * $Id: corrections.php,v 1.2 2005-02-04 14:27:04 matthew Exp $
  * 
  */
 
@@ -58,7 +58,7 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
         $newname = $fyr_names[$rep];
         $newparty = $fyr_parties[$rep];
         if ($oldname != $newname || $oldparty != $newparty) {
-            $out .= "Wanting to change $oldname,$oldparty to $newname,$newparty<br>";
+            $out .= "Wanting to change rep $rep : $oldname,$oldparty to $newname,$newparty<br>";
         }
     }
     $fyr_new = (isset($fyr_values['new'])) ? $fyr_values['new'] : array();
@@ -67,7 +67,7 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     }
     $fyr_delete = (isset($fyr_values['delete'])) ? $fyr_values['delete'] : array();
     foreach ($fyr_delete as $rep_id => $dummy) {
-        $out .= "Delete: $rep_id<br>";
+        $out .= "Delete rep $rep_id<br>";
     }
     $fyr_url = (isset($fyr_values['url'])) ? $fyr_values['url'] : '';
     if ($fyr_url == 'http://') $fyr_url = '';

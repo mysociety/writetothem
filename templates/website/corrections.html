@@ -1,8 +1,8 @@
-<? $values['title'] = "Corrections, corrections";
+<? $va_info = $values['va_info'];
+
+$values['title'] = $va_info['name'] . " Corrections";
 $values['robots'] = 'noindex, nofollow';
 include "header.php";
-
-$va_info = $values['va_info'];
 
 ?>
 
@@ -13,6 +13,8 @@ $va_info = $values['va_info'];
 <?=$values['error']?>
 </p>
 <? } ?>
+
+<p>Thank you for helping us keep up to date.</p>
 
 <p>Below are the <?=count($values['reps_info'])!=1?$va_info['rep_name_plural']:$va_info['rep_name'] ?> from <strong><?=$va_info['name'] ?></strong>.
 Please edit any that are incorrect, or select the checkbox for anyone who isn't a councillor in this ward at all.</p>
@@ -37,7 +39,7 @@ print '<table style="margin: 0 auto" border="1" cellpadding="3" cellspacing="0">
 
 <label for="newname">Missing councillor's name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
 
-<p>If you looked up this information on the web, please tell us the address of the page where you found it, to help us keep up to date:
+<p>If you looked up this information on the web, please tell us the address of the page where you found it:
 <input type="text" name="url" id="url" value="http://" size="50"></p>
 
 <p>Do you have any other information that would be useful to us? (Optional)<br>
