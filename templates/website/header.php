@@ -4,15 +4,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WriteToThem.com Beta Test - <? print $values['title']; ?></title>
-<style type="text/css">
 <?php
-if (array_key_exists('css', $_REQUEST) && !preg_match('#"#',$_REQUEST['css'])) {
-	print '@import "'.$_REQUEST['css'].'";'."\n";
-} else { ?>
-@import "/wtt.css";
-<?php } ?>
+if (array_key_exists('css', $_REQUEST) && !preg_match('#"#',$_REQUEST['css'])) { ?>
+<style type="text/css">
+@import "<?=$_REQUEST['css'] ?>";
 </style>
 <?php
+} else { ?>
+<link href="/wtt.css" rel="stylesheet" type="text/css" media="all">
+<?php
+}
 if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
