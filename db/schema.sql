@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.1 2004-10-05 16:42:14 chris Exp $
+-- $Id: schema.sql,v 1.2 2004-10-20 09:06:14 chris Exp $
 --
 
 -- secret
@@ -14,11 +14,25 @@ create table secret (
     secret text not null
 );
 
--- queue
+-- state
+-- States a message can be in.
+create table state (
+    name varchar(10) not null primary key
+);
+
+-- new: awaiting sending of confirmation email.
+insert into state (name) values ('new');
+-- pending: awaiting confirmation of user's email address.
+insert into state (name) values ('pending');
+-- ready: ready to be sent.
+insert into state (name) values ('ready');
+-- sent: dispatched, awaiting failure message or questionnaire response.
+insert into state (name) values ('sent');
+
+-- message
 -- List of messages to be sent.
-create table queue (
-    id serial not null primary key,
-    token char(20) not null,
+create table message (
+    id char(20) not null primary key,
 
     -- Sender info
     sender_name text not null,
@@ -34,21 +48,26 @@ create table queue (
     recipient_fax text,
     check((recipient_email is not null and recipient_fax is null) or (recipient_fax is not null and recipient_email is null)),
 
-    -- Text of message (UTF-8 with linebreaks).
+    -- Text of message (UTF-8 with line-breaks).
     message text not null,
 
-    -- State information. Messages start off pending (awaiting email
-    -- confirmation by the sender); they are then put in state send, to be
-    -- sent; then they sit in state sent for a while awaiting a questionnaire
-    -- response from the user.
-    state text not null default ('pending') check (state = 'pending' or state = 'send' or state = 'sent');
+    -- State information.
+    state text not null references state(name),
 
-    -- when the message was originally queued
-    whencreated timestamp(0) without time zone not null default(now()),
+    -- when the message was originally queued (UNIX time)
+    whencreated integer not null,
 
-    -- when we last changed the state or sent a message to the user to confirm
-    -- their address.
-    lastupdate timestamp without time zone
+    -- when we last changed the state, sent a message to the user to confirm
+    -- their address (UNIX time), or made a delivery attempt
+    lastupdate integer
 );
 
-create unique index queue_token_idx on queue(token);
+-- message_log
+-- Events relating to each message.
+create table message_log (
+    message_id char(20) not null references message(id),
+    whenlogged timestamp(0) without time zone not null default(now()),
+    state text not null,     -- state of message when log item added
+    message text not null
+);
+
