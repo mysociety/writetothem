@@ -6,12 +6,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.41 2005-02-10 08:55:28 francis Exp $
+ * $Id: index.php,v 1.42 2005-02-12 22:23:52 matthew Exp $
  * 
  */
 
 require_once "../phplib/fyr.php";
 require_once "../../phplib/mapit.php";
+require_once '../../phplib/dadem.php';
 
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
@@ -88,10 +89,34 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
         header("Location: about-special#$ft");
         exit;
     }
-    
+
     $voting_areas = mapit_get_voting_areas($pc);
+
     if (!rabx_is_error($voting_areas)) {
-        header('Location: ' . new_url('who', true));
+        $area_type = get_http_var('a');
+        if ($area_type && $area_type == 'WMC') {
+            # Special case to only MPs for now
+            # If this is generalised by removing above WMC condition,
+            # be aware of DIS style URLs. Proper way is to fetch parent
+            # voting area, then fetch all children of that
+            $area_representatives = dadem_get_representatives(array_values($voting_areas));
+            $all_reps = array();
+            foreach (array_values($area_representatives) as $rr) {
+                $all_reps = array_merge($all_reps, $rr);
+            }
+            $representatives_info = dadem_get_representatives_info($all_reps);
+            $type_reps = array();
+            foreach ($representatives_info as $id => $data) {
+                if ($data['type'] == $area_type) {
+                    $type_reps[] = $id;
+                }
+            }
+            if (count($type_reps) == 1) {
+                header('Location: ' . new_url('write', true, 'a', null, 'who', $type_reps[0]));
+                exit;
+            }
+        }
+        header('Location: ' . new_url('who', true, 'a', null));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
