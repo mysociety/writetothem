@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.60 2004-12-16 14:48:02 chris Exp $
+# $Id: Queue.pm,v 1.61 2004-12-16 17:31:26 chris Exp $
 #
 
 package FYR::Queue;
@@ -279,7 +279,7 @@ sub scrubmessage ($) {
     # contain only the recipient ID and type, and a placeholder which indicates
     # whether the letter was delivered by fax or email.
     FYR::DB::dbh()->do(q#
-                update message set
+                update message
                     set sender_name = '', sender_email = '',
                         sender_addr = '', sender_phone = null,
                         sender_postcode = '', recipient_name = '',
