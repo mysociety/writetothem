@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.54 2005-01-12 13:24:48 chris Exp $
+ * $Id: write.php,v 1.55 2005-01-12 23:33:52 matthew Exp $
  * 
  */
 
@@ -72,7 +72,7 @@ END;
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
-    $form->addElement('text', 'writer_phone', "Phone: <a href=\"/about-qa#address\">(?)</a>", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_phone', "Phone: <a href=\"/about-qa#address\" target=\"_blank\">(?)</a>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() +]+$/', null);
     $form->applyFilter('writer_phone', 'trim');
 

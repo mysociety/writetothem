@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.43 2005-01-11 12:13:58 chris Exp $
+ * $Id: who.php,v 1.44 2005-01-12 23:33:51 matthew Exp $
  * 
  */
 
@@ -170,8 +170,9 @@ function display_reps($representatives) {
                                                'fyr_extref', fyr_external_referrer()))
                        . '">'
                        . htmlspecialchars($rep_info['name'])
-                       . '</a><br>'
-                       . htmlspecialchars($rep_info['party']);
+                       . '</a>';
+		if (array_key_exists('party', $rep_info))
+                       $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
 	}
 	return '<ul>' . $rep_list . '</ul>';
 }
