@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.38 2004-11-26 11:27:09 francis Exp $
+# $Id: Queue.pm,v 1.39 2004-11-26 17:54:52 chris Exp $
 #
 
 package FYR::Queue;
@@ -125,10 +125,8 @@ sub write ($$$$) {
         # XXX should also check that the text bits are valid UTF-8.
 
         # Check to see if message has already been posted
-        my $already_got = FYR::DB::dbh()->selectall_arrayref("select count(*) from message where id = ?", {}, $id)->[0]->[0];
-        if ($already_got > 0) {
-            throw FYR::Error("You've already sent this message, there's
-                    no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
+        if (FYR::DB::dbh()->selectrow_array('select count(*) from message where id = ?', {}, $id) > 0) {
+            throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
         }
 
         # Queue the message.
