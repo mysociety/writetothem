@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.10 2004-10-19 16:46:08 francis Exp $
+ * $Id: index.php,v 1.11 2004-10-20 08:58:01 francis Exp $
  * 
  */
 
@@ -15,10 +15,7 @@ $form = new HTML_QuickForm('postcodeForm', 'post', 'who.php');
 $buttons[0] =& HTML_QuickForm::createElement('text', 'pc', null, array('size' => 10, 'maxlength' => 255));
 $buttons[1] =& HTML_QuickForm::createElement('submit', 'go', 'Go');
 $form->addGroup($buttons, 'stuff', '<b>Type Your UK Postcode:</b>', '&nbsp', false); // TODO: don't have bold tags here!
-$form->applyFilter('pc', 'trim');
-$form->applyFilter('pc', 'strtoupper');
 $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
-// $form->setDefaults(array('pc' => "CB4 1XP"));
 
 $fyr_form_renderer = new HTML_QuickForm_Renderer_mySociety();
 $form->accept($fyr_form_renderer);

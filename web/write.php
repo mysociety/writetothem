@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.13 2004-10-19 16:46:08 francis Exp $
+ * $Id: write.php,v 1.14 2004-10-20 08:58:01 francis Exp $
  * 
  */
 
@@ -26,6 +26,9 @@ include_once "../../phplib/utility.php";
 
 // Start the session
 session_start();
+/*if (get_http_var('session_fyr')) {
+    $_SESSION = unserialize(get_http_var('session_fyr'));
+}*/
 
 function default_body_text() {
         global $fyr_representative;
@@ -127,7 +130,10 @@ class ActionDisplayFancy extends HTML_QuickForm_Action_Display
         {element} 
         <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
         </TD>', 'body');
-        $page->accept($renderer);
+/*        $page->addElement('hidden', 'session_fyr', serialize($_SESSION));
+        print "<p>Redir forward in hidden form:<pre>";
+        var_dump($_SESSION);
+        print "</pre>";*/
         $page->accept($renderer);
 
         global $fyr_form, $fyr_values;
@@ -164,14 +170,14 @@ class ActionProcess extends HTML_QuickForm_Action {
 $pageWrite =& new PageWrite('writeForm');
 $pagePreview =& new PagePreview('previewForm');
 
-$controller =& new HTML_QuickForm_Controller('StateMachine');
+$controller =& new HTML_QuickForm_Controller('WriteFax');
 $controller->addPage($pageWrite);
 $controller->addPage($pagePreview);
 $controller->addAction('process', new ActionProcess());
 $controller->addAction('display', new ActionDisplayFancy());
 
 // transfer data from previous forms
-$fyr_postcode = get_http_var('pc');
+$fyr_postcode = strtoupper(trim(get_http_var('pc')));
 $fyr_who = get_http_var('who');
 $data =& $controller->container();
 if ($fyr_postcode)
@@ -202,7 +208,5 @@ $fyr_date = strftime('%A %e %B %Y');
 $controller->setDefaults(array('body' => default_body_text()));
 
 $controller->run();
-
-exit;
 
 ?>
