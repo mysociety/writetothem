@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.24 2004-11-18 13:33:14 chris Exp $
+# $Id: Queue.pm,v 1.25 2004-11-18 15:11:57 francis Exp $
 #
 
 package FYR::Queue;
@@ -23,6 +23,7 @@ use Mail::RFC822::Address;
 use MIME::Entity;
 use MIME::Words;
 use Text::Wrap (); # don't pollute our namespace
+use POSIX qw(strftime);
 use utf8;
 
 use mySociety::Config;
@@ -175,7 +176,7 @@ sub write ($$$$) {
 # XXX should have a flag for "exceptional" to warn administrators.
 sub logmsg ($$) {
     my ($id, $msg) = @_;
-    FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?)',
+    FYR::DB::dbh()->do('insert into message_log (message_id, whenlogged, state, message) values (?, ?, ?, ?)',
         {},
         $id,
         strftime('%Y-%m-%d %H:%M:%S', localtime(time())),
@@ -263,8 +264,8 @@ sub message ($;$) {
     $forupdate = defined($forupdate) ? ' for update' : '';
     if (my $msg = FYR::DB::dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
         # Add some convenience fields.
-        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{type}};
-        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{type}};
+        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
+        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
         return $msg;
     } else {
         throw FYR::Error("No message '$id'.");
