@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.35 2005-01-13 23:46:00 matthew Exp $
+ * $Id: index.php,v 1.36 2005-01-17 10:39:44 chris Exp $
  * 
  */
 
@@ -27,7 +27,7 @@ $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
  * trying to obscure this data. */
 $ref = fyr_external_referrer();
 if (isset($ref))
-	$form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
+    $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
 $form .= '</form>';
 
 // Validate postcode, and prepare appropriate page
@@ -65,28 +65,28 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
         exit;
     }
 
-	$specialmap = array(
-		'GIR0AA' => 'giro',
-		'G1R0AA' => 'giro',
-		'SANTA1' => 'santa'
-	);
-	$ft = null;
-	if (array_key_exists($pc2, $specialmap)) {
-		$ft = $specialmap[$pc2];
-	} elseif ($pc22 == 'AM') {
-		$ft = 'archers';
-	} elseif ($pc22 == 'FX') {
-		$ft = 'training';
-	} elseif ($pc23 == 'RE1') {
-		$ft = 'reddwarf';
-	} elseif ($pc23 == 'E20') {
-		$ft = 'eastenders';
-	}
+    $specialmap = array(
+        'GIR0AA' => 'giro',
+        'G1R0AA' => 'giro',
+        'SANTA1' => 'santa'
+    );
+    $ft = null;
+    if (array_key_exists($pc2, $specialmap)) {
+        $ft = $specialmap[$pc2];
+    } elseif ($pc22 == 'AM') {
+        $ft = 'archers';
+    } elseif ($pc22 == 'FX') {
+        $ft = 'training';
+    } elseif ($pc23 == 'RE1') {
+        $ft = 'reddwarf';
+    } elseif ($pc23 == 'E20') {
+        $ft = 'eastenders';
+    }
 
-	if (isset($ft)) {
-		header("Location: about-special#$ft");
-		exit;
-	}
+    if (isset($ft)) {
+        header("Location: about-special#$ft");
+        exit;
+    }
     
     $voting_areas = mapit_get_voting_areas($pc);
     if (!rabx_is_error($voting_areas)) {
