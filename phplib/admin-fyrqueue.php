@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.71 2005-02-07 13:46:01 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.72 2005-02-07 23:59:59 francis Exp $
  * 
  */
 
@@ -203,8 +203,17 @@ class ADMIN_PAGE_FYR_QUEUE {
                 print '<td><a href="'
                         . htmlspecialchars(new_url('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name)
                         . "</a><br>";
-                if ($message['recipient_via'])
-                    print "via: ";
+                if ($message['recipient_via']) {
+                    $repinfo = dadem_get_representative_info($message['recipient_id']);
+                    dadem_check_error($repinfo);
+                    $vainfo = mapit_get_voting_area_info($repinfo['voting_area']);
+                    mapit_check_error($vainfo);
+                    $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
+                    mapit_check_error($parentinfo);
+                    print '<a href="' .
+                       htmlspecialchars(new_url('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
+                        htmlspecialchars("via " . $parentinfo['name'] . " " . $parentinfo['type_name']) . "</a>:<br>";
+                }
                 if ($message['recipient_email'])
                     print htmlspecialchars($message['recipient_email']) . "<br>";
                 if ($message['recipient_fax'])
