@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.101 2005-01-28 22:35:07 francis Exp $
+# $Id: Queue.pm,v 1.102 2005-01-28 22:47:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -1459,6 +1459,22 @@ administrator leaving the note.
 sub admin_add_note_to_message ($$$) {
     my ($id, $user, $note) = @_;
     logmsg($id, "$user added note: $note");
+    return 0;
+}
+
+=item admin_set_message_to_ready ID USER
+
+Move message ID (from, probably, pending) to ready. USER is the name of the
+administrator making the change.
+
+=cut
+
+sub admin_set_message_to_ready ($$) {
+    my ($id, $user) = @_;
+    state($id, 'ready');
+    logmsg($id, "$user put message in state 'ready'");
+    FYR::DB::dbh()->commit();
+    notify_daemon();
     return 0;
 }
 

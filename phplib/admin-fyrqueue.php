@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.53 2005-01-28 22:35:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.54 2005-01-28 22:47:08 francis Exp $
  * 
  */
 
@@ -206,6 +206,11 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             msg_check_error($result);
             print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
             $redirect = true;
+        } else if (get_http_var('ready')) {
+            $result = msg_admin_set_message_to_ready($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id moved to ready state</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('note')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
             msg_check_error($result);
@@ -263,6 +268,9 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
             if ($message['state'] == 'failed' || $message['frozen'])
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
+            if ($message['state'] == 'pending')
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
+
             if (!get_http_var('body'))
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else

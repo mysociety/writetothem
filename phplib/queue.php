@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.33 2005-01-19 02:10:46 francis Exp $
+ * $Id: queue.php,v 1.34 2005-01-28 22:47:08 francis Exp $
  * 
  */
 
@@ -217,6 +217,14 @@ function msg_admin_set_message_to_bounce_wait($id, $user) {
 function msg_admin_add_note_to_message($id, $user, $note) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_add_note_to_message', array($id, $user, $note));
+    return $result;
+}
+
+/* msg_admin_set_message_to_ready ID USER
+ * Override confirm a message. */
+function msg_admin_set_message_to_ready($id, $user) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_set_message_to_ready', array($id, $user));
     return $result;
 }
 
