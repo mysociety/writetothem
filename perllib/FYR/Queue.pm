@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.25 2004-11-18 15:11:57 francis Exp $
+# $Id: Queue.pm,v 1.26 2004-11-18 15:44:52 chris Exp $
 #
 
 package FYR::Queue;
@@ -119,7 +119,7 @@ sub write ($$$$) {
         # DBD::Pg will have begun a new transaction immediately we committed the
         # last one. That's fine, but it means that any timestamps we use are out
         # of date. So begin a new one.
-        FYR::DB::dbh()->do('begin work');
+        FYR::DB::dbh()->begin_work();
         
         # Queue the message.
         FYR::DB::dbh()->do(q#
@@ -661,7 +661,7 @@ sub confirm_email ($) {
         # DBD::Pg will have begun a new transaction immediately we committed the
         # last one. That's fine, but it means that any timestamps we use are out
         # of date. So begin a new one.
-        FYR::DB::dbh()->do('begin work');
+        FYR::DB::dbh()->begin_work();
 
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
@@ -685,7 +685,7 @@ sub record_questionnaire_answer ($$$) {
     throw FYR::Error("Bad QUESTION (should be '0')") if ($qn ne '0');
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
-        FYR::DB::dbh()->do('begin work');
+        FYR::DB::dbh()->begin_work();
         FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
         FYR::DB::dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
         logmsg($id, "answer of \"$answer\" received for questionnaire qn #$qn");
@@ -884,7 +884,7 @@ sub process_queue () {
     # DBD::Pg will have begun a new transaction immediately we committed the
     # last one. That's fine, but it means that any timestamps we use are out
     # of date. So begin a new one.
-    FYR::DB::dbh()->do('begin work');
+    FYR::DB::dbh()->begin_work();
 
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
