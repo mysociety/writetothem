@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.61 2004-12-16 17:31:26 chris Exp $
+# $Id: Queue.pm,v 1.62 2004-12-16 18:13:18 chris Exp $
 #
 
 package FYR::Queue;
@@ -626,6 +626,7 @@ sub make_confirmation_email ($;$) {
             From => format_email_address('FaxYourRepresentative', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
+            Type => 'text/plain; charset="utf-8"',
             Data => $text
         );
 }
@@ -665,6 +666,7 @@ sub make_failure_email ($) {
             From => format_email_address('FaxYourRepresentative', $failure_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
+            Type => 'text/plain; charset="utf-8"',
             Data => $text
         );
 }
@@ -702,6 +704,7 @@ sub make_questionnaire_email ($;$) {
             From => format_email_address('FaxYourRepresentative', $questionnaire_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
+            Type => 'text/plain; charset="utf-8"',
             Data => $text
         );
 }
