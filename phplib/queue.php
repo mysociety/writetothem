@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.30 2005-01-13 02:35:11 chris Exp $
+ * $Id: queue.php,v 1.31 2005-01-13 02:37:11 chris Exp $
  * 
  */
 
@@ -56,7 +56,9 @@ function msg_create() {
  * optionally phone, their phone number. RECIPIENT is the DaDem ID number of
  * the recipient of the message; and TEXT is the text of the message, with only
  * "\n" characters for line breaks. All strings must be encoded in UTF-8.
- * Returns true on success or false on failure. */
+ * Returns null if the message was successfully queued (even if it was frozen),
+ * or, if the message was rejected, the name of a template to which the user
+ * should be directed to explain what was wrong with their message. */
 function msg_write($id, $sender, $recipient_id, $text) {
     global $fyr_queue_client;
     /* XXX check contents of sender array */
