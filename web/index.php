@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.42 2005-02-12 22:23:52 matthew Exp $
+ * $Id: index.php,v 1.43 2005-02-16 09:15:36 chris Exp $
  * 
  */
 
@@ -81,7 +81,8 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
         $ft = 'training';
     } elseif ($pc23 == 'RE1') {
         $ft = 'reddwarf';
-    } elseif ($pc23 == 'E20') {
+    } elseif (preg_match('/^E20[0-9]/', $pc2)) {
+        /* NOT /^E20/, as there are valid and non-fictional E2 0.. postcodes. */
         $ft = 'eastenders';
     }
 
