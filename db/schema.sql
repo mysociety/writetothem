@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.3 2004-11-11 13:46:59 chris Exp $
+-- $Id: schema.sql,v 1.4 2004-11-11 15:36:35 francis Exp $
 --
 
 -- secret
@@ -17,7 +17,7 @@ create table secret (
 -- state
 -- States a message can be in.
 create table state (
-    name varchar(10) not null primary key
+    name varchar(20) not null primary key
 );
 
 insert into state (name) values ('new');
