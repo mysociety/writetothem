@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.22 2005-01-21 19:59:44 chris Exp $
+ * $Id: fyr.php,v 1.23 2005-02-12 02:04:34 francis Exp $
  * 
  */
 
@@ -39,7 +39,7 @@ function fyr_display_error($num, $message, $file, $line, $context) {
     } else {
         /* Message will be in log file, don't display it for cleanliness */
         template_show_error("Please try again later, or <a
-            href=\"mailto:help@writetothem.com\">email us</a> to let us know.");
+            href=\"mailto:team@writetothem.com\">email us</a> to let us know.");
     }
 }
 

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.70 2005-02-11 14:54:28 matthew Exp $
+ * $Id: write.php,v 1.71 2005-02-12 02:04:35 francis Exp $
  * 
  */
 
@@ -170,7 +170,7 @@ function renderForm($form, $pageName)
                 'Sorry. An error has occurred: pageName "'
                     . htmlspecialchars($pageName) .
                 '". Please get in touch with us at
-                <a href="mailto:help@writetothem.com">help@writetothem.com</a>,
+                <a href="mailto:team@writetothem.com">team@writetothem.com</a>,
                 quoting this message. You can <a href="/">try again from the
                 beginning</a>.'
             );
@@ -215,7 +215,7 @@ function submitFax() {
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
                 /* XXX this should be logged! */
-                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
+                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>.");
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
@@ -298,7 +298,7 @@ if (rabx_is_error($success)) {
     if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) 
         template_show_error(<<<EOF
 Sorry, we do not have contact details for this representative, so cannot send
-them a message. Please <a href="mailto:help@writetothem.com">email us</a> to
+them a message. Please <a href="mailto:team@writetothem.com">email us</a> to
 let us know. Details: 
 EOF
             .  htmlspecialchars($success->text)
@@ -318,7 +318,7 @@ EOF
             template_show_error(<<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name]. Please <a href="mailto:help@writetothem.com">email
+$fyr_voting_area[name]. Please <a href="mailto:team@writetothem.com">email
 us</a> to let us know what you think about this.
 EOF
                 );
@@ -376,7 +376,7 @@ if ($on_page == "write") {
             'Sorry. An error has occurred: on_page "'
                 . htmlspecialchars($on_page) .
             '". Please get in touch with us at
-            <a href="mailto:help@writetothem.com">help@writetothem.com</a>,
+            <a href="mailto:team@writetothem.com">team@writetothem.com</a>,
             quoting this message. You can <a href="/">try again from the
             beginning</a>.'
         );
