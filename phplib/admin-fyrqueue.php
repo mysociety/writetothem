@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.39 2005-01-08 10:26:59 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.40 2005-01-11 16:43:55 francis Exp $
  * 
  */
 
@@ -187,6 +187,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
 
 
+            // Display general information
             print "<h2>Message id $id:</h2>";
 
             $message = msg_admin_get_message($id);
@@ -196,36 +197,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             }
             $this->print_message($message);
 
-            if (get_http_var('body')) {
-                print "<h2>Body text of message (only read if you really need to)</h2>";
-                print "<blockquote>";
-                print nl2br(htmlspecialchars($message['message']));
-                print "</blockquote>";
-            }
-
-            if (is_array($message['questionnaires']) and count($message['questionnaires']) > 0) {
-                print "<h2>Questionnaire Responses</h2>";
-                foreach ($message['questionnaires'] as $q) {
-                    if ($q['question_id'] == 0) {
-                        print "Reply within two/three weeks:";
-                    } elseif ($q['question_id'] == 1) {
-                        print "First time contacted any representative:";
-                    } else {
-                        print $q['question_id'] . ":";
-                    }
-                    print " <b>" . $q['answer'] .  "</b><br>";
-                }
-            }
- 
-            print "<h2>All events for this message:</h2>";
-            $recents = msg_admin_message_events($id);
-            if (msg_get_error($recents)) {
-                print "Error contacting queue:";
-                print_r($recents);
-                $recents = array();
-            }
-            $this->print_events($recents);
-
+            // Commands
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
             if ($message['state'] == 'failed')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
@@ -242,19 +214,56 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
             }
             if (!get_http_var('body'))
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body (only if you have to)');
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
+
+            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, "&nbsp;");
+            $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
+            $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Add Comment');
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
-            $form->addElement('textarea', 'notebody', null, array('rows' => 2, 'cols' => 60));
-            $form->addElement('submit', 'note', 'Add Comment (to the log)');
             admin_render_form($form);
-            print "<p><a href=\"?page=reps&amp;rep_id=" .  urlencode($message['recipient_id']) . "&amp;pc=" .  urlencode($message['sender_postcode']) . "\">Edit contact details</a></p>";
+
+            // Body text if enabled
+            if (get_http_var('body')) {
+                print "<h2>Body text of message (only read if you really need to)</h2>";
+                print "<blockquote>";
+                print nl2br(htmlspecialchars($message['message']));
+                print "</blockquote>";
+            }
+
+            // Questionnaire answers if there are any
+            if (is_array($message['questionnaires']) and count($message['questionnaires']) > 0) {
+                print "<h2>Questionnaire Responses</h2>";
+                foreach ($message['questionnaires'] as $q) {
+                    if ($q['question_id'] == 0) {
+                        print "Reply within two/three weeks:";
+                    } elseif ($q['question_id'] == 1) {
+                        print "First time contacted any representative:";
+                    } else {
+                        print $q['question_id'] . ":";
+                    }
+                    print " <b>" . $q['answer'] .  "</b><br>";
+                }
+            }
+ 
+            // Log of what has happened to message
+            print "<h2>All events for this message:</h2>";
+            $recents = msg_admin_message_events($id);
+            if (msg_get_error($recents)) {
+                print "Error contacting queue:";
+                print_r($recents);
+                $recents = array();
+            }
+            $this->print_events($recents);
 ?>
+<h2>Help</h2>
 <p>
-<b>freeze</b> stops delivery to representative, but other stuff
+<b>state meanings</b>, point the mouse to find out what they are
+<br><b>edit contact details</b> by clicking on the recipient name
+<br><b>freeze</b> stops delivery to representative, but other stuff
 (such as confirmation message) still happens
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
 <br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
@@ -335,7 +344,7 @@ All time stats:
             }
          
             // Show it
-            $messages = msg_admin_get_queue($filter);
+            $messages = msg_admin_get_queue($filter, array());
             if (msg_get_error($messages)) {
                 print "Error contacting queue:";
                 print_r($messages);

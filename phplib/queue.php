@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.28 2005-01-11 12:21:07 chris Exp $
+ * $Id: queue.php,v 1.29 2005-01-11 16:43:55 francis Exp $
  * 
  */
 
@@ -126,13 +126,14 @@ function msg_admin_message_events($id) {
     return $result;
 }
 
-/* msg_admin_get_queue FILTER
+/* msg_admin_get_queue FILTER PARAMS
  * Returns array of hashes of recent queue events. 
  * Set FILTER to 0 for all events, 1 for only important ones, 2 for
- * recently changed ones, 3 for recently created ones.*/
-function msg_admin_get_queue($filter) {
+ * recently changed ones, 3 for recently created ones.  PARAMS
+ * is a hash of parameters for the filter type. */
+function msg_admin_get_queue($filter, $params) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter, $params));
     return $result;
 }
 
