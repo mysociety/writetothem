@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.37 2005-01-29 10:38:50 chris Exp $
+# $Id: AbuseChecks.pm,v 1.38 2005-01-31 20:31:14 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -26,6 +26,7 @@ use POSIX;  # strftime
 use Storable;
 
 use mySociety::Config;
+use mySociety::DBHandle qw(dbh);
 use mySociety::Ratty;
 
 use FYR;
@@ -104,11 +105,11 @@ sub get_similar_messages ($) {
     $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
     my $h = FYR::SubstringHash::hash($m, SUBSTRING_LENGTH, NUM_BITS);
 
-    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
+    dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
 
     # Horrid. To insert a value into a BYTEA column we need to do a little
     # parameter-binding dance:
-    my $s = FYR::DB::dbh()->prepare(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#);
+    my $s = dbh()->prepare(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#);
     $s->bind_param(1, $msg->{id});
     $s->bind_param(2, Storable::nfreeze($h), { pg_type => DBD::Pg::PG_BYTEA });
     $s->execute();
@@ -119,7 +120,7 @@ sub get_similar_messages ($) {
     # to (e.g.) all of their MEPs. We compare individuals by comparing postcode
     # and sending email address (so we should catch people spamming by using
     # lots of postcodes to send a single message to several MPs).
-    my $stmt = FYR::DB::dbh()->prepare(q#
+    my $stmt = dbh()->prepare(q#
         select message_id, sender_postcode, sender_email, data
             from message, message_extradata
            where message.id = message_extradata.message_id

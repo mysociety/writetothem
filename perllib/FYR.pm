@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.9 2004-12-16 18:33:22 francis Exp $
+# $Id: FYR.pm,v 1.10 2005-01-31 20:31:14 chris Exp $
 #
 
 use strict;
@@ -47,49 +47,24 @@ use constant MESSAGE_SUSPECTED_ABUSE => 4005;
 
 package FYR::DB;
 
+use mySociety::Config;
+use mySociety::DBHandle qw(dbh);
 use mySociety::Util;
 use DBI;
 
-=head1 FUNCTIONS
+BEGIN {
+    mySociety::DBHandle::configure(
+            Name => mySociety::Config::get('FYR_QUEUE_DB_NAME'),
+            User => mySociety::Config::get('FYR_QUEUE_DB_USER'),
+            Password => mySociety::Config::get('FYR_QUEUE_DB_PASS'),
+            Host => mySociety::Config::get('FYR_QUEUE_DB_HOST', undef),
+            Port => mySociety::Config::get('FYR_QUEUE_DB_PASS', undef)
+        );
 
-=item new_dbh
-
-Return a new handle on the database.
-
-=cut
-sub new_dbh () {
-
-    my $host = mySociety::Config::get('FYR_QUEUE_DB_HOST', undef);
-    my $port = mySociety::Config::get('FYR_QUEUE_DB_PORT', undef);
-    
-    my $connstr = 'dbi:Pg:dbname=' .  mySociety::Config::get('FYR_QUEUE_DB_NAME');
-    $connstr .= ";host=$host" if (defined($host));
-    $connstr .= ";port=$port" if (defined($port));
-
-    my $dbh = DBI->connect($connstr,
-                        mySociety::Config::get('FYR_QUEUE_DB_USER'),
-                        mySociety::Config::get('FYR_QUEUE_DB_PASS'),
-                        { RaiseError => 1, AutoCommit => 0, PrintWarn => 0, PrintError => 0 });
-
-    # make sure we have a site shared secret
-    if (!$dbh->selectrow_array('select secret from secret for update of secret')) {
-        $dbh->do('insert into secret (secret) values (?)', {}, unpack('h*', mySociety::Util::random_bytes(32)));
+    if (!dbh()->selectrow_array('select secret from secret for update of secret')) {
+        dbh()->do('insert into secret (secret) values (?)', {}, unpack('h*', mySociety::Util::random_bytes(32)));
     }
-    $dbh->commit();
-
-    return $dbh;
-}
-
-
-=item dbh
-
-Return a shared handle on the database.
-
-=cut
-sub dbh () {
-    our $dbh;
-    $dbh ||= new_dbh();
-    return $dbh;
+    dbh()->commit();
 }
 
 =item secret

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.117 2005-01-31 12:55:36 chris Exp $
+# $Id: Queue.pm,v 1.118 2005-01-31 20:31:14 chris Exp $
 #
 
 package FYR::Queue;
@@ -39,6 +39,7 @@ use utf8;
 
 use mySociety::Config;
 use mySociety::DaDem;
+use mySociety::DBHandle qw(dbh new_dbh);
 use mySociety::Util;
 use mySociety::VotingArea;
 use mySociety::StringUtils qw(trim merge_spaces string_diff);
@@ -183,12 +184,12 @@ sub write ($$$$) {
         # XXX should also check that the text bits are valid UTF-8.
 
         # Check to see if message has already been posted
-        if (FYR::DB::dbh()->selectrow_array('select count(*) from message where id = ?', {}, $id) > 0) {
+        if (dbh()->selectrow_array('select count(*) from message where id = ?', {}, $id) > 0) {
             throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
         }
 
         # Queue the message.
-        FYR::DB::dbh()->do(q#
+        dbh()->do(q#
             insert into message (
                 id,
                 sender_name, sender_email, sender_addr, sender_phone,
@@ -234,7 +235,7 @@ sub write ($$$$) {
         if (defined($abuse_result)) {
             if ($abuse_result eq 'freeze') {
                 logmsg($id, 1, "abuse system froze message");
-                FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+                dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
             } else {
                 logmsg($id, 1, "abuse system REJECTED message");
                 state($id, 'failed');   # XXX or should this be failed_closed?
@@ -243,14 +244,14 @@ sub write ($$$$) {
         }
     
         # Commit changes
-        FYR::DB::dbh()->commit();
+        dbh()->commit();
 
         # Wake up the daemon to send the confirmation mail.
         notify_daemon();
     } otherwise {
         my $E = shift;
         warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";
-        FYR::DB::dbh()->rollback();
+        dbh()->rollback();
         throw $E;
     };
 
@@ -263,7 +264,8 @@ sub write ($$$$) {
 sub logmsg ($$$) {
     my ($id, $important, $msg) = @_;
     our $dbh;
-    $dbh ||= FYR::DB::new_dbh();
+    # XXX should ping
+    $dbh ||= new_dbh();
     $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional) values (?, ?, ?, ?, ?)',
         {},
         $id,
@@ -306,7 +308,7 @@ sub scrubmessage ($) {
     # our statistics gathering. At the end of this operation the message will
     # contain only the recipient ID and type, and a placeholder which indicates
     # whether the letter was delivered by fax or email.
-    FYR::DB::dbh()->do(q#
+    dbh()->do(q#
                 update message 
                     set sender_name = '', sender_email = '',
                         sender_addr = '', sender_phone = null,
@@ -318,18 +320,18 @@ sub scrubmessage ($) {
                     where id = ?#, {}, $id);
     # Scrub delivery information but make sure we can still tell how the
     # message was sent.
-    FYR::DB::dbh()->do(q#
+    dbh()->do(q#
                 update message
                     set recipient_email = ''
                     where id = ? and recipient_email is not null#, {}, $id);
-    FYR::DB::dbh()->do(q#
+    dbh()->do(q#
                 update message
                     set recipient_fax = ''
                     where id = ? and recipient_fax is not null#, {}, $id);
     # The log, extra data, and bounce tables may also contain personal data.
-    FYR::DB::dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
-    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
-    FYR::DB::dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
+    dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
+    dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
+    dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
     logmsg($id, 1, 'Scrubbed message of all personal data');
 }
 
@@ -345,11 +347,11 @@ update the laststatechange field. If a message is moved to the "failed" or
 sub state ($;$) {
     my ($id, $state) = @_;
     if (defined($state)) {
-        my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+        my ($curr_state, $curr_frozen) = dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
         die "Bad state '$state'" unless (exists($allowed_transitions{$state}));
         die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or (($curr_frozen == 1) and ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed')));
         if ($state ne $curr_state) {
-            FYR::DB::dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
+            dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
             logmsg($id, 0, "changed state to $state");
 
             # On moving into the 'finished' state, scrub message of personal
@@ -361,11 +363,11 @@ sub state ($;$) {
                 scrubmessage($id);
             }
         } else {
-            FYR::DB::dbh()->do('update message set lastaction = ?, numactions = numactions + 1 where id = ?', {}, time(), $id);
+            dbh()->do('update message set lastaction = ?, numactions = numactions + 1 where id = ?', {}, time(), $id);
         }
         return $curr_state;
     } else {
-        return scalar(FYR::DB::dbh()->selectrow_array('select state from message where id = ?', {}, $id));
+        return scalar(dbh()->selectrow_array('select state from message where id = ?', {}, $id));
     }
 }
 
@@ -376,7 +378,7 @@ Get the number of actions taken on this message while in the current state.
 =cut
 sub actions ($) {
     my ($id) = @_;
-    return scalar(FYR::DB::dbh()->selectrow_array('select numactions from message where id = ?', {}, $id));
+    return scalar(dbh()->selectrow_array('select numactions from message where id = ?', {}, $id));
 }
 
 # message ID [LOCK]
@@ -385,7 +387,7 @@ sub actions ($) {
 sub message ($;$) {
     my ($id, $forupdate) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
-    if (my $msg = FYR::DB::dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
+    if (my $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
         # Add some convenience fields.
         $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
         $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
@@ -825,7 +827,7 @@ sub confirm_email ($) {
         throw FYR::Error("You've already confirmed this message.", FYR::Error::MESSAGE_ALREADY_CONFIRMED) if (state($id) ne 'pending');
         state($id, 'ready');
         logmsg($id, 1, "sender email address confirmed");
-        FYR::DB::dbh()->commit();
+        dbh()->commit();
         notify_daemon();
         return 1;
     }
@@ -845,10 +847,10 @@ sub record_questionnaire_answer ($$$) {
     throw FYR::Error("Bad QUESTION (should be '0' or '1')") if ($qn ne '0' and $qn ne '1');
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
-        FYR::DB::dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
-        FYR::DB::dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
+        dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
+        dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
         logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
-        FYR::DB::dbh()->commit();
+        dbh()->commit();
         return 1;
     } else {
         return 0;
@@ -1017,7 +1019,7 @@ my %state_action = (
                 
                 my $result = deliver_fax($msg);
                 if ($result == FYR::Fax::FAX_SUCCESS) {
-                    FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
+                    dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'sent');
                 } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
                     # Don't do anything here: this is a temporary, local
@@ -1032,7 +1034,7 @@ my %state_action = (
             } elsif ($email && defined($msg->{recipient_email})) {
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
-                    FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
+                    dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'bounce_wait');
                 } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
                     state($id, 'ready');    # bump timer
@@ -1053,7 +1055,7 @@ my %state_action = (
             # enough since the message was sent or since the last questionnaire
             # email was sent, then send another one.
             my ($dosend, $reminder) = (0, 0); 
-            if (0 == scalar(FYR::DB::dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
+            if (0 == scalar(dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
                 if (actions($id) == 0) {
                     $dosend = 1 if ($msg->{dispatched} < (time() - QUESTIONNAIRE_DELAY));
                 } elsif (actions($id) < NUM_QUESTIONNAIRE_MESSAGES) { 
@@ -1114,7 +1116,7 @@ sub process_queue ($$) {
     $fax ||= 0;
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
-    my $stmt = FYR::DB::dbh()->prepare(
+    my $stmt = dbh()->prepare(
         'select id, state from message where '
         . join(' or ',
             map { sprintf(q#(state = '%s' and laststatechange < %d)#, $_, time() - $state_timeout{$_}) }
@@ -1124,11 +1126,11 @@ sub process_queue ($$) {
     while (my ($id, $state) = $stmt->fetchrow_array()) {
         state($id, $state_timeout_state{$state});
     }
-    FYR::DB::dbh()->commit();
+    dbh()->commit();
 
     # Actions. These are slow (potentially) so lock row-by-row. Process
     # messages in a random order, so that bad ones don't block everything.
-    $stmt = FYR::DB::dbh()->prepare(
+    $stmt = dbh()->prepare(
         'select id, state from message where ('
             . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
         . ') and (lastaction is null or '
@@ -1156,7 +1158,7 @@ sub process_queue ($$) {
             my $E = shift;
             logmsg($id, 1, "error while processing message: $E");
         } finally {
-            FYR::DB::dbh()->commit();
+            dbh()->commit();
         };
     }
 }
@@ -1186,7 +1188,7 @@ messages.
 =cut
 sub admin_recent_events ($;$) {
     my ($count, $imp) = @_;
-    my $sth = FYR::DB::dbh()->prepare('
+    my $sth = dbh()->prepare('
                     select message_id, whenlogged, state, message, exceptional
                       from message_log ' .
                       ($imp ? 'where exceptional' : '')
@@ -1208,7 +1210,7 @@ set.
 =cut
 sub admin_message_events ($;$) {
     my ($id, $imp) = @_;
-    my $sth = FYR::DB::dbh()->prepare('
+    my $sth = dbh()->prepare('
                     select message_id, whenlogged, state, message, exceptional
                       from message_log
                      where message_id = ? ' . ($imp ? 'and exceptional' : '') .
@@ -1300,7 +1302,7 @@ sub admin_get_queue ($$) {
     } elsif ($filter eq 'recentcreated') {
         $where = "order by created desc limit 100";
     } elsif ($filter eq 'similarbody') {
-        my $sth2 = FYR::DB::dbh()->prepare("
+        my $sth2 = dbh()->prepare("
                 select *, length(message) as message_length from message where id = ?
             ");
         $sth2->execute($params->{msgid});
@@ -1350,7 +1352,7 @@ sub admin_get_queue ($$) {
             $where .= " order by created desc";
         }
     }
-    my $sth = FYR::DB::dbh()->prepare("
+    my $sth = dbh()->prepare("
             select *, length(message) as message_length from message $where
         ");
     $sth->execute(@params);
@@ -1380,17 +1382,17 @@ Returns a hash of information about message with id ID.
 sub admin_get_message ($) {
     my ($id) = @_;
 
-    my $sth = FYR::DB::dbh()->prepare("select 
+    my $sth = dbh()->prepare("select 
         *, length(message) as message_length from message where id =
         ?");
     $sth->execute($id);
     my $hash_ref = $sth->fetchrow_hashref();
 
-    my $bounces = FYR::DB::dbh()->selectcol_arrayref("select 
+    my $bounces = dbh()->selectcol_arrayref("select 
         bouncetext from message_bounce where message_id = ?", {}, $id);
     $hash_ref->{bounces} = $bounces;
 
-    $sth = FYR::DB::dbh()->prepare("select question_id, answer from
+    $sth = dbh()->prepare("select question_id, answer from
         questionnaire_answer where message_id = ?");
     $sth->execute($id);
     my @ret;
@@ -1412,21 +1414,21 @@ Returns a hash of statistics about the queue.
 sub admin_get_stats () {
     my %ret;
 
-    my $rows = FYR::DB::dbh()->selectall_arrayref('select recipient_type, messagecount from message_count_recipient_type', {});
+    my $rows = dbh()->selectall_arrayref('select recipient_type, messagecount from message_count_recipient_type', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
         $ret{"type $type"} = $count;
     }
 
-    $rows = FYR::DB::dbh()->selectall_arrayref('select state, messagecount from message_count_state', {});
+    $rows = dbh()->selectall_arrayref('select state, messagecount from message_count_state', {});
     foreach (@$rows) {
         my ($type, $count) = @$_; 
         $ret{"state $type"} = $count;
     }
 
-    $ret{message_count} = FYR::DB::dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
-    $ret{created_1}     = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
-    $ret{created_24}    = FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
+    $ret{message_count} = dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
+    $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
+    $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
 
     return \%ret;
 }
@@ -1457,9 +1459,9 @@ the representative until thawed. USER is the administrator's name.
 =cut
 sub admin_freeze_message ($$) {
     my ($id, $user) = @_;
-    FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+    dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+    dbh()->commit();
     logmsg($id, 1, "$user froze message");
-    FYR::DB::dbh()->commit();
     return 0;
 }
 
@@ -1471,9 +1473,9 @@ USER is the administrator's name.
 =cut
 sub admin_thaw_message ($$) {
     my ($id, $user) = @_;
-    FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    dbh()->commit();
     logmsg($id, 1, "$user thawed message");
-    FYR::DB::dbh()->commit();
     notify_daemon();
     return 0;
 }
@@ -1487,12 +1489,12 @@ administrator's name.
 =cut
 sub admin_set_message_to_error ($$) {
     my ($id, $user) = @_;
-    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    my ($curr_state, $curr_frozen) = dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
     if ($curr_state ne 'error') {
         state($id, 'error');
     }
+    dbh()->commit();
     logmsg($id, 1, "$user put message in state 'error'");
-    FYR::DB::dbh()->commit();
     return 0;
 }
 
@@ -1504,12 +1506,12 @@ constituent is not told. USER is the administrator's name.
 =cut
 sub admin_set_message_to_failed ($$) {
     my ($id, $user) = @_;
-    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    my ($curr_state, $curr_frozen) = dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
     if ($curr_state ne 'failed') {
         state($id, 'failed');
     }
+    dbh()->commit();
     logmsg($id, 1, "$user put message in state 'failed'");
-    FYR::DB::dbh()->commit();
     return 0;
 }
 
@@ -1521,13 +1523,13 @@ dealt with by an administrator. USER is the administrator's name.
 =cut
 sub admin_set_message_to_failed_closed ($$) {
     my ($id, $user) = @_;
-    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    my ($curr_state, $curr_frozen) = dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
     if ($curr_state ne 'failed_closed') {
         state($id, 'failed_closed');
     }
-    FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
+    dbh()->commit();
     logmsg($id, 1, "$user put message in state 'failed_closed'");
-    FYR::DB::dbh()->commit();
     return 0;
 }
 
@@ -1541,8 +1543,8 @@ administrator making the change.
 sub admin_set_message_to_bounce_wait ($$) {
     my ($id, $user) = @_;
     state($id, 'bounce_wait');
+    dbh()->commit();
     logmsg($id, 1, "$user put message in state 'bounce_wait'");
-    FYR::DB::dbh()->commit();
     return 0;
 }
 
@@ -1567,8 +1569,8 @@ administrator making the change.
 sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
     state($id, 'ready');
+    dbh()->commit();
     logmsg($id, 1, "$user put message in state 'ready'");
-    FYR::DB::dbh()->commit();
     notify_daemon();
     return 0;
 }
