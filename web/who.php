@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.18 2004-10-28 10:53:19 francis Exp $
+ * $Id: who.php,v 1.19 2004-10-29 10:26:34 chris Exp $
  * 
  */
 
@@ -25,7 +25,8 @@ session_destroy();
 // Input data
 $fyr_postcode = get_http_var('pc');
 debug("FRONTEND", "postcode is $fyr_postcode");
-fyr_rate_limit(array('pc' => $fyr_postcode));
+debug_timestamp();
+fyr_rate_limit(array('postcode' => $fyr_postcode));
 
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
@@ -34,6 +35,33 @@ if ($fyr_error_message = mapit_get_error($voting_areas)) {
     include "templates/generalerror.html";
     exit;
 }
+debug_timestamp();
+
+$voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
+if ($fyr_error_message = mapit_get_error($voting_areas_info)) {
+    include "templates/generalerror.html";
+    exit;
+}
+debug_timestamp();
+
+$area_representatives = dadem_get_representatives(array_values($voting_areas));
+if ($fyr_error_message = dadem_get_error($area_representatives)) {
+    include "templates/generalerror.html";
+    exit;
+}
+debug_timestamp();
+
+$all_representatives = array();
+foreach (array_values($area_representatives) as $rr) {
+    $all_representatives = array_merge($all_representatives, $rr);
+}
+$representatives_info = dadem_get_representatives_info($all_representatives);
+if ($fyr_error_message = dadem_get_error($representatives_info)) {
+    include "templates/generalerror.html";
+    exit;
+}
+
+debug_timestamp();
 
 // For each voting area, find all the representatives.  Put descriptive
 // text and form text in an array for the template to render.
@@ -41,22 +69,17 @@ $fyr_representatives = array();
 foreach ($voting_areas as $va_type => $va_specificid) {
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     debug("FRONTEND", "voting area is type $va_type id $va_specificid");
-    $va_info = mapit_get_voting_area_info($va_specificid);
-    if ($fyr_error_message = mapit_get_error($va_info)) {
-        include "templates/generalerror.html";
-        exit;
-    }
+    $va_info = $voting_areas_info[$va_specificid];
 
     // The elected body is the overall entity. e.g. Cambridgeshire County Council.
     $eb_type = $va_inside[$va_type];
     $eb_specificid = $voting_areas[$eb_type];
     debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
-    $eb_info = mapit_get_voting_area_info($eb_specificid);
-    if ($fyr_error_message = mapit_get_error($eb_info)) {
+    $eb_info = $voting_areas_info[$eb_specificid];
+    if ($eb_info == null)
         // No parent elected body - for now we skip it
         // (Will have to do something about London mayor)
         continue;
-    }
     
     // Lookup table of long description XXX should copy these out of Whittaker's
     // Almanac or whatever.
@@ -86,13 +109,9 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     }
 
     // Count representatives
-    $representatives = dadem_get_representatives($va_specificid);
-    if ($fyr_error_message = dadem_get_error($representatives)) {
-        include "templates/generalerror.html";
-        exit;
-    }
+    $representatives = $area_representatives[$va_specificid];
     $rep_count = count($representatives);
-    
+
     // Create HTML
     if ($rep_count > 1) {
         $left_column = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
@@ -117,11 +136,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     // Rest of representatives
     foreach ($representatives as $rep_specificid) {
         ++$c;
-        $rep_info = dadem_get_representative_info($rep_specificid);
-        if ($fyr_error_message = dadem_get_error($rep_info)) {
-            include "templates/generalerror.html";
-            exit;
-        }
+        $rep_info = $representatives_info[$rep_specificid];
         $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b><br>'
             . $rep_info['party'], $rep_specificid);
     }
@@ -133,10 +148,13 @@ foreach ($voting_areas as $va_type => $va_specificid) {
     $right_column .= $fyr_form_renderer->toHtml();
 
     array_push($fyr_representatives, array($left_column, $right_column));
+
+    debug_timestamp();
 }
 
 // Display page, using all the fyr_* variables set above.
 include "templates/who.html";
 
+    debug_timestamp();
 ?>
 
