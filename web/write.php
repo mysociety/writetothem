@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.72 2005-02-13 14:17:56 francis Exp $
+ * $Id: write.php,v 1.73 2005-02-15 10:39:44 chris Exp $
  * 
  */
 
@@ -192,6 +192,15 @@ function submitFax() {
         template_show_error("Sorry, but your message is a bit too long
         for our service.  Please make it shorter, or contact your
         representative by some other means.");
+    }
+
+    /* Check that they've come back with a valid message ID. Really we should
+     * be verifying all the data that we've retrieved from the browser with a
+     * hash, but in this case it doesn't matter. */
+    if (!preg_match("/^[0-9a-f]{20}$/i", $msgid)) {
+        template_show_error('Sorry, but your browser seems to be transmitting
+            erroneous data to us. Please try again, or contact us at
+            <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
     }
 
     $result = msg_write($msgid, 
