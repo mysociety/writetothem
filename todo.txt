@@ -35,8 +35,17 @@ Remove spurious stuff from utility.php
 
 Put all emails from Perl in separate template files
 
+Name all PHP scripts without extension
+
 Later
 -----
 
 Get Mr/Mrs data for MPs
+
+mySociety
+---------
+
+make very master DNS for mySociety domains.
+
+
 
