@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.19 2005-01-05 19:20:07 francis Exp $
+# $Id: AbuseChecks.pm,v 1.20 2005-01-07 14:21:18 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -81,29 +81,56 @@ sub check_similarity ($) {
     # Compute and save hash of this message.
     my $h = FYR::SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
     FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
+
     # Horrid. To insert a value into a BYTEA column we need to do a little
     # parameter-binding dance:
     my $s = FYR::DB::dbh()->prepare(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#);
     $s->bind_param(1, $msg->{id});
     $s->bind_param(2, Storable::nfreeze($h), { pg_type => DBD::Pg::PG_BYTEA });
     $s->execute();
-    # Retrieve hashes of other messages and compare them.
-    my $stmt = FYR::DB::dbh()->prepare(q#select message_id, data from message_extradata where message_id <> ? and name = 'substringhash'#);
-    $stmt->execute($msg->{id});
+
+    # Retrieve hashes of other messages and compare them. We don't want to
+    # compare this message to others sent by the same individual to other
+    # representatives, since it is legitimate for one person to copy a message
+    # to (e.g.) all of their MEPs. We compare individuals by comparing postcode
+    # and sending email address (so we should catch people spamming by using
+    # lots of postcodes to send a single message to several MPs).
+    my $stmt = FYR::DB::dbh()->prepare(q#
+        select message_id, sender_postcode, sender_email, data
+            from message, message_extradata
+           where message.id = message_extradata.message_id
+             and message_id <> ?
+             and recipient_id <> ?
+             and message_extradata.name = 'substringhash'
+        #);
+    $stmt->execute($msg->{id}, $msg->{recipient_id});
     my $thr = mySociety::Config::get('MAX_MESSAGE_SIMILARITY');
     my @similar = ( );
-    while (my ($id2, $h2) = $stmt->fetchrow_array()) {
+
+    my $pc = uc($msg->{sender_postcode});
+    $pc =~ s#\s##g;
+    my $email = lc($msg->{sender_email});
+    $email =~ s#\s##g;
+
+    while (my ($id2, $pc2, $email2, $h2) = $stmt->fetchrow_array()) {
+        $email2 =~ s#\s##g;
+        $pc2 =~ s#\s##g;
+        next if ($email eq $email2 and $pc eq $pc2);
+
         $h2 = Storable::thaw($h2);
         my $similarity = FYR::SubstringHash::similarity($h, $h2);
         push(@similar, [$id2, $similarity]) if ($similarity > $thr);
     }
+
     return 0 unless (@similar);
+
     @similar = sort { $b->[1] <=> $a->[1] } @similar;
     my $why = sprintf("Message body is very similar to $similar[0]->[0] (%.2f similar)", 
         $similar[0]->[1]);
     for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
         $why .= sprintf(", $similar[$i]->[0] (%.2f similar)", $similar[$i]->[1]);
     }
+
     $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
     return $why;
 }
