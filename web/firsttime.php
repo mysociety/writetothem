@@ -1,12 +1,13 @@
 <?
 /*
+ * firsttime.php:
  * Record answer to question about whether this is the first time the
  * constituent has contacted an elected representative.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: firsttime.php,v 1.1 2004-12-15 15:35:04 francis Exp $
+ * $Id: firsttime.php,v 1.2 2005-01-21 17:37:15 chris Exp $
  * 
  */
 
@@ -32,9 +33,9 @@ if (rabx_is_error($result)) {
     template_show_error($result->text);
 }
 if ($answer == "yes") {
-    template_draw("firsttime-yes", $values);
+    template_draw("firsttime-yes");
 } elseif ($answer == "no") {
-    template_draw("firsttime-no", $values);
+    template_draw("firsttime-no");
 } else {
     template_show_error("Unknown answer.");
 }
