@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.115 2005-01-31 11:50:02 chris Exp $
+# $Id: Queue.pm,v 1.116 2005-01-31 11:54:16 chris Exp $
 #
 
 package FYR::Queue;
@@ -1206,7 +1206,7 @@ sub admin_message_events ($;$) {
                     select message_id, whenlogged, state, message, exceptional
                       from message_log
                      where message_id = ? ' . ($imp ? 'and exceptional' : '') .
-                    'order by order_id');
+                   ' order by order_id');
     $sth->execute($id);
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1283,7 +1283,8 @@ sub admin_get_queue ($$) {
     } elsif ($filter eq 'failing') {
         $where = q#
             where (state = 'ready' and not frozen and numactions > 0)
-                  or state = 'failed'#;
+                  or state = 'failed'
+            order by recipient_id, created desc#;
     } elsif ($filter eq 'frozen') {
         $where = q#
             where frozen = 't'
