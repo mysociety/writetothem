@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.22 2004-11-02 16:42:53 chris Exp $
+ * $Id: write.php,v 1.23 2004-11-08 18:09:31 francis Exp $
  * 
  */
 
@@ -129,15 +129,15 @@ function renderForm($form, $pageName)
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
     if ($pageName == "writeForm") {
         $fyr_title = "Now Write Your Message To ${fyr_representative['name']} ${fyr_voting_area['rep_name']} for ${fyr_voting_area['name']}";
-        include "templates/write-write.html";
+        include "../templates/write-write.html";
     } else { // previewForm
         // Generate preview
         $fyr_title = "Check Your Message Is Right";
         ob_start();
-        include "templates/fax-content.html";
+        include "../templates/fax-content.html";
         $fyr_preview = ob_get_contents();
         ob_end_clean();
-        include "templates/write-preview.html";
+        include "../templates/write-preview.html";
     }
 }
 
@@ -161,7 +161,7 @@ function submitFax() {
     if (!in_array($verify_rep_info['voting_area'], $verify_voting_areas)) {
        $fyr_error_message = "There's been a mismatch error.  Sorry about
        this, <a href=\"/\">please start again</a>.";
-       include "templates/generalerror.html";
+       include "../templates/generalerror.html";
        exit;
     }
 
@@ -173,14 +173,18 @@ function submitFax() {
             'phone' => $fyr_values['writer_phone'], 
             ),
             $fyr_values['who'], $fyr_values['body']);
+    if ($fyr_error_message = msg_get_error($success)) {
+        include "../templates/generalerror.html";
+        exit;
+    }
 
     global $fyr_representative, $fyr_voting_area, $fyr_date, $fyr_title;
     if ($success) {
         $fyr_title = "Great! Now Check Your Email";
-        include "templates/write-checkemail.html";
+        include "../templates/write-checkemail.html";
     } else {
         $fyr_error_message = "Failed to queue the message";  // TODO improve this error message
-        include "templates/generalerror.html";
+        include "../templates/generalerror.html";
     }
 }
 
@@ -194,7 +198,7 @@ $fyr_who = $fyr_values['who'];
 $fyr_date = strftime('%A %e %B %Y');
 if (!isset($fyr_postcode) || !isset($fyr_who)) {
     $fyr_error_message = "Please <a href=\"/\">start from the beginning</a>.";
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 
@@ -205,6 +209,10 @@ fyr_rate_limit(array('postcode' => $fyr_postcode, 'who' => $fyr_who));
 $msgid = $fyr_values['fyr_msgid'];
 if (!isset($msgid)) {
     $msgid = msg_create();
+    if ($fyr_error_message = msg_get_error($msgid)) {
+        include "../templates/generalerror.html";
+        exit;
+    }
     $fyr_values['fyr_msgid'] = $msgid;
 }
 
@@ -212,13 +220,13 @@ if (!isset($msgid)) {
 debug("FRONTEND", "Representative $fyr_who");
 $fyr_representative = dadem_get_representative_info($fyr_who);
 if ($fyr_error_message = dadem_get_error($fyr_representative)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
 $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
 if ($fyr_error_message = mapit_get_error($fyr_voting_area)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 
@@ -260,7 +268,7 @@ else if ($on_page =="sendfax") {
     submitFax();
 } else {
     $fyr_error_message = "On an unknown page";
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 

@@ -6,19 +6,35 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.9 2004-10-25 15:21:31 francis Exp $
+ * $Id: queue.php,v 1.10 2004-11-08 18:09:30 francis Exp $
  * 
  */
 
-include_once('../../phplib/simplexmlrpc.php');
+include_once('../../phplib/rabx.php');
 include_once('../../phplib/utility.php');
+
+/* Error codes */
+define('FYR_QUEUE_', 2001);        /* */
+
+/* msg_get_error R
+ * Return FALSE if R indicates success, or an error string otherwise. */
+function msg_get_error($e) {
+    if (!rabx_is_error($e))
+        return FALSE;
+    else
+        return $e->text;
+}
+
+
+$fyr_queue_client = new RABX_Client(OPTION_FYR_QUEUE_URL);
 
 /* msg_create
  * Return a string ID for a new outgoing fax/email message. */
 function msg_create() {
+    global $fyr_queue_client;
     debug("QUEUE", "Getting new message ID");
-    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.create', array());
-    debug("QUEUE", "New ID is $result");
+    $result = $fyr_queue_client->call('FYR.Queue.create', array());
+    debug("QUEUE", "New ID is", $result);
     return $result;
 }
 
@@ -32,8 +48,9 @@ function msg_create() {
  * characters for line breaks. All strings must be encoded in UTF-8.
  * Returns true on success or false on failure. */
 function msg_write($id, $sender, $recipient_id, $text) {
+    global $fyr_queue_client;
     debug("QUEUE", "Writing new message id $id to $recipient_id", $sender);
-    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.write', array($id, $sender, $recipient_id, $text));
+    $result = $fyr_queue_client->call('FYR.Queue.write', array($id, $sender, $recipient_id, $text));
     debug("QUEUE", "Result:", $result);
     if (is_array($result)) // TODO replace this with better error handling code
         return false;
@@ -44,8 +61,9 @@ function msg_write($id, $sender, $recipient_id, $text) {
  * Return some secret data suitable for use in verifying transactions
  * associated with a message. */
 function msg_secret() {
+    global $fyr_queue_client;
     debug("QUEUE", "Getting secret");
-    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.secret', array());
+    $result = $fyr_queue_client->call('FYR.Queue.secret', array());
     debug("QUEUE", "Retrieved (very hush-hush) secret");
     return $result;
 }
@@ -55,8 +73,9 @@ function msg_secret() {
  * whatever, to the queue to confirm the user's email address. Returns true on
  * success or false on failure. */
 function msg_confirm_email($token) {
+    global $fyr_queue_client;
     debug("QUEUE", "Confirming email");
-    $result = sxr_call(OPTION_QUEUE_HOST, OPTION_QUEUE_PORT, OPTION_QUEUE_PATH, 'FYR.Queue.confirm_email', array($token));
+    $result = $fyr_queue_client->call('FYR.Queue.confirm_email', array($token));
     debug("QUEUE", "Result:", $result);
     return $result;
 }

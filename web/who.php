@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.20 2004-11-02 16:25:25 chris Exp $
+ * $Id: who.php,v 1.21 2004-11-08 18:09:30 francis Exp $
  * 
  */
 
@@ -32,21 +32,21 @@ fyr_rate_limit(array('postcode' => $fyr_postcode));
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 if ($fyr_error_message = mapit_get_error($voting_areas)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 debug_timestamp();
 
 $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
 if ($fyr_error_message = mapit_get_error($voting_areas_info)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 debug_timestamp();
 
 $area_representatives = dadem_get_representatives(array_values($voting_areas));
 if ($fyr_error_message = dadem_get_error($area_representatives)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 debug_timestamp();
@@ -57,7 +57,7 @@ foreach (array_values($area_representatives) as $rr) {
 }
 $representatives_info = dadem_get_representatives_info($all_representatives);
 if ($fyr_error_message = dadem_get_error($representatives_info)) {
-    include "templates/generalerror.html";
+    include "../templates/generalerror.html";
     exit;
 }
 
@@ -156,7 +156,7 @@ foreach ($voting_areas as $va_type => $va_specificid) {
 }
 
 // Display page, using all the fyr_* variables set above.
-include "templates/who.html";
+include "../templates/who.html";
 
     debug_timestamp();
 ?>
