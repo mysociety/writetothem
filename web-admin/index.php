@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.7 2004-12-17 14:34:36 francis Exp $
+ * $Id: index.php,v 1.8 2004-12-20 18:03:47 francis Exp $
  * 
  */
 
@@ -16,8 +16,7 @@ require_once "../../phplib/admin.php";
 $pages = array(
     new ADMIN_PAGE_FYR_QUEUE,
     new ADMIN_PAGE_RATTY,
-    new ADMIN_PAGE_MAPIT,
-    new ADMIN_PAGE_DADEM,
+    new ADMIN_PAGE_REPS,
     null, // space separator on menu
     new ADMIN_PAGE_SERVERINFO,
     new ADMIN_PAGE_CONFIGINFO,
