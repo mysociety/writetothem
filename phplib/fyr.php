@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.20 2005-01-13 15:44:24 francis Exp $
+ * $Id: fyr.php,v 1.21 2005-01-18 21:05:11 francis Exp $
  * 
  */
 
@@ -30,11 +30,17 @@ template_set_style("../templates/website");
 
 /* fyr_display_error NUMBER MESSAGE
  * Display an error message to the user. */
-function fyr_display_error($num, $message) {
+function fyr_display_error($num, $message, $file, $line, $context) {
     /* Nuke any existing page output to display the error message. */
     if (OPTION_PHP_DEBUG_LEVEL == 0)
         ob_clean();
-    template_show_error($message);
+    if (OPTION_FYR_REFLECT_EMAILS) {
+        template_show_error("<strong>$message</strong> in $file:$line");
+    } else {
+        /* Message will be in log file, don't display it for cleanliness */
+        template_show_error("Please try again later, or <a
+            href=\"mailto:help@writetothen.com\">email us</a> to let us know.");
+    }
 }
 
 err_set_handler_display('fyr_display_error');
