@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.128 2005-02-10 18:11:03 chris Exp $
+# $Id: Queue.pm,v 1.129 2005-02-11 09:56:37 chris Exp $
 #
 
 package FYR::Queue;
@@ -1136,6 +1136,7 @@ my %state_action = (
             if ($dosend) {
                 my $result = send_questionnaire_email($id, $reminder);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                    logmsg($id, 1, "sent questionnaire " . ($reminder ? 'reminder ' : '') . "email");
                     state($id, 'sent');
                 } # should trap hard error case
             }
