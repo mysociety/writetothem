@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.15 2005-01-05 14:25:56 chris Exp $
+# $Id: AbuseChecks.pm,v 1.16 2005-01-05 14:43:37 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -19,7 +19,7 @@ use Storable;
 
 use mySociety::Config;
 
-use FYR::DB;
+use FYR;
 use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
@@ -77,7 +77,7 @@ sub check_similarity ($) {
     my ($msg) = @_;
     # Compute and save hash of this message.
     my $h = SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
-    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id})
+    FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
     FYR::DB::dbh()->do(q#insert into message_extradata (message_id, name, data) values (?, 'substringhash', ?)#, {}, $msg->{id}, Storable::nfreeze($h));
     # Retrieve hashes of other messages and compare them.
     my $stmt = FYR::DB::dbh()->prepare(q#select message_id, data from message_extradata where message_id <> ? and name = 'substringhash'#);
@@ -91,7 +91,7 @@ sub check_similarity ($) {
     }
     return 0 unless (@similar);
     @similar = sort { $b->[1] <=> $a->[1] } @similar;
-    my $why = "Message body is very similar to #$similar[0]->[0]"
+    my $why = "Message body is very similar to #$similar[0]->[0]";
     for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
         $why .= ", $similar[$i]->[0]";
     }
