@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.16 2004-12-30 12:33:39 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.17 2004-12-30 12:49:08 francis Exp $
  * 
  */
 
@@ -198,13 +198,13 @@ All time stats:
             $this->print_events($recents);
 
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
+            if ($message['state'] == 'failed')
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if ($message['frozen']) {
-                if ($message['state'] != 'error' and $message['state'] != 'failed')
+                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
-                if ($message['state'] != 'failed')
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Failed');
-                if ($message['state'] != 'failed_closed')
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Closed');
+                if ($message['state'] != 'failed' and $message['state'] != 'failed_closed')
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail');
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
             }
@@ -226,8 +226,8 @@ All time stats:
 (such as confirmation message) still happens
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
 <br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
-<br><b>failed</b> rejects a message, with no email to the constituent.
-<br><b>closed</b> marks a failed message so it doesn't appear in important list any more.
+<br><b>fail</b> rejects a message, with no email to the constituent.
+<br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <?
          } else {
