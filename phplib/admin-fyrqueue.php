@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.42 2005-01-12 12:56:01 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.43 2005-01-12 14:19:56 francis Exp $
  * 
  */
 
@@ -50,6 +50,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
 <th>Client IP / <br> Referrer</th>
 <th>Length (chars)</th>
 </tr>
+<form action="<?=new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto')) ?>" method="post">
 <?
 	$c = 1;
             foreach ($messages as $message) {
@@ -112,18 +113,35 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                         htmlspecialchars($simple_ref) . "</a><br>" .
                  "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
+                print '<td><input type="checkbox" name="check_' .  $message['id'] . '"
+                    onclick="this.parentNode.parentNode.className=this.checked
+                    ? \'h\' : \''.($c==1?'v':'').'\'" >';
                 print "</tr>";
+                # this.checked this .className=
 
                 if (array_key_exists('diff', $message)) {
                     print '<tr'.($c==1?' class="v"':'').'>';
-                    print "<td colspan=8><b>Differences:</b>";
+                    print "<td colspan=9><b>Differences:</b>";
                     print $message['diff'];
                     print "</td></tr>";
                 }
 
                 $c = 1 - $c;
             }
+            if (count($messages) > 1) {
+?><tr><td colspan=9><b>Ticked items:</b>
+        <input name="freeze" value="Freeze" type="submit" />
+        <input name="thaw" value="Thaw" type="submit" />
+        <input name="error" value="Error" type="submit" />
+        <input name="failed" value="Fail" type="submit" /> 
+        <input name="failed_closed" value="Fail Close" type="submit" /> 
+        &nbsp; <input size="20" name="notebody" type="text" /> 
+        <input name="note" value="Add Comment" type="submit" />
+</td><tr>
+<?
+    }
 ?>
+</form>
 </table>
 <?
     }
@@ -151,48 +169,52 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <?
     }
 
+    function do_actions($id) {
+        // Freeze or thaw messages
+        if (get_http_var('freeze')) {
+            $result = msg_admin_freeze_message($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id frozen</i></b></p>";
+        } else if (get_http_var('thaw')) {
+            $result = msg_admin_thaw_message($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id thawed</i></b></p>";
+        } else if (get_http_var('error')) {
+            $result = msg_admin_set_message_to_error($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id moved to error state</i></b></p>";
+        } else if (get_http_var('failed')) {
+            $result = msg_admin_set_message_to_failed($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id moved to failed state</i></b></p>";
+        } else if (get_http_var('failed_closed')) {
+            $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
+        } else if (get_http_var('bounce_wait')) {
+            $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
+        } else if (get_http_var('note')) {
+            $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
+            msg_check_error($result);
+            print "<p><b><i>Note added to message $id</i></b></p>";
+        }
+    }
+
     function display($self_link) {
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
         $view = get_http_var('view');
         $id = get_http_var("id");
-        
+
+
         // Display about id
         if ($id) {
+            $this->do_actions($id);
+
             print "<h2><a href=\"$self_link\">[Back to Message List]</a></h2></h2>";
-
-            // Freeze or thaw messages
-            if (get_http_var('freeze')) {
-                $result = msg_admin_freeze_message($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id frozen</i></b></p>";
-            } else if (get_http_var('thaw')) {
-                $result = msg_admin_thaw_message($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id thawed</i></b></p>";
-            } else if (get_http_var('error')) {
-                $result = msg_admin_set_message_to_error($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id moved to error state</i></b></p>";
-            } else if (get_http_var('failed')) {
-                $result = msg_admin_set_message_to_failed($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id moved to failed state</i></b></p>";
-            } else if (get_http_var('failed_closed')) {
-                $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
-            } else if (get_http_var('bounce_wait')) {
-                $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
-                msg_check_error($result);
-                print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
-            } else if (get_http_var('note')) {
-                $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
-                msg_check_error($result);
-                print "<p><b><i>Note added to message $id</i></b></p>";
-            }
-
 
             // Display general information
             print "<h2>Message id $id:</h2>";
@@ -298,7 +320,20 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 }
             }
          } else {
-            // Display general statistics
+            // Perform actions on checked items
+            $sender_emails = array();
+            foreach ($_POST as $k=>$v) {
+                if (stristr($k, "check_")) {
+                    $checkid = str_replace("check_", "", $k);
+                    $this->do_actions($checkid);
+                    $message = msg_admin_get_message($checkid);
+                    array_push($sender_emails, $message['sender_email']);
+                }
+            }
+            print "<p>In case you want to email the senders of those messages: " .
+                implode(",", array_unique($sender_emails));
+
+             // Display general statistics
             $stats = msg_admin_get_stats();
             if (msg_get_error($stats)) {
                 print "Error contacting queue:";
@@ -380,8 +415,6 @@ All time stats:
                 print "[Recently Changed] ";
             if ($filter == 4)
                 print "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
-
-
 # Too slow, doesn't really work, so disabled for now
 #            if ($filter != 0)
 #                print "<a href=\"$self_link&amp;view=all\">[Entire Queue]</a> ";
@@ -389,6 +422,7 @@ All time stats:
 #                print "[Entire Queue] ";
             print "</h2>";
 
+    
             $this->print_messages($messages);
             if ($filter == 2)
                 print "<p>...";

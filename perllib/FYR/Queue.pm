@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.86 2005-01-12 12:56:00 francis Exp $
+# $Id: Queue.pm,v 1.87 2005-01-12 14:19:56 francis Exp $
 #
 
 package FYR::Queue;
@@ -1206,10 +1206,9 @@ sub admin_get_queue ($$) {
         $sth2->execute($params->{msgid});
         $msg = $sth2->fetchrow_hashref();
         my @similar = FYR::AbuseChecks::get_similar_messages($msg);
-        $where = "where id in (" . join(",", map { '?' } @similar) .  ")";
         @params = map { $_->[0] } @similar;
-        $where .= " or id = ?";
         push @params, $params->{msgid};
+        $where = "where id in (" . join(",", map { '?' } @params) .  ")";
     }
     my $sth = FYR::DB::dbh()->prepare("select 
         created, id, laststatechange, state, frozen, numactions, lastaction,  
