@@ -1,4 +1,6 @@
-<? include "header.php"; ?>
+<?
+include "header.php";
+?>
 
 <H3>FaxYourRepresentative.com - Fax Or Email Your Democratic Representatives For Free</H3>
 
@@ -68,4 +70,15 @@
 	</TR>
 	</TABLE><P>
 
-<? include "footer.php"; ?>
+<? 
+
+/* Focus the postcode box. Must come after the box is created, obviously. */
+print "<script language=\"javascript\">\n"
+    . "<!--\n"
+    . javascript_focus_set("postcodeForm", "pc") . "\n"
+    . "// -->\n"
+    . "</script>";
+
+include "footer.php";
+
+?>
