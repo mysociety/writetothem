@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.57 2004-12-16 12:16:17 francis Exp $
+# $Id: Queue.pm,v 1.58 2004-12-16 14:21:12 chris Exp $
 #
 
 package FYR::Queue;
@@ -1004,7 +1004,8 @@ my %state_action = (
                 } # should trap hard error case
             }
          
-            # If we've had the message for long enough, then 
+            # If we've had the message for long enough, then scrub personal
+            # information and mark it finished.
             if ($msg->{dispatched} < (time() - MESSAGE_RETAIN_TIME)) {
                 state($id, 'finished');
             }
@@ -1068,7 +1069,10 @@ sub process_queue ($$) {
             if ($msg->{state} eq $state
                 and (!defined($msg->{lastaction})
                     or $msg->{lastaction} < time() - $state_action_interval{$state})) {
-                &{$state_action{$state}}($email, $fax, $id);
+                # Check for ready+frozen again.
+                if (!$msg->{frozen} or $msg->{state} ne 'ready') {
+                    &{$state_action{$state}}($email, $fax, $id);
+                }
             }
         } catch FYR::Error with {
             my $E = shift;
@@ -1114,8 +1118,7 @@ sub admin_recent_events ($) {
 
 =item admin_message_events ID
 
-Returns an array of hashes of information about events for given message
-ID.
+Returns an array of hashes of information about events for given message ID.
 
 =cut
 sub admin_message_events ($) {
