@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.9 2005-01-29 10:38:50 chris Exp $
+# $Id: Fax.pm,v 1.10 2005-01-30 13:30:27 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -392,8 +392,12 @@ sub deliver ($) {
     $f->print("$$\n");
 
     my @imgfiles;
+    my %unsent;
     try {
         @imgfiles = make_representative_fax($msg);
+        %unsent = map { $_ => 1 } @imgfiles;
+
+        FYR::Queue::logmsg($id, 0, "messages has " . scalar(@imgfiles) . " page/s; files are: " . join(", ", @imgfiles));
 
         my $number = $msg->{recipient_fax};
 
@@ -429,7 +433,7 @@ sub deliver ($) {
                 # warnings and progress information on standard output. This
                 # makes life slightly easier for us, since we can then use
                 # pipe_via to process the error stream.
-                '-v', '',       
+                '-v', '',
                 '-v', 'ewi',
                 '-t', $number,
                 @imgfiles
@@ -448,6 +452,10 @@ sub deliver ($) {
         while (defined(my $line = $rd->getline())) {
             chomp($line);
             FYR::Queue::logmsg($id, 0, "efax output: $line");
+            # Record the pages which efax believes it's sent.
+            if ($line =~ m#efax: \d+:\d+ sent -> (.+)#) {
+                delete($unsent{$_});
+            }
         }
         if ($rd->error()) {
             throw FYR::Fax::SoftError("read from efax: $!");
@@ -490,12 +498,20 @@ sub deliver ($) {
         }
     } catch FYR::Fax::HardError with {
         my $E = shift;
-        FYR::Queue::logmsg($id, 1, $E->text());
         $ret = FAX_HARD_ERROR;
+        FYR::Queue::logmsg($id, 1, $E->text());
+        if (0 == keys(%unsent)) {
+            FYR::Queue::logmsg($id, 1, "however all pages were apparently sent; assuming success");
+            $ret = FAX_SUCCESS;
+        } 
     } catch FYR::Fax::SoftError with {
         my $E = shift;
-        FYR::Queue::logmsg($id, 1, $E->text());
         $ret = FAX_SOFT_ERROR;
+        FYR::Queue::logmsg($id, 1, $E->text());
+        if (0 == keys(%unsent)) {
+            FYR::Queue::logmsg($id, 1, "however all pages were apparently sent; assuming success");
+            $ret = FAX_SUCCESS;
+        } 
     } finally {
         # whatever happens, nuke the lockfile and all the image files.
         foreach ($lockfilename, @imgfiles) {
