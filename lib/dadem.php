@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: dadem.php,v 1.20 2004-10-06 16:22:49 francis Exp $
+ * $Id: dadem.php,v 1.21 2004-10-06 17:11:46 chris Exp $
  * 
  */
 
@@ -73,41 +73,8 @@ function dadem_get_representatives($va_id) {
  * voting_area, the id of the voting area they represent.
  * On failure, returns an error code. */
 function dadem_get_representative_info($rep_id) {
-    /* XXX extend this with further stub data. */
-    $stub_data = array(
-        1 => array('name' => 'Maurice Leeke', 'type' => VA_CED, 'voting_area' => 2,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'Maurice.Leeke@cambridgeshire.gov.uk'),
-        2 => array('name' => 'Diane Armstrong', 'type' => VA_DIW, 'voting_area' => 4,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'diane_armstrong@tiscali.co.uk'),
-        3 => array('name' => 'Max Boyce','type' => VA_DIW, 'voting_area' => 4,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'maxboyce@cix.co.uk'),
-        4 => array('name' => 'Ian Nimmo-Smith','type' => VA_DIW, 'voting_area' => 4,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ian@monksilver.com'),
-        5 => array('name' => 'Anne Campbell','type' => VA_WMC, 'voting_area' => 6,
-                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441223311315'),
-        6 => array('name' => 'Geoffrey Van Orden','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+3222849332'),
-        7 => array('name' => 'Jeffrey Titford','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441245252071'),
-        8 => array('name' => 'Richard Howitt','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'richard.howitt@geo2.poptel.org.uk'),
-        9 => array('name' => 'Robert Sturdy','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'rsturdy@europarl.eu.int'),
-        10 => array('name' => 'Andrew Duff','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'mep@andrewduffmep.org'),
-        11 => array('name' => 'Christopher Beazley','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_FAX, 'fax' => '+441920485805'),
-        12 => array('name' => 'Tom Wise','type' => VA_EUR, 'voting_area' => 8,
-                'contact_method' => DADEM_CONTACT_EMAIL, 'email' => 'ukipeast@globalnet.co.uk')
-    );
-    $ret = $stub_data[$rep_id];
-    if (!isset($ret)) {
-        debug("DADEM", "Representative not found id $rep_id");
-        return DADEM_REP_NOT_FOUND;
-    }
-    debug("DADEM", "Looked up info for representative id $rep_id");
-    debug("DADEMRESULT", "Results:", $ret);
-    return $ret;
+    debug("DADEM", "Looking up info on representative id $rep_id");
+    return sxr_call(OPTION_DADEM_HOST, OPTION_DADEM_PORT, OPTION_DADEM_PATH, 'DaDem.get_representative_info', array($rep_id));
 }
 
 ?>
