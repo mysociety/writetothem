@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.118 2005-01-31 20:31:14 chris Exp $
+# $Id: Queue.pm,v 1.119 2005-02-03 09:55:48 francis Exp $
 #
 
 package FYR::Queue;
@@ -1238,15 +1238,18 @@ All messages on the queue.
 
 =item important
 
-Messages which may need operator attention.
+Messages which may need operator attention.  Exactly the same set of messages
+as the 'failing' and 'frozen' sets combined.
 
 =item failing
 
-Messages which are failing or have failed to be delivered, for any reason.
+Messages which are failing or have failed to be delivered, which have not
+been frozen.  Combined with 'frozen' makes all 'important' messages.
 
 =item frozen
 
-Messages which are frozen in states new, pending or ready.
+Messages which are frozen in states new, pending or ready.  Combined
+with 'failing' makes all 'important' messages.
 
 =item recentchanged
 
@@ -1283,20 +1286,21 @@ sub admin_get_queue ($$) {
                     or state = 'failed'
                     or state = 'error'
                     or (state = 'ready' and numactions > 0)
-                or frozen = 't')
+                    or frozen = 't')
             order by created desc#;
         # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
         # index to do the scan. q.v. comments on the end of,
         #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
     } elsif ($filter eq 'failing') {
         $where = q#
-            where (state = 'ready' and not frozen and numactions > 0)
-                  or state = 'failed'
+            where (state = 'bounce_confirm'
+                    or state = 'failed'
+                    or state = 'error'
+                    or (state = 'ready' and numactions > 0))
+                  and frozen = 'f' 
             order by recipient_id, created desc#;
     } elsif ($filter eq 'frozen') {
-        $where = q#
-            where frozen = 't'
-                  and (state = 'new' or state = 'pending' or state = 'ready')#;
+        $where = q# where frozen = 't' order by created desc#;
     } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc limit 100";
     } elsif ($filter eq 'recentcreated') {

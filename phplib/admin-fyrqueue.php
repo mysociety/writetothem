@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.66 2005-01-31 14:03:24 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.67 2005-02-03 09:55:49 francis Exp $
  * 
  */
 
@@ -47,6 +47,89 @@ class ADMIN_PAGE_FYR_QUEUE {
                 $text);
         return $text;
     }
+
+    function render_bar($view, $reverse, $id) {
+        if ($id) $view = "none";
+    
+        // Activity level
+        $stats = msg_admin_get_stats();
+        if (msg_get_error($stats)) {
+            print "Error contacting queue:";
+            print_r($stats);
+        }
+        print "<p>";
+        print "<b>" . $stats["created_1"] . "</b> new in hour, ";
+        print "<b>" . $stats["created_24"] . "</b> new in day... ";
+
+        // Quick referrers
+        $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
+        $freq_referrers_day = array(
+        array("http://www.faxyourmp.com/youandyourmp.php3", 7),
+        array("http://www.google.co.uk/search?hl=en&q=fax+your+mp&meta=", 4),
+        array("http://www.stophumantraffic.org/writemp.html", 2),
+        array("http://www.google.co.uk/search?hl=en&q=faxyourmp&meta=", 2),
+        array("http://www.google.co.uk/search?hl=en&client=firefox-a&rls=org.mozilla%3Aen-GB%3Aofficial_s&q=local+mp&btnG=Search&meta=", 2)
+        );
+        if (msg_get_error($freq_referrers_day)) {
+            print "Error contacting queue:";
+            print_r($freq_referrers_day);
+        }
+        print "top referrers: ";
+        foreach ($freq_referrers_day as $row) {
+            if (!preg_match('#^http://(www\.)?(google|faxyourmp|writetothem)\.#i', $row[0])) {
+                if ($row[1] > 1 && $row[0] != "") {
+                    print trim_url_to_domain($row[0]) . " $row[1], ";
+                }
+            }
+        }
+        print " <a href=\"$this->self_link&amp;view=statistics\">more stats...</a> ";
+
+        // Bar to change view
+        $qmenu = "";
+        $qmenu .= "[Frozen";
+        $qmenu .= ": ";
+        if ($view == 'frozen' and (!$reverse))
+            $qmenu .= "Newest ";
+        else
+            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen\">Newest</a> ";
+        $qmenu .= " | ";
+        if ($view == 'frozen' and ($reverse))
+            $qmenu .= "Oldest";
+        else
+            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen_rev\">Oldest</a>";
+        $qmenu .= "] ";
+
+        if ($view != 'failing')
+            $qmenu .= "<a href=\"$this->self_link&amp;view=failing\">[Failing]</a> ";
+        else
+            $qmenu .= "[Failing] ";
+
+        if ($view != 'recentcreated')
+            $qmenu .= "<a href=\"$this->self_link&amp;view=recentcreated\">[Recent Created]</a> ";
+        else
+            $qmenu .= "[Recent Created] ";
+            
+        if ($view != 'recentchanged')
+            $qmenu .= "<a href=\"$this->self_link&amp;view=recentchanged\">[Recent Changed]</a> ";
+        else
+            $qmenu .= "[Recent Changed] ";
+
+        if ($view  == 'similarbody')
+            $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
+
+        $qmenu .= "[Contains ";
+
+        $form = new HTML_QuickForm('searchForm', 'post', $this->self_link);
+        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
+        $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>12));
+        $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
+        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
+        $form->addGroup($searchgroup, "actiongroup", "",' ', false);
+        admin_render_form($form);
+
+    }
+
+
 
     /* print_messages MESSAGES [ID]
      * Print a table giving information about the MESSAGES (array of
@@ -265,7 +348,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
-        $view = get_http_var('view', 'important');
+        $view = get_http_var('view', 'failing');
         $id = get_http_var("id");
 
         // Display about id
@@ -275,7 +358,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 #               exit;
             }
 
-            print "<h2><a href=\"$self_link\">[Back to Message List]</a></h2></h2>";
+            // Navigation bar
+            $this->render_bar($view, false, $id);
 
             // Display general information
             print "<h2>Message id " . $this->make_ids_links($id) . ":</h2>";
@@ -388,6 +472,78 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     admin_render_form($form);
                 }
             }
+         } elseif ($view == 'statistics') {
+            // Display general statistics
+            $stats = msg_admin_get_stats();
+            if (msg_get_error($stats)) {
+                print "Error contacting queue:";
+                print_r($stats);
+            }
+
+            $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
+            if (msg_get_error($freq_referrers_day)) {
+                print "Error contacting queue:";
+                print_r($freq_referrers_day);
+            }
+
+            $freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
+            if (msg_get_error($freq_referrers_week)) {
+                print "Error contacting queue:";
+                print_r($freq_referrers_week);
+            }
+
+            // Navigation bar
+            $this->render_bar($view, false, $id);
+?>
+<h2>Queue statistics</h2>
+<p>
+<b><?=$stats["created_1"]?></b> new in last hour,
+<b><?=$stats["created_24"]?></b> new in last day
+</p>
+
+<h2>Messages in each state</h2>
+<table border=1>
+<?
+    foreach ($stats as $k=>$v) {
+        if (stristr($k, "state ")) {
+            print "<tr><td>";
+            print add_tooltip($k, $this->state_help_notes(str_replace("state ", "", $k)));
+            print "</td><td>$v</td></tr>\n";
+        }
+    }
+    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
+?>
+</table>
+<h2>Types of representatives</h2>
+<table border=1>
+<?
+    foreach ($stats as $k=>$v) {
+        if (stristr($k, "type ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
+    }
+    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
+?>
+</table>
+<h2>Top referrers in last day</h2>
+<table border=1>
+<?
+    foreach ($freq_referrers_day as $row) {
+        if ($row[1] > 1 && $row[0] != "") {
+            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
+        }
+    }
+?>
+</table>
+<h2>Top referrers in last week</h2>
+<table border=1>
+<?
+    foreach ($freq_referrers_week as $row) {
+        if ($row[1] > 1 && $row[0] != "") {
+            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
+        }
+    }
+?>
+</table>
+<?
          } else {
             // Perform actions on checked items
             $sender_emails = array();
@@ -409,85 +565,6 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     implode("<br>", array_unique($sender_full));
             }
 
-             // Display general statistics
-            $stats = msg_admin_get_stats();
-            if (msg_get_error($stats)) {
-                print "Error contacting queue:";
-                print_r($stats);
-            }
-
-            $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
-            if (msg_get_error($freq_referrers_day)) {
-                print "Error contacting queue:";
-                print_r($freq_referrers_day);
-            }
-/*            $freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
-            if (msg_get_error($freq_referrers_week)) {
-                print "Error contacting queue:";
-                print_r($freq_referrers_week);
-            } */
-
-
-?>
-<h2>
-Summary statistics: 
-<b><?=$stats["created_1"]?></b> new in last hour,
-<b><?=$stats["created_24"]?></b> new in last day
-</h2>
-<table>
-
-<tr><td>
-<table border=1>
-<?
-    foreach ($stats as $k=>$v) {
-        if (stristr($k, "state ")) {
-            print "<tr><td>";
-            print add_tooltip($k, $this->state_help_notes(str_replace("state ", "", $k)));
-            print "</td><td>$v</td></tr>\n";
-        }
-    }
-    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
-?>
-</table>
-</td>
-<td>
-<table border=1>
-<?
-    foreach ($stats as $k=>$v) {
-        if (stristr($k, "type ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
-    }
-    print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
-?>
-</table>
-</td>
-<td>
-<h3>top referrers last day</h3>
-<table border=1>
-<?
-    foreach ($freq_referrers_day as $row) {
-        if ($row[1] > 1 && $row[0] != "") {
-            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
-        }
-    }
-?>
-</table>
-</td>
-<!--<td>
-<h3>top referrers<br>last week</h3>
-<table border=1>
-<?
-/*    foreach ($freq_referrers_week as $row) {
-        if ($row[1] > 2 && $row[0] != "") {
-            print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
-        }
-    }*/
-?>
-</table>
-</td>-->
-</tr>
-</table>
-
-<?
             // Decide what message view to show
             $params = array();
             $reverse = false;
@@ -496,7 +573,7 @@ Summary statistics:
                 $reverse = true;
             }
             
-            /* Set up additional parameters for view if necessary. */
+            // Set up additional parameters for view if necessary.
             if ($view == "similarbody") {
                 $params['msgid'] = get_http_var('simto');
             } else if ($view == "search" || get_http_var('search')) {
@@ -504,7 +581,7 @@ Summary statistics:
                 $params['query'] = get_http_var('query');
             }
             
-            // Show it
+            // Get details about view
             $messages = msg_admin_get_queue($view, $params);
             if (msg_get_error($messages)) {
                 print "Error contacting queue:";
@@ -512,72 +589,27 @@ Summary statistics:
                 $messages = array();
             }
 
-            print "<h2>View messages which: ";
-            print "</h2>";
+            // Navigation bar
+            $this->render_bar($view, $reverse, $id);
 
-            $qmenu = "";
-            $qmenu .= "[Need Action ";
-            if ($view == 'important')
-                $qmenu .= count($messages);
-            $qmenu .= ": ";
-            if ($view == 'important' and (!$reverse))
-                $qmenu .= "Newest ";
-            else
-                $qmenu .= "<a href=\"$self_link&amp;view=important\">Newest</a> ";
-            $qmenu .= " | ";
-            if ($view == 'important' and ($reverse))
-                $qmenu .= "Oldest";
-            else
-                $qmenu .= "<a href=\"$self_link&amp;view=important_rev\">Oldest</a>";
-            $qmenu .= "] ";
-
-            if ($view != 'failing')
-                $qmenu .= "<a href=\"$self_link&amp;view=failing\">[Failing/failed]</a> ";
-            else
-                $qmenu .= "[Failing/failed] ";
-
-            if ($view != 'frozen')
-                $qmenu .= "<a href=\"$self_link&amp;view=frozen\">[Frozen]</a> ";
-            else
-                $qmenu .= "[Frozen] ";
-
-            if ($view != 'recentcreated')
-                $qmenu .= "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
-            else
-                $qmenu .= "[Recently Created] ";
-                
-            if ($view != 'recentchanged')
-                $qmenu .= "<a href=\"$self_link&amp;view=recentchanged\">[Recently Changed]</a> ";
-            else
-                $qmenu .= "[Recently Changed] ";
-
-            if ($view  == 'similarbody')
-                $qmenu .= "[Similar to " .  $this->make_ids_links($params['msgid']) . "] ";
-
-            $qmenu .= "[Contains ";
-            if ($view == 'search')
-                $qmenu .= count($messages) . " ";
-
-            $form = new HTML_QuickForm('searchForm', 'post', $self_link);
-            $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
-            $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>16));
-            $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
-            $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
-            $form->addGroup($searchgroup, "actiongroup", "",' ', false);
-            admin_render_form($form);
-
+            // Display messages
+            print "<h2>Messages which are $view " . count($messages) . ": </h2>";
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
             $this->print_messages($messages, $view == 'similarbody' ? $params['msgid'] : null);
             if ($view == 'recentchanged' or $view == 'recentcreated')
                 print "<p>..."; /* indicate that this isn't all the messages... */
+
+            // Help
             ?>
             <h2>Help &mdash; what views/searches are there?</h2>
             <p>
-            <b>Need Action, Newest/Oldest:</b> Message which need immediate administrator attention.
-            This is either to fix broken addresses, or handle possible cases of abuse.
-            Always shows all important messages, but can show newest or oldest first.
+            <b>Frozen, Newest/Oldest:</b> Message which are frozen, most likely
+            due to possible abuse.  Always shows all frozen messages, but can
+            show newest or oldest first.
+            <br><b>Failing:</b> Messages for which delivery is failing, most like
+            incorrect contact details.  Sorted by recipient.
             <br><b>Recently Created:</b> Most recent messages constituents have made.
             <br><b>Recently Changed:</b> Messages which something has happened to recently.
             <br><b>Similar to:</b> Shows messages with bodies similar to a given message.
@@ -597,6 +629,7 @@ Summary statistics:
             </p>
             <?
         }
+        if ($view != "statistics") {
 ?>
 <h2>Help &mdash; what do the buttons do?</h2>
 <?
@@ -628,6 +661,7 @@ Summary statistics:
 <p><img src="queue-state-machine.png"></p>
 
         <?
+        }
         }
     }
 }
