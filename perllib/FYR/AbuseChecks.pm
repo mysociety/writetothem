@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.44 2005-03-03 15:50:02 francis Exp $
+# $Id: AbuseChecks.pm,v 1.45 2005-03-03 15:53:16 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -279,7 +279,7 @@ sub test ($) {
         recipient_type => [$msg->{recipient_type}, "Type of voting area representative represents"],
 
         sender_addr => [$msg->{sender_addr}, "Postal address of constituent"],
-        sender_addr_nopostcode => [$sender_addr_nopostcode, "Postal address of constituent, without postcode"],
+        sender_addr_nopostcode => [$sender_addr_nopostcode, "Postal address of constituent, without any instances of their postcode"],
         sender_email => [$msg->{sender_email}, "Email address of constituent"],
         sender_ipaddr => [$msg->{sender_ipaddr}, "IP address of constituent"],
         sender_name => [$msg->{sender_name}, "Name of constituent"],
