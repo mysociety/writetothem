@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.18 2004-12-15 15:35:04 francis Exp $
+ * $Id: queue.php,v 1.19 2004-12-15 19:02:58 francis Exp $
  * 
  */
 
@@ -118,13 +118,29 @@ function msg_admin_recent_events($count) {
     return $result;
 }
 
-/* msg_admin_get_queue
- * Returns array of hashes of recent queue events. */
-function msg_admin_get_queue() {
+/* msg_admin_message_events
+ * Returns array of hashes of queue events for a particular message id. */
+function msg_admin_message_events($id) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array());
+    $result = $fyr_queue_client->call('FYR.Queue.admin_message_events', array($id));
     return $result;
 }
 
+/* msg_admin_get_queue FILTER
+ * Returns array of hashes of recent queue events. 
+ * Set FILTER to 0 for all events, or 1 for only important ones.*/
+function msg_admin_get_queue($filter) {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter));
+    return $result;
+}
+
+/* msg_admin_get_stats
+ * Returns hash of statistics about queue. */
+function msg_admin_get_stats() {
+    global $fyr_queue_client;
+    $result = $fyr_queue_client->call('FYR.Queue.admin_get_stats', array());
+    return $result;
+}
 
 ?>

@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.13 2004-12-07 12:50:57 chris Exp $
+-- $Id: schema.sql,v 1.14 2004-12-15 19:02:58 francis Exp $
 --
 
 set client_min_messages to error;
@@ -77,6 +77,7 @@ create table message (
     -- when the message was dispatched to the representative (UNIX time)
     dispatched integer
 );
+create index message_created_idx on message(created);
 
 -- message_log
 -- Events relating to each message.
@@ -88,6 +89,7 @@ create table message_log (
     state text not null,                        -- state of message when log item added
     message text not null
 );
+create index message_log_order_id_idx on message_log(order_id);
 
 -- questionnaire_answer
 -- Results of the questionnaire we send to users.

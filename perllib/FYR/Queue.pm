@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.53 2004-12-15 17:02:27 francis Exp $
+# $Id: Queue.pm,v 1.54 2004-12-15 19:02:58 francis Exp $
 #
 
 package FYR::Queue;
@@ -1081,11 +1081,54 @@ sub notify_daemon () {
 
 Returns an array of hashes of information about recent queue events.
 Specify the number of events you'd like.
-
 =cut
 sub admin_recent_events ($) {
     my ($count) = @_;
-    my $sth = FYR::DB::dbh()->prepare('select * from message_log order by order_id desc limit '. int($count));
+    my $sth = FYR::DB::dbh()->prepare('select message_id, whenlogged, state, message from message_log order by order_id desc limit ?');
+    $sth->execute(int($count));
+    my @ret;
+    while (my $hash_ref = $sth->fetchrow_hashref()) {
+        push @ret, $hash_ref;
+    }
+    return \@ret;
+}
+
+=item admin_message_events COUNT
+
+Returns an array of hashes of information about events for given message
+id.  Specify the message id.
+=cut
+sub admin_message_events ($) {
+    my ($id) = @_;
+    my $sth = FYR::DB::dbh()->prepare('select message_id, whenlogged, state, message from message_log where message_id = ? order by order_id');
+    $sth->execute($id);
+    my @ret;
+    while (my $hash_ref = $sth->fetchrow_hashref()) {
+        push @ret, $hash_ref;
+    }
+    return \@ret;
+}
+
+
+=item admin_get_queue FILTER
+
+Returns an array of hashes of information about each message on the queue.
+Set FILTER to 1 to get only important message, 0 to get all messages.
+
+=cut
+sub admin_get_queue ($) {
+    warn Dumper(@_);
+    my ($filter) = @_;
+    my $where = "";
+    if (int($filter) == 1) {
+        $where = "where (state = 'bounce_confirm' or state = 'failed' or
+        state = 'error' or (state = 'ready' and numactions > 0))";
+    }
+    my $sth = FYR::DB::dbh()->prepare('select 
+        created, id, laststatechange, state, numactions, lastaction,  
+        sender_name, sender_email, sender_postcode,
+        recipient_name, recipient_email, recipient_fax, recipient_type,
+        length(message) as message_length from message ' . $where . ' order by created desc');
     $sth->execute();
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
@@ -1096,18 +1139,30 @@ sub admin_recent_events ($) {
 
 =item admin_get_queue
 
-Returns an array of hashes of information about each message on the queue.
+Returns an hash of statistics about the queue.
 
 =cut
-sub admin_get_queue () {
+sub admin_get_stats () {
     () = @_;
-    my $sth = FYR::DB::dbh()->prepare('select * from message order by created desc');
-    $sth->execute();
-    my @ret;
-    while (my $hash_ref = $sth->fetchrow_hashref()) {
-        push @ret, $hash_ref;
+    my %ret;
+
+    my $rows = FYR::DB::dbh()->selectall_arrayref('select recipient_type, count(*) from message group by recipient_type', {});
+    foreach (@$rows) {
+        my ($type, $count) = @$_; 
+        $ret{'type '. $type} = $count;
     }
-    return \@ret;
+
+    $rows = FYR::DB::dbh()->selectall_arrayref('select state, count(*) from message group by state', {});
+    foreach (@$rows) {
+        my ($type, $count) = @$_; 
+        $ret{'state '. $type} = $count;
+    }
+
+    $ret{'message_count'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message', {}));
+    $ret{'created_1'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - 60*60*1)); 
+    $ret{'created_24'} = scalar(FYR::DB::dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - 60*60*24)); 
+
+    return \%ret;
 }
 
 1;
