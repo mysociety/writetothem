@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.84 2005-01-10 10:01:20 chris Exp $
+# $Id: Queue.pm,v 1.85 2005-01-11 16:59:15 francis Exp $
 #
 
 package FYR::Queue;
@@ -1175,16 +1175,19 @@ sub admin_message_events ($) {
 }
 
 
-=item admin_get_queue FILTER
+=item admin_get_queue FILTER PARAMS
 
 Returns an array of hashes of information about each message on the queue.
-FILTER should be: 0 to return all messages; 1 to return only information about
-messages which may need operator attention; 2 to return messages which recently
-changed state; or 3 to return messages which were created recently.
+FILTER should be: 
+    0 to return all messages; 
+    1 to return only information about messages which may need operator attention; 
+    2 to return messages which recently changed state; 
+    3 to return messages which were created recently; 
+PARAMS is a hash of parameters to the filter type.
 
 =cut
-sub admin_get_queue ($) {
-    my ($filter) = @_;
+sub admin_get_queue ($$) {
+    my ($filter, $params) = @_;
     my $where = "order by created desc";
     if (int($filter) == 1) {
         $where = "where (state = 'bounce_confirm' or state = 'failed' or

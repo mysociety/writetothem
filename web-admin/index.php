@@ -5,11 +5,11 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.8 2004-12-20 18:03:47 francis Exp $
+ * $Id: index.php,v 1.9 2005-01-11 16:59:15 francis Exp $
  * 
  */
 
-require_once "../phplib/fyr.php";
+require_once "../conf/general";
 require_once "../phplib/admin-fyrqueue.php";
 require_once "../../phplib/admin.php";
 
