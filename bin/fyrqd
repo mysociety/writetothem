@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.4 2004-12-06 16:38:15 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.5 2004-12-07 14:08:01 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -164,7 +164,7 @@ while ($foad == 0) {
             print_log('err', "fork: $!");
         } elsif ($pid == 0) {
             try {
-                run_daemon($num, $notifysock);
+                run_daemon($email, $fax, $num, $notifysock);
             } catch Error with {
                 my $E = shift;
                 print_log('err', "process failed with error $E");
