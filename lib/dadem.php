@@ -6,7 +6,7 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.1 2004-10-04 17:24:14 chris Exp $
+ * $Id: dadem.php,v 1.2 2004-10-04 17:26:11 chris Exp $
  * 
  */
 
@@ -69,11 +69,11 @@ $rep_name = array(
     );
 
 
-constant('DADEM_BAD_TYPE', 1);  /* bad area type */
-constant('DADEM_UNKNOWN', 2);   /* unknown area */
+define('DADEM_BAD_TYPE', 1);  /* bad area type */
+define('DADEM_UNKNOWN', 2);   /* unknown area */
 
-constant('DADEM_CONTACT_FAX', 101);
-constant('DADEM_CONTACT_EMAIL', 102);
+define('DADEM_CONTACT_FAX', 101);
+define('DADEM_CONTACT_EMAIL', 102);
 
 /* dadem_get_representatives TYPE ID
  * Return an array of (name, type of contact information, contact information)
