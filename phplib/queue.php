@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.2 2004-10-19 15:48:48 chris Exp $
+ * $Id: queue.php,v 1.3 2004-10-20 09:32:06 chris Exp $
  * 
  */
 
@@ -22,7 +22,7 @@ function msg_create() {
  * sender including elements: name, the sender's full name; email, their email
  * address; address, their full postal address; and optionally phone, their
  * phone number. RECIPIENT is the DaDem ID number of the recipient of the
- * message; and TEXT is the text of the message, formatted in HTML. All strings
+ * message; and TEXT is the text of the message, with line breaks. All strings
  * must be encoded in UTF-8.
  * 
  * Returns true on success or false on failure. */
