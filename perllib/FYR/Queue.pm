@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.91 2005-01-13 15:44:24 francis Exp $
+# $Id: Queue.pm,v 1.92 2005-01-17 10:26:19 chris Exp $
 #
 
 package FYR::Queue;
@@ -892,7 +892,7 @@ my %state_timeout = (
 # Where we time out to.
 my %state_timeout_state = qw(
         pending         failed_closed
-        ready           error`
+        ready           error
         bounce_wait     sent
         sent            finished
     );
