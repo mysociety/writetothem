@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.10 2005-02-04 17:08:06 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.11 2005-02-04 17:13:53 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -121,7 +121,7 @@ if ($token eq 'bounce-null') {
         FYR::DB::dbh()->rollback();
     } else {
         # Record the bounce
-        FYR::Queue::logmsg($id, "received email bounce message");
+        FYR::Queue::logmsg($id, "received email bounce message", 1);
         if ($m->{state} eq 'bounce_wait') {
             FYR::Queue::state($id, 'bounce_confirm');
         }
