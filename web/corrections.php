@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.4 2005-02-04 15:13:08 matthew Exp $
+ * $Id: corrections.php,v 1.5 2005-02-08 15:06:55 francis Exp $
  * 
  */
 
@@ -31,6 +31,8 @@ $fyr_vatype = $fyr_values['id'];
 
 $va_info = mapit_get_voting_area_info($fyr_vatype);
 mapit_check_error($va_info);
+$parent_info = mapit_get_voting_area_info($va_info['parent_area_id']);
+mapit_check_error($parent_info);
 debug_timestamp();
 $area_reps = dadem_get_representatives(array($fyr_vatype));
 dadem_check_error($area_reps);
@@ -41,7 +43,7 @@ $reps_info = dadem_get_representatives_info($area_reps);
 dadem_check_error($reps_info);
 debug_timestamp();
 
-$out = '';
+$template_page = 'corrections-index';
 if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     # Changes have been submitted
     $fyr_names = $fyr_values['name'];
@@ -53,11 +55,8 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     $fyr_notes = (isset($fyr_values['notes'])) ? $fyr_values['notes'] : '';
     $fyr_email = (isset($fyr_values['email'])) ? $fyr_values['email'] : '';
 
-    # Just because I'm outputting it straight back out again
-    # Pseudo SQL to show the sort of thing I think is wanted
-    $fyr_url = htmlspecialchars($fyr_url);
-    $fyr_notes = htmlspecialchars($fyr_notes); if ($fyr_url) $fyr_notes = "$fyr_url\n\n$fyr_notes";
-    $fyr_email = htmlspecialchars($fyr_email);
+    # Store URL with notes
+    if ($fyr_url) $fyr_notes = "$fyr_url\n\n$fyr_notes";
     
     $diff = array_diff($area_reps, array_keys($fyr_names));
     $diff2 = array_diff($area_reps, array_keys($fyr_parties));
@@ -69,15 +68,17 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     foreach ($area_reps as $rep) {
         $oldname = $reps_info[$rep]['name'];
         $oldparty = $reps_info[$rep]['party'];
-        $newname = htmlspecialchars($fyr_names[$rep]);
-        $newparty = htmlspecialchars($fyr_parties[$rep]);
+        $newname = $fyr_names[$rep];
+        $newparty = $fyr_parties[$rep];
         if ($oldname != $newname || $oldparty != $newparty) {
-            $out .= "INSERT INTO some_table (rep_id, change, name, party, notes, email) VALUES ($rep, 'modify', \"$newname\", \"$newparty\", \"$fyr_notes\", \"$fyr_email\")<br>";
+            $ret = dadem_store_user_correction($rep, 'modify', $newname, $newparty, $fyr_notes, $fyr_email);
+            dadem_check_error($ret);
         }
     }
 
     if (isset($fyr_new['name']) && isset($fyr_new['party']) && $fyr_new['name'] && $fyr_new['party']) {
-        $out .= "INSERT INTO some_table (rep_id, change, name, party, notes, email) VALUES (NULL, 'add', \"".htmlspecialchars($fyr_new['name']).'", "'.htmlspecialchars($fyr_new['party'])."\", \"$fyr_notes\", \"$fyr_email\")<br>";
+        $ret = dadem_store_user_correction(null, 'add', $fyr_new['name'], $fyr_new['party'], $fyr_notes, $fyr_email);
+        dadem_check_error($ret);
     }
 
     foreach ($fyr_delete as $rep_id => $dummy) {
@@ -89,25 +90,17 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
             template_show_error('Trying to delete the only representative?');
             exit;
         }
-        $out .= "INSERT INTO some_table (rep_id, change, notes, email) VALUES ($rep_id, 'delete', \"$fyr_notes\", \"$fyr_email\")<br>";
+        $ret = dadem_store_user_correction($rep_id, 'delete', '', '', $fyr_notes, $fyr_email);
+        dadem_check_error($ret);
     }
+
+    $template_page = 'corrections-thanks';
 }
 
-$on_page = 'corrections';
-$error = '';
-if ($out) $error = $out;
-
-if ($on_page == 'corrections') {
-    template_draw('corrections', array('id'=>$fyr_vatype, 'va_info'=>$va_info, 'reps_info'=>$reps_info, 'error'=>$error));
-} else {
-    template_show_error(
-            'Sorry. An error has occurred: on_page "'
-                . htmlspecialchars($on_page) .
-            '". Please get in touch with us at
-            <a href="mailto:help@writetothem.com">help@writetothem.com</a>,
-            quoting this message. You can <a href="/">try again from the
-            beginning</a>.'
-        );
-}
+template_draw($template_page, array('id'=>$fyr_vatype, 
+    'va_info'=>$va_info, 
+    'reps_info'=>$reps_info,
+    'parent_info'=>$parent_info,
+    ));
 
 ?>

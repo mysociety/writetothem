@@ -1,6 +1,6 @@
 <? $va_info = $values['va_info'];
 
-$values['title'] = $va_info['name'] . " Corrections";
+$values['title'] = $va_info['name'] . " " . $va_info['type_name'] ." Corrections";
 $values['robots'] = 'noindex, nofollow';
 include "header.php";
 
@@ -8,16 +8,12 @@ include "header.php";
 
 <h2><?=$values['title'] ?></h2>
 
-<? if ($values['error']) { ?>
-<p class="warning">
-<?=$values['error']?>
-</p>
-<? } ?>
-
 <p>Thank you for helping us keep up to date.</p>
 
 <? if (count($values['reps_info']) != 1) { ?>
-<p>Below are the <?=$va_info['rep_name_plural'] ?> from <strong><?=$va_info['name'] ?></strong>.
+<p>Below are the <?=$va_info['rep_name_plural'] ?> from <strong><?=$va_info['name'] ?> 
+<?=$va_info['type_name']?></strong>
+in <?=$values['parent_info']['name']?>.
 Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$va_info['rep_name'] ?> in this <?=$va_info['type_name'] ?> at all.</p>
 <? } else { ?>
 <p>Below is the <?=$va_info['rep_name'] ?> from <strong><?=$va_info['name'] ?></strong>.

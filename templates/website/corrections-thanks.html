@@ -1,0 +1,20 @@
+<? $va_info = $values['va_info'];
+
+$values['title'] = "Thanks for your corrections to " . $va_info['name'] . " " . $va_info['type_name'] . "!";
+$values['robots'] = 'noindex, nofollow';
+include "header.php";
+
+?>
+
+<h2><?=$values['title'] ?></h2>
+
+<p>We'll use them on the site as soon as we can.  Contributions like yours help
+volunteer maintained sites like this keep up to date. 
+
+If you're interested in getting involved in any other way, whether
+helping build sites, publicising them, or lending a hand in another way, 
+<a href="/about-contact">please get in touch</a>.
+</p>
+
+<? 
+include "footer.php"; ?>
