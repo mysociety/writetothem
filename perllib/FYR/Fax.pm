@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.15 2005-02-04 13:21:33 chris Exp $
+# $Id: Fax.pm,v 1.16 2005-02-09 18:48:56 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -30,6 +30,7 @@ use Fcntl;
 use GD;
 use HTML::Entities;
 use IO::Pipe;
+use POSIX qw(strftime);
 use utf8;
 
 use FYR::EmailTemplate;
@@ -329,6 +330,13 @@ sub make_representative_fax ($) {
             ++$pagenum;
 
             my $f = ($pagenum > 1 ? $footerheight : $firstfooterheight);
+
+            # Add date on first page.
+            if ($pagenum == 1) {
+                my ($dy) = format_text($im, strftime("%A %d %B %Y\n\n", localtime($msg->{created})), $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
+                $y += $dy;
+            }
+            
             my ($dy, $text2) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
 
             push(@pages, $im);

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.126 2005-02-08 17:29:39 chris Exp $
+# $Id: Queue.pm,v 1.127 2005-02-09 18:48:56 chris Exp $
 #
 
 package FYR::Queue;
@@ -511,8 +511,14 @@ sub format_email_body ($) {
     my $addr = "$msg->{sender_name}\n$msg->{sender_addr}";
     $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
     $addr .= "\n\n" . "Email: $msg->{sender_email}";
-    my $text = format_postal_address($addr);
-    $text .= "\n\n" . wrap(EMAIL_COLUMNS, $msg->{message});
+
+    my $text = format_postal_address($addr)
+                . "\n\n"
+                # Date here is slightly silly as it will be in the Date:
+                # header, but we may as well be consistent....
+                . strftime('%A %d %B %Y', localtime($msg->{created}))
+                . "\n\n"
+                . wrap(EMAIL_COLUMNS, $msg->{message});
     return $text;
 }
 
