@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.73 2004-12-30 15:01:01 francis Exp $
+# $Id: Queue.pm,v 1.74 2004-12-30 15:15:02 francis Exp $
 #
 
 package FYR::Queue;
@@ -268,7 +268,7 @@ sub logmsg ($$) {
 # Transitions we're allowed to make in the state machine.
 my %allowed_transitions = (
         new =>              [qw(pending failed)],
-        pending =>          [qw(ready failed)],
+        pending =>          [qw(ready failed failed_closed)],
         ready =>            [qw(error bounce_wait sent)],
         bounce_wait =>      [qw(bounce_confirm sent)],
         bounce_confirm =>   [qw(bounce_wait error)],
@@ -886,8 +886,8 @@ my %state_timeout = (
 
 # Where we time out to.
 my %state_timeout_state = qw(
-        pending         failed
-        ready           error
+        pending         failed_closed
+        ready           error`
         bounce_wait     sent
         sent            finished
     );
