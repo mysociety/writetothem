@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.33 2005-01-14 17:01:57 chris Exp $
+# $Id: AbuseChecks.pm,v 1.34 2005-01-17 17:56:47 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -143,6 +143,7 @@ sub get_similar_messages ($) {
 
         $h2 = Storable::thaw($h2);
         my $similarity = FYR::SubstringHash::similarity($h, $h2);
+        #warn "$id2 $similarity\n";
         push(@similar, [$id2, $similarity]) if ($similarity > $thr);
     }
 

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.92 2005-01-17 10:26:19 chris Exp $
+# $Id: Queue.pm,v 1.93 2005-01-17 17:56:47 francis Exp $
 #
 
 package FYR::Queue;
@@ -1350,7 +1350,10 @@ administrator's name.
 =cut
 sub admin_set_message_to_error ($$) {
     my ($id, $user) = @_;
-    state($id, 'error');
+    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    if ($curr_state ne 'error') {
+        state($id, 'error');
+    }
     logmsg($id, "$user put message in state 'error'");
     FYR::DB::dbh()->commit();
     return 0;
@@ -1364,7 +1367,10 @@ constituent is not told. USER is the administrator's name.
 =cut
 sub admin_set_message_to_failed ($$) {
     my ($id, $user) = @_;
-    state($id, 'failed');
+    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    if ($curr_state ne 'failed') {
+        state($id, 'failed');
+    }
     logmsg($id, "$user put message in state 'failed'");
     FYR::DB::dbh()->commit();
     return 0;
@@ -1378,7 +1384,10 @@ dealt with by an administrator. USER is the administrator's name.
 =cut
 sub admin_set_message_to_failed_closed ($$) {
     my ($id, $user) = @_;
-    state($id, 'failed_closed');
+    my ($curr_state, $curr_frozen) = FYR::DB::dbh()->selectrow_array('select state, frozen from message where id = ? for update', {}, $id);
+    if ($curr_state ne 'failed_closed') {
+        state($id, 'failed_closed');
+    }
     FYR::DB::dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     logmsg($id, "$user put message in state 'failed_closed'");
     FYR::DB::dbh()->commit();

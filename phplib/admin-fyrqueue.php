@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.48 2005-01-13 15:50:28 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.49 2005-01-17 17:56:47 francis Exp $
  * 
  */
 
@@ -136,13 +136,14 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
             }
             if (count($messages) > 1) {
 ?><tr><td colspan=9><b>Ticked items:</b>
+        <input size="20" name="notebody" type="text" /> 
+        <input name="note" value="Comment" type="submit" />
+        &nbsp; <b>Action:</b>
         <input name="freeze" value="Freeze" type="submit" />
         <input name="thaw" value="Thaw" type="submit" />
         <input name="error" value="Error" type="submit" />
         <input name="failed" value="Fail" type="submit" /> 
         <input name="failed_closed" value="Fail Close" type="submit" /> 
-        &nbsp; <input size="20" name="notebody" type="text" /> 
-        <input name="note" value="Add Comment" type="submit" />
 </td><tr>
 <?
     }
@@ -179,35 +180,44 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 
     function do_actions($id) {
         // Freeze or thaw messages
+        $redirect = false;
         if (get_http_var('freeze')) {
             $result = msg_admin_freeze_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id frozen</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('thaw')) {
             $result = msg_admin_thaw_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id thawed</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('error')) {
             $result = msg_admin_set_message_to_error($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to error state</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('failed')) {
             $result = msg_admin_set_message_to_failed($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to failed state</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('failed_closed')) {
             $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('bounce_wait')) {
             $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
+            $redirect = true;
         } else if (get_http_var('note')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
             msg_check_error($result);
             print "<p><b><i>Note added to message $id</i></b></p>";
+            $redirect = true;
         }
+        return $redirect;
     }
 
     function display($self_link) {
@@ -220,7 +230,10 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 
         // Display about id
         if ($id) {
-            $this->do_actions($id);
+            if ($this->do_actions($id)) {
+#               header("Location: ".$_SERVER['REQUEST_URI'] . "\n");
+#               exit;
+            }
 
             print "<h2><a href=\"$self_link\">[Back to Message List]</a></h2></h2>";
 
@@ -236,6 +249,11 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 
             // Commands
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
+            if (!get_http_var('note')) {
+                $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Comment');
+            }
+            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Actions:</b>");
             if ($message['state'] == 'failed')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if ($message['frozen']) {
@@ -254,11 +272,6 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
-            if (!get_http_var('note')) {
-                $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, "&nbsp;");
-                $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Add Comment');
-            }
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
@@ -298,21 +311,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 $recents = array();
             }
             $this->print_events($recents);
-?>
-<h2>Help &mdash; what do the buttons do?</h2>
-<p>
-<b>freeze</b> stops delivery to representative, but other stuff
-(such as confirmation message) still happens
-<br><b>thaw</b> undoes a freeze, so message gets delivered.
-<br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
-<br><b>fail</b> rejects a message, with no email to the constituent.
-<br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
-<br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
-<br><b>edit contact details</b> by clicking on the recipient name
-</p>
-<p>To find out <b>state meanings</b>, point the mouse to find out what they are
-</p>
-<?
+
             if (count($message['bounces']) > 0) {
                 print "<h2>Bounce Messages</h2>";
                 foreach ($message['bounces'] as $bounce) {
@@ -443,11 +442,35 @@ All time stats:
             $this->print_messages($messages);
             if ($filter == 2)
                 print "<p>...";
+        }
+?>
+<h2>Help &mdash; what do the buttons do?</h2>
+<?
+        if (!$id) {
+?>
+<p>They apply to all items you have checked.</p>
+<?
+        }
+?>
+<p>
+<b>comment</b> adds the text entered as a remark in the message's log
+<br><b>freeze</b> stops delivery to representative, but other stuff
+(such as confirmation message) still happens
+<br><b>thaw</b> undoes a freeze, so message gets delivered.
+<br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
+<br><b>fail</b> rejects a message, with no email to the constituent.
+<br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
+<br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
+<br><b>edit contact details</b> by clicking on the recipient name
+</p>
+<p>To find out <b>state meanings</b>, point the mouse to find out what they are
+</p>
+<?
+        if (!$id) {
         ?>
 <h2>Help &mdash; what do the states mean?</h2>
-<p>Point the mouse a state name in the table above for extra description.
-Here is a diagram of state changes:
-<p><img src="queue-state-machine.png">
+<p>Here is a diagram of state changes:</p>
+<p><img src="queue-state-machine.png"></p>
 
         <?
         }
