@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w
 #
 # problemreport:
+# Simple problem report, passing data on to CVSTrac.
 #
-# Copyright (c) 2004 Chris Lightfoot. All rights reserved.
-# Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.1 2004-12-13 19:47:52 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.2 2004-12-13 19:54:45 chris Exp $';
 
 use strict;
 
@@ -79,7 +80,7 @@ sub submit_problem_to_cvstrac ($) {
     $req->content($postdata);
 
     my $res = $ua->request($req);
-print STDERR $res->status_line(), $res->content();
+
     return $res->is_success();
 }
 
