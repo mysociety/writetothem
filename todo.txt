@@ -29,8 +29,11 @@ To return error object with integer, string
 
 Share constants properly between Perl and PHP
 Make error codes global
+Have config file for admin / support email addresses
 
 Remove spurious stuff from utility.php
+
+Put all emails from Perl in separate template files
 
 Later
 -----

@@ -6,12 +6,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.5 2004-10-20 12:43:56 chris Exp $
+ * $Id: queue.php,v 1.6 2004-10-20 13:18:03 francis Exp $
  * 
  */
 
-include_once('simplexmlrpc.php');
-include_once('utility.php');
+include_once('../conf/config.php');
+include_once('../../phplib/simplexmlrpc.php');
+include_once('../../phplib/utility.php');
 
 /* msg_create
  * Return a string ID for a new outgoing fax/email message. */
