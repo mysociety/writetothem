@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.11 2004-11-15 12:36:56 francis Exp $
+# $Id: Queue.pm,v 1.12 2004-11-15 15:03:42 fyr Exp $
 #
 
 package FYR::Queue;
@@ -91,6 +91,7 @@ sub write ($$$$$) {
         # Give recipient their proper prefixes/suffixes.
         $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
 
+=pod
         # Decide how to send the message.
         $recipient->{fax} ||= undef;
         $recipient->{email} ||= undef;
@@ -107,6 +108,10 @@ sub write ($$$$$) {
                 $recipient->{fax} = undef;
             }
         }
+=cut
+        # bodge things so that mails go to sender.
+        $recipient->{email} = $sender->{email};
+        $recipient->{fax} = undef;
 
         # XXX should also check that the text bits are valid UTF-8.
         
@@ -861,8 +866,8 @@ Specify the number of events you'd like.
 =cut
 sub admin_recent_events ($$) {
     my ($x,$count) = @_;
-    my $sth = FYR::DB::dbh()->prepare('select * from message_log order by order_id desc limit ?');
-    $sth->execute($count);
+    my $sth = FYR::DB::dbh()->prepare('select * from message_log order by order_id desc limit '. int($count));
+    $sth->execute();
     my @ret;
     while (my $hash_ref = $sth->fetchrow_hashref()) {
         push @ret, $hash_ref;
