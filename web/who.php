@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.11 2004-10-18 08:47:13 francis Exp $
+ * $Id: who.php,v 1.12 2004-10-18 10:33:53 chris Exp $
  * 
  */
 
@@ -53,28 +53,31 @@ foreach ($voting_areas as $va_type => $va_specificid) {
         continue;
     }
     
-    // Lookup table of long description
+    // Lookup table of long description XXX should copy these out of Whittaker's
+    // Almanac or whatever.
     if ($eb_type == VA_DIS) {
-        $eb_info['description'] = "Your District Council is responsible for local services and policy,
-            including planning, council housing, building regulation, rubbish
-            collection, and local roads. Some responsibilities, such as
-            recreation facilities, are shared with the County Council.";
-    }
-    else if ($eb_type == VA_CTY) {
+        $eb_info['description'] = "Your District Council is responsible for
+            local services and policy, including planning, council housing,
+            building regulation, rubbish collection, and local roads. Some
+            responsibilities, such as recreation facilities, are shared with
+            the County Council.";
+    } else if ($eb_type == VA_MTD) {
+        $eb_info['description'] = "Your Metropolitan District Council is
+            responsible for all aspects of local services and policy, including
+            planning, transport, education, social services and libraries.";
+    } else if ($eb_type == VA_CTY) {
         $eb_info['description'] = "Your County Council is responsible for local
-        services, including education, social services, transport and
-        libraries.";
-    }
-    else if ($eb_type == VA_WMP) {
+            services, including education, social services, transport and
+            libraries.";
+    } else if ($eb_type == VA_WMP) {
         $eb_info['description'] = "The House of Commons is responsible for
-        making laws in the UK and for overall scrutiny of all aspects of
-        government.";
-    }
-    else if ($eb_type == VA_EUP) {
+            making laws in the UK and for overall scrutiny of all aspects of
+            government.";
+    } else if ($eb_type == VA_EUP) {
         $eb_info['description'] = "They scrutinise European laws (called
-        \"directives\") and the budget of the European Union, and provides
-        oversight of the other decision-making bodies of the Union,
-        including the Council of Ministers and the Commission.";
+            \"directives\") and the budget of the European Union, and provides
+            oversight of the other decision-making bodies of the Union,
+            including the Council of Ministers and the Commission.";
     }
 
     // Count representatives
