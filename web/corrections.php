@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.2 2005-02-04 14:27:04 matthew Exp $
+ * $Id: corrections.php,v 1.3 2005-02-04 15:00:00 matthew Exp $
  * 
  */
 
@@ -46,34 +46,47 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
     # Changes have been submitted
     $fyr_names = $fyr_values['name'];
     $fyr_parties = $fyr_values['party'];
+    $fyr_new = (isset($fyr_values['new'])) ? $fyr_values['new'] : array();
+    $fyr_delete = (isset($fyr_values['delete'])) ? $fyr_values['delete'] : array();
+    $fyr_url = (isset($fyr_values['url'])) ? $fyr_values['url'] : '';
+    if ($fyr_url == 'http://') $fyr_url = '';
+    $fyr_notes = (isset($fyr_values['notes'])) ? $fyr_values['notes'] : '';
+    $fyr_email = (isset($fyr_values['email'])) ? $fyr_values['email'] : '';
+
+    # Just because I'm outputting it straight back out again
+    # Pseudo SQL to show the sort of thing I think is wanted
+    $fyr_url = htmlspecialchars($fyr_url);
+    $fyr_notes = htmlspecialchars($fyr_notes); if ($fyr_url) $fyr_notes = "$fyr_url\n\n$fyr_notes";
+    $fyr_email = htmlspecialchars($fyr_email);
+    
     $diff = array_diff($area_reps, array_keys($fyr_names));
     $diff2 = array_diff($area_reps, array_keys($fyr_parties));
     if (sizeof($diff) || sizeof($diff2)) {
         template_show_error('There was a problem with that submission; the submitted rows did not match the rows in the database.');
         exit;
     }
+
     foreach ($area_reps as $rep) {
         $oldname = $reps_info[$rep]['name'];
         $oldparty = $reps_info[$rep]['party'];
-        $newname = $fyr_names[$rep];
-        $newparty = $fyr_parties[$rep];
+        $newname = htmlspecialchars($fyr_names[$rep]);
+        $newparty = htmlspecialchars($fyr_parties[$rep]);
         if ($oldname != $newname || $oldparty != $newparty) {
-            $out .= "Wanting to change rep $rep : $oldname,$oldparty to $newname,$newparty<br>";
+            $out .= "INSERT INTO some_table (rep_id, change, name, party, notes, email) VALUES ($rep, 'modify', \"$newname\", \"$newparty\", \"$fyr_notes\", \"$fyr_email\")<br>";
         }
     }
-    $fyr_new = (isset($fyr_values['new'])) ? $fyr_values['new'] : array();
+
     if (isset($fyr_new['name']) && isset($fyr_new['party']) && $fyr_new['name'] && $fyr_new['party']) {
-        $out .= "Wanting to add a councillor: $fyr_new[name] $fyr_new[party]<br>";
+        $out .= "INSERT INTO some_table (rep_id, change, name, party, notes, email) VALUES (NULL, 'add', \"".htmlspecialchars($fyr_new['name']).'", "'.htmlspecialchars($fyr_new['party'])."\", \"$fyr_notes\", \"$fyr_email\")<br>";
     }
-    $fyr_delete = (isset($fyr_values['delete'])) ? $fyr_values['delete'] : array();
+
     foreach ($fyr_delete as $rep_id => $dummy) {
-        $out .= "Delete rep $rep_id<br>";
+        if (!in_array($rep_id, $area_reps)) {
+            template_show_error('Trying to delete a rep not in this area?');
+            exit;
+        }
+        $out .= "INSERT INTO some_table (rep_id, change, notes, email) VALUES ($rep_id, 'delete', \"$fyr_notes\", \"$fyr_email\")<br>";
     }
-    $fyr_url = (isset($fyr_values['url'])) ? $fyr_values['url'] : '';
-    if ($fyr_url == 'http://') $fyr_url = '';
-    $fyr_notes = (isset($fyr_values['notes'])) ? $fyr_values['notes'] : '';
-    $fyr_email = (isset($fyr_values['email'])) ? $fyr_values['email'] : '';
-    $out .= "Submitted URL:$fyr_url, notes:$fyr_notes, email:$fyr_email<br>";
 }
 
 $on_page = 'corrections';
