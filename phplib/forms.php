@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.9 2005-02-13 14:23:33 francis Exp $
+ * $Id: forms.php,v 1.10 2005-02-15 19:29:48 matthew Exp $
  * 
  */
 
@@ -43,6 +43,14 @@ function add_all_variables_hidden(&$form, $variables) {
     // the value of the contents, just uses the one in _POST rather
     // than the new one.
     $form->addElement('html', "<tr><td>$html_hidden</td></tr>");
+}
+
+# Matthew's non HTML_QuickForm version of the above
+function add_all_variables_hidden_nonQF($variables) {
+    debug("SERIALIZE", "Writing hidden vars:", $variables);
+    $ser_vars = base64_encode(serialize($variables));
+    $html_hidden = '<input name="mysociety_serialized_variables" type="hidden" value="' . $ser_vars . '">';
+    return $html_hidden;
 }
 
 class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {

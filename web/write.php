@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.73 2005-02-15 10:39:44 chris Exp $
+ * $Id: write.php,v 1.74 2005-02-15 19:30:03 matthew Exp $
  * 
  */
 
@@ -98,38 +98,38 @@ END;
     return $form;
 }
 
-function buildPreviewForm()
-{
-    $form = new HTML_QuickForm('previewForm', 'post', 'write');
-
+function buildPreviewForm() {
     global $fyr_values;
-    add_all_variables_hidden($form, $fyr_values);
-
-    $buttons[0] =& HTML_QuickForm::createElement('submit', 'submitWrite', '<< edit this Message');
-    $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitSendFax', 'Continue >>');
-    $form->addGroup($buttons, 'buttons', '', '&nbsp;', false);
-
+    $form = '<form method="post" action="write" id="previewForm" name="previewForm"><div id="buttonbox">';
+    $form .= add_all_variables_hidden_nonQF($fyr_values);
+    $form .= '<input type="submit" name="submitWrite" value="&lt;&lt; Edit this message">
+<input type="submit" name="submitSendFax" value="Continue &gt;&gt;">
+</div></form>';
     return $form;
 }
 
 function renderForm($form, $pageName)
 {
-    // $renderer =& $page->defaultRenderer();
-    $renderer =& new HTML_QuickForm_Renderer_mySociety();
-    $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
-    $renderer->setElementTemplate('{element}', 'previewStuff');
-    $renderer->setElementTemplate('<TR><TD colspan=2> 
-    {element} 
-    <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
-    </TD></TR>', 'body');
-    $form->accept($renderer);
-
     global $fyr_form, $fyr_values;
     debug("FRONTEND", "Form values:", $fyr_values);
 
+    // $renderer =& $page->defaultRenderer();
+    if (is_object($form)) {
+        $renderer =& new HTML_QuickForm_Renderer_mySociety();
+        $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
+        $renderer->setElementTemplate('{element}', 'previewStuff');
+        $renderer->setElementTemplate('<TR><TD colspan=2> 
+    {element} 
+    <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
+    </TD></TR>', 'body');
+        $form->accept($renderer);
+
     // Make HTML
-    $fyr_form = $renderer->toHtml();
-    $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
+        $fyr_form = $renderer->toHtml();
+        $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
+    } else {
+        $fyr_form = $form;
+    }
 
     $prime_minister = false;
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
@@ -376,7 +376,7 @@ if ($on_page == "write") {
     renderForm($writeForm, "writeForm");
 } else if ($on_page == "preview") {
     $previewForm = buildPreviewForm();
-    $previewForm->setConstants($fyr_values);
+#    $previewForm->setConstants($fyr_values); # WHAT DID THIS LINE DO?
     renderForm($previewForm, "previewForm");
 } else if ($on_page =="sendfax") {
     submitFax();

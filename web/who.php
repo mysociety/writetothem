@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.63 2005-02-13 16:57:57 matthew Exp $
+ * $Id: who.php,v 1.64 2005-02-15 19:30:03 matthew Exp $
  * 
  */
 
@@ -155,7 +155,7 @@ foreach ($va_display_order as $va_type) {
         $text .= display_reps($representatives);
 
         if ($va_type == 'WMC') {
-            $text .= '<p style="font-size: 80%" id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+            $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types)) {

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.18 2005-02-13 20:50:56 matthew Exp $
+ * $Id: wtt.css,v 1.19 2005-02-15 19:30:03 matthew Exp $
  * 
  */
 
@@ -62,7 +62,7 @@ label {
 }
 
 .smallb {
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 a:link {    color: #843f23; /* #639c18;*/ }
@@ -108,9 +108,6 @@ a:hover {    color: #000000; }
 }
 
 #footer {
-/*    background-image: url("/images/mosaic.gif");
-    background-repeat: repeat-x;
-    padding-top: 24px; */
     padding: 3px;
     border-top: solid 1px #527b10;
     font-size: 90%;
@@ -143,6 +140,11 @@ ol#instructions li#fou span { background-color: #99cc99; }
 ol#instructions li#fiv span { background-color: #000066; }
 */
 
+#postcodebox, #writebox, #preview, #buttonbox {
+    background-color: #d0bf69; /* #b3d386; #94d639; ccff99; */
+    color: #000000;
+}
+
 #postcodebox {
     _width: 27em;
     display: table;
@@ -150,8 +152,6 @@ ol#instructions li#fiv span { background-color: #000066; }
     text-align: center;
     border: solid 2px #9c8f4f; /* #a5a57c; */ /* 314208; */
     padding: 8px;
-    background-color: #d0bf69; /* #b3d386; */
-    color: #000000;
 }
 #writebox {
     _width: 1px;
@@ -159,16 +159,18 @@ ol#instructions li#fiv span { background-color: #000066; }
     margin: 0 auto;
     border: solid 2px #314208;
     padding: 8px;
-    background-color: #d0bf69; /* #94d639; */
-    color: #000000;
 }
 #preview {
     width: 33em;
     margin: 0 auto 1em;
     border: solid 2px #314208;
-    padding: 5px 5px 15px;
-    background-color: #d0bf69; /* ccff99; */
-    color: #000000;
+    padding: 10px;
+}
+#buttonbox {
+    width: 33em;
+    margin: 0 auto;
+    border: solid 2px #314208;
+    padding: 8px;
 }
 
 #repstable {
@@ -177,11 +179,11 @@ ol#instructions li#fiv span { background-color: #000066; }
     border: none;
 }
 #firstcol {
-    border-left: solid 2px #9c8f4f;
+    border-left: solid 1px #9c8f4f;
     border-left: none;
 }
 .maincol {
-    border-left: solid 2px #9c8f4f;
+    border-left: solid 1px #9c8f4f;
 }
 #repstable ul#photo {
     list-style-type: none;
@@ -193,12 +195,17 @@ ol#instructions li#fiv span { background-color: #000066; }
 }
 #repstable p#twfy {
     clear: left;
+    font-size: 80%;
+}
+#repstable ul {
+    margin-left: 0;
+    padding-left: 1.5em;
 }
 
 #sidebar {
     float: right;
-    width: 15em;
-    padding: 2px;
+    width: 14em;
+    padding: 5px;
     border: solid 1px #9c8f4f;
     background-color: #d0bf69;
     margin: 0 0 1em 10px;
