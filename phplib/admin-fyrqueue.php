@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.14 2004-12-30 10:32:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.15 2004-12-30 11:31:46 francis Exp $
  * 
  */
 
@@ -25,7 +25,7 @@ class ADMIN_PAGE_FYR_QUEUE {
 <table border=1
 width=100%><tr><th>Created</th><th>ID</th><th>Last State
 Change</th><th>State</th><th>Sender</th><th>Recipient</th>
-<th>IP / Referrer</th>
+<th>Client IP / <br> Referrer</th>
 <th>Length (chars)</th>
 </tr>
 <?
@@ -55,9 +55,14 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 if ($message['recipient_email']) print $message['recipient_email'] . "<br>";
                 if ($message['recipient_fax']) print $message['recipient_fax'] . "<br>";
                 print "</td>";
+                $simple_ref = $message['sender_referrer'];
+                $url_bits = parse_url($simple_ref);
+                if ($simple_ref != "") 
+                    $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
                 print "<td>" . 
-                        $message['sender_ipaddr'] . "<br>" .
-                        $message['sender_referrer'] . "<br>" .
+                        gethostbyaddr($message['sender_ipaddr']) . "<br>" .
+                        "<a href=\"" .
+                        htmlspecialchars($message['sender_referrer']) . "\">" . $simple_ref . "</a><br>" .
                  "</td>";
                 print "<td>" . $message['message_length'] . "</td>";
                print "</tr>";
