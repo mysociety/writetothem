@@ -6,20 +6,20 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: mapit.php,v 1.4 2004-10-04 17:07:31 chris Exp $
+ * $Id: mapit.php,v 1.5 2004-10-04 17:24:14 chris Exp $
  * 
  */
 
-include('votingarea.php');
+include_once('votingarea.php');
 
 /* Error codes */
 define('MAPIT_BAD_POSTCODE', 1);    /* not in the format of a postcode */
 define('MAPIT_NOT_FOUND', 2);       /* postcode not found */
 
-/* get_voting_areas POSTCODE
+/* mapit_get_voting_areas POSTCODE
  * On success, return an array mapping voting/administrative area type to
  * voting area ID and name. On failure, return an error code. */
-function get_voting_areas($postcode) {
+function mapit_get_voting_areas($postcode) {
     /* remove spaces */
     $postcode = strtoupper(preg_replace('/ +/', '', $postcode, -1));
 
