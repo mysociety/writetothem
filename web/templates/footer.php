@@ -25,6 +25,16 @@ Sending identical copied and pasted "form" letters will do your cause more harm 
 </TABLE><P>
 </DIV>
 
+<div>
+<p><font size="-1">
+<a href="http://www.goveval.com/"><img src="images/ge.png" border="0" alt="GovEval"></a><br>
+Contact data for elected representatives <br>
+kindly supplied by <a href="http://www.goveval.com/">GovEval</a></font></p>
+
+<p><font size="-1">This site uses Ordnance Survey data under licence</font></p>
+
+</div>
+
 
 </BODY>
 </HTML>
