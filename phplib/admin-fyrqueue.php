@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.34 2005-01-05 12:06:36 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.35 2005-01-05 12:12:37 francis Exp $
  * 
  */
 
@@ -197,7 +197,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "</blockquote>";
             }
 
-            if (is_array($message['questionnaires'])) {
+            if (is_array($message['questionnaires']) and count($message['questionnaires']) > 0) {
                 print "<h2>Questionnaire Responses</h2>";
                 foreach ($message['questionnaires'] as $q) {
                     if ($q['question_id'] == 0) {
