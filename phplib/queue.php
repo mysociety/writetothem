@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.34 2005-01-28 22:47:08 francis Exp $
+ * $Id: queue.php,v 1.35 2005-01-31 10:20:50 chris Exp $
  * 
  */
 
@@ -111,27 +111,32 @@ function msg_confirm_email($token) {
     return $result;
 }
 
-/* msg_admin_recent_events
- * Returns array of hashes of recent queue events. */
-function msg_admin_recent_events($count) {
+/* msg_admin_recent_events COUNT [IMPORTANT]
+ * Returns array of hashes of recent queue events. If IMPORTANT is true, return
+ * only important/exceptional events. */
+function msg_admin_recent_events($count, $important = false) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_recent_events', array($count));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_recent_events', array($count, $important));
     return $result;
 }
 
-/* msg_admin_message_events
- * Returns array of hashes of queue events for a particular message id. */
-function msg_admin_message_events($id) {
+/* msg_admin_message_events ID [IMPORTANT]
+ * Returns array of hashes of queue events for a particular message ID. If
+ * IMPORTANT is true, return only important/exceptional events. */
+function msg_admin_message_events($id, $important = false) {
     global $fyr_queue_client;
-    $result = $fyr_queue_client->call('FYR.Queue.admin_message_events', array($id));
+    $result = $fyr_queue_client->call('FYR.Queue.admin_message_events', array($id, $important));
     return $result;
 }
 
 /* msg_admin_get_queue FILTER PARAMS
- * Returns array of hashes of recent queue events. 
- * Set FILTER to 0 for all events, 1 for only important ones, 2 for
- * recently changed ones, 3 for recently created ones.  PARAMS
- * is a hash of parameters for the filter type. */
+ * Returns array of hashes of recent queue events. Filter should be all, to
+ * return all messages; important, to return messages which may need operator
+ * attention; recentchanged, to return up to 100 messages which have recently
+ * changed state; recentcreated, to return up to 100 of the most recently
+ * created messages; similarbody, to return messages whose body text is similar
+ * to that given in PARAMS['msgid']; or search, to return messages which
+ * contain terms from PARAMS['query']. */
 function msg_admin_get_queue($filter, $params) {
     global $fyr_queue_client;
     $result = $fyr_queue_client->call('FYR.Queue.admin_get_queue', array($filter, $params));
