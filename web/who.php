@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.56 2005-02-09 11:59:50 chris Exp $
+ * $Id: who.php,v 1.57 2005-02-10 09:12:02 francis Exp $
  * 
  */
 
@@ -37,6 +37,11 @@ debug_timestamp();
 $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
 mapit_check_error($voting_areas_info);
 debug_timestamp();
+
+$prime_minister = false;
+if (array_key_exists('WMC', $voting_areas) && $voting_areas['WMC'] == 13339) {
+    $prime_minister = $voting_areas_info[$voting_areas['WMC']];
+}
 
 $area_representatives = dadem_get_representatives(array_values($voting_areas));
 dadem_check_error($area_representatives);
@@ -167,7 +172,11 @@ foreach ($va_display_order as $va_type) {
 }
 
 // Display page, using all the fyr_* variables set above.
-template_draw("who", array("reps" => $fyr_representatives, "error" => $fyr_error));
+template_draw("who", array(
+    "reps" => $fyr_representatives, 
+    "error" => $fyr_error,
+    "prime_minister" => $prime_minister
+    ));
 
 debug_timestamp();
 
