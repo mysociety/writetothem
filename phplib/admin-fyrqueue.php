@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.28 2005-01-03 13:58:18 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.29 2005-01-04 16:35:18 francis Exp $
  * 
  */
 
@@ -17,6 +17,22 @@ class ADMIN_PAGE_FYR_QUEUE {
         $this->id = "fyrqueue";
         $this->name = "Message Queue";
         $this->navname = "Message Queue";
+    }
+
+    function state_help_notes($state) {
+        $map = array(
+        'new' => 'About to send confirmation email to constituent',
+        'pending' => 'Waiting for confirmation from constituent',
+        'ready' => 'Attempting to send to representative',
+        'bounce_wait' => 'Waiting for possible email delivery failure message',
+        'bounce_confirm' => 'Email delivery failure received, admin',
+        'error' => 'About to tell constituent that delivery failed',
+        'sent' => 'Delivery to representative succeeded',
+        'failed' => 'Delivery to representative failed, needs admin attention',
+        'finished' => 'Delivery succeeded, personal data has been scrubbed',
+        'failed_closed' => 'Delivery failed, admin has dealt with it',
+        );
+        return $map[$state];
     }
 
     function print_messages($messages) {
@@ -36,7 +52,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "<td><a href=\"" . $this->self_link . "&id=" .  urlencode($message['id']) . "\">" .  substr($message['id'],0,10) . "<br/>" .  substr($message['id'],10) . "</a></td>";
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
                 print "<td>";
-                print $message['state'];
+                print add_tooltip($message['state'], $this->state_help_notes($message['state']));
                 if ($message['frozen']) {
                     print "<br><b>frozen</b>";
                 }
@@ -67,8 +83,8 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 }
                 $short_client_name = trim_characters($client_name, strlen($client_name) - 27, 30); 
 
-                print "<td><span title=\"" .  htmlspecialchars($client_name) . "\">" .
-                        $short_client_name . "</span><br>" .
+                print "<td>" . add_tooltip($short_client_name, $client_name) .
+                        "<br>" .
                         "<a href=\"" .
                         htmlspecialchars($message['sender_referrer']) .  "\">" . 
                         htmlspecialchars($simple_ref) . "</a><br>" .
@@ -96,7 +112,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<tr>";
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
-                print "<td>" . $recent['state'] . "</td>";
+                print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
                 print "<td>" . htmlspecialchars($recent['message']) . "</td>";
                 print "</tr>";
             }
@@ -289,11 +305,19 @@ All time stats:
                     print "Error contacting queue:";
                     print_r($messages);
                 } else {
+                    // Display recently changed messages
                     print "<h2>Messages which have changed recently: <a
                     href=\"$self_link&amp;filter=0\">[all messages]</a></h2>";
                     $this->print_messages($messages);
                 }
             }
+        ?>
+<h2>What do the states mean?</h2>
+<p>Point the mouse a state name in the table above for extra description.
+Here is a diagram of state changes:
+<p><img src="queue-state-machine.png">
+
+        <?
         }
     }
 }
