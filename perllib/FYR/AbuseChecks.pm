@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.21 2005-01-07 17:58:06 chris Exp $
+# $Id: AbuseChecks.pm,v 1.22 2005-01-11 16:30:22 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -79,7 +79,19 @@ sub check_similarity ($) {
     my ($msg) = @_;
 
     # Compute and save hash of this message.
-    my $h = FYR::SubstringHash::hash($msg->{message}, SUBSTRING_LENGTH, NUM_BITS);
+    
+    # The beginning and end of each message are liable to be pretty similar, so
+    # strip them off for purposes of hash computation. This is, frankly, a
+    # hack.
+    my $m = $msg->{message};
+    # Salutation.
+    $m =~ s#^\s+Dear\s+[^\n]+\n##gs;
+    # Signoff.
+    $m =~ s#^\s*Yours sincerely,?\s*\n##gs;
+    # "Electronic signature".
+    $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
+    my $h = FYR::SubstringHash::hash($m, SUBSTRING_LENGTH, NUM_BITS);
+
     FYR::DB::dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
 
     # Horrid. To insert a value into a BYTEA column we need to do a little
