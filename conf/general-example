@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.12 2004-12-07 14:19:49 chris Exp $
+ * $Id: general-example,v 1.13 2004-12-07 16:12:49 chris Exp $
  * 
  */
 
@@ -37,8 +37,8 @@ define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
 
 // Should the queue daemon on this host send emails and/or faxes?
-define('OPTION_FYR_QUEUE_SEND_EMAIL', '0');
-define('OPTION_FYR_QUEUE_SEND_FAX', '0');
+define('OPTION_FYR_QUEUE_DAEMON_SEND_EMAIL', '0');
+define('OPTION_FYR_QUEUE_DAEMON_SEND_FAX', '0');
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://notfinished.faxyourrepresentative.com');
