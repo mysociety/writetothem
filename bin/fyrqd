@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.13 2005-02-23 13:20:26 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.14 2005-03-03 11:21:19 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -220,7 +220,6 @@ while ($foad == 0) {
     # a loop to collect expired children, and then sleep. Hopefully, signals
     # will interrupt sleep, but just in case, don't sleep for too long....
     block_sigchld(0);
-    my $terminated;
     while ((my $terminated = waitpid(-1, WNOHANG)) > 0) {
         block_sigchld(1);
 
@@ -255,6 +254,7 @@ if ($foad == SIGHUP) {
     print_log('notice', "restarting on signal $foad");
     { exec($FindBin::Script, @ARGV); }  # suppress "not likely to be reached" warning
     print_log('err', "exec: $!");
+    exit(1);
 } else {
     print_log('notice', "shutting down on signal $foad");
 }
@@ -321,5 +321,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.13 2005-02-23 13:20:26 chris Exp $
+$Id: fyrqd,v 1.14 2005-03-03 11:21:19 chris Exp $
 
