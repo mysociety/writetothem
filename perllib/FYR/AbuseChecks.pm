@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.22 2005-01-11 16:30:22 chris Exp $
+# $Id: AbuseChecks.pm,v 1.23 2005-01-12 09:04:32 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -73,10 +73,12 @@ use constant SUBSTRING_LENGTH => 32;
 # Number of low bits which must be zero for a hash to be accepted.
 use constant NUM_BITS => 4;
 
-# check_similarity MESSAGE
-# Test MESSAGE for similarity to other messages in the queue.
-sub check_similarity ($) {
+# get_similar_messages MESSAGE
+# Return list of pairs of (message ids, similarity) for messages whose
+# bodies are similar to MESSAGE.  "similarity" is between 0.0 and 1.0.
+sub get_similar_messages ($) {
     my ($msg) = @_;
+    die "get_similar_messages: must call in list context" unless (wantarray());
 
     # Compute and save hash of this message.
     
@@ -134,6 +136,15 @@ sub check_similarity ($) {
         push(@similar, [$id2, $similarity]) if ($similarity > $thr);
     }
 
+    return @similar;
+}
+
+# check_similarity MESSAGE
+# Test MESSAGE for similarity to other messages in the queue.
+sub check_similarity ($) {
+    my ($msg) = @_;
+
+    my @similar = get_similar_messages($msg);
     return 0 unless (@similar);
 
     @similar = sort { $b->[1] <=> $a->[1] } @similar;
