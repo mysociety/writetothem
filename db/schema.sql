@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.10 2004-11-18 17:22:20 chris Exp $
+-- $Id: schema.sql,v 1.11 2004-11-18 22:57:31 chris Exp $
 --
 
 -- secret
@@ -28,6 +28,7 @@ insert into state (name) values ('bounce_confirm');
 insert into state (name) values ('error');
 insert into state (name) values ('sent');
 insert into state (name) values ('finished');
+insert into state (name) values ('failed');
 
 -- message
 -- List of messages to be sent.
