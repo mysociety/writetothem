@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.66 2005-02-10 14:01:58 francis Exp $
+ * $Id: write.php,v 1.67 2005-02-11 11:12:17 chris Exp $
  * 
  */
 
@@ -48,7 +48,7 @@ function buildWriteForm()
 END;
 
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
-    $form->addElement("html", "<tr><td valign=top>$stuff_on_left</td><td align=right>\n<table>"); // CSSify
+    $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
 
     $form->addElement('text', 'writer_name', "Your name:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_name', 'Please enter your name', 'required', null, null);
@@ -72,9 +72,11 @@ END;
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
-    $form->addElement('text', 'writer_phone', "Phone: <a href=\"/about-qa#address\" target=\"_blank\">(?)</a>", array('size' => 20, 'maxlength' => 255));
+    $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_phone', 'Please enter a phone number', 'regex', '/^[\d() -+]+$/', null);
     $form->applyFilter('writer_phone', 'trim');
+
+    $form->addElement("html", "<tr><td colspan=\"2\"><em style=\"font-size: 80%\">Optional: to let your {$fyr_voting_area['rep_name']} contact you more easily</em></td></tr>"); // CSSify
 
     // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
     $form->addElement("html", "</table>\n</td></tr>"); // CSSify
