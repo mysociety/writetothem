@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.71 2005-02-12 02:04:35 francis Exp $
+ * $Id: write.php,v 1.72 2005-02-13 14:17:56 francis Exp $
  * 
  */
 
@@ -52,7 +52,7 @@ function buildWriteForm()
             <br><br>$fyr_date
 END;
 
-    // special formatting for letter-like code, TODO: how do this // properly with QuickHtml?
+    // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
     $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
 
     $form->addElement('text', 'writer_name', "Your name:", array('size' => 20, 'maxlength' => 255));
@@ -90,7 +90,7 @@ END;
 
     add_all_variables_hidden($form, $fyr_values);
 
-    $buttons[0] =& HTML_QuickForm::createElement('static', 'static1', null, 
+    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null, 
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
     $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
@@ -118,10 +118,10 @@ function renderForm($form, $pageName)
     $renderer =& new HTML_QuickForm_Renderer_mySociety();
     $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
     $renderer->setElementTemplate('{element}', 'previewStuff');
-    $renderer->setElementTemplate('<TD colspan=2> 
+    $renderer->setElementTemplate('<TR><TD colspan=2> 
     {element} 
     <!-- BEGIN error --><span style="color: #ff0000"><br>{error}</span><!-- END error --> 
-    </TD>', 'body');
+    </TD></TR>', 'body');
     $form->accept($renderer);
 
     global $fyr_form, $fyr_values;
