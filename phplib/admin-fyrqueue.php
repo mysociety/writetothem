@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.36 2005-01-05 19:20:07 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.37 2005-01-07 08:03:04 francis Exp $
  * 
  */
 
@@ -299,7 +299,11 @@ All time stats:
 <table border=1>
 <?
     foreach ($stats as $k=>$v) {
-        if (stristr($k, "state ")) print "<tr><td>$k</td><td>$v</td></tr>\n";
+        if (stristr($k, "state ")) {
+            print "<tr><td>";
+            print add_tooltip($k, $this->state_help_notes(str_replace("state ", "", $k)));
+            print "</td><td>$v</td></tr>\n";
+        }
     }
     print "<tr><td>Total:</td><td>" . $stats['message_count'] .  "</td></tr>\n";
 ?>
@@ -340,9 +344,9 @@ All time stats:
 
             print "<h2>View messages which are: ";
             if ($filter != 1)
-                print "<a href=\"$self_link&amp;view=important\">[Important]</a> ";
+                print "<a href=\"$self_link&amp;view=important\">[Need Attention]</a> ";
             else
-                print "[Important " . count($messages) . "] ";
+                print "[Need Attention " . count($messages) . "] ";
             if ($filter != 3)
                 print "<a href=\"$self_link&amp;view=recentcreated\">[Recently Created]</a> ";
             else
