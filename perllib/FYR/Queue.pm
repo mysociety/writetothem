@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.10 2004-11-11 13:46:59 chris Exp $
+# $Id: Queue.pm,v 1.11 2004-11-15 12:36:56 francis Exp $
 #
 
 package FYR::Queue;
@@ -853,4 +853,36 @@ sub notify_daemon () {
     $s->close();
 }
 
+=item admin_recent_events COUNT
+
+Returns an array of hashes of information about recent queue events.
+Specify the number of events you'd like.
+
+=cut
+sub admin_recent_events ($$) {
+    my ($x,$count) = @_;
+    my $sth = FYR::DB::dbh()->prepare('select * from message_log order by order_id desc limit ?');
+    $sth->execute($count);
+    my @ret;
+    while (my $hash_ref = $sth->fetchrow_hashref()) {
+        push @ret, $hash_ref;
+    }
+    return \@ret;
+}
+
+=item admin_get_queue
+
+Returns an array of hashes of information about each message on the queue.
+
+=cut
+sub admin_get_queue ($) {
+    my ($x) = @_;
+    my $sth = FYR::DB::dbh()->prepare('select * from message order by created desc');
+    $sth->execute();
+    my @ret;
+    while (my $hash_ref = $sth->fetchrow_hashref()) {
+        push @ret, $hash_ref;
+    }
+    return \@ret;
+}
 1;
