@@ -6,13 +6,14 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.3 2004-10-24 17:13:33 chris Exp $
+# $Id: Queue.pm,v 1.4 2004-11-01 15:23:09 chris Exp $
 #
 
 package FYR::Queue;
 
 use strict;
 
+use Convert::Base32;
 use Crypt::CBC;
 use Error qw(:try);
 use HTML::Entities;
@@ -293,36 +294,85 @@ sub make_representative_email ($) {
         );
 }
 
+
+#
+# Tokens.
+#
+# Tokens are used to represent message IDs in the outside world. We want to
+# prevent attackers from being able to construct tokens from message IDs;
+# this leaves us with two options: (a) construct random tokens, recode the
+# mapping from tokens to IDs; (b) encrypt the message ID with some other data,
+# and assume that the attacker will not infer the key and other parameters used
+# to generate them. Use (b), basically because (a) isn't as neat. Other
+# requirements are that tokens are as short as possible, because we will want
+# to transmit them as URL suffixes in emails; and that tokens are
+# case-insensitive, since we use them in VERPs to detect mail bounces. We
+# therefore use base32 to encode the data.
+#
+
+# Arbitrary IV for the encryption; arguably this should be per-installation and
+# in the database.
+use constant token_iv => 'nk"49{8y';
+
+# Shorten common token types to single characters.
+my %confirm_wordmap = qw(
+        confirm C
+        bounce  B
+    );
+
 # make_token WORD ID
 # Returns a token for WORD (e.g. "bounce", "confirm", etc.) and the given
-# message ID.
-use constant token_iv => 'nk"49{8y';
+# message ID. The token will contain only letters and digits between 2 and 7
+# inclusive, so is suitable for transmission through case-insensitive channels
+# (e.g. as part of an email address).
 sub make_token ($$) {
     my ($word, $id) = @_;
-    my $rand = sprintf('%04x', int(rand(0xffff)));
+
+    $word = $confirm_wordmap{$word} if (exists($confirm_wordmap{$word}));
+
+    # Try to keep these as short as possible. In particular, since the message
+    # ID itself is composed only of characters [0-9a-f], pack it into the
+    # equivalent octets.
+    my $rand = int(rand(0xffff));
+    my $string = $word . pack('nh*', $rand, $id);
+
     my $c = Crypt::CBC->new({
                     key => $word . FYR::DB::secret(),
                     cipher => 'IDEA',
                     prepend_iv => 0,
                     iv => token_iv
                 });
-    return lc("$rand-" . $c->encrypt_hex(pack('h*', "$rand$id")));
+
+    return Convert::Base32::encode_base32(pack('na*', $rand, $c->encrypt($string)));
 }
 
 # check_token WORD TOKEN
 # If TOKEN is valid, return the ID it encodes. Otherwise return undef.
 sub check_token ($$) {
     my ($word, $token) = @_;
-    my ($rand, $enc) = ($token =~ m#^([0-9a-f]{4})-([0-9a-f]+)$#) or return undef;
+
+    $token = lc($token);
+    return undef if ($token !~ m#^[2-7a-z]{20,}$#);
+    
+    $word = $confirm_wordmap{$word} if (exists($confirm_wordmap{$word}));
+
+    my ($rand, $enc) = unpack('na*', Convert::Base32::decode_base32($token));
+
     my $c = Crypt::CBC->new({
                     key => $word . FYR::DB::secret(),
                     cipher => 'IDEA',
                     prepend_iv => 0,
                     iv => token_iv
                 });
-    my $dec = unpack('h*', $c->decrypt_hex($enc));
-    return undef if (substr($dec, 0, 4) ne $rand);
-    return substr($dec, 4);
+
+    my $dec = $c->decrypt($enc);
+
+    my $word2 = substr($dec, 0, length($word));
+    return undef if ($word ne $word2);
+    my $rand2 = unpack('n', substr($dec, length($word), 2));
+    return undef if ($rand2 != $rand);
+    my $id = unpack('h*', substr($dec, length($word) + 2));
+    return $id;
 }
 
 # confirm_token ID
