@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.7 2005-01-11 16:58:36 chris Exp $
+ * $Id: about.php,v 1.8 2005-01-11 16:59:58 chris Exp $
  * 
  */
 
@@ -28,7 +28,7 @@ if (!isset($page) || (!preg_match('/^(?:about|problem)-[a-z]+$/', $page) && $pag
     
 $values = array();
 
-if ($page = 'write-checkemail')
+if ($page == 'write-checkemail')
     /* Fill in some other values as required. */
     $values['voting_area'] = array('rep_name' => 'MP' /* ... XXX */);
 
