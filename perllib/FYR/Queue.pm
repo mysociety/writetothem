@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.12 2004-11-15 15:03:42 fyr Exp $
+# $Id: Queue.pm,v 1.13 2004-11-15 17:18:37 chris Exp $
 #
 
 package FYR::Queue;
@@ -66,7 +66,7 @@ their phone number. RECIPIENT is the DaDem ID number of the recipient of the
 message; and TEXT is the text of the message, with line breaks. Returns true on
 success, or an error code on failure.
 
-This function commits its changes.
+This function is called remotely and commits its changes.
 
 =cut
 sub write ($$$$$) {
@@ -638,7 +638,8 @@ sub secret () {
 =item confirm_email TOKEN
 
 Confirm a user's email address, based on the TOKEN they've supplied in a URL
-which they've clicked on.
+which they've clicked on. This function is called remotely and commits its
+changes.
 
 =cut
 sub confirm_email ($$) {
