@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.143 2005-03-07 18:45:19 chris Exp $
+# $Id: Queue.pm,v 1.144 2005-03-24 12:17:23 chris Exp $
 #
 
 package FYR::Queue;
@@ -723,8 +723,19 @@ sub make_confirmation_email ($;$) {
     my $text = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder' : 'confirm'),
                     email_template_params($msg, confirm_url => $confirm_url)
-                )
-                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                );
+
+    # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
+    # present URLs as hyperlinks in email bodies unless we enclose them in
+    # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
+    # we manually make that transformation. Note that we're assuming here that
+    # the confirm URLs have no characters which need to be entity-encoded,
+    # which is bad, evil and wrong but actually true in this case.
+    $text =~ s#(http://.+$)#<a href="$1">$1</a>#
+        if ($msg->{sender_email} =~ m/\@aol\.com$/i);
+
+    # Append a separator and the text of the ms
+    $text .= "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);
 
     # Add header if site in test mode
