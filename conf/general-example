@@ -13,7 +13,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.7 2004-11-18 16:02:36 chris Exp $
+ * $Id: general-example,v 1.8 2004-11-18 21:49:17 chris Exp $
  * 
  */
 
@@ -42,8 +42,22 @@ define('OPTION_EMAIL_PREFIX', 'fyr-');
 // Configuration for fax generation and sending.
 // Truetype font for writing faxes
 define('OPTION_FAX_FONT', '/home/chris/projects/mysociety/cvs/mysociety/fyr/data/Cyberbit.ttf');
-// Devices to use for fax sending, separated by :
-define('OPTION_FAX_DEVICES', 'ttyS0');
+// Location of efax command.
+define('OPTION_FAX_COMMAND', '/software/bin/efax');
+// Where we keep UUCP lock files.
+define('OPTION_FAX_LOCKDIR', '/var/lock');  // Linux
+//define('OPTION_FAX_LOCKDIR', '/var/spool/lock');  // *BSD?
+// Device to use for fax sending, without the /dev/.
+define('OPTION_FAX_DEVICE', 'ttyS0');
+// efax(1) options to configure the modem. This is NOT interpreted by the
+// shell.
+define('OPTION_FAX_OPTIONS', '-iZ -i&FE0&D2S7=120 -i&C0 -kZ -iM1L0');
+    // nb -iM1L0 is the speaker config -- see efax(1)
+// Sending station ID for faxes. Should be a full international phone number.
+define('OPTION_FAX_STATIONID', '000000000000');
+// Fax header (sent by the fax machine, not written into the fax).
+define('OPTION_FAX_HEADER', 'Sent via WRITE TO THEM http://www.writetothem.com/');
+
 
 // Configuration of the queue management daemon:
 // Number of worker processes
