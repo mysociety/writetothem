@@ -40,6 +40,11 @@ Emails and the available variables are:
 
     The text of the constituent's letter is appended to the confirmation mail.
 
+  - via-coversheet
+
+    Prepended to any mail which is sent via another contact point, for instance
+    a Democratic Services office.
+
   - footer
 
     Appended to the mail sent to the representative. Extra variables are,

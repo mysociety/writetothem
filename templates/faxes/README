@@ -1,5 +1,10 @@
 Format as for ../emails. Templates are:
 
+  - via-coversheet
+
+    Cover sheet page for fax sent to a representative via another contact
+    point, for instance a Democratic Services office.
+
   - footer-first
 
   - footer
