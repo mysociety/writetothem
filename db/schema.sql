@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.15 2004-12-16 12:16:17 francis Exp $
+-- $Id: schema.sql,v 1.16 2004-12-20 15:39:31 chris Exp $
 --
 
 set client_min_messages to error;
@@ -46,6 +46,10 @@ create table message (
     -- representatives for the sender
     sender_postcode text not null,
 
+    -- data for anti-abuse measures
+    sender_ipaddr text not null,    -- IP address used to submit the message
+    sender_referrer text not null,  -- any external Referer: header we saw
+
     -- Recipient info; one of email or fax must be non-NULL; the ID
     recipient_id integer not null,      -- DaDem ID
     recipient_name text not null,
@@ -59,6 +63,7 @@ create table message (
 
     -- State information.
     state text not null references state(name),
+
     -- Frozen messages don't leave ready state
     frozen boolean not null default('f'),
 
@@ -80,6 +85,14 @@ create table message (
     dispatched integer
 );
 create index message_created_idx on message(created);
+
+-- message_extradata
+-- Additional (opaque) data about each message.
+create table message_extradata (
+    message_id char(20) not null references message(id),
+    name varchar(255) not null,
+    data bytea not null
+);
 
 -- message_log
 -- Events relating to each message.
