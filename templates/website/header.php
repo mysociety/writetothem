@@ -31,7 +31,7 @@ if (OPTION_FYR_REFLECT_EMAILS) {
 </h1>
 <div id="content">
 <?
-	if (substr($template_name, 0, 5)=='about') {
+	if (substr($template_name, 0, 5)=='about' && !isset($values['nobox'])) {
 		include 'about-sidebar.html';
 	}
 ?>
