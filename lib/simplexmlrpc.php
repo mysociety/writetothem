@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: simplexmlrpc.php,v 1.1 2004-10-06 15:15:48 chris Exp $
+ * $Id: simplexmlrpc.php,v 1.2 2004-10-06 15:39:00 chris Exp $
  * 
  */
 
@@ -44,7 +44,7 @@ function sxr_call($host, $port, $path, $func, $params) {
             /* XXX other types */
             for ($i = 0; $i < $v->arraysize(); ++$i) {
                 $x = $v->arraymem($i);
-                array_push($r, $x);
+                array_push($r, $x->scalarval());
             }
             return $r;
         }
