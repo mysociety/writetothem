@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.3 2004-12-07 17:08:14 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.4 2004-12-07 18:32:45 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -34,10 +34,19 @@ mySociety::Config::set_file('../conf/general');
 
 my @lines = ( );
 
+my $is_bounce_message = 0;
+
 while (defined($_ = STDIN->getline())) {
     chomp();
-    # Skip any From_ line-- we don't need it.
-    push(@lines, $_) unless (@lines == 0 and m#^From #);
+    # Skip any From_ line-- we don't need it. BUT, on some systems (e.g.
+    # FreeBSD with default exim config), there will be no Return-Path in a
+    # message even at final delivery time. So use the insanely ugly
+    # "From MAILER-DAEMON ..." thing to distinguish bounces, if it is present.
+    if (@lines == 0 and m#^From #) {
+        $is_bounce_message = 1 if (m#^From MAILER-DAEMON #);
+    } else {
+        push(@lines, $_);
+    }
 }
 
 if (STDIN->error()) {
@@ -53,20 +62,23 @@ if (!defined($m)) {
     exit(1);
 }
 
-# RFC2822:
-# 'The "Return-Path:" header field contains a pair of angle brackets
-# that enclose an optional addr-spec.'
-my $return_path = $m->head()->get("Return-Path");
+if (!$is_bounce_message) {
+    # RFC2822: 'The "Return-Path:" header field contains a pair of angle
+    # brackets that enclose an optional addr-spec.'
+    my $return_path = $m->head()->get("Return-Path");
 
-if (!defined($return_path)) {
-    print_log('err', "message had no Return-Path; discarding");
-    exit(0);
-}
-
-if ($return_path !~ m#<>#) {
-    # This is not a bounce message. We discard it.
-    print_log('info', "message was not a bounce message; discarding");
-    exit(0);
+    if (!defined($return_path)) {
+        # No Return-Path; we're screwed.
+        print_log('err', "message had no Return-Path and was not a bounce according to any From_ line; discarding");
+        print_log('err', "configure your MDA to add a Return-Path to messages at delivery time");
+        exit(0);
+    } elsif ($return_path =~ m#<>#) {
+        $is_bounce_message = 1;
+    } else {
+        # This is not a bounce message. We discard it.
+        print_log('info', "message was not a bounce message; discarding");
+        exit(0);
+    }
 }
 
 # Now we have a bounce. We need to know the address to which it was sent so
