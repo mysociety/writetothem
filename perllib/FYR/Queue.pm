@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.93 2005-01-17 17:56:47 francis Exp $
+# $Id: Queue.pm,v 1.94 2005-01-18 13:05:37 chris Exp $
 #
 
 package FYR::Queue;
@@ -478,6 +478,8 @@ sub make_representative_email ($) {
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
             Subject => "Letter from your constituent " . format_mimewords($msg->{sender_name}),
             Type => 'text/plain; charset="utf-8"',
+            # See note in make_confirmation_email.
+            Encoding => 'quoted-printable',
             Data => format_email_body($msg)
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . FYR::EmailTemplate::format(
@@ -650,6 +652,16 @@ sub make_confirmation_email ($;$) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
             Type => 'text/plain; charset="utf-8"',
+            # XXX Ideally we'd use the 'binary' encoding (pass through all
+            # characters unchanged, under the condition that no NULs appear)
+            # here; mail servers now either support it or know to transcode it
+            # into something else.  However, there are MUAs so talentless (ahem
+            # IMP ahem) as to interpret 'Content-Transfer-Encoding: binary' as
+            # meaning that the message-part is a *binary attachment* and so
+            # refuse to display it to the user, making it difficult for them to
+            # click the confirm link. So we use (ugly) quoted-printable insted.
+
+            Encoding => 'quoted-printable',
             Data => $text
         );
 }
@@ -690,6 +702,7 @@ sub make_failure_email ($) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
             Type => 'text/plain; charset="utf-8"',
+            Encoding => 'quoted-printable',
             Data => $text
         );
 }
@@ -728,6 +741,8 @@ sub make_questionnaire_email ($;$) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
             Type => 'text/plain; charset="utf-8"',
+            # See note in make_confirmation_mail
+            Encoding => 'quoted-printable',
             Data => $text
         );
 }
