@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.4 2004-12-17 10:22:42 francis Exp $
+# $Id: deploy,v 1.5 2004-12-20 21:22:37 francis Exp $
 #
 
 set -e
@@ -16,7 +16,7 @@ FYR_BIN=`pwd`
 MYSOCIETY_BIN=$FYR_BIN/../../bin
 EXPECTED_HOST=very.unfortu.net
 SCRIPT_COMMAND=fyr/bin/deploy
-source ../../shlib/deployfns
+. ../../shlib/deployfns
 
 # User to load test schema
 PSQL_SCHEMATEST_USER=pgsql
