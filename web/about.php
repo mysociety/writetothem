@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.6 2005-01-11 16:56:38 chris Exp $
+ * $Id: about.php,v 1.7 2005-01-11 16:58:36 chris Exp $
  * 
  */
 
@@ -23,7 +23,7 @@ require_once "../phplib/fyr.php";
  */
 
 $page = get_http_var("page");
-if (!isset($page) || (!preg_match('/^(?:about|problem)-[a-z]+$/', $page) && $page != 'write-checkemail' && page != 'confirm-accept'))
+if (!isset($page) || (!preg_match('/^(?:about|problem)-[a-z]+$/', $page) && $page != 'write-checkemail' && $page != 'confirm-accept'))
     $page = 'index';
     
 $values = array();
