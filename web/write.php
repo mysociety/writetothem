@@ -5,16 +5,18 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.6 2004-10-06 17:44:41 francis Exp $
+ * $Id: write.php,v 1.7 2004-10-14 15:49:22 francis Exp $
  * 
  */
 
 $fyr_title = "Now Write Your Fax To X MP for X";
 
-include_once "../lib/utility.php";
-include_once "../lib/votingarea.php";
-include_once "../lib/dadem.php";
-include_once "../lib/mapit.php";
+include_once "../conf/config.php";
+include_once "../../phplib/mapit.php";
+include_once "../../phplib/votingarea.php";
+include_once "../../phplib/dadem.php";
+include_once "../../phplib/utility.php";
+
 
 // Input data
 $fyr_postcode = get_http_var('pc');
@@ -65,6 +67,7 @@ if ($fyr_error_message = dadem_get_error($fyr_representative)) {
     include "templates/generalerror.html";
     exit;
 }
+print_r($fyr_representative);
 $va_id = $fyr_representative['voting_area'];
 
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division

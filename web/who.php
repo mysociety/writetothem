@@ -5,16 +5,17 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.5 2004-10-06 15:21:42 francis Exp $
+ * $Id: who.php,v 1.6 2004-10-14 15:49:22 francis Exp $
  * 
  */
 
 $fyr_title = "Now Choose The Representative Responsible for the Topic";
 
-include_once "../lib/mapit.php";
-include_once "../lib/votingarea.php";
-include_once "../lib/dadem.php";
-include_once "../lib/utility.php";
+include_once "../conf/config.php";
+include_once "../../phplib/mapit.php";
+include_once "../../phplib/votingarea.php";
+include_once "../../phplib/dadem.php";
+include_once "../../phplib/utility.php";
 
 // Input data
 $fyr_postcode = get_http_var('pc');

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.3 2004-10-14 14:14:24 chris Exp $
+# $Id: FYR.pm,v 1.1 2004-10-14 15:49:22 francis Exp $
 #
 
 package FYR::Error;
