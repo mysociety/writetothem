@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.30 2005-01-11 00:49:10 francis Exp $
+ * $Id: index.php,v 1.31 2005-01-11 11:50:41 chris Exp $
  * 
  */
 
@@ -32,6 +32,7 @@ $form .= '</form>';
 
 // Validate postcode, and prepare appropriate page
 $template = "index-index";
+$error_message = null;
 if ($pc != "") {
     /* Test for various special-case postcodes which lie outside the UK. Many
      * of these aren't valid UK postcode formats, so do a special-case test
