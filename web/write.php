@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.38 2004-12-13 12:17:34 francis Exp $
+ * $Id: write.php,v 1.39 2004-12-16 18:33:22 francis Exp $
  * 
  */
 
@@ -171,6 +171,12 @@ function submitFax() {
     if (rabx_is_error($success)) {
         if ($success->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
             template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
+        if ($success->code == FYR_QUEUE_MESSAGE_SUSPECTED_ABUSE) 
+            template_show_error("Sorry, but we've had to reject your
+            message.  Please see if you have broken any of our <a
+            href=\"about-guidelines\">Guidelines for Campaigning</a>.
+            If you don't think that you have, then contact us <a
+            href=\"mailto:help@writetothem.com\">help@writetothem.com</a>.");
         template_show_error($success->text);
     }
 

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.62 2004-12-16 18:13:18 chris Exp $
+# $Id: Queue.pm,v 1.63 2004-12-16 18:33:22 francis Exp $
 #
 
 package FYR::Queue;
@@ -35,6 +35,7 @@ use mySociety::VotingArea;
 use FYR;
 use FYR::EmailTemplate;
 use FYR::Fax;
+use FYR::AbuseChecks;
 
 use Data::Dumper;
 
@@ -201,14 +202,11 @@ sub write ($$$$) {
             $text,
             time(), time());
 
+        # Log creation of message
         my $logaddr = $sender->{address};
         $logaddr =~ s#\n#, #gs;
         $logaddr =~ s#,+#,#g;
         $logaddr =~ s#, *$##;
-
-        # This goes before logmsg, otherwise the message_log foreign key
-        # constraint gets violated by the new log message.
-        FYR::DB::dbh()->commit();
 
         logmsg($id, sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
                     $sender->{name},
@@ -218,6 +216,23 @@ sub write ($$$$) {
                     $recipient->{name},
                     defined($recipient->{fax}) ? "fax" : "email",
                     $recipient->{fax} || $recipient->{email}));
+
+        # Check for possible abuse
+        my ($abuse_action, $abuse_logmsg) = FYR::AbuseChecks::test(message($id));
+        if ($abuse_action eq 'reject') {
+            logmsg($id, "Abuse system rejected message: $abuse_logmsg");
+            state($id, 'failed');
+            FYR::DB::dbh()->commit();
+            throw FYR::Error("Message was rejected, suspected abuse.", FYR::Error::MESSAGE_SUSPECTED_ABUSE);
+        } elsif ($abuse_action eq 'hold') {
+            logmsg($id, "Abuse system froze message: $abuse_logmsg");
+            FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+        } elsif ($abuse_action ne 'ok') {
+            throw FYR::Error("Internal error, unknown response from abuse system");
+        }
+    
+        # Commit changes
+        FYR::DB::dbh()->commit();
 
         # Wake up the daemon to send the confirmation mail.
         notify_daemon();
@@ -279,7 +294,7 @@ sub scrubmessage ($) {
     # contain only the recipient ID and type, and a placeholder which indicates
     # whether the letter was delivered by fax or email.
     FYR::DB::dbh()->do(q#
-                update message
+                update message 
                     set sender_name = '', sender_email = '',
                         sender_addr = '', sender_phone = null,
                         sender_postcode = '', recipient_name = '',
@@ -817,7 +832,6 @@ sub record_questionnaire_answer ($$$) {
 #
 
 use constant HOUR => 3600;
-
 use constant DAY => (24 * HOUR);
 
 # How many confirmation mails may be sent, in total.

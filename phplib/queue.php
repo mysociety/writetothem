@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: chris@mysociety.org; WWW: http://www.mysociety.org/
  *
- * $Id: queue.php,v 1.20 2004-12-16 12:16:17 francis Exp $
+ * $Id: queue.php,v 1.21 2004-12-16 18:33:22 francis Exp $
  * 
  */
 
@@ -18,6 +18,7 @@ define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);
 define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);
 define('FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA', 4003);
 define('FYR_QUEUE_MESSAGE_SHAME', 4004); /* Represenative does not want to be contacted */
+define('FYR_QUEUE_MESSAGE_SUSPECTED_ABUSE', 4005);
 
 /* msg_get_error R
  * Return FALSE if R indicates success, or an error string otherwise. */

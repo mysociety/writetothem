@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.16 2004-12-16 15:21:23 chris Exp $
+ * $Id: general-example,v 1.17 2004-12-16 18:33:21 francis Exp $
  * 
  */
 
@@ -50,7 +50,7 @@ define('OPTION_EMAIL_DOMAIN', 'faxyourrepresentative.com');
 define('OPTION_EMAIL_PREFIX', 'fyr-');
 
 // Google API key, if available (used for one of the anti-abuse measures).
-// define('OPTION_GOOGLE_API_KEY', '...');
+define('OPTION_GOOGLE_API_KEY', '');
 
 // Configuration for fax generation and sending.
 // Truetype font for writing faxes
