@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.46 2004-12-13 12:21:32 francis Exp $
+# $Id: Queue.pm,v 1.47 2004-12-13 13:20:05 francis Exp $
 #
 
 package FYR::Queue;
@@ -87,7 +87,9 @@ sub work_out_destination($) {
         $recipient->{fax} = undef;
     } elsif ($recipient->{method} eq "shame") {
         throw FYR::Error("Representative has told us they do not want WriteToThem.com to deliver messages for them.", FYR::Error::MESSAGE_SHAME);
-    } else {
+    } elsif ($recipient->{method} eq "unknown") {
+        throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
+     } else {
         throw FYR::Error("Unknown contact method '" .  $recipient->{method} . "'.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
     }
 }
