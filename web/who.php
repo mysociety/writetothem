@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.38 2005-01-08 00:03:02 matthew Exp $
+ * $Id: who.php,v 1.39 2005-01-08 11:19:28 matthew Exp $
  * 
  */
 
@@ -110,9 +110,9 @@ foreach ($va_display_order as $va_type) {
 	// Create HTML
 	if (is_array($va_type)) {
 		if ($rep_count > 1) {
-			$text = "<h4>Your {$va_info[0]['rep_name_long_plural']}</h4><p>";
+			$text = "<h3>Your {$va_info[0]['rep_name_long_plural']}</h3><p>";
 		} else {
-			$text = "<h4>Your {$va_info[0]['rep_name_long']}</h4><p>";
+			$text = "<h3>Your {$va_info[0]['rep_name_long']}</h3><p>";
 		}
 		if ($rep_counts[0]>1) {
 			$text .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
@@ -131,10 +131,10 @@ foreach ($va_display_order as $va_type) {
 		$text .= display_reps($representatives[1]);
 	} else {
 		if ($rep_count > 1) {
-			$text = "<h4>Your ${va_info['rep_name_long_plural']}</h4><p>";
+			$text = "<h3>Your ${va_info['rep_name_long_plural']}</h3><p>";
 			$text .= "Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
 		} else {
-			$text = "<h4>Your ${va_info['rep_name_long']}</h4><p>";
+			$text = "<h3>Your ${va_info['rep_name_long']}</h3><p>";
 			$text .= "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
 		}
 		$text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
