@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.64 2005-02-04 13:01:17 matthew Exp $
+ * $Id: write.php,v 1.65 2005-02-08 14:34:59 chris Exp $
  * 
  */
 
@@ -68,7 +68,7 @@ END;
     $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
 
     $form->addElement('text', 'writer_email', "Email:", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_email', 'Please enter your email', 'required', null, null);
+    $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
@@ -83,7 +83,6 @@ END;
     $form->addRule('body', 'Please enter your message', 'required', null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
-    $form->applyFilter('body', 'convert_to_unix_newlines');
 
     add_all_variables_hidden($form, $fyr_values);
 
@@ -225,6 +224,11 @@ function submitFax() {
 
 // Get all fyr_values
 $fyr_values = get_all_variables();
+
+// Normalise text part of message here, before we modify it.
+if (array_key_exists('body', $fyr_values))
+    $fyr_values['body'] = convert_to_unix_newlines($fyr_values['body']);
+
 debug("FRONTEND", "All variables:", $fyr_values);
 if (!array_key_exists('pc', $fyr_values) || $fyr_values['pc'] == "") {
     template_show_error("Please <a href=\"/\">start from the beginning</a>.");
