@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.39 2005-02-08 00:53:28 francis Exp $
+# $Id: AbuseChecks.pm,v 1.40 2005-02-08 10:23:06 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -164,7 +164,7 @@ my @tests = (
             my ($msg) = @_;
             my $cc = get_country_from_ip($msg->{sender_ipaddr});
             $cc ||= 'unknown';
-            FYR::Queue::logmsg($msg->{id}, 0, sprintf('sender IP address %s is country %s', $msg->{sender_ipaddr}, $cc));
+            FYR::Queue::logmsg($msg->{id}, 0, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
             return ( sender_ip_country => [$cc, 
                 "Country of constituent's IP address, or localhost if 127.0.0.1"] );
         },
