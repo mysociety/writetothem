@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.7 2004-12-17 16:28:56 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.8 2004-12-21 08:38:58 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -97,6 +97,7 @@ my ($a) = Mail::Address->parse($to);
 if (!defined($a)) {
     # Couldn't parse first To: address.
     print_log('err', "unable to parse address from To: header '$to' in received bounce message; discarding");
+    exit(0);
 }
 
 my $prefix = mySociety::Config::get("EMAIL_PREFIX");
@@ -108,15 +109,12 @@ if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get
 
 my ($token) = ($a->user() =~ m#^\Q$prefix\E(.*)#);
 
-if ($token eq 'bounce-null') {
-    # Just discard this one;
-    exit(0);
-} elsif (defined(my $id = FYR::Queue::check_token('bounce', $token))) {
+if ($token ne 'bounce-null') {
+    && defined(my $id = FYR::Queue::check_token('bounce', $token))) {
     my $msg = FYR::Queue::message($id, 1);    # lock message
     if (!defined($msg)) {
         print_log('err', "bounce received for non-existant message '$id'; discarding");
         FYR::DB::dbh()->rollback();
-        exit(0);
     } else {
         # Record the bounce
         FYR::Queue::logmsg($id, "received email bounce message");
@@ -128,5 +126,6 @@ if ($token eq 'bounce-null') {
     }
 } else {
     print_log('err', "received bounce with invalid token '$token'; discarding");
-    exit(0);
 }
+
+exit(0);
