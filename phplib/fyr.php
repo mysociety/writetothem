@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.16 2005-01-11 11:51:27 chris Exp $
+ * $Id: fyr.php,v 1.17 2005-01-12 17:19:11 chris Exp $
  * 
  */
 
@@ -49,7 +49,7 @@ function fyr_rate_limit($important_vars) {
     $important_vars['PAGE'] = $_SERVER['SCRIPT_NAME'];
     $important_vars['SITE'] = 'fyr';
 
-    $ret = ratty_test($important_vars);
+    $ret = ratty_test("fyr-web", $important_vars);
     if (isset($ret)) {
         list($rule, $error_message) = $ret;
         if ($error_message == "") {
