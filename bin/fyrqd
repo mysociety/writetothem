@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.9 2004-12-15 16:02:25 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.10 2005-01-21 09:27:25 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -80,7 +80,7 @@ sub run_daemon ($$$$) {
         }
     }
 
-    print_log('info', "shutting down after $iter iterations");
+    print_log('notice', "shutting down after $iter iterations");
 }
 
 # Entry point.
@@ -235,11 +235,11 @@ undef($pidfile);
 unlink($socketpath);
 
 if ($foad == SIGHUP) {
-    print_log('info', "restarting on signal $foad");
+    print_log('notice', "restarting on signal $foad");
     { exec($FindBin::Script, @ARGV); }  # suppress "not likely to be reached" warning
     print_log('err', "exec: $!");
 } else {
-    print_log('info', "shutting down on signal $foad");
+    print_log('notice', "shutting down on signal $foad");
 }
 
 exit(0);
@@ -304,5 +304,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.9 2004-12-15 16:02:25 chris Exp $
+$Id: fyrqd,v 1.10 2005-01-21 09:27:25 chris Exp $
 
