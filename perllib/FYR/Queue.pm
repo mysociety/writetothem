@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.15 2004-11-16 15:01:09 chris Exp $
+# $Id: Queue.pm,v 1.16 2004-11-17 11:40:11 chris Exp $
 #
 
 package FYR::Queue;
@@ -484,6 +484,29 @@ sub send_user_email ($$$) {
     return $result;
 }
 
+# email_template NAME
+# Find the email template with the given NAME. We look for the templates
+# directory in ../ and ../../. Nasty.
+sub email_template ($$) {
+    my ($name) = @_;
+    foreach (qw(.. ../..)) {
+        return "$_/$name" if (-e "$_/$name");
+    }
+    die "unable to locate email template for '$name'";
+}
+
+# email_template_params MESSAGE EXTRA
+# Return a reference to a hash of information about the MESSAGE, and additional
+# elements from EXTRA.
+sub email_template_params ($%) {
+    my ($msg, %params) = @_;
+    $params{sender_name} = $msg->{sender_name};
+    $params{recipient_name} = $msg->{recipient_name};
+    $params{recipient_position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
+    $params{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$recipient->{type}};
+    return \%params;
+}
+
 # make_confirmation_email MESSAGE [REMINDER]
 # Return a MIME::Entity object for the given MESSAGE (reference to hash of db
 # fields), suitable for sending to the constituent so that they can confirm
@@ -504,44 +527,14 @@ sub make_confirmation_email ($;$) {
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
-    if ($reminder) {
-        $reminder = qq#(This is a reminder email. It seems that the first one didn't reach you.)\n\n#;
-    } else {
-        $reminder = '';
-    }
-
     # Don't insert linebreaks in the below except for paragraph marks-- let
     # Text::Wrap do the rest.
-    my $text = wrap(EMAIL_COLUMNS, 
-        <<EOF);
-$reminder
-Please click on the link below to confirm that you wish FaxYourRepresentative.com to send the message copied at the bottom of this email to $msg->{recipient_name}, your $msg->{recipient_position}:
-
-    $confirm_url
-
-If your email program does not let you click on this link, just copy and paste it into your web browser and hit return.
-
-We'll send you a confirmation email once your message has been dispatched successfully. If for some reason we can't send your message, we will email you with details of how to contact your $msg->{recipient_position} by more traditional, albeit less fun, means.
-
-A copy of your message is pasted to the bottom of this email.
-
-Please feel free to email us on info\@FaxYourRepresentative.com with any comments, problems or suggestions. And don't forget to let your friends and family know about www.FaxYourRepresentative.com !
-
-If you did not request that a message be sent to $msg->{recipient_name}, please let us know by sending an email to abuse\@FaxYourRepresentative.com
-
-Don't worry; nothing will be sent without your permission.
-
--- the FaxYourRepresentative.com team
-
-
------------------------------------------------------------------------
-
-A copy of your message follows:
-
-
-EOF
-
-    $text .= format_email_body($msg);
+    my $text = FYR::EmailTemplate::format(
+                    email_template($reminder ? 'confirm' : 'confirm-reminder'),
+                    email_template_params($msg, confirm_url => $confirm_url)
+                )
+                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . format_email_body($msg);
 
     return MIME::Entity->build(
             Sender => $confirm_sender,
@@ -575,21 +568,12 @@ sub make_failure_email ($) {
 
     # Don't insert linebreaks in the below except for paragraph marks-- let
     # Text::Wrap do the rest.
-    my $text = wrap(EMAIL_COLUMNS, 
-        <<EOF);
-We're very sorry, but it wasn't possible to send your letter to $msg->{recipient_name}, your $msg->{recipient_position}. Unfortunately, our system isn't 100% reliable and from time to time a message doesn't get through. We've attached a copy of your letter to the bottom of your email, so that you can print it out and send it by more traditional means. Or, try again via our site in a week or so -- hopefully we'll have tracked down the problem by then.
-
--- the FaxYourRepresentative.com team
-
-
------------------------------------------------------------------------
-
-A copy of your message follows:
-
-
-EOF
-
-    $text .= format_email_body($msg);
+    my $text = FYR::EmailTemplate::format(
+                    email_template('failure'),
+                    email_template_params($msg)
+                )
+                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . format_email_body($msg);
 
     return MIME::Entity->build(
             Sender => $failure_sender,
@@ -623,48 +607,17 @@ sub make_questionnaire_email ($;$) {
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
-    my $howlong = 'Two weeks';
-    if ($reminder) {
-        $howlong = 'A few weeks';
-        $reminder = qq#(This is a reminder email. It seems that the first one didn't reach you.)\n\n#;
-    } else {
-        $reminder = '';
-    }
-
-    # Don't insert linebreaks in the below except for paragraph marks-- let
-    # Text::Wrap do the rest.
-    my $text = wrap(EMAIL_COLUMNS,
-        <<EOF);
-Hi,
-
-$reminder
-$howlong ago we sent your letter to $msg->{recipient_name}, your $msg->{recipient_position}.
-
-- If you HAVE had a reply, please click on the link below:
-
-    $yes_url
-
-- If you HAVE NOT had a reply, please click on the link below:
-
-    $no_url
-
-Unlike most other workers in the public sector, the performance of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} is not measured and published. With your help, we'd like to fix this curious anomaly.
-
-Your feedback will allow us to publish performance tables of the responsiveness of all the politicians in the UK. The majority of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} respond promptly and diligently to the needs and views of their constituents. They deserve credit and respect for their conscientiousness.
-
-Likewise, we're keen to expose the minority of $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}} who don't seem to give a damn.
-
-Rest assured that we will not store ANY data that could be used to identify you. We do not keep a copy of the letter you sent to your $msg->{recipient_position}.
-
--- the FaxYourRepresentative.com team
-
-EOF
+    my $text = FYR::EmailTemplate::format(
+                    email_template($reminder ? 'questionnaire' : 'questionnaire-reminder'),
+                    email_template_params($msg, yes_url => $yes_url, no_url => $no_url)
+                );
 
     return MIME::Entity->build(
             Sender => $questionnaire_sender,
             From => format_email_address('FaxYourRepresentative', $questionnaire_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position})
+            Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
+            Data => $text
         );
 }
 
