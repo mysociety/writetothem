@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.16 2005-02-09 18:48:56 chris Exp $
+# $Id: Fax.pm,v 1.17 2005-02-10 14:50:45 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -401,7 +401,7 @@ sub deliver ($) {
         unless (exists($msg->{recipient_fax}) and defined($msg->{recipient_fax}));
 
     FYR::Queue::logmsg($id, 1, "attempting delivery by fax to $msg->{recipient_fax}");
-
+again:
     # First, try to lock the fax device. If that doesn't work, then soft-fail.
     #
     # We do this here (rather than having efax do it) so that we can reliably
@@ -410,8 +410,47 @@ sub deliver ($) {
     my $f = new IO::File($lockfilename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (!$f) {
         if ($!{EEXIST}) {
+            # A lockfile is present.
+            my $pid;
+            if (!defined($f = new IO::File($lockfilename, O_RDONLY))) {
+                FYR::Queue::logmsg($id, 1, "not faxing: sending device is locked and cannot open lockfile: $!");
+                return FAX_SOFT_ERROR;
+            } else {
+                $pid = $f->getline();
+                if (!defined($pid)) {
+                    FYR::Queue::logmsg($id, 1, "not faxing: sending device is locked and cannot read lockfile: $!");
+                    return FAX_SOFT_ERROR;
+                }
+                $f->close();
+                chomp($pid);
+
+                # (The "empty" or "not a PID" tests might wind up with us
+                # colliding with some other process, but that's pretty unlikely
+                # and in any case just likely to result in both failing, so
+                # we'd back off and retry.)
+                my $again = 0;
+                if ($pid eq '') {
+                    FYR::Queue::logmsg($id, 1, "lock file was empty; assuming stale");
+                    $again = 1;
+                } elsif ($pid =~ m#[^\d]#) {
+                    FYR::Queue::logmsg($id, 1, "lock file contains \"$pid\", not a PID; assuming stale");
+                    $again = 1;
+                } elsif (!defined(kill(0, $pid)) && !$!{EPERM}) {
+                    FYR::Queue::logmsg($id, 1, "stale lock file (refers to \"$pid\", which is not running");
+                    $again = 1;
+                }
+
+                if ($again) {
+                    if (!unlink($lockfilename)) {
+                        FYR::Queue::logmsg($id, 1, "cannot remove lock file: $!");
+                        return FAX_SOFT_ERROR;
+                    } else {
+                        goto again;
+                    }
+                }
+            }
             # Device was locked.
-            FYR::Queue::logmsg($id, 1, "not faxing: sending device is locked");
+            FYR::Queue::logmsg($id, 1, "not faxing: sending device is locked by PID $pid");
             return FAX_SOFT_ERROR;
         } else {
             FYR::Queue::logmsg($id, 1, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $lockfilename: $!");
@@ -424,6 +463,7 @@ sub deliver ($) {
 
     # We win; save our PID in the lock file.
     $f->print("$$\n");
+    $f->close();    # Should lock it, though other programs won't obey that.
 
     my @imgfiles;
     my %unsent;
