@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.5 2004-12-20 21:22:37 francis Exp $
+# $Id: deploy,v 1.6 2005-01-04 11:34:16 francis Exp $
 #
 
 set -e
@@ -31,6 +31,7 @@ FYR_NAME="WriteToThem.com"
 FYR_UNAME=fyr
 FYR_DEPLOYSPACE=$FYR_VHOST/deployspace
 hostname=$( echo $FYR_VHOST | sed 's@/$@@' | sed 's@^.*/@@' )
+FYR_QUEUE_DB_UNIX_USER=fyr
 
 # Main body of script
 fmt << END
@@ -54,7 +55,7 @@ check_config_files $FYR_DEPLOYSPACE/mysociety/fyr/conf
 
 warn "Checking database schemas..."
 read_conf $FYR_DEPLOYSPACE/mysociety/fyr/conf/general
-check_pgsql_schema $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS
+check_pgsql_schema $FYR_QUEUE_DB_UNIX_USER $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS 
 
 warn "Stopping services..."
 down_notice $FYR_VHOST $FYR_NAME
