@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.32 2004-11-18 20:19:03 chris Exp $
+# $Id: Queue.pm,v 1.33 2004-11-18 21:25:32 chris Exp $
 #
 
 package FYR::Queue;
@@ -530,6 +530,8 @@ sub make_confirmation_email ($;$) {
 # this is a reminder mail.
 sub send_confirmation_email ($;$) {
     my ($id, $reminder) = @_;
+    die "attempt to send confirmation mail for message $id while in state '" . state($id) . "' (should be 'new' or 'pending')"
+        unless (state($id) eq 'new' or state($id) eq 'pending');
     $reminder ||= 0;
     my $msg = message($id);
     return send_user_email($id, 'confirmation' . ($reminder ? ' reminder' : ''), make_confirmation_email($msg, $reminder));
@@ -605,6 +607,8 @@ sub send_questionnaire_email ($;$) {
     my ($id, $reminder) = @_;
     $reminder ||= 0;
     my $msg = message($id);
+    die "attempt to send questionnaire for message $id while in state '" . state($id) . "' (should be 'sent')"
+        unless (state($id) eq 'sent');
     return send_user_email($id, 'questionnaire' . ($reminder ? ' reminder' : ''), make_questionnaire_email($msg, $reminder));
 }
 
@@ -613,6 +617,8 @@ sub send_questionnaire_email ($;$) {
 # Attempt to deliver the MESSAGE by email.
 sub deliver_email ($) {
     my ($msg) = @_;
+    die "attempt to deliver message $id while in state '" . state($id) . "' (should be 'ready')"
+        unless (state($id) ne 'ready');
     my $id = $msg->{id};
     my $mail = make_representative_email($msg);
     my $sender = sprintf('%s-%s@%s',
@@ -658,6 +664,7 @@ changes.
 sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
+        return 0 if (state($id) ne 'pending'); # already confirmed
         state($id, 'ready');
         logmsg($id, "sender email address confirmed");
         FYR::DB::dbh()->commit();
@@ -904,7 +911,7 @@ sub process_queue () {
         # still meets the criteria for sending. Do things this way round so
         # that we can have several queue-running daemons operating
         # simultaneously.
-        my $msg = message($id);
+        my $msg = message($id, 1);
         next if (!exists($state_action{$msg->{state}})
                     or (defined($msg->{lastaction})
                         and $msg->{lastaction} > time() - $state_action_interval{$msg->{state}}));
