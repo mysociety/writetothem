@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.18 2004-12-17 10:50:50 francis Exp $
+ * $Id: general-example,v 1.19 2004-12-17 16:37:36 chris Exp $
  * 
  */
 
@@ -40,8 +40,12 @@ define('OPTION_FYR_QUEUE_DB_PASS', '');
 // sender, rather than sent to their representative.
 define('OPTION_FYR_REFLECT_EMAILS', 1);
 
+// Base domain of the website. This is used to distinguish internal from
+// external referrers, for instance.
+define('OPTION_WEB_DOMAIN', 'writetothem.com');
+
 // Top-level URL of current website
-define('OPTION_BASE_URL', 'http://sometestdomain.writetothem.com');
+define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN . '/');
 
 // Domain name for emails to current website
 define('OPTION_EMAIL_DOMAIN', 'sometestdomain.writetothem.com');
