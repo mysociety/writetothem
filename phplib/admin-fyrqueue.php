@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.65 2005-01-31 11:55:15 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.66 2005-01-31 14:03:24 chris Exp $
  * 
  */
 
@@ -122,7 +122,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                     print htmlspecialchars($message['recipient_fax']) . "<br>";
                 print "</td>";
 
-                print "<td>${message['sender_ipaddr']}<br>"
+                print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a><br>"
                         . trim_url($message['sender_referrer']) . "</td>";
                 print "<td>${message['message_length']}</td>";
 
