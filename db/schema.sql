@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.17 2004-12-22 13:16:01 francis Exp $
+-- $Id: schema.sql,v 1.18 2005-01-13 02:37:28 chris Exp $
 --
 
 set client_min_messages to error;
@@ -31,6 +31,7 @@ insert into state (name) values ('error');
 insert into state (name) values ('sent');
 insert into state (name) values ('finished');
 insert into state (name) values ('failed');
+insert into state (name) values ('failed_closed');
 
 -- message
 -- List of messages to be sent.
