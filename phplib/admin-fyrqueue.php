@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.2 2004-11-18 17:14:42 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.3 2004-11-18 20:55:18 fyr Exp $
  * 
  */
 
@@ -80,7 +80,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <?
             foreach ($recents as $recent) {
                 print "<tr>";
-                print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['whenlogged']) . "</td>";
+                print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . $recent['state'] . "</td>";
                 print "<td>" . $recent['message'] . "</td>";
