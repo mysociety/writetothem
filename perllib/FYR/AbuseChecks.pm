@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.16 2005-01-05 14:43:37 chris Exp $
+# $Id: AbuseChecks.pm,v 1.17 2005-01-05 14:46:31 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -91,7 +91,7 @@ sub check_similarity ($) {
     }
     return 0 unless (@similar);
     @similar = sort { $b->[1] <=> $a->[1] } @similar;
-    my $why = "Message body is very similar to #$similar[0]->[0]";
+    my $why = "Message body is very similar to $similar[0]->[0]";
     for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
         $why .= ", $similar[$i]->[0]";
     }
