@@ -6,15 +6,26 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.1 2004-11-18 13:27:57 chris Exp $
+# $Id: Fax.pm,v 1.2 2004-11-18 21:41:44 chris Exp $
 #
+
+package FYR::Fax::HardError;
+use Error;
+@FYR::Fax::Error::ISA = qw(Error::Simple);
+
+package FYR::Fax::SoftError;
+use Error;
+@FYR::Fax::Error::ISA = qw(Error::Simple);
 
 package FYR::Fax;
 
 use strict;
 
+use Errno;
+use Error qw(:try);
 use GD;
 use HTML::Entities;
+use IO::Pipe;
 use utf8;
 
 use FYR::EmailTemplate;
@@ -136,7 +147,7 @@ sub format_text ($$$$$$;$$) {
     # Advance one line so that first line is within rectangle.
     $y += (text_dimensions("M", $size))[1];
 
-    while (@stuff > 0 && $y < $height) {
+    while (@stuff > 0 && $y <= $height) {
         my $word = shift(@stuff);
         if ($word eq "\n") {
             # Line break. Go to beginning of next line.
@@ -202,7 +213,7 @@ sub format_postal_address ($$) {
         $max = $w if ($w > $max);
     }
 
-    $max *= 1.05;
+    $max *= 1.05; # XXX
     $max = TEXT_CX / 2 if ($max > TEXT_CX / 2);
     $max = int($max);
     
@@ -213,74 +224,276 @@ sub format_postal_address ($$) {
     return $y;
 }
 
+sub footer_text ($$$) {
+    my ($page, $total, $url) = @_;
+    my $text = FYR::EmailTemplate::format(fax_template($page == 1 ? 'footer-first' : 'footer'), {
+                        this_page => $page,
+                        total_pages => $total,
+                        representative_url => $url
+                    }, 1);
+    $text =~ s#\n+#\n#sg;
+    $text =~ s#\n$##s;
+    return $text;
+}
+
 =item make_representative_fax MESSAGE
 
-
+Generates page images suitable for sending MESSAGE to its recipient by fax.
+Returns in list context a list of temporary filenames containing PBM image
+data for each page of the fax. These should be deleted by the caller.
 
 =cut
 sub make_representative_fax ($) {
     my ($msg) = @_;
 
-    my @pages = ( );
+    my @imgfiles = ( );
 
-    my $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY);
-    $im->colorAllocate(255, 255, 255);
-    $im->colorAllocate(0, 0, 0);
+    my $url = 'https://secure.writetothem.com/Roign243ohn4h8n8n9n32h4nh';
 
-    # First thing to do is to format the fax footer. The purpose of this is
-    # just to figure out how much space it takes up, so that we can subtract
-    # that from the space available for the text.
-    my $text = FYR::EmailTemplate::format(fax_template('footer'), {
-                    this_page => '10',
-                    total_pages => '99',
-                    representative_url => 'https://secure.writetothem.com/Roign243ohn4h8n8n9n32h4nh'
-                });
-    # Remove blank lines and trailing carriage returns.
-    $text =~ s#\n+#\n#sg;
-    $text =~ s#\n$##s;
-    my ($footerheight, $remainder) = format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL);
+    try {
+        my @pages = ( );
 
-    my $addr = $msg->{sender_addr};
-    $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (exists($msg->{sender_phone}));
-    $addr .= "\n\n" . "Email: $msg->{sender_email}";
-
-    # Coordinates relative to text area.
-    my ($x, $y) = (0, format_postal_address($im, $addr));
-    my $pagenum = 0;
-
-    $text = "\n\n" . $msg->{message};
-    while (length($text) > 0) {
-        ++$pagenum;
-        my ($dy, $text2) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $footerheight - FMARGIN_CY));
-
-        push(@pages, $im);
-
-        ($x, $y) = (0, 0);
-        $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY);
+        my $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
         $im->colorAllocate(255, 255, 255);
         $im->colorAllocate(0, 0, 0);
-        $text = $text2;
+
+        # First thing to do is to format the fax footers. The purpose of this
+        # is just to figure out how much space it takes up, so that we can
+        # subtract that from the space available for the text.
+        my $text = footer_text(1, 99, $url);
+        my $firstfooterheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
+        $text = footer_text(2, 99, $url);
+        my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_SMALL))[0];
+
+        my $addr = $msg->{sender_addr};
+        $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
+        $addr .= "\n\n" . "Email: $msg->{sender_email}";
+
+        # Coordinates relative to text area.
+        my ($x, $y) = (0, format_postal_address($im, $addr));
+        my $pagenum = 0;
+
+        $text = "\n\n" . $msg->{message};
+        while (length($text) > 0) {
+            ++$pagenum;
+
+            my $f = ($pagenum > 1 ? $footerheight : $firstfooterheight);
+            my ($dy, $text2) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
+
+            push(@pages, $im);
+
+            ($x, $y) = (0, 0);
+            $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
+            $im->colorAllocate(255, 255, 255);
+            $im->colorAllocate(0, 0, 0);
+            $text = $text2;
+        }
+
+        # Now go back over each page and write the appropriate footer, and save
+        # the pages to temporary PBM files whose names we return.
+        for (my $i = 0; $i < @pages; ++$i) {
+            $text = footer_text($i + 1, scalar(@pages), $url);
+            my $f = ($i > 0 ? $footerheight : $firstfooterheight);
+
+            format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_SMALL);
+            $pages[$i]->setThickness(2);
+            $pages[$i]->line(LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f - 10, LMARGIN_CX + TEXT_CX, TMARGIN_CY + TEXT_CY - $f - 10, 1);
+
+            # Nasty. We need to create a PBM file on disk, but getting
+            # bitmapped data out of GD is not trivial. We use the "WBMP" format
+            # (part of the WAP specification, apparently). This is designed for
+            # mobile phones with 2x3 pixel screens or whatever, and so is not
+            # quite the right thing for thousands-of-pixels-square fax images.
+            # But it seems to work.
+            my ($h, $name) = mySociety::Util::named_tempfile('.pbm');
+            push(@imgfiles, $name);
+            my ($p, $pid) = mySociety::Util::pipe_via('wbmptopbm', $h);
+            $h->close() or die "close: $name: $!";;
+            $p->print($pages[$i]->wbmp(1)) or die "write: $name: $!";
+            $p->close() or die "close: $!";
+
+            waitpid($pid, 0);
+
+            if ($?) {
+                # Something went wrong.
+                if ($? & 127) {
+                    die "wbmptopbm died with signal " . ($? & 127);
+                } else {
+                    die "wbmptopbm exited with status " . ($? >> 8);
+                }
+            }
+
+            # else OK.
+        }
+
+    } finally {
+        # Something went wrong; clean up the temporary files.
+        foreach (@imgfiles) {
+            unlink($_);
+        }
+    };
+    
+    die "no fax images created" if (@imgfiles == 0);
+    
+    return @imgfiles;
+}
+
+use constant FAX_SUCCESS => 0;
+use constant FAX_SOFT_ERROR => 1;
+use constant FAX_HARD_ERROR => 2;
+
+# deliver MESSAGE
+# Send the MESSAGE by fax. Returns one of the FAX_ constants to indicate
+# whether the transaction was successful, failed with a temporary (soft) error,
+# or failed with a hard (permanent) error.
+sub deliver ($) {
+    my ($msg) = @_;
+    my $ret = FAX_SOFT_ERROR;
+
+    die "attempted fax delivery for message $msg->{id} without fax recipient"
+        unless (exists($msg->{recipient_fax}) and defined($msg->{recipient_fax}));
+
+    # We want to commit all our log messages as soon as they happen.
+    FYR::Queue::logmsg($id, "attempting delivery by fax to $msg->{recipient_fax}");
+    FYR::DB::dbh()->commit();
+
+    # First, try to lock the fax device. If that doesn't work, then soft-fail.
+    #
+    # We do this here (rather than having efax do it) so that we can reliably
+    # detect "in use" errors.
+    my $lockfilename = mySociety::Config::get('FAX_LOCKDIR') . '/' . mySociety::Config::get('FAX_DEVICE');
+    my $f = new IO::File($lockfilename, O_WRONLY | O_CREAT | O_EXCL, 0644);
+    if (!$f) {
+        if ($!{EEXIST}) {
+            # Device was locked.
+            FYR::Queue::logmsg($id, "not faxing: sending device is locked");
+            return FAX_SOFT_ERROR;
+        } else {
+            FYR::Queue::logmsg($id, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $!");
+            # This probably indicates that something on the system is broken
+            # (on fire, eh?) but does not indicate that the message is
+            # undeliverable.
+            return FAX_SOFT_ERROR;
+        }
     }
 
-    # Now go back over each page and write the appropriate footer.
-    for (my $i = 0; $i < @pages; ++$i) {
-        $text = FYR::EmailTemplate::format(fax_template('footer'), {
-                    this_page => $i + 1,
-                    total_pages => scalar(@pages),
-                    representative_url => 'https://secure.writetothem.com/Roign243ohn4h8n8n9n32h4nh'
-                }, 1);
-        # Remove blank lines and trailing carriage returns.
-        $text =~ s#\n+#\n#sg;
-        $text =~ s#\n$##s;
-        format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $footerheight, TEXT_CX, $footerheight, 0, FONT_SIZE_SMALL);
-        $pages[$i]->setThickness(2);
-        $pages[$i]->line(LMARGIN_CX, TMARGIN_CY + TEXT_CY - $footerheight - 10, LMARGIN_CX + TEXT_CX, TMARGIN_CY + TEXT_CY - $footerheight - 10, 1);
+    # We win; save our PID in the lock file.
+    $f->print("$$\n");
 
-        open(PNG, ">/tmp/page-" . ($i + 1) . ".png");
-        print PNG $pages[$i]->png();
-        close(PNG);
-        undef($pages[$i]);
-    }
+    my @imgfiles;
+    try {
+        @imgfiles = make_representative_fax($message);
+
+        my $number = $msg->{recipient_fax};
+
+        # Now we have to process this to generate a phone number.
+        $number =~ s/ //g;
+        if ($number =~ m#^\+#) {
+            if ($number =~ m#^\+44#) {
+                # National number, within this country.
+                $number =~ s#^\+44#0#;
+            } else {
+                # International direct dialing.
+                $number =~ s#\^+#00#;
+            }
+        }
+
+        if ($number =~ m#([^\d])#) {
+            throw FYR::Fax::HardError("recipient number contains bad character '$1'; unable to send by fax");
+        } else {
+            logmsg($id, "recipient's dialing number is $number");
+        }
+
+        # We call efax(1) directly rather than via the fax(1) wrapper, because
+        # we need to interpret the exit status of efax(1); fax(1) does not
+        # return this, but instead produces "human readable" output. We also
+        # want to log errors and warnings (but nothing else) from efax.
+        my @efaxcmd = (
+                mySociety::Config::get('FAX_COMMAND', 'efax'),
+                split(/ +/, mySociety::Config::get('FAX_OPTIONS')),
+                '-d', mySociety::Config::get('FAX_DEVICE'),
+                '-l', mySociety::Config::get('FAX_STATIONID'),
+                '-h', mySociety::Config::get('FAX_HEADER'),
+                # Don't produce anything on standard error, but log errors,
+                # warnings and progress information on standard output. This
+                # makes life slightly easier for us, since we can then use
+                # pipe_via to process the error stream.
+                '-v', '',       
+                '-v', 'ewi',
+                '-t', $number,
+                @imgfiles
+            );
+
+        my $p = new IO::Pipe() or throw FYR::Fax::SoftError("pipe: $!");
+        my ($rd, $wr) = $p->handles();
+
+        my ($p2, $pid) = mySociety::Util::pipe_via(@efaxcmd, $wr);
+        $wr->close();
+        $p2->close();   # efax needs nothing on standard input.
+
+        # Read output from efax, and log it.
+        while (defined(my $line = $rd->getline())) {
+            chomp($line);
+            FYR::Queue::logmsg($id, "efax output: $line");
+        }
+        if ($rd->error()) {
+            throw FYR::Fax::SoftError("read from efax: $!");
+        }
+        $rd->close();
+
+        if (!defined(waitpid($pid, 0))) {
+            throw FYR::Fax::SoftError("wait for efax termination: $!");
+        }
+
+        if ($?) {
+            if ($? & 127) {
+                throw FYR::Fax::SoftError("efax was killed by signal " . ($? & 127));
+            } else {
+                my $st = $? >> 8;
+                #
+                # efax exit codes:
+                #
+                if ($st == 1) {
+                    # number busy or device in use
+                    throw FYR::Fax::SoftError("fax number was engaged");
+                } elsif ($st == 2) {
+                    # some kind of fatal error
+                    throw FYR::Fax::HardError("fatal error in efax");
+                } elsif ($st == 3) {
+                    # "Modem protocol error"
+                    throw FYR::Fax::SoftError("modem protocol error (exit status 3) in efax");
+                } elsif ($st == 4) {
+                    # Modem is not responding.
+                    throw FYR::Fax::SoftError("modem is not responding");
+                } elsif ($st == 5) {
+                    # Program terminated by signal
+                    throw FYR::Fax::SoftError("efax terminated by signal");
+                }
+            }
+        } else {
+            # Yay!
+            $ret = FAX_SUCCESS;
+        }
+    } catch FYR::Fax::HardError with {
+        my $E = shift;
+        logmsg($id, $E->text());
+        $ret = FAX_HARD_ERROR;
+    } catch FYR::Fax::SoftError with {
+        my $E = shift;
+        logmsg($id, $E->text());
+        $ret - FAX_SOFT_ERROR;
+    } finally {
+        # whatever happens, nuke the lockfile and all the image files.
+        foreach ($lockfilename, @imgfiles) {
+            unlink($_);
+        }
+
+        # and commit database changes, since it is important that our log
+        # messages are recorded.
+        FYR::DB::dbh()->commit();
+    };
+
+    return $ret;
 }
 
 1;
