@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.12 2004-10-18 10:33:53 chris Exp $
+ * $Id: who.php,v 1.13 2004-10-18 11:06:23 francis Exp $
  * 
  */
 
@@ -122,7 +122,8 @@ foreach ($voting_areas as $va_type => $va_specificid) {
             include "templates/generalerror.html";
             exit;
         }
-        $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b>', $rep_specificid);
+        $form->addElement('radio', 'who', null, "&nbsp;<b>" .  $rep_info['name'] . '</b><br>'
+            . $rep_info['party'], $rep_specificid);
     }
 
     $form->addElement('hidden', 'pc', $fyr_postcode);
