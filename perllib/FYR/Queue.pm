@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.87 2005-01-12 14:19:56 francis Exp $
+# $Id: Queue.pm,v 1.88 2005-01-13 02:34:01 chris Exp $
 #
 
 package FYR::Queue;
@@ -220,17 +220,15 @@ sub write ($$$$) {
                     $recipient->{fax} || $recipient->{email}));
 
         # Check for possible abuse
-        my ($abuse_action, $abuse_logmsg) = FYR::AbuseChecks::test(message($id));
-        if ($abuse_action eq 'reject') {
-            logmsg($id, "abuse system rejected message: $abuse_logmsg");
-            state($id, 'failed');
-            FYR::DB::dbh()->commit();
-            throw FYR::Error("Message was rejected, suspected abuse.", FYR::Error::MESSAGE_SUSPECTED_ABUSE);
-        } elsif ($abuse_action eq 'hold') {
-            logmsg($id, "abuse system froze message: $abuse_logmsg");
-            FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-        } elsif ($abuse_action ne 'ok') {
-            throw FYR::Error("Internal error, unknown response from abuse system");
+        my $abuse_result = FYR::AbuseChecks::test(message($id));
+        if (defined($abuse_result)) {
+            if ($abuse_result eq 'freeze') {
+                logmsg($id, "abuse system froze message");
+                FYR::DB::dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+            } else {
+                logmsg($id, "abuse system REJECTED message");
+                state($id, 'failed');   # XXX or should this be failed_closed?
+            }
         }
     
         # Commit changes

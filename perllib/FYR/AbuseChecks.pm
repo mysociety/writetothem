@@ -3,10 +3,15 @@
 # FYR/AbuseChecks.pm:
 # Some automated abuse checks.
 #
+# This is v2 of the automated abuse checks. Rather than applying checks here,
+# we do a bunch of tests and kick their results through to Ratty using the
+# "fyr-abuse" scope. Specific rules can then refer to the results we generate
+# here.
+#
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.23 2005-01-12 09:04:32 francis Exp $
+# $Id: AbuseChecks.pm,v 1.24 2005-01-13 02:34:01 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -20,13 +25,14 @@ use Storable;
 use Data::Dumper;
 
 use mySociety::Config;
+use mySociety::Ratty;
 
 use FYR;
 use FYR::SubstringHash;
 
 # google_for_postcode POSTCODE
-# Return true if the POSTCODE occurs with the terms "faxyourmp" or
-# "writetothem" on a web page indexed by Google.
+# Return the number of pages found on Google in which the POSTCODE occurs with
+# the terms "faxyourmp" or "writetothem".
 sub google_for_postcode ($) {
     my ($pc) = @_;
     our ($G, $nogoogle);
@@ -53,18 +59,18 @@ sub google_for_postcode ($) {
     $G->query('', $googlesearch);
     my $results = $G->results();
 
-    return (scalar(@$results) > 0);
+    return scalar(@$results);
 }
 
-# check_ip_in_uk ADDRESS
-# Return true if the IP ADDRESS is in the UK.
-sub check_ip_in_uk ($) {
+# get_country_from_ip ADDRESS
+# Return the country code for the given IP address, or undef if none could be
+# found.
+sub get_country_from_ip ($) {
     my ($addr) = @_;
     return 1 if $addr eq "127.0.0.1";
     our $geoip;
     $geoip ||= new Geo::IP(GEOIP_STANDARD);
-    my $cc = $geoip->country_code_by_addr($addr);
-    return defined($cc) and $cc =~ m#^(GB|UK)$#;
+    return $geoip->country_code_by_addr($addr);
 }
 
 # Constants for similarity hashing.
@@ -75,7 +81,9 @@ use constant NUM_BITS => 4;
 
 # get_similar_messages MESSAGE
 # Return list of pairs of (message ids, similarity) for messages whose
-# bodies are similar to MESSAGE.  "similarity" is between 0.0 and 1.0.
+# bodies are similar to MESSAGE. "similarity" is between 0.0 and 1.0. This list
+# excludes messages which are from the same email address and postcode (fixes
+# ticket #108).
 sub get_similar_messages ($) {
     my ($msg) = @_;
     die "get_similar_messages: must call in list context" unless (wantarray());
@@ -139,121 +147,116 @@ sub get_similar_messages ($) {
     return @similar;
 }
 
-# check_similarity MESSAGE
-# Test MESSAGE for similarity to other messages in the queue.
-sub check_similarity ($) {
-    my ($msg) = @_;
-
-    my @similar = get_similar_messages($msg);
-    return 0 unless (@similar);
-
-    @similar = sort { $b->[1] <=> $a->[1] } @similar;
-    my $why = sprintf("Message body is very similar to $similar[0]->[0] (%.2f similar)", 
-        $similar[0]->[1]);
-    for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
-        $why .= sprintf(", $similar[$i]->[0] (%.2f similar)", $similar[$i]->[1]);
-    }
-
-    $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
-    return $why;
-}
-
 # @tests
-# List of tests to apply to messages. Each entry in the array should be a
-# reference to a list of: action ('hold' or 'drop') and a code reference, which
-# should return an explanatory message if the test succeeds for this message.
-# Tests are applied in the order given and the first which succeeds for a
-# message determines its fate.
+# Tests to apply to messages to detect abuse. Each entry in the array is a code
+# reference, which is passed the message as a reference to a hash; it should
+# return a hash of rate limiting variables to their values. The convention is
+# that a boolean value should be added to the results if true, and not added
+# if false -- see the "representative emailing themself" case for an example.
+# Tests may also log information, if they want.
 my @tests = (
-        # Debugging test cases
-        [
-            'hold',
-            sub ($) {
-                return 'ABUSETESTHOLD appears in message body'
-                    if ($_[0]->{message} =~ m#ABUSETESTHOLD#);
-            }
-        ],
+        # Country of origin of IP address
+        sub ($) {
+            my ($msg) = @_;
+            my $cc = get_country_from_ip($msg->{sender_ipaddr});
+            $cc ||= 'unknown';
+            logmsg($msg->{id}, sprintf('sender IP address %s -> country %s', $msg->{sender_ipaddr}, $cc));
+            return ( sender_ip_country => $cc );
+        },
 
-        [
-            'reject',
-             sub ($) {
-                return "ABUSETESTREJECT appears in message body"
-                    if ($_[0]->{message} =~ m#ABUSETESTREJECT#);
-            },
-        ],
+        # Length of message, in characters and words
+        sub ($) {
+            my ($msg) = @_;
+            my $l1 = length($msg->{message});
+            my $l2 = scalar(split(/[[:space:]]+/, $msg->{message}));
+            logmsg($msg->{id}, sprintf('message length: %d words, %d characters', $l2, $l1));
+            return (
+                    message_length_characters => $l1,
+                    message_length_words => $l2
+                );
+        },
 
-        # IP address outside UK
-        [
-            'hold',
-            sub ($) {
-                return qq#IP address $_[0]->{sender_ipaddr} is not in the UK#
-                    if (!check_ip_in_uk($_[0]->{sender_ipaddr}));
-            }
-        ],
-
-        # Extremely short messages, allow for length of signature (about 150)
-        [
-            'hold',
-            sub ($) {
-                return "Message is extremely short"
-                    if (length($_[0]->{message}) - length($_[0]->{recipient_name}
-                        ) < 250);
-            }
-        ],
-
-        # Check for postcodes advertised on Google
-        [
-            'hold',
-            sub ($) {
-                return qq#Postcode "$_[0]->{sender_postcode}" appears in Google with term "faxyourmp" or "writetothem"#
-                    if (google_for_postcode($_[0]->{sender_postcode}));
-            }
-        ],
-
+        # Postcodes advertised in Google
+        sub ($) {
+            my ($msg) = @_;
+            my $hits = google_for_postcode($msg->{sender_postcode});
+            logmsg($msg->{id}, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
+                $msg->{sender_postcode}, $hits))
+                if ($hits > 0);
+            return ( postcode_google_hits => $hits );
+        },
+        
         # Representative emailing themself
         # TODO Actually look this up in DaDem, as it won't work if they
         # are somebody who is faxed, even if we know their email.
         # This can also spot representatives emailing each other, is
         # that useful?
-        [
-            'hold',
-            sub ($) {
-                return "Representative is emailing themself"
-                    if (defined($_->{recipient_email}) and $_[0]->{sender_email} eq $_[0]->{recipient_email}
-                        and !(mySociety::Config::get('FYR_REFLECT_EMAILS')));
+        sub ($) {
+            my ($msg) = @_;
+            if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
+                and defined($msg->{recipient_email})
+                and $msg->{sender_email} eq $msg->{recipient_email}) {
+                logmsg($msg->{id}, 'representative appears to be emailing themself');
+                return ( representative_emailing_self => 'YES' );
+            } else {
+                return ( );
             }
-        ],
+        },
 
         # Body of message similar to other messages in queue.
-        [
-            'hold',
-            \&check_similarity
-        ]
+        sub ($) {
+            my ($msg) = @_;
+            my @similar = sort { $b->[1] <=> $a->[1] } grep { $_->[1] > get_similar_messages($msg);
+            return ( ) if (!@similar);
 
+            my $why = sprintf('message body is very similar to %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);
+            for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
+                $why .= sprintf(", %s (%.2f similar)", $similar[$i]->[0], $similar[$i]->[1]);
+            }
+
+            $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
+
+            my %res = ( );
+            
+            # Generate a bunch of useful metrics
+            $res{similarity_max} = $similar[0]->[0];
+
+            foreach my $thr (qw(0.5 0.6 0.7 0.8 0.9 0.95 0.99)) {
+                next if ($_ > mySociety::Config::get('MAX_MESSAGE_SIMILARITY'));
+                my $n = scalar(grep { $_->[1] > $thr } @similar);
+                $res{"similarity_num_$_"} = $n;     # "number of messages more than ... similar to this one"
+            }
+        }
     );
 
 =item test MESSAGE
 
-Perform abuse checks on the MESSAGE (hash of database fields). This returns in
-list context one of: 'ok' to indicate that delivery should occur as normal,
-'hold' to indicate that the message should be held for inspection by an
-administrator, or 'reject' to indicate that the message should be discarded;
-and, for 'hold' or 'reject', the reason for the result, to be displayed to the
-administrator.
+Perform abuse checks on the MESSAGE (hash of database fields). This performs
+tests on the message (which may themselves log information), and passes the
+message and the results of the tests to the rate limiter under scope
+"fyr-abuse". The function returns undef to indicate that delivery should
+proceed as normal, 'freeze' to indicate that the message should be frozen for
+inspection by an administrator, or, if the message should be rejected
+completely, the name of a template which should be displayed to the user to
+explain why their message has been rejected.
 
 =cut
 sub test ($) {
     my ($msg) = @_;
 
-    foreach (@tests) {
-        my ($what, $f) = @$_;
-        my $why = &$f($msg);
-        if ($why) {
-            return ($what, $why);
-        }
+    my %ratty_values = %$msg;
+    foreach my $f (@tests) {
+        %ratty_values = (%ratty_values, &$f($msg));
     }
 
-    return ('ok', undef);
+    # Perform test.
+    my ($ruleid, $result) = mySociety::Ratty::test('fyr-abuse', \%ratty_values);
+    if (defined($ruleid)) {
+        logmsg($msg->{id}, "fyr-abuse rule $ruleid fired for message; result: $result");
+        return $result;
+    } else {
+        return undef;
+    }
 }
 
 1;
