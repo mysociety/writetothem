@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.27 2004-12-30 19:46:20 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.28 2005-01-03 13:58:18 matthew Exp $
  * 
  */
 
@@ -59,7 +59,7 @@ Change</th><th>State</th><th>Sender</th><th>Recipient</th>
                 print "</td>";
                 $simple_ref = $message['sender_referrer'];
                 $url_bits = parse_url($simple_ref);
-                if ($simple_ref != "") 
+                if ($simple_ref != "" && ($url_bits['path']!='/' || $url_bits['query'])) 
                     $simple_ref = $url_bits['scheme'] . "://" .  $url_bits['host'] . "/...";
                 $client_name = $message['sender_ipaddr'];
                 if ($client_name != "")  {
