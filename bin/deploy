@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.2 2004-12-13 11:04:11 chris Exp $
+# $Id: deploy,v 1.3 2004-12-13 17:16:16 francis Exp $
 #
 
 set -e
@@ -44,11 +44,11 @@ main () {
     # Currently just FYR and services to update
 
     fmt << END
-    This will update services.mysociety and $hostname
-    from CVS and gracefully restart Apache.  It will warn you first if
-    any database schemas need upgrading, or config files fixing.  These
-    get fixed in the deploy space, i.e. the place where the "cvs export"
-    happens to, before copying over to the live server.
+    This will update $hostname from CVS and gracefully restart 
+    Apache.  It will warn you first if any database schemas need
+    upgrading, or config files fixing.  These get fixed in the deploy
+    space, i.e. the place where the "cvs export" happens to, before
+    copying over to the live server.
 
     You should ensure that fyrqd is not running when this script is run.
 
