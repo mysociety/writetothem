@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.6 2005-01-11 17:19:04 chris Exp $
+ * $Id: forms.php,v 1.7 2005-01-11 19:52:19 matthew Exp $
  * 
  */
 
@@ -57,7 +57,7 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
             </table>
             </form>');
         $this->setElementTemplate('
-                <TR>  
+                <TR valign="top">  
                 <TD CLASS="small<!-- BEGIN required -->b<!-- END required -->">{label}</TD>
                 <TD>
                     {element} 
