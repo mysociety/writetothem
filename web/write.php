@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.35 2004-11-29 10:20:50 francis Exp $
+ * $Id: write.php,v 1.36 2004-12-10 11:53:32 matthew Exp $
  * 
  */
 
@@ -65,7 +65,7 @@ END;
     $form->addRule('writer_town', 'Please enter your town', 'required', null, null);
     $form->applyFilter('writer_town', 'trim');
 
-    $form->addElement('static', 'staticpc', 'postcode:', $fyr_postcode);
+    $form->addElement('static', 'staticpc', 'postcode:', htmlentities($fyr_postcode));
 
     $form->addElement('text', 'writer_email', "email:", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email', 'Please enter your email', 'required', null, null);
