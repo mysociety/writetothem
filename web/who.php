@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.48 2005-01-17 10:38:57 chris Exp $
+ * $Id: who.php,v 1.49 2005-01-17 19:28:14 matthew Exp $
  * 
  */
 
@@ -139,13 +139,13 @@ foreach ($va_display_order as $va_type) {
         }
         $text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
 
-        /* Note categories of representatives who aren't paid for their work.... */
         if($va_type == 'WMC') {
             $twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
             if (preg_match('#<img src="/images/mps/(\d+.jpg)"#', $twfy, $matches))
                 $representatives_info[$representatives[0]]['image'] = $matches[1];
         }
         $text .= display_reps($representatives);
+        /* Note categories of representatives who aren't paid for their work.... */
         if (!$va_salaried[$va_type])
             $text .= "<p><em>Please remember that unlike MPs or MEPs, your "
                 . (($rep_count > 1)
@@ -168,12 +168,16 @@ debug_timestamp();
 
 function display_reps($representatives) {
     global $representatives_info, $fyr_postcode;
-    $rep_list = '';
+    $rep_list = ''; $photo = 0;
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
-        if (array_key_exists('image', $rep_info)) {
+        if ($rep_specificid == '2000005') {
+            $rep_list .= '<img src="images/zz99zz.jpeg" align="left">';
+            $photo = 1;
+        } elseif (array_key_exists('image', $rep_info)) {
             $rep_list .= '<img src="http://www.theyworkforyou.com/images/mps/'.$rep_info['image'].'" align="left">';
+            $photo = 1;
         }
         $rep_list .= '<a href="'
                        . htmlspecialchars(new_url('write', 0, 
@@ -186,6 +190,6 @@ function display_reps($representatives) {
         if (array_key_exists('party', $rep_info))
                        $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
     }
-    return '<ul'.(array_key_exists('image', $rep_info)?' id="photo"':'').'>' . $rep_list . '</ul>';
+    return '<ul'.($photo==1?' id="photo"':'').'>' . $rep_list . '</ul>';
 }
 ?>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.36 2005-01-17 10:39:44 chris Exp $
+ * $Id: index.php,v 1.37 2005-01-17 19:28:14 matthew Exp $
  * 
  */
 
@@ -16,7 +16,7 @@ require_once "../../phplib/mapit.php";
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
-$form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm">' . "\n";
+$form = '<div id="postcodebox"><form action="./" method="get" name="postcodeForm" id="postcodeForm">' . "\n";
 $form .= '<label for="pc"><b>Type Your UK Postcode:</b></label>&nbsp;' . "\n";
 $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
 $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
@@ -28,7 +28,7 @@ $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
 $ref = fyr_external_referrer();
 if (isset($ref))
     $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
-$form .= '</form>';
+$form .= '</form></div>';
 
 // Validate postcode, and prepare appropriate page
 $template = "index-index";
