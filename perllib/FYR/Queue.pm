@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.39 2004-11-26 17:54:52 chris Exp $
+# $Id: Queue.pm,v 1.40 2004-12-06 16:38:15 chris Exp $
 #
 
 package FYR::Queue;
@@ -791,8 +791,9 @@ my %state_action_interval = (
 # representing the message will be locked; any transaction will be committed
 # after they return.
 my %state_action = (
-        new => sub ($) {
-            my ($id) = @_;
+        new => sub ($$$) {
+            my ($email, $fax, $id) = @_;
+            return unless ($email);
             # Construct confirmation email and send it to the sender.
             my $result = send_confirmation_email($id);
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
@@ -805,8 +806,9 @@ my %state_action = (
             }
         },
 
-        pending => sub ($) {
-            my ($id) = @_;
+        pending => sub ($$$) {
+            my ($email, $fax, $id) = @_;
+            return unless ($email);
             # Send reminder confirmation if necessary. We don't send one
             # immediately on entering this state, but do thereafter.
             if (actions($id) == 0) {
@@ -826,11 +828,11 @@ my %state_action = (
             }
         },
 
-        ready => sub ($) {
-            my ($id) = @_;
+        ready => sub ($$$) {
+            my ($email, $fax, $id) = @_;
             # Send email or fax to recipient.
             my $msg = message($id);
-            if (defined($msg->{recipient_fax})) {
+            if ($fax && defined($msg->{recipient_fax})) {
                 my $result = deliver_fax($msg);
                 if ($result == FYR::Fax::FAX_SUCCESS) {
                     FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
@@ -841,7 +843,7 @@ my %state_action = (
                     logmsg($id, "abandoning message after failure to send to representative");
                     state($id, 'error');
                 }
-            } else {
+            } elsif ($email && defined($msg->{recipient_email})) {
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
@@ -855,8 +857,10 @@ my %state_action = (
             }
         },
 
-        sent => sub ($) {
-            my ($id) = @_;
+        sent => sub ($$$) {
+            my ($email, $fax, $id) = @_;
+            return unless ($email);
+
             my $msg = message($id);
 
             # If we haven't got a questionnaire response, and it's been long
@@ -884,8 +888,10 @@ my %state_action = (
             }
         },
 
-        error => sub ($) {
-            my ($id) = @_;
+        error => sub ($$$) {
+            my ($email, $fax, $id) = @_;
+            return unless ($email);
+
             # Send failure report to sender.
             my $result = send_failure_email($id);
             if ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
@@ -898,9 +904,13 @@ my %state_action = (
         }
     );
 
-# process_queue
-# Drive the state machine round.
-sub process_queue () {
+# process_queue EMAIL FAX
+# Drive the state machine round; emails will be sent if EMAIL is true, and
+# faxes if FAX is true.
+sub process_queue ($$) {
+    my ($email, $fax) = @_;
+    $email ||= 0;
+    $fax ||= 0;
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
     my $stmt = FYR::DB::dbh()->prepare(
@@ -936,7 +946,7 @@ sub process_queue () {
             if ($msg->{state} eq $state
                 and (!defined($msg->{lastaction})
                     or $msg->{lastaction} < time() - $state_action_interval{$state})) {
-                &{$state_action{$state}}($id);
+                &{$state_action{$state}}($email, $fax, $id);
             }
         } catch FYR::Error with {
             my $E = shift;
