@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.1 2004-10-14 15:49:22 francis Exp $
+# $Id: FYR.pm,v 1.2 2004-10-20 11:06:41 chris Exp $
 #
 
 package FYR::Error;
@@ -23,7 +23,9 @@ my %config = (
         dbname => 'fyr',
         dbuser => 'fyr',
         dbpass => '',
-        baseurl => 'http://caesious.beasts.org/~chris/tmp/fyr'
+        baseurl => 'http://caesious.beasts.org/~chris/tmp/fyr',
+        emaildomain => 'caesious.beasts.org',
+        emailprefix => 'fyr-'
     );
 
 =item get_value NAME [DEFAULT]
@@ -34,13 +36,15 @@ that is not specified, undef.
 =cut
 sub get_value ($;$) {
     my ($name, $def) = @_;
-    return $config->{$name} || $def;
+    my $x = $config{$name} || $def;
+    die "No config value for '$name', and no default" unless (defined($x));
+    return $x;
 }
 
 package FYR::DB;
 
+use mySociety::Util;
 use DBI;
-use FYR::Config;
 
 =item new_dbh
 
@@ -48,16 +52,18 @@ Return a new handle on the database.
 
 =cut
 sub new_dbh () {
-    my $dbh DBI->connect('dbi:Pg:%s' . FYR::Config::get_value('dbname', 'fyr'),
+    my $dbh = DBI->connect('dbi:Pg:dbname=' . FYR::Config::get_value('dbname', 'fyr'),
                         FYR::Config::get_value('dbuser', 'fyr'),
                         FYR::Config::get_value('dbpass', ''),
                         { RaiseError => 1, AutoCommit => 0 });
 
     # make sure we have a site shared secret
-    if (0 == scalar($dbh->selectrow_array('select count(*) from secret for update of secret'))) {
-        $dbh->do('insert into secret (secret) values (?)', {}, pack('h*', mySociety::Util::random_bytes(32)));
+    if (!$dbh->selectrow_array('select secret from secret for update of secret')) {
+        $dbh->do('insert into secret (secret) values (?)', {}, unpack('h*', mySociety::Util::random_bytes(32)));
         $dbh->commit();
     }
+
+    return $dbh;
 }
 
 
@@ -68,7 +74,7 @@ Return a shared handle on the database.
 =cut
 sub dbh () {
     our $dbh;
-    $dbh ||= another_dbh();
+    $dbh ||= new_dbh();
     return $dbh;
 }
 
