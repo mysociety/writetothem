@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.31 2004-11-18 18:55:07 chris Exp $
+# $Id: Queue.pm,v 1.32 2004-11-18 20:19:03 chris Exp $
 #
 
 package FYR::Queue;
@@ -510,7 +510,7 @@ sub make_confirmation_email ($;$) {
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
     my $text = FYR::EmailTemplate::format(
-                    email_template($reminder ? 'confirm' : 'confirm-reminder'),
+                    email_template($reminder ? 'confirm-reminder' : 'confirm'),
                     email_template_params($msg, confirm_url => $confirm_url)
                 )
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
