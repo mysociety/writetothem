@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.33 2004-11-18 21:25:32 chris Exp $
+# $Id: Queue.pm,v 1.34 2004-11-18 23:17:47 chris Exp $
 #
 
 package FYR::Queue;
@@ -32,6 +32,7 @@ use mySociety::Util;
 use mySociety::VotingArea;
 use FYR;
 use FYR::EmailTemplate;
+use FYR::Fax;
 
 use Data::Dumper;
 
@@ -93,27 +94,29 @@ sub write ($$$$) {
         # Give recipient their proper prefixes/suffixes.
         $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
 
-=pod
-        # Decide how to send the message.
-        $recipient->{fax} ||= undef;
-        $recipient->{email} ||= undef;
-        if (defined($recipient->{fax}) and defined($recipient->{email})) {
-            if ($recipient->{method} == 0) {
-                if (rand(1) < 0.5) {
-                    $recipient->{fax} = undef;
-                } else {
+        if ($recipient_id < 2000000) {
+            # Bodge things so that mails go to sender.
+            $recipient->{email} = $sender->{email};
+            $recipient->{fax} = undef;
+        } else {
+            # Dummy data: actually send.
+            # Decide how to send the message.
+            $recipient->{fax} ||= undef;
+            $recipient->{email} ||= undef;
+            if (defined($recipient->{fax}) and defined($recipient->{email})) {
+                if ($recipient->{method} == 0) {
+                    if (rand(1) < 0.5) {
+                        $recipient->{fax} = undef;
+                    } else {
+                        $recipient->{email} = undef;
+                    }
+                } elsif ($recipient->{method} == 1) {
                     $recipient->{email} = undef;
+                } else {
+                    $recipient->{fax} = undef;
                 }
-            } elsif ($recipient->{method} == 1) {
-                $recipient->{email} = undef;
-            } else {
-                $recipient->{fax} = undef;
             }
         }
-=cut
-        # bodge things so that mails go to sender.
-        $recipient->{email} = $sender->{email};
-        $recipient->{fax} = undef;
 
         # We must save the three-letter code for the representative type in
         # the database, NOT the numeric ID.
@@ -212,7 +215,7 @@ update the laststatechange field. If a message is moved to the "failed" or
 "finished" states, then it is stripped of personal identifying information.
 
 =cut
-sub state ($$) {
+sub state ($;$) {
     my ($id, $state) = @_;
     if (defined($state)) {
         my $curr_state = FYR::DB::dbh()->selectrow_array('select state from message where id = ? for update', {}, $id);
@@ -234,7 +237,7 @@ sub state ($$) {
                                     recipient_type = '',
                                     recipient_email = '', recipient_fax = null,
                                     message = ''
-                                where id = ?#, $id);
+                                where id = ?#, {}, $id);
                 logmsg($id, 'Scrubbed message of all personal data');
             }
         } else {
@@ -242,7 +245,7 @@ sub state ($$) {
         }
         return $curr_state;
     } else {
-        return FYR::DB::dbh()->selectrow_array('select state from message where id = ?', {}, $id);
+        return scalar(FYR::DB::dbh()->selectrow_array('select state from message where id = ?', {}, $id));
     }
 }
 
@@ -617,9 +620,9 @@ sub send_questionnaire_email ($;$) {
 # Attempt to deliver the MESSAGE by email.
 sub deliver_email ($) {
     my ($msg) = @_;
-    die "attempt to deliver message $id while in state '" . state($id) . "' (should be 'ready')"
-        unless (state($id) ne 'ready');
     my $id = $msg->{id};
+    die "attempt to deliver message $id while in state '" . state($id) . "' (should be 'ready')"
+        unless (state($id) eq 'ready');
     my $mail = make_representative_email($msg);
     my $sender = sprintf('%s-%s@%s',
                             mySociety::Config::get('EMAIL_PREFIX'),
@@ -629,9 +632,9 @@ sub deliver_email ($) {
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, "delivered message by email to $msg->{recipient_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
-        logmsg($id, "temporary failure delivering message by email to $msg->{sender_email}");
+        logmsg($id, "temporary failure delivering message by email to $msg->{recipient_email}");
     } else {
-        logmsg($id, "permanent failure delivering message by email to $msg->{sender_email}");
+        logmsg($id, "permanent failure delivering message by email to $msg->{recipient_email}");
     }
     return $result;
 }
@@ -641,8 +644,15 @@ sub deliver_email ($) {
 sub deliver_fax ($) {
     my ($msg) = @_;
     my $id = $msg->{id};
-    logmsg($id, 'Not yet able to send faxes');
-    return 0;
+    my $result = FYR::Fax::deliver($msg);
+    if ($result == FYR::Fax::FAX_SUCCESS) {
+        logmsg($id, "delivered message by fax to $msg->{recipient_fax}");
+    } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
+        logmsg($id, "temporary failure delivering message by fax to $msg->{recipient_fax}");
+    } else {
+        logmsg($id, "permanent failure delivering message by fax to $msg->{recipient_fax}");
+    }
+    return $result;
 }
 
 =item secret
@@ -814,12 +824,14 @@ my %state_action = (
             my $msg = message($id);
             if (defined($msg->{recipient_fax})) {
                 my $result = deliver_fax($msg);
-                if (!$result) {
-                    logmsg($id, "abandoning message after failure to send to representative");
-                    state($id, 'error');
-                } else {
+                if ($result == FYR::Fax::FAX_SUCCESS) {
                     FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
                     state($id, 'sent');
+                } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
+                    state($id, 'ready');    # bump timer
+                } else {
+                    logmsg($id, "abandoning message after failure to send to representative");
+                    state($id, 'error');
                 }
             } else {
                 my $result = deliver_email($msg);
@@ -844,10 +856,10 @@ my %state_action = (
             # email was sent, then send another one.
             my ($dosend, $reminder) = (0, 0); 
             if (0 == scalar(FYR::DB::dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
-                if (actions($id) == 0 && $msg->{dispatched} < (time() - QUESTIONNAIRE_DELAY)) {
-                    $dosend = 1;
-                } elsif (actions($id) < NUM_QUESTIONNAIRE_MESSAGES && $msg->{lastaction} < (time() - QUESTIONNAIRE_INTERVAL)) {
-                    $dosend = $reminder = 1;
+                if (actions($id) == 0) {
+                    $dosend = 1 if ($msg->{dispatched} < (time() - QUESTIONNAIRE_DELAY));
+                } elsif (actions($id) < NUM_QUESTIONNAIRE_MESSAGES) { 
+                    $dosend = $reminder = 1 if ($msg->{lastaction} < (time() - QUESTIONNAIRE_INTERVAL));
                 }
             }
 
@@ -912,7 +924,8 @@ sub process_queue () {
         # that we can have several queue-running daemons operating
         # simultaneously.
         my $msg = message($id, 1);
-        next if (!exists($state_action{$msg->{state}})
+        next if ($msg->{state} ne $state
+                    or !exists($state_action{$msg->{state}})
                     or (defined($msg->{lastaction})
                         and $msg->{lastaction} > time() - $state_action_interval{$msg->{state}}));
         try {

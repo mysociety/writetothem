@@ -6,16 +6,16 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.2 2004-11-18 21:41:44 chris Exp $
+# $Id: Fax.pm,v 1.3 2004-11-18 23:17:47 chris Exp $
 #
 
 package FYR::Fax::HardError;
 use Error;
-@FYR::Fax::Error::ISA = qw(Error::Simple);
+@FYR::Fax::HardError::ISA = qw(Error::Simple);
 
 package FYR::Fax::SoftError;
 use Error;
-@FYR::Fax::Error::ISA = qw(Error::Simple);
+@FYR::Fax::SoftError::ISA = qw(Error::Simple);
 
 package FYR::Fax;
 
@@ -23,6 +23,7 @@ use strict;
 
 use Errno;
 use Error qw(:try);
+use Fcntl;
 use GD;
 use HTML::Entities;
 use IO::Pipe;
@@ -326,11 +327,13 @@ sub make_representative_fax ($) {
             # else OK.
         }
 
-    } finally {
+    } otherwise {
+        my $E = shift;
         # Something went wrong; clean up the temporary files.
         foreach (@imgfiles) {
             unlink($_);
         }
+        $E->throw();
     };
     
     die "no fax images created" if (@imgfiles == 0);
@@ -349,6 +352,7 @@ use constant FAX_HARD_ERROR => 2;
 sub deliver ($) {
     my ($msg) = @_;
     my $ret = FAX_SOFT_ERROR;
+    my $id = $msg->{id} or die "no ID in message";
 
     die "attempted fax delivery for message $msg->{id} without fax recipient"
         unless (exists($msg->{recipient_fax}) and defined($msg->{recipient_fax}));
@@ -361,7 +365,7 @@ sub deliver ($) {
     #
     # We do this here (rather than having efax do it) so that we can reliably
     # detect "in use" errors.
-    my $lockfilename = mySociety::Config::get('FAX_LOCKDIR') . '/' . mySociety::Config::get('FAX_DEVICE');
+    my $lockfilename = mySociety::Config::get('FAX_LOCKDIR') . '/LCK..' . mySociety::Config::get('FAX_DEVICE');
     my $f = new IO::File($lockfilename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (!$f) {
         if ($!{EEXIST}) {
@@ -369,7 +373,7 @@ sub deliver ($) {
             FYR::Queue::logmsg($id, "not faxing: sending device is locked");
             return FAX_SOFT_ERROR;
         } else {
-            FYR::Queue::logmsg($id, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $!");
+            FYR::Queue::logmsg($id, "unable to lock fax sending device " . mySociety::Config::get('FAX_DEVICE') . ": $lockfilename: $!");
             # This probably indicates that something on the system is broken
             # (on fire, eh?) but does not indicate that the message is
             # undeliverable.
@@ -382,7 +386,7 @@ sub deliver ($) {
 
     my @imgfiles;
     try {
-        @imgfiles = make_representative_fax($message);
+        @imgfiles = make_representative_fax($msg);
 
         my $number = $msg->{recipient_fax};
 
@@ -401,7 +405,7 @@ sub deliver ($) {
         if ($number =~ m#([^\d])#) {
             throw FYR::Fax::HardError("recipient number contains bad character '$1'; unable to send by fax");
         } else {
-            logmsg($id, "recipient's dialing number is $number");
+            FYR::Queue::logmsg($id, "recipient's dialing number is $number");
         }
 
         # We call efax(1) directly rather than via the fax(1) wrapper, because
@@ -411,7 +415,7 @@ sub deliver ($) {
         my @efaxcmd = (
                 mySociety::Config::get('FAX_COMMAND', 'efax'),
                 split(/ +/, mySociety::Config::get('FAX_OPTIONS')),
-                '-d', mySociety::Config::get('FAX_DEVICE'),
+                '-d', '/dev/' . mySociety::Config::get('FAX_DEVICE'),
                 '-l', mySociety::Config::get('FAX_STATIONID'),
                 '-h', mySociety::Config::get('FAX_HEADER'),
                 # Don't produce anything on standard error, but log errors,
@@ -424,8 +428,10 @@ sub deliver ($) {
                 @imgfiles
             );
 
-        my $p = new IO::Pipe() or throw FYR::Fax::SoftError("pipe: $!");
-        my ($rd, $wr) = $p->handles();
+        my ($rd, $wr);
+        $rd = new IO::Handle();
+        $wr = new IO::Handle();
+        my $p = new IO::Pipe($rd, $wr) or throw FYR::Fax::SoftError("pipe: $!");
 
         my ($p2, $pid) = mySociety::Util::pipe_via(@efaxcmd, $wr);
         $wr->close();
@@ -457,8 +463,9 @@ sub deliver ($) {
                     # number busy or device in use
                     throw FYR::Fax::SoftError("fax number was engaged");
                 } elsif ($st == 2) {
-                    # some kind of fatal error
-                    throw FYR::Fax::HardError("fatal error in efax");
+                    # some kind of fatal error in efax; assume that this is NOT
+                    # a fatal error per sending. (?)
+                    throw FYR::Fax::SoftError("fatal error in efax");
                 } elsif ($st == 3) {
                     # "Modem protocol error"
                     throw FYR::Fax::SoftError("modem protocol error (exit status 3) in efax");
@@ -476,11 +483,11 @@ sub deliver ($) {
         }
     } catch FYR::Fax::HardError with {
         my $E = shift;
-        logmsg($id, $E->text());
+        FYR::Queue::logmsg($id, $E->text());
         $ret = FAX_HARD_ERROR;
     } catch FYR::Fax::SoftError with {
         my $E = shift;
-        logmsg($id, $E->text());
+        FYR::Queue::logmsg($id, $E->text());
         $ret - FAX_SOFT_ERROR;
     } finally {
         # whatever happens, nuke the lockfile and all the image files.
