@@ -36,118 +36,15 @@ marked "Next".</p>
 <p align="left"><b>If you aren't sure who to contact, please read <a href="whoadvice1.html">this advice</a>.</b></p>
 
 <table>
-
-<tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr><tr>
-    <td width="50%">
-    <h4>Your City Councillors</h4>
-    <p>Your City Councillors represent you on the <a href="http://www.cambridge.gov.uk/">Cambridge City Council</a>.
-    Your City Council is responsible for local services and policy, including 
-    planning, council housing, building regulation, rubbish collection, and local
-    roads. Some
-    responsibilities, such as recreation facilities, are shared with the County
-    Council. (<a href="citycouncils.html">Find out more</a>.)</p>
-    </td><td valign="bottom">
-    <p>In your ward, <b>West Chesterton</b>, you are represented by three councillors.
-    Please choose one councillor to contact.</p>
-    <table style="float: left;">
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="cc1"></td>
-            <td><b>Diane Armstrong</b><br>Liberal Democrat</td>
-            <td valign="top"><input type="radio" name="who" value="cc2"></td>
-            <td><b>Max Boyce</b><br>Liberal Democrat</td>
-        </tr>
-
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="cc3"></td>
-            <td><b>Ian Nimmo-Smith</b><br>Liberal Democrat</td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-    <input style="float: right" type="submit" value="Next &gt;&gt;">
-    </td>
-</tr>
-
-<tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr><tr>
-    <td>
-    <h4>Your County Councillor</h4>
-    <p>Your County Councillor represents you on the <a href="http://www.cambridgeshire.gov.uk">Cambridgeshire
-    County Council</a>. Your County Council is responsible for local services,
-    including education, social services, transport and libraries. (<a href="countycouncils.html">Find out more</a>).</p>
-    </td><td valign="bottom">
-    <p>In your ward, <b>West Chesterton</b>, your County Councillor is:</p>
-    <table style="float: left;">
-    <tr>
-    <td valign="top"><input type="radio" name="who" value="Cc"></td>
-    <td><b>Maurice Leek</b><br>Liberal Democrat</td>
-    </table>
-    <input style="float: right" type="submit" value="Next &gt;&gt;">
-    </td>
-</tr>
-
-<tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr><tr>
-    <td>
-    <h4>Your MP</h4>
-    <p>Your MP represents you in the <a href="http://www.parliament.uk/about_commons/about_commons.cfm">House of Commons</a> in Westminster.
-    The House of Commons is responsible for making laws in the UK and
-    for overall scrutiny of all aspects of government.</p>
-    </td><td valign="bottom">
-    <p>In your constituency, <b>Cambridge</b>, your MP is:</p>
-    <table style="float: left">
-    <tr>
-    <td valign="top"><input type="radio" name="who" value="mp"></td>
-    <td><b>Anne Campbell</b><br>Labour Party</td>
-    </table>
-    <input style="float: right" type="submit" value="Next &gt;&gt;">
-    </td>
-</tr>
-
-<tr><td colspan="2" align="center" height="4" bgcolor="#cecece"></td></tr><tr>
-    <td valign="top">
-    <h4>Your MEPs (Member of European Parliament)</h4>
-    <p>MEPs represent you in the <a href="http://www.europarl.eu.int/opengov/default_noscript_en.htm">European Parliament</a>. They
-    scrutinise European laws (called "directives") and the budget of the
-    European Union, and provides oversight of the other decision-making bodies
-    of the Union, including the Council of Ministers and the Commission.</p>
-    </td><td valign="bottom">
-    <p>In your European Constituency, <b>Eastern Region</b>, MEPs are elected
-    through a party list system. You are represented by seven MEPs.
-    Please choose one MEP to contact:</p>
-    <table style="float: left">
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="mep1"></td>
-            <td><b>Geoffrey van Orden</b><br>Conservative</td>
-            <td valign="top"><input type="radio" name="who" value="mep2"></td>
-            <td><b>Jeffrey Titford</b><br>UK Independence Party</td>
-        </tr>
-
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="mep3"></td>
-            <td><b>Richard Howitt</b><br>Labour Party</td>
-            <td valign="top"><input type="radio" name="who" value="mep4"></td>
-            <td><b>Robert Sturdy</b><br>Conservative Party</td>
-        </tr>
-
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="mep5"></td>
-            <td><b>Andrew Duff</b><br>Liberal Democrat</td>
-            <td valign="top"><input type="radio" name="who" value="mep6"></td>
-            <td><b>Christopher Beazley</b><br>Conservative Party</td>
-        </tr>
-
-        <tr>
-            <td valign="top"><input type="radio" name="who" value="mep7"></td>
-            <td><b>Tom Wise</b><br>UK Independence Party</td>
-            <td></td><td></td>
-        </tr>
-    </table>
-    <input style="float: right" type="submit" value="Next &gt;&gt;">
-    
-    </td>
-</tr>
-
+<?
+foreach ($fyr_representatives as $row) {
+    list($left_column, $right_column) = $row;
+?>
+    <tr><td width="50%"><?=$left_column?></td><td valign="bottom"><?=$right_column?></td></tr> 
+<?
+}
+?>
 </table>
-
 
 <!--
 

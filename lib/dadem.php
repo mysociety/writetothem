@@ -6,68 +6,11 @@
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: dadem.php,v 1.5 2004-10-04 18:14:10 francis Exp $
+ * $Id: dadem.php,v 1.6 2004-10-05 11:57:22 francis Exp $
  * 
  */
 
 include_once('votingarea.php');
-
-/* $rep_name
- * Long names of representatives for the different VA_s. */
-$rep_name = array(
-        VA_LBW  => 'Councillor',
-
-        VA_GLA  => 'Mayor', /* "of London"? */
-        VA_LAC  => 'Assembly Member',
-        
-        VA_CED  => 'County Councillor',
-        
-        VA_DIW  => 'District Councillor',
-        
-        VA_UTE  => 'Councillor',
-        VA_UTW  => 'Councillor',
-        
-        VA_MTW  => 'Councillor',
-        
-        VA_SPE  => 'Member of the Scottish Parliament',
-        VA_SPC  => 'Member of the Scottish Parliament',
-        
-        VA_WAE  => 'Welsh Assembly Member',
-        VA_WAC  => 'Welsh Assembly Member',
-
-        VA_WMC  => 'Member of Parliament',
-
-        VA_EUR  => 'Member of the European Parliament'
-    );
-
-/* $rep_suffix
- * Suffix/short name. */
-$rep_suffix = array(
-        VA_LBW  => 'Cllr',
-
-        VA_GLA  => 'Mayor', /* "of London"? */
-        VA_LAC  => 'AM',
-        
-        VA_CED  => 'Cllr',
-        
-        VA_DIW  => 'Cllr',
-        
-        VA_UTE  => 'Cllr',
-        VA_UTW  => 'Cllr',
-        
-        VA_MTW  => 'Cllr',
-        
-        VA_SPE  => 'MSP',
-        VA_SPC  => 'MSP',
-        
-        VA_WAE  => 'AM',
-        VA_WAC  => 'AM',
-
-        VA_WMC  => 'MP',
-
-        VA_EUR  => 'MEP'
-    );
-
 
 define('DADEM_BAD_TYPE', 1);  /* bad area type */
 define('DADEM_UNKNOWN', 2);   /* unknown area */

@@ -1,12 +1,14 @@
 <?php
 /*
  * votingarea.php:
- * Stuff about voting and administrative areas.
+ * Stuff about voting and administrative areas.  "Voting Area" is the
+ * terminology we use to mean any geographical region for which an
+ * elected representative is returned.
  * 
  * Copyright (c) 2004 Chris Lightfoot. All rights reserved.
  * Email: chris@ex-parrot.com; WWW: http://www.ex-parrot.com/~chris/
  *
- * $Id: votingarea.php,v 1.1 2004-10-04 17:06:05 chris Exp $
+ * $Id: votingarea.php,v 1.2 2004-10-05 11:57:22 francis Exp $
  * 
  */
 
@@ -111,6 +113,62 @@ $va_name = array(
 
         VA_EUP  =>  "European Parliament",
         VA_EUR  =>  "Region"
+    );
+
+/* $va_rep_name
+ * Long names of representatives for the different VA_s. */
+$va_rep_name = array(
+        VA_LBW  => 'Councillor',
+
+        VA_GLA  => 'Mayor', /* "of London"? */
+        VA_LAC  => 'Assembly Member',
+        
+        VA_CED  => 'County Councillor',
+        
+        VA_DIW  => 'District Councillor',
+        
+        VA_UTE  => 'Councillor',
+        VA_UTW  => 'Councillor',
+        
+        VA_MTW  => 'Councillor',
+        
+        VA_SPE  => 'Member of the Scottish Parliament',
+        VA_SPC  => 'Member of the Scottish Parliament',
+        
+        VA_WAE  => 'Welsh Assembly Member',
+        VA_WAC  => 'Welsh Assembly Member',
+
+        VA_WMC  => 'Member of Parliament',
+
+        VA_EUR  => 'Member of the European Parliament'
+    );
+
+/* $va_rep_suffix
+ * Suffix/short name. */
+$va_rep_suffix = array(
+        VA_LBW  => 'Cllr',
+
+        VA_GLA  => 'Mayor', /* "of London"? */
+        VA_LAC  => 'AM',
+        
+        VA_CED  => 'Cllr',
+        
+        VA_DIW  => 'Cllr',
+        
+        VA_UTE  => 'Cllr',
+        VA_UTW  => 'Cllr',
+        
+        VA_MTW  => 'Cllr',
+        
+        VA_SPE  => 'MSP',
+        VA_SPC  => 'MSP',
+        
+        VA_WAE  => 'AM',
+        VA_WAC  => 'AM',
+
+        VA_WMC  => 'MP',
+
+        VA_EUR  => 'MEP'
     );
 
 ?>
