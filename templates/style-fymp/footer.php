@@ -28,10 +28,10 @@ code is available</a> under an open source license.</p>
 </div>
 -->
 <div id="footer">
-<a href="/about">About</a>
-| <a href="/about-contactus">Contact Us</a>
+<a href="/about-qa">Help</a>
+| <a href="/about-contact">Contact Us</a>
 | <a href="/about-guidelines">Guidelines for Campaigners</a>
-| <a href="/about-copyright">&copy; mySociety</a>
+| <a href="/about-copyright">Copyright</a>
 </div>
 </body>
 </html>

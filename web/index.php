@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.29 2005-01-11 00:29:06 matthew Exp $
+ * $Id: index.php,v 1.30 2005-01-11 00:49:10 francis Exp $
  * 
  */
 
@@ -60,7 +60,7 @@ if ($pc != "") {
     }
 
     if (isset($ot)) {
-        header("Location: about-overseasterritories#$ot");
+        header("Location: about-elsewhere#$ot");
         exit;
     }
 
