@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.3 2004-11-18 23:17:47 chris Exp $
+# $Id: Fax.pm,v 1.4 2004-12-09 12:29:20 chris Exp $
 #
 
 package FYR::Fax::HardError;
@@ -357,9 +357,7 @@ sub deliver ($) {
     die "attempted fax delivery for message $msg->{id} without fax recipient"
         unless (exists($msg->{recipient_fax}) and defined($msg->{recipient_fax}));
 
-    # We want to commit all our log messages as soon as they happen.
     FYR::Queue::logmsg($id, "attempting delivery by fax to $msg->{recipient_fax}");
-    FYR::DB::dbh()->commit();
 
     # First, try to lock the fax device. If that doesn't work, then soft-fail.
     #
@@ -494,10 +492,6 @@ sub deliver ($) {
         foreach ($lockfilename, @imgfiles) {
             unlink($_);
         }
-
-        # and commit database changes, since it is important that our log
-        # messages are recorded.
-        FYR::DB::dbh()->commit();
     };
 
     return $ret;

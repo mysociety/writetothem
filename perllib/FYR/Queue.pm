@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.43 2004-12-07 19:44:30 chris Exp $
+# $Id: Queue.pm,v 1.44 2004-12-09 12:29:20 chris Exp $
 #
 
 package FYR::Queue;
@@ -749,6 +749,15 @@ use constant QUESTIONNAIRE_INTERVAL => (14 * DAY);
 # recipient wants to forward it?
 use constant MESSAGE_RETAIN_TIME => (21 * DAY);
 
+# Total number of times we attempt delivery by fax.
+use constant FAX_DELIVERY_ATTEMPTS => 4;
+
+use constant FAX_DELIVERY_INTERVAL => 600;
+
+use constant FAX_DELIVERY_BACKOFF => 3;
+
+# Interval between fax sending attempts
+
 # Timeouts in the state machine:
 my %state_timeout = (
         # How long a message may be "pending" (awaiting confirmation) before it
@@ -786,8 +795,8 @@ my %state_action_interval = (
         # How often we confirmation mail reminders.
         pending         => DAY * 1,
 
-        # How often we attempt delivery in the face of soft failures.
-        ready           => 1800,
+        # How often we consider delivery attempts in the face of soft failures.
+        ready           => 120,
 
         # How often we grind over sent messages to send questionnaires or
         # expire messages into the "finished" state.
@@ -845,6 +854,25 @@ my %state_action = (
             # Send email or fax to recipient.
             my $msg = message($id);
             if ($fax && defined($msg->{recipient_fax})) {
+                # 
+                # We want an exponential backoff for fax sending, because some
+                # sending errors (e.g. send to voice number not fax number)
+                # will *really* irritate people and we don't want to annoy them
+                # too much....
+                # 
+
+                # Abandon faxes after a few failures.
+                if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
+                    logmsg($id, "abandoning message after $msg->{numactions} failures to send by fax");
+                    state($id, 'failed');
+                    return;
+                }
+
+                # Don't retry sending until a reasonable backoff time has
+                # passed.
+                my $howlong = time() - $msg->{laststatechange};
+                return if ($msg->{numactions} > 0 && $howlong < FAX_DELIVERY_INTERVAL * (FAX_DELIVERY_BACKOFF ** $msg->{numactions}));
+                
                 my $result = deliver_fax($msg);
                 if ($result == FYR::Fax::FAX_SUCCESS) {
                     FYR::DB::dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
