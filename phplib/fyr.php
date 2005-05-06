@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.23 2005-02-12 02:04:34 francis Exp $
+ * $Id: fyr.php,v 1.24 2005-05-06 15:52:04 francis Exp $
  * 
  */
 
@@ -17,6 +17,10 @@ require_once "../../phplib/error.php";
 require_once "../../phplib/ratty.php";
 require_once "../../phplib/template.php";
 require_once "../../phplib/utility.php";
+
+// Disable these types (due to elections / pending elections etc.)
+$disabled_child_types = array('CED', 'WMC');
+#$disabled_child_types = array();
 
 /* Output buffering: PHP's output buffering is broken, because it does not
  * affect headers. However, it's worth using it anyway, because in the common

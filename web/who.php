@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.65 2005-02-15 20:39:14 matthew Exp $
+ * $Id: who.php,v 1.66 2005-05-06 15:52:05 francis Exp $
  * 
  */
 
@@ -109,12 +109,16 @@ foreach ($va_display_order as $va_type) {
     if ($rep_count == 0) continue;
 
     // Create HTML
+    global $disabled_child_types;
     if (is_array($va_type)) {
+        // Plural
+        $disabled = in_array($va_type[0], $disabled_child_types);
+
         if ($rep_count > 1) {
-            $heading = "<h3>Your {$va_info[0]['rep_name_long_plural']}</h3>";
+            $heading = "Your {$va_info[0]['rep_name_long_plural']}";
             $text = "<p>";
         } else {
-            $heading = "<h3>Your {$va_info[0]['rep_name_long']}</h3>";
+            $heading = "Your {$va_info[0]['rep_name_long']}";
             $text = "<p>";
         }
         if ($rep_counts[0]>1) {
@@ -135,11 +139,13 @@ foreach ($va_display_order as $va_type) {
         $text .= '.</p>';
         $text .= display_reps($representatives[1]);
     } else {
+        // Singular
+        $disabled = in_array($va_type, $disabled_child_types);
         if ($rep_count > 1) {
-            $heading = "<h3>Your ${va_info['rep_name_long_plural']}</h3>";
+            $heading = "Your ${va_info['rep_name_long_plural']}";
             $text = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
-            $heading = "<h3>Your ${va_info['rep_name_long']}</h3>";
+            $heading = "Your ${va_info['rep_name_long']}";
             $text = "<p>Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $text .= "${eb_info['name']}.  ${eb_info['description']}";
@@ -150,9 +156,6 @@ foreach ($va_display_order as $va_type) {
         $text .= "</p>";
 
         if($va_type == 'WMC') {
-            /*$twfy = join('',file('http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name']))));
-            if (preg_match('#<img src="/images/mps/(\d+.jpg)"#', $twfy, $matches))
-                $representatives_info[$representatives[0]]['image'] = $matches[1];*/
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
         $text .= display_reps($representatives);
@@ -166,8 +169,19 @@ foreach ($va_display_order as $va_type) {
         }
     }
 
-    array_push($fyr_representatives, $text);
-    array_push($fyr_headings, $heading);
+    if ($disabled) {
+        $text = "<p>Due to a recent election, we don't have details for this
+            representative.  We'll be adding them as soon as we can. 
+            </p>
+
+            <p>Why not take this as an opportunity to <strong>write to one of your
+            other representatives</strong>? Their job is to help you too!</p>";
+        array_push($fyr_representatives, $text);
+        array_push($fyr_headings, "<h3><strike>$heading</strike></h3>");
+    } else {
+        array_push($fyr_representatives, $text);
+        array_push($fyr_headings, "<h3>$heading</h3>");
+    }
     debug_timestamp();
 }
 

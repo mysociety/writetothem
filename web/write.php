@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.77 2005-02-16 18:31:38 matthew Exp $
+ * $Id: write.php,v 1.78 2005-05-06 15:52:05 francis Exp $
  * 
  */
 
@@ -300,6 +300,12 @@ dadem_check_error($fyr_representative);
 // The voting area is the ward/division. e.g. West Chesterton Electoral Division
 $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
 mapit_check_error($fyr_voting_area);
+
+// For URLs like http://writetothem.com/?a=WMC;pc=XXXXX
+if (in_array($fyr_representative['type'], $disabled_child_types)) {
+    header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
+    exit;
+}
 
 // Reverify that the representative represents this postcode
 $verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
