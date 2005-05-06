@@ -2,12 +2,12 @@
 /*
  * who.php:
  * Page to ask which representative they would like to contact
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.66 2005-05-06 15:52:05 francis Exp $
- * 
+ * $Id: who.php,v 1.67 2005-05-06 16:48:57 adam Exp $
+ *
  */
 
 require_once "../phplib/fyr.php";
@@ -89,7 +89,7 @@ foreach ($va_display_order as $va_type) {
 
     // Description of areas of responsibility
     $eb_info['description'] = $va_responsibility_description[$eb_type];
- 
+
     // Count representatives
     unset($representatives);
     if (is_array($va_type)) {
@@ -125,7 +125,7 @@ foreach ($va_display_order as $va_type) {
             $text .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
             $text .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
-        }    
+        }
         $text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
         $text .= display_reps($representatives[0]);
         $text .= '<p>';
@@ -170,8 +170,8 @@ foreach ($va_display_order as $va_type) {
     }
 
     if ($disabled) {
-        $text = "<p>Due to a recent election, we don't have details for this
-            representative.  We'll be adding them as soon as we can. 
+        $text = "<p>Due to the recent election, we don't yet have details for this
+            representative.  We'll be adding them as soon as we can.
             </p>
 
             <p>Why not take this as an opportunity to <strong>write to one of your
