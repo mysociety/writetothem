@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.44 2005-02-23 14:59:45 francis Exp $
+ * $Id: index.php,v 1.45 2005-05-06 13:17:51 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -137,7 +137,7 @@ template_draw($template, array(
         "blurb-top" => <<<END
     <h2>Contact your
 Councillors,
-<acronym title="Member of Parliament">MP</acronym>, 
+<strike><acronym title="Member of Parliament">MP</acronym></strike>, 
 <acronym title="Members of the European Parliament">MEPs</acronym>,
 <acronym title="Members of the Scottish Parliament">MSPs</acronym>, or
 <br>Welsh and London Assembly Members 
