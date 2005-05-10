@@ -1,0 +1,118 @@
+#!/usr/bin/perl -w -I../../perllib
+#
+# test-run:
+# Test harness for WriteToThem.  Makes sure we haven't broken the code.
+# 
+# Requires:
+# * ../general/conf file set up for WriteToThem, and matching the below requirements
+# * apache configured to serve ../web on OPTION_BASE_URL
+# * a database with name ending "_testharness"; this script will drop and remake the
+#   database, so make sure it is never used for anything important
+# * email addresses (email_n below) configured to pipe to ./test-mailin with fast
+#   local delivery
+#
+# Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.1 2005-05-10 12:08:41 francis Exp $';
+
+use strict;
+require 5.8.0;
+
+use Data::Dumper;
+use Carp qw(verbose);
+use Storable;
+use FindBin;
+use Getopt::Long;
+
+use mySociety::Config;
+mySociety::Config::set_file('../conf/general');
+use mySociety::DBHandle qw(dbh);
+use mySociety::WebTestHarness;
+
+sub help {
+print <<END
+
+Usage: test-run [OPTION}
+
+Options are
+    --verbose=n   Choose 0 (no progress), 1 (basic actions), 2 (full debug)
+
+END
+}
+
+# Parse command line
+our $verbose = 0; # currently 3 levels: 0, 1 and 2
+our $help;
+if (!GetOptions(
+        'verbose=i' =>  \$verbose,
+        'help' =>               \$help
+    )) {
+    help();
+    exit(1);
+}
+if ($help) {
+    help();
+    exit(0);
+}
+
+# Set up options
+
+our $base_url = mySociety::Config::get('BASE_URL');
+our $admin_url = mySociety::Config::get('ADMIN_URL');
+our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
+sub email_n { my $n = shift; return "fyrharness+$n\@owl"; }
+sub name_n { my $n = shift; return ($n == 0 || $n == 100) ? "Cate Constituent $n" : "Rachel Representative $n"; }
+
+#############################################################################
+# Main code
+
+# Configure test harness class
+print "Set up web test harness...\n" if $verbose > 0;
+our $wth = new mySociety::WebTestHarness({db_option_prefix => 'FYR_QUEUE_'});
+$wth->log_watcher_setup($httpd_error_log);
+$wth->database_drop_reload('../db/schema.sql');
+$wth->email_setup({ eveld_bin => "$FindBin::Bin/../../services/EvEl/bin/eveld",
+                    log_mailbox => "log_mailbox" });
+our $b = $wth->browser_get_agent();
+
+# Syntax check all .php files
+print "Syntax check all PHP files...\n" if $verbose > 0;
+$wth->php_check_syntax("../../fyr/");
+$wth->php_check_syntax("../../fyr/templates/emails/", qr//);
+
+# Check that we can detect PHP errors
+#print "Confirm we can detect errors...\n" if $verbose > 0;
+#$wth->log_watcher_check();
+#$b->get($base_url . "/test.php?error=1" );
+#my $errors = $wth->log_watcher_get_errors();
+#die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
+
+print "Sending example message...\n" if $verbose > 0;
+do_send_example_message();
+
+# Check admin pages
+#print "Checking administration pages...\n" if $verbose > 0;
+#do_admin_pages();
+
+# Check for any unhandled mails or errors
+$wth->email_check_none_left();
+$wth->log_watcher_check();
+print "Everything completed successfully\n";
+
+#############################################################################
+# Functions to make and sign pledges, and so on
+
+sub do_send_example_message() {
+    $b->get($base_url);
+    $wth->browser_check_contents("First, type your UK postcode:");
+    $wth->browser_check_contents("This is a test version");
+
+    $b->submit_form(form_name => 'postcodeForm',
+        fields => { pc => 'CB23QJ'},  # The Guildhall, Cambridege 
+        ) or die "Failed to submit signing form";
+    $wth->browser_check_contents("");
+ }
+
+

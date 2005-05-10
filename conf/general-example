@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.24 2005-02-21 11:37:29 francis Exp $
+ * $Id: general-example,v 1.25 2005-05-10 12:08:41 francis Exp $
  * 
  */
 
@@ -46,6 +46,7 @@ define('OPTION_WEB_DOMAIN', 'writetothem.com');
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN . '/');
+define('OPTION_ADMIN_URL', 'https://secure.../admin');
 
 // Domain name for emails to current website
 define('OPTION_EMAIL_DOMAIN', 'sometestdomain.writetothem.com');
@@ -101,5 +102,9 @@ define('OPTION_PHP_DEBUG_LEVEL', 0);
 
 // URLS of admin scripts
 define('OPTION_ADMIN_SERVICES_CGI', 'https://secure.mysociety.org/admin/services');
+
+// Log file (used in test harness, and later in admin scripts)
+define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
+
 
 ?>
