@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.67 2005-05-06 16:48:57 adam Exp $
+ * $Id: who.php,v 1.68 2005-05-12 16:59:24 matthew Exp $
  *
  */
 
@@ -155,7 +155,7 @@ foreach ($va_display_order as $va_type) {
             $text .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
         $text .= "</p>";
 
-        if($va_type == 'WMC') {
+        if($va_type == 'WMC' && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
         $text .= display_reps($representatives);
