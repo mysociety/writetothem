@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.24 2005-02-03 15:40:23 chris Exp $
+-- $Id: schema.sql,v 1.25 2005-05-12 15:15:16 francis Exp $
 --
 
 set client_min_messages to error;
@@ -189,9 +189,11 @@ create function gather_stats() returns trigger as '
     end;
 ' language 'plpgsql';
 
-create trigger message_gather_stats
-    after insert or update or delete on message
-    for each row execute procedure gather_stats();
+-- Disabled, as there were deadlocks.  TODO Replace with a better
+-- mechanism.
+--create trigger message_gather_stats
+--    after insert or update or delete on message
+--   for each row execute procedure gather_stats();
 
 -- questionnaire_answer
 -- Results of the questionnaire we send to users.
