@@ -2,12 +2,12 @@
 /*
  * write.php:
  * Page where they enter details, write their message, and preview it
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.78 2005-05-06 15:52:05 francis Exp $
- * 
+ * $Id: write.php,v 1.79 2005-05-13 03:59:35 adam Exp $
+ *
  */
 
 require_once "../phplib/fyr.php";
@@ -95,7 +95,7 @@ END;
 
     add_all_variables_hidden($form, $fyr_values);
 
-    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null, 
+    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
     $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
@@ -128,9 +128,9 @@ function renderForm($form, $pageName)
         <TR><TD colspan=2>
         <span style="color: #ff0000"><br>{error}:</span>
         </TD></TR>
-        <!-- END error --> 
-        <TR><TD colspan=2> 
-        {element} 
+        <!-- END error -->
+        <TR><TD colspan=2>
+        {element}
         </TD></TR>', 'body');
         $form->accept($renderer);
 
@@ -146,8 +146,8 @@ function renderForm($form, $pageName)
     if ($fyr_values['who'] == 1702) {
         $prime_minister = true;
     }
-    $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
-            'voting_area' => $fyr_voting_area, 'form' => $fyr_form, 
+    $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
+            'voting_area' => $fyr_voting_area, 'form' => $fyr_form,
             'date' => $fyr_date, 'prime_minister' => $prime_minister));
 
     if ($pageName == "writeForm") {
@@ -190,7 +190,7 @@ function renderForm($form, $pageName)
 function submitFax() {
     global $fyr_values, $msgid;
 
-    $address = 
+    $address =
         $fyr_values['writer_address1'] . "\n" .
         $fyr_values['writer_address2'] . "\n" .
         $fyr_values['writer_town'] . "\n" .
@@ -214,24 +214,24 @@ function submitFax() {
             <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
     }
 
-    $result = msg_write($msgid, 
-            array( 
+    $result = msg_write($msgid,
+            array(
             'name' => $fyr_values['writer_name'],
-            'email' => $fyr_values['writer_email'], 
+            'email' => $fyr_values['writer_email'],
             'address' => $address,
             'postcode' => $fyr_values['pc'],
-            'phone' => $fyr_values['writer_phone'], 
+            'phone' => $fyr_values['writer_phone'],
             'referrer' => $fyr_values['fyr_extref'],
             'ipaddr' =>  $_SERVER['REMOTE_ADDR']
             ),
-            $fyr_values['who'], 
+            $fyr_values['who'],
             $fyr_values['signedbody']);
 
     /* $result is an RABX error, the name of a template to redirect to, or null
      * on success. */
     if (isset($result)) {
         if (rabx_is_error($result)) {
-            if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) 
+            if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED)
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
                 /* XXX this should be logged! */
@@ -244,7 +244,7 @@ function submitFax() {
     } else {
         /* Show them the "check your email and click the link" template. */
         global $fyr_representative, $fyr_voting_area, $fyr_date;
-        $our_values = array_merge($fyr_values, array('representative' => $fyr_representative, 
+        $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
                     'voting_area' => $fyr_voting_area, 'date' => $fyr_date));
         template_draw("write-checkemail", $our_values);
     }
@@ -277,7 +277,7 @@ if (!isset($fyr_who)) {
 }
 
 // Rate limiter
-$limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"), 
+$limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"),
                      'who' => array($fyr_who, "Representative id from DaDem"));
 if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
     $limit_values['body'] = array($fyr_values['body'], "Body text of message");
@@ -309,9 +309,9 @@ if (in_array($fyr_representative['type'], $disabled_child_types)) {
 
 // Reverify that the representative represents this postcode
 $verify_voting_area_map = mapit_get_voting_areas($fyr_values['pc']);
-if (is_array($verify_voting_area_map)) 
+if (is_array($verify_voting_area_map))
     $verify_voting_areas = array_values($verify_voting_area_map);
-else 
+else
     $verify_voting_areas = array();
 if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
    template_show_error("There's been a mismatch error.  Sorry about
@@ -321,11 +321,13 @@ if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
 // Check the contact method exists
 $success = msg_recipient_test($fyr_values['who']);
 if (rabx_is_error($success)) {
-    if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) 
+    if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA)
         template_show_error(<<<EOF
 Sorry, we do not have contact details for this representative, so cannot send
-them a message. Please <a href="mailto:team@writetothem.com">email us</a> to
-let us know. Details: 
+them a message. It can, unfortunately, take us a couple of weeks or so to get
+details for newly elected officials. Your patience, in this matter, is greatly
+appreciated. Please <a href="mailto:team@writetothem.com">email us</a> to
+let us know &#8212; particularly if you've got a fax number or an email address. Details:
 EOF
             .  htmlspecialchars($success->text)
         );
@@ -386,7 +388,7 @@ if (isset($fyr_values['submitWrite'])) {
 
 // Display it
 if ($on_page == "write") {
-    if (!isset($writeForm)) 
+    if (!isset($writeForm))
         $writeForm = buildWriteForm();
     $writeForm->setDefaults(array('body' => default_body_text()));
     $writeForm->setConstants($fyr_values);
