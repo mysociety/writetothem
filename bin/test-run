@@ -15,7 +15,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.1 2005-05-10 12:08:41 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.2 2005-05-13 13:52:45 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -62,8 +62,8 @@ if ($help) {
 our $base_url = mySociety::Config::get('BASE_URL');
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
-sub email_n { my $n = shift; return "fyrharness+$n\@owl"; }
-sub name_n { my $n = shift; return ($n == 0 || $n == 100) ? "Cate Constituent $n" : "Rachel Representative $n"; }
+sub email_n { my $n = shift; return "fyrharness+$n\@pledgebank.owl"; }
+sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 #############################################################################
 # Main code
@@ -73,7 +73,7 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $wth = new mySociety::WebTestHarness({db_option_prefix => 'FYR_QUEUE_'});
 $wth->log_watcher_setup($httpd_error_log);
 $wth->database_drop_reload('../db/schema.sql');
-$wth->email_setup({ eveld_bin => "$FindBin::Bin/../../services/EvEl/bin/eveld",
+$wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin/eveld",
                     log_mailbox => "log_mailbox" });
 our $b = $wth->browser_get_agent();
 
@@ -83,11 +83,11 @@ $wth->php_check_syntax("../../fyr/");
 $wth->php_check_syntax("../../fyr/templates/emails/", qr//);
 
 # Check that we can detect PHP errors
-#print "Confirm we can detect errors...\n" if $verbose > 0;
-#$wth->log_watcher_check();
-#$b->get($base_url . "/test.php?error=1" );
-#my $errors = $wth->log_watcher_get_errors();
-#die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
+print "Confirm we can detect errors...\n" if $verbose > 0;
+$wth->log_watcher_check();
+$b->get($base_url . "/test.php?error=1" );
+my $errors = $wth->log_watcher_get_errors();
+die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
 
 print "Sending example message...\n" if $verbose > 0;
 do_send_example_message();
@@ -97,22 +97,76 @@ do_send_example_message();
 #do_admin_pages();
 
 # Check for any unhandled mails or errors
+print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
+print "Checking no log file errors at end...\n" if $verbose > 1;
 $wth->log_watcher_check();
 print "Everything completed successfully\n";
 
 #############################################################################
-# Functions to make and sign pledges, and so on
+# General functions
+
+# Call fyrqd for one pass
+sub call_fyrqd {
+    system("./fyrqd", "--debug", "--once", "--email", # $verbose > 1 ? qw(--verbose) : ()
+        ) and die "Failed to call fyrqd";
+}
+
+#############################################################################
 
 sub do_send_example_message() {
     $b->get($base_url);
     $wth->browser_check_contents("First, type your UK postcode:");
-    $wth->browser_check_contents("This is a test version");
+    $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
 
+    # Enter Cambridge postcode, and choose David Howarth MP
     $b->submit_form(form_name => 'postcodeForm',
         fields => { pc => 'CB23QJ'},  # The Guildhall, Cambridege 
         ) or die "Failed to submit signing form";
-    $wth->browser_check_contents("");
- }
+    $wth->browser_check_contents("Now select the representative you'd like to contact");
+    $b->follow_link(text_regex => qr/David Howarth/) or die "Failed to find link to MP";
+    $wth->browser_check_contents("Now Write Your Message");
+
+    # Fill in a test letter
+    my $fields = { 
+            writer_name => name_n(0),
+            writer_address1 => '23 Something Street',
+            writer_address2 => undef,
+            writer_town => 'Someplace',
+            writer_county => 'Someshire',
+            writer_email => 'nonsense email',
+            writer_phone => undef,
+            body => "This is a test message which shouldn't ever get to real representative.  It means the test harness is working."
+    };
+    # ... with bad email first
+    $b->submit_form(form_name => 'writeForm',
+        fields => $fields, button => 'submitPreview') or die "Failed to submit message form";
+    $wth->browser_check_contents('Choose a valid email address');
+    # ... then with good
+    $fields->{'writer_email'} = email_n(0);
+    $b->submit_form(form_name => 'writeForm',
+        fields => $fields, button => 'submitPreview') or die "Failed to submit message form";
+    # ... check preview and submit it
+    $wth->browser_check_contents('Now Preview The Message');
+    $wth->browser_check_contents('It means the test harness is working');
+    $b->submit_form(form_name => 'previewForm', button => 'submitSendFax') or die "Failed to confirm preview";
+    $wth->browser_check_contents('Nearly Done! Now check your email');
+
+    # Wait for confirmation email to arrive
+    call_fyrqd();
+    # Click link in the confirmation email
+    my $confirmation_email = $wth->email_get_containing(
+        '%To: '.name_n(0).' <'.email_n(0).'>'.
+        '%Subject: Please confirm that you want to send a message to David Howarth MP'.
+        '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
+        '%to confirm that you wish%');
+    die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
+    print "Message confirm URL is $1\n" if $verbose > 1;
+    $wth->email_check_url($1);
+    $b->get($1);
+    $wth->browser_check_contents("All done... We'll send your message now");
+
+    # TODO: Prod message into being sent
+}
 
 
