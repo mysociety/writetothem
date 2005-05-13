@@ -1,0 +1,30 @@
+#!/usr/bin/perl -w
+#
+# test-mailin:
+# Receives incoming mail for the test harness, and stores it in the database
+# for the test harness to access.
+# 
+# Hook this up with something like this in /etc/aliases...
+#   fyrharness: "| /home/francis/devel/mysociety/fyr/bin/test-mailin"
+# ... or some other appropriate way.
+#
+# Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+chdir $FindBin::Bin;
+
+use File::Slurp;
+
+use mySociety::Config;
+mySociety::Config::set_file('../conf/general');
+use mySociety::WebTestHarness;
+
+our $wth = new mySociety::WebTestHarness({'db_option_prefix' => 'FYR_QUEUE_'});
+my $slurped = read_file(\*STDIN);
+$wth->email_incoming($slurped);
+
