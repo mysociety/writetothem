@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.79 2005-05-13 03:59:35 adam Exp $
+ * $Id: write.php,v 1.80 2005-05-19 21:57:11 adam Exp $
  *
  */
 
@@ -323,9 +323,9 @@ $success = msg_recipient_test($fyr_values['who']);
 if (rabx_is_error($success)) {
     if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA)
         template_show_error(<<<EOF
-Sorry, we do not have contact details for this representative, so cannot send
+Sorry, we do not currently have contact details for this representative, and are unable to send
 them a message. It can, unfortunately, take us a couple of weeks or so to get
-details for newly elected officials. Your patience, in this matter, is greatly
+these: for both newly, and re-elected officials. Your patience, in this matter, is greatly
 appreciated. Please <a href="mailto:team@writetothem.com">email us</a> to
 let us know &#8212; particularly if you've got a fax number or an email address. Details:
 EOF
