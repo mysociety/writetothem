@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.148 2005-03-30 15:37:07 chris Exp $
+# $Id: Queue.pm,v 1.149 2005-05-19 19:08:54 matthew Exp $
 #
 
 package FYR::Queue;
@@ -732,7 +732,7 @@ sub make_confirmation_email ($;$) {
     # the confirm URLs have no characters which need to be entity-encoded,
     # which is bad, evil and wrong but actually true in this case.
     $text =~ s#(http://.+$)#<a href="$1">$1</a>#m
-        if ($msg->{sender_email} =~ m/\@aol\.com$/i);
+        if ($msg->{sender_email} =~ m/\@aol\./i);
 
     # Append a separator and the text of the ms
     $text .= "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
