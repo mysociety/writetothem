@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.21 2005-03-07 10:05:34 chris Exp $
+# $Id: Fax.pm,v 1.22 2005-06-02 09:02:45 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -516,6 +516,8 @@ again:
             throw FYR::Fax::HardError("recipient number contains bad character '$1'; unable to send by fax");
         } else {
             FYR::Queue::logmsg($id, 0, "recipient's dialing number is $number");
+            throw FYR::Fax::HardError("recipient's dialing number does not begin '0'; won't send")
+                if ($number !~ /^0/);
         }
 
         # We call efax(1) directly rather than via the fax(1) wrapper, because
