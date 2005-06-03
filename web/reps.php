@@ -6,9 +6,12 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: reps.php,v 1.4 2005-01-13 15:15:38 francis Exp $
+ * $Id: reps.php,v 1.5 2005-06-03 16:04:03 francis Exp $
  * 
  */
+
+# This page was prototype of interface for representatives, but never finished
+exit;
 
 require_once "../phplib/forms.php";
 require_once "../phplib/fyr.php";

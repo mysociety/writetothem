@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.26 2005-06-03 11:09:58 matthew Exp $
+ * $Id: fyr.php,v 1.27 2005-06-03 16:04:03 francis Exp $
  * 
  */
 
@@ -19,7 +19,7 @@ require_once "../../phplib/template.php";
 require_once "../../phplib/utility.php";
 
 // Disable these types (due to elections / pending elections etc.)
-$disabled_child_types = array('CED');
+$disabled_child_types = array();
 #$disabled_child_types = array('CED', 'WMC');
 #$disabled_child_types = array();
 

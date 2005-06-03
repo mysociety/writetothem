@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.68 2005-05-12 16:59:24 matthew Exp $
+ * $Id: who.php,v 1.69 2005-06-03 16:04:03 francis Exp $
  *
  */
 
@@ -39,6 +39,7 @@ mapit_check_error($voting_areas_info);
 debug_timestamp();
 
 $area_representatives = dadem_get_representatives(array_values($voting_areas));
+$error = dadem_get_error($area_representatives);
 dadem_check_error($area_representatives);
 debug_timestamp();
 
@@ -108,12 +109,20 @@ foreach ($va_display_order as $va_type) {
 
     if ($rep_count == 0) continue;
 
+    // Data bad due to election etc?
+    $disabled = false;
+    $parent_status = dadem_get_area_status($va_info['parent_area_id']);
+    dadem_check_error($parent_status);
+    $status = dadem_get_area_status($va_info['area_id']);
+    dadem_check_error($status);
+    if ($parent_status != 'none' || $status != 'none') {
+        $disabled = true;
+    }
+
     // Create HTML
     global $disabled_child_types;
     if (is_array($va_type)) {
         // Plural
-        $disabled = in_array($va_type[0], $disabled_child_types);
-
         if ($rep_count > 1) {
             $heading = "Your {$va_info[0]['rep_name_long_plural']}";
             $text = "<p>";
@@ -140,7 +149,6 @@ foreach ($va_display_order as $va_type) {
         $text .= display_reps($representatives[1]);
     } else {
         // Singular
-        $disabled = in_array($va_type, $disabled_child_types);
         if ($rep_count > 1) {
             $heading = "Your ${va_info['rep_name_long_plural']}";
             $text = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
@@ -170,11 +178,16 @@ foreach ($va_display_order as $va_type) {
     }
 
     if ($disabled) {
-        $text = "<p>Due to the recent election, we don't yet have details for this
-            representative.  We'll be adding them as soon as we can.
-            </p>
-
-            <p>Why not take this as an opportunity to <strong>write to one of your
+        if ($status == "recent_election" || $parent_status == "recent_election") {
+            $text = "<p>Due to the recent election, we don't yet have details for this
+                representative.  We'll be adding them as soon as we can.</p>";
+        } elseif ($status == "pending_election" || $parent_status == "pending_election") {
+            $text = "<p>There's an upcoming election.  We'll be adding your new
+                    representative as soon as we can after the election.</p>";
+        } else {
+            $text = "Representative details not available for unknown reason.";
+        }
+        $text .="<p>Why not take this as an opportunity to <strong>write to one of your
             other representatives</strong>? Their job is to help you too!</p>";
         array_push($fyr_representatives, $text);
         array_push($fyr_headings, "<h3><strike>$heading</strike></h3>");
