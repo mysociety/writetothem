@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: cheltenham.css,v 1.1 2005-06-03 08:52:28 matthew Exp $
+ * $Id: cheltenham.css,v 1.2 2005-06-03 08:56:20 matthew Exp $
  * 
  */
 
@@ -42,7 +42,7 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 }
 
 #postcodebox {
-    border: solid 2px #9c8f4f;
+    border: solid 2px #02927b;
 }
 #writebox, #preview, #buttonbox {
     border: solid 2px #02927B;
