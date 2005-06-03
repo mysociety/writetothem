@@ -2,7 +2,7 @@
 
 $values['title'] = "Thanks for your corrections to " . $va_info['name'] . " " . $va_info['type_name'] . "!";
 $values['robots'] = 'noindex, nofollow';
-include "header.php";
+template_draw('header', $values);
 
 ?>
 
@@ -17,4 +17,4 @@ helping build sites, publicising them, or lending a hand in another way,
 </p>
 
 <? 
-include "footer.php"; ?>
+template_draw('footer', $values); ?>

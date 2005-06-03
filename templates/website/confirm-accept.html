@@ -1,6 +1,6 @@
 <? 
 $values['title'] = "We'll send your message now";
-include "header.php"; 
+template_draw('header', $values);
 ?>
 
 <h2>All done... We'll send your message now</h2>
@@ -17,4 +17,4 @@ about this testing service.</p>
 Meanwhile... Start a <a href="http://www.mysociety.org/ycml/">long term relationship</a><br> with your MP
 </h2>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

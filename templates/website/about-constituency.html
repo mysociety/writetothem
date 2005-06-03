@@ -1,4 +1,5 @@
-<? $values['title'] = "Who are my Representatives?"; include "header.php"; ?>
+<? $values['title'] = "Who are my Representatives?";
+template_draw('header', $values); ?>
 
 <h2>Who are my Representatives?</h2>
 
@@ -80,4 +81,4 @@ information about the Declaration on aboutmyvote</a>.</p>
 
 </dl>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

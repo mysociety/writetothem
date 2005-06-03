@@ -1,4 +1,5 @@
-<? $values['title'] = "Special and fictional postcodes"; include "header.php"; ?>
+<? $values['title'] = "Special and fictional postcodes";
+    template_draw('header', $values); ?>
 
 <h2>Special Postcodes</h2>
 
@@ -28,4 +29,4 @@ representatives of fictional locations. Hopefully, the links below will help.</p
 <dd>FX - Fairfax. Used by the <a href="http://www.royalmail.com/">Royal Mail</a> for training purposes.</dd>
 </dl>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

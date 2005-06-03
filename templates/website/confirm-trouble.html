@@ -1,6 +1,6 @@
 <? 
 $values['title'] = "Oops... That ain't good...";
-include "header.php"; 
+template_draw('header', $values);
 ?>
 
 <h3>Oops... Something didn't quite work...</h3>
@@ -10,4 +10,4 @@ problem though, so please let us know what went on and send a copy of
 the confirmation email to <a href="mailto:team@writetothem.com">team@writetothem.com</a> and we'll look into
 it.</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,4 +1,5 @@
-<? $values['title'] = "Who are you, and why are you doing this?"; include "header.php"; ?>
+<? $values['title'] = "Who are you, and why are you doing this?";
+    template_draw('header', $values); ?>
 
 <h2><?=$values['title']?></h2>
 
@@ -54,4 +55,4 @@ FaxYourMP or WriteToThem:</p>
 <a href="http://www.theyworkforyou.com/">TheyWorkForYou.com</a>, a new website
 which lets you keep track of what your MP does and says in Parliament.</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

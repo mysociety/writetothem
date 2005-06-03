@@ -1,4 +1,5 @@
-<? $values['title'] = "Who should I write to?"; include "header.php"; ?>
+<? $values['title'] = "Who should I write to?";
+    template_draw('header', $values); ?>
 
 <h2><?=$values['title'] ?> </h2>
 <UL>
@@ -135,4 +136,4 @@ According to the official website, the "GLA's main areas of responsibility are:
 <li>Health
 </ul>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -2,7 +2,7 @@
 
 $values['title'] = $va_info['name'] . " " . $va_info['type_name'] ." Corrections";
 $values['robots'] = 'noindex, nofollow';
-include "header.php";
+template_draw('header', $values);
 
 ?>
 
@@ -58,4 +58,4 @@ if (count($values['reps_info'])) {
 </form>
 
 <? 
-include "footer.php"; ?>
+template_draw('footer', $values); ?>

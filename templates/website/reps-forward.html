@@ -1,4 +1,5 @@
-<? $values['title'] = "Foward " . $values['constituent']['name'] . "'s Message"; include "header.php"; ?>
+<? $values['title'] = "Foward " . $values['constituent']['name'] . "'s Message";
+    template_draw('header', $values); ?>
 
 <h1><?=$values['title'] ?></h1>
 
@@ -32,4 +33,4 @@ foreach ($values['forwardreps'] as $row) {
 ?>
 </table>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,5 +1,6 @@
 <? $values['title'] = $values['voting_area']['rep_prefix'] . " " . $values['representative']['name'] . 
-        $values['voting_area']['rep_suffix'] . "'s Control Panel"; include "header.php"; ?>
+    $values['voting_area']['rep_suffix'] . "'s Control Panel";
+template_draw('header', $values); ?>
 
 <h1><?=$values['title'] ?></h1>
 
@@ -40,4 +41,4 @@ if ($c == 0) { ?>
 ?>
 </table>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

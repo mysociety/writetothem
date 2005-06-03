@@ -1,6 +1,6 @@
 <? 
 $values['title'] = "Thanks for your feedback... and one *last* question";
-include "header.php"; 
+template_draw('header', $values);
 ?>
 
 <h1>Thanks for your feedback... and one *last* question</h1>
@@ -32,4 +32,4 @@ participation in the democratic process.
 
 <p>&mdash; The WriteToThem.com team</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

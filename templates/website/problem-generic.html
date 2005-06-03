@@ -1,6 +1,6 @@
 <? 
 $values['title'] = "Problem with your message";
-include "header.php"; 
+template_draw('header', $values);
 ?>
 
 <h2>Message Rejected</h2>
@@ -13,4 +13,4 @@ don't think that you have, then contact us at
 <p>All the usuals<br>
 -The WriteToThem.com Team</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,7 +1,8 @@
-<? $values['title'] = "Sorry! Something's gone wrong."; include "header.php"; ?>
+<? $values['title'] = "Sorry! Something's gone wrong.";
+    template_draw('header', $values); ?>
 
 <h2>Sorry!  Something's gone wrong.</h2>
 
 <p align="center"><?=$values['error_message'] ?></p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,6 +1,8 @@
-<? $values['title'] = 'About Us'; include 'header.php'; ?>
+<? $values['title'] = 'About Us';
+    template_draw('header', $values); ?>
+
 <h2>About Us</h2>
 
 Blah, blah, blah.
 
-<? include 'footer.php'; ?>
+<? template_draw('footer', $values); ?>

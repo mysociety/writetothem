@@ -1,4 +1,5 @@
-<? $values['title'] = "How to link to us"; include "header.php"; ?>
+<? $values['title'] = "How to link to us";
+    template_draw('header', $values); ?>
 
 <h2><?=$values['title']?></h2>
 <p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
@@ -33,4 +34,4 @@ for campaigners</a>.  You must not tell your users to send cut-and-paste message
 
 <p>Feel free to hack around with the design as much as you like. Any questions, just drop us a line at <a href="mailto:team@writetothem.com">team@writetothem.com</a>.</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

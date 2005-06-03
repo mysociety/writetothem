@@ -1,4 +1,5 @@
-<? $values['title'] = "British Overseas Territories and Crown Dependencies"; include "header.php"; ?>
+<? $values['title'] = "British Overseas Territories and Crown Dependencies";
+    template_draw('header', $values); ?>
 
 <h2><?=$values['title']?></h2>
 
@@ -105,4 +106,4 @@ Gibraltar
 or contact them by phone on +350 78420, or by fax to +350 42849.
 </p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,5 +1,5 @@
 <?
-include "header.php";
+template_draw('header', $values);
 ?>
 
 <?=$values['blurb-top'] ?>
@@ -58,5 +58,5 @@ Due to the General Election, new MPs and County Councillors are not yet availabl
 Have a <a href="http://www.mysociety.org/ycml/">long term relationship</a> with your MP!
 </div>
 <?
-include "footer.php";
+template_draw('footer', $values);
 ?>

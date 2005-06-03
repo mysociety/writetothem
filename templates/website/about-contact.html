@@ -1,4 +1,5 @@
-<? $values['title'] = "Tell us what you think"; include "header.php"; ?>
+<? $values['title'] = "Tell us what you think";
+template_draw('header', $values); ?>
 
 <h2><?=$values['title'] ?></h2>
 
@@ -24,4 +25,4 @@ If you do not have access to email, you may send a fax or leave a voicemail on 0
 not be delivered.</span>
 </p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,4 +1,5 @@
-<? $values['title'] = "Copyright information"; include "header.php"; ?>
+<? $values['title'] = "Copyright information";
+template_draw('header', $values); ?>
 
 <h2>Copyright information</h2>
 
@@ -23,4 +24,4 @@ using <a href="http://www.ordnancesurvey.co.uk/">Ordnance Survey</a>
 data under licence.  Every thanks to them both!
 
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

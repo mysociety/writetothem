@@ -1,6 +1,7 @@
 <? 
 $values['title'] = "Check your message is right";
-include "header.php"; ?>
+template_draw('header', $values);
+?>
 
 <h2>Now Preview The Message You've Written</h2>
 
@@ -12,4 +13,4 @@ include "header.php"; ?>
 your <?=$values['voting_area']['rep_name']?>)
 </p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

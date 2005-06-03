@@ -1,4 +1,5 @@
-<? $values['title'] = "What people said about FaxYourMP.com"; include "header.php"; ?>
+<? $values['title'] = "What people said about FaxYourMP.com";
+    template_draw('header', $values); ?>
 
 <h2>What people said about our predecessor, FaxYourMP.com</h2>
 
@@ -52,4 +53,4 @@ Email us at <a href="mailto:team@writetothem.com">team@writetothem.com</a>.</p>
 <p>To protect those MPs who do get in touch with their constituents we have taken out their names and replaced them with "my MP". Other than that, all these quotes are genuine, and from constituents rather like yourself.</p>
 <p>We can't guarantee that your MP will get in touch with you about your query, but it appears that many of them do respond promptly.</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

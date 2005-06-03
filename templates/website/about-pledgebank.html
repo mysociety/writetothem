@@ -1,4 +1,5 @@
-<? $values['title'] = 'PledgeBank'; $values['nobox'] = 1; include 'header.php'; ?>
+<? $values['title'] = 'PledgeBank'; $values['nobox'] = 1;
+    template_draw('header', $values); ?>
 <h2>PledgeBank - "I'll do it if you will too"</h2>
 
 <p>PledgeBank is a web site to help get people past the barrier of not wanting to act alone. We all know that people hate thinking that they might be the only person to turn up to an event, or the only person who volunteers to help with a cause. PledgeBank is about overcoming this common fear.</p>
@@ -25,4 +26,4 @@
 
 <p>If you've any questions, or if you'd like to be involved with the launch, please email Tom at <a href="mailto:pb@mysociety.org">pb@mysociety.org</a>.</p>
 
-<? include 'footer.php'; ?>
+<? template_draw('footer', $values); ?>

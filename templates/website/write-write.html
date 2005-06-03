@@ -3,7 +3,7 @@ $values['title'] = "Now write your message to ".
     $values['representative']['name'] . " " .
     $values['voting_area']['rep_name'] . " for " . $values['voting_area']['name'];
 
-include "header.php";
+template_draw('header', $values);
 if ($values['prime_minister']) { 
 ?>
 <h2 class="warning"><strong>VIP.... VIP... VIP.... VIP... READ THIS BIT
@@ -45,4 +45,4 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 
 <?=$values['form'] ?>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

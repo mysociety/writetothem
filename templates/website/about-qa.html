@@ -1,4 +1,5 @@
-<? $values['title'] = "Questions and Answers"; include "header.php"; ?>
+<? $values['title'] = "Questions and Answers";
+    template_draw('header', $values); ?>
 <h2>Questions and Answers</h2>
 
 <a name="top"></a>
@@ -335,4 +336,4 @@ touch with us for any reason:</p>
 
 </dl>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

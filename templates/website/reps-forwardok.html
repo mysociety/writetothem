@@ -1,4 +1,5 @@
-<? $values['title'] = "Foward Successful"; include "header.php"; ?>
+<? $values['title'] = "Foward Successful";
+    template_draw('header', $values); ?>
 
 <h1><?=$values['title'] ?></h1>
 
@@ -9,4 +10,4 @@ been successfully forwarded.
 other WriteToThem.com options, <a href="reps">click here</a>.
 </p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

@@ -1,5 +1,5 @@
 <?
-include "header.php";
+template_draw('header', $values);
 ?>
 
 <?=$values['blurb-top'] ?>
@@ -50,6 +50,6 @@ include "header.php";
 <? 
 /* The above focuses on the postcode box. Must come after the box is created, obviously. */
 
-include "footer.php";
+template_draw('footer', $values);
 
 ?>

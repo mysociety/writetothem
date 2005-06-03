@@ -1,6 +1,6 @@
 <? $values['title'] = "Now select the representative you'd like to contact";
 $values['robots'] = 'index, nofollow';
-include "header.php";
+template_draw('header', $values);
 ?>
 <h2><?=$values['title'] ?></h2>
 
@@ -59,4 +59,4 @@ foreach ($values['reps'] as $row) {
 </table>
 <? }
 
-include "footer.php"; ?>
+template_draw('footer', $values); ?>

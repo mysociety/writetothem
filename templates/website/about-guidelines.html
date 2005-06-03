@@ -1,4 +1,5 @@
-<? $values['title'] = "Guidelines for campaigning"; include "header.php"; ?>
+<? $values['title'] = "Guidelines for campaigning";
+    template_draw('header', $values); ?>
 
 <h2>Guidelines for campaigning</h2>
 
@@ -52,4 +53,4 @@ use our <a href="/about-linktous">handy linking form</a>.
 <li><strong>If in doubt, <a href="/about-contact">ask us first</a>.</strong></li>
 </ol>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>

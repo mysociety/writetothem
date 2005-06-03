@@ -1,6 +1,6 @@
 <? 
 $values['title'] = "Problem with your message";
-include "header.php"; 
+template_draw('header', $values);
 ?>
 
 <h2>Your message is near-identical to others sent previously</h2>
@@ -25,4 +25,4 @@ original, words.
 <p>All the usuals<br>
 -The WriteToThem.com Team</p>
 
-<? include "footer.php"; ?>
+<? template_draw('footer', $values); ?>
