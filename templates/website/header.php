@@ -1,6 +1,6 @@
 <?php
 
-$syn = str_replace('.writetothem.com', '', $_SERVER['SERVER_NAME']);
+$syn = str_replace('.writetothem.com', '', $_SERVER['HTTP_HOST']);
 
 header("Content-Type: text/html; charset=utf-8"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
