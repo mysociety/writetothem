@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.70 2005-06-07 08:35:24 francis Exp $
+ * $Id: who.php,v 1.71 2005-06-07 08:37:47 francis Exp $
  *
  */
 
@@ -117,8 +117,12 @@ foreach ($va_display_order as $va_type) {
     } else {
         $parent_status = 'none';
     }
-    $status = dadem_get_area_status($va_info['area_id']);
-    dadem_check_error($status);
+    if (array_key_exists('area_id', $va_info)) {
+        $status = dadem_get_area_status($va_info['area_id']);
+        dadem_check_error($status);
+    } else {
+        $status = 'none';
+    }
     if ($parent_status != 'none' || $status != 'none') {
         $disabled = true;
     }
