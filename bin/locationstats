@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: locationstats,v 1.1 2005-01-19 11:49:37 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: locationstats,v 1.2 2005-06-24 12:29:32 chris Exp $';
 
 use strict;
 
@@ -33,6 +33,6 @@ my %p = map { $_ => 1 } @pcs;
 my %loc;
 foreach (keys(%p)) {
     $loc{$_} = mySociety::MaPit::get_location($_);
-    print "$_ -> $loc{$_}->[1], $loc{$_}->[2]\n";
+    print "$_ -> $loc{$_}->{easting}, $loc{$_}->{northing}\n";
 }
 
