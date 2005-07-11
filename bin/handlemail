@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.13 2005-02-04 17:41:32 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.14 2005-07-11 12:11:38 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -32,6 +32,10 @@ BEGIN {
 }
 use mySociety::DBHandle qw(dbh);
 use mySociety::Util qw(print_log);
+
+# Don't print diagnostics to standard error, as this can result in bounce
+# messages being generated (only in response to non-bounce input, obviously).
+mySociety::Util::log_to_stderr(0);
 
 use FYR;
 use FYR::Queue;
