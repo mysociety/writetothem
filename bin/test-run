@@ -19,13 +19,12 @@
 #
 
 # TODO:
-# Clear out ratty
 # Trap ratty rule
 # Sending faxes
 # Questionaire
 # Admin pages
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.5 2005-07-18 13:31:35 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.6 2005-07-18 15:31:57 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -105,6 +104,8 @@ die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test
 
 print "Sending example message...\n" if $verbose > 0;
 do_send_example_message();
+print "Testing ratty blocking message...\n" if $verbose > 0;
+do_send_blocked_message();
 
 # Check for any unhandled mails or errors
 print "Checking no emails left at end...\n" if $verbose > 1;
@@ -132,9 +133,9 @@ sub do_send_example_message() {
     # Enter Cambridge postcode, and choose David Howarth MP
     $wth->browser_submit_form(form_name => 'postcodeForm',
         fields => { pc => 'CB23QJ'},  # The Guildhall, Cambridege 
-        ) or die "Failed to submit signing form";
+        );
     $wth->browser_check_contents("Now select the representative you'd like to contact");
-    $wth->browser_follow_link(text_regex => qr/David Howarth/) or die "Failed to find link to MP";
+    $wth->browser_follow_link(text_regex => qr/David Howarth/);
     $wth->browser_check_contents("Now Write Your Message");
 
     # Fill in a test letter
@@ -150,16 +151,16 @@ sub do_send_example_message() {
     };
     # ... with bad email first
     $wth->browser_submit_form(form_name => 'writeForm',
-        fields => $fields, button => 'submitPreview') or die "Failed to submit message form";
+        fields => $fields, button => 'submitPreview');
     $wth->browser_check_contents('Choose a valid email address');
     # ... then with good
     $fields->{'writer_email'} = email_n(0);
     $wth->browser_submit_form(form_name => 'writeForm',
-        fields => $fields, button => 'submitPreview') or die "Failed to submit message form";
+        fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
     $wth->browser_check_contents('Now Preview The Message');
     $wth->browser_check_contents('It means the test harness is working');
-    $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax') or die "Failed to confirm preview";
+    $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents('Nearly Done! Now check your email');
 
     # Wait for confirmation email to arrive
@@ -185,6 +186,32 @@ sub do_send_example_message() {
         '%Subject: Letter from your constituent '.name_n(0).
         '%23 Something Street'.
         '%Signed with an electronic signature%');
+}
+
+#############################################################################
+
+sub do_send_blocked_message() {
+    $wth->browser_get($admin_url);    
+    $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
+    # check no existing rules
+    $wth->browser_check_no_contents('View');
+
+    # make new rule
+    $wth->browser_follow_link(text_regex => qr/New rule/);
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
+        fields => {}, button => 'newfilter');
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm', 
+        fields => { 
+            note => 'Block quicker than you can imagine',
+            sequence => 1,
+            requests => 0, interval => 0,
+            action => 'freeze',
+            field1 => 'message_length_characters',
+            condition1 => '+<',
+            value1 => '10',
+            }, 
+        button => 'done');
+
 }
 
 
