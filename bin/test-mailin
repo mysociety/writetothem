@@ -24,7 +24,8 @@ use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
 use mySociety::WebTestHarness;
 
-our $wth = new mySociety::WebTestHarness({'db_option_prefix' => 'FYR_QUEUE_'});
+our $wth = new mySociety::WebTestHarness();
+$wth->database_connect('FYR_QUEUE_');
 my $slurped = read_file(\*STDIN);
 $wth->email_incoming($slurped);
 

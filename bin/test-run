@@ -6,21 +6,26 @@
 # Requires:
 # * ../general/conf file set up for WriteToThem, and matching the below requirements
 # * apache configured to serve ../web on OPTION_BASE_URL
-# * a database with name ending "_testharness"; this script will drop and remake the
-#   database, so make sure it is never used for anything important
+# * an FYR database with name ending "_testharness"; this script will drop and remake 
+#   the database, so make sure it is never used for anything important
 # * email addresses (email_n below) configured to pipe to ./test-mailin with fast
 #   local delivery
+# * a Ratty database with name ending "_testharness", also configured in ../general/conf
+#   (an entry not normally present when running FYR) and in the ratty service
+#   that OPTION_RATTY_URL talks to.
 #
 # Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
 # TODO:
+# Clear out ratty
+# Trap ratty rule
 # Sending faxes
 # Questionaire
 # Admin pages
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.4 2005-07-17 22:52:14 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.5 2005-07-18 13:31:35 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -75,9 +80,14 @@ sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 # Configure test harness class
 print "Set up web test harness...\n" if $verbose > 0;
-our $wth = new mySociety::WebTestHarness({db_option_prefix => 'FYR_QUEUE_'});
+our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
+$wth->database_connect('RATTY_');
+$wth->database_drop_reload('../../services/Ratty/schema.sql');
+$wth->database_cycle_sequences(200);
+$wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
+$wth->database_cycle_sequences(200);
 $wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin/eveld",
                     log_mailbox => "log_mailbox" });
 
