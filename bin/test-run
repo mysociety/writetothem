@@ -24,7 +24,7 @@
 # Questionaire
 # Admin pages
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.7 2005-07-19 09:44:26 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.8 2005-07-19 10:24:15 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -108,6 +108,7 @@ print "Testing ratty blocking message...\n" if $verbose > 0;
 do_send_blocked_message();
 
 # Check for any unhandled mails or errors
+call_fyrqd();
 print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
 print "Checking no log file errors at end...\n" if $verbose > 1;
@@ -123,7 +124,7 @@ sub call_fyrqd {
         ) and die "Failed to call fyrqd";
 }
 
-sub send_message {
+sub send_message_to_rep {
     my ($who, $postcode, $repname, $fields) = @_;
     $fields->{writer_name} = name_n($who);
     $fields->{writer_email} = email_n($who);
@@ -163,21 +164,24 @@ sub send_message {
     $wth->browser_get($1);
     $wth->browser_check_contents("All done... We'll send your message now");
     # TODO: Check message isn't sent early
+}
 
-    # Check message is delivered to the representative
+sub check_delivered_to_rep {
+    my ($who, $repname, $extra_check) = @_;
+
     call_fyrqd();
     my $confirmation_email = $wth->email_get_containing(
         '%From: '.name_n($who).' <'.email_n($who).'>'.
         '%To: '.$repname.' MP <'.email_n($who).'>'.
         '%Subject: Letter from your constituent '.name_n($who).
-        '%'.$fields->{writer_address1}.
+        '%'.$extra_check.
         '%Signed with an electronic signature%');
 }
 
 #############################################################################
 
 sub do_send_example_message() {
-    send_message(0, 
+    send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridege 
         'David Howarth', 
         { 
@@ -185,9 +189,10 @@ sub do_send_example_message() {
             writer_town => 'Someplace',
             writer_county => 'Someshire',
             writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working."
+            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         } 
     );
+    check_delivered_to_rep(0, 'David Howarth', '23 Something Street');
 }
 
 #############################################################################
@@ -211,12 +216,13 @@ sub do_send_blocked_message() {
             message => 'freeze',
             field1 => 'message_length_characters',
             condition1 => '+<',
-            value1 => '10',
+            value1 => '200',
         }, 
         button => 'done');
     $wth->browser_check_contents('Block quicker than you can imagine');
 
-    send_message(1, 
+    # This now shouldn't get there, as the message should be frozen
+    send_message_to_rep(1, 
         'CB23QJ', # The Guildhall, Cambridege 
         'David Howarth', 
         { 
@@ -227,6 +233,8 @@ sub do_send_blocked_message() {
             body => "V. short"
         } 
     );
+    call_fyrqd();
+    $wth->email_check_none_left();
 }
 
 
