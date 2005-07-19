@@ -24,7 +24,7 @@
 # Questionaire
 # Admin pages
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.6 2005-07-18 15:31:57 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.7 2005-07-19 09:44:26 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -71,7 +71,7 @@ if ($help) {
 our $base_url = mySociety::Config::get('BASE_URL');
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
-sub email_n { my $n = shift; return "fyrharness+$n\@pledgebank.owl"; }
+sub email_n { my $n = shift; return "fyrharness+$n\@writetothem.owl"; }
 sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 #############################################################################
@@ -123,43 +123,29 @@ sub call_fyrqd {
         ) and die "Failed to call fyrqd";
 }
 
-#############################################################################
-
-sub do_send_example_message() {
+sub send_message {
+    my ($who, $postcode, $repname, $fields) = @_;
+    $fields->{writer_name} = name_n($who);
+    $fields->{writer_email} = email_n($who);
+    
     $wth->browser_get($base_url);
     $wth->browser_check_contents("First, type your UK postcode:");
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
 
-    # Enter Cambridge postcode, and choose David Howarth MP
+    # Choose
     $wth->browser_submit_form(form_name => 'postcodeForm',
-        fields => { pc => 'CB23QJ'},  # The Guildhall, Cambridege 
+        fields => { pc => $postcode},  
         );
     $wth->browser_check_contents("Now select the representative you'd like to contact");
-    $wth->browser_follow_link(text_regex => qr/David Howarth/);
+    $wth->browser_follow_link(text_regex => qr/$repname/);
     $wth->browser_check_contents("Now Write Your Message");
 
     # Fill in a test letter
-    my $fields = { 
-            writer_name => name_n(0),
-            writer_address1 => '23 Something Street',
-            writer_address2 => undef,
-            writer_town => 'Someplace',
-            writer_county => 'Someshire',
-            writer_email => 'nonsense email',
-            writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working."
-    };
-    # ... with bad email first
-    $wth->browser_submit_form(form_name => 'writeForm',
-        fields => $fields, button => 'submitPreview');
-    $wth->browser_check_contents('Choose a valid email address');
-    # ... then with good
-    $fields->{'writer_email'} = email_n(0);
     $wth->browser_submit_form(form_name => 'writeForm',
         fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
     $wth->browser_check_contents('Now Preview The Message');
-    $wth->browser_check_contents('It means the test harness is working');
+    $wth->browser_check_contents($fields->{body});
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents('Nearly Done! Now check your email');
 
@@ -167,8 +153,8 @@ sub do_send_example_message() {
     call_fyrqd();
     # Click link in the confirmation email
     my $confirmation_email = $wth->email_get_containing(
-        '%To: '.name_n(0).' <'.email_n(0).'>'.
-        '%Subject: Please confirm that you want to send a message to David Howarth MP'.
+        '%To: '.name_n($who).' <'.email_n($who).'>'.
+        '%Subject: Please confirm that you want to send a message to '.$repname.' MP'.
         '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
         '%to confirm that you wish%');
     die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
@@ -181,22 +167,39 @@ sub do_send_example_message() {
     # Check message is delivered to the representative
     call_fyrqd();
     my $confirmation_email = $wth->email_get_containing(
-        '%From: '.name_n(0).' <'.email_n(0).'>'.
-        '%To: David Howarth MP <'.email_n(0).'>'.
-        '%Subject: Letter from your constituent '.name_n(0).
-        '%23 Something Street'.
+        '%From: '.name_n($who).' <'.email_n($who).'>'.
+        '%To: '.$repname.' MP <'.email_n($who).'>'.
+        '%Subject: Letter from your constituent '.name_n($who).
+        '%'.$fields->{writer_address1}.
         '%Signed with an electronic signature%');
 }
 
 #############################################################################
 
+sub do_send_example_message() {
+    send_message(0, 
+        'CB23QJ', # The Guildhall, Cambridege 
+        'David Howarth', 
+        { 
+            writer_address1 => '23 Something Street',
+            writer_town => 'Someplace',
+            writer_county => 'Someshire',
+            writer_phone => undef,
+            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working."
+        } 
+    );
+}
+
+#############################################################################
+
 sub do_send_blocked_message() {
+    # Go to abuse rules page
     $wth->browser_get($admin_url);    
     $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
-    # check no existing rules
+    # ... check no existing rules
     $wth->browser_check_no_contents('View');
 
-    # make new rule
+    # ... make new rule
     $wth->browser_follow_link(text_regex => qr/New rule/);
     $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
         fields => {}, button => 'newfilter');
@@ -205,13 +208,25 @@ sub do_send_blocked_message() {
             note => 'Block quicker than you can imagine',
             sequence => 1,
             requests => 0, interval => 0,
-            action => 'freeze',
+            message => 'freeze',
             field1 => 'message_length_characters',
             condition1 => '+<',
             value1 => '10',
-            }, 
+        }, 
         button => 'done');
+    $wth->browser_check_contents('Block quicker than you can imagine');
 
+    send_message(1, 
+        'CB23QJ', # The Guildhall, Cambridege 
+        'David Howarth', 
+        { 
+            writer_address1 => '23 Something Street',
+            writer_town => 'Someplace',
+            writer_county => 'Someshire',
+            writer_phone => undef,
+            body => "V. short"
+        } 
+    );
 }
 
 
