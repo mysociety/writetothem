@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.149 2005-05-19 19:08:54 matthew Exp $
+# $Id: Queue.pm,v 1.150 2005-07-19 21:41:08 francis Exp $
 #
 
 package FYR::Queue;
@@ -1374,20 +1374,15 @@ are as follows:
 
 All messages on the queue.
 
-=item important
+=item needattention
 
-Messages which may need operator attention.  Exactly the same set of messages
-as the 'failing' and 'frozen' sets combined.
+Messages which need attention.  This means frozen in states new, pending or
+ready, or in bounce_confirm.
 
 =item failing
 
 Messages which are failing or have failed to be delivered, which have not
 been frozen.  Combined with 'frozen' makes all 'important' messages.
-
-=item frozen
-
-Messages which are frozen in states new, pending or ready.  Combined
-with 'failing' makes all 'important' messages.
 
 =item recentchanged
 
@@ -1418,31 +1413,24 @@ search for ' rule #6 ' and the like.
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all important failing frozen recentchanged recentcreated similarbody search logsearch);
+    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
     my $msg;
     my @params;
-    if ($filter eq 'important') {
-        $where = q#
-            where  state = 'bounce_confirm'
-                    or state = 'failed'
-                    or state = 'error'
-                    or (frozen = 't' and state <> 'failed_closed')
-            order by created desc#;
-        # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
-        # index to do the scan. q.v. comments on the end of,
-        #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
+    # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
+    # index to do the scan. q.v. comments on the end of,
+    #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
+    if ($filter eq 'needattention') {
+        $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed') 
+                         or (state = 'bounce_confirm') order by created desc#;
     } elsif ($filter eq 'failing') {
         $where = q#
-            where (state = 'bounce_confirm'
-                    or state = 'failed'
+            where (state = 'failed'
                     or state = 'error')
                   and frozen = 'f' 
-            order by recipient_id, created desc#;
-    } elsif ($filter eq 'frozen') {
-        $where = q# where frozen = 't' and state <> 'failed_closed' order by created desc#;
+            order by created desc#;
     } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc limit 100";
     } elsif ($filter eq 'recentcreated') {

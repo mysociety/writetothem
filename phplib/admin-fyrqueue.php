@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.80 2005-02-23 14:59:44 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.81 2005-07-19 21:41:08 francis Exp $
  * 
  */
 
@@ -87,10 +87,10 @@ class ADMIN_PAGE_FYR_QUEUE {
 
         // Bar to change view
         $qmenu = "";
-        if ($view == 'frozen')
-            $qmenu .= "[Frozen] ";
+        if ($view == 'needattention')
+            $qmenu .= "[Need Attention] ";
         else
-            $qmenu .= "<a href=\"$this->self_link&amp;view=frozen\">[Frozen]</a> ";
+            $qmenu .= "<a href=\"$this->self_link&amp;view=needattention\">[Need Attention]</a> ";
 
         if ($view != 'failing')
             $qmenu .= "<a href=\"$this->self_link&amp;view=failing\">[Failing]</a> ";
@@ -354,7 +354,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
-        $view = get_http_var('view', 'frozen');
+        $view = get_http_var('view', 'needattention');
         $id = get_http_var("id");
 
         // Display about id
