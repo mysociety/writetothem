@@ -9,7 +9,8 @@
 # * an FYR database with name ending "_testharness"; this script will drop and remake 
 #   the database, so make sure it is never used for anything important
 # * email addresses (email_n below) configured to pipe to ./test-mailin with fast
-#   local delivery
+#   local delivery, and
+# * email address set in OPTION_EMAIL_PREFIX configured to pipe to ./handlemail
 # * a Ratty database with name ending "_testharness", also configured in ../general/conf
 #   (an entry not normally present when running FYR) and in the ratty service
 #   that OPTION_RATTY_URL talks to.
@@ -19,12 +20,13 @@
 #
 
 # TODO:
-# Trap ratty rule
 # Sending faxes
-# Questionaire
+# Bounce messages to rep
+# Questionnaire
 # Admin pages
+# Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.8 2005-07-19 10:24:15 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.9 2005-07-19 18:08:26 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -34,11 +36,13 @@ use Carp qw(verbose);
 use Storable;
 use FindBin;
 use Getopt::Long;
+use IO::Handle;
 
 use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
+use mySociety::Util;
 
 sub help {
 print <<END
@@ -102,6 +106,8 @@ $wth->browser_get($base_url . "/test.php?error=1" );
 my $errors = $wth->log_watcher_get_errors();
 die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
 
+#print "Sending bouncing message...\n" if $verbose > 0;
+#do_send_bouncing_message();
 print "Sending example message...\n" if $verbose > 0;
 do_send_example_message();
 print "Testing ratty blocking message...\n" if $verbose > 0;
@@ -170,12 +176,22 @@ sub check_delivered_to_rep {
     my ($who, $repname, $extra_check) = @_;
 
     call_fyrqd();
-    my $confirmation_email = $wth->email_get_containing(
+    my $content = $wth->email_get_containing(
         '%From: '.name_n($who).' <'.email_n($who).'>'.
         '%To: '.$repname.' MP <'.email_n($who).'>'.
         '%Subject: Letter from your constituent '.name_n($who).
         '%'.$extra_check.
         '%Signed with an electronic signature%');
+
+    return $content;
+}
+
+# Send one mail to bounce handling script
+sub call_handlemail {
+    my ($content) = @_;
+    my $p = mySociety::Util::pipe_via("./handlemail") or die "failed to call handlemail";
+    $p->print($content);
+    $p->close(); 
 }
 
 #############################################################################
@@ -236,5 +252,33 @@ sub do_send_blocked_message() {
     call_fyrqd();
     $wth->email_check_none_left();
 }
+
+#############################################################################
+
+=comment
+sub do_send_bouncing_message() {
+    send_message_to_rep(0, 
+        'CB23QJ', # The Guildhall, Cambridege 
+        'David Howarth', 
+        { 
+            writer_address1 => '10 Boing Boing Land',
+            writer_town => 'Springy Street',
+            writer_county => 'Thumpshire',
+            writer_phone => '01234 567890',
+            body => "Bouncing message this is.  A test."
+        } 
+    );
+    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land');
+
+    # Now fake that it bounced
+    call_handlemail($content);
+
+    # Find message in admin interface
+    $wth->browser_get($admin_url);    
+    $wth->browser_follow_link(text_regex => qr/Message Queue/);
+    $wth->browser_follow_link(text_regex => qr/Recent Created/);
+    $wth->browser_check_contents('<b>frozen</b>');
+}
+=cut
 
 
