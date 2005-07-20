@@ -1,0 +1,110 @@
+#!/usr/local/bin/php -q
+<?php
+/* 
+ * admin_reminder_mail:
+ * Displays administrative tasks which need doing on WriteToThem
+ *
+ * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
+ *
+ * $Id: admin_reminder_mail,v 1.1 2005-07-20 18:56:19 francis Exp $
+ *
+ */
+
+require_once "../conf/general";
+require_once "../phplib/queue.php";
+require_once "../../phplib/dadem.php";
+
+function verbose($str) {
+    global $verbose;
+    if ($verbose) 
+        fwrite(STDERR, "admin_reminder_mail: $str\n");
+}
+function error($str) {
+    fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");
+}
+
+$short_opts = '';
+$long_opts = array('verbose','help');
+require_once '../../phplib/phpcgi';
+
+$switches = $options[0];
+$args = $options[1];
+$verbose = 0; 
+foreach ($switches as $switch) {
+    if ($switch[0]=='--verbose') $verbose = 1;
+    if ($switch[0]=='--help') {
+?>
+
+Usage: frequentupdate [--verbose]
+
+--help      Display this help message
+--verbose   Display more information
+
+<?
+        exit;
+    }
+}
+
+// Prepare email...
+$mail = '';
+
+// Messages in "need attention" state
+$need_attention_messages = msg_admin_get_queue('needattention', array());
+$url = OPTION_ADMIN_URL . '/?page=fyrqueue';
+$need_attention_messages_count = count($need_attention_messages);
+if ($need_attention_messages_count > 0) {
+    $mail .= "
+* $need_attention_messages_count messages are frozen, or have bounced.
+  Decide if they are valid or not:
+  $url
+";
+}
+
+// Representatives with bad contact details
+$bad_contacts = dadem_get_bad_contacts();
+dadem_check_error($bad_contacts);
+$bad_contacts_info = dadem_get_representatives_info($bad_contacts);
+dadem_check_error($bad_contacts_info);
+$mps = 0;
+$not_mps = 0;
+foreach ($bad_contacts_info as $info) {
+    if ($info['type'] == 'WMC') {
+        $mps++;
+    } else {
+        $not_mps++;
+    }
+}
+$not_mps = $need_attention_count - $mps;
+
+$url = OPTION_ADMIN_URL . '/?page=reps';
+if ($mps > 0) {
+    $mps_constituents = number_format($mps * 60000);
+    $mail .= "
+* $mps_constituents people are stopped from contacting their MP.
+  Phone up the offices and get their constituency mail fax or email:
+  $url
+";
+}
+if ($not_mps > 0) {
+    $mail .= "
+* Find out councillor and other rep contact details:
+  $not_mps representatives have no contact details
+  $url
+";
+}
+
+// Councils which are not matched
+$councils_not_matched = dadem_admin_get_raw_council_status('needattention');
+$url = OPTION_ADMIN_SERVICES_CGI . 'match.cgi';
+if ($councils_not_matched > 0) {
+    $mail .= "
+* $councils_not_matched councils have not matched with GovEval data
+  Help them along their way:
+  $url
+";
+}
+
+// Mail to team@
+print $mail;
+
