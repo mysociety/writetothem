@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.82 2005-07-21 09:58:43 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.83 2005-07-21 11:19:19 francis Exp $
  * 
  */
 
@@ -33,19 +33,6 @@ class ADMIN_PAGE_FYR_QUEUE {
         'failed_closed' => 'Delivery failed, admin has dealt with it',
         );
         return $map[$state];
-    }
-
-    function make_ids_links($text) {
-        $text = htmlspecialchars($text);
-        // Message ids e.g. 0361593135850d75745e
-        $text = preg_replace("/([a-f0-9]{20})/", 
-                "<a href=\"" .  $this->self_link . "&id=\$1\">\$1</a>", 
-                $text);
-        // Ratty rules e.g. rule #10
-        $text = preg_replace("/rule #([0-9]+)/",
-                "<a href=\"?page=ratty-fyr-abuse&action=editrule&rule_id=\$1\">rule #\$1</a>",
-                $text);
-        return $text;
     }
 
     function render_bar($view, $reverse, $id) {
@@ -293,7 +280,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
                 print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
                 print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
-                print "<td>" . $this->make_ids_links($recent['message']) . "</td>";
+                print "<td>" . make_ids_links($recent['message']) . "</td>";
                 print "</tr>";
             }
 ?>
@@ -367,7 +354,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $this->render_bar($view, false, $id);
 
             // Display general information
-            print "<h2>Message id " . $this->make_ids_links($id) . ":</h2>";
+            print "<h2>Message id " . make_ids_links($id) . ":</h2>";
 
             $message = msg_admin_get_message($id);
             if (msg_get_error($message)) {
@@ -600,7 +587,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             // Display messages
             print "<h2>Messages which";
             if ($view == "similarbody") {
-                print " have similar bodies to  " . $this->make_ids_links(get_http_var('simto'));
+                print " have similar bodies to  " . make_ids_links(get_http_var('simto'));
             } elseif ($view == "search") {
                 print " match search query '" . htmlspecialchars(get_http_var('query')) . "'";
             } elseif ($view == "logsearch") {
