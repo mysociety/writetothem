@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.81 2005-07-19 21:41:08 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.82 2005-07-21 09:58:43 francis Exp $
  * 
  */
 
@@ -28,7 +28,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         'bounce_confirm' => 'Email delivery failure received, admin',
         'error' => 'About to tell constituent that delivery failed',
         'sent' => 'Delivery to representative succeeded',
-        'failed' => 'Delivery to representative failed, needs admin attention',
+        'failed' => 'Delivery to representative failed, may need admin attention',
         'finished' => 'Delivery succeeded, personal data has been scrubbed',
         'failed_closed' => 'Delivery failed, admin has dealt with it',
         );
@@ -262,9 +262,8 @@ class ADMIN_PAGE_FYR_QUEUE {
         &nbsp; <b>Action:</b>
         <input name="freeze" value="Freeze" type="submit" />
         <input name="thaw" value="Thaw" type="submit" />
-        <input name="error" value="Error" type="submit" />
+        <input name="error" value="Error with email" type="submit" />
         <input name="failed" value="Fail silently" type="submit" />
-        <input name="failed_closed" value="Fail Close" type="submit" /> 
 </td><tr>
 <?
     }
@@ -386,7 +385,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Action:</b>");
             if ($message['frozen']) {
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error');
+                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error with email');
                 if ($message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail silently');
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
@@ -396,7 +395,6 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
             }
-            $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed_closed', 'Fail Close');
             if ($message['state'] == 'pending')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
 
@@ -660,9 +658,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <br><b>freeze</b> stops delivery to representative, but other stuff
 (such as confirmation message) still happens
 <br><b>thaw</b> undoes a freeze, so message gets delivered.
-<br><b>error</b> rejects a message, sending a "could not deliver" email to constituent.
-<br><b>fail</b> rejects a message, with no email to the constituent.
-<br><b>fail close</b> marks a failed message so it doesn't appear in important list any more.
+<br><b>error with email</b> rejects a message, sending a "could not deliver" email to constituent.
+<br><b>fail silently</b> rejects a message, with no email to the constituent.
 <br><b>confirm</b> moves 'pending' to 'ready', the same as user clicking confirm link in email
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <br><b>edit contact details</b> by clicking on the recipient name
