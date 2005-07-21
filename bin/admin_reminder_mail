@@ -3,13 +3,13 @@
 /* 
  * admin_reminder_mail:
  * Works out administrative tasks which need doing on WriteToThem, and 
- * sends email.  By deafault just a test, specify --realrun to really
+ * sends email.  By default just a test, specify --realrun to really
  * send to team@writetothem.com
  *
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.2 2005-07-21 17:23:48 francis Exp $
+ * $Id: admin_reminder_mail,v 1.3 2005-07-21 19:06:44 francis Exp $
  *
  */
 
