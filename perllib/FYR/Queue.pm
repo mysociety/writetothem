@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.150 2005-07-19 21:41:08 francis Exp $
+# $Id: Queue.pm,v 1.151 2005-07-21 11:15:34 francis Exp $
 #
 
 package FYR::Queue;
@@ -1203,11 +1203,11 @@ my %state_action = (
                     if ($msg->{recipient_via}) {
                         my $R = mySociety::DaDem::get_representative_info($msg->{recipient_id});
                         my $viainfo = get_via_representative($R->{voting_area});
-                        mySociety::DaDem::admin_mark_failing_contact($R->{id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
+                        mySociety::DaDem::admin_mark_failing_contact($R->{id}, $method, $msg->{"recipient_$method"}, 'fyr-queue', "msg $id");
                         logmsg($id, 1, qq#marked representative 'via' contact ($method to $msg->{"recipient_$method"}) as failing#);
                     } else {
-                        mySociety::DaDem::admin_mark_failing_contact($msg->{recipient_id}, $method, $msg->{"recipient_$method"}, 'fyr-queue');
-                        logmsg($id, 1, qq#marked representative contact ($method to $msg->{"recipient_$method"}) as failing#);
+                        mySociety::DaDem::admin_mark_failing_contact($msg->{recipient_id}, $method, $msg->{"recipient_$method"}, 'fyr-queue', "msg $id");
+                        logmsg($id, 1, qq#marked representative $msg->{recipient_id} contact ($method to $msg->{"recipient_$method"}) as failing#);
                     }
                 } catch Error with {
                     my $E = shift;
