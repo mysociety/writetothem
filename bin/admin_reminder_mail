@@ -2,12 +2,14 @@
 <?php
 /* 
  * admin_reminder_mail:
- * Displays administrative tasks which need doing on WriteToThem
+ * Works out administrative tasks which need doing on WriteToThem, and 
+ * sends email.  By deafault just a test, specify --realrun to really
+ * send to team@writetothem.com
  *
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.1 2005-07-20 18:56:19 francis Exp $
+ * $Id: admin_reminder_mail,v 1.2 2005-07-21 17:23:48 francis Exp $
  *
  */
 
@@ -25,14 +27,16 @@ function error($str) {
 }
 
 $short_opts = '';
-$long_opts = array('verbose','help');
+$long_opts = array('verbose','help','realrun');
 require_once '../../phplib/phpcgi';
 
 $switches = $options[0];
 $args = $options[1];
 $verbose = 0; 
+$realrun = 0;
 foreach ($switches as $switch) {
     if ($switch[0]=='--verbose') $verbose = 1;
+    if ($switch[0]=='--realrun') $realrun = 1;
     if ($switch[0]=='--help') {
 ?>
 
@@ -56,7 +60,7 @@ $need_attention_messages_count = count($need_attention_messages);
 if ($need_attention_messages_count > 0) {
     $mail .= "
 * $need_attention_messages_count messages are frozen, or have bounced.
-  Decide if they are valid or not:
+  Decide if they are valid, so the real ones can get on their way:
   $url
 ";
 }
@@ -82,7 +86,7 @@ if ($mps > 0) {
     $mps_constituents = number_format($mps * 60000);
     $mail .= "
 * $mps_constituents people are stopped from contacting their MP.
-  Phone up the offices and get their constituency mail fax or email:
+  Phone up $mps offices and get constituency mail faxes/emails:
   $url
 ";
 }
@@ -105,6 +109,25 @@ if ($councils_not_matched > 0) {
 ";
 }
 
-// Mail to team@
-print $mail;
+// Send mail to team@
+if ($mail) {
+    $dest = "francis@flourish.org";
+    if ($realrun) {
+        $dest = "team@writetothem.com";
+    }
+    $subject ="WriteToThem needs some tender loving care";
+    $mail = "Here are some thing to do to make our service smoother and lovelier...
+".$mail."
+That's all!
+
+-- The Quality Deity";
+    mail($dest, $subject, $mail,
+        "From: The Quality Deity <team@writetothem.com>\n".
+        "X-Mailer: PHP/" . phpversion());
+    if (!$realrun) {
+        print "Subject: $subject\n\n";
+        print $mail;
+        print "\n\n... sent test mail to $dest\n";
+    }
+}
 
