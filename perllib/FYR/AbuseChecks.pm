@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.45 2005-03-03 15:53:16 francis Exp $
+# $Id: AbuseChecks.pm,v 1.46 2005-07-22 13:57:39 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -73,7 +73,8 @@ sub get_country_from_ip ($) {
     return 'localhost' if $addr eq '127.0.0.1';
     our $geoip;
     $geoip ||= new Geo::IP(GEOIP_STANDARD);
-    return $geoip->country_code_by_addr($addr);
+    my $country = $geoip->country_code_by_addr($addr);
+    return $country;
 }
 
 # Constants for similarity hashing.
