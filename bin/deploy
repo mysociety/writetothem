@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: deploy,v 1.11 2005-03-17 18:14:51 francis Exp $
+# $Id: deploy,v 1.12 2005-07-29 16:27:31 francis Exp $
 #
 
 set -e
@@ -21,10 +21,21 @@ check_who_where very.unfortu.net root
 # User to load test schema
 PSQL_SCHEMATEST_USER=pgsql
 
-# Which virtual server to update
-FYR_VHOST=$1
-[ x$FYR_VHOST = x ] && die "specify target vhost directory as single argument"
-[ ! -d $FYR_VHOST ] && die "specify target vhost directory as single argument"
+# Load in parameters
+if [ "$1" = "www.writetothem.com" ]
+then
+    FYR_VHOST=/data/vhost/www.writetothem.com
+    FYR_FYRQD=fyrqd
+elif [ "$1" = "staging.writetothem.com" ]
+then
+    FYR_VHOST=/data/vhost/staging.writetothem.com
+    FYR_FYRQD=fyrstagingqd
+else 
+    die "specify staging.writetothem.com or www.writetothem.com as parameter"
+fi
+
+# Check virtual server directory
+[ ! -d $FYR_VHOST ] && die "virtual host directory $FYR_VHOST not found"
 
 # Write To Them
 FYR_NAME="WriteToThem.com"
@@ -36,12 +47,10 @@ FYR_QUEUE_DB_UNIX_USER=fyr
 # Main body of script
 fmt << END
 This will update $hostname from CVS and gracefully restart 
-Apache.  It will warn you first if any database schemas need
-upgrading, or config files fixing.  These get fixed in the deploy
-space, i.e. the place where the "cvs export" happens to, before
+Apache and FYR queue daemon.  It will warn you first if any database
+schemas need upgrading, or config files fixing.  These get fixed in the
+deploy space, i.e. the place where the "cvs export" happens to, before
 copying over to the live server.
-
-You should ensure that fyrqd is not running when this script is run.
 
 Press RETURN to continue.
 END
@@ -63,6 +72,7 @@ read_conf $FYR_DEPLOYSPACE/mysociety/fyr/conf/general
 check_pgsql_schema $FYR_QUEUE_DB_UNIX_USER $FYR_DEPLOYSPACE/mysociety/fyr/db/schema.sql $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER $OPTION_FYR_QUEUE_DB_PASS 
 
 warn "Stopping services..."
+daemon_stop $FYR_FYRQD
 down_notice $FYR_VHOST $FYR_NAME
 
 warn "Rsyncing new data files..."
@@ -71,3 +81,4 @@ rsync_across $FYR_DEPLOYSPACE $FYR_VHOST
 warn "Starting services..."
 apachectl graceful
 up_notice $FYR_VHOST
+daemon_start $FYR_FYRQD
