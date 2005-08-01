@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.151 2005-07-21 11:15:34 francis Exp $
+# $Id: Queue.pm,v 1.152 2005-08-01 09:50:33 chris Exp $
 #
 
 package FYR::Queue;
@@ -532,6 +532,16 @@ sub format_email_body ($) {
     return $text;
 }
 
+# as_utf8_octets STRING
+# Given a UNICODE STRING, return a byte string giving that string's encoding
+# in UTF-8.
+sub as_utf8_octets ($) {
+    my $s = shift;
+    die "STRING is not valid ASCII/UTF-8" unless (utf8::valid($s));
+    utf8::encode($s);
+    return $s;
+}
+
 # make_representative_email MESSAGE
 # Return a MIME::Entity object for the passed MESSAGE (hash of db fields),
 # suitable for immediate sending to the real recipient.
@@ -558,14 +568,15 @@ sub make_representative_email ($) {
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_email.
             Encoding => 'quoted-printable',
-            Data =>
-                $bodytext
-                . "\n\n"
-                . format_email_body($msg)
-                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
-                . FYR::EmailTemplate::format(
-                    email_template('footer'),
-                    email_template_params($msg, representative_url => '') # XXX
+            Data => as_utf8_octets(
+                    $bodytext
+                    . "\n\n"
+                    . format_email_body($msg)
+                    . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                    . FYR::EmailTemplate::format(
+                        email_template('footer'),
+                        email_template_params($msg, representative_url => '') # XXX
+                    )
                 )
         );
 }
@@ -760,7 +771,7 @@ sub make_confirmation_email ($;$) {
             # click the confirm link. So we use (ugly) quoted-printable insted.
 
             Encoding => 'quoted-printable',
-            Data => $text
+            Data => as_utf8_octets($text)
         );
 }
 
@@ -801,7 +812,7 @@ sub make_failure_email ($) {
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
             Type => 'text/plain; charset="utf-8"',
             Encoding => 'quoted-printable',
-            Data => $text
+            Data => as_utf8_octets($text)
         );
 }
 
@@ -850,7 +861,7 @@ sub make_questionnaire_email ($;$) {
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_mail
             Encoding => 'quoted-printable',
-            Data => $text
+            Data => as_utf8_octets($text)
         );
 }
 
