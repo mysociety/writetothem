@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.152 2005-08-01 09:50:33 chris Exp $
+# $Id: Queue.pm,v 1.153 2005-08-02 18:12:35 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1473,7 +1473,7 @@ sub admin_get_queue ($$) {
             
             $where = "where ";
             $where .= join(" and ", map {
-                        for (my $i=1; $i<=13; ++$i) {
+                        for (my $i=1; $i<=14; ++$i) {
                             push(@params, $_)
                         }
                         q#
@@ -1490,6 +1490,7 @@ sub admin_get_queue ($$) {
                               (recipient_name ilike '%' || ? || '%') or
                               (recipient_email ilike '%' || ? || '%') or
                               (recipient_fax ilike '%' || ? || '%') or
+                              (id ilike '%' || ? || '%') or
                               (message ilike '%' || ? || '%'))
                         #
                     } @terms
