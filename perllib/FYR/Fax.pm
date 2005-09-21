@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.22 2005-06-02 09:02:45 chris Exp $
+# $Id: Fax.pm,v 1.23 2005-09-21 13:05:22 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -448,6 +448,10 @@ again:
                 }
                 $f->close();
                 chomp($pid);
+
+                # Some programs (efax!) stick whitespace in PID files.
+                $pid =~ s/^\s+//;
+                $pid =~ s/\s+$//;
 
                 # (The "empty" or "not a PID" tests might wind up with us
                 # colliding with some other process, but that's pretty unlikely
