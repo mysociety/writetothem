@@ -10,13 +10,23 @@ template_draw('header', $values);
 </p>
 <? } ?>
 
-<? if (!sizeof($values['reps'])) { ?>
+<?  if (!sizeof($values['reps'])) { ?>
 <p><big><em>Sorry, but we've not got any data for your area. Please
 <a href="mailto:team@writetothem.com">mail us</a> and let us know that this matters
 to you.</em></big></p>
 <? } else {
 $cols = sizeof($values['reps']);
 ?>
+
+<?  if ($values['county_note']) { ?>
+<div class="notebox">
+<p><b>Important note about your County Councillors:</b> There was a County
+Council Election on Thursday 5th May 2005 which used new County boundaries. We
+haven't yet got information about the new County Councillors for your postcode. 
+Later in the year we will get new data from Ordnance Survey to fix this.
+</p>
+</div>
+<? } ?>
 
 <!--
 <div class="notebox">

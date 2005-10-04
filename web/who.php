@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.72 2005-06-07 08:41:27 francis Exp $
+ * $Id: who.php,v 1.73 2005-10-04 11:33:46 francis Exp $
  *
  */
 
@@ -33,6 +33,13 @@ if (get_http_var('err')) {
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
+
+// If in a county, but not a county electoral division, display explanation
+// (which is lack of data from Ordnance Survey)
+$fyr_county_note = false;
+if (array_key_exists('CTY', $voting_areas) && !array_key_exists('CED', $voting_areas)) {
+    $fyr_county_note = true; 
+}
 
 $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
 mapit_check_error($voting_areas_info);
@@ -205,8 +212,9 @@ foreach ($va_display_order as $va_type) {
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
     "reps" => $fyr_representatives,
-    'headings' => $fyr_headings,
+    "headings" => $fyr_headings,
     "error" => $fyr_error,
+    "county_note" => $fyr_county_note
     ));
 
 debug_timestamp();
