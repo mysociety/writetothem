@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.153 2005-08-02 18:12:35 matthew Exp $
+# $Id: Queue.pm,v 1.154 2005-10-06 23:02:25 chris Exp $
 #
 
 package FYR::Queue;
@@ -529,6 +529,11 @@ sub format_email_body ($) {
                 . strftime('%A %d %B %Y', localtime($msg->{created}))
                 . "\n\n"
                 . wrap(EMAIL_COLUMNS, $msg->{message});
+
+    # Strip any lines which consist only of spaces. Because we send the mails
+    # as quoted-printable, such lines get formatted as ugly strings of "=20".
+    $text =~ s/^\s+$//gm;
+    
     return $text;
 }
 
