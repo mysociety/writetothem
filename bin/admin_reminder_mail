@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.3 2005-07-21 19:06:44 francis Exp $
+ * $Id: admin_reminder_mail,v 1.4 2005-10-07 10:08:49 francis Exp $
  *
  */
 
@@ -17,33 +17,34 @@ require_once "../conf/general";
 require_once "../phplib/queue.php";
 require_once "../../phplib/dadem.php";
 
-function verbose($str) {
-    global $verbose;
-    if ($verbose) 
-        fwrite(STDERR, "admin_reminder_mail: $str\n");
-}
 function error($str) {
     fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");
 }
 
 $short_opts = '';
-$long_opts = array('verbose','help','realrun');
+$long_opts = array('help');
 require_once '../../phplib/phpcgi';
 
 $switches = $options[0];
 $args = $options[1];
-$verbose = 0; 
 $realrun = 0;
+if (count($args) > 1) {
+    print "Specify at most one argument.\n";
+    exit;
+}
+if (count($args) == 1) {
+    $realrun = 1;
+    $email_to = $args[0];
+}
 foreach ($switches as $switch) {
-    if ($switch[0]=='--verbose') $verbose = 1;
-    if ($switch[0]=='--realrun') $realrun = 1;
     if ($switch[0]=='--help') {
 ?>
 
-Usage: frequentupdate [--verbose]
+Usage: admin_reminder_mail TO_ADDRESS
+
+TO_ADDRESS is the (comma separated) list of email addresses to send to.
 
 --help      Display this help message
---verbose   Display more information
 
 <?
         exit;
@@ -79,7 +80,6 @@ foreach ($bad_contacts_info as $info) {
         $not_mps++;
     }
 }
-$not_mps = $need_attention_count - $mps;
 
 $url = OPTION_ADMIN_URL . '/?page=reps';
 if ($mps > 0) {
@@ -92,8 +92,8 @@ if ($mps > 0) {
 }
 if ($not_mps > 0) {
     $mail .= "
-* Find out councillor and other rep contact details:
-  $not_mps representatives have no contact details
+* $not_mps reps/councils have no contact details
+  Find out councillor and other rep contact details:
   $url
 ";
 }
@@ -108,26 +108,67 @@ if ($councils_not_matched > 0) {
   $url
 ";
 }
+if ($mail) {
+    $mail = "Here are some thing to do to make our service smoother and lovelier...
+".$mail;
+}
+
+// Diligency league tables...
+// ... for futzing with the queue
+$diligency_queue = msg_admin_get_diligency_queue(time() - 60*60*24*7);
+if (count($diligency_queue) > 0) {
+    $dili_mail .= "* At futzing with the message queue:\n";
+    foreach ($diligency_queue as $pair) {
+        $dili_mail .= sprintf("%12s %5d", $pair[1], $pair[0]) . "\n";
+    }
+    $dili_mail .= "\n";
+}
+// ... for other representatives
+$diligency_reps = dadem_admin_get_diligency_reps(time() - 60*60*24*7);
+if (count($diligency_reps) > 0) {
+    $dili_mail .= "* At getting MP and other contact details:\n";
+    foreach ($diligency_reps as $pair) {
+        $dili_mail .= sprintf("%12s %5d", $pair[1], $pair[0]) . "\n";
+    }
+    $dili_mail .= "\n";
+}
+// ... for councils over last 7 days
+$diligency_councils = dadem_admin_get_diligency_council(time() - 60*60*24*7);
+if (count($diligency_councils) > 0) {
+    $dili_mail .= "* At fixing up councillors and wards:\n";
+    foreach ($diligency_councils as $pair) {
+        $dili_mail .= sprintf("%12s %5d", $pair[1], $pair[0]) . "\n";
+    }
+    $dili_mail .= "\n";
+}
+if ($dili_mail) {
+    if ($mail) {
+    $mail .= "
+
+And this week's most diligent were (please, take a bow!)...
+
+";  } else {
+    $mail .= "This week's most diligent were (please, take a bow!)...
+
+";
+    }
+    $mail .= $dili_mail;
+}
 
 // Send mail to team@
 if ($mail) {
-    $dest = "francis@flourish.org";
-    if ($realrun) {
-        $dest = "team@writetothem.com";
-    }
-    $subject ="WriteToThem needs some tender loving care";
-    $mail = "Here are some thing to do to make our service smoother and lovelier...
-".$mail."
-That's all!
+        $dest = $email_to;
+        $subject ="WriteToThem needs some tender loving care";
+        $mail .="That's all for this week!
 
 -- The Quality Deity";
-    mail($dest, $subject, $mail,
-        "From: The Quality Deity <team@writetothem.com>\n".
-        "X-Mailer: PHP/" . phpversion());
-    if (!$realrun) {
+    if ($realrun) {
+        mail($dest, $subject, $mail,
+            "From: The Quality Deity <team@writetothem.com>\n".
+            "X-Mailer: PHP/" . phpversion());
+    } else {
         print "Subject: $subject\n\n";
         print $mail;
-        print "\n\n... sent test mail to $dest\n";
     }
 }
 

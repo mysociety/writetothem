@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.154 2005-10-06 23:02:25 chris Exp $
+# $Id: Queue.pm,v 1.155 2005-10-07 10:08:50 francis Exp $
 #
 
 package FYR::Queue;
@@ -53,7 +53,7 @@ use FYR::Fax;
 
 =head1 NAME
 
-FYR::Queue
+FYR.Queue
 
 =head1 DESCRIPTION
 
@@ -314,21 +314,23 @@ sub logmsg_set_handler ($) {
     $logmsg_handler = $_[0];
 }
 
-# logmsg ID IMPORTANT DIAGNOSTIC
+# logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
-# then mark the log message as exceptional.
-sub logmsg ($$$) {
-    my ($id, $important, $msg) = @_;
+# then mark the log message as exceptional. Optionally, EDITOR is the name
+# of the human who performed the action relating to the log message.
+sub logmsg ($$$;$) {
+    my ($id, $important, $msg, $editor) = @_;
     our $dbh;
     # XXX should ping
     $dbh ||= new_dbh();
-    $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional) values (?, ?, ?, ?, ?)',
+    $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional, editor) values (?, ?, ?, ?, ?, ?)',
         {},
         $id,
         time(),
         state($id),
         $msg,
-        $important ? 't' : 'f');
+        $important ? 't' : 'f',
+        $editor);
     $dbh->commit();
     &$logmsg_handler($id, time(), state($id), $msg, $important) if (defined($logmsg_handler));
 }
@@ -1543,6 +1545,8 @@ sub admin_get_message ($) {
         *, length(message) as message_length from message where id =
         ?");
     $sth->execute($id);
+    throw FYR::Error("admin_get_message: Message not found '$id'") if ($sth->rows == 0);
+    throw FYR::Error("admin_get_message: Multiple messages with '$id' found") if ($sth->rows > 1);
     my $hash_ref = $sth->fetchrow_hashref();
 
     my $bounces = dbh()->selectcol_arrayref("select 
@@ -1618,7 +1622,7 @@ sub admin_freeze_message ($$) {
     my ($id, $user) = @_;
     dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
     dbh()->commit();
-    logmsg($id, 1, "$user froze message");
+    logmsg($id, 1, "$user froze message", $user);
     return 0;
 }
 
@@ -1632,7 +1636,7 @@ sub admin_thaw_message ($$) {
     my ($id, $user) = @_;
     dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     dbh()->commit();
-    logmsg($id, 1, "$user thawed message");
+    logmsg($id, 1, "$user thawed message", $user);
     notify_daemon();
     return 0;
 }
@@ -1651,7 +1655,7 @@ sub admin_set_message_to_error ($$) {
         state($id, 'error');
     }
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'error'");
+    logmsg($id, 1, "$user put message in state 'error'", $user);
     return 0;
 }
 
@@ -1668,7 +1672,7 @@ sub admin_set_message_to_failed ($$) {
         state($id, 'failed');
     }
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'failed'");
+    logmsg($id, 1, "$user put message in state 'failed'", $user);
     return 0;
 }
 
@@ -1685,7 +1689,7 @@ sub admin_set_message_to_failed_closed ($$) {
         state($id, 'failed_closed');
     }
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'failed_closed'");
+    logmsg($id, 1, "$user put message in state 'failed_closed'", $user);
     return 0;
 }
 
@@ -1700,7 +1704,7 @@ sub admin_set_message_to_bounce_wait ($$) {
     my ($id, $user) = @_;
     state($id, 'bounce_wait');
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'bounce_wait'");
+    logmsg($id, 1, "$user put message in state 'bounce_wait'", $user);
     return 0;
 }
 
@@ -1712,7 +1716,7 @@ administrator leaving the note.
 =cut
 sub admin_add_note_to_message ($$$) {
     my ($id, $user, $note) = @_;
-    logmsg($id, 1, "$user added note: $note");
+    logmsg($id, 1, "$user added note: $note", $user);
     return 0;
 }
 
@@ -1726,10 +1730,27 @@ sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
     state($id, 'ready');
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'ready'");
+    logmsg($id, 1, "$user put message in state 'ready'", $user);
     notify_daemon();
     return 0;
 }
+
+=item admin_get_diligency_queue TIME
+
+Returns how many actions each administrator has done to the queue since unix
+time TIME.  Data is returned as an array of pairs of count, name with largest
+counts first.
+
+=cut
+
+sub admin_get_diligency_queue($) {
+    my ($from_time) = @_;
+    my $admin_activity = dbh()->selectall_arrayref("select count(*) as c, editor 
+        from message_log where whenlogged >= ? and editor is not null
+        group by editor order by c desc", {}, $from_time);
+    return $admin_activity;
+}
+
 
 
 1;

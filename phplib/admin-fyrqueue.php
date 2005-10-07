@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.83 2005-07-21 11:19:19 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.84 2005-10-07 10:08:50 francis Exp $
  * 
  */
 
@@ -357,10 +357,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             print "<h2>Message id " . make_ids_links($id) . ":</h2>";
 
             $message = msg_admin_get_message($id);
-            if (msg_get_error($message)) {
-                print "Error contacting queue:";
-                print_r($message);
-            }
+            msg_check_error($message);
             $this->print_message($message);
 
             // Commands
@@ -543,6 +540,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     $checkid = str_replace("check_", "", $k);
                     $this->do_actions($checkid);
                     $message = msg_admin_get_message($checkid);
+                    msg_check_error($message);
                     array_push($sender_emails, $message['sender_email']);
                     array_push($sender_full, $message['sender_name'] . 
                             " &lt;" .  $message['sender_email'] . "&gt;");
