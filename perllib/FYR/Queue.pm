@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.156 2005-10-10 12:30:15 francis Exp $
+# $Id: Queue.pm,v 1.157 2005-10-10 12:57:25 francis Exp $
 #
 
 package FYR::Queue;
@@ -301,9 +301,9 @@ sub write ($$$$) {
         notify_daemon();
     } otherwise {
         my $E = shift;
-#        if ($E->value() != FYR::Error::MESSAGE_ALREADY_QUEUED) {
+        if ($E->value() != FYR::Error::MESSAGE_ALREADY_QUEUED) {
             warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";
-#        }
+        }
         dbh()->rollback();
         throw $E;
     };
