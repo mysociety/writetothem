@@ -18,7 +18,7 @@ define('FYR_QUEUE_MESSAGE_SHAME', 4004); /* Representative does not want to be c
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.38 2005-10-07 10:08:50 francis Exp $
+ * $Id: queue.php,v 1.39 2005-10-15 00:13:55 francis Exp $
  *
  */
 
