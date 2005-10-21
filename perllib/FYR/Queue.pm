@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.157 2005-10-10 12:57:25 francis Exp $
+# $Id: Queue.pm,v 1.158 2005-10-21 10:39:02 francis Exp $
 #
 
 package FYR::Queue;
@@ -1005,7 +1005,7 @@ use constant MESSAGE_RETAIN_TIME => (21 * DAY);
 use constant FAILED_RETAIN_TIME => MESSAGE_RETAIN_TIME;
 
 # Total number of times we attempt delivery by fax.
-use constant FAX_DELIVERY_ATTEMPTS => 4;
+use constant FAX_DELIVERY_ATTEMPTS => 7;
 
 # Interval between fax sending attempts.
 use constant FAX_DELIVERY_INTERVAL => 600;
