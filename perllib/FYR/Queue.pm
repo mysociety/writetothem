@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.158 2005-10-21 10:39:02 francis Exp $
+# $Id: Queue.pm,v 1.159 2005-10-21 13:20:33 francis Exp $
 #
 
 package FYR::Queue;
@@ -1005,12 +1005,24 @@ use constant MESSAGE_RETAIN_TIME => (21 * DAY);
 use constant FAILED_RETAIN_TIME => MESSAGE_RETAIN_TIME;
 
 # Total number of times we attempt delivery by fax.
-use constant FAX_DELIVERY_ATTEMPTS => 7;
-
+# (note that 'ready' state timeout, below, is 7 days and will most likely cause
+# failure before FAX_DELIVERY_ATTEMPTS is reached)
+use constant FAX_DELIVERY_ATTEMPTS => 10;
 # Interval between fax sending attempts.
-use constant FAX_DELIVERY_INTERVAL => 600;
-
-use constant FAX_DELIVERY_BACKOFF => 3;
+use constant FAX_DELIVERY_INTERVAL => 1200; # 20 minutes
+use constant FAX_DELIVERY_BACKOFF => 1.9;
+# Python command line to print out roughly how many days attempts happen at:
+# for x in range(1,11): print 1200 * (1.9**x) / 60 / 60 / 24;
+# 0.0263888888889
+# 0.0501388888889
+# 0.0952638888889
+# 0.181001388889
+# 0.343902638889
+# 0.653415013889
+# 1.24148852639
+# 2.35882820014
+# 4.48177358026
+# 8.5153698025
 
 # Timeouts in the state machine:
 my %state_timeout = (
