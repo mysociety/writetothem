@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.2 2005-10-25 18:53:15 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.3 2005-10-25 20:26:37 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -66,6 +66,9 @@ sub add_section ($$$$) {
 # Add a row to the given report SECTION. Permitted FIELDs are as follows, with
 # obligatory fields marked *
 # 
+# * what
+#       The value that is reported (e.g. "all messages sent").
+# 
 # * number_of_individuals
 #       Number of people to whom this row applies.
 #
@@ -101,12 +104,12 @@ sub add_section ($$$$) {
 sub add_report_row ($%) {
     my ($section, %fields) = @_;
     my %permitted = map { $_ => 1 } qw(
-            number_of_individuals representative_id area_id representative_name
-            area_name representative_party representative_type value min max
-            stddev
+            what number_of_individuals representative_id area_id
+            representative_name area_name representative_party
+            representative_type value min max stddev
         );
     my @required = qw(
-            number_of_individuals representative_name value
+            what number_of_individuals representative_name value
         );
     my @bad = grep { !exists($permitted{$_}) } keys %fields;
     die "bad fields in add_report_row: " . join(", ", @bad);
@@ -125,6 +128,126 @@ sub add_report_row ($%) {
     dbh()->do($s, {}, map { $fields{$_} } sort keys %fields);
     return $id;
 }
+
+#
+# Report sections
+#
+
+# Table of sections of reports which we produce. Each entry gives an
+# identifying keyword, title, description and generating function for that
+# section. Sections are generated in the order stated.
+my @report_sections = (
+    [
+        'message_volume',
+        'Volume of messages',
+        <<EOF,
+Total number of messages submitted, sent, failed, and waiting to be sent,
+during the stated period.
+EOF
+        sub ($$$$) {
+            my ($report, $section, $start, $end) = @_;
+            # All messages
+            add_report_row($section,
+                    what => 'number of messages written',
+                    number_of_individuals =>
+                        dbh()->selectrow_array('
+                            select count(recipient_id) from message
+                            where created >= ? and created < ?',
+                            {}, $start->epoch(), $end->epoch()
+                        ),
+                    representative_name => 'all representatives',
+                    area_name => 'anywhere',
+                    value => dbh()->selectrow_array('
+                            select count(id) from message
+                            where created >= ? and created < ?',
+                            {}, $start->epoch(), $end->epoch())
+                );
+            # Subdivide by result.
+            foreach (
+                    ['sent',         [qw(bounce_wait bounce_confirm sent
+                                            finished)]],
+                    ['failed',       [qw(error failed failed_closed)]],
+                    ['not yet sent', [qw(new pending ready)]]
+                ) {
+                my ($desc, $states) = @$_;
+                add_report_row($section,
+                        what => "$desc messages",
+                        number_of_individuals =>
+                            dbh()->selectrow_array("
+                                select count(recipient_id) from message
+                                where created >= ? and created < ?
+                                    and state in ("
+                                        . join(", ", map { dbh()->quote($_) } @$states)
+                                    . ")",
+                                {}, $start->epoch(), $end->epoch()
+                            ),
+                        representative_name => 'all representatives',
+                        area_name => 'anywhere',
+                        value =>
+                            dbh()->selectrow_array("
+                                select count(id) from message
+                                where created >= ? and created < ?
+                                    and state in ("
+                                        . join(", ", map { dbh()-.quote($_) } @$states)
+                                    . ")"
+                                {}, $start->epoch(), $end->epoch())
+                    );
+            }
+        }
+    ], [
+        'representative_volume',
+        'Volume of messages, by type of representative',
+        <<EOF,
+Number of messages written to different categories of representatives during
+the stated period.
+EOF
+        sub ($$$$) {
+            my ($report, $section, $start, $end) = @_;
+            foreach (
+                    ['MPs',             [qw(WMC)]],
+                    ['MSPs',            [qw(SPC SPE)]],
+                    ['Welsh AMs',       [qw(WAC WAE)]],
+                    ['London AMs',      [qw(LAC LAE)]],
+                    ['MEPs',            [qw(EUR)]],
+                    ['all councillors', [qw(LBW CED DIS UTW UTE MTW COP LGE)]]
+                ) {
+                my ($desc, $types) = @$_;
+                add_report_row($section,
+                        what => 'number of messages written',
+                        number_of_individuals =>
+                            dbh()->selectrow_array("
+                                select count(recipient_id) from message
+                                where created >= ? and created < ?
+                                    and recipient_type in ("
+                                        . join(", ", map { dbh()->quote($_) } @$types)
+                                    . ")",
+                                {}, $start->epoch(), $end->epoch()
+                            ),
+                        representative_name => $desc,
+                        area_name => 'anywhere',
+                        value =>
+                            dbh()->selectrow_array("
+                                select count(id) from message
+                                where created >= ? and created < ?
+                                    and recipient_type in ("
+                                        . join(", ", map { dbh()-.quote($_) } @$types)
+                                    . ")"
+                                {}, $start->epoch(), $end->epoch())
+                    );
+            }
+        }
+    ], [
+        'response_rates'
+        'Response rates for certain representatives',
+        <<EOF,
+The fraction of messages sent to 
+EOF
+        sub ($$$$) {
+        }
+    ]
+);
+
+
 
 my $pp = new DateTime::Format::Strptime(
                 pattern => '%Y-%m-%d',
@@ -165,19 +288,6 @@ if (defined($start)) {
 my $end = DateTime->now()->truncate(to => 'day');
 my $start = $end->clone()->subtract(month => 6);
 
-# Table of sections of reports which we produce. Each entry gives a title,
-# description and generating function for that section. Sections are generated
-# in the order stated.
-my @report_sections = (
-        [
-            'Volume of messages',
-            <<EOF,
-Total number of messages submitted, sent, failed, and waiting to be sent,
-during the stated period.
-EOF
-            \&message_volume
-        ]
-    );
 
 
 sub find_periods ($) {
