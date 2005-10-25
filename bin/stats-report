@@ -1,0 +1,393 @@
+#!/usr/bin/perl -w
+#
+# stats-report:
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.1 2005-10-25 13:29:22 chris Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use CGI;
+use DateTime;
+use HTML::Entities;
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use mySociety::DaDem;
+use mySociety::MaPit;
+use mySociety::VotingArea;
+
+use FYR;
+
+sub find_periods ($) {
+    my $list = shift;
+
+    # Construct various time periods over which we produce reports.
+    my $epoch = DateTime->from_epoch(epoch => 0, time_zone => 'Europe/London');
+    my $now = DateTime->now(time_zone => 'Europe/London');
+    my $today = $now->clone()->truncate(to => 'day');
+    my $yesterday = $today->clone()->subtract(days => 1);
+    my $thisweek = $today->clone()->truncate(to => 'week');
+    my $lastweek = $thisweek->clone()->subtract(days => 7);
+    my $thismonth = $today->clone()->truncate(to => 'month');
+    my $lastmonth = $thismonth->clone()->subtract(months => 1);
+    my $thisyear = $now->clone()->truncate(to => 'year');
+    my $lastyear = $thisyear->clone()->subtract(years => 1);
+
+    push(@$list, ['today',      $today,     $now]);
+    push(@$list, ['yesterday',  $yesterday, $today]);
+    push(@$list, ['this week',  $thisweek,  $now]);
+    push(@$list, ['last week',  $lastweek,  $thisweek]);
+    push(@$list, ['this month', $thismonth, $now]);
+    push(@$list, ['last month', $lastmonth, $thismonth]);
+    push(@$list, ['this year',  $thisyear,  $now]);
+#    push(@$list, ['last year',  $lastyear,  $thisyear]);
+    push(@$list, ['ever',       $epoch,     $now]);
+
+    return $now;
+}
+
+my @timeperiods;
+my $now = find_periods(\@timeperiods);
+
+my $q = new CGI(""); # We're only using it for HTML generation.
+
+print $q->start_html("WriteToThem usage report"),
+        $q->h1("WriteToThem usage report"),
+        $q->p('This report shows usage as of', $now->strftime('%H:%M:%S on %Y-%m-%d.'));
+
+goto fish;
+
+# Totals.
+print
+    $q->h2('All messages'),
+    $q->start_table(),
+        $q->Tr(
+            $q->th([
+                '',
+                map { $_->[0] } @timeperiods
+            ])
+        ),
+    # Written
+        $q->Tr(
+            $q->th('written'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # Sent
+        $q->Tr(
+            $q->th('(of which) sent'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and state in (
+                                'bounce_wait',
+                                'bounce_confirm',
+                                'sent',
+                                'finished'
+                            )",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # Failed
+        $q->Tr(
+            $q->th('failed'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and state in (
+                                'error',
+                                'failed',
+                                'failed_closed'
+                            )",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # Not yet sent
+        $q->Tr(
+            $q->th('not yet sent'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and state in (
+                                'new',
+                                'pending',
+                                'ready'
+                            )",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    $q->end_table();
+
+# Messages by type of representative.
+print
+    $q->h2('By type of representative'),
+    $q->start_table(),
+        $q->Tr(
+            $q->th([
+                '',
+                map { $_->[0] } @timeperiods
+            ])
+        ),
+    # MPs
+        $q->Tr(
+            $q->th('MPs'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type = 'WMC'",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # MSPs
+         $q->Tr(
+            $q->th('MSPs'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type in ('SPC', 'SPE')",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # Welsh Assembly
+        $q->Tr(
+            $q->th('Welsh AMs'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type in ('WAC', 'WAE')",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # Greater London Assembly
+        $q->Tr(
+            $q->th('London AMs'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type in ('LAC', 'LAE')",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # MEPs
+        $q->Tr(
+            $q->th('MEPs'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type = 'EUR'",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    # all councillors
+        $q->Tr(
+            $q->th('all councillors'),
+            $q->td([
+                map {
+                    scalar(dbh()->selectrow_array("
+                        select count(id) from message
+                        where created >= ? and created < ?
+                            and recipient_type in (
+                                'LBW', 'CED', 'DIS', 'UTW', 'UTE',
+                                'MTW', 'COP', 'LGE'
+                            )",
+                        {}, $_->[1]->epoch(), $_->[2]->epoch()))
+                } @timeperiods
+            ])
+        ),
+    $q->end_table();
+
+fish:
+
+print
+    $q->h2("Messages to MPs and their response rates"),
+    $q->p("The table below records data from <em>questionnaire responses received during the given time period</em>. Questionnaire emails are sent two and three weeks after a message is dispatched. Because users may give a questionnaire response at any time after the questionnaire is sent, the column for \"total messages sent\" is approximate.");
+
+# Need to obtain a list of MP/constituency names and then pick out messages
+# by those.
+print STDERR "get constituency IDs... ";
+my $areaids = mySociety::MaPit::get_areas_by_type('WMC');
+print STDERR "done\n";
+print STDERR "get constituency info... ";
+my %wmc = %{mySociety::MaPit::get_voting_areas_info($areaids)};
+print STDERR "done\n";
+
+print STDERR "get MP IDs... ";
+my $repids = mySociety::DaDem::get_representatives([keys %wmc]);
+print STDERR "done\n";
+
+foreach (keys %$repids) {
+    if (!@{$repids->{$_}}) {
+        print STDERR "area #$_ ($wmc{$_}->{name}) has no representative\n";
+    } else {
+        my $repid = $repids->{$_}->[0];
+        if ($repid !~ /^[1-9]\d*$/) {
+            print STDERR "area #$_ ($wmc{$_}->{name}) has bad representative ID $repid\n";
+        }
+    }
+}
+
+print STDERR "get MP info... ";
+my $reps = mySociety::DaDem::get_representatives_info([map { $_->[0] } grep { @$_ == 1 } values %$repids]);
+print STDERR "done\n";
+foreach my $areaid (keys %wmc) {
+    if (@{$repids->{$areaid}}) {
+        $wmc{$areaid}->{mp} = $reps->{$repids->{$areaid}->[0]};
+        $wmc{$areaid}->{mp}->{id} = $repids->{$areaid}->[0];
+    }
+}
+
+# Don't want to use v short time periods.
+@timeperiods = (
+        ['six months to date', DateTime->now()->subtract(months => 6), DateTime->now()],
+        ['year to date',        DateTime->now()->subtract(years => 1), DateTime->now(, DateTime->now())]
+    );
+
+foreach (@timeperiods) {
+    print STDERR "$_->[0] $_->[1] to $_->[2]\n";
+}
+
+print
+    $q->start_table(),
+    $q->Tr(
+        $q->th(['', '', '']),
+        map { $q->th({ -colspan => 4 }, $_->[0]) } @timeperiods
+    ),
+    $q->Tr(
+        $q->th([
+            'MP',
+            'Party',
+            'Constituency',
+            (map {
+                ('Total messages sent',
+                'Questionnaire results',
+                'Response received',
+                'First time contacted')
+            } @timeperiods)
+        ])
+    );
+
+# List of references to hashes of constituency ID to results for each time
+# period.
+my @results = ( );
+
+# Questionnaire answers: question_id #0 is "did you get a response?"; #1 is
+# "is this your first time?".
+my $stn = dbh()->prepare("
+            select count(id), recipient_id
+            from message
+            where recipient_type = 'WMC'
+                and state in ('sent', 'finished')
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?
+            group by recipient_id");
+my $stq = dbh()->prepare("
+            select distinct on(message_id, question_id)
+                message_id, question_id, answer, recipient_id
+            from questionnaire_answer, message
+            where questionnaire_answer.message_id = message.id
+                and recipient_type = 'WMC'
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?");
+
+foreach (@timeperiods) {
+    my ($name, $st, $en) = @$_;
+    print STDERR "get message counts for $name... ";
+    # Total # messages
+    my %r;
+    $stn->execute($st->epoch(), $en->epoch(), time() - 86400 * 14);
+    while (my ($n, $mp) = $stn->fetchrow_array()) {
+        $r{$mp} = [$n, 0, 0, 0];
+    }
+    print STDERR "done\n";
+    
+    print STDERR "get questionnaire responses for $name... ";
+    $stq->execute($st->epoch(), $en->epoch(), time() - 86400 * 14);
+    my %mm;
+    while (my ($msgid, $qid, $answer, $mp) = $stq->fetchrow_array()) {
+        if (!exists($mm{$msgid})) {
+            ++$r{$mp}->[1];
+            $mm{$msgid} = 1;
+        }
+        if ($qid == 0 && $answer eq 'yes') {
+            ++$r{$mp}->[2];
+        } elsif ($qid == 1 && $answer eq 'yes') {
+            ++$r{$mp}->[3];
+        }
+    }
+    print STDERR "done\n";
+
+    foreach my $area (values %wmc) {
+        next unless ($area->{mp});
+        $r{$area->{mp}->{id}} ||= [0, 0, 0, 0];
+    }
+
+    push(@results, \%r);
+}
+
+foreach my $areaid (sort { $wmc{$a}->{name} cmp $wmc{$b}->{name} } keys %wmc) {
+    my $area = $wmc{$areaid};
+    next unless (exists($area->{mp}));
+    print $q->Tr($q->td([
+            encode_entities($area->{mp}->{name}),
+            encode_entities($area->{mp}->{party}),
+            encode_entities($area->{name}),
+            map {
+                my $x = $results[$_]->{$area->{mp}->{id}};
+                if ($x->[0] == 0) {
+                    qw(- - - -)
+                } else {
+                    ($x->[0],
+                    $x->[1] . sprintf("<br />%.1f%%", 100 * $x->[1] / $x->[0]),
+                    $x->[2] . sprintf("<br />%.1f%%", 100 * $x->[2] / $x->[0]),
+                    $x->[3] . sprintf("<br />%.1f%%", 100 * $x->[3] / $x->[0]))
+                }
+            } (0 .. $#results)
+        ]));
+}
+
+print $q->end_table();
+
+print $q->end_html();
