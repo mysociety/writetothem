@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.29 2005-10-25 14:26:24 chris Exp $
+-- $Id: schema.sql,v 1.30 2005-10-25 20:06:18 chris Exp $
 --
 
 set client_min_messages to error;
@@ -243,6 +243,8 @@ create table section (
 create table report_row (
     id serial primary key,
     section_id integer not null references section(id),
+    -- Description of the value.
+    what text not null,
     -- The number of individuals described in this row. For instance, 646 for
     -- "all MPs", or 1 for "Tony Blair".
     number_of_individuals integer not null default(1),
