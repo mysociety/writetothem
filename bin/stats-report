@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.3 2005-10-25 20:26:37 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.4 2005-10-26 09:58:52 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -112,7 +112,7 @@ sub add_report_row ($%) {
             what number_of_individuals representative_name value
         );
     my @bad = grep { !exists($permitted{$_}) } keys %fields;
-    die "bad fields in add_report_row: " . join(", ", @bad);
+    die "bad fields in add_report_row: " . join(", ", @bad)
         if (@bad);
     my @missing = grep { !exists($fields{$_}) } @required;
     die "missing fields in add_report_row: " . join(", ", @missing);
@@ -188,8 +188,8 @@ EOF
                                 select count(id) from message
                                 where created >= ? and created < ?
                                     and state in ("
-                                        . join(", ", map { dbh()-.quote($_) } @$states)
-                                    . ")"
+                                        . join(", ", map { dbh()->quote($_) } @$states)
+                                    . ")",
                                 {}, $start->epoch(), $end->epoch())
                     );
             }
@@ -230,14 +230,14 @@ EOF
                                 select count(id) from message
                                 where created >= ? and created < ?
                                     and recipient_type in ("
-                                        . join(", ", map { dbh()-.quote($_) } @$types)
-                                    . ")"
+                                        . join(", ", map { dbh()->quote($_) } @$types)
+                                    . ")",
                                 {}, $start->epoch(), $end->epoch())
                     );
             }
         }
     ], [
-        'response_rates'
+        'response_rates',
         'Response rates for certain representatives',
         <<EOF,
 The fraction of messages sent to 
@@ -285,10 +285,8 @@ if (defined($start)) {
     $start = $end->clone()->subtract(-months => 6);
 }
 
-my $end = DateTime->now()->truncate(to => 'day');
-my $start = $end->clone()->subtract(month => 6);
 
-
+__END__
 
 sub find_periods ($) {
     my $list = shift;
