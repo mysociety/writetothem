@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.46 2005-05-12 14:52:17 francis Exp $
+ * $Id: index.php,v 1.47 2005-10-26 19:19:11 chris Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -93,30 +93,42 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
     $voting_areas = mapit_get_voting_areas($pc);
 
     if (!rabx_is_error($voting_areas)) {
-        $area_type = get_http_var('a');
-        if ($area_type && $area_type == 'WMC') {
-            # Special case to only MPs for now
-            # If this is generalised by removing above WMC condition,
-            # be aware of DIS style URLs. Proper way is to fetch parent
-            # voting area, then fetch all children of that
-            $area_representatives = dadem_get_representatives(array_values($voting_areas));
-            $all_reps = array();
-            foreach (array_values($area_representatives) as $rr) {
-                $all_reps = array_merge($all_reps, $rr);
+        /* Possibly a deep link (from another site which knows its users'
+         * postcodes) specifying one or more particular area types. */
+        if ($area_types = fyr_parse_area_type_list(get_http_var('a'))) {
+            /* At this point we need to check whether we have only one
+             * representative. If so grab their ID and redirect through to
+             * write.php. Otherwise punt to who.php with the appropriate a
+             * parameter. */
+            $id = null;
+
+            $a = array();
+            foreach (array_keys($area_types) as $t) {
+                if (array_key_exists($t, $voting_areas))
+                    array_push($a, $voting_areas[$t]);
             }
-            $representatives_info = dadem_get_representatives_info($all_reps);
-            $type_reps = array();
-            foreach ($representatives_info as $id => $data) {
-                if ($data['type'] == $area_type) {
-                    $type_reps[] = $id;
+            $area_representatives = dadem_get_representatives($a);
+            foreach (array_values($area_representatives) as $rr) {
+                if (count($rr) > 1) {
+                    $id = null;
+                    break;
+                } else if (count($rr) == 1) {
+                    if ($id) {
+                        $id = null;
+                        break;
+                    } else
+                        $id = $rr[0];
                 }
             }
-            if (count($type_reps) == 1) {
-                header('Location: ' . new_url('write', true, 'a', null, 'who', $type_reps[0]));
-                exit;
-            }
-        }
-        header('Location: ' . new_url('who', true, 'a', null));
+
+            if ($id)
+                /* Single representative */
+                header('Location: ' . new_url('write', true, 'a', null, 'who', $id));
+            else
+                /* Several */
+                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types))));
+        } else
+            header('Location: ' . new_url('who', true, 'a', null));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {

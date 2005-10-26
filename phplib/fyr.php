@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.27 2005-06-03 16:04:03 francis Exp $
+ * $Id: fyr.php,v 1.28 2005-10-26 19:19:11 chris Exp $
  * 
  */
 
@@ -104,6 +104,47 @@ function fyr_external_referrer() {
         if (preg_match('#^(https?://|news:)#', $r) && !fyr_is_internal_url($r))
             return $r;
     } else
+        return null;
+}
+
+/* fyr_parse_area_type_list TYPES
+ * Parse a comma-separated list of area TYPES, or a known alias for same, and
+ * return an array whose keys are the valid listed TYPES, or null if there are
+ * none or if TYPES is null or empty. Known aliases are "council", for
+ * councillors of any type; "westminstermp", for MP; "regionalmp" for devolved
+ * assembly members/MSPs; or "mep" for MEPs. */
+function fyr_parse_area_type_list($types) {
+    if (!isset($types) || $types == '')
+        return null;
+
+    $aliases = array(
+            /* Councillors of whatever sort */
+            'council' => 'DIW,CED,LBW,COP,LGE,MTW,UTE,UTW',
+            /* MPs */
+            'westminstermp' => 'WMC',
+            /* Devolved assembly members / MSPs */
+            'regionalmp' => 'SPC,SPE,WAC,WAE,LAC,LAE,NIE',
+            /* MEPs */
+            'mep' => 'EUR'
+        );
+    if (array_key_exists($types, $aliases))
+        $types = $aliases[$types];
+   
+    $a = array();
+    $n = 0;
+    foreach (explode(',', $types) as $t) {
+        if (strlen($t) != 3
+            /* Parent types, which we suppress here. */
+            || preg_match('/^(LBO|LAS|LGD|CTY|DIS|UTA|MTD|COI|SPA|WAS|NIA|WMP|EUP)$/', $t))
+            continue;
+        $a[$t] = 1;
+    header("X-Debug-$n: $t");
+        ++$n;
+    }
+
+    if ($n > 0)
+        return $a;
+    else
         return null;
 }
 

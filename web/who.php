@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.73 2005-10-04 11:33:46 francis Exp $
+ * $Id: who.php,v 1.74 2005-10-26 19:19:11 chris Exp $
  *
  */
 
@@ -20,6 +20,7 @@ require_once "../../phplib/mapit.php";
 
 // Postcode
 $fyr_postcode = get_http_var('pc');
+$area_types = fyr_parse_area_type_list(get_http_var('a'));
 
 debug("FRONTEND", "postcode is $fyr_postcode");
 debug_timestamp();
@@ -33,6 +34,18 @@ if (get_http_var('err')) {
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
+
+if ($area_types) {
+    $a = array();
+    foreach (array_keys($area_types) as $t) {
+        if (array_key_exists($t, $voting_areas))
+            $a[$t] = $voting_areas[$t];
+        if (array_key_exists($t, $va_inside)
+            && array_key_exists($va_inside[$t], $voting_areas))
+            $a[$va_inside[$t]] = $voting_areas[$va_inside[$t]];
+    }
+    $voting_areas = $a;
+}
 
 // If in a county, but not a county electoral division, display explanation
 // (which is lack of data from Ordnance Survey)
