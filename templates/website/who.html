@@ -11,11 +11,17 @@ template_draw('header', $values);
 <? } ?>
 
 <?  if (!sizeof($values['reps'])) { ?>
+    <?  if ($values['all_url']) { ?>
+<p><big><em>Sorry, but you don't have any representatives of this type.
+Instead, <a href="<?=$values['all_url']?>">show all your representatives</a>.
+</em></big></p>
+    <? } else { ?>
 <p><big><em>Sorry, but we've not got any data for your area. Please
 <a href="mailto:team@writetothem.com">mail us</a> and let us know that this matters
 to you.</em></big></p>
+    <? } ?>
 <? } else {
-$cols = sizeof($values['reps']);
+    $cols = sizeof($values['reps']);
 ?>
 
 <?  if ($values['county_note']) { ?>
@@ -41,7 +47,13 @@ but most MPs are available now.
 representatives? Their job is to help you too!
 </p>-->
 
+<?  if ($values['all_url']) { ?>
+<p>You have several elected representatives at different levels of government.
+One level is shown here, or you can 
+<a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
+<? } else { ?>
 <p>You have several elected representatives at different levels of government. <b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
+<? } ?>
 
 <table id="repstable" cellpadding="5" cellspacing="0" border="0">
     <tr valign="middle">

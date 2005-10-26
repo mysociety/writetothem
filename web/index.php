@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.47 2005-10-26 19:19:11 chris Exp $
+ * $Id: index.php,v 1.48 2005-10-26 20:21:08 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -123,12 +123,12 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
 
             if ($id)
                 /* Single representative */
-                header('Location: ' . new_url('write', true, 'a', null, 'who', $id));
+                header('Location: ' . new_url('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer()));
             else
                 /* Several */
-                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types))));
+                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer()));
         } else
-            header('Location: ' . new_url('who', true, 'a', null));
+            header('Location: ' . new_url('who', true, 'a', null, 'fyr_extref', fyr_external_referrer()));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {

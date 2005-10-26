@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.74 2005-10-26 19:19:11 chris Exp $
+ * $Id: who.php,v 1.75 2005-10-26 20:21:08 francis Exp $
  *
  */
 
@@ -35,6 +35,8 @@ $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
 
+// Limit to specific types of representatives
+$fyr_all_url = null;
 if ($area_types) {
     $a = array();
     foreach (array_keys($area_types) as $t) {
@@ -45,6 +47,11 @@ if ($area_types) {
             $a[$va_inside[$t]] = $voting_areas[$va_inside[$t]];
     }
     $voting_areas = $a;
+
+    $fyr_all_url = htmlspecialchars(new_url('who', 0,
+                    'pc', $fyr_postcode,
+                    'fyr_extref', fyr_external_referrer()));
+
 }
 
 // If in a county, but not a county electoral division, display explanation
@@ -227,7 +234,8 @@ template_draw("who", array(
     "reps" => $fyr_representatives,
     "headings" => $fyr_headings,
     "error" => $fyr_error,
-    "county_note" => $fyr_county_note
+    "county_note" => $fyr_county_note,
+    "all_url" => $fyr_all_url,
     ));
 
 debug_timestamp();
