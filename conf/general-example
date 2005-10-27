@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.27 2005-10-27 14:59:14 francis Exp $
+ * $Id: general-example,v 1.28 2005-10-27 15:32:23 chris Exp $
  * 
  */
 
@@ -25,6 +25,10 @@ define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
 
 // Where the FYR queue service is.
 define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/queue');
+
+// Name of SMTP server. This host must allow relaying from the machine on which
+// fyrqd runs.
+define('OPTION_SMTP_SMARTHOST', 'localhost');
 
 // PostgreSQL database for FYR queue
 /*
