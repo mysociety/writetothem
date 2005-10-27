@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.26 2005-05-13 13:52:45 francis Exp $
+ * $Id: general-example,v 1.27 2005-10-27 14:59:14 francis Exp $
  * 
  */
 
@@ -105,6 +105,9 @@ define('OPTION_ADMIN_SERVICES_CGI', 'https://secure.mysociety.org/admin/services
 
 // Log file (used in test harness, and later in admin scripts)
 define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
+
+// For passing authentication to HearFromYourMP
+define('OPTION_AUTH_SHARED_SECRET', 'long string of random bytes');
 
 
 ?>

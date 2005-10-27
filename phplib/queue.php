@@ -18,7 +18,7 @@ define('FYR_QUEUE_MESSAGE_SHAME', 4004); /* Representative does not want to be c
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.40 2005-10-16 20:24:43 francis Exp $
+ * $Id: queue.php,v 1.41 2005-10-27 14:59:14 francis Exp $
  *
  */
 
@@ -126,7 +126,9 @@ function msg_secret() {
 
   Confirm a user's email address, based on the TOKEN they've supplied in a
   URL which they've clicked on. This function is called remotely and
-  commits its changes. */
+  commits its changes. Returns id of the message on success, or 0 for
+  failure. Can be called multiple times for the same message with no harm,
+  just returns the id again. */
 function msg_confirm_email($token) {
     global $msg_client;
     $params = func_get_args();

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.160 2005-10-26 20:22:38 francis Exp $
+# $Id: Queue.pm,v 1.161 2005-10-27 14:59:14 francis Exp $
 #
 
 package FYR::Queue;
@@ -938,18 +938,20 @@ sub secret () {
 
 Confirm a user's email address, based on the TOKEN they've supplied in a URL
 which they've clicked on. This function is called remotely and commits its
-changes.
+changes. Returns id of the message on success, or 0 for failure. Can be
+called multiple times for the same message with no harm, just returns the id
+again.
 
 =cut
 sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
-        throw FYR::Error("You've already confirmed this message.", FYR::Error::MESSAGE_ALREADY_CONFIRMED) if (state($id) ne 'pending');
+        return $id if (state($id) ne 'pending');
         state($id, 'ready');
         logmsg($id, 1, "sender email address confirmed");
         dbh()->commit();
         notify_daemon();
-        return 1;
+        return $id;
     }
     return 0;
 }
