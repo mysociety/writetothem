@@ -1,13 +1,14 @@
 #!/usr/bin/perl -w
 #
-# stats-report:
-# Compile statistical reports on messages sent through FYR.
+# badmps:
+# List current MPs to whom messages have been sent but for whom no positive
+# questionnaire responses have been received.
 #
-# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.1 2005-10-31 12:12:57 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.2 2005-10-31 12:17:30 chris Exp $';
 
 use strict;
 require 5.8.0;
