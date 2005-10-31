@@ -1,0 +1,112 @@
+#!/usr/bin/perl -w
+#
+# stats-report:
+# Compile statistical reports on messages sent through FYR.
+#
+# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.1 2005-10-31 12:12:57 chris Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use CGI;
+use DateTime;
+use DateTime::Format::Strptime;
+use HTML::Entities;
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use mySociety::DaDem;
+use mySociety::MaPit;
+use mySociety::VotingArea;
+
+use FYR;
+
+# Need to obtain a list of MP/constituency names and then pick out messages
+# by those.
+print STDERR "get constituency IDs... ";
+my $areaids = mySociety::MaPit::get_areas_by_type('WMC');
+print STDERR "done\n";
+print STDERR "get constituency info... ";
+my %wmc = %{mySociety::MaPit::get_voting_areas_info($areaids)};
+print STDERR "done\n";
+
+print STDERR "get MP IDs... ";
+my $repids = mySociety::DaDem::get_representatives([keys %wmc]);
+print STDERR "done\n";
+
+my %repid_to_area_name;
+
+foreach (keys %$repids) {
+    if (!@{$repids->{$_}}) {
+        print STDERR "area #$_ ($wmc{$_}->{name}) has no representative\n";
+    } else {
+        my $repid = $repids->{$_}->[0];
+        if ($repid !~ /^[1-9]\d*$/) {
+            print STDERR "area #$_ ($wmc{$_}->{name}) has bad representative ID $repid\n";
+        } else {
+            $repid_to_area_name{$repid} = $wmc{$_}->{name};
+        }
+    }
+}
+
+print STDERR "get MP info... ";
+my $reps = mySociety::DaDem::get_representatives_info([map { $_->[0] } grep { @$_ == 1 } values %$repids]);
+print STDERR "done\n";
+
+print STDERR "get MP message counts... ";
+my $messagecount = dbh()->selectall_hashref("
+                        select recipient_id, count(id) as num
+                        from message
+                        where state = 'finished'
+                        group by recipient_id",
+                        'recipient_id');
+print STDERR "done\n";
+
+my $stq = dbh()->prepare("
+            select distinct on(message_id, question_id) answer, recipient_id
+            from questionnaire_answer, message
+            where questionnaire_answer.message_id = message.id
+                and recipient_type = 'WMC'
+                and question_id = 0
+                and recipient_id in (" . join(', ', keys %$reps) . ")");
+
+$stq->execute();
+
+while (my ($answer, $recipient_id) = $stq->fetchrow_array()) {
+    if ($answer eq 'yes') {
+        delete $reps->{$recipient_id};
+    } elsif (exists($reps->{$recipient_id})) {
+        ++$reps->{$recipient_id}->{messages};
+    }
+}
+
+print <<EOF;
+
+Current MPs to whom messages have been sent but for whom no positive
+questionnaire responses have been received:
+
+ID      Name                      Constituency              Messages "No"s
+------- ------------------------- ------------------------- -------- --------
+EOF
+
+foreach (keys %$reps) {
+    next unless (exists($messagecount->{$_}));
+    printf "% 7d %-25.25s %-25.25s % 8d % 8d\n",
+            $_,
+            $reps->{$_}->{name},
+            $repid_to_area_name{$_},
+            $messagecount->{$_}->{num},
+            $reps->{$_}->{messages} || 0;
+}
