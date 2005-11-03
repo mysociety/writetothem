@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.161 2005-10-27 14:59:14 francis Exp $
+# $Id: Queue.pm,v 1.162 2005-11-03 10:28:33 chris Exp $
 #
 
 package FYR::Queue;
@@ -574,6 +574,7 @@ sub make_representative_email ($) {
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
             Subject => format_mimewords($subject),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_email.
             Encoding => 'quoted-printable',
@@ -769,6 +770,7 @@ sub make_confirmation_email ($;$) {
             From => format_email_address('WriteToThem', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
             Type => 'text/plain; charset="utf-8"',
             # XXX Ideally we'd use the 'binary' encoding (pass through all
             # characters unchanged, under the condition that no NULs appear)
@@ -819,6 +821,7 @@ sub make_failure_email ($) {
             From => format_email_address('WriteToThem', $failure_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
             Type => 'text/plain; charset="utf-8"',
             Encoding => 'quoted-printable',
             Data => as_utf8_octets($text)
@@ -867,6 +870,7 @@ sub make_questionnaire_email ($;$) {
             From => format_email_address('WriteToThem', $questionnaire_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_mail
             Encoding => 'quoted-printable',
