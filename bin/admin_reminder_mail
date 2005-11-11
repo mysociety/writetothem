@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.4 2005-10-07 10:08:49 francis Exp $
+ * $Id: admin_reminder_mail,v 1.5 2005-11-11 12:34:56 francis Exp $
  *
  */
 
@@ -23,7 +23,7 @@ function error($str) {
 
 $short_opts = '';
 $long_opts = array('help');
-require_once '../../phplib/phpcgi';
+require_once '../../phplib/phpcli.php';
 
 $switches = $options[0];
 $args = $options[1];
