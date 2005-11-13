@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.84 2005-10-07 10:08:50 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.85 2005-11-13 12:13:53 francis Exp $
  * 
  */
 
@@ -183,14 +183,16 @@ class ADMIN_PAGE_FYR_QUEUE {
                         . "</a><br>";
                 if ($message['recipient_via']) {
                     $repinfo = dadem_get_representative_info($message['recipient_id']);
-                    dadem_check_error($repinfo);
-                    $vainfo = mapit_get_voting_area_info($repinfo['voting_area']);
-                    mapit_check_error($vainfo);
-                    $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
-                    mapit_check_error($parentinfo);
-                    print '<a href="' .
-                       htmlspecialchars(new_url('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
-                        htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
+                    if (!dadem_get_error($repinfo)) {
+                        $vainfo = mapit_get_voting_area_info($repinfo['voting_area']);
+                        $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
+                        mapit_check_error($parentinfo);
+                        print '<a href="' .
+                           htmlspecialchars(new_url('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
+                            htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
+                    } else {
+                        print 'recipient_via contact, but rep id not found ';
+                    }
                 }
                 if ($message['recipient_email'])
                     print htmlspecialchars($message['recipient_email']) . "<br>";
