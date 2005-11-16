@@ -1,0 +1,69 @@
+/*
+ * syn.css
+ * Things that are most likely to change in syndicated stylesheets.
+ * 
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+ *
+ * $Id: animalaid.css,v 1.1 2005-11-16 10:24:22 francis Exp $
+ * 
+ */
+
+img#chelt {
+    background-color: #ffffff;
+    float: right;
+    border: solid 2px #02927b;
+    padding: 5px;
+    margin: 10px;
+}
+
+body {
+    color: #000000;
+    background-color: #ffffff;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+a:link { color: #660066; }
+a:visited { color: #330033; }
+a:active, a:hover { text-decoration: none; }
+
+h1#heading {
+    color: #660066;
+    background-color: #99CD99;
+    border-bottom: solid 2px #02927B;
+}
+h1#heading a, h1#heading a:link, h1#heading a:visited {
+    color: #660066;
+}
+
+#footer {
+    border-top: solid 1px #02927B;
+}
+
+#postcodebox, #writebox, #preview, #buttonbox {
+    background-color: #99CD99;
+    color: #000000;
+}
+
+#postcodebox {
+    border: solid 2px #02927b;
+}
+#writebox, #preview, #buttonbox {
+    border: solid 2px #02927B;
+}
+
+.maincol {
+    border-left: solid 1px #02927B;
+}
+
+#sidebar {
+    border: solid 1px #02927b;
+    background-color: #99CD99;
+}
+
+.notebox {
+    border: none;
+    background-color: #ffffff;
+    color: #cc0000;
+}
+
