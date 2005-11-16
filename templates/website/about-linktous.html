@@ -74,4 +74,26 @@ representatives.
 
 <pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBO&quot;&gt;</pre>
 
+<h2>Prefilling name and address</h2>
+
+<p>If you already know the name, address or email of the person using your website,
+you can send the values to WriteToThem. They will then be defaults for the letter.
+The person writing the letter can check or alter them before sending.
+
+<p>
+<pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;writer_email&quot; value=&quot;name@email.address&quot;&gt;</pre>
+
+<p>The fields available are:
+
+<ul>
+<li>writer_name</li>
+<li>writer_address1</li>
+<li>writer_address2</li>
+<li>writer_town</li>
+<li>writer_county</li>
+<li>writer_email</li>
+<li>writer_phone</li>
+</ul>
+
+
 <? template_draw('footer', $values); ?>
