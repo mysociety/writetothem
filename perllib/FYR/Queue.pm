@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.162 2005-11-03 10:28:33 chris Exp $
+# $Id: Queue.pm,v 1.163 2005-11-24 17:19:21 francis Exp $
 #
 
 package FYR::Queue;
@@ -1414,8 +1414,9 @@ All messages on the queue.
 
 =item needattention
 
-Messages which need attention.  This means frozen in states new, pending or
-ready, or in bounce_confirm.
+Messages which need attention. This means frozen in states ready, or in
+bounce_confirm. (new and pending are excluded as often people sent test
+messages to themselves which break rules, but they never confirm).
 
 =item failing
 
@@ -1461,7 +1462,8 @@ sub admin_get_queue ($$) {
     # index to do the scan. q.v. comments on the end of,
     #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
     if ($filter eq 'needattention') {
-        $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed') 
+        $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed'
+                           and state <> 'pending' and state <> 'new') 
                          or (state = 'bounce_confirm') order by created desc#;
     } elsif ($filter eq 'failing') {
         $where = q#
