@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.163 2005-11-24 17:19:21 francis Exp $
+# $Id: Queue.pm,v 1.164 2005-11-25 14:54:25 francis Exp $
 #
 
 package FYR::Queue;
@@ -359,7 +359,7 @@ foreach (keys %allowed_transitions) {
 }
 
 # scrubmessage ID
-# Remove all personal data from message ID. This includes the text of the
+# Remove some personal data from message ID. This includes the text of the
 # letter, any log messages (since they may contain email addresses etc.), and
 # any bounce messages (since they usually contain quoted text).
 sub scrubmessage ($) {
@@ -374,16 +374,6 @@ sub scrubmessage ($) {
                     set sender_ipaddr = '', sender_referrer = null,
                         message = '[ removed message of ' || length(message) || ' characters]'
                     where id = ?#, {}, $id);
-    # Scrub delivery information but make sure we can still tell how the
-    # message was sent.
-    dbh()->do(q#
-                update message
-                    set recipient_email = ''
-                    where id = ? and recipient_email is not null#, {}, $id);
-    dbh()->do(q#
-                update message
-                    set recipient_fax = ''
-                    where id = ? and recipient_fax is not null#, {}, $id);
     # The log, extra data, and bounce tables may also contain personal data.
     dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
     dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
@@ -1262,7 +1252,7 @@ my %state_action = (
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
-            if ($msg->{sender_name} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
+            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
             }
