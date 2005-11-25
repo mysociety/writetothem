@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: reps.php,v 1.5 2005-06-03 16:04:03 francis Exp $
+ * $Id: reps.php,v 1.6 2005-11-25 16:27:13 francis Exp $
  * 
  */
 
@@ -19,6 +19,7 @@ require_once "../phplib/fyr.php";
 require_once "../../phplib/utility.php";
 require_once "../../phplib/dadem.php";
 require_once "../../phplib/mapit.php";
+require_once "../../phplib/votingarea.php";
 
 // Input data
 $fyr_who = 2000002;

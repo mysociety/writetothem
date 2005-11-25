@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.6 2005-02-15 11:12:06 francis Exp $
+ * $Id: corrections.php,v 1.7 2005-11-25 16:27:13 francis Exp $
  * 
  */
 
@@ -15,8 +15,8 @@ require_once "../phplib/forms.php";
 require_once "../phplib/queue.php";
 
 require_once "../../phplib/mapit.php";
-require_once "../../phplib/votingarea.php";
 require_once "../../phplib/dadem.php";
+require_once "../../phplib/votingarea.php";
 require_once "../../phplib/utility.php";
 
 // Get all fyr_values

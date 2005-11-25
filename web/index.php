@@ -6,12 +6,14 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.48 2005-10-26 20:21:08 francis Exp $
+ * $Id: index.php,v 1.49 2005-11-25 16:27:13 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
+require_once "../../phplib/utility.php";
 require_once "../../phplib/mapit.php";
 require_once '../../phplib/dadem.php';
+require_once "../../phplib/votingarea.php";
 
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));

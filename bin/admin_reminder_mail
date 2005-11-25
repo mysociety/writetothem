@@ -9,13 +9,15 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.5 2005-11-11 12:34:56 francis Exp $
+ * $Id: admin_reminder_mail,v 1.6 2005-11-25 16:27:12 francis Exp $
  *
  */
 
 require_once "../conf/general";
 require_once "../phplib/queue.php";
 require_once "../../phplib/dadem.php";
+require_once "../../phplib/votingarea.php";
+require_once "../../phplib/utility.php";
 
 function error($str) {
     fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");

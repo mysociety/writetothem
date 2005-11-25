@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.164 2005-11-25 14:54:25 francis Exp $
+# $Id: Queue.pm,v 1.165 2005-11-25 16:27:13 francis Exp $
 #
 
 package FYR::Queue;
@@ -57,7 +57,31 @@ FYR.Queue
 
 =head1 DESCRIPTION
 
-Management of queue of messages for FYR.
+Implementation of management of message queue for FYR.
+
+=head1 CONSTANTS
+
+=head2 Error codes
+
+=over 4
+
+=item MESSAGE_ALREADY_QUEUED 4001
+
+Tried to send message which has already been sent.
+
+=item MESSAGE_ALREADY_CONFIRMED 4002
+
+Tried to confirm message which has already been confirmed.
+
+=item MESSAGE_BAD_ADDRESS_DATA 4003
+
+Contact data not available for that representative.
+
+=item MESSAGE_SHAME 4004
+
+Representative does not want to be contacted 
+
+=back
 
 =head1 FUNCTIONS
 
