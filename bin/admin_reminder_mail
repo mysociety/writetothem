@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.7 2005-11-25 18:28:47 francis Exp $
+ * $Id: admin_reminder_mail,v 1.8 2005-11-25 21:26:33 dademcron Exp $
  *
  */
 
@@ -117,6 +117,13 @@ if ($mail) {
 ".$mail;
 }
 
+// Find MPs with no responsiveness
+$badmps = `./badmps`;
+if ($badmps) {
+    $mail .= "\n";
+    $mail .= $badmps;
+}
+
 // Diligency league tables...
 // ... for futzing with the queue
 $diligency_queue = msg_admin_get_diligency_queue(time() - 60*60*24*7);
@@ -163,7 +170,8 @@ And this week's most diligent were (please, take a bow!)...
 if ($mail) {
         $dest = $email_to;
         $subject ="WriteToThem needs some tender loving care";
-        $mail .="That's all for this week!
+        $mail .="
+That's all for this week!
 
 -- The Quality Deity";
     if ($realrun) {
