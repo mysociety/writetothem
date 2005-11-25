@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.6 2005-11-25 16:27:12 francis Exp $
+ * $Id: admin_reminder_mail,v 1.7 2005-11-25 18:28:47 francis Exp $
  *
  */
 
@@ -42,9 +42,11 @@ foreach ($switches as $switch) {
     if ($switch[0]=='--help') {
 ?>
 
-Usage: admin_reminder_mail TO_ADDRESS
+Usage: admin_reminder_mail [TO_ADDRESS]
 
 TO_ADDRESS is the (comma separated) list of email addresses to send to.
+If no TO_ADDRESS is specified command runs in test mode, and outputs
+to stdout.
 
 --help      Display this help message
 

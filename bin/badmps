@@ -8,7 +8,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.2 2005-10-31 12:17:30 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.3 2005-11-25 18:28:47 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -34,18 +34,20 @@ use mySociety::VotingArea;
 
 use FYR;
 
+my $verbose = 0;
+
 # Need to obtain a list of MP/constituency names and then pick out messages
 # by those.
-print STDERR "get constituency IDs... ";
+print STDERR "get constituency IDs... " if $verbose > 0;
 my $areaids = mySociety::MaPit::get_areas_by_type('WMC');
 print STDERR "done\n";
-print STDERR "get constituency info... ";
+print STDERR "get constituency info... " if $verbose > 0;
 my %wmc = %{mySociety::MaPit::get_voting_areas_info($areaids)};
-print STDERR "done\n";
+print STDERR "done\n" if $verbose > 0;
 
-print STDERR "get MP IDs... ";
+print STDERR "get MP IDs... " if $verbose > 0;
 my $repids = mySociety::DaDem::get_representatives([keys %wmc]);
-print STDERR "done\n";
+print STDERR "done\n" if $verbose > 0;
 
 my %repid_to_area_name;
 
@@ -62,18 +64,18 @@ foreach (keys %$repids) {
     }
 }
 
-print STDERR "get MP info... ";
+print STDERR "get MP info... " if $verbose > 0;
 my $reps = mySociety::DaDem::get_representatives_info([map { $_->[0] } grep { @$_ == 1 } values %$repids]);
-print STDERR "done\n";
+print STDERR "done\n" if $verbose > 0;
 
-print STDERR "get MP message counts... ";
+print STDERR "get MP message counts... " if $verbose > 0;
 my $messagecount = dbh()->selectall_hashref("
                         select recipient_id, count(id) as num
                         from message
                         where state = 'finished'
                         group by recipient_id",
                         'recipient_id');
-print STDERR "done\n";
+print STDERR "done\n" if $verbose > 0;
 
 my $stq = dbh()->prepare("
             select distinct on(message_id, question_id) answer, recipient_id
@@ -93,6 +95,14 @@ while (my ($answer, $recipient_id) = $stq->fetchrow_array()) {
     }
 }
 
+# See if we have anything
+my $got_something = 0;
+foreach (keys %$reps) {
+    next unless (exists($messagecount->{$_}));
+    $got_something = 1;
+}
+exit if (!$got_something);
+
 print <<EOF;
 
 Current MPs to whom messages have been sent but for whom no positive
@@ -111,3 +121,4 @@ foreach (keys %$reps) {
             $messagecount->{$_}->{num},
             $reps->{$_}->{messages} || 0;
 }
+
