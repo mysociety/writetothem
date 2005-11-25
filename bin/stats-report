@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.4 2005-10-26 09:58:52 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-report,v 1.5 2005-11-25 21:28:16 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -21,6 +21,7 @@ use CGI;
 use DateTime;
 use DateTime::Format::Strptime;
 use HTML::Entities;
+use Getopt::Long;
 
 use mySociety::Config;
 BEGIN {
@@ -282,7 +283,7 @@ if (defined($start)) {
     }
     $start = $s;
 } else {
-    $start = $end->clone()->subtract(-months => 6);
+    $start = $end->clone()->subtract(months => 6);
 }
 
 
