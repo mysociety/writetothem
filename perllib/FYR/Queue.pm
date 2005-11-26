@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.165 2005-11-25 16:27:13 francis Exp $
+# $Id: Queue.pm,v 1.166 2005-11-26 01:23:03 francis Exp $
 #
 
 package FYR::Queue;
@@ -1003,6 +1003,7 @@ sub record_questionnaire_answer ($$$) {
 
 use constant HOUR => 3600;
 use constant DAY => (24 * HOUR);
+use constant WEEK => (7 * DAY);
 
 # How many confirmation mails may be sent, in total.
 use constant NUM_CONFIRM_MESSAGES => 2;
@@ -1626,6 +1627,7 @@ sub admin_get_stats () {
     $ret{message_count} = dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
     $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
     $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
+    $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - WEEK); 
 
     return \%ret;
 }

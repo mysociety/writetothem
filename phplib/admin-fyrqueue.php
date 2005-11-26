@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.85 2005-11-13 12:13:53 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.86 2005-11-26 01:23:03 francis Exp $
  * 
  */
 
@@ -46,7 +46,8 @@ class ADMIN_PAGE_FYR_QUEUE {
         }
         print "<p>";
         print "<b>" . $stats["created_1"] . "</b> new in hour, ";
-        print "<b>" . $stats["created_24"] . "</b> new in day... ";
+        print "<b>" . $stats["created_24"] . "</b> new in day, ";
+        print "<b>" . $stats["created_168"] . "</b> new in week... ";
 
         // Quick referrers
         $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
@@ -487,7 +488,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <h2>Queue statistics</h2>
 <p>
 <b><?=$stats["created_1"]?></b> new in last hour,
-<b><?=$stats["created_24"]?></b> new in last day
+<b><?=$stats["created_24"]?></b> new in last day,
+<b><?=$stats["created_168"]?></b> new in last week
 </p>
 
 <h2>Messages in each state</h2>
