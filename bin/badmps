@@ -8,7 +8,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.4 2005-11-25 21:26:33 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: badmps,v 1.5 2005-11-26 01:52:19 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -107,7 +107,7 @@ foreach (keys %$reps) {
     $got_something = 1;
 }
 exit if (!$got_something);
-@output = sort { $messagecount->{$b->{id}} <=> $messagecount->{$a->{id}} } @output;
+@output = sort { $messagecount->{$b->{id}}->{num} <=> $messagecount->{$a->{id}}->{num} } @output;
 
 print <<EOF;
 * Check addresses of these MPs, who have no positive feedback:
@@ -116,7 +116,7 @@ EOF
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 foreach (@output) {
     $_ = $_->{id};
-    printf "  - %s (%s) has been sent %d msgs (got %d 'noes')\n    %s\n",
+    printf "  - %s (%s) has been sent %d msgs (got %d 'no', 0 'yes')\n    %s\n",
             $reps->{$_}->{name},
             $repid_to_area_name{$_},
             $messagecount->{$_}->{num},

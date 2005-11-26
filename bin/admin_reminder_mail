@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.8 2005-11-25 21:26:33 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.9 2005-11-26 01:52:19 dademcron Exp $
  *
  */
 
@@ -165,6 +165,27 @@ And this week's most diligent were (please, take a bow!)...
     }
     $mail .= $dili_mail;
 }
+
+// Statistics
+$stats = msg_admin_get_stats();
+$freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
+$mail .= "
+Finally, some statistics to keep you happy...
+
+"; 
+$mail .= "* " . $stats["created_24"] . " new messages in last day\n\n";
+$mail .= "* " . $stats["created_168"] . " new messages in last week\n\n";
+$mail .= "* Top 10 referrers this week, and number of messages they caused:\n";
+$n = 0;
+foreach ($freq_referrers_week as $row) {
+    if ($row[1] > 1 && $row[0] != "") {
+        $n++;
+        $mail .= sprintf("%5d %s", $row[1], $row[0]) . "\n";
+    }
+    if ($n == 10)
+        break;
+}
+$mail .= "\n";
 
 // Send mail to team@
 if ($mail) {
