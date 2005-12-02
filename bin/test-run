@@ -26,7 +26,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.9 2005-07-19 18:08:26 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.10 2005-12-02 18:36:30 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -130,6 +130,28 @@ sub call_fyrqd {
         ) and die "Failed to call fyrqd";
 }
 
+# Change the date that all parts of WriteToThem think is today.  Call with no
+# parameters to reset it to the actual today.
+sub set_fyr_date {
+    my $new_date = shift;
+    if (defined($new_date)) {
+        dbh()->do('delete from debugdate; insert into debugdate (override_today) values (?);', {}, $new_date);
+    } else {
+        dbh()->do('delete from debugdate;');
+    }
+    print "Date changed to $new_date\n" if $verbose > 1;
+    dbh()->commit();
+}
+
+# Run the fyr queue on many sequential dates
+sub spin_queue {
+    my ($format_string, $from, $to) = @_;
+    for (my $i = $from; $i <= $to; $i ++) {
+        set_fyr_date(sprintf($format_string, $i));
+        call_fyrqd();
+    }
+}
+
 sub send_message_to_rep {
     my ($who, $postcode, $repname, $fields) = @_;
     $fields->{writer_name} = name_n($who);
@@ -197,6 +219,7 @@ sub call_handlemail {
 #############################################################################
 
 sub do_send_example_message() {
+    set_fyr_date('1990-01-01');
     send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridege 
         'David Howarth', 
@@ -209,11 +232,31 @@ sub do_send_example_message() {
         } 
     );
     check_delivered_to_rep(0, 'David Howarth', '23 Something Street');
+
+    # 2 days to get over bounce_wait
+    spin_queue('1990-01-%02d', 2, 3);
+    # 13 days more, no questionnaire
+    spin_queue('1990-01-%02d', 4, 20); # TODO
+#    $wth->email_check_none_left();
+# Provoke sending of questionnaire
+#    set_fyr_date('1990-01-17'); # TODO
+    call_fyrqd();
+    my $questionnaire_email = $wth->email_get_containing(
+        '%To: '.name_n(0).' <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
+        '%Two weeks ago we sent your letter to David Howarth MP%');
+    # And reminder
+    spin_queue('1990-01-%02d', 16, 22);
+    call_fyrqd();
+
+    $wth->email_check_none_left();
 }
 
 #############################################################################
 
 sub do_send_blocked_message() {
+    set_fyr_date('1990-06-30');
+
     # Go to abuse rules page
     $wth->browser_get($admin_url);    
     $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);

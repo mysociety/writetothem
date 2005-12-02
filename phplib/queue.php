@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.43 2005-12-01 17:02:06 francis Exp $
+ * $Id: queue.php,v 1.44 2005-12-02 18:36:31 francis Exp $
  *
  */
 
@@ -140,6 +140,29 @@ function msg_record_questionnaire_answer($token, $question, $response) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.record_questionnaire_answer', $params);
+    return $result;
+}
+
+/* msg_get_time
+
+  Returns the current time, in Unix seconds since epoch. This may not be
+  the real world time, as it can be overriden in the database for the test
+  script. */
+function msg_get_time() {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.get_time', $params);
+    return $result;
+}
+
+/* msg_get_date
+
+  Returns the current date, in iso format. This may not be the real world
+  date, as it can be overriden in the database for the test script. */
+function msg_get_date() {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.get_date', $params);
     return $result;
 }
 

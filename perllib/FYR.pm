@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.11 2005-01-31 20:49:06 chris Exp $
+# $Id: FYR.pm,v 1.12 2005-12-02 18:36:30 francis Exp $
 #
 
 use strict;
@@ -74,6 +74,22 @@ Return the site shared secret.
 =cut
 sub secret () {
     return scalar(dbh()->selectrow_array('select secret from secret'));
+}
+
+=item Time
+
+Return time, offset to debug time.
+
+=cut
+my $time_offset;
+sub Time () {
+    if (!defined($time_offset)) {
+        $time_offset =
+            FYR::DB::dbh()->selectrow_array('
+                        select extract(epoch from
+                                fyr_current_timestamp() - current_timestamp)');
+    }
+    return time() + int($time_offset);
 }
 
 1;

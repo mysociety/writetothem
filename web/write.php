@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.82 2005-11-25 16:27:13 francis Exp $
+ * $Id: write.php,v 1.83 2005-12-02 18:36:31 francis Exp $
  *
  */
 
@@ -141,6 +141,13 @@ function renderForm($form, $pageName)
         $fyr_form = $form;
     }
 
+    // Add time-shift warning if in debug mode
+    $fyr_today = msg_get_date();
+    msg_check_error($fyr_today);
+    if ($fyr_today != date('Y-m-d')) {
+        $fyr_form = "<p style=\"text-align: center; color: #ff0000; \">Note: On this test site, the date is faked to be $fyr_today</p>" . $fyr_form;
+    }
+
     $prime_minister = false;
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
     if ($fyr_values['who'] == 1702) {
@@ -235,7 +242,7 @@ function submitFax() {
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
                 /* XXX this should be logged! */
-                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>.");
+                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>." /*. "<br><br>Technical details: " . $result->text */);
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
@@ -269,7 +276,9 @@ if (!isset($fyr_values['fyr_extref']))
 // Various display and used fields
 $fyr_postcode = $fyr_values['pc'];
 $fyr_who = $fyr_values['who'];
-$fyr_date = strftime('%A %e %B %Y');
+$fyr_time = msg_get_time();
+msg_check_error($fyr_time);
+$fyr_date = strftime('%A %e %B %Y', $fyr_time);
 
 if (!isset($fyr_who)) {
     header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");

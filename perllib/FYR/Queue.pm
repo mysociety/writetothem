@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.166 2005-11-26 01:23:03 francis Exp $
+# $Id: Queue.pm,v 1.167 2005-12-02 18:36:31 francis Exp $
 #
 
 package FYR::Queue;
@@ -286,7 +286,7 @@ sub write ($$$$) {
                 (map { $recipient->{$_} || undef } qw(name type email fax)),
                 $recipient->{via} ? 't' : 'f',
             $text,
-            time(), time());
+            FYR::DB::Time(), FYR::DB::Time());
 
         # Log creation of message
         my $logaddr = $sender->{address};
@@ -352,13 +352,13 @@ sub logmsg ($$$;$) {
     $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional, editor) values (?, ?, ?, ?, ?, ?)',
         {},
         $id,
-        time(),
+        FYR::DB::Time(),
         state($id),
         $msg,
         $important ? 't' : 'f',
         $editor);
     $dbh->commit();
-    &$logmsg_handler($id, time(), state($id), $msg, $important) if (defined($logmsg_handler));
+    &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important) if (defined($logmsg_handler));
 }
 
 # %allowed_transitions
@@ -420,7 +420,7 @@ sub state ($;$) {
         die "Bad state '$state'" unless (exists($allowed_transitions{$state}));
         die "Can't go from state '$curr_state' to '$state'" unless ($state eq $curr_state or $allowed_transitions{$curr_state}->{$state} or ($state eq 'failed' or $state eq 'error' or $state eq 'failed_closed'));
         if ($state ne $curr_state) {
-            dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, time(), $state, $id);
+            dbh()->do('update message set lastaction = null, numactions = 0, laststatechange = ?, state = ? where id = ?', {}, FYR::DB::Time(), $state, $id);
             logmsg($id, 0, "changed state to $state");
 
             # On moving into the 'finished' state, scrub message of personal
@@ -432,7 +432,7 @@ sub state ($;$) {
                 scrubmessage($id);
             }
         } else {
-            dbh()->do('update message set lastaction = ?, numactions = numactions + 1 where id = ?', {}, time(), $id);
+            dbh()->do('update message set lastaction = ?, numactions = numactions + 1 where id = ?', {}, FYR::DB::Time(), $id);
         }
         return $curr_state;
     } else {
@@ -540,11 +540,14 @@ sub format_email_body ($) {
     $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
     $addr .= "\n\n" . "Email: $msg->{sender_email}";
 
+    my $formatted_date = strftime('%A %e %B %Y', localtime($msg->{created}));
+    $formatted_date =~ s/  / /g; # remove zero pad
+
     my $text = format_postal_address($addr)
                 . "\n\n"
                 # Date here is slightly silly as it will be in the Date:
                 # header, but we may as well be consistent....
-                . strftime('%A %d %B %Y', localtime($msg->{created}))
+                . $formatted_date
                 . "\n\n"
                 . wrap(EMAIL_COLUMNS, $msg->{message});
 
@@ -588,7 +591,7 @@ sub make_representative_email ($) {
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
             Subject => format_mimewords($subject),
-            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_email.
             Encoding => 'quoted-printable',
@@ -784,7 +787,7 @@ sub make_confirmation_email ($;$) {
             From => format_email_address('WriteToThem', $confirm_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
-            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             Type => 'text/plain; charset="utf-8"',
             # XXX Ideally we'd use the 'binary' encoding (pass through all
             # characters unchanged, under the condition that no NULs appear)
@@ -835,7 +838,7 @@ sub make_failure_email ($) {
             From => format_email_address('WriteToThem', $failure_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
-            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             Type => 'text/plain; charset="utf-8"',
             Encoding => 'quoted-printable',
             Data => as_utf8_octets($text)
@@ -884,7 +887,7 @@ sub make_questionnaire_email ($;$) {
             From => format_email_address('WriteToThem', $questionnaire_sender),
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
-            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(time)),
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_mail
             Encoding => 'quoted-printable',
@@ -1155,7 +1158,7 @@ my %state_action = (
                 # Don't attempt to send faxes outside reasonably sane hours --
                 # if we have a typo in a phone number we don't want to call the
                 # victim at all hours of the night.
-                my $hour = (localtime(time()))[2];
+                my $hour = (localtime(FYR::DB::Time()))[2];
                 return if ($hour < 8 || $hour > 20);
 
                 # Abandon faxes after a few failures.
@@ -1167,12 +1170,12 @@ my %state_action = (
 
                 # Don't retry sending until a reasonable backoff time has
                 # passed.
-                my $howlong = time() - $msg->{laststatechange};
+                my $howlong = FYR::DB::Time() - $msg->{laststatechange};
                 return if ($msg->{numactions} > 0 && $howlong < FAX_DELIVERY_INTERVAL * (FAX_DELIVERY_BACKOFF ** $msg->{numactions}));
                 
                 my $result = deliver_fax($msg);
                 if ($result == FYR::Fax::FAX_SUCCESS) {
-                    dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
+                    dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);
                     state($id, 'sent');
                 } elsif ($result == FYR::Fax::FAX_SOFT_ERROR) {
                     # Don't do anything here: this is a temporary, local
@@ -1187,7 +1190,7 @@ my %state_action = (
             } elsif ($email && defined($msg->{recipient_email})) {
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
-                    dbh()->do('update message set dispatched = ? where id = ?', {}, time(), $id);
+                    dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);
                     state($id, 'bounce_wait');
                 } else {
                     # XXX for the moment we do not distinguish soft/hard errors.
@@ -1223,7 +1226,7 @@ my %state_action = (
          
             # If we've had the message for long enough, then scrub personal
             # information and mark it finished.
-            if ($msg->{dispatched} < (time() - MESSAGE_RETAIN_TIME)) {
+            if ($msg->{dispatched} < (FYR::DB::Time() - MESSAGE_RETAIN_TIME)) {
                 state($id, 'finished');
             } else {
                 # Bump timer in any case.
@@ -1277,7 +1280,7 @@ my %state_action = (
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
-            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (time() - FAILED_RETAIN_TIME)) {
+            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
             }
@@ -1298,7 +1301,7 @@ sub process_queue ($$) {
     my $stmt = dbh()->prepare(
         'select id, state from message where '
         . join(' or ',
-            map { sprintf(q#(state = '%s' and laststatechange < %d)#, $_, time() - $state_timeout{$_}) }
+            map { sprintf(q#(state = '%s' and laststatechange < %d)#, $_, FYR::DB::Time() - $state_timeout{$_}) }
                 keys %state_timeout)
         . ' for update');
     $stmt->execute();
@@ -1315,7 +1318,7 @@ sub process_queue ($$) {
                 . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
             . ') and (lastaction is null or '
                 . join(' or ',
-                    map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, time() - $state_action_interval{$_}) }
+                    map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, FYR::DB::Time() - $state_action_interval{$_}) }
                         keys %state_action_interval)
             . q#) and (state <> 'ready' or not frozen) order by random()#);
     } else {
@@ -1323,7 +1326,7 @@ sub process_queue ($$) {
                 select id, state from message
                 where state = 'ready' and not frozen
                     and (lastaction is null or lastaction < %d)
-                #, time() - $state_action_interval{ready}));
+                #, FYR::DB::Time() - $state_action_interval{ready}));
     }
     $stmt->execute();
     while (my ($id, $state) = $stmt->fetchrow_array()) {
@@ -1335,7 +1338,7 @@ sub process_queue ($$) {
             my $msg = message($id, 1);
             if ($msg->{state} eq $state
                 and (!defined($msg->{lastaction})
-                    or $msg->{lastaction} < time() - $state_action_interval{$state})) {
+                    or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})) {
                 # Check for ready+frozen again.
                 if (!$msg->{frozen} or $msg->{state} ne 'ready') {
                     &{$state_action{$state}}($email, $fax, $id);
@@ -1364,6 +1367,29 @@ sub notify_daemon () {
     fcntl($s, F_SETFL, O_NONBLOCK | $flags) or return;
     $s->print("\0") or return;
     $s->close();
+}
+
+=item get_time
+
+Returns the current time, in Unix seconds since epoch. This may not
+be the real world time, as it can be overriden in the database for
+the test script.
+
+=cut
+sub get_time () {
+    my ($id, $user) = @_;
+    return scalar(dbh()->selectrow_array("select extract(epoch from fyr_current_timestamp())", {}));
+}
+
+=item get_date
+
+Returns the current date, in iso format. This may not be the real world date,
+as it can be overriden in the database for the test script.
+
+=cut
+sub get_date () {
+    my ($id, $user) = @_;
+    return scalar(dbh()->selectrow_array("select fyr_current_date()", {}));
 }
 
 #
@@ -1625,9 +1651,9 @@ sub admin_get_stats () {
     }
 
     $ret{message_count} = dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
-    $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - HOUR); 
-    $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - DAY); 
-    $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, time() - WEEK); 
+    $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - HOUR); 
+    $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - DAY); 
+    $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - WEEK); 
 
     return \%ret;
 }
@@ -1644,7 +1670,7 @@ sub admin_get_popular_referrers($) {
         select sender_referrer, count(*) as c from message 
             where created > ?
             group by sender_referrer
-            order by c desc', {}, time() - $secs);
+            order by c desc', {}, FYR::DB::Time() - $secs);
 
     return $result;
 }

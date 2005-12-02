@@ -27,5 +27,6 @@ if (OPTION_FYR_REFLECT_EMAILS) {
 	if (substr($real_template_name, 0, 5)=='about' && !isset($values['nobox'])) {
 		include 'about-sidebar.html';
 	}
+
 ?>
 

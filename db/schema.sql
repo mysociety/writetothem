@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.30 2005-10-25 20:06:18 chris Exp $
+-- $Id: schema.sql,v 1.31 2005-12-02 18:36:30 francis Exp $
 --
 
 set client_min_messages to error;
@@ -15,6 +15,43 @@ set client_min_messages to error;
 create table secret (
     secret text not null
 );
+
+-- If a row is present, that is date which is "today".  Used for debugging
+-- to advance time without having to wait.
+create table debugdate (
+    override_today date
+);
+
+-- Returns the date of "today", which can be overriden for testing.
+create function fyr_current_date()
+    returns date as '
+    declare
+        today date;
+    begin
+        today = (select override_today from debugdate);
+        if today is not null then
+           return today;
+        else
+           return current_date;
+        end if;
+
+    end;
+' language 'plpgsql';
+
+-- Returns the timestamp of current time, but with possibly overriden "today".
+create function fyr_current_timestamp()
+    returns timestamp as '
+    declare
+        today date;
+    begin
+        today = (select override_today from debugdate);
+        if today is not null then
+           return today + current_time;
+        else
+           return current_timestamp;
+        end if;
+    end;
+' language 'plpgsql';
 
 -- state
 -- States a message can be in.
