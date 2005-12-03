@@ -26,7 +26,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.10 2005-12-02 18:36:30 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.11 2005-12-03 11:43:26 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -236,7 +236,7 @@ sub do_send_example_message() {
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 3);
     # 13 days more, no questionnaire
-    spin_queue('1990-01-%02d', 4, 20); # TODO
+    spin_queue('1990-01-%02d', 4, 30); # TODO
 #    $wth->email_check_none_left();
 # Provoke sending of questionnaire
 #    set_fyr_date('1990-01-17'); # TODO
