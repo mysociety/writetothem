@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.14 2005-03-03 11:21:19 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.15 2005-12-05 12:19:45 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -107,6 +107,7 @@ my $fax = mySociety::Config::get('QUEUE_DAEMON_SEND_FAX', 0);
 my $once = 0;
 my $nodetach = 0;
 my $help = 0;
+my $multiple = 0;
 if (!GetOptions(
         'processes=i' =>    \$numprocesses,
         'socket=s' =>       \$socketpath,
@@ -114,6 +115,7 @@ if (!GetOptions(
         'email' =>          \$email,
         'fax' =>            \$fax,
         'once' =>           \$once,
+        'multiple=i' =>     \$multiple,
         'debug' =>          \$nodetach,
         'help' =>           \$help
     )) {
@@ -131,6 +133,13 @@ FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 if ($once) {
     FYR::Queue::process_queue($email, $fax);
+    exit(0);
+}
+
+if ($multiple) {
+    for(my $i=0;$i<$multiple;++$i) {
+        FYR::Queue::process_queue($email, $fax);
+    }
     exit(0);
 }
 
@@ -313,6 +322,10 @@ Send faxes or emails respectively. Default is neither.
 
 Run the queue once, then exit.
 
+=item --multiple NUM
+
+Run the queue NUM times, then exit.
+
 =back
 
 =head1 COPYRIGHT 
@@ -321,5 +334,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.14 2005-03-03 11:21:19 chris Exp $
+$Id: fyrqd,v 1.15 2005-12-05 12:19:45 francis Exp $
 

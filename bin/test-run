@@ -22,11 +22,10 @@
 # TODO:
 # Sending faxes
 # Bounce messages to rep
-# Questionnaire
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.11 2005-12-03 11:43:26 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.12 2005-12-05 12:19:45 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -146,8 +145,10 @@ sub set_fyr_date {
 # Run the fyr queue on many sequential dates
 sub spin_queue {
     my ($format_string, $from, $to) = @_;
-    for (my $i = $from; $i <= $to; $i ++) {
+    for (my $i = $from; $i < $to; $i ++) {
         set_fyr_date(sprintf($format_string, $i));
+        call_fyrqd();
+        call_fyrqd();
         call_fyrqd();
     }
 }
@@ -234,22 +235,35 @@ sub do_send_example_message() {
     check_delivered_to_rep(0, 'David Howarth', '23 Something Street');
 
     # 2 days to get over bounce_wait
-    spin_queue('1990-01-%02d', 2, 3);
+    spin_queue('1990-01-%02d', 2, 4);
     # 13 days more, no questionnaire
-    spin_queue('1990-01-%02d', 4, 30); # TODO
-#    $wth->email_check_none_left();
-# Provoke sending of questionnaire
-#    set_fyr_date('1990-01-17'); # TODO
+    spin_queue('1990-01-%02d', 4, 17);
+    $wth->email_check_none_left();
+    # 14th day provokes sending of questionnaire
+    set_fyr_date('1990-01-18');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
         '%To: '.name_n(0).' <'.email_n(0).'>'.
         '%Subject: Did your MP reply to your letter?'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
     # And reminder
-    spin_queue('1990-01-%02d', 16, 22);
-    call_fyrqd();
-
+    #spin_queue('1990-01-%02d', 16, 22);
     $wth->email_check_none_left();
+
+    # Get links from questionnaire email
+    die "Questionnaire yes link not found" if ($questionnaire_email !~ m#^\s*($base_url/Y/.*$)#m);
+    my $yes_link = $1;
+    $wth->email_check_url($yes_link);
+    print "Questionnaire 'yes' URL is $yes_link\n" if $verbose > 1;
+    die "Questionnaire no link not found" if ($questionnaire_email !~ m#^\s*($base_url/N/.*$)#m);
+    my $no_link = $1;
+    $wth->email_check_url($no_link);
+    print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
+
+    $wth->browser_get($yes_link);
+    $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
+    $wth->browser_follow_link(text_regex => qr/YES/);
+    $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
 #############################################################################
