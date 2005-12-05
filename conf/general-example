@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.28 2005-10-27 15:32:23 chris Exp $
+ * $Id: general-example,v 1.29 2005-12-05 20:57:26 francis Exp $
  * 
  */
 
@@ -112,6 +112,8 @@ define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
 
 // For passing authentication to HearFromYourMP
 define('OPTION_AUTH_SHARED_SECRET', 'long string of random bytes');
+define('OPTION_HEARFROMYOURMP_BASE_URL', 'http://hearfromyourmp.owl');
+
 
 
 ?>

@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: firsttime.php,v 1.2 2005-01-21 17:37:15 chris Exp $
+ * $Id: firsttime.php,v 1.3 2005-12-05 20:57:33 francis Exp $
  * 
  */
 
@@ -32,10 +32,11 @@ $result = msg_record_questionnaire_answer($token, 1, $answer);
 if (rabx_is_error($result)) {
     template_show_error($result->text);
 }
+$values = msg_admin_get_message($result);
 if ($answer == "yes") {
-    template_draw("firsttime-yes");
+    template_draw("firsttime-yes", $values);
 } elseif ($answer == "no") {
-    template_draw("firsttime-no");
+    template_draw("firsttime-no", $values);
 } else {
     template_show_error("Unknown answer.");
 }

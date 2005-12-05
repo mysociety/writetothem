@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.167 2005-12-02 18:36:31 francis Exp $
+# $Id: Queue.pm,v 1.168 2005-12-05 20:57:29 francis Exp $
 #
 
 package FYR::Queue;
@@ -982,7 +982,8 @@ sub confirm_email ($) {
 Record a user's response to a questionnaire question. TOKEN is the token sent
 them in the questionnaire email; QUESTION must be 0 or 1 and RESPONSE
 must be "YES", indicating that they have received a reply, or "NO",
-indicating that they have not.
+indicating that they have not. Returns 0 upon failure, or msgid upon
+success.
 
 =cut
 sub record_questionnaire_answer ($$$) {
@@ -994,7 +995,7 @@ sub record_questionnaire_answer ($$$) {
         dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
         logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
         dbh()->commit();
-        return 1;
+        return $id;
     } else {
         return 0;
     }

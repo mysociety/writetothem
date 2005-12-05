@@ -13,9 +13,6 @@ back and relax &mdash; your message is on its way.</p>
 <a href="mailto:team@writetothem.com">thoughts, complaints or comments</a>
 about this testing service.</p>
 
-<h2 id="confirmadvert" align="center">
-Meanwhile... Start a 
-<a href="http://www.hearfromyourmp.com/?name=<?=urlencode($values['sender_name'])?>&email=<?=urlencode($values['sender_email'])?>&pc=<?=urlencode($values['sender_postcode'])?>&sign=<?=urlencode($values['auth_signature'])?>">long term relationship</a><br> with your MP
-</h2>
+<?=fyr_display_advert($values)?>
 
 <? template_draw('footer', $values); ?>
