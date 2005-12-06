@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.31 2005-12-06 11:09:11 chris Exp $
+ * $Id: fyr.php,v 1.32 2005-12-06 11:19:25 chris Exp $
  * 
  */
 
@@ -142,7 +142,6 @@ function fyr_parse_area_type_list($types) {
             || preg_match('/^(LBO|LAS|LGD|CTY|DIS|UTA|MTD|COI|SPA|WAS|NIA|WMP|EUP)$/', $t))
             continue;
         $a[$t] = 1;
-    header("X-Debug-$n: $t");
         ++$n;
     }
 
