@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.32 2005-12-06 11:19:25 chris Exp $
+ * $Id: fyr.php,v 1.33 2005-12-06 12:01:26 chris Exp $
  * 
  */
 
@@ -162,13 +162,17 @@ function fyr_breadcrumbs($num) {
                 'Check message',
                 'Confirm email'
             );
+    /* Ideally we'd like the numbers to appear as a result of this being a
+     * list, but that's beyond CSS's tiny capabilities, so put them in
+     * explicitly. That means that two numbers will appear in non-CSS
+     * browsers. */
     $str = '<ol id="breadcrumbs">';
     for ($i = 0; $i < sizeof($steps); ++$i) {
         if ($i == $num - 1)
             $str .= "<li class=\"hilight\">";
         else
             $str .= "<li>";
-        $str .= htmlspecialchars($steps[$i]) . "</li>";
+        $str .= ($i + 1) . ". " . htmlspecialchars($steps[$i]) . "</li>";
     }
     $str .= "</ol>";
     return $str;
