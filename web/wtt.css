@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.29 2005-12-06 11:36:47 chris Exp $
+ * $Id: wtt.css,v 1.30 2005-12-06 11:50:29 chris Exp $
  * 
  */
 
@@ -305,5 +305,12 @@ pre.sourcecode {
     background-color: #d9ecff;
     padding: 5px;
     margin-bottom: 1em;
+}
+
+p#contactemail {
+    width: 33em; /* Aim to miss the sidebar. */
+    background-color: #f88;
+    border: 2px solid #d00;
+    padding: 1em;
 }
 
