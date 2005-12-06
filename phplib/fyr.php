@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.30 2005-12-05 20:57:30 francis Exp $
+ * $Id: fyr.php,v 1.31 2005-12-06 11:09:11 chris Exp $
  * 
  */
 
@@ -151,6 +151,30 @@ function fyr_parse_area_type_list($types) {
     else
         return null;
 }
+
+/* fyr_breadcrumbs NUMBER
+ * Numbered "breadcrumbs" trail for current user; NUMBER is the (1-based)
+ * number of the step to hilight. */
+function fyr_breadcrumbs($num) {
+    $steps = array(
+                'Enter postcode',
+                'Pick representative',
+                'Write message',
+                'Check message',
+                'Confirm email'
+            );
+    $str = '<ol id="breadcrumbs">';
+    for ($i = 0; $i < sizeof($steps); ++$i) {
+        if ($i == $num - 1)
+            $str .= "<li class=\"hilight\">";
+        else
+            $str .= "<li>";
+        $str .= htmlspecialchars($steps[$i]) . "</li>";
+    }
+    $str .= "</ol>";
+    return $str;
+}
+
 
 function fyr_display_advert($values) {
     $auth_signature = auth_sign_with_shared_secret($values['sender_email'], OPTION_AUTH_SHARED_SECRET);
