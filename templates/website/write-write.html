@@ -1,11 +1,16 @@
+
+
 <? 
 $values['title'] = "Now write your message to ". 
     $values['representative']['name'] . " " .
     $values['voting_area']['rep_name'] . " for " . $values['voting_area']['name'];
 
 template_draw('header', $values);
+print fyr_breadcrumbs(3);
+
 if ($values['prime_minister']) { 
 ?>
+
 <h2 class="warning"><strong>VIP.... VIP... VIP.... VIP... READ THIS BIT
 PLEASE...</strong></h2> 
 <p>Please <strong>*ONLY*</strong> use this service to fax Tony Blair if you are one of his
@@ -44,7 +49,5 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 </ul>
 
 <?=$values['form'] ?>
-
-<?= fyr_breadcrumbs(3) ?>
 
 <? template_draw('footer', $values); ?>

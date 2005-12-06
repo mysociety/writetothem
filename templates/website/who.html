@@ -2,6 +2,9 @@
 $values['robots'] = 'index, nofollow';
 template_draw('header', $values);
 ?>
+
+<?= fyr_breadcrumbs(2) ?>
+
 <h2><?=$values['title'] ?></h2>
 
 <? if ($values['error']) { ?>
@@ -80,8 +83,6 @@ foreach ($values['reps'] as $row) {
 ?>
 </tr>
 </table>
-
-<?= fyr_breadcrumbs(2) ?>
 
 <? }
 

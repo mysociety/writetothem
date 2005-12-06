@@ -2,6 +2,9 @@
 template_draw('header', $values);
 ?>
 
+<?= fyr_breadcrumbs(1) ?>
+
+
 <?=$values['blurb-top'] ?>
 
 <!--<p align="center">
@@ -26,8 +29,6 @@ Due to the General Election, new MPs and County Councillors are not yet availabl
 <?  } else { ?>
 <p align="center">If you don't know your Postcode you can try <a href="http://www.postcodeanywhere.co.uk/home/newcheckerpopup.aspx">this Postcode Finder</a></p>
 <?  } ?>
-
-<?= fyr_breadcrumbs(1) ?>
 
 <!--<p><small><a href="http://uk.imdb.com/title/tt0047573/">A horror horde of
         crawl-and-crush giants clawing out of the earth from mile-deep
