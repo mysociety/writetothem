@@ -25,7 +25,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.14 2005-12-07 17:53:59 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.15 2005-12-07 18:06:16 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -161,11 +161,13 @@ sub spin_queue {
 }
 
 sub send_message_to_rep {
-    my ($who, $postcode, $repname, $fields) = @_;
+    my ($who, $postcode, $repname, $fields, $cobrand) = @_;
     $fields->{writer_name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     
-    $wth->browser_get($base_url);
+    my $start_url = $base_url;
+    $start_url .= "?cocode=testcode123" if ($cobrand eq "animalaid");
+    $wth->browser_get($start_url);
     $wth->browser_check_contents("First, type your UK postcode:");
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
 
@@ -186,6 +188,8 @@ sub send_message_to_rep {
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents('Nearly Done! Now check your email');
 
+    # TODO: Check message isn't sent early
+
     # Wait for confirmation email to arrive
     call_fyrqd();
     # Click link in the confirmation email
@@ -198,8 +202,12 @@ sub send_message_to_rep {
     print "Message confirm URL is $1\n" if $verbose > 1;
     $wth->email_check_url($1);
     $wth->browser_get($1);
-    $wth->browser_check_contents("All done... We'll send your message now");
-    # TODO: Check message isn't sent early
+
+    if ($cobrand eq "animalaid") {
+        # TODO: Add check when their site is ready
+    } else {
+        $wth->browser_check_contents("All done... We'll send your message now");
+    }
 }
 
 sub check_delivered_to_rep {
@@ -340,8 +348,9 @@ sub do_send_cobrand_message() {
             writer_town => 'Whereville',
             writer_county => 'Whereex',
             writer_phone => undef,
-            body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example."
-        } 
+            body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example.",
+        },
+        'animalaid'
     );
     check_delivered_to_rep(2, 'Paul Sargent', '32 Wheresome Wroad');
 }
