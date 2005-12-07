@@ -25,7 +25,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.13 2005-12-07 16:42:14 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.14 2005-12-07 17:53:59 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -303,7 +303,7 @@ sub do_send_blocked_message() {
         button => 'done');
     $wth->browser_check_contents('Block quicker than you can imagine');
 
-    # This now shouldn't get there, as the message should be frozen
+    # The message shouldn't be delivered, as it should be frozen
     send_message_to_rep(1, 
         'CB23QJ', # The Guildhall, Cambridege 
         'David Howarth', 
@@ -317,6 +317,14 @@ sub do_send_blocked_message() {
     );
     call_fyrqd();
     $wth->email_check_none_left();
+
+    # Check for email telling the constituent that their message wasn't sent
+    set_fyr_date('1990-07-08');
+    call_fyrqd();
+    my $confirmation_email = $wth->email_get_containing(
+        '%To: '.name_n(1).' <'.email_n(1).'>'.
+        '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
+        '%We\'re very sorry, but it wasn\'t possible to send your letter%');
 }
 
 #############################################################################
@@ -324,7 +332,7 @@ sub do_send_blocked_message() {
 sub do_send_cobrand_message() {
     set_base_url("animalaid.");
     set_fyr_date('1991-02-03');
-    send_message_to_rep(1, 
+    send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
        'Paul Sargent', 
         { 
@@ -335,7 +343,7 @@ sub do_send_cobrand_message() {
             body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example."
         } 
     );
-    check_delivered_to_rep(1, 'Paul Sargent', '32 Wheresome Wroad');
+    check_delivered_to_rep(2, 'Paul Sargent', '32 Wheresome Wroad');
 }
 
 #############################################################################
