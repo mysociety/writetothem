@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.83 2005-12-02 18:36:31 francis Exp $
+ * $Id: write.php,v 1.84 2005-12-07 16:42:14 francis Exp $
  *
  */
 
@@ -221,6 +221,10 @@ function submitFax() {
             <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
     }
 
+    global $cobrand;
+    $cocode = $fyr_values['cocode'];
+    if (!$cocode)
+        $cocode = null;
     $result = msg_write($msgid,
             array(
             'name' => $fyr_values['writer_name'],
@@ -232,7 +236,9 @@ function submitFax() {
             'ipaddr' =>  $_SERVER['REMOTE_ADDR']
             ),
             $fyr_values['who'],
-            $fyr_values['signedbody']);
+            $fyr_values['signedbody'],
+            $cobrand, $cocode
+    );
 
     /* $result is an RABX error, the name of a template to redirect to, or null
      * on success. */
@@ -241,8 +247,8 @@ function submitFax() {
             if ($result->code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED)
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
-                /* XXX this should be logged! */
-                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>." /*. "<br><br>Technical details: " . $result->text */);
+                error_log("write.php msg_write error: " . $result->text);
+                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>.");
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
@@ -272,6 +278,8 @@ if (!array_key_exists('pc', $fyr_values) || $fyr_values['pc'] == "") {
 $fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
 if (!isset($fyr_values['fyr_extref']))
     $fyr_values['fyr_extref'] = fyr_external_referrer();
+if (!isset($fyr_values['cocode']))
+    $fyr_values['cocode'] = get_http_var('cocode');
 
 // Various display and used fields
 $fyr_postcode = $fyr_values['pc'];

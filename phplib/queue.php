@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.44 2005-12-02 18:36:31 francis Exp $
+ * $Id: queue.php,v 1.45 2005-12-07 16:42:14 francis Exp $
  *
  */
 
@@ -60,20 +60,26 @@ function msg_recipient_test($recipient) {
     return $result;
 }
 
-/* msg_write ID SENDER RECIPIENT TEXT
+/* msg_write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE]
 
   Write details of a message for sending. ID is the identity of the
-  message, SENDER is a reference to hash containing details of the sender
-  including elements: name, the sender's full name; email, their email
-  address; address, their full postal address; postcode, their post code;
-  and optionally phone, their phone number; ipaddr, their IP address;
-  referrer, website that referred them to this one. RECIPIENT is the DaDem
-  ID number of the recipient of the message; and TEXT is the text of the
-  message, with line breaks. Returns true on success, or an error code on
-  failure.
+  message,
+
+  SENDER is a reference to hash containing details of the sender including
+  elements: name, the sender's full name; email, their email address;
+  address, their full postal address; postcode, their post code; and
+  optionally phone, their phone number; ipaddr, their IP address; referrer,
+  website that referred them to this one. 
+
+  RECIPIENT is the DaDem ID number of the recipient of the message; and
+  TEXT is the text of the message, with line breaks. Returns true on
+  success, or an error code on failure.
+
+  COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE
+  is a reference code for them.
 
   This function is called remotely and commits its changes. */
-function msg_write($id, $sender, $recipient, $text) {
+function msg_write($id, $sender, $recipient, $text, $cobrand = null, $cocode = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.write', $params);
@@ -135,7 +141,8 @@ function msg_confirm_email($token) {
   Record a user's response to a questionnaire question. TOKEN is the token
   sent them in the questionnaire email; QUESTION must be 0 or 1 and
   RESPONSE must be "YES", indicating that they have received a reply, or
-  "NO", indicating that they have not. */
+  "NO", indicating that they have not. Returns 0 upon failure, or msgid
+  upon success. */
 function msg_record_questionnaire_answer($token, $question, $response) {
     global $msg_client;
     $params = func_get_args();

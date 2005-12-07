@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.86 2005-11-26 01:23:03 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.87 2005-12-07 16:42:14 francis Exp $
  * 
  */
 
@@ -124,7 +124,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>State</th>
         <th>Sender</th>
         <th>Recipient</th>
-        <th>Client IP / <br> Referrer</th>
+        <th>Client IP / <br> Referrer / Cobrand</th>
         <th>Length (chars)</th>
         <th>Tick</th>
     </tr>
@@ -201,8 +201,10 @@ class ADMIN_PAGE_FYR_QUEUE {
                     print htmlspecialchars($message['recipient_fax']) . "<br>";
                 print "</td>";
 
-                print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a><br>"
-                        . trim_url($message['sender_referrer']) . "</td>";
+                print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a>".
+                    "<br>" . trim_url($message['sender_referrer']) . 
+                    "<br>" . $message['cobrand'] . " " . $message['cocode'] .
+                    "</td>";
                 print "<td>${message['message_length']}</td>";
 
                 /* Javascript code changes shading of table row for checked

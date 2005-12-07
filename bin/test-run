@@ -25,7 +25,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.12 2005-12-05 12:19:45 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.13 2005-12-07 16:42:14 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -70,8 +70,13 @@ if ($help) {
 }
 
 # Set up options
-
-our $base_url = mySociety::Config::get('BASE_URL');
+our $base_url;
+sub set_base_url($) {
+    my $cobrand = shift;
+    $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+}
+set_base_url('');
+die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
 sub email_n { my $n = shift; return "fyrharness+$n\@writetothem.owl"; }
@@ -105,12 +110,14 @@ $wth->browser_get($base_url . "/test.php?error=1" );
 my $errors = $wth->log_watcher_get_errors();
 die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
 
-#print "Sending bouncing message...\n" if $verbose > 0;
-#do_send_bouncing_message();
 print "Sending example message...\n" if $verbose > 0;
 do_send_example_message();
 print "Testing ratty blocking message...\n" if $verbose > 0;
 do_send_blocked_message();
+print "Sending cobrand message...\n" if $verbose > 0;
+do_send_cobrand_message();
+#print "Sending bouncing message...\n" if $verbose > 0;
+#do_send_bouncing_message();
 
 # Check for any unhandled mails or errors
 call_fyrqd();
@@ -184,7 +191,7 @@ sub send_message_to_rep {
     # Click link in the confirmation email
     my $confirmation_email = $wth->email_get_containing(
         '%To: '.name_n($who).' <'.email_n($who).'>'.
-        '%Subject: Please confirm that you want to send a message to '.$repname.' MP'.
+        '%Subject: Please confirm that you want to send a message to %'.$repname.
         '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
         '%to confirm that you wish%');
     die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
@@ -201,8 +208,8 @@ sub check_delivered_to_rep {
     call_fyrqd();
     my $content = $wth->email_get_containing(
         '%From: '.name_n($who).' <'.email_n($who).'>'.
-        '%To: '.$repname.' MP <'.email_n($who).'>'.
-        '%Subject: Letter from your constituent '.name_n($who).
+        '%To: %'.$repname.'% <'.email_n($who).'>'.
+        '%Subject: Letter from %constituent '.name_n($who).
         '%'.$extra_check.
         '%Signed with an electronic signature%');
 
@@ -220,6 +227,7 @@ sub call_handlemail {
 #############################################################################
 
 sub do_send_example_message() {
+    set_base_url("");
     set_fyr_date('1990-01-01');
     send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridege 
@@ -232,7 +240,7 @@ sub do_send_example_message() {
             body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         } 
     );
-    check_delivered_to_rep(0, 'David Howarth', '23 Something Street');
+    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street');
 
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 4);
@@ -269,6 +277,7 @@ sub do_send_example_message() {
 #############################################################################
 
 sub do_send_blocked_message() {
+    set_base_url("");
     set_fyr_date('1990-06-30');
 
     # Go to abuse rules page
@@ -312,8 +321,28 @@ sub do_send_blocked_message() {
 
 #############################################################################
 
+sub do_send_cobrand_message() {
+    set_base_url("animalaid.");
+    set_fyr_date('1991-02-03');
+    send_message_to_rep(1, 
+       'OX 13d R', # Lincoln college, Oxford
+       'Paul Sargent', 
+        { 
+            writer_address1 => '32 Wheresome Wroad',
+            writer_town => 'Whereville',
+            writer_county => 'Whereex',
+            writer_phone => undef,
+            body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example."
+        } 
+    );
+    check_delivered_to_rep(1, 'Paul Sargent', '32 Wheresome Wroad');
+}
+
+#############################################################################
+
 =comment
 sub do_send_bouncing_message() {
+    set_base_url("");
     send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridege 
         'David Howarth', 

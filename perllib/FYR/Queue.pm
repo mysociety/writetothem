@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.168 2005-12-05 20:57:29 francis Exp $
+# $Id: Queue.pm,v 1.169 2005-12-07 16:42:14 francis Exp $
 #
 
 package FYR::Queue;
@@ -194,22 +194,28 @@ sub recipient_test ($) {
     return 1
 }
 
-=item write ID SENDER RECIPIENT TEXT
+=item write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE]
 
 Write details of a message for sending. ID is the identity of the message,
+
 SENDER is a reference to hash containing details of the sender including
 elements: name, the sender's full name; email, their email address; address,
 their full postal address; postcode, their post code; and optionally phone,
 their phone number; ipaddr, their IP address; referrer, website that referred
-them to this one. RECIPIENT is the DaDem ID number of the recipient of the
-message; and TEXT is the text of the message, with line breaks. Returns true on
-success, or an error code on failure.
+them to this one. 
+
+RECIPIENT is the DaDem ID number of the recipient of the message; and TEXT is
+the text of the message, with line breaks. Returns true on success, or an error
+code on failure.
+
+COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
+a reference code for them.
 
 This function is called remotely and commits its changes.
 
 =cut
-sub write ($$$$) {
-    my ($id, $sender, $recipient_id, $text) = @_;
+sub write ($$$$;$$) {
+    my ($id, $sender, $recipient_id, $text, $cobrand, $cocode) = @_;
 
     throw FYR::Error("Bad ID specified")
         unless ($id =~ m/^[0-9a-f]{20}$/i);
@@ -268,7 +274,8 @@ sub write ($$$$) {
                 message,
                 state,
                 created, laststatechange,
-                numactions, dispatched
+                numactions, dispatched,
+                cobrand, cocode
             ) values (
                 ?,
                 ?, ?, ?, ?, ?, ?, ?,
@@ -278,7 +285,8 @@ sub write ($$$$) {
                 ?,
                 'new',
                 ?, ?,
-                0, null
+                0, null,
+                ?, ?
             )#, {},
             $id,
             (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
@@ -286,7 +294,8 @@ sub write ($$$$) {
                 (map { $recipient->{$_} || undef } qw(name type email fax)),
                 $recipient->{via} ? 't' : 'f',
             $text,
-            FYR::DB::Time(), FYR::DB::Time());
+            FYR::DB::Time(), FYR::DB::Time(),
+            $cobrand, $cocode);
 
         # Log creation of message
         my $logaddr = $sender->{address};
@@ -748,7 +757,11 @@ sub make_confirmation_email ($;$) {
     $reminder ||= 0;
 
     my $token = make_token("confirm", $msg->{id});
-    my $confirm_url = mySociety::Config::get('BASE_URL') . '/C/' . $token;
+    my $url_start = mySociety::Config::get('BASE_URL');
+    if ($msg->{cobrand}) {
+        $url_start = "http://" . $msg->{cobrand} . "." . mySociety::Config::get('WEB_DOMAIN');
+    }
+    my $confirm_url = $url_start . '/C/' . $token;
 
     # Note: (a) don't care about bounces from this mail (they result only from
     # transient failures or abuse; but (b) we can't use a reply to confirm that

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.33 2005-12-06 12:01:26 chris Exp $
+ * $Id: fyr.php,v 1.34 2005-12-07 16:42:14 francis Exp $
  * 
  */
 
@@ -40,10 +40,12 @@ $syn = str_replace('.'.OPTION_WEB_DOMAIN, '', $syn);
 if (array_key_exists('syn', $_GET)) {
     $syn = $_GET['syn'];
 }
-if ($syn == 'cheltenham')
-    template_set_style('../templates/cheltenham', true);
-elseif ($syn == 'animalaid')
-    template_set_style('../templates/animalaid', true);
+$cobrand_allowed = array('cheltenham'=>1, 'animalaid'=>1);
+if (array_key_exists($syn, $cobrand_allowed)) {
+    template_set_style("../templates/$syn", true);
+    global $cobrand;
+    $cobrand = $syn;
+} 
 
 /* fyr_display_error NUMBER MESSAGE
  * Display an error message to the user. */

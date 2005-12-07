@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.49 2005-11-25 16:27:13 francis Exp $
+ * $Id: index.php,v 1.50 2005-12-07 16:42:14 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -30,6 +30,9 @@ $form .= '&nbsp;<input type="submit" value="Go">' . "\n";
 $ref = fyr_external_referrer();
 if (isset($ref))
     $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
+$cocode = get_http_var('cocode');
+if ($cocode)
+    $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
 $form .= '</div></form>';
 
 // Validate postcode, and prepare appropriate page
@@ -125,12 +128,12 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
 
             if ($id)
                 /* Single representative */
-                header('Location: ' . new_url('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer()));
+                header('Location: ' . new_url('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
             else
                 /* Several */
-                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer()));
+                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
         } else
-            header('Location: ' . new_url('who', true, 'a', null, 'fyr_extref', fyr_external_referrer()));
+            header('Location: ' . new_url('who', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {

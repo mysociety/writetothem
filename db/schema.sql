@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.31 2005-12-02 18:36:30 francis Exp $
+-- $Id: schema.sql,v 1.32 2005-12-07 16:42:14 francis Exp $
 --
 
 set client_min_messages to error;
@@ -123,7 +123,11 @@ create table message (
     numactions integer not null default (0),
 
     -- when the message was dispatched to the representative (UNIX time)
-    dispatched integer
+    dispatched integer,
+
+    -- cobranding (e.g. see http://cheltenham.writetothem.com)
+    cobrand text check (cobrand ~* '^[a-z0-9]+$'), -- first part of domain (e.g. cheltenham, animalaid), NULL for no cobranding
+    cocode text check (cocode ~* '^[a-zA-Z0-9-]+$') -- extra code for cobranding organisation
 );
 
 -- Various indices to make the queue pages quicker.
