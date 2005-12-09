@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.169 2005-12-07 16:42:14 francis Exp $
+# $Id: Queue.pm,v 1.170 2005-12-09 11:59:09 chris Exp $
 #
 
 package FYR::Queue;
@@ -479,16 +479,16 @@ sub message ($;$) {
 # Return STRING, formatted for inclusion in an email header.
 sub format_mimewords ($) {
     my ($text) = @_;
-    my $out = '';
-    foreach my $s (split(/(\s+)/, $text)) {
-        utf8::encode($s); # turn to string of bytes
-        if ($s =~ m#[\x00-\x1f\x80-\xff]#) {
-            $s = MIME::Words::encode_mimeword($s, 'Q', 'utf-8');
-        }
-        utf8::decode($s);
-        $out .= $s;
+    # This is unpleasant. Whitespace which separates two encoded-words is not
+    # significant, so we need to fold it in to one of them. Rather than having
+    # some complicated state-machine driven by words, just encode the whole
+    # line if it contains any non-ASCII characters.
+    utf8::encode($text); # turn to string of bytes
+    if ($text =~ m#[\x00-\x1f\x80-\xff]#) {
+        $text = MIME::Words::encode_mimeword($s, 'Q', 'utf-8');
     }
-    return $out;
+    utf8::decode($text);
+    return $text;
 }
 
 # format_email_address NAME ADDRESS
