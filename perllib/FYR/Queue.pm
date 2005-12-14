@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.170 2005-12-09 11:59:09 chris Exp $
+# $Id: Queue.pm,v 1.171 2005-12-14 12:17:06 francis Exp $
 #
 
 package FYR::Queue;
@@ -485,7 +485,7 @@ sub format_mimewords ($) {
     # line if it contains any non-ASCII characters.
     utf8::encode($text); # turn to string of bytes
     if ($text =~ m#[\x00-\x1f\x80-\xff]#) {
-        $text = MIME::Words::encode_mimeword($s, 'Q', 'utf-8');
+        $text = MIME::Words::encode_mimeword($text, 'Q', 'utf-8');
     }
     utf8::decode($text);
     return $text;
