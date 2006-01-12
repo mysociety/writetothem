@@ -25,7 +25,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.15 2005-12-07 18:06:16 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.16 2006-01-12 15:35:18 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -46,19 +46,27 @@ use mySociety::Util;
 sub help {
 print <<END
 
-Usage: test-run [OPTION}
+Usage: test-run [OPTION] [ACTION]...
+
+Actions are a list of tests, run if present in this order:
+    example - send example message successfully, and an example message blocked by ratty
+    cobrand - send example message via a cobrand site (AnimalAid)
+If you specify no actions, it will run all of them.
 
 Options are
     --verbose=n   Choose 0 (no progress), 1 (basic actions), 2 (full debug)
+    --multispawn=n Test concurrency by calling scripts this many times at once (default 1)
 
 END
 }
 
 # Parse command line
 our $verbose = 0; # currently 3 levels: 0, 1 and 2
+our $multispawn = 1;
 our $help;
 if (!GetOptions(
         'verbose=i' =>  \$verbose,
+        'multispawn=i' => \$multispawn,
         'help' =>               \$help
     )) {
     help();
@@ -68,6 +76,23 @@ if ($help) {
     help();
     exit(0);
 }
+our %action;
+foreach (@ARGV) {
+    if ($_ eq "example") {
+        $action{'example'} = 1;
+    } elsif ($_ eq "cobrand") {
+        $action{'cobrand'} = 1;
+    } else {
+        help();
+        print "Action '$_' not known\n";
+        exit(0);
+    }
+}
+if (scalar(@ARGV) == 0) {
+    $action{'example'} = 1;
+    $action{'cobrand'} = 1;
+}
+
 
 # Set up options
 our $base_url;
@@ -110,12 +135,18 @@ $wth->browser_get($base_url . "/test.php?error=1" );
 my $errors = $wth->log_watcher_get_errors();
 die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
 
-print "Sending example message...\n" if $verbose > 0;
-do_send_example_message();
-print "Testing ratty blocking message...\n" if $verbose > 0;
-do_send_blocked_message();
-print "Sending cobrand message...\n" if $verbose > 0;
-do_send_cobrand_message();
+if ($action{'example'}) {
+    print "Sending example message...\n" if $verbose > 0;
+    do_send_example_message();
+    print "Testing ratty blocking message...\n" if $verbose > 0;
+    # do_send_blocked_message depends on do_send_example_message having
+    # been already called, to populate the Ratty example fields table
+    do_send_blocked_message();
+}
+if ($action{'cobrand'}) {
+    print "Sending cobrand message...\n" if $verbose > 0;
+    do_send_cobrand_message();
+}
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
 
@@ -132,8 +163,9 @@ print "Everything completed successfully\n";
 
 # Call fyrqd for one pass
 sub call_fyrqd {
-    system("./fyrqd", "--debug", "--once", "--email", # $verbose > 1 ? qw(--verbose) : ()
-        ) and die "Failed to call fyrqd";
+    $wth->multi_spawn($multispawn, "./fyrqd --debug --once --email" 
+            # . ($verbose > 1 ? qw(--verbose) : ())
+        , $verbose) ;
 }
 
 # Change the date that all parts of WriteToThem think is today.  Call with no
@@ -166,7 +198,7 @@ sub send_message_to_rep {
     $fields->{writer_email} = email_n($who);
     
     my $start_url = $base_url;
-    $start_url .= "?cocode=testcode123" if ($cobrand eq "animalaid");
+    $start_url .= "?cocode=9" if ($cobrand eq "animalaid");
     $wth->browser_get($start_url);
     $wth->browser_check_contents("First, type your UK postcode:");
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep

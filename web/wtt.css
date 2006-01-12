@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.32 2005-12-07 18:22:54 francis Exp $
+ * $Id: wtt.css,v 1.33 2006-01-12 15:35:19 francis Exp $
  * 
  */
 
@@ -316,5 +316,13 @@ p#contactemail {
     background-color: #f88;
     border: 2px solid #d00;
     padding: 1em;
+}
+
+/* Box with notes for writing letters on cobranded site */
+#cobrand_letter_help h2 {
+    clear: both;
+}
+#cobrand_letter_help p {
+    margin-left: 1em;
 }
 

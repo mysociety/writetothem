@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.84 2005-12-07 16:42:14 francis Exp $
+ * $Id: write.php,v 1.85 2006-01-12 15:35:19 francis Exp $
  *
  */
 
@@ -153,9 +153,20 @@ function renderForm($form, $pageName)
     if ($fyr_values['who'] == 1702) {
         $prime_minister = true;
     }
+
+    $cobrand_letter_help = false;
+    global $cobrand;
+    if ($pageName == 'writeForm' && $cobrand) {
+        if ($cobrand == 'animalaid' && $fyr_values['cocode']) {
+            $cobrand_letter_help = file_get_contents("http://www.animalaiduk.com/functions/custom/action_snippet.php?id=" . $fyr_values['cocode']);
+            $cobrand_letter_help = str_replace('<h1', '<h2', $cobrand_letter_help);
+        }
+    }
+    
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form,
-            'date' => $fyr_date, 'prime_minister' => $prime_minister));
+            'date' => $fyr_date, 'prime_minister' => $prime_minister,
+            'cobrand_letter_help' => $cobrand_letter_help));
 
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);

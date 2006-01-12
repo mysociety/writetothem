@@ -39,7 +39,14 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 
 <? } ?>
 
+<? if ($values['cobrand_letter_help']) { ?>
+<div id="cobrand_letter_help">
+<?=$values['cobrand_letter_help']?>
+</div>
+<? } ?>
+
 <h2>Read this before writing your message</h2>
+
 <ul>
 	<li>Please be polite, concise and to the point.</li>
 	<li>By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.</li>
