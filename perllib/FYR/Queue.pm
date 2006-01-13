@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.174 2006-01-13 10:28:02 chris Exp $
+# $Id: Queue.pm,v 1.175 2006-01-13 10:32:52 chris Exp $
 #
 
 package FYR::Queue;
@@ -261,7 +261,7 @@ sub write ($$$$;$$) {
         # Check to see if message has already been posted
         my $start_lock_time = Time::HiRes::time();
         dbh()->do('lock table message');
-        if (dbh()->selectrow_array('select count(*) from message where id = ?', {}, $id) > 0) {
+        if (dbh()->selectrow_array('select id from message where id = ?', {}, $id)) {
             dbh()->rollback();
             throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
         }
