@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.175 2006-01-13 10:32:52 chris Exp $
+# $Id: Queue.pm,v 1.176 2006-01-13 11:10:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -258,59 +258,47 @@ sub write ($$$$;$$) {
 
         # XXX should also check that the text bits are valid UTF-8.
 
-        # Check to see if message has already been posted
-        my $start_lock_time = Time::HiRes::time();
-        dbh()->do('lock table message');
-        if (dbh()->selectrow_array('select id from message where id = ?', {}, $id)) {
-            dbh()->rollback();
-            throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
-        }
-
         # Queue the message.
-        dbh()->do(q#
-            insert into message (
-                id,
-                sender_name, sender_email, sender_addr, sender_phone,
-                sender_postcode, sender_ipaddr, sender_referrer,
-                recipient_id, recipient_name, recipient_type,
-                    recipient_email, recipient_fax,
-                    recipient_via,
-                message,
-                state,
-                created, laststatechange,
-                numactions, dispatched,
-                cobrand, cocode
-            ) values (
-                ?,
-                ?, ?, ?, ?, ?, ?, ?,
-                ?, ?, ?,
-                    ?, ?,
+        try {
+            dbh()->do(q#
+                insert into message (
+                    id,
+                    sender_name, sender_email, sender_addr, sender_phone,
+                    sender_postcode, sender_ipaddr, sender_referrer,
+                    recipient_id, recipient_name, recipient_type,
+                        recipient_email, recipient_fax,
+                        recipient_via,
+                    message,
+                    state,
+                    created, laststatechange,
+                    numactions, dispatched,
+                    cobrand, cocode
+                ) values (
                     ?,
-                ?,
-                'new',
-                ?, ?,
-                0, null,
-                ?, ?
-            )#, {},
-            $id,
-            (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
-            $recipient_id,
-                (map { $recipient->{$_} || undef } qw(name type email fax)),
-                $recipient->{via} ? 't' : 'f',
-            $text,
-            FYR::DB::Time(), FYR::DB::Time(),
-            $cobrand, $cocode);
+                    ?, ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?,
+                        ?, ?,
+                        ?,
+                    ?,
+                    'new',
+                    ?, ?,
+                    0, null,
+                    ?, ?
+                )#, {},
+                $id,
+                (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
+                $recipient_id,
+                    (map { $recipient->{$_} || undef } qw(name type email fax)),
+                    $recipient->{via} ? 't' : 'f',
+                $text,
+                FYR::DB::Time(), FYR::DB::Time(),
+                $cobrand, $cocode);
+        } catch mySociety::DBHandle::Error with {
+            # Assume this is a duplicate-insert error.
+            throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
+        };
 
-        # Commit here, because we don't want to hold the lock while doing the
-        # message abuse checks later (which call out to external resources).
-        # As it stands this is broken, because we want message creation and
-        # checking to be transactional. Probably the right thing to do is to
-        # create messages frozen and unfreeze them if the abuse check is
-        # negative, but it's also probably not worth worrying about.
         dbh()->commit();
-
-        my $end_lock_time = Time::HiRes::time();
-        warn sprintf("PID %d held lock on table message for %.3fs\n", $$, $end_lock_time - $start_lock_time);
 
         # Log creation of message
         my $logaddr = $sender->{address};
