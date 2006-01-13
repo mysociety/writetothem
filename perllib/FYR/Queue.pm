@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.172 2005-12-23 14:02:02 chris Exp $
+# $Id: Queue.pm,v 1.173 2006-01-13 10:15:09 chris Exp $
 #
 
 package FYR::Queue;
@@ -297,6 +297,14 @@ sub write ($$$$;$$) {
             $text,
             FYR::DB::Time(), FYR::DB::Time(),
             $cobrand, $cocode);
+
+        # Commit here, because we don't want to hold the lock while doing the
+        # message abuse checks later (which call out to external resources).
+        # As it stands this is broken, because we want message creation and
+        # checking to be transactional. Probably the right thing to do is to
+        # create messages frozen and unfreeze them if the abuse check is
+        # negative, but it's also probably not worth worrying about.
+        dbh()->commit();
 
         # Log creation of message
         my $logaddr = $sender->{address};
