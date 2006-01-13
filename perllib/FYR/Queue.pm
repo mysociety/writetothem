@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.176 2006-01-13 11:10:40 chris Exp $
+# $Id: Queue.pm,v 1.177 2006-01-13 11:10:59 chris Exp $
 #
 
 package FYR::Queue;
@@ -295,6 +295,7 @@ sub write ($$$$;$$) {
                 $cobrand, $cocode);
         } catch mySociety::DBHandle::Error with {
             # Assume this is a duplicate-insert error.
+            # XXX check by a select?
             throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
         };
 
