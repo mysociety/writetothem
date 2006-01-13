@@ -25,7 +25,7 @@
 # Admin pages
 # Via democratic services
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.16 2006-01-12 15:35:18 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.17 2006-01-13 09:15:54 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -55,14 +55,14 @@ If you specify no actions, it will run all of them.
 
 Options are
     --verbose=n   Choose 0 (no progress), 1 (basic actions), 2 (full debug)
-    --multispawn=n Test concurrency by calling scripts this many times at once (default 1)
+    --multispawn=n Test concurrency by calling scripts this many times at once (default 2)
 
 END
 }
 
 # Parse command line
 our $verbose = 0; # currently 3 levels: 0, 1 and 2
-our $multispawn = 1;
+our $multispawn = 2;
 our $help;
 if (!GetOptions(
         'verbose=i' =>  \$verbose,
