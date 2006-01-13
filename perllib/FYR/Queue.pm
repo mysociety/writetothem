@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.173 2006-01-13 10:15:09 chris Exp $
+# $Id: Queue.pm,v 1.174 2006-01-13 10:28:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -34,6 +34,7 @@ use MIME::Entity;
 use MIME::Words;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
+use Time::HiRes ();
 use Data::Dumper;
 
 use utf8;
@@ -258,8 +259,10 @@ sub write ($$$$;$$) {
         # XXX should also check that the text bits are valid UTF-8.
 
         # Check to see if message has already been posted
+        my $start_lock_time = Time::HiRes::time();
         dbh()->do('lock table message');
         if (dbh()->selectrow_array('select count(*) from message where id = ?', {}, $id) > 0) {
+            dbh()->rollback();
             throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
         }
 
@@ -305,6 +308,9 @@ sub write ($$$$;$$) {
         # create messages frozen and unfreeze them if the abuse check is
         # negative, but it's also probably not worth worrying about.
         dbh()->commit();
+
+        my $end_lock_time = Time::HiRes::time();
+        warn sprintf("PID %d held lock on table message for %.3fs\n", $$, $end_lock_time - $start_lock_time);
 
         # Log creation of message
         my $logaddr = $sender->{address};
