@@ -12,7 +12,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <?php } ?>
 </head>
 <body><a name="top" id="top"></a>
-<a title="Back to Animal Aid website" href="http://www.animalaid.org.uk/"><img id="chelt" alt="Return to www.animalaid.org.uk" src="http://www.animalaiduk.com/templates/aa/images/logo.gif"></a>
+<a title="Back to Animal Aid website" href="http://www.animalaid.org.uk/"><img id="cobrand_logo" alt="Return to www.animalaid.org.uk" src="http://www.animalaiduk.com/templates/aa/images/logo.gif"></a>
 <h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem.com<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';

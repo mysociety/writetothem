@@ -12,7 +12,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <?php } ?>
 </head>
 <body><a name="top" id="top"></a>
-<a title="Back to Cheltenham Council website" href="http://www.cheltenham.gov.uk/"><img id="chelt" alt="Return to www.cheltenham.gov.uk" src="http://www.cheltenham.gov.uk/libraries/images/logo.gif"></a>
+<a title="Back to Cheltenham Council website" href="http://www.cheltenham.gov.uk/"><img id="cobrand_logo" alt="Return to www.cheltenham.gov.uk" src="http://www.cheltenham.gov.uk/libraries/images/logo.gif"></a>
 <h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem.com<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';
