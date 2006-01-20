@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.29 2005-12-05 20:57:26 francis Exp $
+ * $Id: general-example,v 1.30 2006-01-20 12:30:52 francis Exp $
  * 
  */
 
@@ -31,11 +31,8 @@ define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/q
 define('OPTION_SMTP_SMARTHOST', 'localhost');
 
 // PostgreSQL database for FYR queue
-/*
-// Host and port for database, if it is on a remote machine.
-define('OPTION_FYR_QUEUE_DB_HOST', 'dbhost');
+define('OPTION_FYR_QUEUE_DB_HOST', 'localhost');
 define('OPTION_FYR_QUEUE_DB_PORT', '5432');
-*/
 define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
 define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
 define('OPTION_FYR_QUEUE_DB_PASS', '');
