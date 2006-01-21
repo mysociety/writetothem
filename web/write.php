@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.86 2006-01-20 12:24:33 francis Exp $
+ * $Id: write.php,v 1.87 2006-01-21 01:17:21 matthew Exp $
  *
  */
 
@@ -260,7 +260,7 @@ function submitFax() {
                 template_show_error("You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.");
             else
                 error_log("write.php msg_write error: " . $result->text);
-                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team@writetothem.com\">team@writetothem.com</a>.");
+                template_show_error("Sorry, an error has occured. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.");
         } else {
             /* Result is the name of a template page to be shown to the user.
              * XXX For the moment assume that we can just redirect to it. */
@@ -356,7 +356,7 @@ Sorry, we do not currently have contact details for this representative, and are
 them a message. We may have had details in the past, which have since proven to be erroneous. Please
 do let us know, although we'd be <em>really</em> grateful if you could spend five minutes on the phone
 to the Commons (020 7219 3000) or your Council, asking for contact details and feeding them on to us.
-Your patience, in the meantime, is greatly appreciated. Please <a href="mailto:team@writetothem.com">email us</a> to
+Your patience, in the meantime, is greatly appreciated. Please <a href="mailto:team&#64;writetothem.com">email us</a> to
 let us know &#8212; particularly when you've got a fax number or an email address for your representative. Details:
 EOF
             .  htmlspecialchars($success->text)
@@ -376,7 +376,7 @@ EOF
             template_show_error(<<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name]. Please <a href="mailto:team@writetothem.com">email
+$fyr_voting_area[name]. Please <a href="mailto:team&#64;writetothem.com">email
 us</a> to let us know what you think about this.
 EOF
                 );
