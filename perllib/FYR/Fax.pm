@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.23 2005-09-21 13:05:22 chris Exp $
+# $Id: Fax.pm,v 1.24 2006-01-25 11:01:03 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -133,7 +133,8 @@ sub text_dimensions ($$) {
                         $size, 0, 0, 0,
                         $text,
                         GD_TEXT_OPTIONS
-                    );
+                    )
+        || throw FYR::Fax::SoftError("unable to compute text bounds (font missing?)");
     return ($bounds[2] - $bounds[0], int(abs($bounds[1] - $bounds[4]) * LINE_ADVANCE));
 }
 
