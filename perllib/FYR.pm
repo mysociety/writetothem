@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.12 2005-12-02 18:36:30 francis Exp $
+# $Id: FYR.pm,v 1.13 2006-02-01 11:51:28 chris Exp $
 #
 
 use strict;
@@ -49,7 +49,7 @@ package FYR::DB;
 
 use mySociety::Config;
 use mySociety::DBHandle qw(dbh);
-use mySociety::Util;
+use mySociety::Util qw(random_bytes);
 use DBI;
 
 BEGIN {
@@ -58,13 +58,18 @@ BEGIN {
             User => mySociety::Config::get('FYR_QUEUE_DB_USER'),
             Password => mySociety::Config::get('FYR_QUEUE_DB_PASS'),
             Host => mySociety::Config::get('FYR_QUEUE_DB_HOST', undef),
-            Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef)
+            Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef),
+            OnFirstUse => sub {
+                if (!dbh()->selectrow_array('select secret from secret')) {
+                    dbh()->{RaiseError} = 0;
+                    dbh()->do('insert into secret (secret) values (?)',
+                                {}, unpack('h*', random_bytes(32)));
+                    dbh()->commit();
+                    dbh()->{RaiseError} = 1;
+                }
+            }
         );
 
-    if (!dbh()->selectrow_array('select secret from secret for update of secret')) {
-        dbh()->do('insert into secret (secret) values (?)', {}, unpack('h*', mySociety::Util::random_bytes(32)));
-    }
-    dbh()->commit();
 }
 
 =item secret
