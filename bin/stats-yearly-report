@@ -1,0 +1,315 @@
+#!/usr/bin/perl -w
+#
+# stats-yearly-report:
+#
+# Creates statistics for given calendar year, which is the only argument.  Run
+# at least four weeks after end of the year, so questionnaire responses have
+# had time to come in.
+
+# Notes and caveats:
+#
+# - Includes despatched messages which were sent within the calendar year.
+#   Only messages which were delivered (fax successful, email had no bounce)
+#   are counted.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.1 2006-02-08 00:53:47 francis Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use CGI;
+use DateTime;
+use DateTime::Format::Strptime;
+use HTML::Entities;
+use Data::Dumper;
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use mySociety::DaDem;
+use mySociety::MaPit;
+use mySociety::VotingArea;
+
+use FYR;
+
+# Parameters
+my $year = shift;
+die "enter a reasonable year as first argument" if !$year || $year < 2000 || $year > 5000;
+my $area_type = 'WMC';
+
+my $start_epoch = DateTime->new( year=>$year, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
+my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
+# We choose 4 weeks, because 2 weeks until first questionnaire, another week before reminder, then give
+# at least another week for reponse and safety margin.
+die "Need to wait 4 weeks into year before running to be sure have all questionnaire info" if ($end_epoch > time() - 86400 * 28);
+
+print STDERR "year: $year epochs of calculation: $start_epoch => $end_epoch\n";
+
+# Need to obtain a list of MP/constituency names and then pick out messages by those.
+print STDERR "get constituency IDs... ";
+my $areaids = mySociety::MaPit::get_areas_by_type($area_type); # array of ids of areas
+print STDERR "done\n";
+print STDERR "get constituency info... ";
+my %areainfo = %{mySociety::MaPit::get_voting_areas_info($areaids)}; # hash from area id to hash of info about area
+print STDERR "done\n";
+
+print STDERR "get representatives IDs... ";
+my $repids = mySociety::DaDem::get_representatives([keys %areainfo], 1); # hash from area to reps for that area
+print STDERR "done\n";
+
+my @allreps;
+my $reptoarea; # hash from rep id to area represented
+foreach (keys %$repids) {
+    if (!@{$repids->{$_}}) {
+        print STDERR "area #$_ ($areainfo{$_}->{name}) has no representative\n";
+    } else {
+        foreach my $repid (@{$repids->{$_}}) {
+            if ($repid !~ /^[1-9]\d*$/) {
+                print STDERR "area #$_ ($areainfo{$_}->{name}) has bad representative ID $repid\n";
+            }
+            push @allreps, $repid;
+            $reptoarea->{$repid} = $_;
+        }
+   }
+}
+
+print STDERR "get representatives info... ";
+my %repinfo = %{mySociety::DaDem::get_representatives_info(\@allreps)};
+print STDERR "done\n";
+
+# Questionnaire answers: question_id 
+#   #0 is "did you get a response?"; 
+#   #1 is "is this your first time?".
+
+print STDERR "get message counts... ";
+my $stn = dbh()->prepare("
+            select count(id), recipient_id
+            from message
+            where recipient_type = '$area_type'
+                and state in ('sent', 'finished')
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?
+            group by recipient_id");
+
+my %r;
+$stn->execute($start_epoch, $end_epoch, time() - 86400 * 28);
+while (my ($n, $repid) = $stn->fetchrow_array()) {
+    $r{$repid} = [$n, 0, 0, 0, 0];
+}
+print STDERR "done\n";
+
+print STDERR "get questionnaire responses... ";
+my $stq = dbh()->prepare("
+            select distinct on(message_id, question_id)
+                message_id, question_id, answer, recipient_id
+            from questionnaire_answer, message
+            where questionnaire_answer.message_id = message.id
+                and recipient_type = '$area_type'
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?");
+$stq->execute($start_epoch, $end_epoch, time() - 86400 * 28);
+while (my ($msgid, $qid, $answer, $repid) = $stq->fetchrow_array()) {
+    if ($qid == 0) {
+        ++$r{$repid}->[2];
+    } elsif ($qid == 1) {
+        ++$r{$repid}->[4];
+    }
+    if ($qid == 0 && $answer eq 'yes') {
+        ++$r{$repid}->[1];
+    } elsif ($qid == 1 && $answer eq 'yes') {
+        ++$r{$repid}->[3];
+    }
+}
+print STDERR "done\n";
+
+print STDERR "get failed message counts... ";
+my $stf = dbh()->prepare("
+            select count(id), recipient_id
+            from message
+            where recipient_type = '$area_type'
+                and state not in ('sent', 'finished')
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?
+            group by recipient_id");
+
+my %fails_after_dispatch;
+$stf->execute($start_epoch, $end_epoch, time() - 86400 * 28);
+while (my ($n, $repid) = $stf->fetchrow_array()) {
+    $fails_after_dispatch{$repid} = $n;
+}
+print STDERR "done\n";
+
+
+# Print out results
+my $total_sent = 0;
+my $total_responded = 0;
+my $total_responded_outof = 0;
+my $total_firsttime = 0;
+my $total_firsttime_outof = 0;
+my $total_fails_after_dispatch = 0;
+foreach my $repid (@allreps) {
+    my $r_info = $repinfo{$repid};
+    my $areaid = $reptoarea->{$repid};
+    my $a_info = $areainfo{$areaid};
+    #print Dumper($r_info); print Dumper($a_info); exit;
+
+    my $f_after_dispatch = $fails_after_dispatch{$repid};
+    $f_after_dispatch = 0 if !$f_after_dispatch;
+
+    my $q_data;
+    if (!exists($r{$repid})) {
+        # We have no info about messages of them...
+next; # faitemp
+
+        # give up if they are also deleted currently
+        next if ($r_info->{'deleted'} eq '1');
+
+        # otherwise, set to nothing
+        $q_data = [0, 0, 0, 0, 0];
+    } else {
+        $q_data = $r{$repid};
+    }
+
+    print sprintf("$repid deleted%s %s (%s) of %s sentmsgs: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n", 
+            $r_info->{'deleted'},
+            $r_info->{'name'}, $r_info->{'party'}, $a_info->{'name'},
+            $q_data->[0], $f_after_dispatch,
+            $q_data->[1], $q_data->[2], $q_data->[3], $q_data->[4]);
+    die if $a_info->{'type'} ne $area_type; # assertion
+
+    $total_sent += $q_data->[0];
+    $total_responded += $q_data->[1];
+    $total_responded_outof += $q_data->[2];
+    $total_firsttime += $q_data->[3];
+    $total_firsttime_outof += $q_data->[4];
+    $total_fails_after_dispatch += $f_after_dispatch;
+}
+
+print sprintf ("Totals: sentmsg: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n",
+    $total_sent, $total_fails_after_dispatch, $total_responded, $total_responded_outof, $total_firsttime, $total_firsttime_outof);
+
+#foreach my $area (values %areainfo) {
+#    next unless ($area->{mp});
+#    $r{$area->{mp}->{id}} ||= [0, 0, 0, 0];
+#}
+
+=cut
+
+#    my $epoch = DateTime->from_epoch(epoch => 0, time_zone => 'Europe/London');
+#    my $now = DateTime->now(time_zone => 'Europe/London');
+#    my $today = $now->clone()->truncate(to => 'day');
+#    my $yesterday = $today->clone()->subtract(days => 1);
+#    my $thisweek = $today->clone()->truncate(to => 'week');
+
+print STDERR "get MP info... ";
+my $reps = mySociety::DaDem::get_representatives_info([map { $_->[0] } grep { @$_ == 1 } values %$repids]);
+print STDERR "done\n";
+foreach my $areaid (keys %wmc) {
+    if (@{$repids->{$areaid}}) {
+        $wmc{$areaid}->{mp} = $reps->{$repids->{$areaid}->[0]};
+        $wmc{$areaid}->{mp}->{id} = $repids->{$areaid}->[0];
+    }
+}
+
+# Don't want to use v short time periods.
+@timeperiods = (
+        ['six months to date', DateTime->now()->subtract(months => 6), DateTime->now()],
+        ['year to date',        DateTime->now()->subtract(years => 1), DateTime->now(, DateTime->now())]
+    );
+
+foreach (@timeperiods) {
+    print STDERR "$_->[0] $_->[1] to $_->[2]\n";
+}
+
+# List of references to hashes of constituency ID to results for each time
+# period.
+my @results = ( );
+
+# Questionnaire answers: question_id #0 is "did you get a response?"; #1 is
+# "is this your first time?".
+my $stn = dbh()->prepare("
+            select count(id), recipient_id
+            from message
+            where recipient_type = 'WMC'
+                and state in ('sent', 'finished')
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?
+            group by recipient_id");
+my $stq = dbh()->prepare("
+            elect distinct on(message_id, question_id)
+                message_id, question_id, answer, recipient_id
+            from questionnaire_answer, message
+            where questionnaire_answer.message_id = message.id
+                and recipient_type = 'WMC'
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?");
+
+foreach (@timeperiods) {
+    my ($name, $st, $en) = @$_;
+    print STDERR "get message counts for $name... ";
+    # Total # messages
+    my %r;
+    $stn->execute($st->epoch(), $en->epoch(), time() - 86400 * 14);
+    while (my ($n, $mp) = $stn->fetchrow_array()) {
+        $r{$mp} = [$n, 0, 0, 0];
+    }
+    print STDERR "done\n";
+    
+    print STDERR "get questionnaire responses for $name... ";
+    $stq->execute($st->epoch(), $en->epoch(), time() - 86400 * 14);
+    my %mm;
+    while (my ($msgid, $qid, $answer, $mp) = $stq->fetchrow_array()) {
+        if (!exists($mm{$msgid})) {
+            ++$r{$mp}->[1];
+            $mm{$msgid} = 1;
+        }
+        if ($qid == 0 && $answer eq 'yes') {
+            ++$r{$mp}->[2];
+        } elsif ($qid == 1 && $answer eq 'yes') {
+            ++$r{$mp}->[3];
+        }
+    }
+    print STDERR "done\n";
+
+    foreach my $area (values %wmc) {
+        next unless ($area->{mp});
+        $r{$area->{mp}->{id}} ||= [0, 0, 0, 0];
+    }
+
+    push(@results, \%r);
+}
+
+foreach my $areaid (sort { $wmc{$a}->{name} cmp $wmc{$b}->{name} } keys %wmc) {
+    my $area = $wmc{$areaid};
+    next unless (exists($area->{mp}));
+    print $q->Tr($q->td([
+            encode_entities($area->{mp}->{name}),
+            encode_entities($area->{mp}->{party}),
+            encode_entities($area->{name}),
+            map {
+                my $x = $results[$_]->{$area->{mp}->{id}};
+                if ($x->[0] == 0) {
+                    qw(- - - -)
+                } else {
+                    ($x->[0],
+                    $x->[1] . sprintf("<br />%.1f%%", 100 * $x->[1] / $x->[0]),
+                    $x->[2] . sprintf("<br />%.1f%%", 100 * $x->[2] / $x->[0]),
+                    $x->[3] . sprintf("<br />%.1f%%", 100 * $x->[3] / $x->[0]))
+                }
+            } (0 .. $#results)
+        ]));
+}
+
+

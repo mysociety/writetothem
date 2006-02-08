@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.45 2005-12-07 16:42:14 francis Exp $
+ * $Id: queue.php,v 1.46 2006-02-08 00:53:48 francis Exp $
  *
  */
 
@@ -240,7 +240,11 @@ function msg_admin_message_events($id, $important = null) {
 
     Messages which contain the string in an item in their message log.
     Deliberately doesn't strip spaces or punctuation, and looks for whole
-    strings, so you can search for ' rule #6 ' and the like. */
+    strings, so you can search for ' rule #6 ' and the like.
+
+  * type
+
+    All messages which were sent to representative of type PARAMS->{type}.  */
 function msg_admin_get_queue($which, $params) {
     global $msg_client;
     $params = func_get_args();

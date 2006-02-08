@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.177 2006-01-13 11:10:59 chris Exp $
+# $Id: Queue.pm,v 1.178 2006-02-08 00:53:47 francis Exp $
 #
 
 package FYR::Queue;
@@ -1505,13 +1505,17 @@ Messages which contain the string in an item in their message log.  Deliberately
 doesn't strip spaces or punctuation, and looks for whole strings, so you can
 search for ' rule #6 ' and the like.
 
+=item type
+
+All messages which were sent to representative of type PARAMS->{type}. 
+
 =back
 
 =cut
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch);
+    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch type);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
@@ -1591,6 +1595,9 @@ sub admin_get_queue ($$) {
         push @params, @$logmatches;
         $where = q#where id in (# . join(',', map { '?' } @$logmatches) . q#) order by created desc#;
         $where = q#where 1 = 0# if (scalar(@$logmatches) == 0);
+    } elsif ($filter eq 'type') {
+        push @params, $params->{query};
+        $where = "where recipient_type = ?";
     }
     my $sth = dbh()->prepare("
             select *, length(message) as message_length from message $where
