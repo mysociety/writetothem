@@ -17,7 +17,7 @@
 #
 
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.1 2006-02-08 00:53:47 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.2 2006-02-08 10:15:00 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -165,16 +165,27 @@ foreach my $repid (@allreps) {
     my $a_info = $areainfo{$areaid};
     #print Dumper($r_info); print Dumper($a_info); exit;
 
+    if (!$r_info->{whencreated} || !$r_info->{whenlastedited}) {
+        print Dumper($r_info);
+        die "need whencreated and whenlastedited for all data";
+    }
+    if ($r_info->{whencreated} > $r_info->{whenlastedited}) {
+        print Dumper($r_info);
+        die "whencreated > whenlastedited";
+    }
+
     my $f_after_dispatch = $fails_after_dispatch{$repid};
     $f_after_dispatch = 0 if !$f_after_dispatch;
 
     my $q_data;
     if (!exists($r{$repid})) {
         # We have no info about messages of them...
-next; # faitemp
 
-        # give up if they are also deleted currently
-        next if ($r_info->{'deleted'} eq '1');
+        # give up if they were created after the end time range
+        next if ($r_info->{'whencreated'} > $end_epoch);
+        # give up if they are deleted currently
+        # (the whenlastedited is to keep items that were deleted in the middle of the time range)
+        next if ($r_info->{'deleted'} eq '1' && $r_info->{'whenlastedited'} < $start_epoch);
 
         # otherwise, set to nothing
         $q_data = [0, 0, 0, 0, 0];
