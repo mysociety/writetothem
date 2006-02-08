@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.87 2006-01-21 01:17:21 matthew Exp $
+ * $Id: write.php,v 1.88 2006-02-08 00:52:13 francis Exp $
  *
  */
 
@@ -357,7 +357,7 @@ them a message. We may have had details in the past, which have since proven to 
 do let us know, although we'd be <em>really</em> grateful if you could spend five minutes on the phone
 to the Commons (020 7219 3000) or your Council, asking for contact details and feeding them on to us.
 Your patience, in the meantime, is greatly appreciated. Please <a href="mailto:team&#64;writetothem.com">email us</a> to
-let us know &#8212; particularly when you've got a fax number or an email address for your representative. Details:
+let us know &#8212; particularly when you've got a fax number or an email address for your representative. Details: 
 EOF
             .  htmlspecialchars($success->text)
         );
