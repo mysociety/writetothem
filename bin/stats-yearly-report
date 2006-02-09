@@ -19,8 +19,11 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
+# TODO:
+# Export as PHP?
+# export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.4 2006-02-08 23:43:30 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.5 2006-02-09 19:05:06 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -35,6 +38,7 @@ use DateTime;
 use DateTime::Format::Strptime;
 use HTML::Entities;
 use Data::Dumper;
+use POSIX qw(strftime);
 
 use mySociety::Config;
 BEGIN {
@@ -47,10 +51,13 @@ use mySociety::VotingArea;
 
 use FYR;
 
-# Parameters
+# Configurable parameters
 my $year = shift;
 die "enter a reasonable year as first argument" if !$year || $year < 2000 || $year > 5000;
 my $area_type = 'WMC';
+
+############################################################################
+# Extract basic data from MaPit/DaDem
 
 my $start_epoch = DateTime->new( year=>$year, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
@@ -67,11 +74,9 @@ print STDERR "done\n";
 print STDERR "get constituency info... ";
 my %areainfo = %{mySociety::MaPit::get_voting_areas_info($areaids)}; # hash from area id to hash of info about area
 print STDERR "done\n";
-
 print STDERR "get representatives IDs... ";
 my $repids = mySociety::DaDem::get_representatives([keys %areainfo], 1); # hash from area to reps for that area
 print STDERR "done\n";
-
 my @allreps;
 my $reptoarea; # hash from rep id to area represented
 foreach (keys %$repids) {
@@ -82,15 +87,119 @@ foreach (keys %$repids) {
             if ($repid !~ /^[1-9]\d*$/) {
                 print STDERR "area #$_ ($areainfo{$_}->{name}) has bad representative ID $repid\n";
             }
+
             push @allreps, $repid;
             $reptoarea->{$repid} = $_;
         }
    }
 }
-
 print STDERR "get representatives info... ";
 my %repinfo = %{mySociety::DaDem::get_representatives_info(\@allreps)};
 print STDERR "done\n";
+@allreps = grep {
+    my $repid = $_;
+    my $r_info = $repinfo{$repid};
+
+    # TODO: make the detection of edits work for edits that happened at creation
+    die Dumper($r_info) . "only editor was a script, and tests below won't work\n" if ($r_info->{'last_editor'} eq "import" || $r_info->{'last_editor'} eq "dadem_csv_load") && $r_info->{'edit_times'} == 1;
+
+    if (!$r_info->{whencreated} || !$r_info->{whenlastedited}) {
+        die Dumper($r_info) . "\nneed whencreated and whenlastedited for all data";
+    }
+    if ($r_info->{whencreated} > $r_info->{whenlastedited}) { 
+        # This happens with old data for whencreated that had to be recovered from backups
+        $r_info->{whencreated} = $r_info->{whenlastedited};
+    }
+
+    ($r_info->{whencreated} > $end_epoch) ? 0 : 1
+} @allreps;
+
+#@allreps = @allreps[0 .. 5]; # FAI temp debug
+
+############################################################################
+# Calculate intervals
+
+print STDERR "get history... ";
+#my $repid = 1958; #1867 
+my $allintervals;
+foreach my $repid (@allreps) {
+    my @history = @{mySociety::DaDem::get_representative_history($repid)};
+    my @intervals;
+    my $last_h;
+    my $on_first = 1;
+    # convert history to intervals
+    foreach my $h (@history) {
+        if ($last_h) {
+            my $interval_info;
+            $interval_info->{'from'} = $last_h->{'whenedited'};
+            $interval_info->{'to'} = $h->{'whenedited'};
+            if ($interval_info->{'from'} > $interval_info->{'to'}) {
+                if ($on_first) {
+                    # first interval can be out of order due to bad data
+                    $interval_info->{'from'} = $interval_info->{'to'};
+                } else {
+                    die "$repid has out-of-order interval that is not first";
+                }
+            }
+            $interval_info->{'valid_method'} = $last_h->{'valid_method'};
+            $interval_info->{'method'} = $last_h->{'method'};
+            $interval_info->{'fax'} = $last_h->{'fax'};
+            $interval_info->{'email'} = $last_h->{'email'};
+            push @intervals, $interval_info;
+            my $on_first = 0;
+        }
+        $last_h = $h;
+    }
+    if ($last_h->{'deleted'} != 1) {
+            my $interval_info;
+            $interval_info->{'from'} = $last_h->{'whenedited'};
+            $interval_info->{'to'} = time();
+            die if ($interval_info->{'from'} > $interval_info->{'to'});
+            $interval_info->{'valid_method'} = $last_h->{'valid_method'};
+            $interval_info->{'method'} = $last_h->{'method'};
+            $interval_info->{'fax'} = $last_h->{'fax'};
+            $interval_info->{'email'} = $last_h->{'email'};
+            push @intervals, $interval_info;
+    }
+    # clamp to our range, and strip intervals that were out of range
+    map { 
+        $_->{'from'} = $start_epoch if $_->{'from'} < $start_epoch; 
+        $_->{'to'} = $end_epoch if $_->{'to'} > $end_epoch; 
+    } @intervals;
+    @intervals = grep { $_->{'from'} < $_->{'to'} } @intervals;
+    my $stqq = dbh()->prepare("
+                select distinct on(message_id, question_id)
+                    message_id, question_id, answer, recipient_id
+                from questionnaire_answer, message
+                where questionnaire_answer.message_id = message.id
+                    and recipient_type = '$area_type'
+                    and dispatched >= ? and dispatched < ?
+                    and dispatched < $end_epoch and recipient_id = ?");
+    foreach my $interval_info (@intervals) {
+        $stqq->execute($interval_info->{'from'}, $interval_info->{'to'}, $repid);
+        my $rr = [0,0,0,0];
+        while (my ($msgid, $qid, $answer, $repid) = $stqq->fetchrow_array()) {
+            if ($qid == 0) {
+                ++$rr->[1];
+            } elsif ($qid == 1) {
+                ++$rr->[3];
+            }
+            if ($qid == 0 && $answer eq 'yes') {
+                ++$rr->[0];
+            } elsif ($qid == 1 && $answer eq 'yes') {
+                ++$rr->[2];
+            }
+        }
+        $interval_info->{'questionnaire'} = $rr;
+    }
+
+    $allintervals->{$repid} = \@intervals;
+}
+print STDERR "done\n";
+#print Dumper($allintervals);
+
+############################################################################
+# Fill in message counts and questionnaire answers
 
 # Questionnaire answers: question_id 
 #   #0 is "did you get a response?"; 
@@ -106,36 +215,59 @@ my $stn = dbh()->prepare("
                 and dispatched < ?
             group by recipient_id");
 
-my %r;
+my %sent_messages;
 $stn->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 while (my ($n, $repid) = $stn->fetchrow_array()) {
-    $r{$repid} = [$n, 0, 0, 0, 0];
+    $sent_messages{$repid} = $n;
 }
 print STDERR "done\n";
 
 print STDERR "get questionnaire responses... ";
 my $stq = dbh()->prepare("
             select distinct on(message_id, question_id)
-                message_id, question_id, answer, recipient_id
+                message_id, dispatched, question_id, answer, recipient_id
             from questionnaire_answer, message
             where questionnaire_answer.message_id = message.id
                 and recipient_type = '$area_type'
                 and dispatched >= ? and dispatched < ?
                 and dispatched < ?");
 $stq->execute($start_epoch, $end_epoch, time() - 86400 * 28);
-while (my ($msgid, $qid, $answer, $repid) = $stq->fetchrow_array()) {
+my %r;
+while (my ($msgid, $dispatched, $qid, $answer, $repid) = $stq->fetchrow_array()) {
+    my $intervals = $allintervals->{$repid};
+#    die "intervals for $repid not found" 
+    next if !defined($intervals); # FAI temp, should be die with all reps
+    my $found = 0;
+    foreach my $interval (@$intervals) {
+        if ($interval->{'from'} <= $dispatched && $dispatched < $interval->{'to'} ) {
+            warn Dumper($repinfo{$repid}) . Dumper($intervals) . "matched two intervals rep $repid dispatched $dispatched " if $found;
+            $found = 1;
+            if ($qid == 0) {
+                ++$interval->{'r'}->[1];
+            } elsif ($qid == 1) {
+                ++$interval->{'r'}->[3];
+            }
+            if ($qid == 0 && $answer eq 'yes') {
+                ++$interval->{'r'}->[0];
+            } elsif ($qid == 1 && $answer eq 'yes') {
+                ++$interval->{'r'}->[2];
+            }
+        }
+    }
+    warn Dumper($repinfo{$repid}) . Dumper($intervals) . "matched no interval rep $repid dispatched $dispatched " if !$found;
     if ($qid == 0) {
-        ++$r{$repid}->[2];
+        ++$r{$repid}->[1];
     } elsif ($qid == 1) {
-        ++$r{$repid}->[4];
+        ++$r{$repid}->[3];
     }
     if ($qid == 0 && $answer eq 'yes') {
-        ++$r{$repid}->[1];
+        ++$r{$repid}->[0];
     } elsif ($qid == 1 && $answer eq 'yes') {
-        ++$r{$repid}->[3];
+        ++$r{$repid}->[2];
     }
 }
 print STDERR "done\n";
+#print Dumper($allintervals);
 
 print STDERR "get failed message counts... ";
 my $stf = dbh()->prepare("
@@ -170,8 +302,9 @@ while (my ($n, $repid) = $stnd->fetchrow_array()) {
 }
 print STDERR "done\n";
 
-
+############################################################################
 # Print out results
+
 my $total_sent = 0;
 my $total_responded = 0;
 my $total_responded_outof = 0;
@@ -184,64 +317,53 @@ foreach my $repid (@allreps) {
     my $a_info = $areainfo{$areaid};
     #print Dumper($r_info); print Dumper($a_info); exit;
 
-    # TODO: make the detection of edits work for edits that happened at creation
-    die Dumper($r_info) . "only editor was a script, and tests below won't work\n" if ($r_info->{'last_editor'} eq "import" || $r_info->{'last_editor'} eq "dadem_csv_load") && $r_info->{'edit_times'} == 1;
-
-    if (!$r_info->{whencreated} || !$r_info->{whenlastedited}) {
-        die Dumper($r_info) . "\nneed whencreated and whenlastedited for all data";
-    }
-    if ($r_info->{whencreated} > $r_info->{whenlastedited}) { 
-        # This happens with old data for whencreated that had to be recovered from backups
-        $r_info->{whencreated} = $r_info->{whenlastedited};
-    }
-
     my $f_after_dispatch = $fails_after_dispatch{$repid};
     $f_after_dispatch = 0 if !$f_after_dispatch;
     my $n_dispatched = $not_dispatched{$repid};
     $n_dispatched = 0 if !$n_dispatched;
 
-    my $q_data;
-    if (!exists($r{$repid})) {
-        # We have no info about messages of them...
-
-        # give up if they were created after the end time range
-        next if ($r_info->{'whencreated'} > $end_epoch);
-        # give up if they are deleted currently
-        # (the whenlastedited is to keep items that were deleted in the middle of the time range)
-        next if ($r_info->{'deleted'} eq '1' && $r_info->{'whenlastedited'} < $start_epoch);
-
-        # otherwise, set to nothing
-        $q_data = [0, 0, 0, 0, 0];
-    } else {
-        $q_data = $r{$repid};
-    }
+    my $q_data = $r{$repid};
 
     print sprintf("repid$repid %s (%s) of %s 
     sent-success:%d sent-fail:%d not-sent(approx):%d
     Qresponded:%d/%d Qfirsttime:%d/%d
     deleted%s edittimes:%d-%s-%s \n", 
             $r_info->{'name'}, $r_info->{'party'}, $a_info->{'name'},
-            $q_data->[0], $f_after_dispatch, $n_dispatched,
-            $q_data->[1], $q_data->[2], $q_data->[3], $q_data->[4],
+            $sent_messages{$repid}, $f_after_dispatch, $n_dispatched,
+            $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
             $r_info->{'deleted'}, 
             $r_info->{'edit_times'}, $r_info->{'last_editor'}, 
             $r_info->{'method'}
             );
     die if $a_info->{'type'} ne $area_type; # assertion
 
-    $total_sent += $q_data->[0];
-    $total_responded += $q_data->[1];
-    $total_responded_outof += $q_data->[2];
-    $total_firsttime += $q_data->[3];
-    $total_firsttime_outof += $q_data->[4];
+    my $upto = undef;
+    # pretty display of intervals for one MP
+    print "    ";
+    foreach my $interval (@{$allintervals->{$repid}}) {
+        if ($upto) {
+            die "internal error: ranges should meet" if ($upto != $interval->{'from'});
+        } else {
+            print strftime("(%d %b %Y)", localtime($interval->{'from'}));
+        }
+        print sprintf("<v%sQr%d/%d>", 
+                $interval->{'valid_method'}, 
+                $interval->{'r'}->[0], $interval->{'r'}->[1], 
+        );
+        print strftime("(%d %b %Y)", localtime($interval->{'to'}));
+
+        $upto = $interval->{'to'};
+    }
+    print "\n";
+
+    $total_sent += $sent_messages{$repid};
+    $total_responded += $q_data->[0];
+    $total_responded_outof += $q_data->[1];
+    $total_firsttime += $q_data->[2];
+    $total_firsttime_outof += $q_data->[3];
     $total_fails_after_dispatch += $f_after_dispatch;
 }
 
 print sprintf ("Totals: success-sentmsg: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n",
     $total_sent, $total_fails_after_dispatch, $total_responded, $total_responded_outof, $total_firsttime, $total_firsttime_outof);
-
-#foreach my $area (values %areainfo) {
-#    next unless ($area->{mp});
-#    $r{$area->{mp}->{id}} ||= [0, 0, 0, 0];
-#}
 
