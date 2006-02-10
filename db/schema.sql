@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.32 2005-12-07 16:42:14 francis Exp $
+-- $Id: schema.sql,v 1.33 2006-02-10 17:27:58 francis Exp $
 --
 
 set client_min_messages to error;
@@ -256,74 +256,4 @@ create table message_bounce (
     whenreceived integer not null,
     bouncetext text not null
 );
-
---
--- Statistical reports
---
-
--- Each report covers a certain period of time and contains a number of
--- sections. Each section contains a table of information about
--- representatives or categories of representatives.
-create table report (
-    id serial primary key,
-    -- The period covered.
-    start_date date not null,
-    end_date date not null,
-    title text not null,
-    description text not null
-);
-
-create table section (
-    id serial primary key,
-    report_id integer not null references report(id),
-    title text not null,
-    description text not null,
-    variable text not null
-);
-
-create table report_row (
-    id serial primary key,
-    section_id integer not null references section(id),
-    -- Description of the value.
-    what text not null,
-    -- The number of individuals described in this row. For instance, 646 for
-    -- "all MPs", or 1 for "Tony Blair".
-    number_of_individuals integer not null default(1),
-    -- The representative ID and area ID, if it covers a single representative.
-    representative_id integer,
-    area_id integer,
-    -- Name or description of representative ("Tony Blair" or "all MPs").
-    representative_name text not null,
-        -- XXX should have a collating name here so that we can sort the things
-        -- in a manner that doesn't make us look like total muppets, but DaDem
-        -- doesn't supply data in this form, so that's hard.
-    -- Name or description of areas covered ("Sedgfield" or "constituencies in
-    -- the UK").
-    area_name text not null,
-    -- If all representatives covered are from a single party, name it here
-    -- ("Labour" or null).
-    representative_party text,
-    -- The type of representative covered, or null if it covers more than one
-    -- type.
-    representative_type char(3),
-    -- Actual value of the data.
-    value double precision not null,
-    -- Optional min/max and standard deviation.
-    min double precision,
-    max double precision,
-    stddev double precision
-);
-
--- Create a bunch of indices on this, partly for looking things up, and partly
--- so that we can sort on things.
-create index report_row_section_id_idx
-    on report_row(section_id);
-create index report_row_section_id_area_name_idx
-    on report_row(section_id, area_name);
-create index report_row_section_id_representative_party_idx
-    on report_row(section_id, representative_party);
-create index report_row_section_id_representative_type_idx
-    on report_row(section_id, representative_type);
-create index report_row_section_id_value_idx
-    on report_row(section_id, value);
 
