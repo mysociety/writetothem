@@ -22,7 +22,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.6 2006-02-10 04:04:01 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.7 2006-02-10 11:00:56 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -121,7 +121,7 @@ print STDERR "done\n";
 
 (@allreps = @allreps[0 .. $debug_fewer_reps - 1]) if $debug_fewer_reps;
 
-print Dumper(\@allreps);
+#print Dumper(\@allreps);
 
 ############################################################################
 # Calculate intervals
