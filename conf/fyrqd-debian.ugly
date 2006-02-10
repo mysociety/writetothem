@@ -5,13 +5,14 @@
 NAME=!!(*= $daemon_name *)!!
 DAEMON=/data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/fyrqd
 PIDFILE=/data/vhost/!!(*= $vhost *)!!/fyrqd.pid
+DUSER=!!(*= $user *)!!
 
 trap "" 1
 
 case "$1" in
   start)
     echo -n "Starting WriteToThem queue daemon: $NAME"
-    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON > /dev/null
+    start-stop-daemon --start --pidfile $PIDFILE --chuid $DUSER --exec $DAEMON > /dev/null
     ;;
 
   stop)
@@ -22,7 +23,7 @@ case "$1" in
   restart)
     echo -n "Restarting WriteToThem queue daemon: $NAME"
     start-stop-daemon --stop --pidfile $PIDFILE --oknodo
-    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON > /dev/null
+    start-stop-daemon --start --pidfile $PIDFILE --chuid $DUSER --exec $DAEMON > /dev/null
     ;;
 
   *)
