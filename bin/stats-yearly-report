@@ -24,7 +24,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.9 2006-02-12 13:39:14 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.10 2006-02-12 17:48:03 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -40,6 +40,8 @@ use DateTime::Format::Strptime;
 use HTML::Entities;
 use Data::Dumper;
 use POSIX qw(strftime);
+use utf8;
+binmode(STDOUT, ':utf8');
 
 use mySociety::Config;
 BEGIN {
@@ -101,6 +103,7 @@ foreach (keys %$repids) {
 print STDERR "get representatives info... ";
 my %repinfo = %{mySociety::DaDem::get_representatives_info(\@allreps)};
 print STDERR "done\n";
+
 @allreps = grep {
     my $repid = $_;
     my $r_info = $repinfo{$repid};
