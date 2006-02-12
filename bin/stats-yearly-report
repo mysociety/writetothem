@@ -24,7 +24,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.10 2006-02-12 17:48:03 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.11 2006-02-12 17:51:41 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -475,6 +475,8 @@ sub emit_php($$) {
 
 sub display_rep($$) {
     my ($repid, $category) = @_;
+
+    return if $repid == 26988; #  "Election Pending following the death of Robin Cook"
 
     my $r_info = $repinfo{$repid};
     my $areaid = $reptoarea->{$repid};
