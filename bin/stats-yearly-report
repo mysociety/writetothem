@@ -12,17 +12,19 @@
 #   Only messages which were delivered (fax successful, email had no bounce)
 #   are counted.
 #
-# TODO: Are we getting reps which are no longer in office and are not showing
-# in WTT because they are associated with an area which is out-of-generation?
-#
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
+# TODO:
+# fix opening interval
+# use confidence interval as range
+# check shame
+
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.7 2006-02-10 11:00:56 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.8 2006-02-12 11:50:47 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -47,6 +49,7 @@ use mySociety::DBHandle qw(dbh);
 use mySociety::DaDem;
 use mySociety::MaPit;
 use mySociety::VotingArea;
+use mySociety::Util;
 
 use FYR;
 
@@ -55,6 +58,7 @@ my $year = shift;
 die "enter a reasonable year as first argument" if !$year || $year < 2000 || $year > 5000;
 my $area_type = 'WMC';
 my $debug_fewer_reps = undef; #100;# for testing, run with fewer reps than all
+my $output_format = 'debug'; # 'PHP' or 'debug'
 
 ############################################################################
 # Extract basic data from MaPit/DaDem
@@ -64,12 +68,13 @@ my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=
 # We choose 4 weeks, because 2 weeks until first questionnaire, another week before reminder, then give
 # at least another week for reponse and safety margin.
 die "Need to wait 4 weeks into year before running to be sure have all questionnaire info" if ($end_epoch > time() - 86400 * 28);
+my $period_length = $end_epoch - $start_epoch;
 
 print STDERR "year: $year epochs of calculation: $start_epoch => $end_epoch\n";
 
 # Need to obtain a list of MP/constituency names and then pick out messages by those.
 print STDERR "get constituency IDs... ";
-my $areaids = mySociety::MaPit::get_areas_by_type($area_type); # array of ids of areas
+my $areaids = mySociety::MaPit::get_areas_by_type($area_type, 1); # array of ids of ALL areas (not just current generation)
 print STDERR "done\n";
 print STDERR "get constituency info... ";
 my %areainfo = %{mySociety::MaPit::get_voting_areas_info($areaids)}; # hash from area id to hash of info about area
@@ -135,6 +140,7 @@ foreach my $repid (@allreps) {
     my @intervals;
     my $last_h;
     my $on_first = 1;
+    my $creation_node = $history[0];
     # convert history to intervals
     foreach my $h (@history) {
         if ($last_h) {
@@ -175,16 +181,27 @@ foreach my $repid (@allreps) {
         $_->{'to'} = $end_epoch if $_->{'to'} > $end_epoch; 
     } @intervals;
     @intervals = grep { $_->{'from'} < $_->{'to'} } @intervals;
-    # add initial interval (for missing data from early days of code
-    # when we don't have exact contact data history)
+    # add initial interval (for later back-extension data from early days of code)
     die "no intervals for $repid" if !scalar(@intervals);
     my $initial_epoch = $intervals[0]->{'from'};
     if ($initial_epoch > $start_epoch) {
         my $interval_info;
-        $interval_info->{'from'} = $start_epoch;
+        $interval_info->{'from'} = $initial_epoch;
         $interval_info->{'to'} = $initial_epoch;
-        $interval_info->{'method'} = "missingdata";
+        # use values from the first node in the history for this back extension
+        $interval_info->{'valid_method'} = $creation_node->{'valid_method'};
+        $interval_info->{'method'} = $creation_node->{'method'};
+        $interval_info->{'fax'} = $creation_node->{'fax'};
+        $interval_info->{'email'} = $creation_node->{'email'};
         unshift @intervals, $interval_info;
+    }
+    # check ranges meet
+    my $upto = undef;
+    foreach my $interval (@intervals) {
+        if ($upto) {
+            die "internal error: ranges should meet" if ($upto != $interval->{'from'});
+        }
+        $upto = $interval->{'to'};
     }
 
     $allintervals->{$repid} = \@intervals;
@@ -214,27 +231,37 @@ $stn->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 while (my ($n, $repid) = $stn->fetchrow_array()) {
     $sent_messages{$repid} = $n;
 }
+foreach my $repid (@allreps) {
+    $sent_messages{$repid} = 0 if (!defined($sent_messages{$repid}));
+}
 print STDERR "done\n";
 
-print STDERR "get questionnaire responses... ";
+print STDERR "get interval questionnaire responses... ";
 my $stq = dbh()->prepare("
             select distinct on(message_id, question_id)
-                message_id, dispatched, question_id, answer, recipient_id
+                message_id, dispatched, created, question_id, answer, recipient_id
             from questionnaire_answer, message
             where questionnaire_answer.message_id = message.id
                 and recipient_type = '$area_type'
-                and dispatched >= ? and dispatched < ?
+                and created >= ? and created < ?
                 and dispatched < ?");
 $stq->execute($start_epoch, $end_epoch, time() - 86400 * 28);
-my %r;
-while (my ($msgid, $dispatched, $qid, $answer, $repid) = $stq->fetchrow_array()) {
+while (my ($msgid, $dispatched, $created, $qid, $answer, $repid) = $stq->fetchrow_array()) {
     my $intervals = $allintervals->{$repid};
     next if $debug_fewer_reps && !defined($intervals); 
     die "intervals for $repid not found" if !defined($intervals);
     my $found = 0;
+    my $first = 1;
     foreach my $interval (@$intervals) {
-        if ($interval->{'from'} <= $dispatched && $dispatched < $interval->{'to'} ) {
-            die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched two intervals rep $repid dispatched $dispatched " if $found;
+        # extend back if first interval (fixing bad data where we don't know
+        # exact start time due to recovery from backups)
+        if ($first && $created >= $start_epoch && $created < $interval->{'from'}) {
+            $interval->{'from'} = $created;
+        }
+
+        # match
+        if ($interval->{'from'} <= $created && $created < $interval->{'to'} ) {
+            die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched two intervals rep $repid created $created" if $found;
             $found = 1;
             if ($qid == 0) {
                 ++$interval->{'r'}->[1];
@@ -247,8 +274,33 @@ while (my ($msgid, $dispatched, $qid, $answer, $repid) = $stq->fetchrow_array())
                 ++$interval->{'r'}->[2];
             }
         }
+        $first = 0;
     }
-    die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched no interval rep $repid dispatched $dispatched" if !$found;
+    die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched no interval rep $repid created $created" if !$found;
+}
+foreach my $repid (@allreps) {
+    my $intervals = $allintervals->{$repid};
+    foreach my $interval (@$intervals) {
+        foreach (0..3) {
+            $interval->{'r'}->[$_] = 0 if (!$interval->{'r'}->[$_]);
+        }
+    }
+}
+print STDERR "done\n";
+#print Dumper($allintervals);
+
+print STDERR "get overall questionnaire responses... ";
+my $stqo = dbh()->prepare("
+            select distinct on(message_id, question_id)
+                message_id, dispatched, question_id, answer, recipient_id
+            from questionnaire_answer, message
+            where questionnaire_answer.message_id = message.id
+                and recipient_type = '$area_type'
+                and dispatched >= ? and dispatched < ?
+                and dispatched < ?");
+$stqo->execute($start_epoch, $end_epoch, time() - 86400 * 28);
+my %r;
+while (my ($msgid, $dispatched, $qid, $answer, $repid) = $stqo->fetchrow_array()) {
     if ($qid == 0) {
         ++$r{$repid}->[1];
     } elsif ($qid == 1) {
@@ -264,15 +316,8 @@ foreach my $repid (@allreps) {
     foreach (0..3) {
         $r{$repid}->[$_] = 0 if (!$r{$repid}->[$_]);
     }
-    my $intervals = $allintervals->{$repid};
-    foreach my $interval (@$intervals) {
-        foreach (0..3) {
-            $interval->{'r'}->[$_] = 0 if (!$interval->{'r'}->[$_]);
-        }
-    }
 }
 print STDERR "done\n";
-#print Dumper($allintervals);
 
 print STDERR "get failed message counts... ";
 my $stf = dbh()->prepare("
@@ -308,66 +353,169 @@ while (my ($n, $repid) = $stnd->fetchrow_array()) {
 print STDERR "done\n";
 
 ############################################################################
-# Print out results
+# Work out categorisation of MP, and print out results
 
-sub display_rep($) {
+# Categories of data quality are:
+# good - Have good data about MP's responsiveness
+# toofew - Too few messages sent by constituents to the MP 
+# badcontact - We had bad contact data for the MP for much of the time
+# shame - The MP shameful refused to receive messages via our service
+# unknown - Needs manual checking
+
+sub work_out_rep_category($) {
     my ($repid) = @_;
+
+    my $r_info = $repinfo{$repid};
+    my $areaid = $reptoarea->{$repid};
+    my $a_info = $areainfo{$areaid};
+    my $f_after_dispatch = $fails_after_dispatch{$repid} || 0;
+    my $n_dispatched = $not_dispatched{$repid} || 0;
+    my $q_data = $r{$repid};
+
+    my @ints = @{$allintervals->{$repid}};
+    # hmm, TODO: use length of known?
+    my $rep_length = $ints[-1]->{'to'} - $ints[0]->{'from'};
+
+    # Gather data
+    my $intervals_with_no_q_response = 0;
+    my $intervals_with_no_q_response_and_validmethod = 0;
+    my $no_q_response_and_validmethod_time = 0;
+    my $shametime = 0;
+    my $knowninvalidtime = 0;
+    foreach my $interval (@ints) {
+        my $length = $interval->{'to'} - $interval->{'from'};
+        my $missing = ($interval->{'method'} eq 'missingdata');
+
+        if ($interval->{'r'}->[1] == 0) { # got no q responses
+            $intervals_with_no_q_response++;
+            if (!$missing && ($interval->{'valid_method'})) { # TODO: conservative enough about $missing?
+                $intervals_with_no_q_response_and_validmethod++; 
+                $no_q_response_and_validmethod_time += $length;
+            }
+        }
+
+        if ($interval->{'method'} eq 'shame') {
+            $shametime += $length
+        }
+
+        if (!$missing && !($interval->{'valid_method'})) {
+            $knowninvalidtime += $length;
+        }
+            #if ($interval->{'r'}->[1] > 0){
+            #    $valid = 1;
+            #}
+    }
+
+    my $confidence_length;
+    if ($q_data->[1] > 0) {
+        my ($re_mean, $re_low, $re_high) = mySociety::Util::binomial_confidence_interval($q_data->[0], $q_data->[1]);
+        $confidence_length = $re_high - $re_low;
+    }
+
+    print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length intervals_with_no_q_response: $intervals_with_no_q_response no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
+    print "confidence: ".($confidence_length ? $confidence_length : "none")."\n" if $output_format eq 'debug';
+
+    # Work out what we are
+    return 'shame' if ($shametime > $rep_length * 0.1);
+    return 'toofew' if ($sent_messages{$repid} < 10);
+    #return 'toofew' if (!defined($confidence_length) || $confidence_length > 0.50);
+    return 'good' if ($intervals_with_no_q_response == 0);
+    return 'good' if ($intervals_with_no_q_response_and_validmethod == 0);
+    return 'good' if ($no_q_response_and_validmethod_time < $rep_length * 0.1);
+    #return 'badcontact' if ($knowninvalidtime > $rep_length * 0.5);
+    return 'unknown';
+}
+
+sub emit_php($$) {
+    my ($var, $value) = @_;
+    if (!defined($value)) {
+        print "        '$var' => null,\n";
+    } else {
+        $value =~ s/'/\\'/g;
+        print "        '$var' => '$value',\n";
+    }
+}
+
+sub display_rep($$) {
+    my ($repid, $category) = @_;
 
     my $r_info = $repinfo{$repid};
     my $areaid = $reptoarea->{$repid};
     my $a_info = $areainfo{$areaid};
     #print "repid: $repid\n"; print Dumper($r_info); print Dumper($a_info); exit;
 
-    my $f_after_dispatch = $fails_after_dispatch{$repid};
-    $f_after_dispatch = 0 if !$f_after_dispatch;
-    my $n_dispatched = $not_dispatched{$repid};
-    $n_dispatched = 0 if !$n_dispatched;
+    my $f_after_dispatch = $fails_after_dispatch{$repid} || 0;
+    my $n_dispatched = $not_dispatched{$repid} || 0;
 
     my $q_data = $r{$repid};
 
     for (0..3) {
         die Dumper($r_info) . "rep $repid has missing q data" if !defined($q_data->[$_]);
     }
+    die "$repid has no sent_messages field" if !exists($sent_messages{$repid});
+    my ($re_mean, $re_low, $re_high) = 
+        $q_data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[0], $q_data->[1]) : undef;
+    my ($ft_mean, $ft_low, $ft_high) = 
+        $q_data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
 
-    print sprintf("repid$repid %s (%s) of %s 
-    sent-success:%d sent-fail:%d not-sent(approx):%d
-    Qresponded:%d/%d Qfirsttime:%d/%d
-    deleted%s edittimes:%d-%s-%s \n", 
-            $r_info->{'name'}, $r_info->{'party'}, $a_info->{'name'},
-            $sent_messages{$repid}, $f_after_dispatch, $n_dispatched,
-            $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
-            $r_info->{'deleted'}, 
-            $r_info->{'edit_times'}, $r_info->{'last_editor'}, 
-            $r_info->{'method'}
-            );
+    if ($output_format eq "PHP") {
+        print "    array(\n";
+        emit_php('recipient_id', $repid);
+        emit_php('category', $category);
+        emit_php('name', $r_info->{'name'});
+        emit_php('party', $r_info->{'party'});
+        emit_php('area', $a_info->{'name'});
+
+        emit_php('dispatched_success', $sent_messages{$repid});
+
+        emit_php('responded', $q_data->[0]);
+        emit_php('responded_outof', $q_data->[1]);
+        emit_php('responded_mean', $re_mean);
+        emit_php('responded_95_low', $re_low);
+        emit_php('responded_95_high', $re_high);
+
+        emit_php('firsttime', $q_data->[2]);
+        emit_php('firsttime_outof', $q_data->[3]);
+        emit_php('firsttime_mean', $ft_mean);
+        emit_php('firsttime_95_low', $ft_low);
+        emit_php('firsttime_95_high', $ft_high);
+
+        emit_php('when_generated', time());
+        print "    ),\n\n";
+    } else {
+        print sprintf("repid$repid %s (%s) of %s 
+        sent-success:%d sent-fail:%d not-sent(approx):%d
+        Qresponded:%d/%d Qfirsttime:%d/%d
+        deleted%s edittimes:%d-%s-%s \n", 
+                $r_info->{'name'}, $r_info->{'party'}, $a_info->{'name'},
+                $sent_messages{$repid}, $f_after_dispatch, $n_dispatched,
+                $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
+                $r_info->{'deleted'}, 
+                $r_info->{'edit_times'}, $r_info->{'last_editor'}, 
+                $r_info->{'method'}
+                );
+    }
     die if $a_info->{'type'} ne $area_type; # assertion
 
-    my $upto = undef;
     # pretty display of intervals for one MP
-    print "    ";
-    my $rsum = [ 0, 0, 0, 0 ];
-    foreach my $interval (@{$allintervals->{$repid}}) {
-        if ($upto) {
-            die "internal error: ranges should meet" if ($upto != $interval->{'from'});
-        } else {
-            print strftime("(%d %b %Y)", localtime($interval->{'from'}));
+    if ($output_format eq 'debug') {
+        my $first = 1;
+        print "    ";
+        foreach my $interval (@{$allintervals->{$repid}}) {
+            if ($first) {
+                print strftime("(%d %b %Y)", localtime($interval->{'from'}));
+            }
+            my $missing = ($interval->{'method'} eq 'missingdata');
+            print sprintf("<v%sQr%d/%d>", 
+                    $missing ? "?" : $interval->{'valid_method'}, 
+                    $interval->{'r'}->[0], $interval->{'r'}->[1], 
+            );
+            print strftime("(%d %b %Y)", localtime($interval->{'to'}));
+            $first = 0;
         }
-        my $missing = ($interval->{'method'} eq 'missingdata');
-        print sprintf("<v%sQr%d/%d>", 
-                $missing ? "?" : $interval->{'valid_method'}, 
-                $interval->{'r'}->[0], $interval->{'r'}->[1], 
-        );
-        print strftime("(%d %b %Y)", localtime($interval->{'to'}));
-        for (0..3) {
-            $rsum->[$_] += $interval->{'r'}->[$_];
-        }
-
-        $upto = $interval->{'to'};
+        print "\n";
+        print "    category: $category\n";
     }
-    for (0..3) {
-        die "interval q counts don't add up to total for rep $repid" if $rsum->[$_] != $q_data->[$_];
-    }
-    print "\n";
 }
 
 my $total_sent = 0;
@@ -376,8 +524,11 @@ my $total_responded_outof = 0;
 my $total_firsttime = 0;
 my $total_firsttime_outof = 0;
 my $total_fails_after_dispatch = 0;
+print "<?php\n/* Automatically generated by fyr/bin/stats-yearly-report */\n\n" if $output_format eq "PHP";
+print "\$questionnaire_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
 foreach my $repid (@allreps) {
-    display_rep($repid);
+    my $category = work_out_rep_category($repid);
+    display_rep($repid, $category);
 
     my $q_data = $r{$repid};
     $total_sent += $sent_messages{$repid};
@@ -386,8 +537,21 @@ foreach my $repid (@allreps) {
     $total_firsttime += $q_data->[2];
     $total_firsttime_outof += $q_data->[3];
     $total_fails_after_dispatch += ($fails_after_dispatch{$repid} || 0); 
+
+    print "\n" if $output_format eq 'debug';
 }
 
-print sprintf ("Totals: success-sentmsg: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n",
-    $total_sent, $total_fails_after_dispatch, $total_responded, $total_responded_outof, $total_firsttime, $total_firsttime_outof);
+if ($output_format eq 'debug') {
+    print sprintf ("Totals: success-sentmsg: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n",
+        $total_sent, $total_fails_after_dispatch, $total_responded, $total_responded_outof, $total_firsttime, $total_firsttime_outof) 
+} else {
+    emit_php('total_dispatched_success', $total_sent);
+    #emit_php('total_fails_after_dispatch', $total_fails_after_dispatch); # this is a bit useless
+    emit_php('total_responded', $total_responded);
+    emit_php('total_responded_outof', $total_responded_outof);
+    emit_php('total_firsttime', $total_firsttime);
+    emit_php('total_firsttime_outof', $total_firsttime_outof);
+    print ");\n?>\n" if $output_format eq "PHP";
+}
+
 
