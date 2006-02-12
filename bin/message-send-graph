@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.3 2006-02-12 21:35:58 dademcron Exp $
+# $Id: message-send-graph,v 1.4 2006-02-12 23:37:39 dademcron Exp $
 
 SOURCE=/tmp/fyr-signup-rate-graph-data-$RANDOM$RANDOM
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
@@ -41,7 +41,7 @@ cat >$GPSCRIPT <<END
     set xdata time;
     set timefmt "%Y-%m-%d";
     set xrange ["2005-01-01":"2006-01-01"];
-    set format x "%d %b"
+    set format x "%b"
     set xlabel "2005-2006"
     # unset xlabel
     set nokey
@@ -54,8 +54,18 @@ cat >$GPSCRIPT <<END
 
     set arrow 1 from '2005-02-14', 0 to '2005-02-14', 900 lt 0 nohead
     set label 1 'launch of beta' at '2005-02-17', 900 right rotate
-    set arrow 2 from '2005-05-05', 0 to '2005-05-05', 900 lt 0 nohead
-    set label 2 'General Election' at '2005-05-08', 900 right rotate
+    set arrow 2 from '2005-03-15', 0 to '2005-03-15', 900 lt 0 nohead
+    set label 2 'Jamie Oliver link' at '2005-03-18', 900 right rotate
+    set arrow 3 from '2005-05-05', 0 to '2005-05-05', 900 lt 0 nohead
+    set label 3 'General Election' at '2005-05-08', 900 right rotate
+    set arrow 4 from '2005-06-28', 0 to '2005-06-28', 900 lt 0 nohead
+    set label 4 'Our World Our Say email' at '2005-07-01', 900 right rotate
+    set arrow 5 from '2005-09-07', 0 to '2005-09-07', 900 lt 0 nohead
+    set label 5 'no2id (identity cards)' at '2005-09-10', 900 right rotate
+    set arrow 6 from '2005-11-09', 0 to '2005-11-09', 900 lt 0 nohead
+    set label 6 'animalasia.org link' at '2005-11-12', 900 right rotate
+    #set arrow 7 from '2005-12-21', 0 to '2005-12-21', 900 lt 0 nohead
+    #set label 7 'naar.org.uk (racism), peta.org (animals)' at '2005-12-24', 900 right rotate
 
     n = 0
     plot "$SOURCED" using 1:2 with lines axes x1y2 lt 4 title "messages dispatched successfully"
