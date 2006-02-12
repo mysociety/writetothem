@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.34 2005-12-07 16:42:14 francis Exp $
+ * $Id: fyr.php,v 1.35 2006-02-12 20:45:56 matthew Exp $
  * 
  */
 
@@ -34,7 +34,11 @@ ob_start();
 
 template_set_style("../templates/website");
 # syndication type, read from domain name
-$syn = str_replace('.writetothem.com', '', $_SERVER['HTTP_HOST']);
+if (array_key_exists('HTTP_HOST', $_SERVER)) {
+    $syn = str_replace('.writetothem.com', '', $_SERVER['HTTP_HOST']);
+} else {
+    $syn = 'www';
+}
 $syn = str_replace('.'.OPTION_WEB_DOMAIN, '', $syn);
 # or override for debugging
 if (array_key_exists('syn', $_GET)) {

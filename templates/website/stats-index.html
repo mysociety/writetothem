@@ -1,0 +1,109 @@
+<?
+template_draw('header', $values);
+$data = $values['data'];
+$info = $data['info'];
+$data = $data['data'];
+?>
+<script type="text/javascript">
+var showall = 1
+function toggle_category(cat) {
+    var d = document.getElementsByTagName('tr')
+    for (i=0; i<d.length; ++i) {
+        if (d[i].className.indexOf(cat) != -1) {
+		var s = d[i].style.display
+		if (s == 'none') d[i].style.display = 'table-row'
+		else d[i].style.display = 'none'
+	}
+    }
+}
+function just_good() {
+    toggle_category('shame')
+    toggle_category('toofew')
+    toggle_category('unknown')
+    var d = document.getElementById('toggleword')
+    if (showall) {
+	    d.innerHTML = 'Show all'
+    } else {
+        d.innerHTML = "Just those in 'good' category"
+    }
+    showall = 1 - showall
+}
+</script>
+<h2>MP Performance 2005</h2>
+<p>WriteToThem sent <?=number_format($info['total_dispatched_success']) ?>
+ messages to MPs last year, and ??? to other elected reps.
+<?=number_format($info['total_responded_outof']) ?> people answered our feedback email.
+This asked whether MPs had responded to their message within 2 or 3 weeks.
+</p>
+
+<p><a href="javascript:just_good()" id="toggleword">Just those in 'good' category</a></p>
+
+<style type="text/css">
+table {
+    border-collapse: collapse;
+    font-size: 93%;
+    border: solid 1px #a5a57c;
+    border-width: 1px 0 1px 1px;
+}
+td.c { text-align: center; }
+tr:hover {
+background-color: #ffe88c;
+}
+th, td {
+    margin: 0; padding: 2px 5px;
+    border-right: solid 1px #a5a57c;
+}
+.a {
+    background-color: #ffffcc;
+}
+</style>
+
+<table>
+<tr class="a">
+<th><a href="?o=n">Name (Party)</a></th>
+<th><a href="?o=c">Constituency</a></th>
+<th><a href="?o=s">Messages sent to MP</a></th>
+<th><a href="?">Response rate by MP</a></th>
+<th>Confidence interval</th>
+</tr>
+<?
+
+$party_short = array(
+	'Labour' => 'Lab',
+	'Independent Conservative' => 'Ind Con',
+	'Labour / Co-operative' => 'Lab/Co-op',
+	'Conservative' => 'Con',
+	'Liberal Democrat' => 'Lib Dem',
+	'Plaid Cymru' => 'PC',
+	'Sinn Féin' => 'SF',
+	'Independent' => 'Ind',
+);
+
+$c = 0;
+foreach ($data as $row) {
+	if (strstr($row['name'], 'Pending')) continue;
+	print '<tr class="'.$row['category'];
+	if ($c++%2) {
+		print ' a';
+	}
+	print '"><td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
+	print '<br><small>';
+#	if (array_key_exists($row['party'], $party_short)) {
+#		print $party_short[$row['party']];
+	print $row['party'];
+	print "</small></td>";
+	print "<td>$row[area]</td>";
+	print "<td align='right'>$row[sent]</td>";
+	if ($row['notes']) {
+		print '<td colspan="3">' . $row['notes'] . '</td>';
+	} else {
+		print "<td align='right'>$row[response]%</td>";
+		#print "<td class='c'>($row[low]%&nbsp;&ndash;&nbsp;$row[high]%)</td>";
+		print "<td><img src='stats/$row[id].png' title='95% confidence interval: $row[low]%&nbsp;&ndash;&nbsp;$row[high]%'></td>";
+	}
+	print "</tr>\n";
+}
+print '</table>';
+
+template_draw('footer', $values);
+?>

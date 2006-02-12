@@ -1,0 +1,28 @@
+#!/usr/bin/php -q
+<?
+/*
+ * stats-sparklines:
+ * Statistic sparklines!
+ * 
+ * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+ *
+ * $Id: stats-sparklines,v 1.1 2006-02-12 20:45:44 matthew Exp $
+ * 
+ */
+
+require_once '../../phplib/sparkline/lib/Sparkline_Box.php';
+require_once '../phplib/questionnaire_report_2005_WMC.php';
+$data = array();
+foreach ($questionnaire_report_2005_WMC as $key => $row) {
+	if (is_array($row)) {
+		$id = $row['recipient_id'];
+		$mean = $row['responded_mean'];
+		$low = $row['responded_95_low'];
+		$high = $row['responded_95_high'];
+		$graph = new Sparkline_Box($mean, $low, $high);
+		$f = "../web/stats/$id.png";
+		$graph->output('../web/stats/'.$id.'.png');
+	}
+}
+?>
