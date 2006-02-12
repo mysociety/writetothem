@@ -24,7 +24,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.8 2006-02-12 11:50:47 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-report,v 1.9 2006-02-12 13:39:14 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -131,6 +131,37 @@ print STDERR "done\n";
 ############################################################################
 # Calculate intervals
 
+sub equal_w_undef {
+    my ($a, $b) = @_;
+    return 1 if (!defined($a) && !defined($b));
+    return 0 if (defined($a) && !defined($b));
+    return 0 if (!defined($a) && defined($b));
+    return 1 if ($a eq $b);
+    return 0;
+}
+sub node_methods_equal {
+    my ($a, $b) = @_;
+    return (equal_w_undef($a->{'valid_method'}, $b->{'valid_method'}) && 
+            equal_w_undef($a->{'method'}, $b->{'method'}) && 
+            equal_w_undef($a->{'fax'}, $b->{'fax'}) &&
+            equal_w_undef($a->{'email'}, $b->{'email'}));
+}
+sub push_with_merge {
+    # add new interval, merge with end one if same
+    my ($intervals_ref, $interval_info) = @_;
+    my $c = scalar(@$intervals_ref);
+    if ($c) {
+        my $end_interval = $intervals_ref->[$c-1];
+        if (node_methods_equal($interval_info, $end_interval)) {
+            # ok, end interval has same details as this one, so just extend it
+            die if $end_interval->{'to'} != $interval_info->{'from'};
+            $end_interval->{'to'} = $interval_info->{'to'};
+            return;
+        }
+    }
+    push @$intervals_ref, $interval_info;
+}
+
 print STDERR "get history... ";
 my $allintervals;
 my %history = %{mySociety::DaDem::get_representatives_history(\@allreps)};
@@ -149,6 +180,7 @@ foreach my $repid (@allreps) {
             $interval_info->{'to'} = $h->{'whenedited'};
             if ($interval_info->{'from'} > $interval_info->{'to'}) {
                 if ($on_first) {
+                    die if $year ne "2005"; # only 2005 stuff can have this bad date
                     # first interval can be out of order due to bad data
                     $interval_info->{'from'} = $interval_info->{'to'};
                 } else {
@@ -159,7 +191,7 @@ foreach my $repid (@allreps) {
             $interval_info->{'method'} = $last_h->{'method'};
             $interval_info->{'fax'} = $last_h->{'fax'};
             $interval_info->{'email'} = $last_h->{'email'};
-            push @intervals, $interval_info;
+            push_with_merge(\@intervals, $interval_info);
             my $on_first = 0;
         }
         $last_h = $h;
@@ -173,7 +205,7 @@ foreach my $repid (@allreps) {
             $interval_info->{'method'} = $last_h->{'method'};
             $interval_info->{'fax'} = $last_h->{'fax'};
             $interval_info->{'email'} = $last_h->{'email'};
-            push @intervals, $interval_info;
+            push_with_merge(\@intervals, $interval_info);
     }
     # clamp to our range, and strip intervals that were out of range
     map { 
@@ -193,7 +225,9 @@ foreach my $repid (@allreps) {
         $interval_info->{'method'} = $creation_node->{'method'};
         $interval_info->{'fax'} = $creation_node->{'fax'};
         $interval_info->{'email'} = $creation_node->{'email'};
-        unshift @intervals, $interval_info;
+        if (!node_methods_equal($interval_info, $intervals[0])) {
+            unshift @intervals, $interval_info;
+        }
     }
     # check ranges meet
     my $upto = undef;
@@ -256,6 +290,7 @@ while (my ($msgid, $dispatched, $created, $qid, $answer, $repid) = $stq->fetchro
         # extend back if first interval (fixing bad data where we don't know
         # exact start time due to recovery from backups)
         if ($first && $created >= $start_epoch && $created < $interval->{'from'}) {
+            die if $year ne "2005"; # only 2005 stuff can have this bad data
             $interval->{'from'} = $created;
         }
 
@@ -384,11 +419,10 @@ sub work_out_rep_category($) {
     my $knowninvalidtime = 0;
     foreach my $interval (@ints) {
         my $length = $interval->{'to'} - $interval->{'from'};
-        my $missing = ($interval->{'method'} eq 'missingdata');
 
-        if ($interval->{'r'}->[1] == 0) { # got no q responses
+        if ($interval->{'r'}->[0] == 0 && $interval->{'r'}->[1] >= 2) { # got no positive q responses, out of at least 2
             $intervals_with_no_q_response++;
-            if (!$missing && ($interval->{'valid_method'})) { # TODO: conservative enough about $missing?
+            if ($interval->{'valid_method'}) { 
                 $intervals_with_no_q_response_and_validmethod++; 
                 $no_q_response_and_validmethod_time += $length;
             }
@@ -398,7 +432,7 @@ sub work_out_rep_category($) {
             $shametime += $length
         }
 
-        if (!$missing && !($interval->{'valid_method'})) {
+        if (!($interval->{'valid_method'})) {
             $knowninvalidtime += $length;
         }
             #if ($interval->{'r'}->[1] > 0){
@@ -413,7 +447,7 @@ sub work_out_rep_category($) {
     }
 
     print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length intervals_with_no_q_response: $intervals_with_no_q_response no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
-    print "confidence: ".($confidence_length ? $confidence_length : "none")."\n" if $output_format eq 'debug';
+    #print "confidence: ".($confidence_length ? $confidence_length : "none")."\n" if $output_format eq 'debug';
 
     # Work out what we are
     return 'shame' if ($shametime > $rep_length * 0.1);
@@ -505,9 +539,8 @@ sub display_rep($$) {
             if ($first) {
                 print strftime("(%d %b %Y)", localtime($interval->{'from'}));
             }
-            my $missing = ($interval->{'method'} eq 'missingdata');
             print sprintf("<v%sQr%d/%d>", 
-                    $missing ? "?" : $interval->{'valid_method'}, 
+                    $interval->{'valid_method'}, 
                     $interval->{'r'}->[0], $interval->{'r'}->[1], 
             );
             print strftime("(%d %b %Y)", localtime($interval->{'to'}));
