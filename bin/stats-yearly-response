@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.1 2006-02-13 10:52:58 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.2 2006-02-13 10:56:07 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -104,10 +104,6 @@ print STDERR "done\n";
 @allreps = grep {
     my $repid = $_;
     my $r_info = $repinfo{$repid};
-
-    # ??? this is nonsense
-    # TODO: make the detection of edits work for edits that happened at creation
-    die Dumper($r_info) . "only editor was a script, and tests below won't work\n" if ($r_info->{'last_editor'} eq "import" || $r_info->{'last_editor'} eq "dadem_csv_load") && $r_info->{'edit_times'} == 1;
 
     if (!$r_info->{whencreated} || !$r_info->{whenlastedited}) {
         die Dumper($r_info) . "\nneed whencreated and whenlastedited for all data";
