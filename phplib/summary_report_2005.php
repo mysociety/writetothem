@@ -6,32 +6,32 @@ $zeitgeist_by_summary_type_2005 = array(
         'dispatched_success' => '7069',
         'responded' => '2088',
         'responded_outof' => '3971',
-        'firsttime' => '2088',
-        'firsttime_outof' => '3971',
+        'firsttime' => '3971',
+        'firsttime_outof' => '1322',
     ),
 
     'devolved' => array(
         'dispatched_success' => '1750',
         'responded' => '455',
         'responded_outof' => '1095',
-        'firsttime' => '455',
-        'firsttime_outof' => '1095',
+        'firsttime' => '1095',
+        'firsttime_outof' => '372',
     ),
 
     'westminster' => array(
         'dispatched_success' => '29976',
         'responded' => '14050',
         'responded_outof' => '22229',
-        'firsttime' => '14050',
-        'firsttime_outof' => '22229',
+        'firsttime' => '22229',
+        'firsttime_outof' => '9416',
     ),
 
     'council' => array(
         'dispatched_success' => '3720',
         'responded' => '1229',
         'responded_outof' => '2497',
-        'firsttime' => '1229',
-        'firsttime_outof' => '2497',
+        'firsttime' => '2497',
+        'firsttime_outof' => '1253',
     ),
 
 
