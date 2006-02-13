@@ -1,12 +1,12 @@
 <?
 /*
- * index.php:
+ * stats.php:
  * Statistics!
  * 
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.2 2006-02-13 12:25:42 francis Exp $
+ * $Id: stats.php,v 1.3 2006-02-13 17:37:26 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -42,18 +42,22 @@ function zeitgeist($year, $type_summary, $party_summary) {
             $ps[$b]['firsttime'] / $ps[$b]['firsttime_outof'] ?
             1 : 0;
     }
-    global $ps;
+    global $ps; # this is awful, but there doesn't seem another way of passing param to sorting fn in PHP
     $ps = $party_summary;
     $parties_by_responsiveness = array_keys($party_summary);
     usort($parties_by_responsiveness, 'sort_by_responsiveness');
     $parties_by_firsttime = array_keys($party_summary);
     usort($parties_by_firsttime, 'sort_by_firsttime');
+    $ps = $type_summary;
+    $types_by_responsiveness = array_keys($type_summary);
+    usort($types_by_responsiveness, 'sort_by_responsiveness');
     template_draw('stats-zeitgeist', array(
             "title" => "UK Internet Democracy Zeitgeist $year",
             'type_summary' => $type_summary,
             'party_summary' => $party_summary,
             'parties_by_responsiveness' => $parties_by_responsiveness,
             'parties_by_firsttime' => $parties_by_firsttime,
+            'types_by_responsiveness' => $types_by_responsiveness,
             ));
 }
 

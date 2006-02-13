@@ -3,37 +3,52 @@
 <h2><?=$values['title']?></h2>
 <p></p>
 
-<h2>Different types of representative</h2>
-<table>
+<h2>MPs or MEPs quicker?</h2>
+<table class="zeitgeist">
 <tr>
-<th>Representative</th>
+<th>&nbsp;</th>
 <th>Messages sent</th>
-<th>Responsiveness</th>
+<th>Response rate</th>
 <th>First time</th>
 </tr>
 <?
-foreach ($values['type_summary'] as $key => $value) {
-    print "<tr>";
-    print "<td>$key</td>";
+$c = 0;
+$type_map = array( 'europe' => 'European Parliament', 
+    'devolved' => 'Devolved assemblies/parliament',
+    'westminster' => 'Westminster Parliament',
+    'council' => 'All local councils',
+    'total' => 'Total');
+foreach ($values['types_by_responsiveness'] as $type) {
+    if ($type == 'total') continue;
+    $value = $values['type_summary'][$type];
+    print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
+    print "<td>".$type_map[$type]."</td>";
     print "<td>".$value['dispatched_success']."</td>";
-    print "<td>".round(100*$value['responded']/$value['responded_outof'],1)."</td>";
-    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],1)."</td>";
+    print "<td>".round(100*$value['responded']/$value['responded_outof'],1)."%</td>";
+    # this one probably too confusing here
+    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],1)."%</td>";
     print "</tr>";
 }
 ?>
 </table>
 
-<h2>Responsiveness of each party</h2>
+<p><img src="/stats/signups-2005-WMC.png">
+</p>
+
+<table border="0"><tr><td width="50%" valign="top">
+
+<h2>Response rate of each party</h2>
 <p>For MPs of each party, percentage of messages responded to 
 within 2 or 3 weeks.
-<table>
-<tr> <th>Party</th> <th>Responsiveness</th></tr>
+<table class="zeitgeist">
+<tr> <th>Party</th> <th>Response rate</th></tr>
 <?
+$c = 0;
 foreach ($values['parties_by_responsiveness'] as $party) {
     if ($party == 'Deputy Speaker') continue;
     if ($party == 'Speaker') continue;
     $value = $values['party_summary'][$party];
-    print "<tr>";
+    print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>".round(100*$value['responded']/$value['responded_outof'],1)."%</td>";
     print "</tr>";
@@ -41,19 +56,22 @@ foreach ($values['parties_by_responsiveness'] as $party) {
 ?>
 </table>
 
+</td><td valign="top">
+
 <h2>First time by party</h2>
 <p>Number of constituents writing to one of their representatives for the
 first time. You can see that people in Respect and Lib Dem constituencies
 are more likely to have previously contacted a representative, whereas
 those with a Sinn Féin MP are quite likely to be doing so for the first time.
-<table>
+<table class="zeitgeist">
 <tr> <th>Party</th> <th>First time</th> </tr>
 <?
+$c = 0;
 foreach ($values['parties_by_firsttime'] as $party) {
     if ($party == 'Deputy Speaker') continue;
     if ($party == 'Speaker') continue;
     $value = $values['party_summary'][$party];
-    print "<tr>";
+    print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],1)."%</td>";
     print "</tr>";
@@ -61,5 +79,6 @@ foreach ($values['parties_by_firsttime'] as $party) {
 ?>
 </table>
 
+</td></tr></table>
 
 <?  template_draw('footer', $values); ?>
