@@ -1,47 +1,91 @@
-<? template_draw('header', $values); ?>
+<? template_draw('header', $values); 
+
+# $display_type can be:
+# 0 - display as +- if possible (i.e. symmeterical enough), otherwise range
+# 1  - force displaying as range
+function display_range($mean, $low=null, $high=null, $display_type = 0) {
+    $r = 0;
+    $mean_p = round(100 * $mean, $r);
+    if (!$low || !$high) {
+        return $mean_p."%";
+    }
+    $low_p = round(100 * $low, $r);
+    $high_p = round(100 * $high, $r);
+    $range = round((100 * ($high - $low) / 2), $r);
+    $midpoint = round((100 * ($low + ($high - $low) / 2)), $r);
+
+    #print "mid: $midpoint mean: $mean_p\n";
+
+    if ($midpoint == $mean_p && $display_type != 1) {
+        if ($range == 0)
+            return $mean_p."%";
+        else
+            return $mean_p."% &plusmn;".$range."%";
+    }
+    else
+        return $mean_p . "% <small>[".$low_p."%&ndash;".$high_p."%]</small>";
+}
+
+?>
 
 <h2><?=$values['title']?></h2>
-<p></p>
+<p align="center">Zeitgeist | <a href="/stats/<?=$values['year']?>/mps">Detailed MP Peformance</a></p>
 
-<h2>MPs or MEPs quicker?</h2>
+<h2>Performance of elected bodies</h2>
+
 <table class="zeitgeist">
 <tr>
 <th>&nbsp;</th>
 <th>Messages sent</th>
-<th>Response rate</th>
-<th>First time</th>
+<th>Reponse rate (in 2 to 3 weeks) *</th>
+<th>People writing for first time &#8224;</th>
 </tr>
 <?
 $c = 0;
-$type_map = array( 'europe' => 'European Parliament', 
-    'devolved' => 'Devolved assemblies/parliament',
-    'westminster' => 'Westminster Parliament',
-    'council' => 'All local councils',
-    'total' => 'Total');
+$type_map = array( 'europe' => 'Members of the European Parliament', 
+    'scotland' => 'Members of the Scottish Parliament',
+    'wales' => 'Welsh Assembly Members',
+    'northern_ireland' => 'Northern Ireland Assembly Members',
+    'london' => 'London Assembly Members',
+    'westminster' => 'Members of Parliament',
+    'council' => 'Councillors',
+    'total' => 'Total / average');
 foreach ($values['types_by_responsiveness'] as $type) {
-    if ($type == 'total') continue;
     $value = $values['type_summary'][$type];
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
-    print "<td>".$type_map[$type]."</td>";
+    print "<td><strong>".$type_map[$type]."</strong></td>";
     print "<td>".$value['dispatched_success']."</td>";
-    print "<td>".round(100*$value['responded']/$value['responded_outof'],1)."%</td>";
-    # this one probably too confusing here
-    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],1)."%</td>";
+    print "<td>";
+    if ($type == 'total') {
+        print display_range($value['responded'] / $value['responded_outof']);
+    } else {
+        print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
+    }
+    print "</td>";
+    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],0)."%</td>";
     print "</tr>";
 }
 ?>
 </table>
-
-<p><img src="/stats/signups-2005-WMC.png">
+<p><strong>Note:</strong> The Northern Ireland Assembly was added to
+WriteToThem.com in February 2006, so does not appear here.
+<br>* Measured by survey of users, asking 2 to 3 weeks after sending the message
+if they have got a response yet.
+<br>&#8224; Measured by survey of users, asking if this is the first time they
+have written to an elected representative of any kind.
 </p>
+
+<h2>Messages to MPs during 2005</h2>
+<p><img src="/stats/signups-2005-WMC.png"></p>
+
 
 <table border="0"><tr><td width="50%" valign="top">
 
 <h2>Response rate of each party</h2>
 <p>For MPs of each party, percentage of messages responded to 
-within 2 or 3 weeks.
+within 2 to 3 weeks.
 <table class="zeitgeist">
-<tr> <th>Party</th> <th>Response rate</th></tr>
+<tr> <th>Party</th> <th>Response rate<br>(in 2 to 3 weeks)</th></tr>
 <?
 $c = 0;
 foreach ($values['parties_by_responsiveness'] as $party) {
@@ -50,19 +94,23 @@ foreach ($values['parties_by_responsiveness'] as $party) {
     $value = $values['party_summary'][$party];
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
-    print "<td>".round(100*$value['responded']/$value['responded_outof'],1)."%</td>";
+    print "<td>";
+    print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
+    print "</td>";
     print "</tr>";
 }
 ?>
 </table>
+<p><strong>Note:</strong> Very few messages were sent to some parties.
+Ranges in square brackets are the "95% confidence intervals", that is given
+how little data we have, we are only sure the value is in that range.
 
 </td><td valign="top">
 
-<h2>First time by party</h2>
-<p>Number of constituents writing to one of their representatives for the
-first time. You can see that people in Respect and Lib Dem constituencies
-are more likely to have previously contacted a representative, whereas
-those with a Sinn Féin MP are quite likely to be doing so for the first time.
+<h2>First time writers by party</h2>
+<p>For constituencies represented by each party, percentage
+of people writing messages who were writing to a representative
+for the first time.
 <table class="zeitgeist">
 <tr> <th>Party</th> <th>First time</th> </tr>
 <?
@@ -73,11 +121,17 @@ foreach ($values['parties_by_firsttime'] as $party) {
     $value = $values['party_summary'][$party];
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
-    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],1)."%</td>";
+    print "<td>";
+    print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
+    print "</td>";
     print "</tr>";
 }
 ?>
 </table>
+<p><strong>Explanation:</strong> You can see that people in Respect and Lib Dem
+constituencies are more likely to have previously contacted a representative,
+whereas those with a Sinn Féin MP are quite likely to have never written to 
+any representative before.</p>
 
 </td></tr></table>
 

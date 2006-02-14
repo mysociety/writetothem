@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.3 2006-02-13 17:37:26 francis Exp $
+ * $Id: stats.php,v 1.4 2006-02-14 16:05:11 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -32,15 +32,17 @@ if ($type == 'mps') {
 function zeitgeist($year, $type_summary, $party_summary) {
     function sort_by_responsiveness($a, $b) {
         global $ps;
+        if ($a == 'total') return 1;
+        if ($b == 'total') return -1;
         return $ps[$a]['responded'] / $ps[$a]['responded_outof'] <
             $ps[$b]['responded'] / $ps[$b]['responded_outof'] ?
-            1 : 0;
+            1 : -1;
     }
     function sort_by_firsttime($a, $b) {
         global $ps;
         return $ps[$a]['firsttime'] / $ps[$a]['firsttime_outof'] <
             $ps[$b]['firsttime'] / $ps[$b]['firsttime_outof'] ?
-            1 : 0;
+            1 : -1;
     }
     global $ps; # this is awful, but there doesn't seem another way of passing param to sorting fn in PHP
     $ps = $party_summary;
@@ -52,7 +54,8 @@ function zeitgeist($year, $type_summary, $party_summary) {
     $types_by_responsiveness = array_keys($type_summary);
     usort($types_by_responsiveness, 'sort_by_responsiveness');
     template_draw('stats-zeitgeist', array(
-            "title" => "UK Internet Democracy Zeitgeist $year",
+            "title" => "WriteToThem.com Zeitgeist $year",
+            'year' => $year,
             'type_summary' => $type_summary,
             'party_summary' => $party_summary,
             'parties_by_responsiveness' => $parties_by_responsiveness,
@@ -117,7 +120,8 @@ function mp_response_table($year, $questionnaire_report) {
 
     # Output data
     template_draw('stats-mp-performance', array(
-            "title" => "MP Performance $year",
+        "title" => "WriteToThem.com Zeitgeist $year",
+        'year' => $year,
         'data' => $data
         ));
 }

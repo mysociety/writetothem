@@ -24,19 +24,22 @@ function just_good() {
     if (showall) {
 	    d.innerHTML = 'Show all'
     } else {
-        d.innerHTML = "Just those in 'good' category"
+        d.innerHTML = "Just those in 'good' category"-->
     }
     showall = 1 - showall
 }
 </script>
+
 <h2><?=$values['title']?></h2>
-<p>WriteToThem sent <?=number_format($info['total_dispatched_success']) ?>
- messages to MPs last year, and ??? to other elected reps.
-<?=number_format($info['total_responded_outof']) ?> people answered our feedback email.
-This asked whether MPs had responded to their message within 2 or 3 weeks.
+<p align="center"><a href="/stats/<?=$values['year']?>/zeitgeist">Zeitgeist</a> | Detailed MP Performance</p>
+
+<p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
+ messages to MPs last year.
+<strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback email.
+This asked after 2 to 3 weeks whether MPs had responded to their message.
 </p>
 
-<p><a href="javascript:just_good()" id="toggleword">Just those in 'good' category</a></p>
+<!--<p><a href="javascript:just_good()" id="toggleword">Just those in 'good' category</a></p>-->
 
 <style type="text/css">
 table {
@@ -64,7 +67,7 @@ th, td {
 <th><a href="?o=c">Constituency</a></th>
 <th><a href="?o=s">Messages sent to MP</a></th>
 <th><a href="?">Response rate by MP</a></th>
-<th>Confidence interval</th>
+<th>95% confidence interval</th>
 </tr>
 <?
 
@@ -81,7 +84,6 @@ $party_short = array(
 
 $c = 0;
 foreach ($data as $row) {
-	if (strstr($row['name'], 'Pending')) continue;
 	print '<tr class="'.$row['category'];
 	if ($c++%2) {
 		print ' a';
@@ -99,7 +101,8 @@ foreach ($data as $row) {
 	} else {
 		print "<td align='right'>$row[response]%</td>";
 		#print "<td class='c'>($row[low]%&nbsp;&ndash;&nbsp;$row[high]%)</td>";
-		print "<td><img src='stats/$row[id].png' title='95% confidence interval: $row[low]%&nbsp;&ndash;&nbsp;$row[high]%'></td>";
+		print "<td>".round($row['low'],0)."%&ndash;".round($row['high'],0)."%</td>";
+		#print "<td><img src='stats/$row[id].png' title='95% confidence interval: $row[low]%&nbsp;&ndash;&nbsp;$row[high]%'></td>";
 	}
 	print "</tr>\n";
 }
