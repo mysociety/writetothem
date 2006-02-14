@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.4 2006-02-14 14:28:03 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.5 2006-02-14 14:36:52 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -82,7 +82,6 @@ while (my ($message_id, $question_id, $c) = $stcon->fetchrow_array()) {
     die "\nmessage $message_id has contradictory responses to question $question_id, please fix\n";
 }
 print STDERR "done\n";
-exit;
  
 ############################################################################
 # Extract basic data from MaPit/DaDem
@@ -632,23 +631,22 @@ print "\n";
 print "\$party_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
 foreach my $party (keys %$partyr) {
     my $data = $partyr->{$party};
-# TODO: fix binomial_confidence_interval to cope with large input numbers (fallback to normal)
-#    my ($re_mean, $re_low, $re_high) = 
-#        $data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($data->[0], $data->[1]) : undef;
-#    my ($ft_mean, $ft_low, $ft_high) = 
-#        $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
+    my ($re_mean, $re_low, $re_high) = 
+        $data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($data->[0], $data->[1]) : undef;
+    my ($ft_mean, $ft_low, $ft_high) = 
+        $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
 
     print "   '$party' => array(\n";
     emit_php('responded', $data->[0]);
     emit_php('responded_outof', $data->[1]);
-#    emit_php('responded_mean', $re_mean);
-#    emit_php('responded_95_low', $re_low);
-#    emit_php('responded_95_high', $re_high);
+    emit_php('responded_mean', $re_mean);
+    emit_php('responded_95_low', $re_low);
+    emit_php('responded_95_high', $re_high);
     emit_php('firsttime', $data->[2]);
     emit_php('firsttime_outof', $data->[3]);
-#    emit_php('firsttime_mean', $ft_mean);
-#    emit_php('firsttime_95_low', $ft_low);
-#    emit_php('firsttime_95_high', $ft_high);
+    emit_php('firsttime_mean', $ft_mean);
+    emit_php('firsttime_95_low', $ft_low);
+    emit_php('firsttime_95_high', $ft_high);
     print "   ),\n";
 }
 print ");\n" if $output_format eq "PHP";

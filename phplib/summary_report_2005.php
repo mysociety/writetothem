@@ -3,44 +3,64 @@
 
 $zeitgeist_by_summary_type_2005 = array(
     'europe' => array(
-        'dispatched_success' => '7069',
-        'responded' => '2088',
-        'responded_outof' => '3971',
+        'responded' => '2087',
+        'responded_outof' => '3970',
+        'responded_mean' => '0.525692695214106',
+        'responded_95_low' => '0.517767670515297',
+        'responded_95_high' => '0.533617719912915',
         'firsttime' => '1322',
         'firsttime_outof' => '3630',
+        'firsttime_mean' => '0.364187327823691',
+        'firsttime_95_low' => '0.356200511585049',
+        'firsttime_95_high' => '0.372174144062334',
     ),
 
     'devolved' => array(
-        'dispatched_success' => '1750',
         'responded' => '455',
         'responded_outof' => '1095',
+        'responded_mean' => '0.415525114155251',
+        'responded_95_low' => '0.400632377619699',
+        'responded_95_high' => '0.430417850690803',
         'firsttime' => '372',
         'firsttime_outof' => '1016',
+        'firsttime_mean' => '0.366141732283465',
+        'firsttime_95_low' => '0.351027926340466',
+        'firsttime_95_high' => '0.381255538226463',
     ),
 
     'westminster' => array(
-        'dispatched_success' => '29976',
-        'responded' => '14050',
-        'responded_outof' => '22229',
+        'responded' => '14051',
+        'responded_outof' => '22231',
+        'responded_mean' => '0.632045342089875',
+        'responded_95_low' => '0.628810956669106',
+        'responded_95_high' => '0.635279727510643',
         'firsttime' => '9416',
-        'firsttime_outof' => '21513',
+        'firsttime_outof' => '21514',
+        'firsttime_mean' => '0.437668494933532',
+        'firsttime_95_low' => '0.434286224972122',
+        'firsttime_95_high' => '0.441050764894941',
     ),
 
     'council' => array(
-        'dispatched_success' => '3720',
         'responded' => '1229',
         'responded_outof' => '2497',
+        'responded_mean' => '0.492190628754505',
+        'responded_95_low' => '0.48218584388162',
+        'responded_95_high' => '0.502195413627391',
         'firsttime' => '1253',
         'firsttime_outof' => '2365',
+        'firsttime_mean' => '0.529809725158562',
+        'firsttime_95_low' => '0.519546562511479',
+        'firsttime_95_high' => '0.540072887805646',
     ),
 
 
     'total' => array(
         'dispatched_success' => '42515',
         'responded' => '17822',
-        'responded_outof' => '29792',
+        'responded_outof' => '29793',
         'firsttime' => '12363',
-        'firsttime_outof' => '28524',
+        'firsttime_outof' => '28525',
     ),
 );
 ?>
