@@ -5,7 +5,14 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.6 2006-02-13 10:56:07 dademcron Exp $
+# $Id: message-send-graph,v 1.7 2006-02-14 12:27:43 dademcron Exp $
+
+GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 800,250"
+EXTENSION=".png"
+GPLOT_OUTPUT="set terminal fig color big thickness 1"
+EXTENSION=".fig"
+GPLOT_OUTPUT="set terminal svg size 800 250"
+EXTENSION=".svg"
 
 SOURCE=/tmp/fyr-signup-rate-graph-data-$RANDOM$RANDOM
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
@@ -36,7 +43,7 @@ echo "source $SOURCED"
 
 cat >$GPSCRIPT <<END 
     unset border
-    set terminal png font 'Vera.ttf' 9 size 800,250
+    $GPLOT_OUTPUT
 
     set xdata time;
     set timefmt "%Y-%m-%d";
@@ -49,7 +56,7 @@ cat >$GPSCRIPT <<END
     #set ylabel "cumulative messages"
     set ylabel "messages sent to MPs / calendar day"
     set xtics nomirror
-    set ytics nomirror tc lt 2
+    set ytics nomirror
     # set y2tics nomirror tc lt 3
 
     set arrow 1 from '2005-02-14', 0 to '2005-02-14', 900 lt 0 nohead
@@ -73,5 +80,5 @@ END
 echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
-gnuplot < $GPSCRIPT > ~/public_html/fyr-signups.png
+gnuplot < $GPSCRIPT > ~/public_html/fyr-signups$EXTENSION
 
