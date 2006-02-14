@@ -8,7 +8,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.4 2006-02-14 14:36:52 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.5 2006-02-14 14:52:37 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -151,6 +151,7 @@ foreach my $summary_type (keys %$summary_types) {
     my ($ft_mean, $ft_low, $ft_high) = 
         $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
     print "    '$summary_type' => array(\n";
+    emit_php("dispatched_success", $sent_messages->{$summary_type});
     emit_php('responded', $data->[0]);
     emit_php('responded_outof', $data->[1]);
     emit_php('responded_mean', $re_mean);

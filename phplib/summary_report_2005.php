@@ -3,6 +3,7 @@
 
 $zeitgeist_by_summary_type_2005 = array(
     'europe' => array(
+        'dispatched_success' => '7069',
         'responded' => '2087',
         'responded_outof' => '3970',
         'responded_mean' => '0.525692695214106',
@@ -16,6 +17,7 @@ $zeitgeist_by_summary_type_2005 = array(
     ),
 
     'devolved' => array(
+        'dispatched_success' => '1750',
         'responded' => '455',
         'responded_outof' => '1095',
         'responded_mean' => '0.415525114155251',
@@ -29,6 +31,7 @@ $zeitgeist_by_summary_type_2005 = array(
     ),
 
     'westminster' => array(
+        'dispatched_success' => '29976',
         'responded' => '14051',
         'responded_outof' => '22231',
         'responded_mean' => '0.632045342089875',
@@ -42,6 +45,7 @@ $zeitgeist_by_summary_type_2005 = array(
     ),
 
     'council' => array(
+        'dispatched_success' => '3720',
         'responded' => '1229',
         'responded_outof' => '2497',
         'responded_mean' => '0.492190628754505',
