@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.6 2006-02-14 16:51:51 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.7 2006-02-14 17:24:45 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -533,7 +533,7 @@ sub display_rep($$) {
         $q_data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
 
     if ($output_format eq "PHP") {
-        print "    array(\n";
+        print "    $repid => array(\n";
         emit_php('recipient_id', $repid);
         emit_php('category', $category);
         emit_php('name', $r_info->{'name'});
