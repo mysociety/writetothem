@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.179 2006-02-10 16:05:19 chris Exp $
+# $Id: Queue.pm,v 1.180 2006-02-14 14:28:04 francis Exp $
 #
 
 package FYR::Queue;
@@ -1009,7 +1009,7 @@ sub record_questionnaire_answer ($$$) {
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
         dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
-        dbh()->do('insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)', {}, $id, $qn, $answer);
+        dbh()->do('insert into questionnaire_answer (message_id, question_id, answer, whenanswered) values (?, ?, ?, ?)', {}, $id, $qn, $answer, time());
         logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
         dbh()->commit();
         return $id;

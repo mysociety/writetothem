@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.33 2006-02-10 17:27:58 francis Exp $
+-- $Id: schema.sql,v 1.34 2006-02-14 14:28:04 francis Exp $
 --
 
 set client_min_messages to error;
@@ -243,7 +243,8 @@ create function gather_stats() returns trigger as '
 create table questionnaire_answer (
     message_id char(20) not null references message(id) on delete cascade,
     question_id integer not null default(0),    -- reserved for future expansion
-    answer text not null
+    answer text not null,
+    whenanswered integer -- unix time when question was answered
 );
 
 create index questionnaire_answer_message_id_idx
