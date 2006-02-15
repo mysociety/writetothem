@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.6 2006-02-15 09:47:47 francis Exp $
+ * $Id: stats.php,v 1.7 2006-02-15 17:05:52 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -60,8 +60,12 @@ function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) 
     $types_by_responsiveness = array_keys($type_summary);
     usort($types_by_responsiveness, 'sort_by_responsiveness');
     if ($year == "2005") {
-        #print_r($questionnaire_report['26294']);
-        #print_r($questionnaire_report['2070']);
+        $libdem_leadership_candidates = 
+            array(
+                $questionnaire_report['uk.org.publicwhip/person/11565'],
+                $questionnaire_report['uk.org.publicwhip/person/10088'],
+                $questionnaire_report['uk.org.publicwhip/person/10298'],
+                );
     }
     template_draw('stats-zeitgeist', array(
             "title" => "WriteToThem.com Zeitgeist $year",
@@ -71,6 +75,7 @@ function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) 
             'parties_by_responsiveness' => $parties_by_responsiveness,
             'parties_by_firsttime' => $parties_by_firsttime,
             'types_by_responsiveness' => $types_by_responsiveness,
+            'libdem_leadership_candidates' => $libdem_leadership_candidates
             ));
 }
 
@@ -138,10 +143,11 @@ function mp_response_table($year, $questionnaire_report) {
 
 function category_lookup($cat) {
     if (strstr($cat, 'good')) return '';
-    elseif ($cat == 'shame') return "MP doesn't accept messages from WriteToThem";
+    elseif ($cat == 'shame') return "MP doesn't accept messages via WriteToThem";
     elseif ($cat == 'toofew') return 'Too few messages sent to MP';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
     elseif ($cat == 'cheat') return 'This MP attempted improve their response rate by sending themselves messages';
+    elseif ($cat == 'badcontact') return 'WriteToThem had possibly bad contact details for this MP';
     else template_show_error("Unknown MP categorisation '".htmlspecialchars($cat)."'");
     return $cat;
 }

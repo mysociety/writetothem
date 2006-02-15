@@ -32,7 +32,6 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 <p align="center">Zeitgeist | <a href="/stats/<?=$values['year']?>/mps">Detailed MP Peformance</a></p>
 
 <h2>Performance of elected bodies</h2>
-
 <table class="zeitgeist">
 <tr>
 <th>&nbsp;</th>
@@ -86,6 +85,33 @@ have written to an elected representative of any kind.
 <p><strong>Note:</strong> During the period up to a General Election there are
 no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
 MPs on 14th April, enabling it again a week after the election on 12th May.
+
+<? if ($values['year'] == 2005) { ?>
+<h2>Lib Dem leadership candidates</h2>
+<table class="zeitgeist">
+<tr>
+<th>&nbsp;</th>
+<th>Messages sent</th>
+<th>Reponse rate (in 2 to 3 weeks)</th>
+<th>People writing for first time</th>
+</tr>
+<? 
+    $c = 0;
+    foreach ($values['libdem_leadership_candidates'] as $value) {
+    print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
+    print "<td><strong>".$value['name']."</strong></td>";
+    print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
+    print "<td>";
+    print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
+    print "</td>";
+    print "<td>";
+    print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
+    print "</td>";
+    print "</tr>";
+    }
+?>
+</table>
+<? } ?>
 
 <table border="0"><tr><td width="50%" valign="top">
 
