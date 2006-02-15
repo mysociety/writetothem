@@ -97,7 +97,7 @@ foreach ($data as $row) {
 	print "<td>$row[area]</td>";
 	print "<td align='right'>$row[sent]</td>";
 	if ($row['notes']) {
-		print '<td colspan="3">' . $row['notes'] . '</td>';
+		print '<td colspan="2">' . $row['notes'] . '</td>';
 	} else {
 		print "<td align='right'>$row[response]%</td>";
 		#print "<td class='c'>($row[low]%&nbsp;&ndash;&nbsp;$row[high]%)</td>";

@@ -6,16 +6,20 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.4 2006-02-14 16:05:11 francis Exp $
+ * $Id: stats.php,v 1.5 2006-02-15 00:46:18 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
 
 # Read parameters
 $type = get_http_var('type');
-if (!$type) $type = 'mps';
+if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
 if (!$year) $year = '2005';
+if (!get_http_var('type') || !get_http_var('year')) {
+    header("Location: /stats/$year/$type");
+    exit;
+}
 
 if ($type == 'mps') {
     require_once "../phplib/questionnaire_report_${year}_WMC.php";
@@ -24,12 +28,14 @@ if ($type == 'mps') {
     require_once "../phplib/summary_report_${year}.php";
     require_once "../phplib/questionnaire_report_${year}_WMC.php";
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
-        $GLOBALS["party_report_${year}_WMC"]);
+        $GLOBALS["party_report_${year}_WMC"],
+        $GLOBALS["questionnaire_report_${year}_WMC"]
+        );
 } else {
     template_show_error("Unknown report type '".htmlspecialchars($type)."'");
 }
 
-function zeitgeist($year, $type_summary, $party_summary) {
+function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) {
     function sort_by_responsiveness($a, $b) {
         global $ps;
         if ($a == 'total') return 1;
@@ -53,6 +59,10 @@ function zeitgeist($year, $type_summary, $party_summary) {
     $ps = $type_summary;
     $types_by_responsiveness = array_keys($type_summary);
     usort($types_by_responsiveness, 'sort_by_responsiveness');
+    if ($year == "2005") {
+        #print_r($questionnaire_report['26294']);
+        #print_r($questionnaire_report['2070']);
+    }
     template_draw('stats-zeitgeist', array(
             "title" => "WriteToThem.com Zeitgeist $year",
             'year' => $year,
@@ -130,7 +140,8 @@ function category_lookup($cat) {
     if (strstr($cat, 'good')) return '';
     elseif ($cat == 'shame') return "MP doesn't accept messages from WriteToThem";
     elseif ($cat == 'toofew') return 'Too few messages sent to MP';
-    elseif ($cat == 'unknown') return '*** Unknown ***';
+    elseif ($cat == 'unknown') return 'We need to manually check this MP';
+    elseif ($cat == 'cheat') return 'This MP attempted improve their response rate by sending themselves messages';
     else template_show_error("Unknown MP categorisation '".htmlspecialchars($cat)."'");
     return $cat;
 }

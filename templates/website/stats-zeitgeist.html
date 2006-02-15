@@ -54,7 +54,7 @@ foreach ($values['types_by_responsiveness'] as $type) {
     $value = $values['type_summary'][$type];
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td><strong>".$type_map[$type]."</strong></td>";
-    print "<td>".$value['dispatched_success']."</td>";
+    print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
     print "<td>";
     if ($type == 'total') {
         print display_range($value['responded'] / $value['responded_outof']);
@@ -62,7 +62,13 @@ foreach ($values['types_by_responsiveness'] as $type) {
         print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
     }
     print "</td>";
-    print "<td>".round(100*$value['firsttime']/$value['firsttime_outof'],0)."%</td>";
+    print "<td>";
+    if ($type == 'total') {
+        print display_range($value['firsttime'] / $value['firsttime_outof']);
+    } else {
+        print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high']);
+    }
+    print "</td>";
     print "</tr>";
 }
 ?>
@@ -77,7 +83,9 @@ have written to an elected representative of any kind.
 
 <h2>Messages to MPs during 2005</h2>
 <p><img src="/stats/signups-2005-WMC.png"></p>
-
+<p><strong>Note:</strong> During the period up to a General Election there are
+no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
+MPs on 14th April, enabling it again a week after the election on 12th May.
 
 <table border="0"><tr><td width="50%" valign="top">
 
