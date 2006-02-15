@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.7 2006-02-14 17:24:45 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.8 2006-02-15 09:43:38 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -57,7 +57,7 @@ die "enter a reasonable year as first argument" if !$year || $year < 2000 || $ye
 my $output_format = shift;
 die "enter PHP or debug for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug');
 my $area_type = 'WMC';
-my $debug_fewer_reps = undef; #100;# for testing, run with fewer reps than all
+my $debug_fewer_reps = undef; # undef or 100;# for testing, run with fewer reps than all
 
 ############################################################################
 # Fix duplicate questionnaire data
@@ -146,7 +146,19 @@ print STDERR "done\n";
 
 (@allreps = @allreps[0 .. $debug_fewer_reps - 1]) if $debug_fewer_reps;
 
+@allreps = sort { $repinfo{$a}->{whencreated} <=> $repinfo{$b}->{whencreated} } @allreps;
+
+my $reps_by_person;
+foreach my $repid (@allreps) {
+    my $r_info = $repinfo{$repid};
+    # TODO: Will have to fix this up for non-MP reps - possibly just make a
+    # $reps_by_person with only one entry per array, keys just the $repid
+    die "missing parlparse_person_id for repid $repid" if !$r_info->{parlparse_person_id};
+    push @{$reps_by_person->{$r_info->{parlparse_person_id}}}, $repid;
+}
+
 #print Dumper(\@allreps);
+#print Dumper($reps_by_person);
 
 ############################################################################
 # Calculate intervals
@@ -436,17 +448,26 @@ print STDERR "done\n";
 # unknown - Needs manual checking
 
 sub work_out_rep_category($) {
-    my ($repid) = @_;
+    my ($person_id) = @_;
 
-    my $r_info = $repinfo{$repid};
-    my $areaid = $reptoarea->{$repid};
-    my $a_info = $areainfo{$areaid};
-    my $f_after_dispatch = $fails_after_dispatch{$repid} || 0;
-    my $n_dispatched = $not_dispatched{$repid} || 0;
-    my $q_data = $r{$repid};
+    # add up Q results for each rep id for the person
+    my $q_data;
+    my $sent_m;
+    my @ints;
+    foreach my $repid (@{$reps_by_person->{$person_id}}) {
+        foreach (0..3) {
+            $q_data->[$_] += $r{$repid}->[$_];
+        }
+        die "$repid has no sent_messages field" if !exists($sent_messages{$repid});
+        $sent_m += $sent_messages{$repid};
+        my @newints = @{$allintervals->{$repid}};
+        if (scalar(@ints) > 0) {
+            die Dumper(\@ints) . Dumper(\@newints). "out of order intervals for person $person_id" 
+                if $ints[-1]->{'to'} >= $newints[0]->{'from'} + 30; # 30 seconds for scripts that del/add at once but with small gap
+        }
+        push @ints, @newints;
+    }
 
-    my @ints = @{$allintervals->{$repid}};
-    # hmm, TODO: use length of known?
     my $rep_length = $ints[-1]->{'to'} - $ints[0]->{'from'};
 
     # Gather data
@@ -489,7 +510,7 @@ sub work_out_rep_category($) {
 
     # Work out what we are
     return 'shame' if ($shametime > $rep_length * 0.1);
-    return 'toofew' if ($sent_messages{$repid} < 10);
+    return 'toofew' if ($sent_m < 10);
     #return 'toofew' if (!defined($confidence_length) || $confidence_length > 0.50);
     return 'good' if ($intervals_with_no_q_response == 0);
     return 'good' if ($intervals_with_no_q_response_and_validmethod == 0);
@@ -509,38 +530,54 @@ sub emit_php($$) {
 }
 
 sub display_rep($$) {
-    my ($repid, $category) = @_;
+    my ($person_id, $category) = @_;
 
-    return if $repid == 26988; #  "Election Pending following the death of Robin Cook"
-
-    my $r_info = $repinfo{$repid};
-    my $areaid = $reptoarea->{$repid};
-    my $a_info = $areainfo{$areaid};
-    #print "repid: $repid\n"; print Dumper($r_info); print Dumper($a_info); exit;
-
-    my $f_after_dispatch = $fails_after_dispatch{$repid} || 0;
-    my $n_dispatched = $not_dispatched{$repid} || 0;
-
-    my $q_data = $r{$repid};
+    # add up Q results for each rep id for the person
+    my $q_data;
+    my $sent_m;
+    my @ints;
+    my $parties;
+    my $rep_names;
+    my $area_names;
+    foreach my $repid (@{$reps_by_person->{$person_id}}) {
+        foreach (0..3) {
+            $q_data->[$_] += $r{$repid}->[$_];
+        }
+        $sent_m += $sent_messages{$repid};
+        my @newints = @{$allintervals->{$repid}};
+        push @ints, @newints;
+        my $r_info = $repinfo{$repid};
+        my $sparty = $r_info->{'party'};
+        $sparty = "Labour" if $sparty eq "Labour / Co-operative";
+        $parties->{$sparty} = 1;
+        $rep_names->{$r_info->{'name'}} = 1;
+        my $a_info = $areainfo{$reptoarea->{$repid}};
+        $area_names->{$a_info->{'name'}} = 1;
+        die if $a_info->{'type'} ne $area_type; # assertion
+    }
+    my $party = join(" / ", keys %$parties);
+    my $rep_name = join(" / ", keys %$rep_names);
+    my $area_name = join(" / ", keys %$area_names);
+    my $repids = join(" ", @{$reps_by_person->{$person_id}});
 
     for (0..3) {
-        die Dumper($r_info) . "rep $repid has missing q data" if !defined($q_data->[$_]);
+        die "rep $person_id has missing q data" if !defined($q_data->[$_]);
     }
-    die "$repid has no sent_messages field" if !exists($sent_messages{$repid});
     my ($re_mean, $re_low, $re_high) = 
         $q_data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[0], $q_data->[1]) : undef;
     my ($ft_mean, $ft_low, $ft_high) = 
         $q_data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
 
     if ($output_format eq "PHP") {
-        print "    $repid => array(\n";
-        emit_php('recipient_id', $repid);
+        print "    '$person_id' => array(\n";
+        emit_php('person_id', $person_id);
+        emit_php('recipient_ids', $repids);
         emit_php('category', $category);
-        emit_php('name', $r_info->{'name'});
-        emit_php('party', $r_info->{'party'});
-        emit_php('area', $a_info->{'name'});
+        emit_php('name', $rep_name);
+        emit_php('party', $party);
+        emit_php('area', $area_name);
 
-        emit_php('dispatched_success', $sent_messages{$repid});
+        emit_php('dispatched_success', $sent_m);
 
         emit_php('responded', $q_data->[0]);
         emit_php('responded_outof', $q_data->[1]);
@@ -557,25 +594,18 @@ sub display_rep($$) {
         emit_php('when_generated', time());
         print "    ),\n\n";
     } else {
-        print sprintf("repid$repid %s (%s) of %s 
-        sent-success:%d sent-fail:%d not-sent(approx):%d
-        Qresponded:%d/%d Qfirsttime:%d/%d
-        deleted%s edittimes:%d-%s-%s \n", 
-                $r_info->{'name'}, $r_info->{'party'}, $a_info->{'name'},
-                $sent_messages{$repid}, $f_after_dispatch, $n_dispatched,
-                $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
-                $r_info->{'deleted'}, 
-                $r_info->{'edit_times'}, $r_info->{'last_editor'}, 
-                $r_info->{'method'}
+        print sprintf("personid:$person_id repids:$repids %s (%s) of %s 
+        sent-success:%d Qresponded:%d/%d Qfirsttime:%d/%d\n",
+                $rep_name, $party, $area_name,
+                $sent_m, $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
                 );
     }
-    die if $a_info->{'type'} ne $area_type; # assertion
 
     # pretty display of intervals for one MP
     if ($output_format eq 'debug') {
         my $first = 1;
         print "    ";
-        foreach my $interval (@{$allintervals->{$repid}}) {
+        foreach my $interval (@ints) {
             if ($first) {
                 print strftime("(%d %b %Y)", localtime($interval->{'from'}));
             }
@@ -599,31 +629,35 @@ my $total_firsttime_outof = 0;
 my $total_fails_after_dispatch = 0;
 print "<?php\n/* Automatically generated by fyr/bin/stats-yearly-response */\n\n" if $output_format eq "PHP";
 print "\$questionnaire_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
-foreach my $repid (@allreps) {
-    my $category = work_out_rep_category($repid);
-    if ($year == 2005) {
-        if ($repid == 1709 or $repid == 1911 or $repid == 2137 or $repid == 1621 or $repid == 26273
-            or $repid == 1878 or $repid == 1711 or $repid == 2065 or $repid == 1755 or $repid == 1970) {
-            die "repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
-            $category = "good";
+
+foreach my $person_id (keys %$reps_by_person) {
+    my $category = work_out_rep_category($person_id);
+=comment
+        if ($year == 2005) {
+            if ($repid == 1709 or $repid == 1911 or $repid == 2137 or $repid == 1621 or $repid == 26273
+                or $repid == 1878 or $repid == 1711 or $repid == 2065 or $repid == 1755 or $repid == 1970) {
+                die "repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
+                $category = "good";
+            }
+            if ($repid == 2119) {
+                # ILG
+                $category = "cheat";
+            }
         }
-        if ($repid == 2119) {
-            # ILG
-            $category = "cheat";
-        }
+=cut
+    display_rep($person_id, $category);
+        
+    foreach my $repid (@{$reps_by_person->{$person_id}}) {
+        my $q_data = $r{$repid};
+        $total_sent += $sent_messages{$repid};
+        $total_responded += $q_data->[0];
+        $total_responded_outof += $q_data->[1];
+        $total_firsttime += $q_data->[2];
+        $total_firsttime_outof += $q_data->[3];
+        $total_fails_after_dispatch += ($fails_after_dispatch{$repid} || 0); 
+
+        print "\n" if $output_format eq 'debug';
     }
-    
-    display_rep($repid, $category);
-
-    my $q_data = $r{$repid};
-    $total_sent += $sent_messages{$repid};
-    $total_responded += $q_data->[0];
-    $total_responded_outof += $q_data->[1];
-    $total_firsttime += $q_data->[2];
-    $total_firsttime_outof += $q_data->[3];
-    $total_fails_after_dispatch += ($fails_after_dispatch{$repid} || 0); 
-
-    print "\n" if $output_format eq 'debug';
 }
 
 if ($output_format eq 'debug') {
