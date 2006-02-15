@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.8 2006-02-15 09:43:38 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.9 2006-02-15 16:22:02 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -632,19 +632,31 @@ print "\$questionnaire_report_${year}_${area_type} = array(\n" if $output_format
 
 foreach my $person_id (keys %$reps_by_person) {
     my $category = work_out_rep_category($person_id);
-=comment
-        if ($year == 2005) {
-            if ($repid == 1709 or $repid == 1911 or $repid == 2137 or $repid == 1621 or $repid == 26273
-                or $repid == 1878 or $repid == 1711 or $repid == 2065 or $repid == 1755 or $repid == 1970) {
-                die "repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
+    if ($year == 2005) {
+        my $c = scalar(@{$reps_by_person->{$person_id}});
+        foreach my $repid (@{$reps_by_person->{$person_id}}) {
+            if ($repid == 1709 or $repid == 1883 or $repid == 1911 or $repid == 2043 or 
+                $repid == 1924 or $repid == 2137 or $repid == 1530 or $repid == 1719 or 
+                $repid == 1621 or $repid == 26273 or $repid == 1654 or $repid == 2027 or 
+                $repid == 1878 or $repid == 1897 or $repid == 1711 or $repid == 2065 or 
+                $repid == 1755 or $repid == 1970 or $repid == 1691) 
+            {
+                #warn "count $c > 1 for person $person_id $repid" if $c != 1;
+                die "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
                 $category = "good";
             }
-            if ($repid == 2119) {
-                # ILG
-                $category = "cheat";
+            if ($repid == 1908 or $repid == 26393)
+            {
+                #warn "count $c > 1 for person $person_id $repid" if $c != 1;
+                die "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
+                $category = "badcontact";
             }
         }
-=cut
+        if ($person_id eq "uk.org.publicwhip/person/11048") {
+            # ILG
+            $category = "cheat";
+        }
+    }
     display_rep($person_id, $category);
         
     foreach my $repid (@{$reps_by_person->{$person_id}}) {
