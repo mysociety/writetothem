@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.5 2006-02-15 00:46:18 francis Exp $
+ * $Id: stats.php,v 1.6 2006-02-15 09:47:47 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -81,7 +81,7 @@ function mp_response_table($year, $questionnaire_report) {
     foreach ($questionnaire_report as $key => $row) {
         if (is_array($row)) {
             $data['data'][] = array(
-                'id' => $row['recipient_id'],
+                'person_id' => $key,
                 'name' => $row['name'],
                 'party' => $row['party'],
                 'area' => $row['area'],
