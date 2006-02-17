@@ -88,6 +88,7 @@ $zeitgeist_by_summary_type_2005 = array(
 
 
     'total' => array(
+        'total' => true,
         'dispatched_success' => '42515',
         'responded' => '17822',
         'responded_outof' => '29793',

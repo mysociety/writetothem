@@ -11,7 +11,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
 </head>
-<body><a name="top" id="top"></a>
+<body<? if (isset($values['body_id'])) print ' id="' . $values['body_id'] . '"'; ?>><a name="top" id="top"></a>
 <h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem.com<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';

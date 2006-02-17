@@ -4,65 +4,21 @@ $data = $values['data'];
 $info = $data['info'];
 $data = $data['data'];
 ?>
-<script type="text/javascript">
-var showall = 1
-function toggle_category(cat) {
-    var d = document.getElementsByTagName('tr')
-    for (i=0; i<d.length; ++i) {
-        if (d[i].className.indexOf(cat) != -1) {
-		var s = d[i].style.display
-		if (s == 'none') d[i].style.display = 'table-row'
-		else d[i].style.display = 'none'
-	}
-    }
-}
-function just_good() {
-    toggle_category('shame')
-    toggle_category('toofew')
-    toggle_category('unknown')
-    var d = document.getElementById('toggleword')
-    if (showall) {
-	    d.innerHTML = 'Show all'
-    } else {
-        d.innerHTML = "Just those in 'good' category"-->
-    }
-    showall = 1 - showall
-}
-</script>
-
 <h2><?=$values['title']?></h2>
-<p align="center"><a href="/stats/<?=$values['year']?>/zeitgeist">Zeitgeist</a> | Detailed MP Performance</p>
+<p id="zeitgeist_nav"><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a> | <strong>MP Responsiveness League Table</strong></p>
 
 <p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
- messages to MPs last year.
-<strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback email.
-This asked after 2 to 3 weeks whether MPs had responded to their message.
-</p>
+ messages to MPs last year and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
+<strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
+about communicating with their MP. This asked whether MPs had responded to their message within two to three weeks.
 
-<!--<p><a href="javascript:just_good()" id="toggleword">Just those in 'good' category</a></p>-->
+<p>Ranges in square brackets are the "95% confidence intervals", that is given how
+much or little data we have, we are only sure the value is in that range.</p>
 
-<style type="text/css">
-table {
-    border-collapse: collapse;
-    font-size: 93%;
-    border: solid 1px #a5a57c;
-    border-width: 1px 0 1px 1px;
-}
-td.c { text-align: center; }
-tr:hover {
-background-color: #ffe88c;
-}
-th, td {
-    margin: 0; padding: 2px 5px;
-    border-right: solid 1px #a5a57c;
-}
-.a {
-    background-color: #ffffcc;
-}
-</style>
+<p>Journalists: please feel free to use the data on this page, but if you do you must cite TheyWorkForYou.com in the body of your articles as the source of any analysis or data you get off this site.</p>
 
-<table>
-<tr class="a">
+<table class="zeitgeist">
+<tr>
 <th><a href="?o=n">Name (Party)</a></th>
 <th><a href="?o=c">Constituency</a></th>
 <th><a href="?o=s">Messages sent to MP</a></th>

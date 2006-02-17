@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.8 2006-02-15 17:26:26 francis Exp $
+ * $Id: stats.php,v 1.9 2006-02-17 15:56:06 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -21,12 +21,11 @@ if (!get_http_var('type') || !get_http_var('year')) {
     exit;
 }
 
+require_once "../phplib/summary_report_${year}.php";
+require_once "../phplib/questionnaire_report_${year}_WMC.php";
 if ($type == 'mps') {
-    require_once "../phplib/questionnaire_report_${year}_WMC.php";
-    mp_response_table($year, $GLOBALS["questionnaire_report_${year}_WMC"]);
+    mp_response_table($year, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"]);
 } elseif ($type == 'zeitgeist') {
-    require_once "../phplib/summary_report_${year}.php";
-    require_once "../phplib/questionnaire_report_${year}_WMC.php";
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
         $GLOBALS["party_report_${year}_WMC"],
         $GLOBALS["questionnaire_report_${year}_WMC"]
@@ -37,28 +36,24 @@ if ($type == 'mps') {
 
 function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) {
     function sort_by_responsiveness($a, $b) {
-        global $ps;
-        if ($a == 'total') return 1;
-        if ($b == 'total') return -1;
-        return $ps[$a]['responded'] / $ps[$a]['responded_outof'] <
-            $ps[$b]['responded'] / $ps[$b]['responded_outof'] ?
+        if (isset($a['total'])) return 1;
+        if (isset($b['total'])) return -1;
+        return $a['responded'] / $a['responded_outof'] <
+            $b['responded'] / $b['responded_outof'] ?
             1 : -1;
     }
     function sort_by_firsttime($a, $b) {
-        global $ps;
-        return $ps[$a]['firsttime'] / $ps[$a]['firsttime_outof'] <
-            $ps[$b]['firsttime'] / $ps[$b]['firsttime_outof'] ?
+        return $a['firsttime'] / $a['firsttime_outof'] <
+            $b['firsttime'] / $b['firsttime_outof'] ?
             1 : -1;
     }
-    global $ps; # this is awful, but there doesn't seem another way of passing param to sorting fn in PHP
-    $ps = $party_summary;
+    uasort($party_summary, 'sort_by_responsiveness');
     $parties_by_responsiveness = array_keys($party_summary);
-    usort($parties_by_responsiveness, 'sort_by_responsiveness');
+    uasort($party_summary, 'sort_by_firsttime');
     $parties_by_firsttime = array_keys($party_summary);
-    usort($parties_by_firsttime, 'sort_by_firsttime');
-    $ps = $type_summary;
+    uasort($type_summary, 'sort_by_responsiveness');
     $types_by_responsiveness = array_keys($type_summary);
-    usort($types_by_responsiveness, 'sort_by_responsiveness');
+    $libdem_leadership_candidates = array();
     if ($year == "2005") {
         $libdem_leadership_candidates = 
             array(
@@ -79,9 +74,8 @@ function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) 
             ));
 }
 
-function mp_response_table($year, $questionnaire_report) {
+function mp_response_table($year, $questionnaire_report, $type_summary) {
     # Read in data
-    require_once "../phplib/questionnaire_report_${year}_WMC.php";
     $data = array();
     foreach ($questionnaire_report as $key => $row) {
         if (is_array($row)) {
@@ -101,6 +95,13 @@ function mp_response_table($year, $questionnaire_report) {
             $data['info'][$key] = $row;
         }
     }
+
+    $non_mp_sent = 0;
+    foreach ($type_summary as $type => $row) {
+    	if ($type != 'westminster' && $type != 'total')
+	    $non_mp_sent += $row['dispatched_success'];
+    }
+    $data['info']['non_mp_sent'] = $non_mp_sent;
 
     # Sort data
     function by_name($a, $b) {

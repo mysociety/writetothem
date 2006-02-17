@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.35 2006-02-14 16:05:11 francis Exp $
+ * $Id: wtt.css,v 1.36 2006-02-17 15:56:06 matthew Exp $
  * 
  */
 
@@ -44,8 +44,11 @@ h2,h3,h4 {
 }
 h2 {    font-size: 150%; }
 h3 {    font-size: 120%; }
-.maincol h3, .firstcol h3 {
+.maincol h3, .firstcol h3, #zeitgeist p.n {
     margin-bottom: 0;
+}
+#zeitgeist h3 {
+    margin-top: 2em;
 }
 .maincol p, .firstcol p {
     margin-top: 0;
@@ -216,6 +219,10 @@ ol#instructions li#fiv span { background-color: #000066; }
 .maincol {
     border-left: solid 1px #9c8f4f;
 }
+/* td.firstcol, td.maincol {
+    font-size: 90%;
+} */
+
 #repstable ul#photo {
     list-style-type: none;
     margin-left: 0;
@@ -341,5 +348,17 @@ table.zeitgeist th, table.zeitgeist td {
 table.zeitgeist .a, table.zeitgeist th {
     background-color: #ffffcc;
 }
-
-
+table.zeitgesit td.c {
+    text-align: center;
+}
+#zeitgeist_nav {
+   background-color: #ffffac;
+   padding: 5px;
+   text-align: center;
+}
+#zeitgeist_cols .left {
+    padding-right: 1em;
+}
+#zeitgeist_cols td.right {
+    padding-left: 1em;
+}

@@ -8,7 +8,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.6 2006-02-14 14:57:36 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.7 2006-02-17 15:56:13 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -182,7 +182,7 @@ foreach my $summary_type (keys %$summary_types) {
 }
 
 print "\n";
-print "    'total' => array(\n";
+print "    'total' => array(\n        'total' => true,\n";
 emit_php('dispatched_success', $total_sent);
 #emit_php('total_fails_after_dispatch', $total_fails_after_dispatch); # this is a bit useless
 emit_php('responded', $total_responded);

@@ -1,4 +1,4 @@
-<? template_draw('header', $values); 
+<? $values['body_id'] = 'zeitgeist'; template_draw('header', $values); 
 
 # $display_type can be:
 # 0 - display as +- if possible (i.e. symmeterical enough), otherwise range
@@ -29,9 +29,37 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 ?>
 
 <h2><?=$values['title']?></h2>
-<p align="center">Zeitgeist | <a href="/stats/<?=$values['year']?>/mps">Detailed MP Peformance</a></p>
 
-<h2>Performance of elected bodies</h2>
+<p id="zeitgeist_nav"><strong>Summary</strong> | <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
+
+<p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
+table of MP responsiveness data, measuring
+the proportion of users who said that they had heard something back
+from their MP after they had written to them.</p>
+
+<p>In 2005 <a href="http://www.mysociety.org/">mySociety</a> held off publishing an updated version of this data
+because we were busy totally rebuilding FaxYourMP as <a href="/">WriteToThem</a>,
+adding all the UK's 20,000+ other elected representatives, such as
+councillors and MSPs.</p>
+
+<p>We are now publishing this data to celebrate WriteToThem's first
+birthday, and to fulfil our parent charity's registered objects &mdash; to
+conduct research into the interaction between elected bodies and the
+Internet.</p>
+
+
+<h3>Messages to MPs during 2005</h3>
+<map name="imap">
+<area shape="rect" coords="172,66,250,86" href="http://www.feedmebetter.com/getinvolved/lobbymp.php">
+<area shape="rect" coords="404,10,424,130" href="http://www.owos.info/how_you_can_help/contact_MP.php">
+<area shape="rect" coords="522,140,562,160" href="http://www.no2id.net/">
+</map>
+<p align="center"><img border="0" src="/stats/signups-2005-WMC.png" alt="The number of messages sent to MPs via WriteToThem varied throughout the year. Peaks included the Jamie Oliver campaign in March, Our World Our Say at the end of June, and animalsasia.org in November" usemap="#imap"></p>
+<p><strong>Note:</strong> During the period up to a General Election there are
+no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
+MPs on 14th April, enabling it again a week after the election on 12th May.</p>
+
+<h3>Performance of elected bodies</h3>
 <table class="zeitgeist">
 <tr>
 <th>&nbsp;</th>
@@ -80,14 +108,8 @@ if they have got a response yet.
 have written to an elected representative of any kind.
 </p>
 
-<h2>Messages to MPs during 2005</h2>
-<p><img src="/stats/signups-2005-WMC.png"></p>
-<p><strong>Note:</strong> During the period up to a General Election there are
-no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
-MPs on 14th April, enabling it again a week after the election on 12th May.
-
 <? if ($values['year'] == 2005) { ?>
-<h2>Lib Dem leadership candidates</h2>
+<h3>Lib Dem leadership candidates</h3>
 <table class="zeitgeist">
 <tr>
 <th>&nbsp;</th>
@@ -111,11 +133,14 @@ MPs on 14th April, enabling it again a week after the election on 12th May.
     }
 ?>
 </table>
+<p class="n"><strong>Note:</strong>
+Ranges in square brackets are the "95% confidence intervals"; that is, given
+how little data we have, we are only sure the value is in that range.</p>
 <? } ?>
 
-<table border="0"><tr><td width="50%" valign="top">
+<table id="zeitgeist_cols" border="0" cellpadding="0" cellspacing="0"><tr><td width="50%" valign="top" class="left">
 
-<h2>Response rate of each party</h2>
+<h3>Response rate of each party</h3>
 <p>For MPs of each party, percentage of messages responded to 
 within 2 to 3 weeks.
 <table class="zeitgeist">
@@ -136,12 +161,12 @@ foreach ($values['parties_by_responsiveness'] as $party) {
 ?>
 </table>
 <p><strong>Note:</strong> Very few messages were sent to some parties.
-Ranges in square brackets are the "95% confidence intervals", that is given
-how little data we have, we are only sure the value is in that range.
+Ranges in square brackets are the "95% confidence intervals"; that is, given
+how little data we have, we are only sure the value is in that range.</p>
 
-</td><td valign="top">
+</td><td valign="top" class="right">
 
-<h2>First time writers by party</h2>
+<h3>First time writers by party</h3>
 <p>For constituencies represented by each party, percentage
 of people writing messages who were writing to a representative
 for the first time.
