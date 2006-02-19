@@ -3,6 +3,7 @@ template_draw('header', $values);
 $data = $values['data'];
 $info = $data['info'];
 $data = $data['data'];
+$sort = $info['sort'];
 ?>
 <h2><?=$values['title']?></h2>
 <p id="zeitgeist_nav"><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a> | <strong>MP Responsiveness League Table</strong></p>
@@ -12,30 +13,37 @@ $data = $data['data'];
 <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
 about communicating with their MP. This asked whether MPs had responded to their message within two to three weeks.
 
-<p>Ranges in square brackets are the "95% confidence intervals", that is given how
+<p>Journalists: please feel free to use the data on this page, but if you do you <em>must</em> cite WriteToThem.com in the body of your articles as the source of any analysis or data you get off this site.</p>
+
+<p>"95% confidence interval" means given how
 much or little data we have, we are only sure the value is in that range.</p>
 
-<p>Journalists: please feel free to use the data on this page, but if you do you must cite TheyWorkForYou.com in the body of your articles as the source of any analysis or data you get off this site.</p>
-
+<?
+$head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
+$head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
+$head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
+$head_response = 'Response rate by MP'; if ($sort != 'r') $head_response = '<a href="?">' . $head_response . '</a>';
+?>
 <table class="zeitgeist">
 <tr>
-<th><a href="?o=n">Name (Party)</a></th>
-<th><a href="?o=c">Constituency</a></th>
-<th><a href="?o=s">Messages sent to MP</a></th>
-<th><a href="?">Response rate by MP</a></th>
+<? if ($sort == 'r') print '<th>Pos<sup>n</sup></th>'; ?>
+<th><?=$head_name ?></th>
+<th><?=$head_cons ?></th>
+<th><?=$head_messages ?></th>
+<th><?=$head_response ?></th>
 <th>95% confidence interval</th>
 </tr>
 <?
 
 $party_short = array(
-	'Labour' => 'Lab',
-	'Independent Conservative' => 'Ind Con',
-	'Labour / Co-operative' => 'Lab/Co-op',
-	'Conservative' => 'Con',
-	'Liberal Democrat' => 'Lib Dem',
-	'Plaid Cymru' => 'PC',
-	'Sinn Féin' => 'SF',
-	'Independent' => 'Ind',
+    'Labour' => 'Lab',
+    'Independent Conservative' => 'Ind Con',
+    'Labour / Co-operative' => 'Lab/Co-op',
+    'Conservative' => 'Con',
+    'Liberal Democrat' => 'Lib Dem',
+    'Plaid Cymru' => 'PC',
+    'Sinn Féin' => 'SF',
+    'Independent' => 'Ind',
 );
 
 $c = 0;
@@ -44,23 +52,29 @@ foreach ($data as $row) {
 	if ($c++%2) {
 		print ' a';
 	}
-	print '"><td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
-	print '<br><small>';
-#	if (array_key_exists($row['party'], $party_short)) {
-#		print $party_short[$row['party']];
-	print $row['party'];
-	print "</small></td>";
-	print "<td>$row[area]</td>";
-	print "<td align='right'>$row[sent]</td>";
-	if ($row['notes']) {
-		print '<td colspan="2">' . $row['notes'] . '</td>';
-	} else {
-		print "<td align='right'>$row[response]%</td>";
-		#print "<td class='c'>($row[low]%&nbsp;&ndash;&nbsp;$row[high]%)</td>";
-		print "<td>".round($row['low'],0)."%&ndash;".round($row['high'],0)."%</td>";
-		#print "<td><img src='stats/$row[id].png' title='95% confidence interval: $row[low]%&nbsp;&ndash;&nbsp;$row[high]%'></td>";
+	print '">';
+    if ($sort == 'r') {
+        print '<td class="c">';
+	if (!$row['notes']) {
+	    print $c;
 	}
-	print "</tr>\n";
+	print '<br><small>Up/Down N</small></td>';
+    }
+    print '<td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
+    print '<br><small>';
+#    if (array_key_exists($row['party'], $party_short)) {
+#        print $party_short[$row['party']];
+    print $row['party'];
+    print "</small></td>";
+    print "<td>$row[area]</td>";
+    print "<td align='right'>$row[sent]</td>";
+    if ($row['notes']) {
+        print '<td colspan="2">' . $row['notes'] . '</td>';
+    } else {
+        print "<td align='right'>$row[response]%</td>";
+        print "<td>" . $row['low'] . "%&ndash;" . $row['high'] . "%</td>";
+    }
+    print "</tr>\n";
 }
 print '</table>';
 

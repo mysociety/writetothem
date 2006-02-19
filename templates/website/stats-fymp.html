@@ -1,0 +1,60 @@
+<?
+template_draw('header', $values);
+$data = $values['data'];
+$info = $data['info'];
+$data = $data['data'];
+?>
+<h2><?=$values['title']?></h2>
+
+<p>"95% confidence interval" means given how
+much or little data we have, we are only sure the value is in that range.</p>
+
+<table class="zeitgeist">
+<tr>
+<th><a href="?o=n">Name (Party)</a></th>
+<th><a href="?o=c">Constituency</a></th>
+<th><a href="?o=s">Messages sent to MP</a></th>
+<th><a href="?">Response rate by MP</a></th>
+<th>95% confidence interval</th>
+</tr>
+<?
+
+$party_short = array(
+	'Labour' => 'Lab',
+	'Independent Conservative' => 'Ind Con',
+	'Labour / Co-operative' => 'Lab/Co-op',
+	'Conservative' => 'Con',
+	'Liberal Democrat' => 'Lib Dem',
+	'Plaid Cymru' => 'PC',
+	'Sinn Féin' => 'SF',
+	'Independent' => 'Ind',
+);
+
+$c = 0;
+foreach ($data as $row) {
+	print '<tr class="'.$row['category'];
+	if ($c++%2) {
+		print ' a';
+	}
+	print '"><td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
+	print '<br><small>';
+#	if (array_key_exists($row['party'], $party_short)) {
+#		print $party_short[$row['party']];
+	print $row['party'];
+	print "</small></td>";
+	print "<td>$row[area]</td>";
+	print "<td align='right'>$row[sent]</td>";
+	if ($row['notes']) {
+		print '<td colspan="2">' . $row['notes'] . '</td>';
+	} else {
+		print "<td align='right'>$row[response]%</td>";
+		#print "<td class='c'>($row[low]%&nbsp;&ndash;&nbsp;$row[high]%)</td>";
+		print "<td>".round($row['low'],0)."%&ndash;".round($row['high'],0)."%</td>";
+		#print "<td><img src='stats/$row[id].png' title='95% confidence interval: $row[low]%&nbsp;&ndash;&nbsp;$row[high]%'></td>";
+	}
+	print "</tr>\n";
+}
+print '</table>';
+
+template_draw('footer', $values);
+?>

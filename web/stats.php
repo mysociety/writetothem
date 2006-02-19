@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.9 2006-02-17 15:56:06 matthew Exp $
+ * $Id: stats.php,v 1.10 2006-02-19 12:40:50 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -88,8 +88,8 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
                 'category' => $row['category'],
                 'notes' => category_lookup($row['category']),
                 'response' => round($row['responded_mean'] * 100, 1),
-                'low' => round($row['responded_95_low'] * 100, 1),
-                'high' => round($row['responded_95_high'] * 100, 1)
+                'low' => round($row['responded_95_low'] * 100, 0),
+                'high' => round($row['responded_95_high'] * 100, 0)
             );
         } else {
             $data['info'][$key] = $row;
@@ -123,6 +123,7 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
     } elseif ($sort == 's') {
         usort($data['data'], 'by_sent');
     } else {
+        $sort = 'r';
         function by_response($a, $b) {
             if ($a['category'] != 'good' && $b['category'] == 'good')
                 return 1;
