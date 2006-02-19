@@ -42,7 +42,7 @@ $linebreak = false;
 foreach ($data as $row) {
     print '<tr';
     $classes = array();
-    if (!$linebreak && $row['notes']) {
+    if ($sort == 'r' && !$linebreak && $row['notes']) {
         $classes[] = 'break';
 	$linebreak = true;
     }
