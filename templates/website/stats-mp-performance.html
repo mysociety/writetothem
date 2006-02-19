@@ -13,10 +13,12 @@ $sort = $info['sort'];
 <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
 about communicating with their MP. This asked whether MPs had responded to their message within two to three weeks.
 
-<p>Journalists: please feel free to use the data on this page, but if you do you <em>must</em> cite WriteToThem.com in the body of your articles as the source of any analysis or data you get off this site.</p>
+<p><em>Journalists: please feel free to use the data on this page, but if you do you <em>must</em> cite WriteToThem.com in the body of your articles as the source of any analysis or data you get off this site.</em></p>
 
-<p>"95% confidence interval" means given how
-much or little data we have, we are only sure the value is in that range.</p>
+<p><small><strong>Note:</strong> "95% confidence interval" means given how
+much or little data we have, we are only sure the value is in that range. There
+are over 650 MPs in this list because it includes MPs from before and
+after the 2005 election.</small></p>
 
 <?
 $head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
@@ -35,35 +37,37 @@ $head_response = 'Response rate by MP'; if ($sort != 'r') $head_response = '<a h
 </tr>
 <?
 
-$party_short = array(
-    'Labour' => 'Lab',
-    'Independent Conservative' => 'Ind Con',
-    'Labour / Co-operative' => 'Lab/Co-op',
-    'Conservative' => 'Con',
-    'Liberal Democrat' => 'Lib Dem',
-    'Plaid Cymru' => 'PC',
-    'Sinn Féin' => 'SF',
-    'Independent' => 'Ind',
-);
-
 $c = 0;
+$linebreak = false;
 foreach ($data as $row) {
-	print '<tr class="'.$row['category'];
-	if ($c++%2) {
-		print ' a';
-	}
-	print '">';
+    print '<tr';
+    $classes = array();
+    if (!$linebreak && $row['notes']) {
+        $classes[] = 'break';
+	$linebreak = true;
+    }
+    if ($c++%2) $classes[] = 'a';
+    if (count($classes))
+        print ' class="' . join(' ', $classes) . '"';
+    print '>';
     if ($sort == 'r') {
         print '<td class="c">';
 	if (!$row['notes']) {
-	    print $c;
+	    print "$c<br><small>";
+	    if ($row['fymp_rank']) {
+	    	$diff = $c - $row['fymp_rank'];
+		if ($diff<0) print '<img src="/images/arrow_up.png"> ' . -$diff;
+		elseif ($diff>0) print '<img src="/images/arrow_down.png"> ' . $diff;
+		else print '<img src="/images/arrow_right.png"> =';
+	    } else {
+	        print 'New';
+            }
+	    print '</small>';
 	}
-	print '<br><small>Up/Down N</small></td>';
+	print '</td>';
     }
     print '<td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
     print '<br><small>';
-#    if (array_key_exists($row['party'], $party_short)) {
-#        print $party_short[$row['party']];
     print $row['party'];
     print "</small></td>";
     print "<td>$row[area]</td>";

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-my $rcsid = ''; $rcsid .= '$Id: stats-redo-fymp,v 1.1 2006-02-19 12:40:31 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-redo-fymp,v 1.2 2006-02-19 22:09:17 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -14,6 +14,17 @@ use utf8;
 binmode(STDOUT, ':utf8');
 
 use mySociety::Util;
+
+# XXX: Yes, this isn't proper or anything, but I just wanted it done.
+my %reps_by_name;
+open (FP, '../table');
+while (<FP>) {
+    chomp;
+    my ($name, $repid, $person_id) = split /\s+\|\s+/;
+    $name = lc($name);
+    $reps_by_name{$name} = $person_id;
+}
+close FP;
 
 open (FP, '../web/fymp.html');
 $_ = join('', <FP>);
@@ -40,7 +51,20 @@ while (/<tr>(.*?)<\/tr>/sg) {
     $category = 'shame' if ($notes eq 'Does not accept messages');
     $category = 'badcontact' if ($notes eq 'No contact details');
     $c++;
+
+    my $lookup_name = lc($name);
+    $lookup_name =~ s/^(dr|sir|mrs|hon|lady) //;
+    $lookup_name =~ s/ (qc|jp|fsa|bem|bart\.|obe|cbe|mbe)$//g;
+    $lookup_name =~ s/ (qc|jp|fsa|bem|bart\.|obe|cbe|mbe)$//g;
+    $lookup_name =~ s/\\'/'/;
+    my $person_id = $reps_by_name{$lookup_name};
+    #print STDERR "$lookup_name $name $cons\n" if (!$person_id);
+    $person_id = "ERROR" if (!$person_id);
+    $person_id =~ s/10593/10594/ if ($name eq 'Gareth Thomas' && $cons eq 'Harrow West');
+    $person_id =~ s/11814/10546/ if ($name eq 'Angela Smith' && $cons eq 'Basildon');
+
     print "    array(
+        'person_id' => '$person_id',
         'category' => '$category',
         'name' => '$name',
         'party' => '$party',

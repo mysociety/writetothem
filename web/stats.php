@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.10 2006-02-19 12:40:50 matthew Exp $
+ * $Id: stats.php,v 1.11 2006-02-19 22:09:34 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -24,7 +24,8 @@ if (!get_http_var('type') || !get_http_var('year')) {
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
 if ($type == 'mps') {
-    mp_response_table($year, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"]);
+    require_once "../phplib/questionnaire_report_FYMP_WMC.php";
+    mp_response_table($year, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
 } elseif ($type == 'zeitgeist') {
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
         $GLOBALS["party_report_${year}_WMC"],
@@ -74,7 +75,39 @@ function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) 
             ));
 }
 
-function mp_response_table($year, $questionnaire_report, $type_summary) {
+function by_name($a, $b) {
+    return strcmp($a['name'], $b['name']);
+}
+function by_response($a, $b) {
+    if ($a['category'] != 'good' && $b['category'] == 'good')
+        return 1;
+    if ($b['category'] != 'good' && $a['category'] == 'good')
+        return -1;
+    if ($a['category'] != 'good' && $b['category'] != 'good')
+        return by_name($a, $b);
+    if ($a['response']<$b['response']) return 1;
+    elseif ($a['response']>$b['response']) return -1;
+    if ($a['low']<$b['low']) return 1;
+    elseif ($a['low']>$b['low']) return -1;
+    return 0;
+}
+
+function mp_response_table($year, $questionnaire_report, $type_summary, $fymp_report) {
+    foreach ($fymp_report as $key => $row) {
+	$fymp_data[] = array(
+            'name' => $row['name'],
+            'person_id' => $row['person_id'],
+            'category' => $row['category'],
+            'response' => round($row['responded_mean'] * 100, 1),
+            'low' => round($row['responded_95_low'] * 100, 0),
+            'high' => round($row['responded_95_high'] * 100, 0)
+	);
+    }
+    usort($fymp_data, 'by_response');
+    foreach ($fymp_data as $key => $row) {
+        $fymp_ranked[$row['person_id']] = $key+1;
+    }
+
     # Read in data
     $data = array();
     foreach ($questionnaire_report as $key => $row) {
@@ -89,7 +122,8 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
                 'notes' => category_lookup($row['category']),
                 'response' => round($row['responded_mean'] * 100, 1),
                 'low' => round($row['responded_95_low'] * 100, 0),
-                'high' => round($row['responded_95_high'] * 100, 0)
+                'high' => round($row['responded_95_high'] * 100, 0),
+		'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
             );
         } else {
             $data['info'][$key] = $row;
@@ -104,9 +138,6 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
     $data['info']['non_mp_sent'] = $non_mp_sent;
 
     # Sort data
-    function by_name($a, $b) {
-        return strcmp($a['name'], $b['name']);
-    }
     function by_area($a, $b) {
         return strcmp($a['area'], $b['area']);
     }
@@ -124,19 +155,6 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
         usort($data['data'], 'by_sent');
     } else {
         $sort = 'r';
-        function by_response($a, $b) {
-            if ($a['category'] != 'good' && $b['category'] == 'good')
-                return 1;
-            if ($b['category'] != 'good' && $a['category'] == 'good')
-                return -1;
-            if ($a['category'] != 'good' && $b['category'] != 'good')
-                return by_name($a, $b);
-            if ($a['response']<$b['response']) return 1;
-            elseif ($a['response']>$b['response']) return -1;
-            if ($a['low']<$b['low']) return 1;
-            elseif ($a['low']>$b['low']) return -1;
-            return 0;
-        }
         usort($data['data'], 'by_response');
     }
     $data['info']['sort'] = $sort;
@@ -152,9 +170,9 @@ function mp_response_table($year, $questionnaire_report, $type_summary) {
 function category_lookup($cat) {
     if ($cat == 'good') return '';
     elseif ($cat == 'shame') return "MP doesn't accept messages via WriteToThem";
-    elseif ($cat == 'toofew') return 'Too few messages sent to MP';
+    elseif ($cat == 'toofew') return 'Too little data for valid analysis';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
-    elseif ($cat == 'cheat') return 'MP attempted to improve their response rate by sending themselves messages';
+    elseif ($cat == 'cheat') return '<a href="/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
     elseif ($cat == 'badcontact') return 'WriteToThem had possibly bad contact details for this MP';
     else template_show_error("Unknown MP categorisation '".htmlspecialchars($cat)."'");
     return $cat;
