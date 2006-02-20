@@ -39,7 +39,25 @@ lie between the two limits of the confidence intervals.</small></p>
 <? } else { ?>
 <li>Response rate: <strong><?=$mp['response'] ?>%</strong> <small>[<?=$mp['low'] ?>%&ndash;<?=$mp['high'] ?>%]</small>
 <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,1) ?>%</strong> <small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>
-<? } ?>
+<li>Ranking: 
+<?  $c = 0;
+    foreach ($data as $row) {
+        $c++;
+        if ($row['person_id'] == $mp['person_id']) {
+	    print "<strong>$c</strong> (";
+            if ($row['fymp_rank']) {
+		$diff = $c - $row['fymp_rank'];
+                if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
+		elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
+		else print '<img alt="Same" src="/images/arrow_right.png"> =';
+            } else {
+	        print 'New';
+            }
+	    print ')';
+	    break;
+	}
+    }
+} ?>
 </ul>
 <p align="center">
 <a href="/?pc=<?=htmlentities($mp['pc']) ?>">Send a message to one of your representatives</a>
