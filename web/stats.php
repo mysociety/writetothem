@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.12 2006-02-20 00:37:33 matthew Exp $
+ * $Id: stats.php,v 1.13 2006-02-20 08:26:22 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -127,8 +127,20 @@ function mp_response_table($year, $rep_info, $questionnaire_report, $type_summar
 	);
     }
     usort($fymp_data, 'by_response');
+    $position = 0;
+    $same_stat = 1;
+    $last_response = -1;
+    $last_low = -1;
     foreach ($fymp_data as $key => $row) {
-        $fymp_ranked[$row['person_id']] = $key+1;
+        if ($row['response'] != $last_response || $row['low'] != $last_low) {
+	    $position += $same_stat;
+	    $same_stat = 1;
+	    $last_response = $row['response'];
+	    $last_low = $row['low'];
+	} else {
+	    $same_stat++;
+	}
+        $fymp_ranked[$row['person_id']] = $position;
     }
 
     # Read in data

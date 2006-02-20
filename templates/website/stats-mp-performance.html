@@ -40,13 +40,24 @@ lie between the two limits of the confidence intervals.</small></p>
 <li>Response rate: <strong><?=$mp['response'] ?>%</strong> <small>[<?=$mp['low'] ?>%&ndash;<?=$mp['high'] ?>%]</small>
 <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,1) ?>%</strong> <small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>
 <li>Ranking: 
-<?  $c = 0;
+<?
+    $same_stat = 1;
+    $position = 0;
+    $last_response = -1;
+    $last_low = -1;
     foreach ($data as $row) {
-        $c++;
+        if ($row['response'] != $last_response || $row['low'] != $last_low) {
+	    $position += $same_stat;
+	    $same_stat = 1;
+	    $last_response = $row['response'];
+	    $last_low = $row['low'];
+	} else {
+	    $same_stat++;
+	}
         if ($row['person_id'] == $mp['person_id']) {
-	    print "<strong>$c</strong> (";
+	    print "<strong>$position</strong> (";
             if ($row['fymp_rank']) {
-		$diff = $c - $row['fymp_rank'];
+		$diff = $position - $row['fymp_rank'];
                 if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
 		elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
 		else print '<img alt="Same" src="/images/arrow_right.png"> =';
@@ -84,6 +95,10 @@ $head_response = 'Response rate by MP'; if ($sort != 'r') $head_response = '<a h
 <?
 
 $c = 0;
+$same_stat = 1;
+$position = 0;
+$last_response = -1;
+$last_low = -1;
 $linebreak = false;
 foreach ($data as $row) {
     print '<tr';
@@ -97,11 +112,19 @@ foreach ($data as $row) {
         print ' class="' . join(' ', $classes) . '"';
     print '>';
     if ($sort == 'r') {
+        if ($row['response'] != $last_response || $row['low'] != $last_low) {
+	    $position += $same_stat;
+	    $same_stat = 1;
+	    $last_response = $row['response'];
+	    $last_low = $row['low'];
+	} else {
+	    $same_stat++;
+	}
         print '<td class="c">';
 	if (!$row['notes']) {
-	    print "$c<br><small>";
+	    print "$position<br><small>";
 	    if ($row['fymp_rank']) {
-	    	$diff = $c - $row['fymp_rank'];
+	    	$diff = $position - $row['fymp_rank'];
 		if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
 		elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
 		else print '<img alt="Same" src="/images/arrow_right.png"> =';
