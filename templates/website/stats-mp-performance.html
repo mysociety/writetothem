@@ -23,12 +23,12 @@ certain we are. We believe that it is 95% certain that the true values
 lie between the two limits of the confidence intervals.</small></p>
 
 <form method="get">
-<p align="center">Look up your MP; enter your postcode: <input type="text" name="pc" value="<? if (isset($mp['pc'])) print htmlentities($mp['pc']); ?>" size="8">
+<p align="center">Look up your MP; enter your postcode: <input type="text" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
 <input type="submit" value="Look up"></p>
 </form>
 
 <? if (is_array($mp)) {
-     $h_name = htmlentities($mp['name']);
+     $h_name = htmlspecialchars($mp['name']);
 ?>
 <div style="border: solid 1px #a5a57c; margin-bottom: 1em;">
 <ul>
@@ -60,7 +60,7 @@ lie between the two limits of the confidence intervals.</small></p>
 } ?>
 </ul>
 <p align="center">
-<a href="/?pc=<?=htmlentities($mp['pc']) ?>">Send a message to one of your representatives</a>
+<a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a>
 <br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Look up <?=$h_name ?> on TheyWorkForYou</a>
 </p>
 </div>
@@ -112,7 +112,7 @@ foreach ($data as $row) {
 	}
 	print '</td>';
     }
-    print '<td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
+    print '<td>' . str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
     print '<br><small>';
     print $row['party'];
     print "</small></td>";

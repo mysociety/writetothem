@@ -36,7 +36,7 @@ foreach ($data as $row) {
 	if ($c++%2) {
 		print ' a';
 	}
-	print '"><td>' . str_replace(' ','&nbsp;', htmlentities($row['name']));
+	print '"><td>' . str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
 	print '<br><small>';
 #	if (array_key_exists($row['party'], $party_short)) {
 #		print $party_short[$row['party']];
