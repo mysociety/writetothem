@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.9 2006-02-15 16:22:02 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.10 2006-02-20 09:51:05 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -53,9 +53,14 @@ use FYR;
 
 # Configurable parameters
 my $year = shift;
-die "enter a reasonable year as first argument" if !$year || $year < 2000 || $year > 5000;
+die "enter a reasonable year as first argument, or 2005post for 2005 post-election" if !$year || 
+    ($year ne "2005post" && ($year < 2000 || $year > 5000));
 my $output_format = shift;
-die "enter PHP or debug for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug');
+# Output formats are:
+#    PHP - for fyr/phplib/questionnaire_report_2005_WMC.php and the like
+#    debug - for debugging
+#    mapcsv - for plotting responsivness/activity maps of country
+die "enter PHP, debug or mapcsv for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug' && $output_format ne 'mapcsv');
 my $area_type = 'WMC';
 my $debug_fewer_reps = undef; # undef or 100;# for testing, run with fewer reps than all
 
@@ -86,8 +91,13 @@ print STDERR "done\n";
 ############################################################################
 # Extract basic data from MaPit/DaDem
 
+my $year_param = $year;
+$year = "2005" if ($year eq "2005post");
 my $start_epoch = DateTime->new( year=>$year, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
+if ($year_param eq "2005post") {
+    $start_epoch = 1115938800; # 2005-05-13, after things were on again
+}
 # We choose 4 weeks, because 2 weeks until first questionnaire, another week before reminder, then give
 # at least another week for reponse and safety margin.
 die "Need to wait 4 weeks into year before running to be sure have all questionnaire info" if ($end_epoch > time() - 86400 * 28);
@@ -447,6 +457,7 @@ print STDERR "done\n";
 # shame - The MP shameful refused to receive messages via our service
 # unknown - Needs manual checking
 
+my $knownvalidtime;
 sub work_out_rep_category($) {
     my ($person_id) = @_;
 
@@ -476,6 +487,7 @@ sub work_out_rep_category($) {
     my $no_q_response_and_validmethod_time = 0;
     my $shametime = 0;
     my $knowninvalidtime = 0;
+    $knownvalidtime->{$person_id} = 0;
     foreach my $interval (@ints) {
         my $length = $interval->{'to'} - $interval->{'from'};
 
@@ -493,11 +505,14 @@ sub work_out_rep_category($) {
 
         if (!($interval->{'valid_method'})) {
             $knowninvalidtime += $length;
+        } else {
+            $knownvalidtime->{$person_id} += $length;
         }
             #if ($interval->{'r'}->[1] > 0){
             #    $valid = 1;
             #}
     }
+
 
     my $confidence_length;
     if ($q_data->[1] > 0) {
@@ -511,6 +526,7 @@ sub work_out_rep_category($) {
     # Work out what we are
     return 'shame' if ($shametime > $rep_length * 0.1);
     return 'toofew' if ($sent_m < 10);
+#    return 'toofew' if ($q_data->[1] < 10);
     #return 'toofew' if (!defined($confidence_length) || $confidence_length > 0.50);
     return 'good' if ($intervals_with_no_q_response == 0);
     return 'good' if ($intervals_with_no_q_response_and_validmethod == 0);
@@ -539,6 +555,7 @@ sub display_rep($$) {
     my $parties;
     my $rep_names;
     my $area_names;
+    my $area_os_names;
     foreach my $repid (@{$reps_by_person->{$person_id}}) {
         foreach (0..3) {
             $q_data->[$_] += $r{$repid}->[$_];
@@ -553,11 +570,15 @@ sub display_rep($$) {
         $rep_names->{$r_info->{'name'}} = 1;
         my $a_info = $areainfo{$reptoarea->{$repid}};
         $area_names->{$a_info->{'name'}} = 1;
+        if (defined($a_info->{'os_name'})) {
+            $area_os_names->{$a_info->{'os_name'}} = 1;
+        }
         die if $a_info->{'type'} ne $area_type; # assertion
     }
     my $party = join(" / ", keys %$parties);
     my $rep_name = join(" / ", keys %$rep_names);
     my $area_name = join(" / ", keys %$area_names);
+    my $area_os_name = join(" / ", keys %$area_os_names);
     my $repids = join(" ", @{$reps_by_person->{$person_id}});
 
     for (0..3) {
@@ -593,6 +614,25 @@ sub display_rep($$) {
 
         emit_php('when_generated', time());
         print "    ),\n\n";
+    } elsif ($output_format eq 'mapcsv') {
+        if ($area_os_name) { # we only have mapping data for UK, not NI (not Ordnance Survey)
+            print '"'.$area_os_name.'",';
+            if ($q_data->[1] > 0) {
+                print $re_mean.",";
+            } else {
+                print "0,";
+            }
+            print $sent_m.",";
+            print $knownvalidtime->{$person_id}.",";
+            if ($knownvalidtime->{$person_id} == 0) {
+                print "NODATA";
+            } else {
+                my $sent_per_day = ($sent_m / $knownvalidtime->{$person_id} * 60 * 60 * 24);
+                print $sent_per_day;
+            }
+            #print ",";
+            print "\n";
+        }
     } else {
         print sprintf("personid:$person_id repids:$repids %s (%s) of %s 
         sent-success:%d Qresponded:%d/%d Qfirsttime:%d/%d\n",
@@ -629,7 +669,7 @@ my $total_firsttime_outof = 0;
 my $total_fails_after_dispatch = 0;
 print "<?php\n/* Automatically generated by fyr/bin/stats-yearly-response */\n\n" if $output_format eq "PHP";
 print "\$questionnaire_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
-
+print "Constituency,Mean responsiveness,Messages sent,Seconds of valid contact details,Messages sent / day\n" if ($output_format eq 'mapcsv');
 foreach my $person_id (keys %$reps_by_person) {
     my $category = work_out_rep_category($person_id);
     if ($year == 2005) {
@@ -642,19 +682,26 @@ foreach my $person_id (keys %$reps_by_person) {
                 $repid == 1755 or $repid == 1970 or $repid == 1691) 
             {
                 #warn "count $c > 1 for person $person_id $repid" if $c != 1;
-                die "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
+                warn "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
                 $category = "good";
             }
             if ($repid == 1908 or $repid == 26393)
             {
                 #warn "count $c > 1 for person $person_id $repid" if $c != 1;
-                die "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
+                warn "person $person_id repid $repid was expected to be unknown, but is $category" if $category ne "unknown";
                 $category = "badcontact";
             }
         }
         if ($person_id eq "uk.org.publicwhip/person/11048") {
             # ILG
             $category = "cheat";
+        }
+        if ($person_id eq "uk.org.publicwhip/person/11087" ||
+            $person_id eq "uk.org.publicwhip/person/10294" ||
+            $person_id eq "uk.org.publicwhip/person/10088" ||
+            $person_id eq "uk.org.publicwhip/person/10128" ||
+            $person_id eq "uk.org.publicwhip/person/10562") {
+            $category = "badcontact";
         }
     }
     display_rep($person_id, $category);
@@ -676,17 +723,21 @@ if ($output_format eq 'debug') {
     print sprintf ("Totals: success-sentmsg: %d fails-after-dispatch: %d responded: %d/%d firsttime: %d/%d\n",
         $total_sent, $total_fails_after_dispatch, $total_responded, $total_responded_outof, $total_firsttime, $total_firsttime_outof) 
 } else {
-    emit_php('total_dispatched_success', $total_sent);
-    #emit_php('total_fails_after_dispatch', $total_fails_after_dispatch); # this is a bit useless
-    emit_php('total_responded', $total_responded);
-    emit_php('total_responded_outof', $total_responded_outof);
-    emit_php('total_firsttime', $total_firsttime);
-    emit_php('total_firsttime_outof', $total_firsttime_outof);
+    if ($output_format eq "PHP") {
+        emit_php('total_dispatched_success', $total_sent);
+        #emit_php('total_fails_after_dispatch', $total_fails_after_dispatch); # this is a bit useless
+        emit_php('total_responded', $total_responded);
+        emit_php('total_responded_outof', $total_responded_outof);
+        emit_php('total_firsttime', $total_firsttime);
+        emit_php('total_firsttime_outof', $total_firsttime_outof);
+    }
     print ");\n" if $output_format eq "PHP";
 }
 
-print "\n";
-print "\$party_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
+if ($output_format eq "PHP") {
+    print "\n";
+    print "\$party_report_${year}_${area_type} = array(\n" if $output_format eq "PHP";
+}
 foreach my $party (keys %$partyr) {
     my $data = $partyr->{$party};
     my ($re_mean, $re_low, $re_high) = 
@@ -694,18 +745,20 @@ foreach my $party (keys %$partyr) {
     my ($ft_mean, $ft_low, $ft_high) = 
         $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
 
-    print "   '$party' => array(\n";
-    emit_php('responded', $data->[0]);
-    emit_php('responded_outof', $data->[1]);
-    emit_php('responded_mean', $re_mean);
-    emit_php('responded_95_low', $re_low);
-    emit_php('responded_95_high', $re_high);
-    emit_php('firsttime', $data->[2]);
-    emit_php('firsttime_outof', $data->[3]);
-    emit_php('firsttime_mean', $ft_mean);
-    emit_php('firsttime_95_low', $ft_low);
-    emit_php('firsttime_95_high', $ft_high);
-    print "   ),\n";
+    if ($output_format eq "PHP") {
+        print "   '$party' => array(\n";
+        emit_php('responded', $data->[0]);
+        emit_php('responded_outof', $data->[1]);
+        emit_php('responded_mean', $re_mean);
+        emit_php('responded_95_low', $re_low);
+        emit_php('responded_95_high', $re_high);
+        emit_php('firsttime', $data->[2]);
+        emit_php('firsttime_outof', $data->[3]);
+        emit_php('firsttime_mean', $ft_mean);
+        emit_php('firsttime_95_low', $ft_low);
+        emit_php('firsttime_95_high', $ft_high);
+        print "   ),\n";
+    }
 }
 print ");\n" if $output_format eq "PHP";
 
