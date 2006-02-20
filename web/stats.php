@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.14 2006-02-20 08:34:29 matthew Exp $
+ * $Id: stats.php,v 1.15 2006-02-20 14:14:51 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -18,6 +18,7 @@ $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
 if (!$year) $year = '2005';
+$xml = get_http_var('xml');
 if (!get_http_var('type') || !get_http_var('year')) {
     header("Location: /stats/$year/$type");
     exit;
@@ -48,7 +49,7 @@ if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
 
 if ($type == 'mps') {
     require_once "../phplib/questionnaire_report_FYMP_WMC.php";
-    mp_response_table($year, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
+    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
 } elseif ($type == 'zeitgeist') {
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
         $GLOBALS["party_report_${year}_WMC"],
@@ -115,7 +116,7 @@ function by_response($a, $b) {
     return 0;
 }
 
-function mp_response_table($year, $rep_info, $questionnaire_report, $type_summary, $fymp_report) {
+function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $fymp_report) {
     foreach ($fymp_report as $key => $row) {
 	$fymp_data[] = array(
             'name' => $row['name'],
@@ -209,7 +210,7 @@ function mp_response_table($year, $rep_info, $questionnaire_report, $type_summar
     }
 
     # Output data
-    template_draw('stats-mp-performance', array(
+    template_draw($xml ? 'stats-mp-twfy' : 'stats-mp-performance', array(
         "title" => "WriteToThem.com Zeitgeist $year",
         'year' => $year,
         'data' => $data
@@ -221,7 +222,7 @@ function category_lookup($cat) {
     elseif ($cat == 'shame') return "MP doesn't accept messages via WriteToThem";
     elseif ($cat == 'toofew') return 'Too little data for valid analysis';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
-    elseif ($cat == 'cheat') return '<a href="/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
+    elseif ($cat == 'cheat') return '<a href="http://www.writetothem.com/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
     elseif ($cat == 'badcontact') return 'WriteToThem had possibly bad contact details for this MP';
     else template_show_error("Unknown MP categorisation '".htmlspecialchars($cat)."'");
     return $cat;
