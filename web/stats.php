@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.15 2006-02-20 14:14:51 francis Exp $
+ * $Id: stats.php,v 1.16 2006-02-20 18:41:13 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -18,6 +18,7 @@ $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
 if (!$year) $year = '2005';
+$year = intval($year);
 $xml = get_http_var('xml');
 if (!get_http_var('type') || !get_http_var('year')) {
     header("Location: /stats/$year/$type");
