@@ -10,6 +10,7 @@ mySociety</a>.
     '/about-qa'=>'Help',
     '/about-contact' => 'Contact Us',
     '/about-guidelines' => 'Guidelines for Campaigners',
+    '/stats'=>'Stats',
     '/about-copyright' => 'Copyright'
 );
 foreach ($links as $uri => $text) {
