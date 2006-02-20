@@ -6,10 +6,12 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.11 2006-02-19 22:09:34 matthew Exp $
+ * $Id: stats.php,v 1.12 2006-02-20 00:37:33 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
+require_once '../../phplib/mapit.php';
+require_once '../../phplib/dadem.php';
 
 # Read parameters
 $type = get_http_var('type');
@@ -20,12 +22,33 @@ if (!get_http_var('type') || !get_http_var('year')) {
     header("Location: /stats/$year/$type");
     exit;
 }
+$postcode = get_http_var('pc');
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
+
+$rep_info = array();
+$voting_areas = mapit_get_voting_areas($postcode);
+if (!rabx_is_error($voting_areas)) {
+    $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
+    mapit_check_error($voting_areas_info);
+    $area_representatives = dadem_get_representatives($voting_areas['WMC']);
+    dadem_check_error($area_representatives);
+    $rep_info = dadem_get_representative_info($area_representatives[0]);
+    dadem_check_error($rep_info);
+    $rep_info['postcode'] = $postcode;
+}
+if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
+    $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
+    $template = "index-advice";
+} elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
+    $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
+    $template = "index-advice";
+}
+
 if ($type == 'mps') {
     require_once "../phplib/questionnaire_report_FYMP_WMC.php";
-    mp_response_table($year, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
+    mp_response_table($year, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
 } elseif ($type == 'zeitgeist') {
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
         $GLOBALS["party_report_${year}_WMC"],
@@ -92,7 +115,7 @@ function by_response($a, $b) {
     return 0;
 }
 
-function mp_response_table($year, $questionnaire_report, $type_summary, $fymp_report) {
+function mp_response_table($year, $rep_info, $questionnaire_report, $type_summary, $fymp_report) {
     foreach ($fymp_report as $key => $row) {
 	$fymp_data[] = array(
             'name' => $row['name'],
@@ -158,6 +181,20 @@ function mp_response_table($year, $questionnaire_report, $type_summary, $fymp_re
         usort($data['data'], 'by_response');
     }
     $data['info']['sort'] = $sort;
+
+    $data['info']['mp'] = null;
+    if (count($rep_info)) {
+        $key = $rep_info['parlparse_person_id'];
+        $row = $questionnaire_report[$key];
+        $data['info']['mp'] = array_merge($row, array(
+	    'pc' => $rep_info['postcode'],
+            'notes' => category_lookup($row['category']),
+            'response' => round($row['responded_mean'] * 100, 1),
+            'low' => round($row['responded_95_low'] * 100, 0),
+            'high' => round($row['responded_95_high'] * 100, 0),
+            'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
+	));
+    }
 
     # Output data
     template_draw('stats-mp-performance', array(

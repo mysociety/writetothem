@@ -53,6 +53,7 @@ Internet.</p>
 <area shape="rect" coords="172,66,250,86" href="http://www.feedmebetter.com/getinvolved/lobbymp.php">
 <area shape="rect" coords="404,10,424,130" href="http://www.owos.info/how_you_can_help/contact_MP.php">
 <area shape="rect" coords="522,140,562,160" href="http://www.no2id.net/">
+<area shape="rect" coords="622,5,718,25" href="http://www.animalsasia.org/">
 </map>
 <p align="center"><img border="0" src="/stats/signups-2005-WMC.png" alt="The number of messages sent to MPs via WriteToThem varied throughout the year. Peaks included the Jamie Oliver campaign in March, Our World Our Say at the end of June, and animalsasia.org in November" usemap="#imap"></p>
 <p align="center"><strong><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></strong></p>
@@ -109,36 +110,6 @@ if they have got a response yet.
 have written to an elected representative of any kind.
 </p>
 
-<? if ($values['year'] == 2005) { ?>
-<h3>Lib Dem leadership candidates</h3>
-<table class="zeitgeist">
-<tr>
-<th>&nbsp;</th>
-<th>Messages sent</th>
-<th>Reponse rate (in 2 to 3 weeks)</th>
-<th>People writing for first time</th>
-</tr>
-<? 
-    $c = 0;
-    foreach ($values['libdem_leadership_candidates'] as $value) {
-    print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
-    print "<td><strong>".$value['name']."</strong></td>";
-    print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
-    print "<td>";
-    print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
-    print "</td>";
-    print "<td>";
-    print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
-    print "</td>";
-    print "</tr>";
-    }
-?>
-</table>
-<p class="n"><strong>Note:</strong>
-Ranges in square brackets are the "95% confidence intervals"; that is, given
-how little data we have, we are only sure the value is in that range.</p>
-<? } ?>
-
 <table id="zeitgeist_cols" border="0" cellpadding="0" cellspacing="0"><tr><td width="50%" valign="top" class="left">
 
 <h3>Response rate of each party</h3>
@@ -168,9 +139,6 @@ how little data we have, we are only sure the value is in that range.</p>
 </td><td valign="top" class="right">
 
 <h3>First time writers by party</h3>
-<p>For constituencies represented by each party, percentage
-of people writing messages who were writing to a representative
-for the first time.
 <table class="zeitgeist">
 <tr> <th>Party</th> <th>First time</th> </tr>
 <?

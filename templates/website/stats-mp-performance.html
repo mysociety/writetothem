@@ -4,6 +4,7 @@ $data = $values['data'];
 $info = $data['info'];
 $data = $data['data'];
 $sort = $info['sort'];
+$mp = $info['mp'];
 ?>
 <h2><?=$values['title']?></h2>
 <p id="zeitgeist_nav"><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a> | <strong>MP Responsiveness League Table</strong></p>
@@ -13,14 +14,41 @@ $sort = $info['sort'];
 <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
 about communicating with their MP. This asked whether MPs had responded to their message within two to three weeks.
 
-<p><em>Journalists: please feel free to use the data on this page, but if you do you <em>must</em> cite WriteToThem.com in the body of your articles as the source of any analysis or data you get off this site.</em></p>
+<p><em>Journalists: please feel free to use the data on this page, but if you do you <em>must</em> cite WriteToThem.com in the body of your articles as the source of any analysis or data you get from this site.</em></p>
 
-<p><small><strong>Note:</strong> "95% confidence interval" means given how
-much or little data we have, we are only sure the value is in that range. There
-are over 650 MPs in this list because it includes MPs from before and
-after the 2005 election.</small></p>
+<p><small><strong>Note:</strong> Because we have only a limited amount of data for each MP, we cannot
+be 100% certain of their responsiveness. The ranges show the '95% <a href="http://en.wikipedia.org/wiki/Confidence_interval">confidence
+interval</a>' for each MP's responsiveness; the larger the range, the less
+certain we are. We believe that it is 95% certain that the true values
+lie between the two limits of the confidence intervals.</small></p>
 
-<?
+<form method="get">
+<p align="center">Look up your MP; enter your postcode: <input type="text" name="pc" value="<? if (isset($mp['pc'])) print htmlentities($mp['pc']); ?>" size="8">
+<input type="submit" value="Look up"></p>
+</form>
+
+<? if (is_array($mp)) {
+     $h_name = htmlentities($mp['name']);
+?>
+<div style="border: solid 1px #a5a57c; margin-bottom: 1em;">
+<ul>
+<li><strong><?=$h_name ?></strong>, <?=$mp['party'] ?> MP for <?=$mp['area'] ?>
+<li>Messages sent: <?=$mp['dispatched_success'] ?>
+<? if ($mp['notes']) { ?>
+<li><?=$mp['notes'] ?>
+<? } else { ?>
+<li>Response rate: <strong><?=$mp['response'] ?>%</strong> <small>[<?=$mp['low'] ?>%&ndash;<?=$mp['high'] ?>%]</small>
+<li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,1) ?>%</strong> <small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>
+<? } ?>
+</ul>
+<p align="center">
+<a href="/?pc=<?=htmlentities($mp['pc']) ?>">Send a message to one of your representatives</a>
+<br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Look up <?=$h_name ?> on TheyWorkForYou</a>
+</p>
+</div>
+
+<? }
+
 $head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
 $head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
 $head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
