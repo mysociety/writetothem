@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.13 2006-02-20 08:26:22 matthew Exp $
+ * $Id: stats.php,v 1.14 2006-02-20 08:34:29 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -121,9 +121,9 @@ function mp_response_table($year, $rep_info, $questionnaire_report, $type_summar
             'name' => $row['name'],
             'person_id' => $row['person_id'],
             'category' => $row['category'],
-            'response' => round($row['responded_mean'] * 100, 1),
-            'low' => round($row['responded_95_low'] * 100, 0),
-            'high' => round($row['responded_95_high'] * 100, 0)
+            'response' => $row['responded_mean'],
+            'low' => $row['responded_95_low'],
+            'high' => $row['responded_95_high']
 	);
     }
     usort($fymp_data, 'by_response');
@@ -155,9 +155,9 @@ function mp_response_table($year, $rep_info, $questionnaire_report, $type_summar
                 'sent' => $row['dispatched_success'],
                 'category' => $row['category'],
                 'notes' => category_lookup($row['category']),
-                'response' => round($row['responded_mean'] * 100, 1),
-                'low' => round($row['responded_95_low'] * 100, 0),
-                'high' => round($row['responded_95_high'] * 100, 0),
+                'response' => $row['responded_mean'],
+                'low' => $row['responded_95_low'],
+                'high' => $row['responded_95_high'],
 		'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
             );
         } else {
@@ -201,9 +201,9 @@ function mp_response_table($year, $rep_info, $questionnaire_report, $type_summar
         $data['info']['mp'] = array_merge($row, array(
 	    'pc' => $rep_info['postcode'],
             'notes' => category_lookup($row['category']),
-            'response' => round($row['responded_mean'] * 100, 1),
-            'low' => round($row['responded_95_low'] * 100, 0),
-            'high' => round($row['responded_95_high'] * 100, 0),
+            'response' => $row['responded_mean'],
+            'low' => $row['responded_95_low'],
+            'high' => $row['responded_95_high'],
             'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
 	));
     }

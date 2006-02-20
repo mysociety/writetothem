@@ -37,7 +37,7 @@ lie between the two limits of the confidence intervals.</small></p>
 <? if ($mp['notes']) { ?>
 <li><?=$mp['notes'] ?>
 <? } else { ?>
-<li>Response rate: <strong><?=$mp['response'] ?>%</strong> <small>[<?=$mp['low'] ?>%&ndash;<?=$mp['high'] ?>%]</small>
+<li>Response rate: <strong><?=round($mp['response']*100,1) ?>%</strong> <small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>
 <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,1) ?>%</strong> <small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>
 <li>Ranking: 
 <?
@@ -149,8 +149,8 @@ foreach ($data as $row) {
     if ($row['notes']) {
         print '<td colspan="2">' . $row['notes'] . '</td>';
     } else {
-        print "<td align='right'>$row[response]%</td>";
-        print "<td>" . $row['low'] . "%&ndash;" . $row['high'] . "%</td>";
+        print "<td align='right'>" . round($row['response']*100, 1) . "%</td>";
+        print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
     }
     print "</tr>\n";
 }
