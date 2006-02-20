@@ -112,7 +112,12 @@ foreach ($data as $row) {
 	}
 	print '</td>';
     }
-    print '<td>' . str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
+    print '<td>';
+    $href = str_replace(' ', '_', htmlspecialchars(strtolower($row['name'])));
+    if ($href == 'angela_smith' || $href == 'gareth_thomas')
+        $href .= ',' . str_replace(' ', '_', strtolower($row['area']));
+    print '<a name="' . $href . '"></a>';
+    print str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
     print '<br><small>';
     print $row['party'];
     print "</small></td>";
