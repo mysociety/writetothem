@@ -130,12 +130,6 @@ foreach ($values['parties_by_responsiveness'] as $party) {
 }
 ?>
 </table>
-<p><strong>Note:</strong> Very few messages were sent to some parties.
-Because we have only a limited amount of data for each MP, we cannot be certain
-of their responsiveness. The ranges show the '95% <a href="http://en.wikipedia.org/wiki/Confidence_interval">confidence interval</a>' for each
-MP's responsiveness; the larger the range, the less certain we are. We believe
-that it is 95% certain that the true values lie between the two limits of the
-confidence intervals.</p>
 
 </td><td valign="top" class="right">
 
@@ -158,7 +152,19 @@ foreach ($values['parties_by_firsttime'] as $party) {
 ?>
 </table>
 
+<p>This table shows our estimate of the percentage of authors contacting MPs of
+each party who were writing to an elected representative for the first
+time.</p>
+
 </td></tr></table>
+
+<p><strong>Note:</strong> Very few messages were sent to some MPs and parties.
+Because we have only a limited amount of data in each case, we cannot be certain
+of their responsiveness. The ranges show the '95% <a href="http://en.wikipedia.org/wiki/Confidence_interval">confidence interval</a>' for each
+responsiveness; the larger the range, the less certain we are. We believe
+that it is 95% certain that the true values lie between the two limits of the
+confidence intervals.</p>
+
 
 <p align="center"><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
 
