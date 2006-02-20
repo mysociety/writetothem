@@ -84,9 +84,9 @@ foreach ($data as $row) {
 	    print "$c<br><small>";
 	    if ($row['fymp_rank']) {
 	    	$diff = $c - $row['fymp_rank'];
-		if ($diff<0) print '<img src="/images/arrow_up.png"> ' . -$diff;
-		elseif ($diff>0) print '<img src="/images/arrow_down.png"> ' . $diff;
-		else print '<img src="/images/arrow_right.png"> =';
+		if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
+		elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
+		else print '<img alt="Same" src="/images/arrow_right.png"> =';
 	    } else {
 	        print 'New';
             }
