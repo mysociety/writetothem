@@ -1,0 +1,66 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass letter
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout My Address
+
+Francis Irving
+\newline 
+mySociety
+\newline 
+12 Dukes Road
+\newline 
+London
+\newline 
+WC1H 9AD
+\newline 
+francis@mysociety.org
+\layout Send To Address
+
+\layout Signature
+
+Francis Irving
+\newline 
+www.writetothem.com 
+\layout Opening
+
+Dear XXX,
+\layout Standard
+
+
+\series bold 
+Congratulations! 100% responsiveness on WriteToThem.com
+\layout Standard
+
+We're writing to let you know that you have a 100% responsiveness rate in
+ WriteToThem.com's 2005 league table of MPs.
+ You can see the full results on our website at http://www.writetothem.com/stats/2
+005/mps
+\layout Standard
+
+Well done to you and all your staff!
+\layout Closing
+
+Yours sincerely,
+\the_end
