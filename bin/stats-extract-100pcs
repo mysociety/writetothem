@@ -7,7 +7,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats-extract-100pcs,v 1.1 2006-02-21 10:42:04 francis Exp $
+ * $Id: stats-extract-100pcs,v 1.2 2006-02-21 14:49:21 francis Exp $
  * 
  */
 
@@ -37,6 +37,7 @@ foreach ($questionnaire_report_2005_WMC as $key => $row) {
                 else
                     die("unknown method for rep $repid");
                 print " ";
+                print date(" (d M Y) ", $info['whenlastedited']);
             }
             print "\n";
         }
