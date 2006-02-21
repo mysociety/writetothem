@@ -1,0 +1,45 @@
+#!/usr/bin/php -q
+<?
+/*
+ * stats-extract-100pcs:
+ * Extract contact details of MPs with 100% response rate.
+ * 
+ * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org. WWW: http://www.mysociety.org
+ *
+ * $Id: stats-extract-100pcs,v 1.1 2006-02-21 10:42:04 francis Exp $
+ * 
+ */
+
+require_once '../../phplib/cli.php';
+require_once '../conf/general';
+require_once '../../phplib/utility.php';
+require_once '../../phplib/dadem.php';
+
+require_once '../phplib/questionnaire_report_2005_WMC.php';
+$data = array();
+foreach ($questionnaire_report_2005_WMC as $key => $row) {
+	if (is_array($row)) {
+        if ($row['responded_mean'] == 1 && $row['category'] == 'good') {
+            print $row['name']." ";
+            $repids = split(" ", $row['recipient_ids']);
+            foreach ($repids as $repid) {
+                $info = dadem_get_representative_info($repid);
+                if ($info['method'] == 'email')
+                    print $info['email'];
+                elseif ($info['method'] == 'fax') {
+                    print $info['fax'];
+                    if ($info['email']) 
+                        ' (unpref email: ' . $info['email'] . ')';
+                }
+                elseif ($info['method'] == 'both')
+                    print $info['email'] . ' ' . $info['fax'];
+                else
+                    die("unknown method for rep $repid");
+                print " ";
+            }
+            print "\n";
+        }
+	}
+}
+?>
