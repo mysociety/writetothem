@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.46 2005-07-22 13:57:39 francis Exp $
+# $Id: AbuseChecks.pm,v 1.47 2006-02-22 11:49:07 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -37,6 +37,11 @@ use FYR::SubstringHash;
 # Return the number of pages found on Google in which the POSTCODE occurs with
 # the terms "faxyourmp" or "writetothem".
 sub google_for_postcode ($) {
+    # Disabled, due to repeatedly getting this error:
+    # 502 Bad Gateway at /usr/share/perl5/SOAP/Lite.pm line 3006
+    # This seems to be a problem at Google's end, which they haven't fixed.
+    return 0;
+
     my ($pc) = @_;
     our ($G, $nogoogle);
     if (!$G) {
