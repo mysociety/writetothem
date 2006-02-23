@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.10 2006-02-04 15:56:27 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.11 2006-02-23 17:40:31 dademcron Exp $
  *
  */
 
@@ -60,7 +60,7 @@ $mail = '';
 
 // Messages in "need attention" state
 $need_attention_messages = msg_admin_get_queue('needattention', array());
-$url = OPTION_ADMIN_URL . '/?page=fyrqueue';
+$url = OPTION_ADMIN_URL . '?page=fyrqueue';
 $need_attention_messages_count = count($need_attention_messages);
 if ($need_attention_messages_count > 0) {
     $mail .= "
@@ -85,7 +85,7 @@ foreach ($bad_contacts_info as $info) {
     }
 }
 
-$url = OPTION_ADMIN_URL . '/?page=reps';
+$url = OPTION_ADMIN_URL . '?page=reps';
 if ($mps > 0) {
     $mps_constituents = number_format($mps * 60000);
     $mail .= "
