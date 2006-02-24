@@ -7,7 +7,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats-extract-100pcs,v 1.2 2006-02-21 14:49:21 francis Exp $
+ * $Id: stats-extract-100pcs,v 1.3 2006-02-24 11:43:53 francis Exp $
  * 
  */
 
@@ -22,6 +22,7 @@ foreach ($questionnaire_report_2005_WMC as $key => $row) {
 	if (is_array($row)) {
         if ($row['responded_mean'] == 1 && $row['category'] == 'good') {
             print $row['name']." ";
+# print "\n"; continue; # uncomment to print just names
             $repids = split(" ", $row['recipient_ids']);
             foreach ($repids as $repid) {
                 $info = dadem_get_representative_info($repid);
