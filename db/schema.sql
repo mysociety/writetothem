@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.34 2006-02-14 14:28:04 francis Exp $
+-- $Id: schema.sql,v 1.35 2006-02-24 16:49:06 chris Exp $
 --
 
 set client_min_messages to error;
@@ -258,3 +258,10 @@ create table message_bounce (
     bouncetext text not null
 );
 
+-- confirmation_message_autoreply
+-- Record URLs in emails to which we've auto-replied, so that we never send
+-- more than one.
+create table confirmation_mail_autoreply (
+    url text not null primary key,
+    whenreceived integer not null
+);
