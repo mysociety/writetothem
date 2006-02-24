@@ -5,29 +5,30 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.7 2006-02-14 12:27:43 dademcron Exp $
+# $Id: message-send-graph,v 1.8 2006-02-24 17:32:34 dademcron Exp $
 
-GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 800,250"
+GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
-GPLOT_OUTPUT="set terminal fig color big thickness 1"
-EXTENSION=".fig"
-GPLOT_OUTPUT="set terminal svg size 800 250"
-EXTENSION=".svg"
+#GPLOT_OUTPUT="set terminal fig color big thickness 1"
+#EXTENSION=".fig"
+#GPLOT_OUTPUT="set terminal svg size 800 250"
+#EXTENSION=".svg"
 
-SOURCE=/tmp/fyr-signup-rate-graph-data-$RANDOM$RANDOM
+SOURCEO=/tmp/fyr-signup-rate-graph-data-nonwmc-$RANDOM$RANDOM
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 GPSCRIPT=/tmp/fyr-signup-rate-graph-script-$RANDOM$RANDOM
 
 echo "select 
-    date('1970-1-1 00:00:00'::timestamp + (created||' seconds')::interval), count(*)
+    date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval), count(*)
     from message 
-    where recipient_type = 'WMC'
+    where dispatched is not null and state in ('sent', 'finished') 
+        and recipient_type != 'WMC'
     group by
-    date('1970-1-1 00:00:00'::timestamp + (created||' seconds')::interval)
+    date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     order by 
-    date('1970-1-1 00:00:00'::timestamp + (created||' seconds')::interval)
-    ;" | psql -A -F " " --host=tea fyr fyr | egrep -v "date|rows" >$SOURCE
-echo "source $SOURCE"
+    date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
+    ;" | psql -A -F " " --host=tea fyr fyr | egrep -v "date|rows" >$SOURCEO
+echo "source $SOURCEO"
 
 echo "select 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval), count(*)
@@ -47,14 +48,14 @@ cat >$GPSCRIPT <<END
 
     set xdata time;
     set timefmt "%Y-%m-%d";
-    set xrange ["2005-01-01":"2006-01-01"];
-    set format x "%b"
+    # set xrange ["2005-01-01":"2006-01-01"];
+    set format x "%b %Y"
     # set xlabel "WriteToThem.com in 2005"
     unset xlabel
-    set nokey
+    #set nokey
 
     #set ylabel "cumulative messages"
-    set ylabel "messages sent to MPs / calendar day"
+    set ylabel "messages sent / calendar day"
     set xtics nomirror
     set ytics nomirror
     # set y2tics nomirror tc lt 3
@@ -73,9 +74,9 @@ cat >$GPSCRIPT <<END
 
 
     n = 0
-    plot "$SOURCED" using 1:2 with lines axes x1y2 lt 4 title "messages dispatched successfully"
-    #"$SOURCE" using 1:2 with lines axes x1y2 lt 3 title "messages created"
-    #"< awk 'BEGIN { n = 0 } { n += \$2; print \$1, \$2, n; }' $SOURCE" using 1:3 with lines lt 2 title "cumulative messages created",
+    plot "$SOURCED" using 1:2 with lines axes x1y2 lt 4 title "MPs",\
+    "$SOURCEO" using 1:2 with lines axes x1y2 lt 3 title "non-MPs" 
+#    "< awk 'BEGIN { n = 0 } { n += \$2; print \$1, \$2, n; }' $SOURCE" using 1:3 with lines lt 2 title "cumulative messages created",
 END
 echo "gpscript $GPSCRIPT"
 
