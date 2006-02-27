@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.18 2006-02-27 17:38:14 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.19 2006-02-27 17:42:56 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -67,7 +67,7 @@ if (STDIN->error()) {
     exit(75);   # EX_TEMPFAIL
 }
 
-my $m = new Mail::Internet(\@lines);
+my $m = new Mail::Internet([@lines]);
 if (!defined($m)) {
     # Unable to parse message; should drop.
     print_log('err', "unable to parse message from standard input; discarding");
