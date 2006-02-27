@@ -1,0 +1,7 @@
+Thank you for your email to WriteToThem.com. If you have a question or comment
+about the site, one of our volunteers will send you a reply as soon as they
+can. However, if you are trying to <?=$values['action']?>, you cannot do that
+by replying to the email we sent -- you MUST click on the web page link in the
+email, or cut-and-paste it into your web browser, to <?=$values['action']?>.
+
+-- the WriteToThem.com team
