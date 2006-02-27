@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.13 2006-02-01 11:51:28 chris Exp $
+# $Id: FYR.pm,v 1.14 2006-02-27 17:09:33 chris Exp $
 #
 
 use strict;
@@ -61,11 +61,10 @@ BEGIN {
             Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef),
             OnFirstUse => sub {
                 if (!dbh()->selectrow_array('select secret from secret')) {
-                    dbh()->{RaiseError} = 0;
+                    local dbh()->{HandleError};
                     dbh()->do('insert into secret (secret) values (?)',
                                 {}, unpack('h*', random_bytes(32)));
                     dbh()->commit();
-                    dbh()->{RaiseError} = 1;
                 }
             }
         );
