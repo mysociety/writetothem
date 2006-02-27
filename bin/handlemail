@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.17 2006-02-27 17:05:06 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.18 2006-02-27 17:38:14 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -93,7 +93,7 @@ if (!$is_bounce_message) {
         
         # First, send this to team@writetothem.com.
         if (mySociety::Util::EMAIL_SUCCESS
-                != mySociety::Util::send_email(join('', @lines), $return_path, 'team@writetothem.com')) {
+                != mySociety::Util::send_email(join("\n", @lines) . "\n", $return_path, 'team@writetothem.com')) {
             print_log('err', 'unable to forward non-bounce to team@writetothem.com; deferring');
             exit(75);
         }
