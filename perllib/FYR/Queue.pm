@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.181 2006-03-03 14:30:47 francis Exp $
+# $Id: Queue.pm,v 1.182 2006-03-03 14:53:50 francis Exp $
 #
 
 package FYR::Queue;
@@ -51,6 +51,19 @@ use FYR;
 use FYR::AbuseChecks;
 use FYR::EmailTemplate;
 use FYR::Fax;
+
+our $message_calculated_values = "
+    length(message) as message_length,
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+        and question_id = 0 and answer = 'no') as questionnaire_0_no,
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+        and question_id = 0 and answer = 'yes') as questionnaire_0_yes,
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+        and question_id = 1 and answer = 'no') as questionnaire_1_no,
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+        and question_id = 1 and answer = 'yes') as questionnaire_1_yes
+";
+
 
 =head1 NAME
 
@@ -1609,18 +1622,8 @@ sub admin_get_queue ($$) {
         $where = "where recipient_id = ?";
     }
     my $sth = dbh()->prepare("
-            select *, 
-                length(message) as message_length,
-                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
-                        and question_id = 0 and answer = 'no') as questionnaire_0_no,
-                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
-                        and question_id = 0 and answer = 'yes') as questionnaire_0_yes,
-                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
-                        and question_id = 1 and answer = 'no') as questionnaire_1_no,
-                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
-                        and question_id = 1 and answer = 'yes') as questionnaire_1_yes
+            select *, $message_calculated_values
             from message 
-
             $where
         ");
     $sth->execute(@params);
@@ -1651,7 +1654,7 @@ sub admin_get_message ($) {
     my ($id) = @_;
 
     my $sth = dbh()->prepare("select 
-        *, length(message) as message_length from message where id =
+        *, $message_calculated_values from message where id =
         ?");
     $sth->execute($id);
     throw FYR::Error("admin_get_message: Message not found '$id'") if ($sth->rows == 0);
