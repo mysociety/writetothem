@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.89 2006-03-03 14:30:47 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.90 2006-03-03 19:17:12 francis Exp $
  * 
  */
 
@@ -603,38 +603,52 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print " (" . count($year_array) . " of them): </h2>";
 
                 $q_by_email = array();
+                $q_by_email_yes = array();
+                $sent_by_email = array();
                 $q_0_no = 0; $q_0_yes = 0;
                 $q_1_no = 0; $q_1_yes = 0;
+                $dispatched = 0;
                 foreach ($year_array as $message) {
-                    if (!array_key_exists('sender_email', $q_by_email))
+                    if (!array_key_exists($message['sender_email'], $q_by_email)) {
                         $q_by_email[$message['sender_email']] = 0;
+                        $q_by_email_yes[$message['sender_email']] = 0;
+                        $sent_by_email[$message['sender_email']] = 0;
+                    }
                     $q_by_email[$message['sender_email']] += $message['questionnaire_0_no'];
                     $q_by_email[$message['sender_email']] += $message['questionnaire_0_yes'];
+                    $q_by_email_yes[$message['sender_email']] += $message['questionnaire_0_yes'];
                     $q_0_no += $message['questionnaire_0_no'];
                     $q_0_yes += $message['questionnaire_0_yes'];
                     $q_1_no += $message['questionnaire_1_no'];
                     $q_1_yes += $message['questionnaire_1_yes'];
+                    if ($message['dispatched']) {
+                        $sent_by_email[$message['sender_email']] = $sent_by_email[$message['sender_email']] + 1;
+                        $dispatched++;
+                    }
                 }
+                print "Dispatched: $dispatched (unique: " . count($sent_by_email) . ")";
                 if ($q_0_yes + $q_0_no > 0) {
-                    print "Responsiveness: $q_0_yes / " . ($q_0_no + $q_0_yes);
+                    print " Responsiveness: $q_0_yes / " . ($q_0_no + $q_0_yes);
                 }
                 if ($q_1_yes + $q_1_no > 0) {
                     print " First time: $q_1_yes / " . ($q_1_no + $q_1_yes);
                 }
 
                 $html = '';
-                foreach ($q_by_email as $email => $count) {
-                    if ($count > 1) {
-                        $html .= "<tr><td>$email</td><td>$count</td></tr>";
+                foreach ($q_by_email as $email => $q_count) {
+                    $sent_count = $sent_by_email[$email];
+                    $q_count_yes = $q_by_email_yes[$email];
+                    if ($q_count > 1 || $sent_count > 1) {
+                        $html .= "<tr><td>$email</td><td>$sent_count</td><td>$q_count_yes / $q_count</td></tr>";
                     }
                 }
                 if ($html) {
                     print '<table border="1">';
-                    print '<th>Multiple questionnaire responders</th><th>Responses to first question</th>';
+                    print '<th>Multiple mailers</th><th>Message dispatched</th><th>Responses to first question</th>';
                     print $html;
                     print '</table>';
                 } else {
-                    print ' No multiple questionnaire responders by same email';
+                    print ' Nobody succesfully sent more than one message to this rep using same email.';
                 }
                 print '<p>';
 
@@ -702,7 +716,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             } else {
                 print " are $view";
             }
-            print " (" . count($messages) . " of them): </h2>";
+            print " (" . count($messages) . " messages): </h2>";
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
