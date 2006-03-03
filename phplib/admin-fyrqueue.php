@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.88 2006-02-08 11:31:31 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.89 2006-03-03 14:30:47 francis Exp $
  * 
  */
 
@@ -126,6 +126,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>Recipient</th>
         <th>Client IP / <br> Referrer / Cobrand</th>
         <th>Length (chars)</th>
+        <th>Questionnaire</th>
         <th>Tick</th>
     </tr>
     <form action="<?=htmlspecialchars(new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
@@ -180,8 +181,9 @@ class ADMIN_PAGE_FYR_QUEUE {
                     $message['recipient_type'];
                 }
                 print '<td><a href="'
-                        . htmlspecialchars(new_url('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name)
-                        . "</a><br>";
+                        . htmlspecialchars(new_url('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name) . "</a>"
+                        . " (<a href=\"" . htmlspecialchars(new_url('', false, 'page', 'fyrqueue', 'rep_id', $message['recipient_id']))                   . '">msgs</a>)' 
+                        ."<br>";
                 if ($message['recipient_via']) {
                     $repinfo = dadem_get_representative_info($message['recipient_id']);
                     if (!dadem_get_error($repinfo)) {
@@ -207,6 +209,24 @@ class ADMIN_PAGE_FYR_QUEUE {
                     "</td>";
                 print "<td>${message['message_length']}</td>";
 
+                $outof0 = ($message['questionnaire_0_no'] + $message['questionnaire_0_yes']);
+                $outof1 = ($message['questionnaire_1_no'] + $message['questionnaire_1_yes']);
+                print '<td>';
+                if ($outof0) {
+                    print 'responded:';
+                    print $message['questionnaire_0_yes'] .'/'. $outof0;
+                }
+                if ($outof0 && $outof1)
+                    print '<br>';
+                if ($outof1) {
+                    print ' firsttime:';
+                    print $message['questionnaire_1_yes'] .'/'. $outof1;
+                }
+                if (!$outof0 && !$outof1) {
+                    print '&nbsp;';
+                }
+                print '</td>';
+
                 /* Javascript code changes shading of table row for checked
                  * messages to make them look "selected". */
                 print '<td><input type="checkbox" name="check_'
@@ -214,6 +234,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                         . '" onclick="this.parentNode.parentNode.className = this.checked ? \'h\' : \''
                             . ($c == 1 ? 'v' : '')
                             . '\'" >';
+                print '</td>';
 
                 print "</tr>";
                 # this.checked this .className=
@@ -347,6 +368,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         #print "<pre>"; print_r($_POST); print "</pre>";
         $view = get_http_var('view', 'needattention');
         $id = get_http_var("id");
+        $rep_id = get_http_var("rep_id");
 
         // Display about id
         if ($id) {
@@ -537,6 +559,87 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 ?>
 </table>
 <?
+         } elseif ($rep_id) {
+            $repinfo = dadem_get_representative_info($rep_id);
+            dadem_check_error($repinfo);
+            $sameperson = null;
+            if ($repinfo['parlparse_person_id']) {
+                $sameperson = dadem_get_same_person($repinfo['parlparse_person_id']);
+                dadem_check_error($sameperson);
+            }
+            if (!$sameperson) 
+                $sameperson = array($rep_id);
+ 
+            $messages = array();
+            $this->render_bar("rep_id", true, $id);
+            $rep_ids = '';
+            foreach ($sameperson as $this_rep_id) {
+                $params = array('rep_id' => $this_rep_id);
+                $new_messages = msg_admin_get_queue('rep_id', $params);
+                if (msg_get_error($new_messages)) {
+                    print "Error contacting queue:";
+                    print_r($new_messages);
+                    $new_messages = array();
+                }
+                $messages = array_merge($messages, $new_messages);
+                $rep_ids = ' ' . $this_rep_id;
+            }
+
+            $by_year = array();
+            foreach ($messages as $message) {
+                if ($message['dispatched'])
+                    $year = strftime('%Y', $message['dispatched']);
+                else
+                    $year = strftime('%Y', $message['created']);
+
+                $by_year[$year][] = $message;
+            }
+            
+            $years = array_keys($by_year);
+            sort($years);
+            foreach ($years as $year) {
+                $year_array = $by_year[$year];
+                print "<h2>Year $year for rep ids $rep_ids";
+                print " (" . count($year_array) . " of them): </h2>";
+
+                $q_by_email = array();
+                $q_0_no = 0; $q_0_yes = 0;
+                $q_1_no = 0; $q_1_yes = 0;
+                foreach ($year_array as $message) {
+                    if (!array_key_exists('sender_email', $q_by_email))
+                        $q_by_email[$message['sender_email']] = 0;
+                    $q_by_email[$message['sender_email']] += $message['questionnaire_0_no'];
+                    $q_by_email[$message['sender_email']] += $message['questionnaire_0_yes'];
+                    $q_0_no += $message['questionnaire_0_no'];
+                    $q_0_yes += $message['questionnaire_0_yes'];
+                    $q_1_no += $message['questionnaire_1_no'];
+                    $q_1_yes += $message['questionnaire_1_yes'];
+                }
+                if ($q_0_yes + $q_0_no > 0) {
+                    print "Responsiveness: $q_0_yes / " . ($q_0_no + $q_0_yes);
+                }
+                if ($q_1_yes + $q_1_no > 0) {
+                    print " First time: $q_1_yes / " . ($q_1_no + $q_1_yes);
+                }
+
+                $html = '';
+                foreach ($q_by_email as $email => $count) {
+                    if ($count > 1) {
+                        $html .= "<tr><td>$email</td><td>$count</td></tr>";
+                    }
+                }
+                if ($html) {
+                    print '<table border="1">';
+                    print '<th>Multiple questionnaire responders</th><th>Responses to first question</th>';
+                    print $html;
+                    print '</table>';
+                } else {
+                    print ' No multiple questionnaire responders by same email';
+                }
+                print '<p>';
+
+                $this->print_messages($year_array, null);
+            }
          } else {
             // Perform actions on checked items
             $sender_emails = array();

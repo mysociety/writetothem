@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.48 2006-02-12 13:39:14 francis Exp $
+ * $Id: queue.php,v 1.49 2006-03-03 14:30:47 francis Exp $
  *
  */
 
@@ -244,7 +244,11 @@ function msg_admin_message_events($id, $important = null) {
 
   * type
 
-    All messages which were sent to representative of type PARAMS->{type}.  */
+    All messages which were sent to representative of type PARAMS->{type}. 
+
+  * rep_id
+
+    All messages which were sent to representative PARAMS->{rep_id}. */
 function msg_admin_get_queue($which, $params) {
     global $msg_client;
     $params = func_get_args();

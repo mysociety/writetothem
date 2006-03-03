@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.35 2006-02-24 16:49:06 chris Exp $
+-- $Id: schema.sql,v 1.36 2006-03-03 14:30:46 francis Exp $
 --
 
 set client_min_messages to error;
@@ -136,6 +136,7 @@ create index message_state_idx on message(state);
 create index message_frozen_idx on message(frozen);
 create index message_laststatechange_idx on message(laststatechange);
 create index message_recipient_type_idx on message(recipient_type);
+create index message_recipient_id_idx on message(recipient_id);
 
 -- message_extradata
 -- Additional (opaque) data about each message.
@@ -247,8 +248,9 @@ create table questionnaire_answer (
     whenanswered integer -- unix time when question was answered
 );
 
-create index questionnaire_answer_message_id_idx
-    on questionnaire_answer(message_id);
+create index questionnaire_answer_message_id_idx on questionnaire_answer(message_id);
+create index questionnaire_answer_question_id_idx on questionnaire_answer(question_id);
+create index questionnaire_answer_answer_idx on questionnaire_answer(answer);
 
 -- message_bounce
 -- Bounce messages received for emailed messages.

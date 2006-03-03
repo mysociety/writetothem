@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.180 2006-02-14 14:28:04 francis Exp $
+# $Id: Queue.pm,v 1.181 2006-03-03 14:30:47 francis Exp $
 #
 
 package FYR::Queue;
@@ -1511,13 +1511,17 @@ search for ' rule #6 ' and the like.
 
 All messages which were sent to representative of type PARAMS->{type}. 
 
+=item rep_id
+
+All messages which were sent to representative PARAMS->{rep_id}.
+
 =back
 
 =cut
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch type);
+    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch type rep_id);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
@@ -1600,9 +1604,24 @@ sub admin_get_queue ($$) {
     } elsif ($filter eq 'type') {
         push @params, $params->{query};
         $where = "where recipient_type = ?";
+    } elsif ($filter eq 'rep_id') {
+        push @params, $params->{rep_id};
+        $where = "where recipient_id = ?";
     }
     my $sth = dbh()->prepare("
-            select *, length(message) as message_length from message $where
+            select *, 
+                length(message) as message_length,
+                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+                        and question_id = 0 and answer = 'no') as questionnaire_0_no,
+                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+                        and question_id = 0 and answer = 'yes') as questionnaire_0_yes,
+                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+                        and question_id = 1 and answer = 'no') as questionnaire_1_no,
+                    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+                        and question_id = 1 and answer = 'yes') as questionnaire_1_yes
+            from message 
+
+            $where
         ");
     $sth->execute(@params);
     my @ret;
