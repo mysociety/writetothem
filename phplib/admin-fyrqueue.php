@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.91 2006-03-03 19:24:39 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.92 2006-03-03 19:33:55 francis Exp $
  * 
  */
 
@@ -622,7 +622,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     $q_0_yes += $message['questionnaire_0_yes'];
                     $q_1_no += $message['questionnaire_1_no'];
                     $q_1_yes += $message['questionnaire_1_yes'];
-                    if ($message['dispatched']) {
+                    if ($message['dispatched'] && ($message['state'] == 'sent' || $message['state'] == 'finished')) {
                         $sent_by_email[$message['sender_email']] = $sent_by_email[$message['sender_email']] + 1;
                         $dispatched++;
                         $dispatched_by_email[$message['sender_email']] = true;
