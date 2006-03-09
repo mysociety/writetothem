@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.13 2006-03-02 18:13:14 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.14 2006-03-09 17:13:40 francis Exp $
  *
  */
 
@@ -85,7 +85,7 @@ foreach ($bad_contacts_info as $info) {
     }
 }
 
-$url = OPTION_ADMIN_URL . '?page=reps';
+$url = OPTION_ADMIN_URL . '?page=reps&bad_contacts=1';
 if ($mps > 0) {
     $mps_constituents = number_format($mps * 60000);
     $mail .= "
