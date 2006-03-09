@@ -24,8 +24,9 @@
 # Bounce messages to rep
 # Admin pages
 # Via democratic services
+# User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.17 2006-01-13 09:15:54 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.18 2006-03-09 16:17:40 francis Exp $';
 
 use strict;
 require 5.8.0;
