@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: corrections.php,v 1.7 2005-11-25 16:27:13 francis Exp $
+ * $Id: corrections.php,v 1.8 2006-03-10 11:49:04 francis Exp $
  * 
  */
 
@@ -76,7 +76,7 @@ if (isset($fyr_values['name']) && isset($fyr_values['party'])) {
         }
     }
 
-    if (isset($fyr_new['name']) && isset($fyr_new['party']) && $fyr_new['name'] && $fyr_new['party']) {
+    if ((isset($fyr_new['name']) && $fyr_new['name']) || ($fyr_new['party'] && isset($fyr_new['party']))) {
         $ret = dadem_store_user_correction($fyr_vatype, null, 'add', $fyr_new['name'], $fyr_new['party'], $fyr_notes, $fyr_email);
         dadem_check_error($ret);
     }
