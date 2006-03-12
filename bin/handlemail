@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.19 2006-02-27 17:42:56 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.20 2006-03-12 19:44:08 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -136,7 +136,7 @@ if (!$is_bounce_message) {
         } else {
             $vv = {
                     action => 'complete our questionnaire',
-                    which => 'one of the the links'
+                    which => 'one of the links'
                 };
         }
 
