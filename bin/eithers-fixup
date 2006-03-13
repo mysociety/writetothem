@@ -1,0 +1,102 @@
+#!/usr/bin/perl -w
+#
+# eithers-fixup:
+#
+# Fix up "eithers" to be email. We're not using "eithers" any more.  Tries
+# to check questionnaire response counts, but numbers too low to be of use.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: eithers-fixup,v 1.1 2006-03-13 11:46:54 francis Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use CGI;
+use DateTime;
+use DateTime::Format::Strptime;
+use HTML::Entities;
+use Data::Dumper;
+use POSIX qw(strftime);
+use utf8;
+binmode(STDOUT, ':utf8');
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use mySociety::DaDem;
+use mySociety::MaPit;
+use mySociety::VotingArea;
+use mySociety::Util;
+use mySociety::Parties;
+
+use FYR;
+
+############################################################################
+
+
+print STDERR "get bad contacts... ";
+my $bad_contacts = mySociety::DaDem::get_bad_contacts(); # hash from area to reps for that area
+print STDERR "done\n";
+print STDERR "get representatives info... ";
+my $repinfo = mySociety::DaDem::get_representatives_info($bad_contacts);
+print STDERR "done\n";
+
+foreach my $bad_contact (@$bad_contacts) {
+    my $info = $repinfo->{$bad_contact};
+    #print Dumper($info);
+    my $fax = $info->{fax};
+    my $email = $info->{email};
+    $fax = 'NONE' if !$fax;
+    $email = 'NONE' if !$email;
+    # Find questionnaire responses
+    my $stn = dbh()->prepare("
+                select distinct on(message_id, question_id)
+                    message_id, dispatched, question_id, answer, recipient_id, recipient_email, recipient_fax
+                from questionnaire_answer, message
+                where questionnaire_answer.message_id = message.id
+                and (recipient_email = ? or recipient_fax = ?)
+                ");
+    $stn->execute($email, $fax);
+    my ($e, $f);
+    foreach (0..1) {
+        $e->[$_] = 0;
+        $f->[$_] = 0;
+    }
+    while (my ($msgid, $dispatched, $qid, $answer, $eepid, $email_in, $fax_in) = $stn->fetchrow_array()) {
+        if ($email_in && $email eq $email_in) {
+            if ($qid == 0) { ++$e->[1]; }
+            if ($qid == 0 && $answer eq 'yes') { ++$e->[0]; }
+        } elsif ($fax_in && $fax eq $fax_in) {
+            if ($qid == 0) { ++$f->[1]; }
+            if ($qid == 0 && $answer eq 'yes') { ++$f->[0]; }
+        } else {
+            die "internal error";
+        }
+    }
+    #print Dumper($e);
+    #print Dumper($f);
+    # Change data 
+    if (scalar grep { $_ eq $info->{type} } @$mySociety::VotingArea::council_child_types) {
+        # ignore council types for now
+        print "can't fix up councillor type " . $info->{id} . " " . $info->{email} . " " . $info->{fax} . "\n";
+    } else {
+        if ($info->{method} eq 'either') {
+            $info->{method} = 'email';
+            my $login = getlogin || getpwuid($<);
+            print "fixing " . $info->{id} . " " . $info->{email} . " " . $info->{fax} . "...";
+            mySociety::DaDem::admin_edit_representative($info->{id}, $info, $login, "Updated by script eithers-fixup");
+            print "\n";
+        }
+    }
+}
+
