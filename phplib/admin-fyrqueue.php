@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.92 2006-03-03 19:33:55 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.93 2006-03-13 09:30:01 francis Exp $
  * 
  */
 
@@ -730,8 +730,8 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             ?>
             <h2>Help &mdash; what views/searches are there?</h2>
             <p>
-            <b>Frozen:</b> Message which are frozen, most likely
-            due to possible abuse.
+            <b>Need Attention:</b> Message which are frozen, most likely
+            due to possible abuse, or need bounce messages classifying.
             <br><b>Failing:</b> Messages for which delivery is failing, most like
             incorrect contact details.  Sorted by recipient.
             <br><b>Recently Created:</b> Most recent messages constituents have made.
