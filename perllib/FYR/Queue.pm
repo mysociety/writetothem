@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.184 2006-03-10 15:37:39 chris Exp $
+# $Id: Queue.pm,v 1.185 2006-03-20 10:14:36 francis Exp $
 #
 
 package FYR::Queue;
@@ -1713,6 +1713,9 @@ sub admin_get_stats () {
     $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - HOUR); 
     $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - DAY); 
     $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - WEEK); 
+
+    $ret{last_fax_time} = dbh()->selectrow_array('select dispatched from message where dispatched is not null and recipient_fax is not null and recipient_email is null order by dispatched desc limit 1', {});
+    $ret{last_email_time} = dbh()->selectrow_array('select dispatched from message where dispatched is not null and recipient_fax is null and recipient_email is not null order by dispatched desc limit 1', {});
 
     return \%ret;
 }

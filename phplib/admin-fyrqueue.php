@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.93 2006-03-13 09:30:01 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.94 2006-03-20 10:14:37 francis Exp $
  * 
  */
 
@@ -48,6 +48,8 @@ class ADMIN_PAGE_FYR_QUEUE {
         print "<b>" . $stats["created_1"] . "</b> new in hour, ";
         print "<b>" . $stats["created_24"] . "</b> new in day, ";
         print "<b>" . $stats["created_168"] . "</b> new in week... ";
+        print "last fax sent <b>" . strftime('%e %b %Y, %H:%M', $stats["last_fax_time"]) . "</b> ... ";
+        print "last email sent <b>" . strftime('%e %b %Y, %H:%M', $stats["last_email_time"]) . "</b> ... ";
 
         // Quick referrers
         $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
@@ -63,7 +65,7 @@ class ADMIN_PAGE_FYR_QUEUE {
             print "Error contacting queue:";
             print_r($freq_referrers_day);
         }
-        print "top referrers (excludes our sites and google): ";
+        print "top referrers in day (excludes our sites and google): ";
         foreach ($freq_referrers_day as $row) {
             if (!preg_match('#^http://(www\.)?(google|faxyourmp|writetothem|theyworkforyou)\.#i', $row[0])) {
                 if ($row[1] > 1 && $row[0] != "") {
