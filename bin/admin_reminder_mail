@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.14 2006-03-09 17:13:40 francis Exp $
+ * $Id: admin_reminder_mail,v 1.15 2006-03-20 10:37:03 francis Exp $
  *
  */
 
@@ -55,8 +55,21 @@ to stdout.
     }
 }
 
+$stats = msg_admin_get_stats();
+$freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
+
 // Prepare email...
 $mail = '';
+
+// Check fax sent in last day
+$fax_last_days_ago = (time() - $stats['last_fax_time']) / (60 * 60 * 24);
+if ($fax_last_days_ago >= 1) {
+    $fax_last_days_ago = round($fax_last_days_ago, 1);
+    $mail .= "
+* A fax was last sent $fax_last_days_ago days ago, which is more than one
+  Kick the fax servers! They're all probably broken.
+";
+}
 
 // Messages in "need attention" state
 $need_attention_messages = msg_admin_get_queue('needattention', array());
@@ -199,8 +212,6 @@ And this week's most diligent were (please, take a bow!)...
 }
 
 // Statistics
-$stats = msg_admin_get_stats();
-$freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
 $mail .= "
 Finally, some statistics to keep you happy...
 
