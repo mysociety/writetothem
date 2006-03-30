@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.185 2006-03-20 10:14:36 francis Exp $
+# $Id: Queue.pm,v 1.186 2006-03-30 09:59:01 chris Exp $
 #
 
 package FYR::Queue;
@@ -761,7 +761,7 @@ sub email_template ($) {
 # elements from EXTRA.
 sub email_template_params ($%) {
     my ($msg, %params) = @_;
-    foreach (qw(sender_name sender_addr recipient_name recipient_position recipient_position_plural recipient_id)) {
+    foreach (qw(sender_name sender_addr recipient_name recipient_position recipient_position_plural recipient_id recipient_email)) {
         $params{$_} = $msg->{$_};
     }
     $params{sender_addr} =~ s#[,.]?\n+#, #g;
