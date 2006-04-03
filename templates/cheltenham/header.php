@@ -10,6 +10,9 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <?php if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
+<?php if (isset($values['spell'])) { ?>
+<script src="/jslib/spell/spellChecker.js"></script>
+<?php } ?>
 </head>
 <body><a name="top" id="top"></a>
 <a title="Back to Cheltenham Council website" href="http://www.cheltenham.gov.uk/"><img id="cobrand_logo" alt="Return to www.cheltenham.gov.uk" src="http://www.cheltenham.gov.uk/libraries/images/logo.gif"></a>

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.88 2006-02-08 00:52:13 francis Exp $
+ * $Id: write.php,v 1.89 2006-04-03 12:01:31 francis Exp $
  *
  */
 
@@ -95,9 +95,11 @@ END;
 
     add_all_variables_hidden($form, $fyr_values);
 
+    $form->addElement("html", '<script>document.write(\'<tr><td><input name="doSpell" type="button" value="Check Spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
+
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
-    $buttons[1] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
+    $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
 
     return $form;
@@ -168,6 +170,8 @@ function renderForm($form, $pageName)
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form,
             'date' => $fyr_date, 'prime_minister' => $prime_minister,
             'cobrand_letter_help' => $cobrand_letter_help));
+
+    $our_values['spell'] = "true";
 
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);

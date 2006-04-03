@@ -10,6 +10,9 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <?php if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
+<?php if (isset($values['spell'])) { ?>
+<script src="/jslib/spell/spellChecker.js"></script>
+<?php } ?>
 </head>
 <body><a name="top" id="top"></a>
 <a title="Back to Animal Aid website" href="http://www.animalaid.org.uk/"><img id="cobrand_logo" alt="Return to www.animalaid.org.uk" src="http://www.animalaiduk.com/templates/aa/images/logo.gif"></a>
