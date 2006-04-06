@@ -5,32 +5,32 @@
 <p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
 </p>
 
-<form method="get" action="http://www.writetothem.com/">
-<table border="0" bgcolor="#cccc99">
-<tr>
-<td><b> <a href="http://www.writetothem.com/">Your Politicians</a></b><br>
-<input name="pc" type="text" size="13" value="Your Postcode">
-<input type="submit" value="go">
-</td>
-</tr>
-</table>
-</form>
+<? $signup_form = <<<END
+<!-- WriteToThem box, start -->
+<div style="padding:0px; border:1px solid #999999; width:167px; margin: 0px; background-color:#FFE88C;">
+    <form method="get" action="http://www.writetothem.com/">
+        <div style="background-color:#D0BF69;padding:3px;font:12px arial; color:#2B3260; text-align:center;">
+                <b>Contact Your Politician</b>
+        </div>
+        <div style="margin:10px; font: 11px arial; color:#2B3260; text-align:center;">
+            <div style="margin-bottom:5px;">Enter your Postcode below:</div>
+            <input type="text" name="pc" size="13" />
+            <input type="submit" name="submit" value="Go" />
+        </div>
+    </form>
+</div>
+<!-- WriteToThem box, end-->
+END;
+?>
+
+<?=$signup_form ?>
 
 <p>Before you do so, make sure you read the <a href="about-guidelines">guidelines
 for campaigners</a>.  You must not tell your users to send cut-and-paste messages &mdash; they are against our conditions of use and we will block them.</p>
 
 <p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
 
-<pre class="sourcecode">&lt;form method=&quot;get&quot; action=&quot;http://www.writetothem.com/&quot;&gt;
-&lt;table border=&quot;0&quot; bgcolor=&quot;#cccc99&quot;&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;b&gt;&lt;a href=&quot;http://www.writetothem.com/&quot;&gt;Your Politicians&lt;/a&gt;&lt;/b&gt;
-&lt;br&gt;&lt;input name=&quot;pc&quot; type=&quot;text&quot; size=&quot;13&quot; value=&quot;Your Postcode&quot;&gt;
-&lt;input type=&quot;submit&quot; value=&quot;Go&quot;&gt;
-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/table&gt;
-&lt;/form&gt;</pre>
+<pre class="sourcecode"><?=htmlspecialchars($signup_form)?></pre>
 
 <p>Feel free to hack around with the design as much as you like. Any questions, just drop us a line at <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.</p>
 
