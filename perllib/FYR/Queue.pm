@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.186 2006-03-30 09:59:01 chris Exp $
+# $Id: Queue.pm,v 1.187 2006-04-06 13:59:47 chris Exp $
 #
 
 package FYR::Queue;
@@ -623,6 +623,7 @@ sub make_representative_email ($) {
             To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
             Subject => format_mimewords($subject),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+            'Message-ID' => email_message_id($msg->{id}),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_email.
             Encoding => 'quoted-printable',
@@ -664,6 +665,7 @@ my %token_wordmap = qw(
         confirm         C
         bounce          B
         questionnaire   Q
+        message_id      M
     );
 
 # make_token WORD ID
@@ -744,6 +746,19 @@ sub send_user_email ($$$) {
         logmsg($id, 1, "hard error sending $descr email to $msg->{sender_email}");
     }
     return $result;
+}
+
+# email_message_id ID
+# Return a string suitable for use as the value of an email Message-ID: header
+# for an email related to message ID.
+sub email_message_id ($) {
+    my $id = shift;
+    # the Message-ID: we use will be related to the internal ID of the message,
+    # but will not reveal it, and will be different for each email.
+    return sprintf('<%s.%08x@%s>',
+                    make_token('message_id', $id),
+                    int(rand(0xffffffff)),      # add some more entropy...
+                    mySociety::Config::get('EMAIL_DOMAIN'));
 }
 
 # email_template NAME
@@ -828,7 +843,9 @@ sub make_confirmation_email ($;$) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+            'Message-ID' => email_message_id($msg->{id}),
             Type => 'text/plain; charset="utf-8"',
+            
             # XXX Ideally we'd use the 'binary' encoding (pass through all
             # characters unchanged, under the condition that no NULs appear)
             # here; mail servers now either support it or know to transcode it
@@ -879,6 +896,7 @@ sub make_failure_email ($) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+            'Message-ID' => email_message_id($msg->{id}),
             Type => 'text/plain; charset="utf-8"',
             Encoding => 'quoted-printable',
             Data => as_utf8_octets($text)
@@ -928,6 +946,7 @@ sub make_questionnaire_email ($;$) {
             To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+            'Message-ID' => email_message_id($msg->{id}),
             Type => 'text/plain; charset="utf-8"',
             # See note in make_confirmation_mail
             Encoding => 'quoted-printable',
