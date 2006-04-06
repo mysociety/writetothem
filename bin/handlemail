@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.21 2006-03-23 16:54:21 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.22 2006-04-06 13:57:41 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -101,7 +101,7 @@ if (!$is_bounce_message) {
         # Now see whether the email contains one of our URLs.
         my $url;
         foreach (@lines) {
-            if (m#(http://www\.writetothem\.com/[CNY]/[2-7A-Za-z]{20,})#) {
+            if (m#(http://www\.writetothem\.com/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
                 $url = $1;
                 last;
             }
