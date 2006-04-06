@@ -11,7 +11,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
 <?php } ?>
 <?php if (isset($values['spell'])) { ?>
-<script src="/jslib/spell/spellChecker.js"></script>
+<script type="text/javascript" src="/jslib/spell/spellChecker.js"></script>
 <?php } ?>
 </head>
 <body<? if (isset($values['body_id'])) print ' id="' . $values['body_id'] . '"'; ?>><a name="top" id="top"></a>

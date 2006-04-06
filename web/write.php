@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.89 2006-04-03 12:01:31 francis Exp $
+ * $Id: write.php,v 1.90 2006-04-06 14:38:17 matthew Exp $
  *
  */
 
@@ -95,7 +95,7 @@ END;
 
     add_all_variables_hidden($form, $fyr_values);
 
-    $form->addElement("html", '<script>document.write(\'<tr><td><input name="doSpell" type="button" value="Check Spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
+    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check Spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
@@ -392,6 +392,7 @@ EOF
 // Generate signature
 if (array_key_exists('writer_email', $fyr_values) && array_key_exists('body', $fyr_values)) {
     $fyr_values['signature'] = sha1($fyr_values['writer_email']);
+    $fyr_values['signature'] = substr_replace($fyr_values['signature'], '/', 20, 0);
     $fyr_values['signedbody'] = <<<EOF
 $fyr_values[body]
 
