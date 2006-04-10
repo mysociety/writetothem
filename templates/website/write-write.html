@@ -51,7 +51,9 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 	<li>Please be polite, concise and to the point.</li>
 	<li>By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.</li>
 	<li><A HREF="about-qa#formletters" TARGET="_blank">Use your own words (new window)</A>. <?=$values['voting_area']['rep_name']?>s will ignore copied and pasted 'identikit' messages.</li>
+    <? if ($values['representative']['type'] != 'HOC') { ?>
 	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_blank">waste of time (new window)</A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.</li>
+    <? } ?>
 	<li><A HREF="about-yourrep" TARGET="_blank">Read this (new window)</A> to learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.</li>
 </ul>
 

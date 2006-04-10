@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.90 2006-04-06 14:38:17 matthew Exp $
+ * $Id: write.php,v 1.91 2006-04-10 17:30:19 francis Exp $
  *
  */
 
@@ -346,26 +346,44 @@ if (is_array($verify_voting_area_map))
     $verify_voting_areas = array_values($verify_voting_area_map);
 else
     $verify_voting_areas = array();
-if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
-   template_show_error("There's been a mismatch error.  Sorry about
-       this, <a href=\"/\">please start again</a>.");
+if (!in_array($fyr_representative['type'], $postcodeless_child_types)) {
+    if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
+       template_show_error("There's been a mismatch error.  Sorry about
+           this, <a href=\"/\">please start again</a>.");
+    }
 }
+
+// Get the electoral body information
+$eb_type = $va_inside[$fyr_voting_area['type']];
+if (array_key_exists($eb_type, $verify_voting_area_map)) {
+    $eb_id = $verify_voting_area_map[$eb_type];
+} else {
+    $eb_id = $fyr_voting_area['parent_area_id'];
+}
+$eb_area_info = mapit_get_voting_area_info($eb_id);
+mapit_check_error($eb_area_info);
 
 // Check the contact method exists
 $success = msg_recipient_test($fyr_values['who']);
 if (rabx_is_error($success)) {
-    if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA)
-        template_show_error(<<<EOF
-Sorry, we do not currently have contact details for this representative, and are unable to send
-them a message. We may have had details in the past, which have since proven to be erroneous. Please
-do let us know, although we'd be <em>really</em> grateful if you could spend five minutes on the phone
-to the Commons (020 7219 3000) or your Council, asking for contact details and feeding them on to us.
-Your patience, in the meantime, is greatly appreciated. Please <a href="mailto:team&#64;writetothem.com">email us</a> to
-let us know &#8212; particularly when you've got a fax number or an email address for your representative. Details: 
-EOF
-            .  htmlspecialchars($success->text)
+    if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
+        $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['type_name'];
+        if ($type_display_name == "the House of Commons")
+            $type_display_name .= " (020 7219 3000)";
+        template_show_error("
+Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send
+them a message. We may have had details in the past, which have since proven to be erroneous. 
+
+Please <a href=\"mailto:team&#64;writetothem.com\">email us</a> to encourage us to find the contact details.
+
+We'd be <em>really</em> grateful if you could <strong>spend five minutes on the phone
+to $type_display_name</strong>, asking for the contact details.
+Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
+your represenative.
+"
+             # htmlspecialchars($success->text) # not helpful to user
         );
-    else if ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
+    } else if ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
         if ($fyr_voting_area['type'] == 'WMC') {
             $url = 'http://www.locata.co.uk/cgi-bin/phpdriver?MIval=hoc_search&postcode=' . urlencode($fyr_postcode);
             template_show_error(<<<EOF

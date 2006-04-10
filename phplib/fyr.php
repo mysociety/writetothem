@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.35 2006-02-12 20:45:56 matthew Exp $
+ * $Id: fyr.php,v 1.36 2006-04-10 17:30:19 francis Exp $
  * 
  */
 
@@ -23,6 +23,9 @@ require_once "../../phplib/auth.php";
 $disabled_child_types = array();
 #$disabled_child_types = array('CED', 'WMC');
 #$disabled_child_types = array();
+
+// Types which require no postcode authentication (e.g. House of Lords)
+$postcodeless_child_types = array('HOC'); 
 
 /* Output buffering: PHP's output buffering is broken, because it does not
  * affect headers. However, it's worth using it anyway, because in the common
