@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.91 2006-04-10 17:30:19 francis Exp $
+ * $Id: write.php,v 1.92 2006-04-11 22:56:17 francis Exp $
  *
  */
 
@@ -23,15 +23,31 @@ function default_body_text() {
         global $fyr_representative;
         return "Dear " .  $fyr_representative['name'] . ",\n\n\n\nYours sincerely,\n\n";
 }
-
 function default_body_regex() {
         global $fyr_representative;
         return '^Dear ' .  $fyr_representative['name'] . ',\s+Yours sincerely,\s+';
 }
+function default_body_notsigned() {
+        global $fyr_representative;
+        return 'Yours sincerely,\s+$';
+}
+
 
 class RuleAlteredBodyText extends HTML_QuickForm_Rule {
     function validate($value, $options) {
         return !preg_match('#'.default_body_regex().'#', $value);
+    }
+}
+
+class RuleSigned extends HTML_QuickForm_Rule {
+    function validate($value, $options) {
+        return !preg_match('#'.default_body_notsigned().'#', $value);
+    }
+}
+
+class RulePostcode extends HTML_QuickForm_Rule {
+    function validate($value, $options) {
+        return validate_postcode($value);
     }
 }
 
@@ -41,6 +57,7 @@ function buildWriteForm()
     $form = new HTML_QuickForm('writeForm', 'post', 'write');
     global $fyr_values, $fyr_postcode, $fyr_who;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
+    global $fyr_postcode_editable;
 
     // TODO: CSS this:
     $stuff_on_left = <<<END
@@ -73,7 +90,16 @@ END;
     $form->addElement('text', 'writer_county', 'County:', array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('writer_county', 'trim');
 
-    $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
+    if ($fyr_postcode_editable) {
+        // House of Lords
+        $form->addElement('text', 'pc', "Postcode:", array('size' => 20, 'maxlength' => 255));
+        $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
+        $form->addRule('pc', 'Choose a valid postcode', new RulePostcode(), null, null);
+        $form->applyFilter('pc', 'trim');
+    } else {
+        // All other representatives (postcode fixed as must be in constituency)
+        $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
+    }
 
     $form->addElement('text', 'writer_email', "Email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
@@ -90,12 +116,13 @@ END;
 
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
+    $form->addRule('body', 'Please sign with your name after "Yours sincerely"', new RuleSigned(), null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
 
     add_all_variables_hidden($form, $fyr_values);
 
-    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check Spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
+    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
@@ -286,11 +313,11 @@ $fyr_values = get_all_variables();
 if (array_key_exists('body', $fyr_values))
     $fyr_values['body'] = convert_to_unix_newlines($fyr_values['body']);
 
-debug("FRONTEND", "All variables:", $fyr_values);
 if (!array_key_exists('pc', $fyr_values) || $fyr_values['pc'] == "") {
-    template_show_error("Please <a href=\"/\">start from the beginning</a>.");
-    exit;
+    $fyr_values['pc'] = "";
 }
+
+debug("FRONTEND", "All variables:", $fyr_values);
 $fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
 if (!isset($fyr_values['fyr_extref']))
     $fyr_values['fyr_extref'] = fyr_external_referrer();
@@ -346,7 +373,11 @@ if (is_array($verify_voting_area_map))
     $verify_voting_areas = array_values($verify_voting_area_map);
 else
     $verify_voting_areas = array();
-if (!in_array($fyr_representative['type'], $postcodeless_child_types)) {
+$fyr_postcode_editable = false;
+if (in_array($fyr_representative['type'], $postcodeless_child_types)) {
+    $fyr_postcode_editable = true;
+}
+if (!$fyr_postcode_editable) {
     if (!in_array($fyr_representative['voting_area'], $verify_voting_areas)) {
        template_show_error("There's been a mismatch error.  Sorry about
            this, <a href=\"/\">please start again</a>.");

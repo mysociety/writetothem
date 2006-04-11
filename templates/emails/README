@@ -60,7 +60,6 @@ Emails and the available variables are:
     The text of the constituent's letter is appended to the failure notice.
 
   - questionnaire
-  - questionnaire-reminder
 
     Sent to the user two weeks after their letter is sent, to ask them whether
     they have had a reply from their representative. Extra variables are,
@@ -70,5 +69,10 @@ Emails and the available variables are:
 
       - no_url, the URL they should click to indicate that they have not
         received a reply.
+
+    The text of the constituent's letter is appended to the questionnaire.
     
-    -reminder is the reminder mail, send one week after the original.
+  - questionnaire-reminder
+
+    Is the reminder mail, send one week after the original questionnaire.
+

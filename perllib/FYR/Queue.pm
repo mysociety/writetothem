@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.187 2006-04-06 13:59:47 chris Exp $
+# $Id: Queue.pm,v 1.188 2006-04-11 22:56:16 francis Exp $
 #
 
 package FYR::Queue;
@@ -929,7 +929,9 @@ sub make_questionnaire_email ($;$) {
     my $text = FYR::EmailTemplate::format(
                     email_template($reminder ? 'questionnaire-reminder' : 'questionnaire'),
                     email_template_params($msg, yes_url => $yes_url, no_url => $no_url)
-                );
+                )
+                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . format_email_body($msg);
 
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in

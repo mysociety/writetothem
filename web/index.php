@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.50 2005-12-07 16:42:14 francis Exp $
+ * $Id: index.php,v 1.51 2006-04-11 22:56:17 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -17,6 +17,18 @@ require_once "../../phplib/votingarea.php";
 
 $pc = get_http_var("pc");
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
+
+// Redirect from parlparse person identifier
+$person = get_http_var("person");
+if ($person) {
+    $ids = dadem_get_same_person($person);
+    dadem_check_error($ids);
+    // TODO: Fix up case when a person is a representative multiple times
+    // (for now we just take the most recent made one, i.e. last in list)
+    $id = $ids[count($ids)-1];
+    header('Location: ' . new_url('write', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id, 'person', null));
+    exit;
+}
 
 $form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm"><div id="postcodebox">' . "\n";
 $form .= '<label for="pc"><b>First, type your UK postcode:</b></label>&nbsp;' . "\n";
@@ -36,8 +48,10 @@ if ($cocode)
 $form .= '</div></form>';
 
 // Validate postcode, and prepare appropriate page
-if (isset($_GET['t'])) $template = 'index-'.$_GET['t'];
-else $template = "index-index";
+if (isset($_GET['t'])) 
+    $template = 'index-'.$_GET['t'];
+else 
+    $template = "index-index";
 $error_message = null;
 if ($pc != "" or array_key_exists('pc', $_GET)) {
     /* Test for various special-case postcodes which lie outside the UK. Many
@@ -132,8 +146,9 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
             else
                 /* Several */
                 header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
-        } else
+        } else {
             header('Location: ' . new_url('who', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
+        }
         exit;
     }
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
