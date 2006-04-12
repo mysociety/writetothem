@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.37 2006-04-12 15:10:16 francis Exp $
+ * $Id: fyr.php,v 1.38 2006-04-12 23:59:14 matthew Exp $
  * 
  */
 
@@ -228,6 +228,50 @@ Have you ever wanted to <a href="http://www.pledgebank.com">change the world</a>
 <?
         }
     }
+}
+
+function parse_date($date) {
+	$now = time();
+	$date = preg_replace('#\b([a-z]|on|an|of|in|the|year of our lord)\b#i','',$date);
+	if (!$date)
+		return null;
+
+	$epoch = 0;
+	$day = null;
+	$year = null;
+	$month = null;
+	if (preg_match('#(\d+)/(\d+)/(\d+)#',$date,$m)) {
+		$day = $m[1]; $month = $m[2]; $year = $m[3];
+		if ($year<100) $year += 2000;
+	} elseif (preg_match('#(\d+)/(\d+)#',$date,$m)) {
+		$day = $m[1]; $month = $m[2]; $year = date('Y');
+	} elseif (preg_match('#^([0123][0-9])([01][0-9])([0-9][0-9])$#',$date,$m)) {
+		$day = $m[1]; $month = $m[2]; $year = $m[3];
+	} else {
+		$dayofweek = date('w'); # 0 Sunday, 6 Saturday
+			if (preg_match('#next\s+(sun|sunday|mon|monday|tue|tues|tuesday|wed|wednes|wednesday|thu|thur|thurs|thursday|fri|friday|sat|saturday)\b#i',$date,$m)) {
+				$date = preg_replace('#next#i','this',$date);
+				if ($dayofweek == 5) {
+					$now = strtotime('3 days', $now);
+				} elseif ($dayofweek == 4) {
+					$now = strtotime('4 days', $now);
+				} else {
+					$now = strtotime('5 days', $now);
+				}
+			}
+		$t = strtotime($date,$now);
+		if ($t != -1) {
+			$day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
+		}
+	}
+	if (!$epoch && $day && $month && $year) {
+		$t = mktime(0,0,0,$month,$day,$year);
+		$day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
+	}
+
+	if ($epoch == 0)
+		return null;
+	return array('iso'=>"$year-$month-$day", 'epoch'=>$epoch, 'day'=>$day, 'month'=>$month, 'year'=>$year);
 }
 
 ?>

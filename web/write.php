@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.95 2006-04-12 15:59:35 matthew Exp $
+ * $Id: write.php,v 1.96 2006-04-12 23:59:26 matthew Exp $
  *
  */
 
@@ -28,6 +28,10 @@ function fix_dear_lord_address($name) {
     $name = str_replace("Marquess ", "Lord ", $name);
     $name = str_replace("Bishop ", "Lord Bishop ", $name);
     $name = str_replace("Earl ", "Lord ", $name);
+    $name = str_replace('The ', '', $name);
+    # If anyone thinks of a counter-example to this, please let me know.
+    $name = str_replace('Lord of ', 'Lord ', $name);
+    $name = str_replace('Lady of ', 'Lady ', $name);
     return $name;
 }
 
@@ -70,6 +74,9 @@ function buildWriteForm()
     global $fyr_values, $fyr_postcode, $fyr_who;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
     global $fyr_postcode_editable;
+
+    if ($fyr_voting_area['name']=='United Kingdom')
+    	$fyr_voting_area['name'] = 'House of Lords';
 
     // TODO: CSS this:
     $stuff_on_left = <<<END
@@ -128,8 +135,8 @@ END;
 
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
-    $form->addRule('body', 'Please sign with your name after "Yours sincerely"', new RuleSigned(), null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
+    $form->addRule('body', 'Please sign with your name after "Yours sincerely"', new RuleSigned(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
 
     add_all_variables_hidden($form, $fyr_values);
