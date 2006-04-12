@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.36 2006-04-10 17:30:19 francis Exp $
+ * $Id: fyr.php,v 1.37 2006-04-12 15:10:16 francis Exp $
  * 
  */
 
@@ -160,17 +160,27 @@ function fyr_parse_area_type_list($types) {
         return null;
 }
 
-/* fyr_breadcrumbs NUMBER
+/* fyr_breadcrumbs NUMBER [TYPE]
  * Numbered "breadcrumbs" trail for current user; NUMBER is the (1-based)
- * number of the step to hilight. */
-function fyr_breadcrumbs($num) {
-    $steps = array(
-                'Enter postcode',
-                'Pick representative',
-                'Write message',
-                'Check message',
-                'Confirm email'
-            );
+ * number of the step to hilight. TYPE can be 'default' or 'lords'. */
+function fyr_breadcrumbs($num, $type = 'default') {
+    if ($type == 'default') {
+        $steps = array(
+                    'Enter postcode',
+                    'Pick representative',
+                    'Write message',
+                    'Check message',
+                    'Confirm email'
+                );
+    } elseif ($type == 'lords') {
+        $steps = array(
+                    'Find a lord',
+                    'FIXME',
+                    'Write message',
+                    'Check message',
+                    'Confirm email'
+                );
+    }
     /* Ideally we'd like the numbers to appear as a result of this being a
      * list, but that's beyond CSS's tiny capabilities, so put them in
      * explicitly. That means that two numbers will appear in non-CSS

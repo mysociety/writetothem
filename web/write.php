@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.93 2006-04-12 09:46:50 francis Exp $
+ * $Id: write.php,v 1.94 2006-04-12 15:10:16 francis Exp $
  *
  */
 
@@ -19,13 +19,25 @@ require_once "../../phplib/dadem.php";
 require_once "../../phplib/votingarea.php";
 require_once "../../phplib/utility.php";
 
+function fix_dear_lord_address($name) {
+    // Lords are addressed specially at the start of letters:
+    // http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm
+    $name = str_replace("Baroness ", "Lady ", $name);
+    $name = str_replace("Viscount ", "Lord ", $name);
+    $name = str_replace("Countess ", "Lady ", $name);
+    $name = str_replace("Marquess ", "Lord ", $name);
+    $name = str_replace("Bishop ", "Lord Bishop ", $name);
+    $name = str_replace("Earl ", "Lord ", $name);
+    return $name;
+}
+
 function default_body_text() {
         global $fyr_representative;
-        return "Dear " .  $fyr_representative['name'] . ",\n\n\n\nYours sincerely,\n\n";
+        return "Dear " .  fix_dear_lord_address($fyr_representative['name']) . ",\n\n\n\nYours sincerely,\n\n";
 }
 function default_body_regex() {
         global $fyr_representative;
-        return '^Dear ' .  $fyr_representative['name'] . ',\s+Yours sincerely,\s+';
+        return '^Dear ' .  fix_dear_lord_address($fyr_representative['name']) . ',\s+Yours sincerely,\s+';
 }
 function default_body_notsigned() {
         global $fyr_representative;
