@@ -6,7 +6,8 @@ template_draw('header', $values);
 
 <h2>Which Lord would you like to write to?</h2>
 
-<h3>1. I've no idea!
+<ol>
+<li>I've no idea!
 
 <form action="/lords" method="get" name="randomLordForm" id="randomLordForm">
 <div id="postcodebox">
@@ -16,17 +17,19 @@ template_draw('header', $values);
 <?=$values['form_extra']?>
 </div></form>
 
-<h3>2. Find a Lord interested in my topic
+<li>Find a Lord interested in my topic
 
-<form action="http://www.theyworkforyou.com/search/?s=chocolate&o=p" method="get" name="topicLordForm" id="topicLordForm">
+<form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
 <div id="postcodebox">
 <label>Topic:</label>&nbsp;
 <input type="input" name="s" id="s" value="" size="10">
 <input type="hidden" name="o" value="p">
+<input type="hidden" name="house" value="2">
 <input type="submit" value="Go">
 <?=$values['form_extra']?>
 </div></form>
 
+</ol>
 
 <?  /*if (OPTION_FYR_REFLECT_EMAILS) { ?>
     <p align="center"><b>Note:</b> This is a test version of the
