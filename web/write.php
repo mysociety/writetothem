@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.92 2006-04-11 22:56:17 francis Exp $
+ * $Id: write.php,v 1.93 2006-04-12 09:46:50 francis Exp $
  *
  */
 
@@ -410,7 +410,7 @@ Please <a href=\"mailto:team&#64;writetothem.com\">email us</a> to encourage us 
 We'd be <em>really</em> grateful if you could <strong>spend five minutes on the phone
 to $type_display_name</strong>, asking for the contact details.
 Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
-your represenative.
+your representative.
 "
              # htmlspecialchars($success->text) # not helpful to user
         );
