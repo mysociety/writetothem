@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.94 2006-04-12 15:10:16 francis Exp $
+ * $Id: write.php,v 1.95 2006-04-12 15:59:35 matthew Exp $
  *
  */
 
@@ -104,7 +104,7 @@ END;
 
     if ($fyr_postcode_editable) {
         // House of Lords
-        $form->addElement('text', 'pc', "Postcode:", array('size' => 20, 'maxlength' => 255));
+        $form->addElement('text', 'pc', "Postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
         $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
         $form->addRule('pc', 'Choose a valid postcode', new RulePostcode(), null, null);
         $form->applyFilter('pc', 'trim');
