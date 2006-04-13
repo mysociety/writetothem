@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.188 2006-04-11 22:56:16 francis Exp $
+# $Id: Queue.pm,v 1.189 2006-04-13 12:29:44 francis Exp $
 #
 
 package FYR::Queue;
@@ -612,8 +612,9 @@ sub make_representative_email ($) {
     # to that effect.
     if ($msg->{recipient_via}) {
         $subject = "Letter from constituent $msg->{sender_name} to $msg->{recipient_name}";
+        my $coversheet = ($msg->{recipient_type} eq "HOC") ? 'via-coversheet-lords' : 'via-coversheet';
         $bodytext = FYR::EmailTemplate::format(
-                email_template('via-coversheet'),
+                email_template($coversheet),
                 email_template_params($msg, representative_url => '')
             );
     }

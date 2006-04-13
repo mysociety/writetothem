@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.25 2006-01-25 11:04:13 chris Exp $
+# $Id: Fax.pm,v 1.26 2006-04-13 12:29:44 francis Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -255,7 +255,8 @@ sub footer_text ($$$$) {
 # Format the cover-page text for a "via" MESSAGE.
 sub cover_text ($) {
     my ($msg) = @_;
-    return FYR::EmailTemplate::format(fax_template('via-coversheet'), FYR::Queue::email_template_params($msg), 1);
+    my $coversheet = ($msg->{recipient_type} eq "HOC") ? 'via-coversheet-lords' : 'via-coversheet';
+    return FYR::EmailTemplate::format(fax_template($coversheet), FYR::Queue::email_template_params($msg), 1);
 }
 
 # make_pbm_file IMAGE
