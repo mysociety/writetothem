@@ -2,12 +2,12 @@ Three weeks ago we sent your letter to <?=$values['recipient_name']?>, your
 <?=$values['recipient_position']?>. (For reference, there's a copy of your
 letter at the bottom of this email)
 
-- If you HAVE had a real reply (not an automatic emailed acknowledgement or a
-'please wait' note on paper), please click on the link below:
+- If you HAVE had a reply (not just an acknowledgement), please
+click on the link below:
 
     <?=$values['yes_url']?>
 
-- If you HAVE NOT had a reply, or you have only had a holding message, please
+- If you HAVE NOT had a reply, or you have only had an acknowledgement, please
 click on the link below:
 
     <?=$values['no_url']?>

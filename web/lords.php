@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.2 2006-04-12 23:59:26 matthew Exp $
+ * $Id: lords.php,v 1.3 2006-04-13 19:31:45 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -167,17 +167,14 @@ li {
 
 <h2>Which Lord would you like to write to?</h2>
 
+<p>Lords do not have constituencies like MPs, so we need
+different ways for you to find a Lord to contact. It's
+best only to contact a Lord about an issue they
+can help with or influence, which includes national legislation
+and other issues Parliament deals with.
+</p>
+
 <ul>
-
-<li>
-<form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
-Find a Lord who shares my <strong>birthday</strong>:
-
-<input type="input" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>" size="20">
-<input type="submit" value="Go">
-<?=$form_extra ?>
-<br><small><em>e.g. 19th September</em></small>
-</form>
 
 <li>
 <form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
@@ -201,6 +198,16 @@ Find a Lord with some association with this <strong>place</strong>:
 <input type="submit" value="Go">
 <?=$form_extra ?>
 <br><small><em>e.g. they're Lord of there, or they went to university there. To-do: Counties, postcodes</em></small>
+</form>
+
+<li>
+<form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
+Find a Lord who shares my <strong>birthday</strong>:
+
+<input type="input" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>" size="20">
+<input type="submit" value="Go">
+<?=$form_extra ?>
+<br><small><em>e.g. 19th September</em></small>
 </form>
 
 <li>
