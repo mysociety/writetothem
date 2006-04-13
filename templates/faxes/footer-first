@@ -2,7 +2,7 @@ This is page <?=$values['this_page']?>/<?=$values['total_pages']?>. This
 message was sent by WriteToThem.com, the successor to FaxYourMP.com.  If you
 have had any problems receiving this message, please email team@writetothem.com
 or call +44 (0)703 115 0 115; we'll get back to you as soon as possible. See
-www.writetothem.com for details about the new service and what features it will
-provide. We have sent this fax to <?=$values['representative_fax']?>; if this
+www.writetothem.com for details about the service and what features it
+provides.  We have sent this fax to <?=$values['representative_fax']?>; if this
 number is out of date please phone or email us so that we can update our
 records.
