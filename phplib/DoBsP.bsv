@@ -125,7 +125,7 @@
 12954|5 March 1927|Trinity College, Cambridge
 13094|9 January 1950|Digby Stuart Training College, Roehampton
 13095|25 February 1934|Trinity College, Cambridge
-13100|15 December 1917|London School of Economics statistics 1938)
+13100|15 December 1917|London School of Economics statistics 1938
 13101|12 July 1925|St Andrews University
 13098|18 November 1935|St Andrews University; Edinburgh University
 13099|27 January 1943|
@@ -238,7 +238,7 @@
 13493|22 November 1953|Durham University
 10276|21 March 1933|Pembroke College, Oxford
 13340|18 January 1928|Gonville and Caius College, Cambridge; Yale University, USA
-13224|12 January 1936|Manchester University 1971); London University
+13224|12 January 1936|Manchester University 1971; London University
 13226|25 April 1942|Oxford University; Wharton School of Finance, Pennsylvania University
 13221|8 May 1934|University of Cape Town; The Queen's College, Oxford
 13220|14 May 1946|Lady Margaret Hall, Oxford
@@ -323,7 +323,7 @@
 13302|11 July 1947|Trinity College, Cambridge; Cuddesdon Theological College, Oxford; Lincoln Theological College
 13301|7 Jun 1951|
 13300|14 October 1936|Christ's College, Cambridge; Wadham College, Oxford
-13299|14 March 1951|London School of Economics: international history 1972),  European studies; Inns of Court School of Law
+13299|14 March 1951|London School of Economics: international history 1972,  European studies; Inns of Court School of Law
 13159|13 January 1933|Trinity College, Cambridge
 13154|27 March 1939|Christ Church, Oxford
 12867|14 May 1942|
@@ -333,7 +333,7 @@
 13564|6 January 1933|London University
 13565|20 August 1940|l.c.m Apprenticeship, marine engineer
 13566|5 March 1926|
-13567|1 April 1926|Bedford and Birkbeck Colleges, London University 1967, HV Tut Cert 1960)
+13567|1 April 1926|Bedford and Birkbeck Colleges, London University 1967, HV Tut Cert 1960
 10386|14 February 1937|St Andrews University; King's College, London University
 12892|30 April 1933|Jesus College, Oxford; Ohio State University
 13121|23 September 1946|York University
@@ -377,7 +377,7 @@
 13045|28 June 1959|Van Mildert College, Durham University; King's College, London; Institute of Education, London
 10446|5 November 1931|University College of Wales, Aberystwyth; Gonville and Caius College, Cambridge; Gray's Inn, Hocker Senior Exhibitioner
 13039|23 March 1928|Ruskin College, Oxford 1949-50; St Catherine's College, Oxford; Department of Education, Manchester University
-13040|24 November 1922|London School of Economics statistics 1943)
+13040|24 November 1922|London School of Economics statistics 1943
 13041|11 March 1923|Christ Church, Oxford
 13042|13 September 1955|University College, Oxford; Brasenose College, Oxford
 13036|8 May 1914|
@@ -407,7 +407,7 @@
 13161|26 July 1930|Royal Academy of Dramatic Art
 13163|24 March 1945|Catford College
 13162|2 July 1938|Sidney Sussex College, Cambridge; St Thomas's Hospital, London 1956-61
-13169|2 November 1934|Oxford University 1957, MA); Princeton University, USA
+13169|2 November 1934|Oxford University 1957, MA; Princeton University, USA
 13168|2 June 1936|RMA, Sandhurst; Selwyn College, Cambridge; Cuddesdon College, Oxford
 12945|8 October 1951|Edinburgh University
 12946|20 July 1935|Worcester College, Oxford
@@ -421,7 +421,7 @@
 13602|20 July 1942|
 13601|3 October 1947|Tours University, France; Royal Agricultural College, Cirencester
 10475|10 June 1934|Plater Hall, Oxford University
-13009|15 October 1931|Girton College, Cambridge 1952, MA)
+13009|15 October 1931|Girton College, Cambridge 1952, MA
 13597|19 March 1931|London School of Economics; Princeton University, USA
 13596|23 April 1945|Trinity College, Cambridge; Tyndale Hall, Bristol
 13595|13 February 1919|Trinity College, Oxford
@@ -607,7 +607,7 @@
 13023|27 February 1932|University College, London
 13030|8 April 1948|Edinburgh University; Strathclyde University; DipHSM 1974
 13293|23 April 1944|St Catherine's College, Oxford; Magdalene College, Cambridge
-13294|5 March 1960|Aston University Production engineering 1982, PhD robotics 1985)
+13294|5 March 1960|Aston University Production engineering 1982, PhD robotics 1985
 13197|21 November 1931|
 13196|6 June 1940|IIT, Kharagpur; Birmingham University
 13548|9 March 1955|London School of Economics; University of Kent
@@ -618,7 +618,7 @@
 13198||
 12845|20 March 1959|Exeter College, Oxford
 13558|14 Nov 1941|
-13481|5 October 1944|University of London economics 1970)
+13481|5 October 1944|University of London economics 1970
 13482|16 January 1947|Manchester University; University College, London
 13483|18 January 1938|Hull University; London School of Economics; University of Cambridge
 10554|12 February 1942|
@@ -706,6 +706,6 @@
 13322|29 April 1943|St Anne's College, Oxford; Brandess University, USA
 13315|8 December 1958|St Hugh's College, Oxford
 13714|10 June 1949|Makere Iniversity, Uganda; Diploma in legal practice, Uganda 1972; Selwyn College, Cambridge; Ridley Hall, Cambridge
-13174|17 October 1942|Queen's University, Belfast politics and economics 1965); University College, London; Oak Hill Theological College, London
+13174|17 October 1942|Queen's University, Belfast politics and economics 1965; University College, London; Oak Hill Theological College, London
 13716|21 January 1945|Christ's College, Cambridge
 13718||
