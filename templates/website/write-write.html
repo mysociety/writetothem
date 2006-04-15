@@ -53,14 +53,19 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_blank">waste of time <small>(new window)</small></A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.</li>
 	<li><A HREF="about-yourrep" TARGET="_blank">Read this <small>(new window)</small></A> to learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.</li>
 <? } else { ?>
-<li><a href="about-lords#when" target="_blank">Frequently Asked Questions about contacting a Lord <small>(new window)</small></a></li>
+<li><a href="about-lords#when" target="_blank">Read this <small>(new window)</small></a> to learn when to contact a Lord.</li>
 <? }
 
        if (isset($values['representative']['parlparse_person_id'])) {
 	$pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['parlparse_person_id']); ?>
-       <li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=<?=$pid ?>">Find out more about <?=str_replace('The ', 'the ', $values['representative']['name']) ?> <small>(new window)</small></a> on TheyWorkForYou.com</li>
+       <li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=<?=$pid ?>">Find out more about <?=str_replace('The ', 'the ', $values['representative']['name']) ?> <small>(new window)</small></a> on TheyWorkForYou.com.</li>
 <?
 	    }
+
+    if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) { ?>
+       <li><?=$values['representative']['name']; ?> is a <strong><?=$values['representative']['party']; ?></strong> Lord.</li>
+<?
+    }
 ?>
 					 
 </ul>

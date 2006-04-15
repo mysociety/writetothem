@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.4 2006-04-15 12:58:10 matthew Exp $
+ * $Id: lords.php,v 1.5 2006-04-15 13:44:28 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -67,8 +67,8 @@ if ($date = get_http_var('d')) {
 			}
 		}
 		if (!count($matches)) {
-			print '<p><em>No Lord shares that date, I\'m afraid. Pick another date!</em></p>';
-			lords_form();
+			$error = 'No Lord shares that date, I\'m afraid. Pick another date!';
+			lords_form(array('date'=>$error));
 		} elseif (count($matches)==1) {
     			header('Location: ' . new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
 			exit;
@@ -82,6 +82,8 @@ if ($date = get_http_var('d')) {
 			}
 			print '</ul>';
 		}
+	} else {
+		lords_form(array('date'=>'We didn\'t recognise that date, sorry.'));
 	}
 } elseif ($q_college = get_http_var('c')) {
 	$f = file('../phplib/DoBsP.bsv');
@@ -99,8 +101,8 @@ if ($date = get_http_var('d')) {
 		}
 	}
 	if (!count($matches)) {
-		print '<p><em>No Lords went to that college, I\'m afraid. Pick another college!</em></p>';
-		lords_form();
+		$error = 'No Lords went to that college, I\'m afraid. Pick another college!';
+		lords_form(array('college'=>$error));
 	} elseif (count($matches)==1) {
     		header('Location: ' . new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
 		exit;
@@ -174,15 +176,21 @@ if ($date = get_http_var('d')) {
 		}
 	}
 	if (!count($matches)) {
-		print '<p><em>No Lords associated with that place, I\'m afraid. Pick another place.</em></p>';
-		lords_form();
-	} elseif (count($matches)==1) {
-    		header('Location: ' . new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
-		exit;
+		$error = 'No Lords associated with that place, I\'m afraid. Pick another place.';
+		lords_form(array('place'=>$error));
+#	} elseif (count($matches)==1) {
+#    		header('Location: ' . new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
+#		exit;
 	} else {
 		$reps_info = dadem_get_representatives_info($matches);
 		dadem_check_error($reps_info);
-		print '<p>There is more than one Lord associated with that place. Please pick from the list below:</p> <ul>';
+		print '<p>';
+		if (count($matches)==1) {
+			print 'Only one Lord matched your search criteria:';
+		} else {
+			print 'There is more than one Lord associated with that place. Please pick from the list below:';
+		}
+		print '</p> <ul>';
 		foreach ($matches as $i => $id) {
 			$url = new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
 			print '<li><a href="' . $url . '">' . $reps_info[$id]['name'] . '</a> <small>' . $reason[$i] . '</small></li>'."\n";
@@ -196,7 +204,7 @@ template_draw('footer', $values);
 
 # ---
 
-function lords_form() {
+function lords_form($error = array()) {
 	global $form_extra;
 ?>
 <style type="text/css">
@@ -207,20 +215,21 @@ li {
 
 <h2>Which Lord would you like to write to?</h2>
 
-<p>WriteToThem <em>Lords edition</em> is an experiment. Lords don't have a duty to
-reply to the public, and they're (obviously) not elected.
+<p>WriteToThem <em>Lords edition</em> is an experiment. Lords do not have a duty to
+reply to the public, and they are (obviously) not elected.
 Nevertheless, they get to vote on things that affect all of us, so we
 reckon they should at least be easy to contact.
 
 However, Lords do not have constituencies like MPs, so we need
 different ways for you to find a Lord to contact. We hope you
-like the methods we've come up with.</p>
+like the methods we have come up with.</p>
 
-<p>It's best only to contact a Lord about an issue they
+<p>It is best only to contact a Lord about an issue they
 can help with or influence, which includes national legislation
 and other issues Parliament deals with.
 
 <a href="about-lords"><strong>Frequently Asked Questions</strong></a></p>
+
 <ul>
 
 <li>
@@ -239,6 +248,9 @@ by words spoken in Parliament, nothing more)</em></small>
 </li>
 
 <li>
+<? if (isset($error['place'])) { ?>
+<div id="error"><?=$error['place'] ?></div>
+<?  } ?>
 <form action="/lords" method="get" name="placeLordForm" id="placeLordForm">
 
 Find a Lord with some association with this <strong>place</strong>:
@@ -250,6 +262,9 @@ Find a Lord with some association with this <strong>place</strong>:
 </form>
 
 <li>
+<? if (isset($error['date'])) { ?>
+<div id="error"><?=$error['date'] ?></div>
+<?  } ?>
 <form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
 Find a Lord who shares my <strong>birthday</strong>:
 
@@ -260,6 +275,9 @@ Find a Lord who shares my <strong>birthday</strong>:
 </form>
 
 <li>
+<? if (isset($error['college'])) { ?>
+<div id="error"><?=$error['college'] ?></div>
+<?  } ?>
 <form action="/lords" method="get" name="collegeLordForm" id="collegeLordForm">
 Find a Lord who went to this Oxbridge <strong>college</strong>:
 <input type="input" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
@@ -284,8 +302,8 @@ Give me a
 
 </ul>
 
-<p>We're using the House of Lords fax machine for all correspondence, so
-we're limiting each person to one message a day for the moment.</p>
+<p>We are using the House of Lords fax machine for all correspondence, so
+messages are limited to one message a day per person for the moment.</p>
 
 
 <?
