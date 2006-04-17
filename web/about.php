@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.10 2006-02-24 11:44:07 francis Exp $
+ * $Id: about.php,v 1.11 2006-04-17 12:27:28 francis Exp $
  * 
  */
 
@@ -29,6 +29,10 @@ if (!isset($page) || (!preg_match('/^(?:about|problem)-[a-z]+$/', $page) && $pag
 
 if ($page == 'about-index') {
     header("Location: about-us");
+    exit;
+}
+if ($page == 'about-pledgebank') {
+    header("Location: http://www.pledgebank.com");
     exit;
 }
     
