@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.97 2006-04-15 12:58:10 matthew Exp $
+ * $Id: write.php,v 1.98 2006-04-17 12:31:53 chris Exp $
  *
  */
 
@@ -345,7 +345,8 @@ if (!isset($fyr_values['cocode']))
 
 // Various display and used fields
 $fyr_postcode = $fyr_values['pc'];
-$fyr_who = $fyr_values['who'];
+if (array_key_exists('who', $fyr_values))
+    $fyr_who = $fyr_values['who'];
 $fyr_time = msg_get_time();
 msg_check_error($fyr_time);
 $fyr_date = strftime('%A %e %B %Y', $fyr_time);
