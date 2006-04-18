@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.15 2005-12-05 12:19:45 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.16 2006-04-18 11:53:26 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -74,7 +74,7 @@ sub run_daemon ($$$$) {
     while (!$foad and $iter < 1000) {
         my $doit = 1;
         if (defined($sel)) {
-            if ($sel->can_read(600 + rand(600))) {
+            if ($sel->can_read(60 + rand(60))) {
                 my $buf = '';
                 my $n = $notifysock->sysread($buf, 1, 0);
                 if (!defined($n)) {
@@ -84,7 +84,7 @@ sub run_daemon ($$$$) {
                 }
             }
         } else {
-            sleep(600 + rand(600));
+            sleep(60 + rand(60));
         }
         # we might have received a signal during select.
         last if ($foad);
@@ -334,5 +334,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.15 2005-12-05 12:19:45 francis Exp $
+$Id: fyrqd,v 1.16 2006-04-18 11:53:26 chris Exp $
 
