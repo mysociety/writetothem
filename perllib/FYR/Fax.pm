@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.26 2006-04-13 12:29:44 francis Exp $
+# $Id: Fax.pm,v 1.27 2006-04-18 09:01:00 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -255,7 +255,7 @@ sub footer_text ($$$$) {
 # Format the cover-page text for a "via" MESSAGE.
 sub cover_text ($) {
     my ($msg) = @_;
-    my $coversheet = ($msg->{recipient_type} eq "HOC") ? 'via-coversheet-lords' : 'via-coversheet';
+    my $coversheet = 'via-coversheet';
     return FYR::EmailTemplate::format(fax_template($coversheet), FYR::Queue::email_template_params($msg), 1);
 }
 
@@ -352,7 +352,20 @@ sub make_representative_fax ($) {
         my ($x, $y) = (0, format_postal_address($im, $addr));
         my $pagenum = 0;
 
-        $text = "\n\n" . $msg->{message};
+        $text = '';
+
+        # For members of the House of Lords whose messages reach them via the
+        # Lords Lobby fax machine (all / almost all?), then format their
+        # address at the top of the fax.
+        if ($msg->{recipient_via} && $msg->{recipient_type} eq 'HOC') {
+            $text = "$msg->{recipient_name}\nHouse of Lords\nLondon\nSW1A 0PW\n";
+        }
+            # XXX might consider doing the same for MPs (just for form's sake)
+            # except that we probably don't want to stick "House of Commons,
+            # London" on a fax going to a constituency office -- that might
+            # confuse people.
+
+        $text .= "\n\n" . $msg->{message};
         while (length($text) > 0) {
             ++$pagenum;
 
@@ -376,7 +389,10 @@ sub make_representative_fax ($) {
         }
         
         # At this point, generate a cover sheet if we need one.
-        if ($msg->{recipient_via}) {
+        # NB that though Lords are 'via' contacts, they don't get a coversheet
+        # -- instead we stick their address into the letter as would be done on
+        # a normal letter, above.
+        if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
             $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
             $im->colorAllocate(255, 255, 255);
             $im->colorAllocate(0, 0, 0);
