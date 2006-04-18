@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.190 2006-04-18 11:41:36 chris Exp $
+# $Id: Queue.pm,v 1.191 2006-04-18 22:14:09 adam Exp $
 #
 
 package FYR::Queue;
@@ -572,7 +572,7 @@ sub make_house_of_lords_address ($) {
             'Baron' => 'The Lord',
             'Baroness' => 'The Baroness',
             'Countess' => 'The Countess',
-            'Duke' => 'His Grace the Duke',
+            'Duke' => 'His Grace, the Duke',
             'Earl' => 'The Earl',
             'Lady' => 'The Lady',
             'Marquess' => 'The Most Hon. the Marquess',
