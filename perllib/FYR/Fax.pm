@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.27 2006-04-18 09:01:00 chris Exp $
+# $Id: Fax.pm,v 1.28 2006-04-18 11:43:14 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -133,9 +133,28 @@ sub text_dimensions ($$) {
                         $size, 0, 0, 0,
                         $text,
                         GD_TEXT_OPTIONS
-                    )
-        || throw FYR::Fax::SoftError("unable to compute text bounds (font missing?)");
-    return ($bounds[2] - $bounds[0], int(abs($bounds[1] - $bounds[4]) * LINE_ADVANCE));
+                    );
+    if (@bounds == 0) {
+        throw FYR::Fax::SoftError("unable to compute text bounds (font missing?); GD error $@");
+    } elsif (@bounds != 8) {
+        throw FYR::Fax::SoftError(
+                "GD::Image->stringFT returned bad bounding rectangle (got "
+                    . scalar(@bounds) . " elements, wanted 8)");
+    }
+
+    # The order of the return values from stringFT changes between different
+    # versions of libgd and hence GD.pm. Assume that the list is always ordered
+    # as XYXYXYXY, and find the max and min.
+    my ($minx, $maxx, $miny, $maxy);
+    for (my $i = 0; $i < 4; ++$i) {
+        my ($x, $y) = @bounds[2 * $i .. 2 * $i + 2];
+        $minx = $x if (!defined($minx) || $x < $minx);
+        $maxx = $x if (!defined($maxx) || $x > $maxx);
+        $miny = $y if (!defined($miny) || $y < $miny);
+        $maxy = $y if (!defined($maxy) || $y > $maxy);
+    }
+        
+    return ($maxx - $minx, ($maxy - $miny) * LINE_ADVANCE);
 }
 
 # format_text IMAGE TEXT X Y WIDTH HEIGHT [NODRAW] [SIZE]
@@ -296,7 +315,7 @@ sub make_pbm_file ($) {
     #     /tmp/fullfs          1003k 1003k     0 100% /mnt/fullfs
     #     # cat fish.wbmp | wbmptopbm > fish.pbm && echo success
     #     wbmptopbm: a file read or write error occurred at some point
-    #     wbmtopbm exited successfully
+    #     success
     #
     # So to check that this succeeded, we ought to parse the file to make sure
     # it's (at least) the correct size etc. But just looking at the file size
@@ -310,7 +329,6 @@ sub make_pbm_file ($) {
         unlink($name);
         die "temporary file is too small (" . $st->size() . " bytes)";
     }
-
 
     return $name;
 }
@@ -348,17 +366,21 @@ sub make_representative_fax ($) {
         $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
         $addr .= "\n\n" . "Email: $msg->{sender_email}";
 
+        # Also stick the date under the address, so that it's properly
+        # right-justified.
+        $addr .= "\n\n" . strftime("%A %d %B %Y", localtime($msg->{created}));
+
         # Coordinates relative to text area.
         my ($x, $y) = (0, format_postal_address($im, $addr));
         my $pagenum = 0;
 
-        $text = '';
+        $text = "\n";
 
         # For members of the House of Lords whose messages reach them via the
         # Lords Lobby fax machine (all / almost all?), then format their
         # address at the top of the fax.
         if ($msg->{recipient_via} && $msg->{recipient_type} eq 'HOC') {
-            $text = "$msg->{recipient_name}\nHouse of Lords\nLondon\nSW1A 0PW\n";
+            $text = "\n" . FYR::Queue::make_house_of_lords_address($msg->{recipient_name});
         }
             # XXX might consider doing the same for MPs (just for form's sake)
             # except that we probably don't want to stick "House of Commons,
@@ -371,12 +393,6 @@ sub make_representative_fax ($) {
 
             my $f = ($pagenum > 1 ? $footerheight : $firstfooterheight);
 
-            # Add date on first page.
-            if ($pagenum == 1) {
-                my ($dy) = format_text($im, strftime("%A %d %B %Y\n\n", localtime($msg->{created})), $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
-                $y += $dy;
-            }
-            
             my ($dy, $text2) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
 
             push(@pages, $im);
@@ -513,9 +529,11 @@ again:
     $f->close();    # Should lock it, though other programs won't obey that.
 
     my @imgfiles;
-    my %unsent;
+    my %unsent = ( xxx => 1 );  # ugh
     try {
         @imgfiles = make_representative_fax($msg);
+        throw FYR::Fax::SoftError("make_representative_fax didn't return any images")
+            if (!@imgfiles);
         %unsent = map { $_ => 1 } @imgfiles;
 
         FYR::Queue::logmsg($id, 0, "messages has " . scalar(@imgfiles) . " page/s; files are: " . join(", ", @imgfiles));
@@ -561,6 +579,8 @@ again:
                 '-t', $number,
                 @imgfiles
             );
+
+        FYR::Queue::logmsg($id, 0, "efax command is: " . join(' ', map { /(\s|^$)/ ? "'$_'" : $_ } @efaxcmd));
 
         my ($rd, $wr);
         $rd = new IO::Handle();
