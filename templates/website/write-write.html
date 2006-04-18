@@ -62,7 +62,9 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 <?
 	    }
 
-    if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) { ?>
+    if ($values['representative']['type'] == 'HOC'
+        && isset($values['representative']['party'])
+        && $values['representative']['party'] != 'Bishop') { ?>
        <li><?=$values['representative']['name']; ?> is a <strong><?=$values['representative']['party']; ?></strong> Lord.</li>
 <?
     }
