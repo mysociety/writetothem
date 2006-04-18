@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.5 2006-04-15 13:44:28 matthew Exp $
+ * $Id: lords.php,v 1.6 2006-04-18 08:22:01 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -274,6 +274,8 @@ Find a Lord who shares my <strong>birthday</strong>:
 <br><small><em>e.g. 19th September</em></small>
 </form>
 
+
+<? /*
 <li>
 <? if (isset($error['college'])) { ?>
 <div id="error"><?=$error['college'] ?></div>
@@ -289,6 +291,7 @@ Find a Lord who went to this Oxbridge <strong>college</strong>:
 <?=$form_extra ?>
 <br><small><em>e.g. Trinity College, Oxford</em></small>
 </form>
+*/ ?>
 
 <li>
 <form action="/lords" method="get" name="randomLordForm" id="randomLordForm">
