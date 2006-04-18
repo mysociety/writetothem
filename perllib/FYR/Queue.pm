@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.189 2006-04-13 12:29:44 francis Exp $
+# $Id: Queue.pm,v 1.190 2006-04-18 11:41:36 chris Exp $
 #
 
 package FYR::Queue;
@@ -561,6 +561,32 @@ sub format_postal_address ($) {
     return $text;
 }
 
+# make_house_of_lords_address PEER
+# Return the address of the named PEER at the House of Lords.
+sub make_house_of_lords_address ($) {
+    my $n = shift;
+
+    # forms of address on envelope -- see,
+    #   http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm
+    my %a = (
+            'Baron' => 'The Lord',
+            'Baroness' => 'The Baroness',
+            'Countess' => 'The Countess',
+            'Duke' => 'His Grace the Duke',
+            'Earl' => 'The Earl',
+            'Lady' => 'The Lady',
+            'Marquess' => 'The Most Hon. the Marquess',
+            'Viscount' => 'The Viscount',
+            'Archbishop' => 'The Most Rev. and the Rt Hon. the Archbishop',
+            'Bishop' => 'The Rt Rev. the Lord Bishop'
+        );
+
+    my $re = '(' . join('|', map { quotemeta($_) } keys(%a)) . ')';
+    $n =~ s/^($re)/$a{$1}/;
+
+    return "$n\nHouse of Lords\nLondon\nSW1A 0PW\n";
+}
+
 # format_email_body MESSAGE
 # Format MESSAGE (a hash of database fields) suitable for sending as an email.
 # We honour every carriage return, and wrap lines.
@@ -571,16 +597,25 @@ sub format_email_body ($) {
     $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
     $addr .= "\n\n" . "Email: $msg->{sender_email}";
 
+    # Also stick the date in, formatted under the address as it would be in a
+    # real letter. Of course, it'll be in the Date: header too, but we may as
+    # well be consistent with how the faxes look.
     my $formatted_date = strftime('%A %e %B %Y', localtime($msg->{created}));
     $formatted_date =~ s/  / /g; # remove zero pad
+    $addr .= "\n\n$formatted_date";
 
     my $text = format_postal_address($addr)
                 . "\n\n"
-                # Date here is slightly silly as it will be in the Date:
-                # header, but we may as well be consistent....
-                . $formatted_date
-                . "\n\n"
-                . wrap(EMAIL_COLUMNS, $msg->{message});
+                . "\n";
+
+    # If the message is going to a peer via, then stick their House of Lords
+    # address on it to.
+    if ($msg->{recipient_via} && $msg->{recipient_type} eq 'HOC') {
+        $text .= make_house_of_lords_address($msg->{recipient_name}) . "\n";
+    }
+
+    # and now the actual text.
+    $text .= "\n" . wrap(EMAIL_COLUMNS, $msg->{message});
 
     # Strip any lines which consist only of spaces. Because we send the mails
     # as quoted-printable, such lines get formatted as ugly strings of "=20".
@@ -605,16 +640,18 @@ sub as_utf8_octets ($) {
 sub make_representative_email ($) {
     my ($msg) = (@_);
 
-    my $subject = "Letter from your constituent $msg->{sender_name}";
+    my $subject = $msg->{recipient_type} eq 'HOC'
+                        ? "Letter from $msg->{sender_name}"
+                        : "Letter from your constituent $msg->{sender_name}";
+    
     my $bodytext = '';
 
     # If this is being sent via some contact, we need to add blurb to the top
     # to that effect.
-    if ($msg->{recipient_via}) {
+    if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
         $subject = "Letter from constituent $msg->{sender_name} to $msg->{recipient_name}";
-        my $coversheet = ($msg->{recipient_type} eq "HOC") ? 'via-coversheet-lords' : 'via-coversheet';
         $bodytext = FYR::EmailTemplate::format(
-                email_template($coversheet),
+                email_template('via-coversheet'),
                 email_template_params($msg, representative_url => '')
             );
     }
