@@ -1,6 +1,0 @@
-FROM: <?=$values['sender_name']?>, <?=$values['sender_addr']?>
-
-TO: <?=$values['recipient_name']?>
-
-(Sent via WriteToThem.com, a project of UKCOD, registered charity number 1076346.)
-
