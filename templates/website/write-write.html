@@ -1,7 +1,9 @@
 <? 
 $values['title'] = "Now write your message to ". 
+    trim($values['voting_area']['rep_prefix'] . " " .
     $values['representative']['name'] . " " .
-    $values['voting_area']['rep_name'] . " for " . $values['voting_area']['name'];
+    $values['voting_area']['rep_suffix']) . ", " .
+    $values['voting_area']['name'];
 
 template_draw('header', $values);
 print fyr_breadcrumbs(3);
