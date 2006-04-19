@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.6 2006-04-18 08:22:01 francis Exp $
+ * $Id: lords.php,v 1.7 2006-04-19 00:33:33 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -218,17 +218,16 @@ li {
 <p>WriteToThem <em>Lords edition</em> is an experiment. Lords do not have a duty to
 reply to the public, and they are (obviously) not elected.
 Nevertheless, they get to vote on things that affect all of us, so we
-reckon they should at least be easy to contact.
+reckon they should at least be easy to contact.  It is best only to contact a
+Lord about an issue they can help with or influence, which includes national
+legislation and other issues Parliament deals with.</p>
 
-However, Lords do not have constituencies like MPs, so we need
+<p>For more information, read our <a href="about-lords"><strong>Frequently Asked Questions</strong></a>.
+</p>
+
+<p>Lords do not have constituencies like MPs, so we need
 different ways for you to find a Lord to contact. We hope you
 like the methods we have come up with.</p>
-
-<p>It is best only to contact a Lord about an issue they
-can help with or influence, which includes national legislation
-and other issues Parliament deals with.
-
-<a href="about-lords"><strong>Frequently Asked Questions</strong></a></p>
 
 <ul>
 
