@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.8 2006-02-24 17:32:34 dademcron Exp $
+# $Id: message-send-graph,v 1.9 2006-04-20 15:52:40 dademcron Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
@@ -27,7 +27,7 @@ echo "select
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
-    ;" | psql -A -F " " --host=tea fyr fyr | egrep -v "date|rows" >$SOURCEO
+    ;" | psql -A -F " " --host=svcs.tea.int.ukcod.org.uk fyr fyr | egrep -v "date|rows" >$SOURCEO
 echo "source $SOURCEO"
 
 echo "select 
@@ -39,7 +39,7 @@ echo "select
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
-    ;" | psql -A -F " " --host=tea fyr fyr | egrep -v "date|rows" >$SOURCED
+    ;" | psql -A -F " " --host=svcs.tea.int.ukcod.org.uk fyr fyr | egrep -v "date|rows" >$SOURCED
 echo "source $SOURCED"
 
 cat >$GPSCRIPT <<END 
@@ -82,4 +82,5 @@ echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
 gnuplot < $GPSCRIPT > ~/public_html/fyr-signups$EXTENSION
+print "http://bitter.ukcod.org.uk/~dademcron/fyr-signups.png"
 
