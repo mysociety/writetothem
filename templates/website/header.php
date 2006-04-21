@@ -18,6 +18,8 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem.com<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';
+if ($_SERVER['REQUEST_URI']!='/') 
+    print ' <span id="homelink">(<a href="/">home</a>)</span>';
 if (OPTION_FYR_REFLECT_EMAILS) {
     print ' <span id="betatest">Staging&nbsp;Site</span>';
 }

@@ -11,7 +11,8 @@ mySociety</a>.
     '/about-contact' => 'Contact Us',
     '/about-guidelines' => 'Guidelines for Campaigners',
     '/about-linkus' => 'Link to us',
-    '/stats' => 'Statistics'
+    '/stats' => 'Statistics',
+    '/about-copyright' => 'Copyright', /* for Affero GPL */
 );
 foreach ($links as $uri => $text) {
     $f = '';
