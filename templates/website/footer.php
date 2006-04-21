@@ -10,7 +10,7 @@ mySociety</a>.
     '/about-qa'=>'Help',
     '/about-contact' => 'Contact Us',
     '/about-guidelines' => 'Guidelines for Campaigners',
-    '/about-linkus' => 'Link to us',
+    '/about-linktous' => 'Link to us',
     '/stats' => 'Statistics',
     '/about-copyright' => 'Copyright', /* for Affero GPL */
 );

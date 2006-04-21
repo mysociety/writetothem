@@ -5,8 +5,20 @@
 <p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
 </p>
 
-<? $signup_form = <<<END
-<!-- WriteToThem box, start -->
+<ul>
+<li><a href="#envelope">Envelope style box</a></li>
+<li><a href="#conventional">Conventional style box</a></li>
+<li><a href="#types">Linking to specific types of representative</a></li>
+<li><a href="#prefill">Prefilling name and address</a></li>
+</ul>
+
+<p>Before you do so, make sure you read the <a
+href="about-guidelines">guidelines for campaigners</a>.  You must not tell your
+users to send cut-and-paste messages &mdash; they are against our conditions of
+use and we will block them.</p>
+
+<? $signup_form_normal = <<<END
+<!-- WriteToThem conventional box, start -->
 <div style="padding:0; border:1px solid #999999; width:14em; margin: 0;
             background-color:#FFE88C; font: 83% Helvetica, Arial, sans-serif;">
     <form method="get" action="http://www.writetothem.com/" style="text-align:center">
@@ -20,27 +32,63 @@
         </div>
     </form>
 </div>
-<!-- WriteToThem box, end-->
+<!-- WriteToThem conventional box, end-->
 END;
 ?>
 
-<?=$signup_form ?>
+<? $signup_form_envelope = <<<END
+<!-- WriteToThem envelope box, start -->
+<script type="text/javascript">
+    function clearDefault(el) {
+      if (el.defaultValue==el.value) el.value = "";
+    }
+    function fillDefault(el) {
+      if (el.value=="") el.value = "Your Postcode";
+    }
+</script>
+<div style="width:167px;height:120px;
+    background: url(http://www.writetothem.com/envelope_bg.gif) no-repeat 0 0; 
+    font:9pt/11pt arial,helvetica,sans-serif;position:relative;">
+    <form method="get" action="http://www.writetothem.com/">
+        <div style="padding:55px 0  0 20px;">
+            <label for="pc" style="display:none;">
+                Contact Your Politician
+            </label>
+            <input type="text" value="Your Postcode" name="pc" size="13"
+                style="width:90px;vertical-align:bottom;
+                    font:8pt/11pt arial,helvetica,sans-serif;color:#666;" 
+                onfocus="clearDefault(this)" onblur="fillDefault(this)" />
+            <input type="image" value="Go" style="vertical-align:bottom;" 
+                src="http://www.writetothem.com/envelope_arrow.gif" />
+        </div>
+    </form>
+    <a href="http://www.writetothem.com/" title="Visit writetothem.com" 
+    style="display:block;overflow:hidden;text-indent:-1234em;height:30px;
+    bottom:0;text-decoration:none;">writetothem.com</a>
+</div>
+<!-- WriteToThem envelope box, end-->
+END;
+?>
 
-<p>Before you do so, make sure you read the <a href="about-guidelines">guidelines
-for campaigners</a>.  You must not tell your users to send cut-and-paste messages &mdash; they are against our conditions of use and we will block them.</p>
-
+<h2><a name="envelope"></a>Envelope style box</h2>
+<?=$signup_form_envelope ?>
 <p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
+<pre class="sourcecode"><?=htmlspecialchars($signup_form_envelope)?></pre>
 
-<pre class="sourcecode"><?=htmlspecialchars($signup_form)?></pre>
+<h2><a name="conventional"></a>Conventional style box</h2>
+<?=$signup_form_normal ?>
+<p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
+<pre class="sourcecode"><?=htmlspecialchars($signup_form_normal)?></pre>
+
 
 <p>Feel free to hack around with the design as much as you like. Any questions, just drop us a line at <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.</p>
 
-<h2>Linking to specific types of representative</h2>
+<h2><a name="types"></a>Linking to specific types of representative</h2>
 
 <p>The form can also link to a specific type of representative. For example, if
 people on your website are writing only to their MP, add the following to the
 form.  It goes just after the postcode &lt;input&gt; field, and before the
-submit button one.</p>
+submit/go button one.</p>
 
 <pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;westminstermp&quot;&gt;</pre>
 
@@ -75,7 +123,7 @@ representatives.
 
 <pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBO&quot;&gt;</pre>
 
-<h2>Prefilling name and address</h2>
+<h2><a name="prefill"></a>Prefilling name and address</h2>
 
 <p>If you already know the name, address or email of the person using your website,
 you can send the values to WriteToThem. They will then be defaults for the letter.
