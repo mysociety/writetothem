@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.7 2006-04-19 00:33:33 francis Exp $
+ * $Id: lords.php,v 1.8 2006-04-21 09:47:07 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -46,7 +46,7 @@ $values = array(
 );
 template_draw('header', $values);
 
-// print fyr_breadcrumbs(1, 'lords')
+print fyr_breadcrumbs(1, 'lords');
 
 // Date of birth
 if ($date = get_http_var('d')) {

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.38 2006-04-12 23:59:14 matthew Exp $
+ * $Id: fyr.php,v 1.39 2006-04-21 09:47:07 francis Exp $
  * 
  */
 
@@ -174,8 +174,7 @@ function fyr_breadcrumbs($num, $type = 'default') {
                 );
     } elseif ($type == 'lords') {
         $steps = array(
-                    'Find a lord',
-                    'FIXME',
+                    'Choose a Lord',
                     'Write message',
                     'Check message',
                     'Confirm email'

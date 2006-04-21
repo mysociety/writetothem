@@ -1,7 +1,7 @@
 <? 
 $values['title'] = "Check your message is right";
 template_draw('header', $values);
-print fyr_breadcrumbs(4);
+print $values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4);
 ?>
 
 <h2>Now Preview The Message You've Written</h2>
