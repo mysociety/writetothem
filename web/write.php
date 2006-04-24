@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.98 2006-04-17 12:31:53 chris Exp $
+ * $Id: write.php,v 1.99 2006-04-24 09:39:31 matthew Exp $
  *
  */
 
@@ -26,9 +26,9 @@ function fix_dear_lord_address($name) {
     $name = str_replace("Viscount ", "Lord ", $name);
     $name = str_replace("Countess ", "Lady ", $name);
     $name = str_replace("Marquess ", "Lord ", $name);
+    $name = str_replace('The ', '', $name);
     $name = preg_replace("#^Bishop #", "Lord Bishop ", $name);
     $name = str_replace("Earl ", "Lord ", $name);
-    $name = str_replace('The ', '', $name);
     # If anyone thinks of a counter-example to this, please let me know.
     $name = str_replace('Lord of ', 'Lord ', $name);
     $name = str_replace('Lady of ', 'Lady ', $name);
