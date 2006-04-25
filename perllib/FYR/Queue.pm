@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.192 2006-04-25 14:07:50 francis Exp $
+# $Id: Queue.pm,v 1.193 2006-04-25 16:41:29 francis Exp $
 #
 
 package FYR::Queue;
@@ -1121,8 +1121,9 @@ use constant QUESTIONNAIRE_DELAY => (14 * DAY);
 use constant QUESTIONNAIRE_INTERVAL => (7 * DAY);
 
 # How long after sending the message do we retain its text in case the
-# recipient wants to forward it?
-use constant MESSAGE_RETAIN_TIME => (21 * DAY);
+# recipient wants to forward it? Make sure the time is longer than the
+# questionnaire delay, as the questionnaire includes a copy of the message.
+use constant MESSAGE_RETAIN_TIME => (28 * DAY);
 
 # How long do we retain log and other information from a failed message for
 # operator inspection?
@@ -1382,7 +1383,7 @@ my %state_action = (
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
-            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
+           if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
             }
