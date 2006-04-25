@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.193 2006-04-25 16:41:29 francis Exp $
+# $Id: Queue.pm,v 1.194 2006-04-25 16:58:59 francis Exp $
 #
 
 package FYR::Queue;
@@ -1169,7 +1169,11 @@ my %state_timeout = (
 
         # How long we hang around trying to deliver a failure report back to
         # the user for a failed message.
-        error           => DAY * 7
+        error           => DAY * 7,
+
+        # How long to hold on to body of failed messages? After this time they
+        # go into failed_closed and after FAILED_RETAIN_TIME get scrubbed.
+        failed          => DAY * 7 * 6
     );
 
 # Where we time out to.
@@ -1178,6 +1182,7 @@ my %state_timeout_state = qw(
         ready           error
         bounce_wait     sent
         sent            finished
+        failed          failed_closed
     );
 
 
@@ -1383,7 +1388,7 @@ my %state_action = (
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
-           if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
+            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
             }

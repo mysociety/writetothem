@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.94 2006-03-20 10:14:37 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.95 2006-04-25 16:58:59 francis Exp $
  * 
  */
 
@@ -30,7 +30,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         'sent' => 'Delivery to representative succeeded',
         'failed' => 'Delivery to representative failed, may need admin attention',
         'finished' => 'Delivery succeeded, personal data has been scrubbed',
-        'failed_closed' => 'Delivery failed, admin has dealt with it',
+        'failed_closed' => 'Delivery failed, admin has dealt with it / timed out',
         );
         return $map[$state];
     }
