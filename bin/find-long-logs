@@ -1,0 +1,47 @@
+#!/usr/bin/perl -w
+#
+# find-long-logs:
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: find-long-logs,v 1.1 2006-04-26 08:14:26 francis Exp $';
+
+use strict;
+require 5.8.0;
+
+# Number of lines which log must be longer than to flag
+my $low = 10000;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use Data::Dumper;
+use POSIX qw(strftime);
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use FYR;
+
+my $long_msgs = dbh()->selectall_hashref("select created, id, (select count(*) from message_log where message_id = id) as c from message where (select count(*) from message_log where message_id = id) > ? order by created", 'id', {}, $low);
+print Dumper($long_msgs);
+
+foreach my $id (keys(%$long_msgs)) {
+    print "$id ";
+    print "(created " . strftime("%d %b %Y", localtime($long_msgs->{$id}->{'created'})) . ")";
+    print " has " . $long_msgs->{$id}->{'c'} . " log messages, last 5 are:\n";
+    my $stcon = dbh()->prepare("select whenlogged, message from message_log where message_id = ? order by whenlogged desc limit 5");
+    $stcon->execute($id);
+    while (my ($whenlogged, $message) = $stcon->fetchrow_array()) {
+        print "\t$whenlogged $message\n";
+    }
+}
+
+
+
