@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.78 2005-12-07 16:42:14 francis Exp $
+ * $Id: who.php,v 1.79 2006-04-26 15:32:10 francis Exp $
  *
  */
 
@@ -203,6 +203,9 @@ foreach ($va_display_order as $va_type) {
 
         if ($va_type == 'WMC') {
             $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
+            $text .= 'New! <a href="/lords">Write to your Lord</a>';
+            $text .= '</div>';
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types)) {
