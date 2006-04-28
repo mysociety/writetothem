@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.12 2006-04-28 23:54:34 francis Exp $
+# $Id: message-send-graph,v 1.13 2006-04-28 23:56:30 francis Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
@@ -34,7 +34,7 @@ echo "select
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     ;" | psql --host $OPTION_FYR_QUEUE_DB_HOST --port $OPTION_FYR_QUEUE_DB_PORT -A -F " " $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER | egrep -v "date|rows" >$SOURCEO
-echo "source $SOURCEO"
+#echo "source $SOURCEO"
 
 echo "select 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval), count(*)
@@ -46,7 +46,7 @@ echo "select
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     ;" | psql --host $OPTION_FYR_QUEUE_DB_HOST --port $OPTION_FYR_QUEUE_DB_PORT -A -F " " $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER | egrep -v "date|rows" >$SOURCED
-echo "source $SOURCED"
+#echo "source $SOURCED"
 
 cat >$GPSCRIPT <<END 
     unset border
@@ -84,7 +84,7 @@ cat >$GPSCRIPT <<END
     "$SOURCEO" using 1:2 with lines axes x1y2 lt 3 title "non-MPs" 
 #    "< awk 'BEGIN { n = 0 } { n += \$2; print \$1, \$2, n; }' $SOURCE" using 1:3 with lines lt 2 title "cumulative messages created",
 END
-echo "gpscript $GPSCRIPT"
+#echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
 gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups$EXTENSION

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.19 2006-04-28 23:48:55 francis Exp $
+ * $Id: index.php,v 1.20 2006-04-28 23:56:30 francis Exp $
  * 
  */
 
@@ -57,7 +57,7 @@ EOF
     new ADMIN_PAGE_REPS,
     new ADMIN_PAGE_EMBED('fyrmatch', 'Councillor Data', OPTION_ADMIN_SERVICES_CGI . 'match.cgi'),
     new ADMIN_PAGE_EMBED('fyremails', 'Standard Emails', 'https://secure.mysociety.org/cvstrac/wiki?p=StandardEmails'),
-    new ADMIN_PAGE_EMBED('fyrsignupgraph', 'Message sent graph', OPTION_BASE_URL . '/fyr-live-signups.png'),
+    new ADMIN_PAGE_EMBED('fyrsignupgraph', 'Sent messages graph', OPTION_BASE_URL . '/fyr-live-signups.png'),
     null, // space separator on menu
     new ADMIN_PAGE_SERVERINFO,
     new ADMIN_PAGE_CONFIGINFO,
