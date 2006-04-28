@@ -1,0 +1,68 @@
+#!/usr/bin/perl -w
+#
+# common-words:
+# 
+# Count word frequency in messages which have not been scrubbed yet. Display
+# only words which aren't in aspell's dictionary. These are candidates for
+# adding to the spelling checker interface.
+#
+# In practice it isn't clear how useful this is - and the output of this script
+# should not be published raw, because it is potentially privacy invading.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: common-words,v 1.1 2006-04-28 21:57:37 dademcron Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use Data::Dumper;
+use Text::Aspell;
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+
+use FYR;
+
+# Count how many of each word
+my $st = dbh()->prepare("select message from message where message is not null and message <> '' and message not like '%[ removed message of%'");
+$st->execute();
+my $counts;
+while (my ($message) = $st->fetchrow_array()) {
+    $message =~ s/\s+/ /g;
+    $message =~ s/[^A-Za-z0-9 '-]/ /g;
+    $message =~ s/\s+/ /g;
+    foreach my $word (split m/ /, $message) {
+        $counts->{$word}++;
+    }
+}
+
+# Then sort by word count
+my @words = keys %$counts;
+@words = sort { $counts->{$a} <=> $counts->{$b} } @words;
+
+# Print those that don't spell check
+my $speller = Text::Aspell->new;
+$speller->set_option('lang','en_GB');
+foreach my $word (@words) {
+    # 40 is the electronic signature hashes
+    if (length($word) != 40 && $word !~ m/^[0-9]+$/ && !$speller->check($word)) {
+        print sprintf("%5d %12s\n", $counts->{$word}, $word);
+    }
+}
+
+
+
+
+
+
