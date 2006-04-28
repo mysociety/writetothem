@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.39 2006-04-21 09:47:07 francis Exp $
+ * $Id: fyr.php,v 1.40 2006-04-28 17:14:09 francis Exp $
  * 
  */
 
@@ -18,6 +18,7 @@ require_once "../../phplib/ratty.php";
 require_once "../../phplib/template.php";
 require_once "../../phplib/utility.php";
 require_once "../../phplib/auth.php";
+require_once "../../phplib/crosssell.php";
 
 // Disable these types (due to elections / pending elections etc.)
 $disabled_child_types = array();
@@ -198,35 +199,7 @@ function fyr_breadcrumbs($num, $type = 'default') {
 
 
 function fyr_display_advert($values) {
-    $auth_signature = auth_sign_with_shared_secret($values['sender_email'], OPTION_AUTH_SHARED_SECRET);
-    $already_signed = file_get_contents(OPTION_HEARFROMYOURMP_BASE_URL.'/authed?email='.urlencode($values['sender_email'])."&sign=".urlencode($auth_signature));
-    if ($already_signed == 'not signed') {
-?>
-<h2 id="advert" align="center">
-Meanwhile... Start a
-<a href="<?=OPTION_HEARFROMYOURMP_BASE_URL?>/?name=<?=urlencode($values['sender_name'])?>&email=<?=urlencode($values['sender_email'])?>&pc=<?=urlencode($values['sender_postcode'])?>&sign=<?=urlencode($auth_signature)?>">long term relationship</a><br> with your MP
-</h2>
-<?
-    } else {
-        $postcode = $values['sender_postcode'];
-        $local_pledges = file_get_contents('http://www.pledgebank.com/rss?postcode=' . urlencode($postcode));
-        preg_match_all('#<link>(.*?)</link>\s+<description>(.*?)</description>#', $local_pledges, $m, PREG_SET_ORDER);
-        $local_num = count($m) - 1;
-        if ($local_num > 5) $local_num = 5;
-        if ($local_num) {
-            print '<div id="pledges"><h2>Recent pledges local to ' . canonicalise_postcode($postcode) . '</h2>';
-            print '<p style="margin-top:0; text-align:right; font-size: 89%">These are pledges near you made by users of <a href="http://www.pledgebank.com/">PledgeBank</a>, another mySociety site. We thought you might be interested. N.B. mySociety does not endorse specific pledges.</p> <ul>';
-            for ($p=1; $p<=$local_num; ++$p) {
-                print '<li><a href="' . $m[$p][1] . '">' . $m[$p][2] . '</a>';
-            }
-            print '</ul><p align="center"><a href="http://www.pledgebank.com/alert?postcode='.$postcode.'">Get emails about local pledges</a></p></div>';
-        } else {
-?>
-<h2 id="advert" align="center">
-Have you ever wanted to <a href="http://www.pledgebank.com">change the world</a> but stopped short because no-one would help?</h2>
-<?
-        }
-    }
+    crosssell_display_advert("wtt", $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
 }
 
 function parse_date($date) {
