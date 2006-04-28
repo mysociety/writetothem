@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.9 2006-04-20 15:52:40 dademcron Exp $
+# $Id: message-send-graph,v 1.10 2006-04-28 23:48:54 francis Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
@@ -13,6 +13,12 @@ EXTENSION=".png"
 #EXTENSION=".fig"
 #GPLOT_OUTPUT="set terminal svg size 800 250"
 #EXTENSION=".svg"
+
+cd `dirname $0`
+cd ../../
+source shlib/deployfns
+
+read_conf fyr/conf/general
 
 SOURCEO=/tmp/fyr-signup-rate-graph-data-nonwmc-$RANDOM$RANDOM
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
@@ -27,7 +33,7 @@ echo "select
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
-    ;" | psql -A -F " " --host=svcs.tea.int.ukcod.org.uk fyr fyr | egrep -v "date|rows" >$SOURCEO
+    ;" | psql --host $OPTION_FYR_DB_HOST --port $OPTION_FYR_DB_PORT -A -F " " $OPTION_FYR_DB_NAME $OPTION_FYR_DB_USER | egrep -v "date|rows" >$SOURCEO
 echo "source $SOURCEO"
 
 echo "select 
@@ -39,7 +45,7 @@ echo "select
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
     order by 
     date('1970-1-1 00:00:00'::timestamp + (dispatched||' seconds')::interval)
-    ;" | psql -A -F " " --host=svcs.tea.int.ukcod.org.uk fyr fyr | egrep -v "date|rows" >$SOURCED
+    ;" | psql --host $OPTION_FYR_DB_HOST --port $OPTION_FYR_DB_PORT -A -F " " $OPTION_FYR_DB_NAME $OPTION_FYR_DB_USER | egrep -v "date|rows" >$SOURCED
 echo "source $SOURCED"
 
 cat >$GPSCRIPT <<END 
@@ -81,6 +87,5 @@ END
 echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
-gnuplot < $GPSCRIPT > ~/public_html/fyr-signups$EXTENSION
-print "http://bitter.ukcod.org.uk/~dademcron/fyr-signups.png"
+gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups.$EXTENSION
 

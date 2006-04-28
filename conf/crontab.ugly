@@ -1,0 +1,14 @@
+# crontab.ugly:
+# Timed tasks for WriteToThem. Template file.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org. WWW: http://www.mysociety.org/
+#
+# $Id: crontab.ugly,v 1.1 2006-04-28 23:48:54 francis Exp $
+
+MAILTO=team@writetothem.com
+
+# Once a day
+33 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/signup-rate-graph
+
+
