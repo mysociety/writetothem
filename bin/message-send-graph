@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.11 2006-04-28 23:54:02 francis Exp $
+# $Id: message-send-graph,v 1.12 2006-04-28 23:54:34 francis Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
@@ -87,5 +87,5 @@ END
 echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
-gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups.$EXTENSION
+gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups$EXTENSION
 
