@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.194 2006-04-25 16:58:59 francis Exp $
+# $Id: Queue.pm,v 1.195 2006-04-28 20:42:10 francis Exp $
 #
 
 package FYR::Queue;
@@ -1762,19 +1762,13 @@ Returns a hash of statistics about the queue.
 sub admin_get_stats () {
     my %ret;
 
-    my $rows = dbh()->selectall_arrayref('select recipient_type, messagecount from message_count_recipient_type', {});
+    my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message group by recipient_type, state', {});
     foreach (@$rows) {
-        my ($type, $count) = @$_; 
-        $ret{"type $type"} = $count;
+        my ($type, $state, $count) = @$_; 
+        $ret{"both $type $state"} = $count;
     }
 
-    $rows = dbh()->selectall_arrayref('select state, messagecount from message_count_state', {});
-    foreach (@$rows) {
-        my ($type, $count) = @$_; 
-        $ret{"state $type"} = $count;
-    }
-
-    $ret{message_count} = dbh()->selectrow_array('select sum(messagecount) from message_count_state', {});
+    $ret{message_count} = dbh()->selectrow_array('select count(*) from message', {});
     $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - HOUR); 
     $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - DAY); 
     $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - WEEK); 
