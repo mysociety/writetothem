@@ -6,13 +6,13 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.21 2006-05-02 13:32:43 francis Exp $
+ * $Id: index.php,v 1.22 2006-05-02 13:36:15 francis Exp $
  * 
  */
 
 require_once "../conf/general";
 require_once "../phplib/admin-fyrqueue.php";
-require_once "../../phplib/admin-ratty.php";
+require_once "../../services/Ratty/phplib/admin-ratty.php";
 require_once "../../services/phplib/admin-reps.php";
 require_once "../../phplib/admin-phpinfo.php";
 require_once "../../phplib/admin-serverinfo.php";
