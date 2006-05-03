@@ -1,4 +1,4 @@
-Two weeks ago we sent your letter to <?=$values['recipient_name']?>, your
+<?=$values['weeks_ago']?> weeks ago we sent your letter to <?=$values['recipient_name']?>, your
 <?=$values['recipient_position']?>. (For reference, there's a copy of your
 letter at the bottom of this email)
 

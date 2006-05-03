@@ -70,6 +70,8 @@ Emails and the available variables are:
       - no_url, the URL they should click to indicate that they have not
         received a reply.
 
+      - weeks_ago, either "Two" (original) or "Three" (reminder)
+
     The text of the constituent's letter is appended to the questionnaire.
     
   - questionnaire-reminder

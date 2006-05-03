@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.18 2006-03-09 16:17:40 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.19 2006-05-03 10:44:20 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -52,6 +52,7 @@ Usage: test-run [OPTION] [ACTION]...
 Actions are a list of tests, run if present in this order:
     example - send example message successfully, and an example message blocked by ratty
     cobrand - send example message via a cobrand site (AnimalAid)
+    lords   - send example message to a Lord
 If you specify no actions, it will run all of them.
 
 Options are
@@ -83,6 +84,8 @@ foreach (@ARGV) {
         $action{'example'} = 1;
     } elsif ($_ eq "cobrand") {
         $action{'cobrand'} = 1;
+    } elsif ($_ eq "lords") {
+        $action{'lords'} = 1;
     } else {
         help();
         print "Action '$_' not known\n";
@@ -92,6 +95,7 @@ foreach (@ARGV) {
 if (scalar(@ARGV) == 0) {
     $action{'example'} = 1;
     $action{'cobrand'} = 1;
+    $action{'lords'} = 1;
 }
 
 
@@ -148,6 +152,10 @@ if ($action{'cobrand'}) {
     print "Sending cobrand message...\n" if $verbose > 0;
     do_send_cobrand_message();
 }
+if ($action{'lords'}) {
+    print "Sending Lords message...\n" if $verbose > 0;
+    do_send_lords_message();
+}
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
 
@@ -194,25 +202,36 @@ sub spin_queue {
 }
 
 sub send_message_to_rep {
-    my ($who, $postcode, $repname, $fields, $cobrand) = @_;
+    my ($who, $postcode, $repname, $fields, $cobrand, $birthday) = @_;
     $fields->{writer_name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     
-    my $start_url = $base_url;
-    $start_url .= "?cocode=9" if ($cobrand eq "animalaid");
-    $wth->browser_get($start_url);
-    $wth->browser_check_contents("First, type your UK postcode:");
-    $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
-
-    # Choose
-    $wth->browser_submit_form(form_name => 'postcodeForm',
-        fields => { pc => $postcode},  
-        );
-    $wth->browser_check_contents("Now select the representative you'd like to contact");
-    $wth->browser_follow_link(text_regex => qr/$repname/);
-    $wth->browser_check_contents("Now Write Your Message");
+    if (!$birthday) {
+        # Postcode selection of representative
+        my $start_url = $base_url;
+        $start_url .= "?cocode=9" if ($cobrand eq "animalaid");
+        $wth->browser_get($start_url);
+        $wth->browser_check_contents("First, type your UK postcode:");
+        $wth->browser_submit_form(form_name => 'postcodeForm',
+            fields => { pc => $postcode},  
+            );
+        $wth->browser_check_contents("Now select the representative you'd like to contact");
+        $wth->browser_follow_link(text_regex => qr/$repname/);
+    } else {
+        # House of Lords selection by birthday
+        $wth->browser_get($base_url . "/lords");
+        $wth->browser_check_contents("Which Lord would you like to write to?");
+        $wth->browser_submit_form(form_name => 'dateLordForm',
+            fields => { d => $birthday},  
+            );
+        # Postcode gets filled in on letter writing page in Lords case
+        $fields->{pc} = $postcode;
+    }
 
     # Fill in a test letter
+    $wth->browser_check_contents("Now Write Your Message");
+    $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
+    $wth->browser_check_contents($repname);
     $wth->browser_submit_form(form_name => 'writeForm',
         fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
@@ -250,7 +269,7 @@ sub check_delivered_to_rep {
     my $content = $wth->email_get_containing(
         '%From: '.name_n($who).' <'.email_n($who).'>'.
         '%To: %'.$repname.'% <'.email_n($who).'>'.
-        '%Subject: Letter from %constituent '.name_n($who).
+        '%Subject: Letter from % '.name_n($who).
         '%'.$extra_check.
         '%Signed with an electronic signature%');
 
@@ -289,15 +308,22 @@ sub do_send_example_message() {
     spin_queue('1990-01-%02d', 4, 17);
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
-    set_fyr_date('1990-01-18');
+    set_fyr_date('1990-01-17');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
         '%To: '.name_n(0).' <'.email_n(0).'>'.
         '%Subject: Did your MP reply to your letter?'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
-    # And reminder
-    #spin_queue('1990-01-%02d', 16, 22);
+    # 6 days more, no reminder
+    spin_queue('1990-01-%02d', 18, 24);
     $wth->email_check_none_left();
+    # 7th day, provokes sending of questionnaire reminder
+    set_fyr_date('1990-01-24');
+    call_fyrqd();
+    $questionnaire_email = $wth->email_get_containing(
+        '%To: '.name_n(0).' <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
+        '%Three weeks ago we sent your letter to David Howarth MP%');
 
     # Get links from questionnaire email
     die "Questionnaire yes link not found" if ($questionnaire_email !~ m#^\s*($base_url/Y/.*$)#m);
@@ -386,6 +412,56 @@ sub do_send_cobrand_message() {
         'animalaid'
     );
     check_delivered_to_rep(2, 'Paul Sargent', '32 Wheresome Wroad');
+}
+
+#############################################################################
+
+sub do_send_lords_message() {
+    set_base_url("");
+    set_fyr_date('1992-01-01');
+    send_message_to_rep(50, 
+        'PE35 6EN',
+        'Lord Rogers', # Subject: in confirmation email wraps, so just check without "of Riverside"
+        { 
+            writer_address1 => '99 Subject\'s Square',
+            writer_town => 'Plebsville',
+            writer_county => 'Fiefdom',
+            writer_phone => undef,
+            body => "I know it is odd for somebody to write to a Lord, as they are not officially representative. However, they ought to respond to the needs and wants of the country, because that's the right thing to do. So I'm writing to you anyway, so altering reality to be as I want, by assuming that it already is."
+        },
+        undef,
+        '23 July', 
+    );
+    check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square');
+
+    # 2 days to get over bounce_wait
+    spin_queue('1992-01-%02d', 2, 4);
+    # 13 days more, no questionnaire
+    spin_queue('1992-01-%02d', 4, 17);
+    $wth->email_check_none_left();
+    # 14th day provokes sending of questionnaire
+    set_fyr_date('1992-01-18');
+    call_fyrqd();
+    my $questionnaire_email = $wth->email_get_containing(
+        '%To: '.name_n(50).' <'.email_n(50).'>'.
+        '%Subject: Did your Lord reply to your letter?'.
+        '%Two weeks ago we sent your letter to Lord Rogers of Riverside%');
+    $wth->email_check_none_left();
+
+    # Get links from questionnaire email
+    die "Questionnaire yes link not found" if ($questionnaire_email !~ m#^\s*($base_url/Y/.*$)#m);
+    my $yes_link = $1;
+    $wth->email_check_url($yes_link);
+    print "Questionnaire 'yes' URL is $yes_link\n" if $verbose > 1;
+    die "Questionnaire no link not found" if ($questionnaire_email !~ m#^\s*($base_url/N/.*$)#m);
+    my $no_link = $1;
+    $wth->email_check_url($no_link);
+    print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
+
+    $wth->browser_get($yes_link);
+    $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
+    $wth->browser_follow_link(text_regex => qr/YES/);
+    $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
 #############################################################################
