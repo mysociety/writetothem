@@ -13,9 +13,9 @@ and be deleted.
 
 Once you click on the link, we'll send your letter to
 <?=$values['recipient_name']?>. If for some reason we can't send your message
-or it doesn't get through, we will email you with details of how to contact
-your <?=$values['recipient_position']?> by more traditional, albeit less fun,
-means.
+or it doesn't get through, we will email you a copy of your message so you can 
+contact your <?=$values['recipient_position']?> by more traditional, albeit
+less fun, means.
 
 A copy of your message is pasted to the bottom of this email.
 
