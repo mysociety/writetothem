@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.196 2006-05-03 10:44:21 francis Exp $
+# $Id: Queue.pm,v 1.197 2006-05-03 11:20:14 francis Exp $
 #
 
 package FYR::Queue;
@@ -967,7 +967,9 @@ sub make_questionnaire_email ($;$) {
     my $text = FYR::EmailTemplate::format(
                     email_template('questionnaire'),
                     email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
-                        weeks_ago => $reminder ? 'Three' : 'Two')
+                        weeks_ago => $reminder ? 'Three' : 'Two',
+                        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
+                        )
                 )
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);

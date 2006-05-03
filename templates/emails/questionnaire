@@ -19,8 +19,8 @@ your help, we'd like to fix this curious anomaly.
 Your feedback will allow us to publish performance tables of the responsiveness
 of all the politicians in the UK. The majority of
 <?=$values['recipient_position_plural']?> respond promptly and diligently to the
-needs and views of their constituents. They deserve credit and respect for
-their conscientiousness.
+needs and views of <?=$values['their_constituents']?>. They deserve credit and
+respect for their conscientiousness.
 
 Likewise, we're keen to expose the minority of
 <?=$values['recipient_position_plural']?> who don't seem to give a damn.

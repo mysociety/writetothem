@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.19 2006-05-03 10:44:20 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.20 2006-05-03 11:20:14 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -440,7 +440,7 @@ sub do_send_lords_message() {
     spin_queue('1992-01-%02d', 4, 17);
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
-    set_fyr_date('1992-01-18');
+    set_fyr_date('1992-01-17');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
         '%To: '.name_n(50).' <'.email_n(50).'>'.

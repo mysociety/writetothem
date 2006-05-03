@@ -72,9 +72,7 @@ Emails and the available variables are:
 
       - weeks_ago, either "Two" (original) or "Three" (reminder)
 
+      - their_constituents, either "their constituents" (elected
+        representatives) or "the public" (House of Lords)
+
     The text of the constituent's letter is appended to the questionnaire.
-    
-  - questionnaire-reminder
-
-    Is the reminder mail, send one week after the original questionnaire.
-
