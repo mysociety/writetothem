@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.99 2006-04-24 09:39:31 matthew Exp $
+ * $Id: write.php,v 1.100 2006-05-03 15:45:28 chris Exp $
  *
  */
 
@@ -67,6 +67,12 @@ class RulePostcode extends HTML_QuickForm_Rule {
     }
 }
 
+function compare_email_addrs($F) {
+    if ($F['writer_email'] != $F['writer_email2'])
+        return array('writer_email2' => "The two email addresses you've entered differ; please check carefully for mistakes");
+    return true;
+}
+
 // Class representing form they enter message of letter in
 function buildWriteForm()
 {
@@ -124,6 +130,12 @@ END;
     $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
     $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
+
+    $form->addElement('text', 'writer_email2', "Confirm email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+    $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
+    $form->addFormRule('compare_email_addrs');
+
+    /* add additional text explaining why we ask for email address twice? */
 
     #    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optional, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
 
