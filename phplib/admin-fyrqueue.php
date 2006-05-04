@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.96 2006-04-28 20:42:11 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.97 2006-05-04 12:14:12 chris Exp $
  * 
  */
 
@@ -133,7 +133,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>Questionnaire</th>
         <th>Tick</th>
     </tr>
-    <form action="<?=htmlspecialchars(new_url("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
+    <form action="<?=htmlspecialchars(url_new("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
 <?
 	$c = 1;
             foreach ($messages as $message) {
@@ -185,8 +185,8 @@ class ADMIN_PAGE_FYR_QUEUE {
                     $message['recipient_type'];
                 }
                 print '<td><a href="'
-                        . htmlspecialchars(new_url('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name) . "</a>"
-                        . " (<a href=\"" . htmlspecialchars(new_url('', false, 'page', 'fyrqueue', 'rep_id', $message['recipient_id']))                   . '">msgs</a>)' 
+                        . htmlspecialchars(url_new('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name) . "</a>"
+                        . " (<a href=\"" . htmlspecialchars(url_new('', false, 'page', 'fyrqueue', 'rep_id', $message['recipient_id']))                   . '">msgs</a>)' 
                         ."<br>";
                 if ($message['recipient_via']) {
                     $repinfo = dadem_get_representative_info($message['recipient_id']);
@@ -195,7 +195,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                         $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
                         mapit_check_error($parentinfo);
                         print '<a href="' .
-                           htmlspecialchars(new_url('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
+                           htmlspecialchars(url_new('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
                             htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
                     } else {
                         print 'recipient_via contact, but rep id not found ';
@@ -422,7 +422,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 
             admin_render_form($form);
             print '<a href="'
-                    .  htmlspecialchars(new_url("", true, 'view', 'similarbody', 'simto', $id, 'id', null))
+                    .  htmlspecialchars(url_new("", true, 'view', 'similarbody', 'simto', $id, 'id', null))
                     .  '">View similar messages</a> ';
 
             // Body text if enabled
@@ -459,10 +459,10 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 
             print ($allevents
                     ? '<a href="'
-                        . htmlspecialchars(new_url('', true, 'allevents', null))
+                        . htmlspecialchars(url_new('', true, 'allevents', null))
                         . '">View only important events</a>'
                     : '<a href="'
-                        . htmlspecialchars(new_url('', true, 'allevents', 1))
+                        . htmlspecialchars(url_new('', true, 'allevents', 1))
                         . '">View all events</a>');
                     
             $recents = msg_admin_message_events($id, !$allevents);

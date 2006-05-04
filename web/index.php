@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.52 2006-04-15 12:58:10 matthew Exp $
+ * $Id: index.php,v 1.53 2006-05-04 12:14:11 chris Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -26,7 +26,7 @@ if ($person) {
     // TODO: Fix up case when a person is a representative multiple times
     // (for now we just take the most recent made one, i.e. last in list)
     $id = $ids[count($ids)-1];
-    header('Location: ' . new_url('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
+    header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
     exit;
 }
 
@@ -142,12 +142,12 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
 
             if ($id)
                 /* Single representative */
-                header('Location: ' . new_url('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
+                header('Location: ' . url_new('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
             else
                 /* Several */
-                header('Location: ' . new_url('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
+                header('Location: ' . url_new('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
         } else {
-            header('Location: ' . new_url('who', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
+            header('Location: ' . url_new('who', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
         }
         exit;
     }
