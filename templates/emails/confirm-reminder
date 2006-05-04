@@ -7,7 +7,7 @@ the letter copied at the bottom of this email to
     <?=$values['confirm_url']?>
 
 If your email program does not let you click on this link, just copy and paste
-it into your web browser and hit return.
+it into your web browser and press return.
 
 Once you click on the link, we'll send your letter to
 <?=$values['recipient_name']?>. If for some reason we can't send your message
