@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.20 2006-05-03 11:20:14 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.21 2006-05-04 20:15:30 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -205,6 +205,7 @@ sub send_message_to_rep {
     my ($who, $postcode, $repname, $fields, $cobrand, $birthday) = @_;
     $fields->{writer_name} = name_n($who);
     $fields->{writer_email} = email_n($who);
+    $fields->{writer_email2} = email_n($who);
     
     if (!$birthday) {
         # Postcode selection of representative
