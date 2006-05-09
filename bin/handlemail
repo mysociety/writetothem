@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.24 2006-05-09 15:05:18 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.25 2006-05-09 16:58:06 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -217,23 +217,23 @@ sub parse_dsn_bounce ($) {
     # The second part of the multipart entity should be of type
     # message/delivery-status.
     my $status = $ent->part(1);
-    return undef if (!$status || lc($status->mime_type()) ne 'message/delivery-status')
+    return undef if (!$status || lc($status->mime_type()) ne 'message/delivery-status');
 
     # The status is given in an RFC822-format header field within the body of
     # the delivery status message.
     my $h = $status->bodyhandle()->open('r');
 
-    my $status;
+    my $r;
     while (defined($_ = $h->getline())) {
         chomp();
         if (/^Status:\s+(\d\.\d+\.\d+\d)\s*$/) {
-            $status = $1;
+            $r = $1;
             last;
         }
     }
     $h->close();
 
-    return $status;
+    return $r;
 }
 
 # NB we make no assumptions about the contens of the token.
@@ -262,30 +262,45 @@ if ($token eq 'bounce-null') {
             }
         } else {
             my $what;
+            my $nextstate;
             
+            # Generic handling of the defined status classes.
             if ($status =~ /^2\./) {
                 $what = 'success';
                 if ($msg->{state} ne 'sent') {
-                    # This is actually a pretty unlikely case; we should
-                    # perhaps ignore it.
-                    FYR::Queue::state($id, 'sent');
+                    # This is actually a pretty unlikely case, because we don't
+                    # request delivery notification; we should perhaps ignore
+                    # it.
+                    $nextstate = 'sent'
                 }
             } elsif ($status =~ /^4\./) {
                 $what = 'persistent transient failure';
                 if ($msg->{state} eq 'bounce-wait') {
                     # Reset the timer.
-                    FYR::Queue::state($id, 'bounce-wait');
+                    $nextstate = 'bounce-wait';
                 }
-            } else ($status =~ /^5\./) {
+            } elsif ($status =~ /^5\./) {
                 $what = 'permanent failure';
-                FYR::Queue::state($id, 'error');
+                $nextstate = 'error';   # XXX check current state as above?
             } else {
                 # Dunno what this is; need operator attention.
-                $what = 'unknown';
-                FYR::Queue::state($id, 'bounce-confirm');
+                $what = 'unknown status';
+                $nextstate = 'bounce_confirm';  # XXX check current state as above?
             }
-            
+
             FYR::Queue::logmsg($id, 0, "message delivery status: $status ($what)");
+
+            # Special cases.
+            if ($status eq '5.2.2') {
+                # "Mailbox over storage limit". Although this is a transient
+                # condition, it has resulted in a permanent failure for this
+                # message. We should retry in due course, so put the message
+                # back into the ready state.
+                $nextstate = 'ready';
+                FYR::Queue::logmsg($id, 1, "message bounced because recipient's mailbox is full; retrying delivery");
+            }
+
+            FYR::Queue::state($id, $nextstate) if ($nextstate);
         }
         
         dbh()->commit();

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.197 2006-05-03 11:20:14 francis Exp $
+# $Id: Queue.pm,v 1.198 2006-05-09 16:58:06 chris Exp $
 #
 
 package FYR::Queue;
@@ -1152,6 +1152,10 @@ use constant FAX_DELIVERY_BACKOFF => 1.9;
 # 4.48177358026
 # 8.5153698025
 
+# Interval before we re-send email in the case of a permanent delivery error
+# resulting from a transient condition.
+use constant EMAIL_REDELIVERY_INTERVAL => 7200; # 2 hours
+
 # Timeouts in the state machine:
 my %state_timeout = (
         # How long a message may be "new" (awaiting sending of confirmation
@@ -1297,6 +1301,21 @@ my %state_action = (
                     state($id, 'ready');    # bump counter
                 }
             } elsif ($email && defined($msg->{recipient_email})) {
+                # It's possible that a message has been put back in to this
+                # state because a previous delivery failed with an permanent
+                # error resulting from a transient condition (for instance, if
+                # the recipient's mailbox is over-quota). In that case we
+                # should try not to send mail too often.
+                if (defined($msg->{dispatched})) {
+                    return if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL);
+                    logmsg($id, 0, "making email redelivery attempt");
+                }
+
+                # XXX we should consider the case where we've made too many
+                # redelivery attempts, but we can't just use the state counter
+                # because redelivery occurs only when a message leaves this
+                # state and then comes back.
+            
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);
