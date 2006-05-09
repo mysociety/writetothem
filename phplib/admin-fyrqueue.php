@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.97 2006-05-04 12:14:12 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.98 2006-05-09 16:55:13 chris Exp $
  * 
  */
 
@@ -836,6 +836,40 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
 <h2>Help &mdash; what do the states mean?</h2>
 <p>Here is a diagram of state changes:</p>
 <p><img src="queue-state-machine.png"></p>
+
+<p>Description of states in the normal lifetime of a message:</p>
+
+<dl>
+<dt>new</dt>
+<dd>The message has been created by the user but it has not yet been sent to
+them for confirmation.</dd>
+
+<dt>pending</dt>
+<dd>The message has been sent to the user but not confirmed yet. A reminder
+copy of the message is sent if the user does not confirm it within a day.</dd>
+
+<dt>ready</dt>
+<dd>The message has been confirmed by the user but it has not yet been
+successfully sent; <em>or</em> it has been sent by email but encountered a
+fatal bounce for a transient error condition (such as the recipient's mailbox
+being full).</dd>
+
+<dt>bounce-wait <em>email only</em></dt>
+<dd>The message has been sent, but we hang on to it for a little while in case
+a bounce message arrives. Bounce messages are either automatically classified
+(where they meet the RFC1892 standard for delivery status notifications) or
+passed into the bounce-confirm state for manual classification.</dd>
+
+<dt>sent</dt>
+<dd>The message has been sent (and, in case of an email, no bounce message has
+arrived within the set time). This is the state in which the questionnaire and
+questionnaire reminder are sent.</dd>
+
+<dt>finished</dt>
+<dd>All our processing of the message has completed successfully.</dd>
+</dl>
+
+</dl>
 
         <?
         }
