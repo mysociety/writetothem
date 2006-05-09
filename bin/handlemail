@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.22 2006-04-06 13:57:41 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.23 2006-05-09 14:26:39 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -212,7 +212,7 @@ if ($token eq 'bounce-null') {
 } elsif (defined($id = FYR::Queue::check_token('bounce', $token))) {
     my $msg = FYR::Queue::message($id, 1);    # lock message
     if (!defined($msg)) {
-        print_log('err', "bounce received for non-existant message '$id'; discarding");
+        print_log('err', "bounce received for non-existent message '$id'; discarding");
         dbh()->rollback();
     } else {
         # Record the bounce
