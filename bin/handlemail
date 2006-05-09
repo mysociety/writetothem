@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.23 2006-05-09 14:26:39 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.24 2006-05-09 15:05:18 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -202,6 +202,40 @@ if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get
     exit(0);
 }
 
+# parse_dsn_bounce TEXT
+# Attempt to parse TEXT (scalar or reference to list of lines) as an RFC1894
+# delivery status notification email. On success, return the DSN status string
+# "x.y.z" (class, subject, detail). On failure (when TEXT cannot be parsed)
+# return undef.
+sub parse_dsn_bounce ($) {
+    my $P = new MIME::Parser();
+    $P->output_to_core(1);  # avoid temporary files when we can
+
+    my $ent = $P->parse_data($_[0]);
+    return undef if (!$ent || !$ent->is_multipart() || lc($ent->mime_type()) ne 'multipart/report');
+
+    # The second part of the multipart entity should be of type
+    # message/delivery-status.
+    my $status = $ent->part(1);
+    return undef if (!$status || lc($status->mime_type()) ne 'message/delivery-status')
+
+    # The status is given in an RFC822-format header field within the body of
+    # the delivery status message.
+    my $h = $status->bodyhandle()->open('r');
+
+    my $status;
+    while (defined($_ = $h->getline())) {
+        chomp();
+        if (/^Status:\s+(\d\.\d+\.\d+\d)\s*$/) {
+            $status = $1;
+            last;
+        }
+    }
+    $h->close();
+
+    return $status;
+}
+
 # NB we make no assumptions about the contens of the token.
 my ($token) = ($a->user() =~ m#^\Q$prefix\E(.*)#);
 #print "token $token\n";
@@ -217,10 +251,43 @@ if ($token eq 'bounce-null') {
     } else {
         # Record the bounce
         FYR::Queue::logmsg($id, 1, "received email bounce message");
-        if ($msg->{state} eq 'bounce_wait') {
-            FYR::Queue::state($id, 'bounce_confirm');
-        }
         dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines) . "\n");
+
+        my $status = parse_dsn_bounce(\@lines);
+
+        if (!defined($status)) {
+            FYR::Queue::logmsg($id, 0, "bounce message could not be parsed as an RFC1892/1894 DSN");
+            if ($msg->{state} eq 'bounce_wait') { # XXX is this condition right?
+                FYR::Queue::state($id, 'bounce_confirm');
+            }
+        } else {
+            my $what;
+            
+            if ($status =~ /^2\./) {
+                $what = 'success';
+                if ($msg->{state} ne 'sent') {
+                    # This is actually a pretty unlikely case; we should
+                    # perhaps ignore it.
+                    FYR::Queue::state($id, 'sent');
+                }
+            } elsif ($status =~ /^4\./) {
+                $what = 'persistent transient failure';
+                if ($msg->{state} eq 'bounce-wait') {
+                    # Reset the timer.
+                    FYR::Queue::state($id, 'bounce-wait');
+                }
+            } else ($status =~ /^5\./) {
+                $what = 'permanent failure';
+                FYR::Queue::state($id, 'error');
+            } else {
+                # Dunno what this is; need operator attention.
+                $what = 'unknown';
+                FYR::Queue::state($id, 'bounce-confirm');
+            }
+            
+            FYR::Queue::logmsg($id, 0, "message delivery status: $status ($what)");
+        }
+        
         dbh()->commit();
     }
 } else {
