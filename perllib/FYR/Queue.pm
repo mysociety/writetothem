@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.198 2006-05-09 16:58:06 chris Exp $
+# $Id: Queue.pm,v 1.199 2006-05-10 12:29:32 chris Exp $
 #
 
 package FYR::Queue;
@@ -398,7 +398,7 @@ my %allowed_transitions = (
         new =>              [qw(pending failed)],
         pending =>          [qw(ready failed failed_closed)],
         ready =>            [qw(error bounce_wait sent)],
-        bounce_wait =>      [qw(bounce_confirm sent)],
+        bounce_wait =>      [qw(bounce_confirm sent ready)],
         bounce_confirm =>   [qw(bounce_wait error)],
         error =>            [qw(failed)],
         sent =>             [qw(finished)],
