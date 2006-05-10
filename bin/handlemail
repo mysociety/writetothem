@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.25 2006-05-09 16:58:06 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.26 2006-05-10 12:27:36 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -26,6 +26,7 @@ use Mail::Address;
 use Mail::Internet;
 use Mail::Header;
 use MIME::Entity;
+use MIME::Parser;
 use MIME::Words;
 use POSIX qw(strftime);
 
@@ -43,6 +44,20 @@ mySociety::Util::log_to_stderr(0);
 use FYR;
 use FYR::EmailTemplate;
 use FYR::Queue;
+
+# logmsg_handler ID TIME STATE MESSAGE IMPORTANT
+# Callback for logmsg, so that we log messages to the system log as well as
+# to the message log in the database.
+sub logmsg_handler ($$$$$) {
+    my ($id, $time, $state, $msg, $important) = @_;
+    print_log($important ? 'info' : 'notice',
+            "message $id($state): $msg");
+    print_log($important ? 'info' : 'notice',
+            "last message delayed by " . (time() - $time) . " seconds")
+                if ($time > time() + 5);
+}
+
+FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 my @lines = ( );
 
@@ -211,12 +226,12 @@ sub parse_dsn_bounce ($) {
     my $P = new MIME::Parser();
     $P->output_to_core(1);  # avoid temporary files when we can
 
-    my $ent = $P->parse_data($_[0]);
-    return undef if (!$ent || !$ent->is_multipart() || lc($ent->mime_type()) ne 'multipart/report');
+    my $ent = $P->parse_data(join("\n", @{$_[0]}) . "\n");
 
+    return undef if (!$ent || !$ent->is_multipart() || lc($ent->mime_type()) ne 'multipart/report');
     # The second part of the multipart entity should be of type
     # message/delivery-status.
-    my $status = $ent->part(1);
+    my $status = $ent->parts(1);
     return undef if (!$status || lc($status->mime_type()) ne 'message/delivery-status');
 
     # The status is given in an RFC822-format header field within the body of
@@ -226,7 +241,7 @@ sub parse_dsn_bounce ($) {
     my $r;
     while (defined($_ = $h->getline())) {
         chomp();
-        if (/^Status:\s+(\d\.\d+\.\d+\d)\s*$/) {
+        if (/^Status:\s+(\d\.\d+\.\d+)\s*$/) {
             $r = $1;
             last;
         }
