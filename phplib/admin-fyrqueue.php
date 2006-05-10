@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.98 2006-05-09 16:55:13 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.99 2006-05-10 12:34:15 chris Exp $
  * 
  */
 
@@ -485,6 +485,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     $form = new HTML_QuickForm('bounceForm', 'post', $self_link);
                     $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Fatal Delivery Error');
                     $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'bounce_wait', 'Temporary Problem');
+                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Fatal Delivery Error, but should retry with same details');
                     $form->addGroup($bouncegroup, "bouncegroup", "Which kind of bounce message is this?",' ', false);
                     $form->addElement('hidden', 'id', $id);
                     admin_render_form($form);
