@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.99 2006-05-10 12:34:15 chris Exp $
+ * $Id: admin-fyrqueue.php,v 1.100 2006-05-11 13:45:33 matthew Exp $
  * 
  */
 
@@ -22,7 +22,7 @@ $state_help_notes_map = array(
     'error' => 'About to tell constituent that delivery failed',
     'sent' => 'Delivery to representative succeeded',
     'finished' => 'Delivery succeeded, personal data has been scrubbed',
-    'failed' => 'Delivery to representative failed, may need admin attention',
+    'failed' => 'Delivery to representative failed',
     'failed_closed' => 'Delivery failed, admin has dealt with it / timed out',
 );
 
@@ -341,11 +341,6 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             $result = msg_admin_set_message_to_failed($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to failed state</i></b></p>";
-            $redirect = true;
-        } else if (get_http_var('failed_closed')) {
-            $result = msg_admin_set_message_to_failed_closed($id, http_auth_user());
-            msg_check_error($result);
-            print "<p><b><i>Message $id moved to failed_closed state</i></b></p>";
             $redirect = true;
         } else if (get_http_var('bounce_wait')) {
             $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());

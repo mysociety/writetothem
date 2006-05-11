@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.200 2006-05-10 12:30:16 chris Exp $
+# $Id: Queue.pm,v 1.201 2006-05-11 13:45:26 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1185,6 +1185,7 @@ my %state_timeout = (
 
 # Where we time out to.
 my %state_timeout_state = qw(
+        new		failed_closed
         pending         failed_closed
         ready           error
         bounce_wait     sent
@@ -1230,8 +1231,9 @@ my %state_action = (
             my $result = send_confirmation_email($id);
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
                 state($id, 'pending');
+            } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
+	    	state($id, 'failed_closed');
             } else {
-                # XXX for the moment we do not distinguish soft/hard errors.
                 state($id, 'new');
             }
         },
@@ -1249,8 +1251,9 @@ my %state_action = (
                 my $result = send_confirmation_email($id, 1);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     state($id, 'pending');  # bump actions counter
+                } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
+	    	    state($id, 'failed_closed');
                 } else {
-                    # XXX for the moment we do not distinguish soft/hard errors.
                     logmsg($id, 1, "error sending confirmation reminder message (will retry)");
                 }
             }
