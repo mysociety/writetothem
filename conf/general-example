@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.30 2006-01-20 12:30:52 francis Exp $
+ * $Id: general-example,v 1.31 2006-05-11 13:58:37 chris Exp $
  * 
  */
 
@@ -40,6 +40,10 @@ define('OPTION_FYR_QUEUE_DB_PASS', '');
 // Puts in a testing mode where emails are reflected back to
 // sender, rather than sent to their representative.
 define('OPTION_FYR_REFLECT_EMAILS', 1);
+
+// Don't mark contacts as failing when delivery fails. This should be set to
+// 1 ONLY on the live site, and not on any other installation.
+define('OPTION_FYR_MARK_CONTACTS_FAILING', 0);
 
 // Base domain of the website. This is used to distinguish internal from
 // external referrers, for instance.
