@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.9 2006-05-04 12:14:12 chris Exp $
+ * $Id: lords.php,v 1.10 2006-05-11 13:05:26 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -220,14 +220,13 @@ reply to the public, and they are (obviously) not elected.
 Nevertheless, they get to vote on things that affect all of us, so we
 reckon they should at least be easy to contact.  It is best only to contact a
 Lord about an issue they can help with or influence, which includes national
-legislation and other issues Parliament deals with.</p>
-
-<p>For more information, read our <a href="about-lords"><strong>Frequently Asked Questions</strong></a>.
+legislation and other issues Parliament deals with.
+For more information, read our <a href="about-lords"><strong>Frequently Asked Questions</strong></a>.
 </p>
 
 <p>Lords do not have constituencies like MPs, so we need
 different ways for you to find a Lord to contact. We hope you
-like the methods we have come up with.</p>
+like the methods we have come up with. Please note that as we are using the House of Lords fax machine for all correspondence, <strong>messages are limited to one message a day per person</strong> for the moment.</p>
 
 <ul>
 
@@ -303,10 +302,6 @@ Give me a
 </li>
 
 </ul>
-
-<p>We are using the House of Lords fax machine for all correspondence, so
-messages are limited to one message a day per person for the moment.</p>
-
 
 <?
 }
