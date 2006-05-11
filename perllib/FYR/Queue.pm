@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.201 2006-05-11 13:45:26 matthew Exp $
+# $Id: Queue.pm,v 1.202 2006-05-11 13:57:12 chris Exp $
 #
 
 package FYR::Queue;
@@ -1385,7 +1385,7 @@ my %state_action = (
             # frozen. It's not guaranteed that this will succeed, and we can't
             # sensibly do very much if it doesn't. So just ignore any error.
             my $msg = message($id);
-            if (!$msg->{frozen}) {
+            if (!$msg->{frozen} && mySociety::Config::get('FYR_MARK_CONTACTS_FAILING', 0)) {
                 try {
                     my $msg = message($id);
                     my $method = defined($msg->{recipient_email}) ? 'email' : 'fax';
