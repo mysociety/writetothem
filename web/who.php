@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.81 2006-05-05 09:46:58 chris Exp $
+ * $Id: who.php,v 1.82 2006-05-14 14:04:34 chris Exp $
  *
  */
 
@@ -21,6 +21,11 @@ require_once "../../phplib/votingarea.php";
 
 // Postcode
 $fyr_postcode = get_http_var('pc');
+if ($fyr_postcode == '') {
+    header('Location: /');
+    exit();
+}
+
 $area_types = fyr_parse_area_type_list(get_http_var('a'));
 
 debug("FRONTEND", "postcode is $fyr_postcode");
@@ -34,9 +39,6 @@ if (get_http_var('err')) {
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
-// XXX this logs an error ("Postcode '' is not valid") in the case of a blank
-// or missing postcode. We should probably just redirect to the home page in
-// that case...?
 debug_timestamp();
 
 // Limit to specific types of representatives
