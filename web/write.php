@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.102 2006-05-03 15:56:44 francis Exp $
+ * $Id: write.php,v 1.103 2006-05-16 11:12:11 matthew Exp $
  *
  */
 
@@ -68,7 +68,7 @@ class RulePostcode extends HTML_QuickForm_Rule {
 }
 
 function compare_email_addrs($F) {
-    if ($F['writer_email'] != $F['writer_email2'])
+    if (!isset($F['writer_email2'] || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2'])
         return array('writer_email' => "The two email addresses you've entered differ;<br>please check them carefully for mistakes");
     return true;
 }
