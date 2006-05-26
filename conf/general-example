@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.31 2006-05-11 13:58:37 chris Exp $
+ * $Id: general-example,v 1.32 2006-05-26 08:42:32 matthew Exp $
  * 
  */
 
@@ -115,6 +115,9 @@ define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
 define('OPTION_AUTH_SHARED_SECRET', 'long string of random bytes');
 define('OPTION_HEARFROMYOURMP_BASE_URL', 'http://hearfromyourmp.owl');
 
-
+// Tracking
+define('OPTION_TRACKING', 0);   // off by default
+define('OPTION_TRACKING_URL', 'http://path/to/web/bug');
+define('OPTION_TRACKING_SECRET', 'really-secret-value');
 
 ?>

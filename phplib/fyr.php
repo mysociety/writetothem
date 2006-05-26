@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.40 2006-04-28 17:14:09 francis Exp $
+ * $Id: fyr.php,v 1.41 2006-05-26 08:42:37 matthew Exp $
  * 
  */
 
@@ -19,6 +19,7 @@ require_once "../../phplib/template.php";
 require_once "../../phplib/utility.php";
 require_once "../../phplib/auth.php";
 require_once "../../phplib/crosssell.php";
+require_once "../../phplib/tracking.php";
 
 // Disable these types (due to elections / pending elections etc.)
 $disabled_child_types = array();
@@ -199,7 +200,9 @@ function fyr_breadcrumbs($num, $type = 'default') {
 
 
 function fyr_display_advert($values) {
-    crosssell_display_advert("wtt", $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
+    global $track;
+    $advert_shown = crosssell_display_advert('wtt', $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
+    $track = 'advert=' . $advert_shown;
 }
 
 function parse_date($date) {
