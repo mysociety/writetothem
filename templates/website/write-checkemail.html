@@ -7,7 +7,7 @@
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <div align="center">
-<? print $values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(4, 'lords') : fyr_breadcrumbs(5); ?>
+<? print (isset($values['representative']) && $values['representative']['type'] == 'HOC') ? fyr_breadcrumbs(4, 'lords') : fyr_breadcrumbs(5); ?>
 <h1>Nearly Done! Now check your email...</h1>
 <h2>The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient.</h2>
 <p>If you use <acronym title="Web based email">Webmail</acronym> or have 'junk mail' filters, you may wish to check your bulk&#47;spam mail folders: sometimes, our messages are marked that way.</p>
