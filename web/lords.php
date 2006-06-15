@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.10 2006-05-11 13:05:26 matthew Exp $
+ * $Id: lords.php,v 1.11 2006-06-15 13:43:04 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -88,11 +88,13 @@ if ($date = get_http_var('d')) {
 } elseif ($q_college = get_http_var('c')) {
 	$f = file('../phplib/DoBsP.bsv');
 	$matches = array();
+	$q_college = preg_quote($q_college, '#');
+	$uni = preg_quote(get_http_var('uni'), '#');
 	foreach ($f as $r) {
 		list($id, $dob, $education) = explode('|', $r);
 		$education = trim(str_replace('; ', "\n", $education));
 		if (!$education) continue;
-		if (preg_match("#.*$q_college.*?".get_http_var('uni').'.*#i', $education, $m)) {
+		if (preg_match("#.*$q_college.*?$uni.*#i", $education, $m)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$id);
 			dadem_check_error($ids);
 			$id = $ids[count($ids)-1];
@@ -133,7 +135,7 @@ if ($date = get_http_var('d')) {
 #			}
 #		}
 #	}
-	$place = preg_quote($place);
+	$place = preg_quote($place, '#');
 	$f = file('../phplib/places.bsv');
 	foreach ($f as $r) {
 		list($pid, $lordofname, $lordofname_full, $county) = explode('|', $r);
