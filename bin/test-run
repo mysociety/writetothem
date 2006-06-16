@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.21 2006-05-04 20:15:30 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.22 2006-06-16 14:11:28 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -42,7 +42,6 @@ use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
-use mySociety::Util;
 
 sub help {
 print <<END
@@ -210,7 +209,7 @@ sub send_message_to_rep {
     if (!$birthday) {
         # Postcode selection of representative
         my $start_url = $base_url;
-        $start_url .= "?cocode=9" if ($cobrand eq "animalaid");
+        $start_url .= "?cocode=9" if ($cobrand && $cobrand eq "animalaid");
         $wth->browser_get($start_url);
         $wth->browser_check_contents("First, type your UK postcode:");
         $wth->browser_submit_form(form_name => 'postcodeForm',
@@ -287,7 +286,7 @@ sub call_handlemail {
 
 #############################################################################
 
-sub do_send_example_message() {
+sub do_send_example_message {
     set_base_url("");
     set_fyr_date('1990-01-01');
     send_message_to_rep(0, 
@@ -344,7 +343,7 @@ sub do_send_example_message() {
 
 #############################################################################
 
-sub do_send_blocked_message() {
+sub do_send_blocked_message {
     set_base_url("");
     set_fyr_date('1990-06-30');
 
@@ -397,7 +396,7 @@ sub do_send_blocked_message() {
 
 #############################################################################
 
-sub do_send_cobrand_message() {
+sub do_send_cobrand_message {
     set_base_url("animalaid.");
     set_fyr_date('1991-02-03');
     send_message_to_rep(2, 
@@ -417,7 +416,7 @@ sub do_send_cobrand_message() {
 
 #############################################################################
 
-sub do_send_lords_message() {
+sub do_send_lords_message {
     set_base_url("");
     set_fyr_date('1992-01-01');
     send_message_to_rep(50, 
