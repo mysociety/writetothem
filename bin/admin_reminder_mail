@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.15 2006-03-20 10:37:03 francis Exp $
+ * $Id: admin_reminder_mail,v 1.16 2006-06-19 11:44:37 dademcron Exp $
  *
  */
 
@@ -23,8 +23,14 @@ function error($str) {
     fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");
 }
 
+function verbose($str) {
+    global $verbose;
+    if ($verbose)
+        fwrite(STDERR, "admin_reminder_mail: $str\n");
+}
+
 $short_opts = '';
-$long_opts = array('help');
+$long_opts = array('help', 'verbose');
 require_once '../../phplib/phpcli.php';
 
 $switches = $options[0];
@@ -38,30 +44,36 @@ if (count($args) == 1) {
     $realrun = 1;
     $email_to = $args[0];
 }
+$verbose = 0;
 foreach ($switches as $switch) {
+    if ($switch[0]=='--verbose') $verbose = 1;
     if ($switch[0]=='--help') {
 ?>
 
-Usage: admin_reminder_mail [TO_ADDRESS]
+Usage: admin_reminder_mail [--verbose] [TO_ADDRESS]
 
 TO_ADDRESS is the (comma separated) list of email addresses to send to.
 If no TO_ADDRESS is specified command runs in test mode, and outputs
 to stdout.
 
 --help      Display this help message
+--verbose   Display more information while working
 
 <?
         exit;
     }
 }
 
+verbose("getting admin statistics");
 $stats = msg_admin_get_stats();
+verbose("getting popular referrers");
 $freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
 
 // Prepare email...
 $mail = '';
 
 // Check fax sent in last day
+verbose("checking fax sent in last day");
 $fax_last_days_ago = (time() - $stats['last_fax_time']) / (60 * 60 * 24);
 if ($fax_last_days_ago >= 1) {
     $fax_last_days_ago = round($fax_last_days_ago, 1);
@@ -72,6 +84,7 @@ if ($fax_last_days_ago >= 1) {
 }
 
 // Messages in "need attention" state
+verbose("getting messages in 'need attention' state");
 $need_attention_messages = msg_admin_get_queue('needattention', array());
 $url = OPTION_ADMIN_URL . '?page=fyrqueue';
 $need_attention_messages_count = count($need_attention_messages);
@@ -84,6 +97,7 @@ if ($need_attention_messages_count > 0) {
 }
 
 // Representatives with bad contact details
+verbose("getting representatives with bad contact details");
 $bad_contacts = dadem_get_bad_contacts();
 dadem_check_error($bad_contacts);
 $bad_contacts_info = dadem_get_representatives_info($bad_contacts);
@@ -116,6 +130,7 @@ if ($not_mps > 0) {
 }
 
 // Councils which are not matched
+verbose("getting councils which are not matched");
 $councils_not_matched = dadem_admin_get_raw_council_status('needattention');
 $url = OPTION_ADMIN_SERVICES_CGI . 'match.cgi';
 if ($councils_not_matched > 0) {
@@ -127,6 +142,7 @@ if ($councils_not_matched > 0) {
 }
 
 // Outstanding customer support mail
+verbose("querying rt for count of outstanding support mail");
 $rt_messages = `psql rt rt --pset t -c "
     select count(*) from tickets 
     left join queues on queues.id = tickets.queue 
@@ -148,6 +164,7 @@ if ($mail) {
 }
 
 // Find MPs with no responsiveness
+verbose("finding MPs with no positive responses to questionnaires");
 $badmps = `./badmps`;
 if ($badmps) {
     $mail .= "\n";
@@ -155,7 +172,9 @@ if ($badmps) {
 }
 
 // Diligency league tables...
+$dili_mail = '';
 // ... for futzing with the queue
+verbose("diligency league - altering the message queue");
 $diligency_queue = msg_admin_get_diligency_queue(time() - 60*60*24*7);
 if (count($diligency_queue) > 0) {
     $dili_mail .= "* At futzing with the message queue:\n";
@@ -164,7 +183,8 @@ if (count($diligency_queue) > 0) {
     }
     $dili_mail .= "\n";
 }
-// ... for other representatives
+// ... for non-council representatives
+verbose("diligency league - getting MP and other contact details");
 $diligency_reps = dadem_admin_get_diligency_reps(time() - 60*60*24*7);
 if (count($diligency_reps) > 0) {
     $dili_mail .= "* At getting MP and other contact details:\n";
@@ -174,6 +194,7 @@ if (count($diligency_reps) > 0) {
     $dili_mail .= "\n";
 }
 // ... for councils over last 7 days
+verbose("diligency league - updating councillor info");
 $diligency_councils = dadem_admin_get_diligency_council(time() - 60*60*24*7);
 if (count($diligency_councils) > 0) {
     $dili_mail .= "* At fixing up councillors and wards:\n";
@@ -183,6 +204,7 @@ if (count($diligency_councils) > 0) {
     $dili_mail .= "\n";
 }
 // ... for doing things on RT
+verbose("diligency league - handling customer support in RT");
 $diligency_rt = `psql rt rt --pset t -c "
     select users.name, count(*) as c from transactions 
     left join tickets on tickets.id = transactions.objectid 
@@ -212,6 +234,7 @@ And this week's most diligent were (please, take a bow!)...
 }
 
 // Statistics
+verbose("generating general statistics");
 $mail .= "
 Finally, some statistics to keep you happy...
 
@@ -232,17 +255,19 @@ $mail .= "\n";
 
 // Send mail to team@
 if ($mail) {
-        $dest = $email_to;
-        $subject ="WriteToThem needs some tender loving care";
-        $mail .="
+    $subject ="WriteToThem needs some tender loving care";
+    $mail .="
 That's all for this week!
 
 -- The Quality Deity";
     if ($realrun) {
+        $dest = $email_to;
+        verbose("sending email to $dest");
         mail($dest, $subject, $mail,
             "From: The Quality Deity <team@writetothem.com>\n".
             "X-Mailer: PHP/" . phpversion());
     } else {
+        verbose("printing email");
         print "Subject: $subject\n\n";
         print $mail;
     }
