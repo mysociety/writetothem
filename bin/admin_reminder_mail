@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.16 2006-06-19 11:44:37 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.17 2006-06-19 12:30:13 dademcron Exp $
  *
  */
 
@@ -78,7 +78,7 @@ $fax_last_days_ago = (time() - $stats['last_fax_time']) / (60 * 60 * 24);
 if ($fax_last_days_ago >= 1) {
     $fax_last_days_ago = round($fax_last_days_ago, 1);
     $mail .= "
-* A fax was last sent $fax_last_days_ago days ago, which is more than one
+* A fax was last sent $fax_last_days_ago days ago, which is more than one day.
   Kick the fax servers! They're all probably broken.
 ";
 }
