@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.22 2006-06-16 14:11:28 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.23 2006-06-21 19:33:09 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -255,7 +255,7 @@ sub send_message_to_rep {
     $wth->email_check_url($1);
     $wth->browser_get($1);
 
-    if ($cobrand eq "animalaid") {
+    if ($cobrand && $cobrand eq "animalaid") {
         # TODO: Add check when their site is ready
     } else {
         $wth->browser_check_contents("All done... We'll send your message now");
