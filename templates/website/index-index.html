@@ -36,11 +36,16 @@ Due to the General Election, new MPs and County Councillors are not yet availabl
 <?
 /* The above focuses on the postcode box. Must come after the box is created, obviously. */
 ?>
-<!--<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">-->
+<? // Display advert, only on even days of the year
+$gdate = getdate();
+print "<!--yday=".$gdate['yday']."-->";
+if ($gdate['yday'] % 2 == 0) { ?>
+<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">
 <!--<p>Have a <a href="<?=OPTION_HEARFROMYOURMP_BASE_URL?>">long term relationship</a> with your MP!</p>-->
 <!--Did your MP respond quickly? See our <a href="stats/2005/zeitgeist">2005 league table</a>.-->
-<!--New! <a href="/lords">Write to your Lord</a>-->
-<!--</div>-->
+New! <a href="/lords">Write to your Lord</a>
+</div>
 <?
+}
 template_draw('footer', $values);
 ?>
