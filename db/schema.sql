@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.37 2006-04-28 20:42:10 francis Exp $
+-- $Id: schema.sql,v 1.38 2006-07-13 15:48:06 francis Exp $
 --
 
 set client_min_messages to error;
@@ -107,6 +107,8 @@ create table message (
 
     -- Frozen messages don't leave ready state
     frozen boolean not null default('f'),
+    -- Test messages don't send questionnaire
+    no_questionnaire boolean not null default('f'),
 
     -- when the message was originally queued (UNIX time)
     created integer not null,

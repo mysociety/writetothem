@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.202 2006-05-11 13:57:12 chris Exp $
+# $Id: Queue.pm,v 1.203 2006-07-13 15:48:06 francis Exp $
 #
 
 package FYR::Queue;
@@ -1349,6 +1349,10 @@ my %state_action = (
                     $dosend = $reminder = 1;
                 }
             }
+            if ($msg->{no_questionnaire}) {
+                # don't send questionnaire for test messages
+                $dosend = 0;
+            }
 
             if ($dosend) {
                 my $result = send_questionnaire_email($id, $reminder);
@@ -1847,6 +1851,35 @@ sub admin_thaw_message ($$) {
     dbh()->do("update message set frozen = 'f' where id = ?", {}, $id);
     dbh()->commit();
     logmsg($id, 1, "$user thawed message", $user);
+    notify_daemon();
+    return 0;
+}
+
+=item admin_no_questionnaire_message ID USER
+
+Mark the message as being one for which a questionnaire is not sent.
+USER is the administrator's name.
+
+=cut
+sub admin_no_questionnaire_message ($$) {
+    my ($id, $user) = @_;
+    dbh()->do("update message set no_questionnaire = 't' where id = ?", {}, $id);
+    dbh()->commit();
+    logmsg($id, 1, "$user set message to not send questionnaire", $user);
+    return 0;
+}
+
+=item admin_yes_questionnaire_message ID USER
+
+Mark the message as being one for which a quesionnaire is sent.
+USER is the administrator's name.
+
+=cut
+sub admin_yes_questionnaire_message ($$) {
+    my ($id, $user) = @_;
+    dbh()->do("update message set no_questionnaire = 'f' where id = ?", {}, $id);
+    dbh()->commit();
+    logmsg($id, 1, "$user set message to send quesionnaire", $user);
     notify_daemon();
     return 0;
 }

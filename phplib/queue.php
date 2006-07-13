@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.51 2006-03-09 16:17:41 francis Exp $
+ * $Id: queue.php,v 1.52 2006-07-13 15:48:07 francis Exp $
  *
  */
 
@@ -306,6 +306,28 @@ function msg_admin_thaw_message($id, $user) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.admin_thaw_message', $params);
+    return $result;
+}
+
+/* msg_admin_no_questionnaire_message ID USER
+
+  Mark the message as being one for which a questionnaire is not sent. USER
+  is the administrator's name. */
+function msg_admin_no_questionnaire_message($id, $user) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.admin_no_questionnaire_message', $params);
+    return $result;
+}
+
+/* msg_admin_yes_questionnaire_message ID USER
+
+  Mark the message as being one for which a quesionnaire is sent. USER is
+  the administrator's name. */
+function msg_admin_yes_questionnaire_message($id, $user) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.admin_yes_questionnaire_message', $params);
     return $result;
 }
 
