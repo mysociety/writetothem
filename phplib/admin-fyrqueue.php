@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.101 2006-07-13 15:48:07 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.102 2006-07-13 16:04:07 francis Exp $
  * 
  */
 
@@ -338,7 +338,7 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
         } else if (get_http_var('no_questionnaire')) {
             $result = msg_admin_no_questionnaire_message($id, http_auth_user());
             msg_check_error($result);
-            print "<p><b><i>Message $id now won't send questionnaire</i></b></p>";
+            print "<p><b><i>Message $id now won't send questionnaire, and has had existing responses deleted</i></b></p>";
             $redirect = true;
         } else if (get_http_var('yes_questionnaire')) {
             $result = msg_admin_yes_questionnaire_message($id, http_auth_user());
@@ -418,12 +418,10 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
             }
-            if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed' and $message['state'] != 'finished') {
-                if ($message['no_questionnaire'])
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'yes_questionnaire', 'Allow Questionnaire');
-                else
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
-            }
+            if ($message['no_questionnaire'])
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'yes_questionnaire', 'Allow Questionnaire');
+            else
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
             if ($message['state'] == 'pending')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
 

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.203 2006-07-13 15:48:06 francis Exp $
+# $Id: Queue.pm,v 1.204 2006-07-13 16:04:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -1093,6 +1093,15 @@ sub record_questionnaire_answer ($$$) {
     throw FYR::Error("Bad QUESTION (should be '0' or '1')") if ($qn ne '0' and $qn ne '1');
     throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
+        my $msg = message($id);
+
+        # silently don't record responses for no_questionnaire type
+        if ($msg->{no_questionnaire}) {
+            logmsg($id, 1, "silently ignored answer of \"$answer\" received for questionnaire qn #$qn");
+            return $id;
+        }
+    
+        # record response, replacing existing response to same question
         dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
         dbh()->do('insert into questionnaire_answer (message_id, question_id, answer, whenanswered) values (?, ?, ?, ?)', {}, $id, $qn, $answer, time());
         logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
@@ -1857,15 +1866,16 @@ sub admin_thaw_message ($$) {
 
 =item admin_no_questionnaire_message ID USER
 
-Mark the message as being one for which a questionnaire is not sent.
-USER is the administrator's name.
+Mark the message as being one for which a questionnaire is not sent.  Deletes
+any existing questionnaires. USER is the administrator's name.
 
 =cut
 sub admin_no_questionnaire_message ($$) {
     my ($id, $user) = @_;
     dbh()->do("update message set no_questionnaire = 't' where id = ?", {}, $id);
+    dbh()->do("delete from questionnaire_answer where message_id = ?", {}, $id);
     dbh()->commit();
-    logmsg($id, 1, "$user set message to not send questionnaire", $user);
+    logmsg($id, 1, "$user set message to not send questionnaire, and deleted any existing responses", $user);
     return 0;
 }
 
