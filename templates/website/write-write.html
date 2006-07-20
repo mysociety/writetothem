@@ -4,6 +4,7 @@ $values['title'] = "Now write your message to ".
     $values['representative']['name'] . " " .
     $values['voting_area']['rep_suffix']) . ", " .
     $values['voting_area']['name'];
+$values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
 print $values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3);
