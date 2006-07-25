@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.105 2006-07-25 15:27:02 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.106 2006-07-25 18:13:51 francis Exp $
  * 
  */
 
@@ -31,7 +31,7 @@ function make_mailto_link($email, $subject, $body, $link) {
     print "<a href=\"mailto:".htmlspecialchars($email).
         "?subject=".htmlspecialchars($subject)."".
         "&body=".htmlspecialchars($body)."".
-    "\">$link</a>";
+    "\">$link</a> ";
 }
 
 class ADMIN_PAGE_FYR_QUEUE {
@@ -469,6 +469,15 @@ another way, if you like.
 -------------------------------------------------------------\n\n".
                 $message['message'],
                 "write-to-own-reps-only");
+            make_mailto_link($message['sender_email'], 
+                "Your message to " . $message['recipient_name'],
+                "Hi " . $message['sender_name']. ",
+
+
+
+-------------------------------------------------------------\n\n".
+                $message['message'],
+                "blank-mail-quoting-message");
             print "</small>";
 
             // Body text if enabled
