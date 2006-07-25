@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.104 2006-07-25 15:21:36 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.105 2006-07-25 15:27:02 francis Exp $
  * 
  */
 
@@ -448,14 +448,6 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                     .  htmlspecialchars(url_new("", true, 'view', 'similarbody', 'simto', $id, 'id', null))
                     .  '">View similar messages</a> ';
 
-            // Body text if enabled
-            if (get_http_var('body')) {
-                print "<h2>Body text of message (only read if you really need to)</h2>";
-                print "<blockquote>";
-                print nl2br(htmlspecialchars($message['message']));
-                print "</blockquote>";
-            }
-
             // Links to send messages to sender
             print " Email sender: <small>";
             make_mailto_link($message['sender_email'], 
@@ -478,6 +470,14 @@ another way, if you like.
                 $message['message'],
                 "write-to-own-reps-only");
             print "</small>";
+
+            // Body text if enabled
+            if (get_http_var('body')) {
+                print "<h2>Body text of message (only read if you really need to)</h2>";
+                print "<blockquote>";
+                print nl2br(htmlspecialchars($message['message']));
+                print "</blockquote>";
+            }
 
             // Questionnaire answers if there are any
             if (is_array($message['questionnaires']) and count($message['questionnaires']) > 0) {
