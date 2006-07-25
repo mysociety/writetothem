@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.103 2006-07-25 02:14:43 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.104 2006-07-25 15:21:36 francis Exp $
  * 
  */
 
@@ -25,6 +25,14 @@ $state_help_notes_map = array(
     'failed' => 'Delivery to representative failed',
     'failed_closed' => 'Delivery failed, admin has dealt with it / timed out',
 );
+
+function make_mailto_link($email, $subject, $body, $link) {
+    $body = str_replace("\n", urlencode("\n"), $body);
+    print "<a href=\"mailto:".htmlspecialchars($email).
+        "?subject=".htmlspecialchars($subject)."".
+        "&body=".htmlspecialchars($body)."".
+    "\">$link</a>";
+}
 
 class ADMIN_PAGE_FYR_QUEUE {
     function ADMIN_PAGE_FYR_QUEUE () {
@@ -447,6 +455,29 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
                 print nl2br(htmlspecialchars($message['message']));
                 print "</blockquote>";
             }
+
+            // Links to send messages to sender
+            print " Email sender: <small>";
+            make_mailto_link($message['sender_email'], 
+                "Your message to " . $message['recipient_name'] . " has not been sent",
+                "Hi " . $message['sender_name']. ",
+
+Unfortunately, your message to " . $message['recipient_name'] . " 
+has not been sent.  
+
+You can only use our service to write to your own elected
+representatives, not to representatives for other places.
+Here is a full explanation as to why we have this policy:
+
+http://www.writetothem.com/about-qa#onlyrep
+
+There's a copy of your message below, so you can send it
+another way, if you like.
+
+-------------------------------------------------------------\n\n".
+                $message['message'],
+                "write-to-own-reps-only");
+            print "</small>";
 
             // Questionnaire answers if there are any
             if (is_array($message['questionnaires']) and count($message['questionnaires']) > 0) {
