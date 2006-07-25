@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.102 2006-07-13 16:04:07 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.103 2006-07-25 02:14:43 francis Exp $
  * 
  */
 
@@ -177,7 +177,10 @@ class ADMIN_PAGE_FYR_QUEUE {
                 print "</td>";
                 print "<td>"
                         . htmlspecialchars($message['sender_name']) . "<br>"
-                        . htmlspecialchars($message['sender_addr']) . "<br>"
+                        . str_replace($message['sender_postcode'], 
+                        '<a href="'.OPTION_BASE_URL.'/who?pc='.urlencode($message['sender_postcode']).'">'.$message['sender_postcode'].'</a>',
+                            htmlspecialchars($message['sender_addr'])
+                                ) . "<br>"
                         . htmlspecialchars($message['sender_email'])
                         . "</td>";
 
