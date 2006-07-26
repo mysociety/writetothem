@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.11 2006-06-15 13:43:04 matthew Exp $
+ * $Id: lords.php,v 1.12 2006-07-26 16:09:09 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -61,7 +61,7 @@ if ($date = get_http_var('d')) {
 			$d = strtotime($dob);
 			if (date('d/m', $date['epoch']) == date('d/m', strtotime($dob))) {
 				$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$id);
-				dadem_check_error($ids);
+    				if (dadem_get_error($ids)) continue;
 				$id = $ids[count($ids)-1];
 				$matches[] = $id;
 			}
@@ -96,7 +96,7 @@ if ($date = get_http_var('d')) {
 		if (!$education) continue;
 		if (preg_match("#.*$q_college.*?$uni.*#i", $education, $m)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$id);
-			dadem_check_error($ids);
+    			if (dadem_get_error($ids)) continue;
 			$id = $ids[count($ids)-1];
 			$matches[] = $id;
 			$colleges[] = $m[0];
@@ -142,13 +142,13 @@ if ($date = get_http_var('d')) {
 		$county = trim($county);
 		if (preg_match("#$place#i", $lordofname)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$pid);
-			dadem_check_error($ids);
+    			if (dadem_get_error($ids)) continue;
 			$id = $ids[count($ids)-1];
 			$matches[] = $id;
 			$reason[] = '';
 		} elseif (preg_match("#$place#i", $county)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$pid);
-			dadem_check_error($ids);
+    			if (dadem_get_error($ids)) continue;
 			$id = $ids[count($ids)-1];
 			$matches[] = $id;
 			$r = '(';
@@ -158,7 +158,7 @@ if ($date = get_http_var('d')) {
 			$reason[] = $r;
 		} elseif (preg_match("#$place#i", $lordofname_full)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$pid);
-			dadem_check_error($ids);
+    			if (dadem_get_error($ids)) continue;
 			$id = $ids[count($ids)-1];
 			$matches[] = $id;
 			$reason[] = '(of ' . $lordofname_full . ')';
@@ -171,7 +171,7 @@ if ($date = get_http_var('d')) {
 		if (!$education) continue;
 		if (preg_match("#.*$place.*#i", $education, $m)) {
 			$ids = dadem_get_same_person('uk.org.publicwhip/person/'.$id);
-			dadem_check_error($ids);
+    			if (dadem_get_error($ids)) continue;
 			$id = $ids[count($ids)-1];
 			$matches[] = $id;
 			$reason[] = '('.$m[0].')';
