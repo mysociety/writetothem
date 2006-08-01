@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.12 2006-07-26 16:09:09 matthew Exp $
+ * $Id: lords.php,v 1.13 2006-08-01 14:23:11 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -236,7 +236,7 @@ like the methods we have come up with. Please note that as we are using the Hous
 <form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
 Find a Lord interested in my <strong>topic</strong>:
 
-<input type="input" name="s" id="s" value="<?=htmlentities(get_http_var('s')) ?>" size="20">
+<input type="text" name="s" id="s" value="<?=htmlentities(get_http_var('s')) ?>" size="20">
 <input type="hidden" name="o" value="p">
 <input type="hidden" name="house" value="2">
 <input type="hidden" name="wtt" value="1">
@@ -255,7 +255,7 @@ by words spoken in Parliament, nothing more)</em></small>
 
 Find a Lord with some association with this <strong>place</strong>:
 
-<input type="input" name="p" id="p" value="<?=htmlentities(get_http_var('p')) ?>" size="20">
+<input type="text" name="p" id="p" value="<?=htmlentities(get_http_var('p')) ?>" size="20">
 <input type="submit" value="Go">
 <?=$form_extra ?>
 <br><small><em>e.g. they're Lord of there, or somewhere in that county, or they went to university there.</em></small>
@@ -268,7 +268,7 @@ Find a Lord with some association with this <strong>place</strong>:
 <form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
 Find a Lord who shares my <strong>birthday</strong>:
 
-<input type="input" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>" size="20">
+<input type="text" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>" size="20">
 <input type="submit" value="Go">
 <?=$form_extra ?>
 <br><small><em>e.g. 19th September</em></small>
@@ -282,7 +282,7 @@ Find a Lord who shares my <strong>birthday</strong>:
 <?  } ?>
 <form action="/lords" method="get" name="collegeLordForm" id="collegeLordForm">
 Find a Lord who went to this Oxbridge <strong>college</strong>:
-<input type="input" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
+<input type="text" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
 <select name="uni">
 <option>Oxford
 <option>Cambridge
