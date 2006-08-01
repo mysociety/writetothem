@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: lords.php,v 1.13 2006-08-01 14:23:11 francis Exp $
+ * $Id: lords.php,v 1.14 2006-08-01 16:38:44 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -228,7 +228,8 @@ For more information, read our <a href="about-lords"><strong>Frequently Asked Qu
 
 <p>Lords do not have constituencies like MPs, so we need
 different ways for you to find a Lord to contact. We hope you
-like the methods we have come up with. Please note that as we are using the House of Lords fax machine for all correspondence, <strong>messages are limited to one message a day per person</strong> for the moment.</p>
+like the methods we have come up with. </p>
+
 
 <ul>
 
