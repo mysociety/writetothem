@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.204 2006-07-13 16:04:07 francis Exp $
+# $Id: Queue.pm,v 1.205 2006-08-01 14:02:41 francis Exp $
 #
 
 package FYR::Queue;
@@ -1109,6 +1109,20 @@ sub record_questionnaire_answer ($$$) {
         return $id;
     } else {
         return 0;
+    }
+}
+
+=item get_questionnaire_message TOKEN
+
+Return id of the message associated with a questionnaire email. TOKEN is the token
+sent them in the questionnaire email;.
+
+=cut
+sub get_questionnaire_message ($) {
+    my ($token) = @_;
+    if (my $id = check_token("questionnaire", $token)) {
+        my $msg = message($id);
+        return $id;
     }
 }
 

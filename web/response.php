@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: response.php,v 1.1 2004-12-15 15:35:04 francis Exp $
+ * $Id: response.php,v 1.2 2006-08-01 14:02:43 francis Exp $
  * 
  */
 
@@ -33,11 +33,16 @@ $values = array(
     'first_time_no' => "\"firsttime?token=" . urlencode($token) .  "&answer=no\""
     );
 
+// Look up info about the message
+$msg_id = msg_get_questionnaire_message($token);
+msg_check_error($msg_id);
+$msg_info = msg_admin_get_message($msg_id);
+msg_check_error($msg_info);
+$values = array_merge($msg_info, $values);
+
 // 0 is the responsiveness question
 $result = msg_record_questionnaire_answer($token, 0, $answer);
-if (rabx_is_error($result)) {
-    template_show_error($result->text);
-}
+msg_check_error($result);
 if ($answer == "yes") {
     template_draw("response-yes", $values);
 } elseif ($answer == "no") {

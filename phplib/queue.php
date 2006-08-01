@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.52 2006-07-13 15:48:07 francis Exp $
+ * $Id: queue.php,v 1.53 2006-08-01 14:02:42 francis Exp $
  *
  */
 
@@ -147,6 +147,17 @@ function msg_record_questionnaire_answer($token, $question, $response) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.record_questionnaire_answer', $params);
+    return $result;
+}
+
+/* msg_get_questionnaire_message TOKEN
+
+  Return id of the message associated with a questionnaire email. TOKEN is
+  the token sent them in the questionnaire email;. */
+function msg_get_questionnaire_message($token) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.get_questionnaire_message', $params);
     return $result;
 }
 
@@ -311,8 +322,8 @@ function msg_admin_thaw_message($id, $user) {
 
 /* msg_admin_no_questionnaire_message ID USER
 
-  Mark the message as being one for which a questionnaire is not sent. USER
-  is the administrator's name. */
+  Mark the message as being one for which a questionnaire is not sent.
+  Deletes any existing questionnaires. USER is the administrator's name. */
 function msg_admin_no_questionnaire_message($id, $user) {
     global $msg_client;
     $params = func_get_args();

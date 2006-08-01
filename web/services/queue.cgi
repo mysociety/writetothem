@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.24 2006-07-13 15:48:07 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.25 2006-08-01 14:02:43 francis Exp $';
 
 require 5.8.0;
 
@@ -47,6 +47,9 @@ while ($req->Accept() >= 0) {
             },
             'FYR.Queue.record_questionnaire_answer' => sub {
                 return FYR::Queue::record_questionnaire_answer($_[0], $_[1], $_[2]);
+            },
+            'FYR.Queue.get_questionnaire_message' => sub {
+                return FYR::Queue::get_questionnaire_message($_[0]);
             },
             'FYR.Queue.get_time' => sub {
                 return FYR::Queue::get_time();
