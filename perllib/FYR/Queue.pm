@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.205 2006-08-01 14:02:41 francis Exp $
+# $Id: Queue.pm,v 1.206 2006-08-01 14:20:32 francis Exp $
 #
 
 package FYR::Queue;
@@ -1121,7 +1121,6 @@ sent them in the questionnaire email;.
 sub get_questionnaire_message ($) {
     my ($token) = @_;
     if (my $id = check_token("questionnaire", $token)) {
-        my $msg = message($id);
         return $id;
     }
 }
