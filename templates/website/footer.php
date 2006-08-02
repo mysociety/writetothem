@@ -8,8 +8,8 @@ mySociety</a>.
 <br>
 <? $links = array(
     '/about-qa'=>'Help',
-    '/about-contact' => 'Contact Us',
-    '/about-guidelines' => 'Guidelines for Campaigners',
+    '/about-contact' => 'Contact WriteToThem.com',
+    /* '/about-guidelines' => 'Guidelines for Campaigners', */  /* we don't get much campaign abuse any more, so prominent link not so needed? */
     '/about-linktous' => 'Link to us',
     '/stats' => 'Statistics',
     '/about-copyright' => 'Copyright', /* for Affero GPL */
