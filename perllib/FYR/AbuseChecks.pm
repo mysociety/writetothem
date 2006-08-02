@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.47 2006-02-22 11:49:07 francis Exp $
+# $Id: AbuseChecks.pm,v 1.48 2006-08-02 05:16:37 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -197,22 +197,35 @@ my @tests = (
                 $msg->{sender_postcode}, $hits)) if ($hits > 0);
             return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode and faxyourmp/writetothem"] );
         },
-        
-        # Representative emailing themself
-        # TODO Actually look this up in DaDem, as it won't work if they
-        # are somebody who is faxed, even if we know their email.
-        # This can also spot representatives emailing each other, is
-        # that useful?
+
+        # Representative emailing themself, i.e. same email address
+        # TODO Actually look up email address in DaDem, as it won't work if
+        # they are somebody who is faxed, even if we know their email.  This
+        # can also spot representatives emailing each other, is that useful?
         sub ($) {
             my ($msg) = @_;
             my $rep_self = undef;
             if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
                 and defined($msg->{recipient_email})
                 and $msg->{sender_email} eq $msg->{recipient_email}) {
-                FYR::Queue::logmsg($msg->{id}, 0, 'representative appears to be emailing themself');
+                FYR::Queue::logmsg($msg->{id}, 0, 'representative appears to be emailing themself (same email address)');
                 $rep_self = 'YES';
             }
-            return ( representative_emailing_self => [$rep_self, 'Present if representative appears to be emailing themself'] );
+            return ( representative_emailing_self => [$rep_self, 'Present if representative appears to be emailing themself (same email)'] );
+        },
+
+ 
+        # Representative emailing themself, i.e. similar name
+        sub ($) {
+            my ($msg) = @_;
+            my $rep_self = undef;
+            if (defined($msg->{recipient_name}) and defined($msg->{sender_name})
+                and ($msg->{sender_name} =~ m/$msg->{recipient_name}/i
+                    or $msg->{recipient_name} =~ m/$msg->{sender_name}/i)) {
+                FYR::Queue::logmsg($msg->{id}, 0, 'representative appears to be emailing themself (similar name)');
+                $rep_self = 'YES';
+            }
+            return ( representative_emailing_self_name => [$rep_self, 'Present if representative appears to be emailing themself (similar name)'] );
         },
 
         # Body of message similar to other messages in queue.
