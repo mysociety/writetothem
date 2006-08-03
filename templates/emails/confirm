@@ -19,15 +19,12 @@ less fun, means.
 
 A copy of your message is pasted to the bottom of this email.
 
-Please feel free to email us on team@writetothem.com with any comments,
-problems or suggestions. 
-
 If you did not request that a message be sent to
 <?=$values['recipient_name']?>, please let us know by sending an email to
 team@writetothem.com
 
-Please do not reply to this mail. If you have a question or comment about the
-site, please send an email to team@writetothem.com
+Please do not reply to this mail. Feel free to email us on
+team@writetothem.com with any comments, problems or suggestions.
 
 -- the WriteToThem.com team
 

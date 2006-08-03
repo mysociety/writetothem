@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.25 2006-08-03 10:56:13 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.26 2006-08-03 12:22:05 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -500,11 +500,11 @@ On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
 >
 > - If you HAVE had a reply, please click on the link below:
 >
->     $base_url/Y/relaguaqexslmg2wl63pvvgmmadf2
+>     $base_url/Y/xxxxxxxxxxxxxxxxx22xxxxxxxxx2
 >
 > - If you HAVE NOT had a reply, please click on the link below:
 >
->     $base_url/N/relaguaqexslmg2wl63pvvgmmadf2
+>     $base_url/N/xxxxxxxxxxxxxx2xx22xxxxxxxxx2
 >
 > ... snipped for brevity ...
 END
