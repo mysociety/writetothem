@@ -28,5 +28,9 @@ Rest assured that we will not store ANY data that could be used to identify
 you. We do not keep a copy of the letter you sent to your
 <?=$values['recipient_position']?>.
 
+Please do not reply to this mail. If you have a question or comment about the
+site, please send an email to team@writetothem.com
+
 -- the WriteToThem.com team
+
 

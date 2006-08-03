@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.24 2006-08-03 01:41:07 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.25 2006-08-03 10:56:13 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -415,7 +415,7 @@ sub do_test_bounce_stuff {
     # - the message is just hard wired here as that is easiest.
     my $user_name = name_n(5);
     my $user_email = email_n(5);
-    my $bounce_address = mySociety::Config::get('EMAIL_PREFIX') . "bounce-null@" . mySociety::Config::get('EMAIL_DOMAIN');
+    my $bounce_address = mySociety::Config::get('EMAIL_PREFIX') . "DO-NOT-REPLY@" . mySociety::Config::get('EMAIL_DOMAIN');
     my $in_reply_to = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxx@" . mySociety::Config::get('EMAIL_DOMAIN');
     my $message_id = "19900830153005.GA19047@" . mySociety::Config::get('EMAIL_DOMAIN');
 

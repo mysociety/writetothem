@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.206 2006-08-01 14:20:32 francis Exp $
+# $Id: Queue.pm,v 1.207 2006-08-03 10:56:13 francis Exp $
 #
 
 package FYR::Queue;
@@ -847,7 +847,7 @@ sub make_confirmation_email ($;$) {
     # transient failures or abuse; but (b) we can't use a reply to confirm that
     # a fax should be sent because a broken server which sends bounces to the
     # From: address would then automatically confirm any email address.
-    my $confirm_sender = sprintf('%sbounce-null@%s',
+    my $confirm_sender = sprintf('%sDO-NOT-REPLY@%s',
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
@@ -917,7 +917,7 @@ sub send_confirmation_email ($;$) {
 sub make_failure_email ($) {
     my ($msg) = @_;
 
-    my $failure_sender = sprintf('%sbounce-null@%s',
+    my $failure_sender = sprintf('%sDO-NOT-REPLY@%s',
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
@@ -960,7 +960,7 @@ sub make_questionnaire_email ($;$) {
     my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
     my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
 
-    my $questionnaire_sender = sprintf('%sbounce-null@%s',
+    my $questionnaire_sender = sprintf('%sDO-NOT-REPLY@%s',
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 

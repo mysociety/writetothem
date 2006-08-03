@@ -26,6 +26,9 @@ If you did not request that a message be sent to
 <?=$values['recipient_name']?>, please let us know by sending an email to
 team@writetothem.com
 
+Please do not reply to this mail. If you have a question or comment about the
+site, please send an email to team@writetothem.com
+
 -- the WriteToThem.com team
 
-Please do not reply to this mail.
+

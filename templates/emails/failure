@@ -1,10 +1,14 @@
 We're very sorry, but it wasn't possible to send your letter to
 <?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
+
 Unfortunately, our system isn't 100% reliable and from time to time a message
 doesn't get through. We've attached a copy of your letter to the bottom of this
 email, so that you can print it out and send it by more traditional means. Or,
 try again via our site in a week or so -- hopefully we'll have tracked down the
 problem by then.
+
+Please do not reply to this mail. If you have a question or comment about the
+site, please send an email to team@writetothem.com
 
 -- the WriteToThem.com team
 
