@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.29 2006-08-03 10:56:13 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.30 2006-08-03 13:13:40 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -265,7 +265,7 @@ my ($token) = ($a->user() =~ m#^\Q$prefix\E(.*)#);
 #print "token $token\n";
 
 my $id;
-if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY') {
+if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-reply') {
     print_log('warning', "bounce received for don't-care email");
 } elsif (defined($id = FYR::Queue::check_token('bounce', $token))) {
     my $msg = FYR::Queue::message($id, 1);    # lock message
