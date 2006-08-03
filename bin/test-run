@@ -10,6 +10,7 @@
 #   the database, so make sure it is never used for anything important
 # * email addresses (email_n below) configured to pipe to ./test-mailin with fast
 #   local delivery, and
+# * similar address with "team" instead of "n" configured in OPTION_CONTACT_EMAIL
 # * email address set in OPTION_EMAIL_PREFIX configured to pipe to ./handlemail
 # * a Ratty database with name ending "_testharness", also configured in ../general/conf
 #   (an entry not normally present when running FYR) and in the ratty service
@@ -26,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.23 2006-06-21 19:33:09 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.24 2006-08-03 01:41:07 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -38,6 +39,7 @@ use FindBin;
 use Getopt::Long;
 use IO::Handle;
 
+use mySociety::Util;
 use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
@@ -50,6 +52,7 @@ Usage: test-run [OPTION] [ACTION]...
 
 Actions are a list of tests, run if present in this order:
     example - send example message successfully, and an example message blocked by ratty
+    bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
     cobrand - send example message via a cobrand site (AnimalAid)
     lords   - send example message to a Lord
 If you specify no actions, it will run all of them.
@@ -81,6 +84,8 @@ our %action;
 foreach (@ARGV) {
     if ($_ eq "example") {
         $action{'example'} = 1;
+    } elsif ($_ eq "bounce") {
+        $action{'bounce'} = 1;
     } elsif ($_ eq "cobrand") {
         $action{'cobrand'} = 1;
     } elsif ($_ eq "lords") {
@@ -93,6 +98,7 @@ foreach (@ARGV) {
 }
 if (scalar(@ARGV) == 0) {
     $action{'example'} = 1;
+    $action{'bounce'} = 1;
     $action{'cobrand'} = 1;
     $action{'lords'} = 1;
 }
@@ -107,8 +113,9 @@ sub set_base_url($) {
 set_base_url('');
 die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
 our $admin_url = mySociety::Config::get('ADMIN_URL');
+our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
-sub email_n { my $n = shift; return "fyrharness+$n\@writetothem.owl"; }
+sub email_n { my $n = shift; return "fyrharness+$n\@" . mySociety::Config::get('EMAIL_DOMAIN'); }
 sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 #############################################################################
@@ -146,6 +153,10 @@ if ($action{'example'}) {
     # do_send_blocked_message depends on do_send_example_message having
     # been already called, to populate the Ratty example fields table
     do_send_blocked_message();
+}
+if ($action{'bounce'}) {
+    print "Testing bouncing stuff...\n" if $verbose > 0;
+    do_test_bounce_stuff();
 }
 if ($action{'cobrand'}) {
     print "Sending cobrand message...\n" if $verbose > 0;
@@ -392,6 +403,115 @@ sub do_send_blocked_message {
         '%To: '.name_n(1).' <'.email_n(1).'>'.
         '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+}
+
+#############################################################################
+
+sub do_test_bounce_stuff {
+    set_base_url("");
+    set_fyr_date('1990-08-30');
+
+    # Pretend to be somebody replying to a questionnaire message
+    # - the message is just hard wired here as that is easiest.
+    my $user_name = name_n(5);
+    my $user_email = email_n(5);
+    my $bounce_address = mySociety::Config::get('EMAIL_PREFIX') . "bounce-null@" . mySociety::Config::get('EMAIL_DOMAIN');
+    my $in_reply_to = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxx@" . mySociety::Config::get('EMAIL_DOMAIN');
+    my $message_id = "19900830153005.GA19047@" . mySociety::Config::get('EMAIL_DOMAIN');
+
+    # Send message with confirmation link ...
+    my $msg = <<END;
+Date: Thu, 30 Aug 1990 16:30:05 +0100
+From: $user_name <$user_email>
+To: WriteToThem <$bounce_address>
+Subject: Re: Please confirm that you want to send a message to Ouch Ooch MP
+Message-ID: <$message_id>
+References: <$in_reply_to>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <$in_reply_to>
+User-Agent: Mutt/1.5.11
+Status: RO
+
+Yes yes yes!
+
+On Mon, Jan 01, 1990 at 03:04:58PM +0000, WriteToThem wrote:
+> Please click on the link below to confirm that you wish WriteToThem.com
+> to send the letter copied at the bottom of this email to Ouch Ooch
+> MP, your MP:
+> 
+>     $base_url/C/xxxxxx2xxx/2xxxxx2x2xxxxxxx2xx
+> 
+> If your email program does not let you click on this link, just copy
+> and paste it into your web browser and press return.
+>
+> ... snipped for brevity ...
+> 
+> -- the WriteToThem.com team
+END
+    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    # ... check that user gets autoresponse
+    $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
+    $wth->email_check_none_left();
+
+    # Send message without link ...
+    $msg = <<END;
+Date: Thu, 30 Aug 1990 16:30:05 +0100
+From: $user_name <$user_email>
+To: WriteToThem <$bounce_address>
+Subject: This is a test message
+Message-ID: <$message_id>
+References: <$in_reply_to>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <$in_reply_to>
+User-Agent: Mutt/1.5.11
+Status: RO
+
+Woot woot woot!
+END
+    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    # .. check that administrator gets the message
+    $wth->email_get_containing('%To: WriteToThem <'.$bounce_address.'>%Woot woot woot!%');
+    $wth->email_check_none_left();
+
+    # Send message with questionnaire links ...
+    $msg = <<END;
+Date: Thu, 30 Aug 1990 16:30:05 +0100
+From: $user_name <$user_email>
+To: WriteToThem <$bounce_address>
+Subject: Did your MP reply to your letter?
+Message-ID: <$message_id>
+References: <$in_reply_to>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <$in_reply_to>
+User-Agent: Mutt/1.5.11
+Status: RO
+
+I don't like this questionnaire, I am instead going to tell you much
+more about my MP's responsiveness in free text.
+
+On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
+> Two weeks ago we sent your letter to David Howarth MP.
+>
+> - If you HAVE had a reply, please click on the link below:
+>
+>     $base_url/Y/relaguaqexslmg2wl63pvvgmmadf2
+>
+> - If you HAVE NOT had a reply, please click on the link below:
+>
+>     $base_url/N/relaguaqexslmg2wl63pvvgmmadf2
+>
+> ... snipped for brevity ...
+END
+    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    # ... check that user gets autoresponse
+    $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
+    $wth->email_check_none_left();
 }
 
 #############################################################################

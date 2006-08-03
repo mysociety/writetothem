@@ -76,3 +76,13 @@ Emails and the available variables are:
         representatives) or "the public" (House of Lords)
 
     The text of the constituent's letter is appended to the questionnaire.
+
+  - reply-auto-response
+
+    Sent to user if they reply to a confirmation or questionnaire email,
+    provided their reply quotes the relevant URL. 
+
+      - url, the URL in their confirmation/questoinnaire mail
+
+      - action, which, text depending on whether confirmation or questoinnaire
+

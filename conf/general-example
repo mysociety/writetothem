@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.32 2006-05-26 08:42:32 matthew Exp $
+ * $Id: general-example,v 1.33 2006-08-03 01:41:07 francis Exp $
  * 
  */
 
@@ -55,6 +55,9 @@ define('OPTION_ADMIN_URL', 'https://secure.../admin');
 
 // Domain name for emails to current website
 define('OPTION_EMAIL_DOMAIN', 'sometestdomain.writetothem.com');
+// Address for support email. TODO: Actually use this everywhere in code
+// (currently only used in place where needed for test suite)
+define('OPTION_CONTACT_EMAIL', 'team@'.OPTION_EMAIL_DOMAIN);
 // Prefix of return-path local part. All mail for EMAIL_PREFIX(.*)@EMAIL_DOMAIN
 // must be delivered to the bounce processing scripts.
 define('OPTION_EMAIL_PREFIX', 'fyr-');

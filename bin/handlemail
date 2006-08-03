@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.26 2006-05-10 12:27:36 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.27 2006-08-03 01:41:07 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -102,26 +102,23 @@ if (!$is_bounce_message) {
     } elsif ($return_path =~ m#<>#) {
         $is_bounce_message = 1;
     } else {
-        # This is not a bounce message. We pass it on to team@writetothem.com,
-        # and also send a patronising response about clicking the link.
+        # This is not a bounce message. We pass it on to contact email address
+        # (e.g. team@writetothem.com), and also send a patronising response
+        # about clicking the link.
         print_log('info', "message was not a bounce message");
         
-        # First, send this to team@writetothem.com.
-        if (mySociety::Util::EMAIL_SUCCESS
-                != mySociety::Util::send_email(join("\n", @lines) . "\n", $return_path, 'team@writetothem.com')) {
-            print_log('err', 'unable to forward non-bounce to team@writetothem.com; deferring');
-            exit(75);
-        }
-
         # Now see whether the email contains one of our URLs.
-        my $url;
+        my @urls;
         foreach (@lines) {
-            if (m#(http://www\.writetothem\.com/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
-                $url = $1;
-                last;
+            my $base_url = mySociety::Config::get('BASE_URL');
+            if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})# ||
+                m#(- If you HAVE(:? NOT)? had a reply, please click on the link below:)#) {
+                push @urls, $1;
             }
         }
+        my $url = join("\n\n", @urls);
 
+        my $forward = 0;
         if ($url) {
             print_log('info', "mail contains confirmation URL $url");
             my $h = dbh();
@@ -131,14 +128,27 @@ if (!$is_bounce_message) {
                                 (url, whenreceived)
                         values (?, ?)',
                         {}, $url, time())) {
-                # Have already sent an autoreply to this one.
+                # Have already sent an autoreply to this one, so forward instead
                 print_log('info', "have already sent one autoresponse for this confirm URL");
-                exit(0);
+                $forward = 1;
             }
         } else {
+            # No URL, so just forward rather than autoreply
+            $forward = 1;
+        }
+
+        if ($forward) {
+            # Forward this on to team@writetothem.com
+            if (mySociety::Util::EMAIL_SUCCESS
+                    != mySociety::Util::send_email(join("\n", @lines) . "\n", $return_path, mySociety::Config::get('CONTACT_EMAIL'))) {
+                print_log('err', 'unable to forward non-bounce to contact email address; deferring');
+                exit(75);
+            }
+
             exit(0);
         }
-        
+
+        # OK, we drop the message here, and send patronising reply instead
         print_log('info', "sending patronising reply");
 
         # Now we need to construct some text to send to them.
@@ -154,12 +164,12 @@ if (!$is_bounce_message) {
                     which => 'one of the links'
                 };
         }
+        $vv->{'url'} = $url;
 
         my $text = FYR::EmailTemplate::format(
                         FYR::Queue::email_template('reply-autoresponse'),
                         $vv
-                    )
-                    . "\n\n$url\n";
+                    );
 
         $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
 
