@@ -6,6 +6,16 @@ template_draw('header', $values);
 <h2>All done... We'll send your message now</h2>
 
 <div align="center">
+<? if ($values['recipient_via']) { ?>
+<p>Your message may be slow to deliver, because we do not have a direct contact
+address for <?=$values['recipient_name']?>. 
+    <? if ($values['recipient_type'] == 'HOC') { ?>
+        Instead we are sending the message via the House of Lords fax machine.
+    <? } else { ?>
+        Instead we are sending the message via the body to which they were elected.
+    <? } ?>
+</p>
+<? } ?>
 <p>In a fortnight, we'll send you an email to see if your representative replied.</p>
 <p>If for some reason we couldn't send your message
 to your representative, we will email you to tell you. Otherwise, you can sit
