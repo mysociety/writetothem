@@ -77,12 +77,25 @@ Emails and the available variables are:
 
     The text of the constituent's letter is appended to the questionnaire.
 
-  - reply-auto-response
+  - reply-autoresponse
 
     Sent to user if they reply to a confirmation or questionnaire email,
-    provided their reply quotes the relevant URL. 
+    and their reply does not quote the relevant URL or URLs.
 
-      - url, the URL in their confirmation/questoinnaire mail
+  - reply-autoresponse-confirm
+  
+    Sent to user if they reply to a confirmation or questionnaire email,
+    provided their reply quotes a confirmation URL.
 
-      - action, which, text depending on whether confirmation or questoinnaire
+      - confirm_url, the URL or URLs in their confirmation/questionnaire mail
+
+  - reply-autoresponse-questionnaire
+
+    Sent to user if they reply to a confirmation or questionnaire email,
+    provided their reply quotes both questionnaire URLs.
+
+      - yes_url, the URL for responding yes
+
+      - no_url, the URL for responding no
+
 

@@ -1,0 +1,12 @@
+This is an automatic response, we have NOT read your email.
+
+If you are trying to confirm your message so that we can send it, you cannot do
+that by replying to the email we sent -- instead, you MUST click on the link
+below, or copy-and-paste it into your web browser.
+
+<?=$values['confirm_url']?>
+
+If you have a question or comment about the site, please send an email to
+team@writetothem.com
+
+-- the WriteToThem.com team

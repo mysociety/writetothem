@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.27 2006-08-03 01:41:07 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.28 2006-08-03 10:36:40 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -107,29 +107,31 @@ if (!$is_bounce_message) {
         # about clicking the link.
         print_log('info', "message was not a bounce message");
         
-        # Now see whether the email contains one of our URLs.
-        my @urls;
+        # See whether the email contains one of our URLs.
+        my ($first_url, $confirm_url, $yes_url, $no_url);
         foreach (@lines) {
             my $base_url = mySociety::Config::get('BASE_URL');
-            if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})# ||
-                m#(- If you HAVE(:? NOT)? had a reply, please click on the link below:)#) {
-                push @urls, $1;
+            if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
+                my $url = $1;
+                $first_url = $url if !$first_url;
+                $confirm_url = $url if ($1 =~ m#/C/#);
+                $yes_url = $url if ($1 =~ m#/Y/#);
+                $no_url = $url if ($1 =~ m#/N/#);
             }
         }
-        my $url = join("\n\n", @urls);
 
         my $forward = 0;
-        if ($url) {
-            print_log('info', "mail contains confirmation URL $url");
+        if ($first_url) {
+            print_log('info', "mail contains first URL $first_url");
             my $h = dbh();
             local $h->{HandleError};
             if (!$h->do('
                         insert into confirmation_mail_autoreply
                                 (url, whenreceived)
                         values (?, ?)',
-                        {}, $url, time())) {
+                        {}, $first_url, time())) {
                 # Have already sent an autoreply to this one, so forward instead
-                print_log('info', "have already sent one autoresponse for this confirm URL");
+                print_log('info', "have already sent one autoresponse for this confirm/questionnaire URL");
                 $forward = 1;
             }
         } else {
@@ -152,22 +154,19 @@ if (!$is_bounce_message) {
         print_log('info', "sending patronising reply");
 
         # Now we need to construct some text to send to them.
+        my $template = 'reply-autoresponse';
         my $vv;
-        if ($url =~ m#/C/#) {
-            $vv = {
-                    action => 'confirm your message so that we can send it',
-                    which => 'the link'
-                };
-        } else {
-            $vv = {
-                    action => 'complete our questionnaire',
-                    which => 'one of the links'
-                };
+        if ($confirm_url) {
+            $template = 'reply-autoresponse-confirm';
+            $vv->{'confirm_url'} = $confirm_url;
+        } elsif ($yes_url && $no_url) {
+            $template = 'reply-autoresponse-questionnaire';
+            $vv->{'yes_url'} = $yes_url;
+            $vv->{'no_url'} = $no_url;
         }
-        $vv->{'url'} = $url;
 
         my $text = FYR::EmailTemplate::format(
-                        FYR::Queue::email_template('reply-autoresponse'),
+                        FYR::Queue::email_template($template),
                         $vv
                     );
 

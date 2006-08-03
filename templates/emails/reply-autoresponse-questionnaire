@@ -1,0 +1,23 @@
+This is an automatic response, we have NOT read your email.
+
+If you are trying to complete our questionnaire, you cannot do that by replying
+to the email we sent -- instead, you MUST click on one of the links below, or
+copy-and-paste it into your web browser.
+
+A few weeks ago we sent your letter to your representative.
+
+- If you HAVE had a reply (not just an acknowledgement), please
+click on the link below:
+
+    <?=$values['yes_url']?>
+
+- If you HAVE NOT had a reply, or you have only had an acknowledgement, please
+click on the link below:
+
+    <?=$values['no_url']?>
+
+If you feel that neither link is suitable, then please do not answer the
+questionnaire. If you have a question or comment about the site, please send an
+email to team@writetothem.com
+
+-- the WriteToThem.com team
