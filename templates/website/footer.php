@@ -10,8 +10,9 @@ mySociety</a>.
     '/about-qa'=>'Help',
     '/about-contact' => 'Contact WriteToThem.com',
     /* '/about-guidelines' => 'Guidelines for Campaigners', */  /* we don't get much campaign abuse any more, so prominent link not so needed? */
-    '/about-linktous' => 'Link to us',
+    '/lords' => 'Lords',
     '/stats' => 'Statistics',
+    '/about-linktous' => 'Link to us',
     '/about-copyright' => 'Copyright', /* for Affero GPL */
 );
 foreach ($links as $uri => $text) {
