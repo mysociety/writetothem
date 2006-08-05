@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.207 2006-08-03 10:56:13 francis Exp $
+# $Id: Queue.pm,v 1.208 2006-08-05 23:28:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -24,6 +24,8 @@ BEGIN {
 use Convert::Base32;
 use Crypt::CBC;
 use DBI;
+use Encode;
+use Encode::Byte;       # for cp1252
 use Error qw(:try);
 use Fcntl;
 use FindBin;
@@ -505,6 +507,7 @@ sub format_mimewords ($) {
     # significant, so we need to fold it in to one of them. Rather than having
     # some complicated state-machine driven by words, just encode the whole
     # line if it contains any non-ASCII characters.
+    # XXX should use the same adaptive logic as for the email bodies.
     utf8::encode($text); # turn to string of bytes
     if ($text =~ m#[\x00-\x1f\x80-\xff]#) {
         $text = MIME::Words::encode_mimeword($text, 'Q', 'utf-8');
@@ -624,6 +627,32 @@ sub format_email_body ($) {
     return $text;
 }
 
+# as_ascii_octets STRING
+# Given a UNICODE STRING, return a byte string giving that string's encoding
+# in ASCII, if it can be so encoded; or undef otherwise.
+sub as_ascii_octets ($) {
+    my $octets = as_utf8_octets($_[0]);
+    if ($octets !~ /[\x80-\xff]/) {
+        return $octets;
+    } else {
+        return undef;
+    }
+}
+
+# as_cp1252_octets STRING
+# Given a UNICODE STRING, return a byte string giving that string's encoding
+# in CP1252, if it can be so encoded; or undef otherwise.
+sub as_cp1252_octets ($) {
+    my $s = shift;
+    die "STRING is not valid ASCII/UTF-8" unless (utf8::valid($s));
+    my $out;
+    eval {
+        my $octets = encode('windows-1252', $s, Encode::FB_CROAK);
+        $out = $octets;
+    };
+    return $out;
+}
+
 # as_utf8_octets STRING
 # Given a UNICODE STRING, return a byte string giving that string's encoding
 # in UTF-8.
@@ -655,6 +684,29 @@ sub make_representative_email ($) {
                 email_template_params($msg, representative_url => '')
             );
     }
+
+    $bodytext .= "\n\n"
+            . format_email_body($msg)
+            . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+            . FYR::EmailTemplate::format(
+                email_template('footer'),
+                email_template_params($msg, representative_url => '') # XXX
+            );
+
+    my $bodyencoding = 'quoted-printable';  # See note in make_confirmation_email.
+    my $bodycharset = 'utf-8';
+
+    # Ugh. Some MUAs (i.e. Hotmail) don't handle UTF-8 properly. So try some
+    # simpler encodings first.
+    my $bodydata;
+    if (defined($bodydata = as_ascii_octets($bodytext))) {
+        $bodycharset = 'us-ascii';
+        $bodyencoding = '7bit';
+    } elsif (defined($bodydata = as_cp1252_octets($bodytext))) {
+        $bodycharset = 'windows-1252';
+    } else {
+        $bodydata = as_utf8_octets($bodytext);
+    }
     
     return MIME::Entity->build(
             From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
@@ -662,19 +714,9 @@ sub make_representative_email ($) {
             Subject => format_mimewords($subject),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            Type => 'text/plain; charset="utf-8"',
-            # See note in make_confirmation_email.
-            Encoding => 'quoted-printable',
-            Data => as_utf8_octets(
-                    $bodytext
-                    . "\n\n"
-                    . format_email_body($msg)
-                    . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
-                    . FYR::EmailTemplate::format(
-                        email_template('footer'),
-                        email_template_params($msg, representative_url => '') # XXX
-                    )
-                )
+            Type => qq(text/plain; charset="$bodycharset"),
+            Encoding => $bodyencoding,
+            Data => $bodydata
         );
 }
 
@@ -851,7 +893,7 @@ sub make_confirmation_email ($;$) {
                                 mySociety::Config::get('EMAIL_PREFIX'),
                                 mySociety::Config::get('EMAIL_DOMAIN'));
 
-    my $text = FYR::EmailTemplate::format(
+    my $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder' : 'confirm'),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
@@ -862,18 +904,41 @@ sub make_confirmation_email ($;$) {
     # we manually make that transformation. Note that we're assuming here that
     # the confirm URLs have no characters which need to be entity-encoded,
     # which is bad, evil and wrong but actually true in this case.
-    $text =~ s#(http://.+$)#<a href="$1">$1</a>#m
+    $bodytext =~ s#(http://.+$)#<a href="$1">$1</a>#m
         if ($msg->{sender_email} =~ m/\@aol\./i);
 
     # Append a separator and the text of the ms
-    $text .= "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+    $bodytext .= "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);
 
     # Add header if site in test mode
     my $reflecting_mails = mySociety::Config::get('FYR_REFLECT_EMAILS');
     if ($reflecting_mails) {
-        $text = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $text;
-    } 
+        $bodytext = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $bodytext;
+    }
+
+    # XXX Ideally we'd use the 'binary' encoding (pass through all characters
+    # unchanged, under the condition that no NULs appear) here; mail servers
+    # now either support it or know to transcode it into something else.
+    # However, there are MUAs so talentless (ahem IMP ahem) as to interpret
+    # 'Content-Transfer-Encoding: binary' as meaning that the message-part is a
+    # *binary attachment* and so refuse to display it to the user, making it
+    # difficult for them to click the confirm link. So we use (ugly)
+    # quoted-printable insted.
+    my $bodyencoding = 'quoted-printable';
+    my $bodycharset = 'utf-8';
+
+    # Ugh. Some MUAs (i.e. Hotmail) don't handle UTF-8 properly. So try some
+    # simpler encodings first.
+    my $bodydata;
+    if (defined($bodydata = as_ascii_octets($bodytext))) {
+        $bodycharset = 'us-ascii';
+        $bodyencoding = '7bit';
+    } elsif (defined($bodydata = as_cp1252_octets($bodytext))) {
+        $bodycharset = 'windows-1252';
+    } else {
+        $bodydata = as_utf8_octets($bodytext);
+    }
 
     return MIME::Entity->build(
             Sender => $confirm_sender,
@@ -882,19 +947,9 @@ sub make_confirmation_email ($;$) {
             Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            Type => 'text/plain; charset="utf-8"',
-            
-            # XXX Ideally we'd use the 'binary' encoding (pass through all
-            # characters unchanged, under the condition that no NULs appear)
-            # here; mail servers now either support it or know to transcode it
-            # into something else.  However, there are MUAs so talentless (ahem
-            # IMP ahem) as to interpret 'Content-Transfer-Encoding: binary' as
-            # meaning that the message-part is a *binary attachment* and so
-            # refuse to display it to the user, making it difficult for them to
-            # click the confirm link. So we use (ugly) quoted-printable insted.
-
-            Encoding => 'quoted-printable',
-            Data => as_utf8_octets($text)
+            Type => qq(text/plain; charset="$bodycharset"),
+            Encoding => $bodyencoding,
+            Data => $bodydata
         );
 }
 
