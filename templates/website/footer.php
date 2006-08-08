@@ -28,11 +28,5 @@ foreach ($links as $uri => $text) {
 print join(' | ', $footer);
 ?>
 </div>
-<?
-    /* User-tracking. */
-    global $track;
-    track_event($track);
-?>
 </body>
 </html>
-
