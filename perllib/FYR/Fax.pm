@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.28 2006-04-18 11:43:14 chris Exp $
+# $Id: Fax.pm,v 1.29 2006-08-08 11:52:45 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -590,6 +590,15 @@ again:
         my ($p2, $pid) = mySociety::Util::pipe_via(@efaxcmd, $wr);
         $wr->close();
         $p2->close();   # efax needs nothing on standard input.
+        
+        my $alarmfired = 0;
+        local $SIG{ALRM} = sub { kill(TERM => $pid); $alarmfired = 1; };
+
+        # Determine a timeout. From existing logfiles the average time to
+        # connect is 26s, and the time per page transmitted an additional 41s.
+        # Allow this amount plus five minutes.
+        my $timeout = 26 + scalar(@imgfiles) * 41 + 300;
+        alarm($timeout);
 
         # Read output from efax, and log it.
         while (defined(my $line = $rd->getline())) {
@@ -604,6 +613,12 @@ again:
             throw FYR::Fax::SoftError("read from efax: $!");
         }
         $rd->close();
+
+        if ($alarmfired) {
+            FYR::Queue::logmsg($id, 0, "timed out efax");
+        }
+
+        alarm(0);
 
         if (!defined(waitpid($pid, 0))) {
             throw FYR::Fax::SoftError("wait for efax termination: $!");
