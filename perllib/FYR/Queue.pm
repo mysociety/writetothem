@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.212 2006-08-09 14:46:02 chris Exp $
+# $Id: Queue.pm,v 1.213 2006-08-09 14:50:41 chris Exp $
 #
 
 package FYR::Queue;
@@ -880,7 +880,7 @@ sub make_confirmation_email ($;$) {
 
 # do_not_reply_sender
 # Return a do-not-reply sender address.
-sub do_no_reply_sender () {
+sub do_not_reply_sender () {
     our $s;
     $s ||= sprintf('%sDO-NOT-REPLY@%s',
                         mySociety::Config::get('EMAIL_PREFIX'),
