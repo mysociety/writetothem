@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.211 2006-08-09 14:43:14 chris Exp $
+# $Id: Queue.pm,v 1.212 2006-08-09 14:46:02 chris Exp $
 #
 
 package FYR::Queue;
@@ -843,14 +843,6 @@ sub make_confirmation_email ($;$) {
     }
     my $confirm_url = $url_start . '/C/' . $token;
 
-    # Note: (a) don't care about bounces from this mail (they result only from
-    # transient failures or abuse; but (b) we can't use a reply to confirm that
-    # a fax should be sent because a broken server which sends bounces to the
-    # From: address would then automatically confirm any email address.
-    my $confirm_sender = sprintf('%sDO-NOT-REPLY@%s',
-                                mySociety::Config::get('EMAIL_PREFIX'),
-                                mySociety::Config::get('EMAIL_DOMAIN'));
-
     my $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder' : 'confirm'),
                     email_template_params($msg, confirm_url => $confirm_url)
@@ -877,7 +869,7 @@ sub make_confirmation_email ($;$) {
 
 
     return mySociety::Email::construct_email({
-            From => [$confirm_sender, 'WriteToThem'],
+            From => [do_not_reply_sender(), 'WriteToThem'],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Please confirm that you want to send a message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
@@ -927,7 +919,7 @@ sub make_failure_email ($) {
                 . format_email_body($msg);
 
     return mySociety::Email::construct_email({
-            From => [$failure_sender, 'WriteToThem'],
+            From => [do_not_reply_sender(), 'WriteToThem'],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
@@ -959,10 +951,6 @@ sub make_questionnaire_email ($;$) {
     my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
     my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
 
-    my $questionnaire_sender = sprintf('%sDO-NOT-REPLY@%s',
-                                mySociety::Config::get('EMAIL_PREFIX'),
-                                mySociety::Config::get('EMAIL_DOMAIN'));
-
     my $text = FYR::EmailTemplate::format(
                     email_template('questionnaire'),
                     email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
@@ -983,7 +971,7 @@ sub make_questionnaire_email ($;$) {
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
     return mySociety::Email::construct_email({
-            From => [$questionnaire_sender, 'WriteToThem'],
+            From => [do_not_reply_sender(), 'WriteToThem'],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
