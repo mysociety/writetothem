@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.209 2006-08-09 13:52:18 chris Exp $
+# $Id: Queue.pm,v 1.210 2006-08-09 14:42:38 chris Exp $
 #
 
 package FYR::Queue;
@@ -32,8 +32,6 @@ use FindBin;
 use HTML::Entities;
 use IO::Socket;
 use Mail::RFC822::Address;
-use MIME::Entity;
-use MIME::Words;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
@@ -655,8 +653,8 @@ sub as_utf8_octets ($) {
 }
 
 # make_representative_email MESSAGE
-# Return a MIME::Entity object for the passed MESSAGE (hash of db fields),
-# suitable for immediate sending to the real recipient.
+# Return the on-the-wire text of an email for the passed MESSAGE (hash of db
+# fields), suitable for immediate sending to the real recipient.
 sub make_representative_email ($) {
     my ($msg) = (@_);
 
@@ -684,31 +682,14 @@ sub make_representative_email ($) {
                 email_template_params($msg, representative_url => '') # XXX
             );
 
-    my $bodyencoding = 'quoted-printable';  # See note in make_confirmation_email.
-    my $bodycharset = 'utf-8';
-
-    # Ugh. Some MUAs (i.e. Hotmail) don't handle UTF-8 properly. So try some
-    # simpler encodings first.
-    my $bodydata;
-    if (defined($bodydata = as_ascii_octets($bodytext))) {
-        $bodycharset = 'us-ascii';
-        $bodyencoding = '7bit';
-    } elsif (defined($bodydata = as_cp1252_octets($bodytext))) {
-        $bodycharset = 'windows-1252';
-    } else {
-        $bodydata = as_utf8_octets($bodytext);
-    }
-    
-    return MIME::Entity->build(
-            From => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            To => format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
-            Subject => format_mimewords($subject),
+    return mySociety::Email::construct_email({
+            From => [$msg->{sender_email}, $msg->{sender_name}],
+            To => [[$msg->{recipient_email}, $msg->{recipient_name}]],
+            Subject => $subject,
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            Type => qq(text/plain; charset="$bodycharset"),
-            Encoding => $bodyencoding,
-            Data => $bodydata
-        );
+            _body_ => $bodytext
+        });
 }
 
 
@@ -801,14 +782,15 @@ sub check_token ($$) {
 }
 
 # send_user_email ID DESCRIPTION MAIL
-# Send MAIL (should be a MIME::Entity object) to the user who submitted the
-# given message ID. DESCRIPTION says what the mail is, for instance
-# "confirmation" or "failure report". Logs an explanatory message and returns
-# one of the mySociety::Util::EMAIL_... codes.
+# Send MAIL (should be full text of an on-the-wire email) to the user who
+# submitted the given message ID. DESCRIPTION says what the mail is, for
+# instance "confirmation" or "failure report". All such messages are sent with
+# a do-not-reply sender. Logs an explanatory message and returns one of the
+# mySociety::Util::EMAIL_... codes.
 sub send_user_email ($$$) {
     my ($id, $descr, $mail) = @_;
     my $msg = message($id);
-    my $result = mySociety::Util::send_email($mail->stringify(), $mail->head()->get('Sender'), $msg->{sender_email});
+    my $result = mySociety::Util::send_email($mail, do_not_reply_sender(), $msg->{sender_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, 1, "sent $descr mail to $msg->{sender_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
@@ -861,10 +843,10 @@ sub email_template_params ($%) {
 }
 
 # make_confirmation_email MESSAGE [REMINDER]
-# Return a MIME::Entity object for the given MESSAGE (reference to hash of db
-# fields), suitable for sending to the constituent so that they can confirm
-# their email address. If REMINDER is true, this is the second and final mail
-# which will be sent.
+# Return the on-the-wire text of an email for the given MESSAGE (reference to
+# hash of db fields), suitable for sending to the constituent so that they can
+# confirm their email address. If REMINDER is true, this is the second and
+# final mail which will be sent.
 sub make_confirmation_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
@@ -908,40 +890,25 @@ sub make_confirmation_email ($;$) {
         $bodytext = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $bodytext;
     }
 
-    # XXX Ideally we'd use the 'binary' encoding (pass through all characters
-    # unchanged, under the condition that no NULs appear) here; mail servers
-    # now either support it or know to transcode it into something else.
-    # However, there are MUAs so talentless (ahem IMP ahem) as to interpret
-    # 'Content-Transfer-Encoding: binary' as meaning that the message-part is a
-    # *binary attachment* and so refuse to display it to the user, making it
-    # difficult for them to click the confirm link. So we use (ugly)
-    # quoted-printable insted.
-    my $bodyencoding = 'quoted-printable';
-    my $bodycharset = 'utf-8';
 
-    # Ugh. Some MUAs (i.e. Hotmail) don't handle UTF-8 properly. So try some
-    # simpler encodings first.
-    my $bodydata;
-    if (defined($bodydata = as_ascii_octets($bodytext))) {
-        $bodycharset = 'us-ascii';
-        $bodyencoding = '7bit';
-    } elsif (defined($bodydata = as_cp1252_octets($bodytext))) {
-        $bodycharset = 'windows-1252';
-    } else {
-        $bodydata = as_utf8_octets($bodytext);
-    }
-
-    return MIME::Entity->build(
-            Sender => $confirm_sender,
-            From => format_email_address('WriteToThem', $confirm_sender),
-            To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf('Please confirm that you want to send a message to %s', format_mimewords($msg->{recipient_name})),
+    return mySociety::Email::construct_email({
+            From => [$confirm_sender, 'WriteToThem'],
+            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+            Subject => "Please confirm that you want to send a message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            Type => qq(text/plain; charset="$bodycharset"),
-            Encoding => $bodyencoding,
-            Data => $bodydata
-        );
+            _body_ => $bodytext
+        });
+}
+
+# do_not_reply_sender
+# Return a do-not-reply sender address.
+sub do_no_reply_sender () {
+    our $s;
+    $s ||= sprintf('%sDO-NOT-REPLY@%s',
+                        mySociety::Config::get('EMAIL_PREFIX'),
+                        mySociety::Config::get('EMAIL_DOMAIN'));
+    return $s;
 }
 
 # send_confirmation_email ID [REMINDER]
@@ -953,19 +920,19 @@ sub send_confirmation_email ($;$) {
         unless (state($id) eq 'new' or state($id) eq 'pending');
     $reminder ||= 0;
     my $msg = message($id);
-    return send_user_email($id, 'confirmation' . ($reminder ? ' reminder' : ''), make_confirmation_email($msg, $reminder));
+    return send_user_email(
+                $id,
+                'confirmation' . ($reminder ? ' reminder' : ''),
+                make_confirmation_email($msg, $reminder)
+            );
 }
 
 # make_failure_email MESSAGE
-# Return a MIME::Entity object for the given MESSAGE (reference to hash of db
-# fields), suitable for sending to the constituent to warn them that their
-# message could not be delivered.
+# Return the on-the-wire text of an email for the given MESSAGE (reference to
+# hash of db fields), suitable for sending to the constituent to warn them that
+# their message could not be delivered.
 sub make_failure_email ($) {
     my ($msg) = @_;
-
-    my $failure_sender = sprintf('%sDO-NOT-REPLY@%s',
-                                mySociety::Config::get('EMAIL_PREFIX'),
-                                mySociety::Config::get('EMAIL_DOMAIN'));
 
     my $text = FYR::EmailTemplate::format(
                     email_template('failure'),
@@ -974,17 +941,13 @@ sub make_failure_email ($) {
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
                 . format_email_body($msg);
 
-    return MIME::Entity->build(
-            Sender => $failure_sender,
-            From => format_email_address('WriteToThem', $failure_sender),
-            To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf(q#Unfortunately, we couldn't send your message to %s#, format_mimewords($msg->{recipient_name})),
+    return mySociety::Email::construct_email({
+            From => [$failure_sender, 'WriteToThem'],
+            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+            Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-            'Message-ID' => email_message_id($msg->{id}),
-            Type => 'text/plain; charset="utf-8"',
-            Encoding => 'quoted-printable',
-            Data => as_utf8_octets($text)
-        );
+            'Message-ID' => email_message_id($msg->{id})
+        });
 }
 
 # send_failure_email ID
@@ -992,12 +955,17 @@ sub make_failure_email ($) {
 sub send_failure_email ($) {
     my ($id) = @_;
     my $msg = message($id);
-    return send_user_email($id, 'failure report', make_failure_email($msg));
+    return send_user_email(
+                $id,
+                'failure report',
+                make_failure_email($msg)
+            );
 }
 
 # make_questionnaire_email MESSAGE [REMINDER]
-# Return a MIME::Entity object for the given MESSAGE, asking the user to fill
-# in a questionnaire. If REMINDER is true, this is a reminder mail.
+# Return the on-the-wire text of an email for the given MESSAGE, asking the
+# user to fill in a questionnaire. If REMINDER is true, this is a reminder
+# mail.
 sub make_questionnaire_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
@@ -1029,18 +997,13 @@ sub make_questionnaire_email ($;$) {
     $text =~ s#(http://.+$)#<a href="$1">$1</a>#mg
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
-    return MIME::Entity->build(
-            Sender => $questionnaire_sender,
-            From => format_email_address('WriteToThem', $questionnaire_sender),
-            To => format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf('Did your %s reply to your letter?', $msg->{recipient_position}),
+    return mySociety::Email::construct_email({
+            From => [$questionnaire_sender, 'WriteToThem'],
+            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+            Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-            'Message-ID' => email_message_id($msg->{id}),
-            Type => 'text/plain; charset="utf-8"',
-            # See note in make_confirmation_mail
-            Encoding => 'quoted-printable',
-            Data => as_utf8_octets($text)
-        );
+            'Message-ID' => email_message_id($msg->{id})
+        });
 }
 
 # send_questionnaire_email ID [REMINDER]
@@ -1051,7 +1014,11 @@ sub send_questionnaire_email ($;$) {
     my $msg = message($id);
     die "attempt to send questionnaire for message $id while in state '" . state($id) . "' (should be 'sent')"
         unless (state($id) eq 'sent');
-    return send_user_email($id, 'questionnaire' . ($reminder ? ' reminder' : ''), make_questionnaire_email($msg, $reminder));
+    return send_user_email(
+                $id,
+                'questionnaire' . ($reminder ? ' reminder' : ''),
+                make_questionnaire_email($msg, $reminder)
+            );
 }
 
 
@@ -1067,7 +1034,7 @@ sub deliver_email ($) {
                             mySociety::Config::get('EMAIL_PREFIX'),
                             make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
-    my $result = mySociety::Util::send_email($mail->stringify(), $sender, $msg->{recipient_email});
+    my $result = mySociety::Util::send_email($mail, $sender, $msg->{recipient_email});
     if ($result == mySociety::Util::EMAIL_SUCCESS) {
         logmsg($id, 1, "delivered message by email to $msg->{recipient_email}");
     } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
