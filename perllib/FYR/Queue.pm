@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.210 2006-08-09 14:42:38 chris Exp $
+# $Id: Queue.pm,v 1.211 2006-08-09 14:43:14 chris Exp $
 #
 
 package FYR::Queue;
@@ -496,21 +496,6 @@ sub message ($;$) {
     } else {
         throw FYR::Error("No message '$id'.");
     }
-}
-
-# format_mimewords STRING
-# Return STRING, formatted for inclusion in an email header.
-sub format_mimewords ($) {
-    my ($text) = @_;
-    return mySociety::Email::format_mimewords($text);
-}
-
-# format_email_address NAME ADDRESS
-# Return a suitably MIME-encoded version of "NAME <ADDRESS>" suitable for use
-# in an email From:/To: header.
-sub format_email_address ($$) {
-    my ($name, $addr) = @_;
-    return mySociety::Email::format_email_address($name, $addr);
 }
 
 # EMAIL_COLUMNS
