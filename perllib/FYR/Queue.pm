@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.208 2006-08-05 23:28:40 chris Exp $
+# $Id: Queue.pm,v 1.209 2006-08-09 13:52:18 chris Exp $
 #
 
 package FYR::Queue;
@@ -44,6 +44,7 @@ use utf8;
 use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::DBHandle qw(dbh new_dbh);
+use mySociety::Email;
 use mySociety::MaPit;
 use mySociety::Util;
 use mySociety::VotingArea;
@@ -503,17 +504,7 @@ sub message ($;$) {
 # Return STRING, formatted for inclusion in an email header.
 sub format_mimewords ($) {
     my ($text) = @_;
-    # This is unpleasant. Whitespace which separates two encoded-words is not
-    # significant, so we need to fold it in to one of them. Rather than having
-    # some complicated state-machine driven by words, just encode the whole
-    # line if it contains any non-ASCII characters.
-    # XXX should use the same adaptive logic as for the email bodies.
-    utf8::encode($text); # turn to string of bytes
-    if ($text =~ m#[\x00-\x1f\x80-\xff]#) {
-        $text = MIME::Words::encode_mimeword($text, 'Q', 'utf-8');
-    }
-    utf8::decode($text);
-    return $text;
+    return mySociety::Email::format_mimewords($text);
 }
 
 # format_email_address NAME ADDRESS
@@ -521,7 +512,7 @@ sub format_mimewords ($) {
 # in an email From:/To: header.
 sub format_email_address ($$) {
     my ($name, $addr) = @_;
-    return sprintf('%s <%s>', format_mimewords($name), $addr);
+    return mySociety::Email::format_email_address($name, $addr);
 }
 
 # EMAIL_COLUMNS
