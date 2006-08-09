@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.213 2006-08-09 14:50:41 chris Exp $
+# $Id: Queue.pm,v 1.214 2006-08-09 15:37:47 chris Exp $
 #
 
 package FYR::Queue;
@@ -923,7 +923,8 @@ sub make_failure_email ($) {
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-            'Message-ID' => email_message_id($msg->{id})
+            'Message-ID' => email_message_id($msg->{id}),
+            _body_ => $text
         });
 }
 
@@ -975,7 +976,8 @@ sub make_questionnaire_email ($;$) {
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-            'Message-ID' => email_message_id($msg->{id})
+            'Message-ID' => email_message_id($msg->{id}),
+            _body_ => $text
         });
 }
 
