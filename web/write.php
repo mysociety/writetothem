@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.105 2006-07-24 08:13:58 matthew Exp $
+ * $Id: write.php,v 1.106 2006-08-09 14:53:38 francis Exp $
  *
  */
 
@@ -117,13 +117,13 @@ END;
 
     if ($fyr_postcode_editable) {
         // House of Lords
-        $form->addElement('text', 'pc', "Postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
-        $form->addRule('pc', 'Please enter your postcode', 'required', null, null);
-        $form->addRule('pc', 'Choose a valid postcode', new RulePostcode(), null, null);
+        $form->addElement('text', 'pc', "UK Postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+        $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
+        $form->addRule('pc', 'Choose a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', new RulePostcode(), null, null);
         $form->applyFilter('pc', 'trim');
     } else {
         // All other representatives (postcode fixed as must be in constituency)
-        $form->addElement('static', 'staticpc', 'Postcode:', htmlentities($fyr_postcode));
+        $form->addElement('static', 'staticpc', 'UK Postcode:', htmlentities($fyr_postcode));
     }
 
     $form->addElement('text', 'writer_email', "Email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
