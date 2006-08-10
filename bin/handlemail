@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.30 2006-08-03 13:13:40 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.31 2006-08-10 00:07:28 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -179,7 +179,7 @@ if (!$is_bounce_message) {
         # We generate this as a bounce.
         my $mail = MIME::Entity->build(
                         Sender => '<>',
-                        From => FYR::Queue::format_email_address("WriteToThem", $from),
+                        From => mySociety::Email::format_email_address("WriteToThem", $from),
                         To => $return_path,
                         Subject => 'Automatic reply to your message to WriteToThem',
                         Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),

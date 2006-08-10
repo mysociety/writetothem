@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.26 2006-08-03 12:22:05 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.27 2006-08-10 00:07:28 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -257,8 +257,8 @@ sub send_message_to_rep {
     call_fyrqd();
     # Click link in the confirmation email
     my $confirmation_email = $wth->email_get_containing(
-        '%To: '.name_n($who).' <'.email_n($who).'>'.
         '%Subject: Please confirm that you want to send a message to %'.$repname.
+        '%To: "'.name_n($who).'" <'.email_n($who).'>'.
         '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
         '%to confirm that you wish%');
     die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
@@ -278,9 +278,9 @@ sub check_delivered_to_rep {
 
     call_fyrqd();
     my $content = $wth->email_get_containing(
-        '%From: '.name_n($who).' <'.email_n($who).'>'.
-        '%To: %'.$repname.'% <'.email_n($who).'>'.
         '%Subject: Letter from % '.name_n($who).
+        '%To: "%'.$repname.'%" <'.email_n($who).'>'.
+        '%From: "'.name_n($who).'" <'.email_n($who).'>'.
         '%'.$extra_check.
         '%Signed with an electronic signature%');
 
@@ -322,8 +322,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-17');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
-        '%To: '.name_n(0).' <'.email_n(0).'>'.
         '%Subject: Did your MP reply to your letter?'.
+        '%To: "'.name_n(0).'" <'.email_n(0).'>'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 18, 24);
@@ -332,8 +332,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-24');
     call_fyrqd();
     $questionnaire_email = $wth->email_get_containing(
-        '%To: '.name_n(0).' <'.email_n(0).'>'.
         '%Subject: Did your MP reply to your letter?'.
+        '%To: "'.name_n(0).'" <'.email_n(0).'>'.
         '%Three weeks ago we sent your letter to David Howarth MP%');
 
     # Get links from questionnaire email
@@ -400,8 +400,8 @@ sub do_send_blocked_message {
     set_fyr_date('1990-07-08');
     call_fyrqd();
     my $confirmation_email = $wth->email_get_containing(
-        '%To: '.name_n(1).' <'.email_n(1).'>'.
         '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
+        '%To: "'.name_n(1).'" <'.email_n(1).'>'.
         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
 }
 
