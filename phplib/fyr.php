@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.41 2006-05-26 08:42:37 matthew Exp $
+ * $Id: fyr.php,v 1.42 2006-08-10 00:07:26 matthew Exp $
  * 
  */
 
@@ -201,7 +201,9 @@ function fyr_breadcrumbs($num, $type = 'default') {
 
 function fyr_display_advert($values) {
     global $track;
-    $advert_shown = crosssell_display_advert('wtt', $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
+    $advert_shown = 'none';
+    if (array_key_exists('sender_email', $values))
+        $advert_shown = crosssell_display_advert('wtt', $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
     $track = 'advert=' . $advert_shown;
 }
 
