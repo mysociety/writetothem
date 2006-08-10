@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.214 2006-08-09 15:37:47 chris Exp $
+# $Id: Queue.pm,v 1.215 2006-08-10 12:15:15 chris Exp $
 #
 
 package FYR::Queue;
@@ -1491,14 +1491,39 @@ sub process_queue ($$) {
                     &{$state_action{$state}}($email, $fax, $id);
                 }
             }
-        } catch FYR::Error with {
-            my $E = shift;
-            logmsg($id, 1, "error while processing message: $E");
         } catch Error with {
+            # We caught some kind of exception. First log the error and freeze
+            # the message, but catch any exception that might occur while we
+            # do. But it's possible that the error is a transient database
+            # error, so try to connect to the database anew to do this. Errors
+            # of type FYR::Error are "expected" (we throw them ourselves);
+            # anything else we regard as "unexpected" and allow to propagate
+            # further (presumably killing this fyrqd child process).
             my $E = shift;
-            logmsg($id, 1, "unexpected error (type " . ref($E) . ") while processing message: $E");
-            $E->throw();
+            my $msg;
+            if ($E->isa('FYR::Error')) {
+                $msg = "error while processing message: $E";
+            } else {
+                $msg = "unexpected error (type " . ref($E) . ") while processing message: $E";
+            }
+            try {
+                dbh()->commit();    # avoid potential deadlock against freeze
+            } catch Error with {
+                # "Never test for an error condition you don't know how to
+                # handle."
+            };
+            try {
+                logmsg($id, 1, $msg);
+                my $dbh = new_dbh();
+                $dbh->do("update message set frozen = 't' where id = ?", {}, $id);
+                $dbh->commit();
+                logmsg($id, 1, "froze message following error");
+            } catch Error with {
+                # Again, not much we can do here.
+            };
+            $E->throw() if (!$E->isa('FYR::Error'));
         } finally {
+            # Actually superfluous if we caught the error now.
             dbh()->commit();
         };
     }
