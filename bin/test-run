@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.27 2006-08-10 00:07:28 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.28 2006-08-10 08:01:53 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -278,7 +278,7 @@ sub check_delivered_to_rep {
 
     call_fyrqd();
     my $content = $wth->email_get_containing(
-        '%Subject: Letter from % '.name_n($who).
+        '%Subject: Letter from %'.name_n($who).
         '%To: "%'.$repname.'%" <'.email_n($who).'>'.
         '%From: "'.name_n($who).'" <'.email_n($who).'>'.
         '%'.$extra_check.
@@ -563,8 +563,8 @@ sub do_send_lords_message {
     set_fyr_date('1992-01-17');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
-        '%To: '.name_n(50).' <'.email_n(50).'>'.
         '%Subject: Did your Lord reply to your letter?'.
+        '%To: "'.name_n(50).'" <'.email_n(50).'>'.
         '%Two weeks ago we sent your letter to Lord Rogers of Riverside%');
     $wth->email_check_none_left();
 
