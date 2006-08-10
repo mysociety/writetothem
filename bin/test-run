@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.28 2006-08-10 08:01:53 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.29 2006-08-10 10:53:51 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -115,7 +115,7 @@ die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
-sub email_n { my $n = shift; return "fyrharness+$n\@" . mySociety::Config::get('EMAIL_DOMAIN'); }
+sub email_n { my $n = shift; return ($n == 666 ? "this-will-bounce\@" : "fyrharness+$n\@") . mySociety::Config::get('EMAIL_DOMAIN'); }
 sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 #############################################################################
@@ -255,21 +255,29 @@ sub send_message_to_rep {
 
     # Wait for confirmation email to arrive
     call_fyrqd();
-    # Click link in the confirmation email
-    my $confirmation_email = $wth->email_get_containing(
-        '%Subject: Please confirm that you want to send a message to %'.$repname.
-        '%To: "'.name_n($who).'" <'.email_n($who).'>'.
-        '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
-        '%to confirm that you wish%');
-    die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
-    print "Message confirm URL is $1\n" if $verbose > 1;
-    $wth->email_check_url($1);
-    $wth->browser_get($1);
-
-    if ($cobrand && $cobrand eq "animalaid") {
-        # TODO: Add check when their site is ready
+    if ($who == 666) {
+        # Mail to and from same deliberately invalid address, so will not arrive
+        $wth->email_check_none_left();
+        # Confirm via database instead, as what we really want to test is MP bounce
+        dbh()->do("update message set state = 'ready' where sender_email = ?", {}, email_n($who));
+        dbh()->commit();
     } else {
-        $wth->browser_check_contents("All done... We'll send your message now");
+        # Click link in the confirmation email
+        my $confirmation_email = $wth->email_get_containing(
+            '%Subject: Please confirm that you want to send a message to %'.$repname.
+            '%To: "'.name_n($who).'" <'.email_n($who).'>'.
+            '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
+            '%to confirm that you wish%');
+        die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
+        print "Message confirm URL is $1\n" if $verbose > 1;
+        $wth->email_check_url($1);
+        $wth->browser_get($1);
+    
+        if ($cobrand && $cobrand eq "animalaid") {
+            # TODO: Add check when their site is ready
+        } else {
+            $wth->browser_check_contents("All done... We'll send your message now");
+        }
     }
 }
 
@@ -410,6 +418,24 @@ sub do_send_blocked_message {
 sub do_test_bounce_stuff {
     set_base_url("");
     set_fyr_date('1990-08-30');
+
+    # TODO: This doesn't work yet. It is meant to test failing bad contacts.
+    # Really we need to turn off the test mode, and have a real representative
+    # in DaDem that can be failed. That's pretty complicated to set up - need
+    # a test DaDem database as well, really.
+    #send_message_to_rep(666, # invalid email address, for reflected email 
+    #                         # (send_message_to_rep has a hack to do confirm)
+    #    'CB23QJ', # The Guildhall, Cambridege 
+    #    'David Howarth', 
+    #    { 
+    #        writer_address1 => '82 Mouse Road',
+    #        writer_town => 'Cheeseland',
+    #        writer_county => 'Emmentalshire',
+    #        writer_phone => undef,
+    #        body => "I think that more cheese should be sent to more mice. How are the mignon little souris meant to be happy when they aren't fully fed with the freshest, creamiest, tastiest coagulated, separated milk curd?"
+    #    } 
+    #);
+    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road');
 
     # Pretend to be somebody replying to a questionnaire message
     # - the message is just hard wired here as that is easiest.
