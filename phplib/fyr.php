@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.42 2006-08-10 00:07:26 matthew Exp $
+ * $Id: fyr.php,v 1.43 2006-08-10 09:35:20 francis Exp $
  * 
  */
 
@@ -189,10 +189,13 @@ function fyr_breadcrumbs($num, $type = 'default') {
     $str = '<ol id="breadcrumbs">';
     for ($i = 0; $i < sizeof($steps); ++$i) {
         if ($i == $num - 1)
-            $str .= "<li class=\"hilight\">";
+            $str .= "<li class=\"hilight\"><em>";
         else
             $str .= "<li>";
-        $str .= ($i + 1) . ". " . htmlspecialchars($steps[$i]) . "</li>";
+        $str .= ($i + 1) . ". " . htmlspecialchars($steps[$i]);
+        if ($i == $num - 1)
+            $str .= "</em>";
+        $str .= "</li>";
     }
     $str .= "</ol>";
     return $str;
