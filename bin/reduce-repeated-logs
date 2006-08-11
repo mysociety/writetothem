@@ -1,17 +1,26 @@
 #!/usr/bin/perl -w
 #
-# reduce-repeated-logs
+# reduce-repeated-logs:
+# Finds messages with lots of duplicated log lines. Merges the adjacent
+# duplicates into one log line, with number of repetitions after it.
+#
+# e.g.
+# unexpected error (type RABX::Error::User) while processing message: Representative ID '13531' not found (repeated 16138 times)
 #
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.1 2006-08-11 11:31:41 francis Exp $';
+# TODO:
+# Cope with messages which have alternating lines repeated many times.
+
+my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.2 2006-08-11 13:38:04 francis Exp $';
 
 use strict;
 require 5.8.0;
 
-# Number of lines which log must be longer than to flag
+# Number of lines which must exactly repeat within a message for this script to
+# look for adjacent duplicates within that message.
 my $low = 1000;
 
 # Horrible boilerplate to set up appropriate library paths.
