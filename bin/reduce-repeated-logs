@@ -1,0 +1,110 @@
+#!/usr/bin/perl -w
+#
+# reduce-repeated-logs
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.1 2006-08-11 11:31:41 francis Exp $';
+
+use strict;
+require 5.8.0;
+
+# Number of lines which log must be longer than to flag
+my $low = 1000;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use Data::Dumper;
+use POSIX qw(strftime);
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+#DBI->trace(1);
+use FYR;
+
+# Takes an array of ids of duplicate message_log items0, and an extra count to
+# add to this. Deletes all of the message except the last one, and appends
+# total count to that.
+sub merge_messages {
+    my ($dups, $c_extra) = @_;
+    my @dups = @$dups;
+    my $c = scalar(@dups) + $c_extra;
+    my $last = pop @dups;
+    #print Dumper(\@dups);
+    #print "count: " . $c . "\n";
+    #print "last: " . $last . "\n";
+    while (scalar(@dups) > 5000) {
+        my @start = @dups[0..5000];
+        @dups = @dups[5001..$#dups];
+        dbh()->do("delete from message_log where order_id in (". join(",", @start) . ")");
+    }
+    dbh()->do("delete from message_log where order_id in (". join(",", @dups) . ")");
+    dbh()->do("update message_log set message = 
+            (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
+            || ' (repeated $c times)') where order_id = ?", {}, $last);
+    dbh()->commit();
+}
+
+# Takes a message id, and merges adjacent duplicate message_log items for that message.
+sub reduce_log($) {
+    my ($message_id) = @_;
+    my $stm = dbh()->prepare("
+        select order_id, exceptional, whenlogged, state, message, editor
+        from message_log where message_id = ? order by order_id");
+    $stm->execute($message_id);
+    my ($p_exceptional, $p_whenlogged, $p_state, $p_message, $p_editor);
+    my @dups;
+    my $c_extra = 0;
+    while (my ($order_id, $exceptional, $whenlogged, $state, $message, $editor) = $stm->fetchrow_array()) {
+        $editor = '' if (!$editor);
+        if ($message =~ m/^(.+) \(repeated (\d+) times\)$/) {
+            $message = $1;
+            $c_extra += ($2 - 1);
+        }
+        #print scalar(@dups) . " $order_id $exceptional $whenlogged $state $message $editor\n";
+
+        if (!$p_state || ($p_exceptional eq $exceptional && $p_whenlogged <= $whenlogged &&
+            $p_state eq $state && $p_message eq $message && $p_editor eq $editor)) {
+            push @dups, $order_id;
+        } else {
+            if (scalar(@dups) > 1) {
+                merge_messages(\@dups, $c_extra);
+            }
+            @dups = ($order_id);
+            $c_extra = 0;
+        }
+        $p_exceptional = $exceptional;
+        $p_whenlogged = $whenlogged;
+        $p_state = $state;
+        $p_message = $message;
+        $p_editor = $editor;
+    }
+    if (scalar(@dups) > 1) {
+        merge_messages(\@dups, $c_extra);
+    }
+}
+
+#reduce_log('fd6967903f554f0e9b0e');
+#exit;
+
+# Read everything with lots of duplicates, using heuristic here
+my $st = dbh()->prepare("select count(*) as c, message_id, message
+    from message_log group by message_id, message having count(*) > $low order by c desc");
+$st->execute();
+while (my ($count, $message_id, $message) = $st->fetchrow_array()) {
+    my ($total_rows) = dbh()->selectrow_array("select count(*) from message_log");
+    print "Total rows: $total_rows\n"; 
+
+    # Do proper merging of adjacent items
+    print "Reducing $message_id $message...\n";
+    reduce_log($message_id);
+}
+
