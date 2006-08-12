@@ -14,7 +14,7 @@
 # TODO:
 # Cope with messages which have alternating lines repeated many times.
 
-my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.2 2006-08-11 13:38:04 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.3 2006-08-12 15:09:50 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -39,7 +39,7 @@ use mySociety::DBHandle qw(dbh);
 #DBI->trace(1);
 use FYR;
 
-# Takes an array of ids of duplicate message_log items0, and an extra count to
+# Takes an array of ids of duplicate message_log items, and an extra count to
 # add to this. Deletes all of the message except the last one, and appends
 # total count to that.
 sub merge_messages {
@@ -61,6 +61,33 @@ sub merge_messages {
             || ' (repeated $c times)') where order_id = ?", {}, $last);
     dbh()->commit();
 }
+ 
+# Takes an array of ids of alternating duplicate message_log items, and
+# merges them together, much like merge_messages for non-alternating repeats.
+sub merge_messages_pairs {
+    my ($dups, $c_extra) = @_;
+    my @dups = @$dups;
+    my $c = (scalar(@dups) + $c_extra) / 2;
+    my $last1 = pop @dups;
+    my $last2 = pop @dups;
+#    print Dumper(\@dups);
+#    print "count: $c\n";
+#    print "last1: $last1 last2: $last2\n";
+#    exit;
+    while (scalar(@dups) > 5000) {
+        my @start = @dups[0..5000];
+        @dups = @dups[5001..$#dups];
+        dbh()->do("delete from message_log where order_id in (". join(",", @start) . ")");
+    }
+    dbh()->do("delete from message_log where order_id in (". join(",", @dups) . ")");
+    dbh()->do("update message_log set message = 
+            (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
+            || ' (repeated in pair about $c times)') where order_id = ?", {}, $last1);
+    dbh()->do("update message_log set message = 
+            (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
+            || ' (repeated in pair about $c times)') where order_id = ?", {}, $last2);
+    dbh()->commit();
+}
 
 # Takes a message id, and merges adjacent duplicate message_log items for that message.
 sub reduce_log($) {
@@ -70,39 +97,70 @@ sub reduce_log($) {
         from message_log where message_id = ? order by order_id");
     $stm->execute($message_id);
     my ($p_exceptional, $p_whenlogged, $p_state, $p_message, $p_editor);
+    my $p_p_message;
     my @dups;
     my $c_extra = 0;
+    my $matching_pairs = 0;
     while (my ($order_id, $exceptional, $whenlogged, $state, $message, $editor) = $stm->fetchrow_array()) {
         $editor = '' if (!$editor);
-        if ($message =~ m/^(.+) \(repeated (\d+) times\)$/) {
+        if ($message =~ m/^(.+) \(repeated (?:in pair about )?(\d+) times\)$/) {
             $message = $1;
-            $c_extra += ($2 - 1);
+            my $c_message = $2 - 1;
+            $c_extra += ($c_message - 1);
         }
         #print scalar(@dups) . " $order_id $exceptional $whenlogged $state $message $editor\n";
 
-        if (!$p_state || ($p_exceptional eq $exceptional && $p_whenlogged <= $whenlogged &&
-            $p_state eq $state && $p_message eq $message && $p_editor eq $editor)) {
-            push @dups, $order_id;
-        } else {
-            if (scalar(@dups) > 1) {
+        # See if meta data same as last message
+        my $got = 0;
+        if (!$p_state || 
+            (   $p_exceptional eq $exceptional && 
+                $p_whenlogged <= $whenlogged &&
+                $p_state eq $state && 
+                $p_editor eq $editor)
+            ) {
+                if (!$p_state || (!$matching_pairs && $p_message eq $message)) {
+                    # Either at beginning, or message same as last one
+                    push @dups, $order_id;
+                    $got = 1;
+                } elsif (!$matching_pairs && scalar(@dups) == 1) {
+                    # Start looking for pair matches
+                    $matching_pairs = 1;
+                    push @dups, $order_id;
+                    $got = 1;
+                } elsif ($matching_pairs && $p_p_message eq $message) {
+                    # Message same as one two ago
+                    push @dups, $order_id;
+                    $got = 1;
+                }
+        } 
+        if (!$got) {
+            # If we got more than one row, then merge in 
+            if (!$matching_pairs && scalar(@dups) >= 2) {
                 merge_messages(\@dups, $c_extra);
+            } elsif ($matching_pairs && scalar(@dups) >= 8) { # higher tolerance for pairs
+                merge_messages_pairs(\@dups, $c_extra);
             }
+            # Reset
             @dups = ($order_id);
             $c_extra = 0;
+            $matching_pairs = 0;
         }
+        $p_p_message = $p_message;
         $p_exceptional = $exceptional;
         $p_whenlogged = $whenlogged;
         $p_state = $state;
         $p_message = $message;
         $p_editor = $editor;
     }
-    if (scalar(@dups) > 1) {
+    if (!$matching_pairs && scalar(@dups) >= 2) {
         merge_messages(\@dups, $c_extra);
+    } elsif ($matching_pairs && scalar(@dups) >= 8) { # higher tolerance for pairs
+        merge_messages_pairs(\@dups, $c_extra);
     }
 }
 
-#reduce_log('fd6967903f554f0e9b0e');
-#exit;
+reduce_log('7f715e54e05dd8428f8a');
+exit;
 
 # Read everything with lots of duplicates, using heuristic here
 my $st = dbh()->prepare("select count(*) as c, message_id, message
