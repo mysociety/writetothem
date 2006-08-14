@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.106 2006-08-09 14:53:38 francis Exp $
+ * $Id: write.php,v 1.107 2006-08-14 08:22:13 matthew Exp $
  *
  */
 
@@ -157,7 +157,7 @@ END;
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
-    $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message >>');
+    $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message');
     $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
 
     return $form;
@@ -167,8 +167,8 @@ function buildPreviewForm() {
     global $fyr_values;
     $form = '<form method="post" action="write" id="previewForm" name="previewForm"><div id="buttonbox">';
     $form .= add_all_variables_hidden_nonQF($fyr_values);
-    $form .= '<input type="submit" name="submitWrite" value="&lt;&lt; Edit this message">
-<input type="submit" name="submitSendFax" value="Continue &gt;&gt;">
+    $form .= '<input type="submit" name="submitWrite" value="Re-edit this message">
+<input type="submit" name="submitSendFax" value="Send Message">
 </div></form>';
     return $form;
 }
