@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.53 2006-08-01 14:02:42 francis Exp $
+ * $Id: queue.php,v 1.54 2006-08-15 17:31:31 francis Exp $
  *
  */
 
@@ -277,10 +277,11 @@ function msg_admin_get_message($id) {
     return $result;
 }
 
-/* msg_admin_get_stats
+/* msg_admin_get_stats [AMOUNT]
 
-  Returns a hash of statistics about the queue. */
-function msg_admin_get_stats() {
+  Returns a hash of statistics about the queue. AMOUNT is not present, or 0
+  to get just basic stats, 1 to get more details (slower). */
+function msg_admin_get_stats($amount = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.admin_get_stats', $params);

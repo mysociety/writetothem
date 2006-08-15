@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.17 2006-06-19 12:30:13 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.18 2006-08-15 17:31:29 francis Exp $
  *
  */
 
@@ -65,7 +65,7 @@ to stdout.
 }
 
 verbose("getting admin statistics");
-$stats = msg_admin_get_stats();
+$stats = msg_admin_get_stats(0);
 verbose("getting popular referrers");
 $freq_referrers_week = msg_admin_get_popular_referrers(60 * 60 * 24 * 7);
 

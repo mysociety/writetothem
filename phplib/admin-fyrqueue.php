@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.108 2006-08-15 16:52:12 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.109 2006-08-15 17:31:31 francis Exp $
  * 
  */
 
@@ -627,7 +627,7 @@ another way, if you like.
             }
          } elseif ($view == 'statistics') {
             // Display general statistics
-            $stats = msg_admin_get_stats();
+            $stats = msg_admin_get_stats(1);
             if (msg_get_error($stats)) {
                 print "Error contacting queue:";
                 print_r($stats);
@@ -659,7 +659,7 @@ another way, if you like.
 <h2>Messages in each state by type (created in last week)</h2>
 <? $this->_display_state_table($stats, "week "); ?>
 <h2>Messages in each state by type (created in last four weeks)</h2>
-<? $this->_display_state_table($stats, "fourweek "); ?>
+<? $this->_display_state_table($stats, "four "); ?>
 <h2>Messages in each state by type (all time)</h2>
 <? $this->_display_state_table($stats, "alltime "); ?>
 
