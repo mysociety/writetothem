@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.106 2006-07-25 18:13:51 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.107 2006-08-15 14:40:31 francis Exp $
  * 
  */
 
@@ -381,8 +381,12 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
             msg_check_error($result);
             print "<p><b><i>Note added to message $id</i></b></p>";
             $redirect = true;
+        } else if (get_http_var('body')) {
+            $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message in admin interface');
+            msg_check_error($result);
+            print "<p><b><i>Logged that you are viewing body of message $id</i></b></p>";
         }
-        return $redirect;
+    return $redirect;
     }
 
     function display($self_link) {
