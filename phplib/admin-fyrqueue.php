@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.107 2006-08-15 14:40:31 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.108 2006-08-15 16:52:12 francis Exp $
  * 
  */
 
@@ -389,6 +389,81 @@ width=100%><tr><th>Time</th><th>ID</th><th>State</th><th>Event</th></tr>
     return $redirect;
     }
 
+    function _display_state_table($stats, $prefix) {
+?>
+<table border=1>
+<?
+        $t = array();
+        $types = array();
+        $state_totals = array();
+        $type_totals = array();
+        global $state_help_notes_map;
+        foreach ($stats as $k=>$v) {
+            if (stristr($k, $prefix)) {
+                list($type, $state) = split(" ", str_replace($prefix, "", $k));
+                $t[$state][$type] = $v;
+                if (!array_key_exists($state, $state_totals)) $state_totals[$state] = 0;
+                if (!array_key_exists($type, $type_totals)) $type_totals[$type] = 0;
+                $state_totals[$state] += $v;
+                $type_totals[$type] += $v;
+                if (!array_key_exists($state, $state_help_notes_map))
+                    die("missing entry from state_help_notes_map '$state'");
+                $types[$type] = 1;
+            }
+        }
+        $states = array_keys($state_help_notes_map);
+        $types = array_keys($types);
+        sort($types);
+        print "<tr><td>&nbsp;</td>";
+        foreach ($states as $state) {
+            print "<td><b>";
+            print add_tooltip($state, $this->state_help_notes($state));
+            print "</b></td>";
+        }
+        print "<td><b>Total</b></td>";
+        print "</tr>";
+        global $va_type_name, $va_inside;
+        foreach ($types as $type) {
+            print "<tr>";
+            print "<td><b>";
+            if (array_key_exists($type, $va_inside))
+                print $va_type_name[$va_inside[$type]];
+            print " (".$type.")";
+            print "</b></td>";
+            foreach ($states as $state) {
+                print "<td style=\"text-align: right\">";
+                if (array_key_exists($state, $t)) {
+                    if (array_key_exists($type, $t[$state])) {
+                        print $t[$state][$type];
+                    }
+                }
+                print "</td>";
+            }
+            print "<td style=\"text-align: right\"><b>";
+            print $type_totals[$type];
+            print "</b></td>";
+            print "</tr>\n";
+        }
+        print "<tr><td><b>Total:</b></td>";
+        foreach ($states as $state) {
+            print "<td style=\"text-align: right\"><b>";
+            if (array_key_exists($state, $state_totals))
+                print $state_totals[$state];
+            else
+                print "&nbsp;";
+            print "</b></td>";
+        }
+        $type_grand_total = array_sum(array_values($type_totals));
+        $state_grand_total = array_sum(array_values($state_totals));
+        if ($type_grand_total != $state_grand_total)
+            die("type_grand_total != state_grand_total");
+        print "<td><b>".$type_grand_total."</b></td>";
+        print "</tr>";
+?>
+</table>
+<?
+    }
+
     function display($self_link) {
         $this->self_link = $self_link;
 
@@ -579,78 +654,14 @@ another way, if you like.
 <b><?=$stats["created_24"]?></b> new in last day,
 <b><?=$stats["created_168"]?></b> new in last week
 </p>
+<h2>Messages in each state by type (created in last day)</h2>
+<? $this->_display_state_table($stats, "day "); ?>
+<h2>Messages in each state by type (created in last week)</h2>
+<? $this->_display_state_table($stats, "week "); ?>
+<h2>Messages in each state by type (created in last four weeks)</h2>
+<? $this->_display_state_table($stats, "fourweek "); ?>
 <h2>Messages in each state by type (all time)</h2>
-<table border=1>
-<?
-    $t = array();
-    $types = array();
-    $state_totals = array();
-    $type_totals = array();
-    global $state_help_notes_map;
-    foreach ($stats as $k=>$v) {
-        if (stristr($k, "both ")) {
-            list($type, $state) = split(" ", str_replace("both ", "", $k));
-            $t[$state][$type] = $v;
-            if (!array_key_exists($state, $state_totals)) $state_totals[$state] = 0;
-            if (!array_key_exists($type, $type_totals)) $type_totals[$type] = 0;
-            $state_totals[$state] += $v;
-            $type_totals[$type] += $v;
-            if (!array_key_exists($state, $state_help_notes_map))
-                die("missing entry from state_help_notes_map '$state'");
-            $types[$type] = 1;
-        }
-    }
-    $states = array_keys($state_help_notes_map);
-    $types = array_keys($types);
-    sort($types);
-    print "<tr><td>&nbsp;</td>";
-    foreach ($states as $state) {
-        print "<td><b>";
-        print add_tooltip($state, $this->state_help_notes($state));
-        print "</b></td>";
-    }
-    print "<td><b>Total</b></td>";
-    print "</tr>";
-    global $va_type_name, $va_inside;
-    foreach ($types as $type) {
-        print "<tr>";
-        print "<td><b>";
-        print $va_type_name[$va_inside[$type]];
-        print " (".$type.")";
-        print "</b></td>";
-        foreach ($states as $state) {
-            print "<td style=\"text-align: right\">";
-            if (array_key_exists($state, $t)) {
-                if (array_key_exists($type, $t[$state])) {
-                    print $t[$state][$type];
-                }
-            }
-            print "</td>";
-        }
-        print "<td style=\"text-align: right\"><b>";
-        print $type_totals[$type];
-        print "</b></td>";
-        print "</tr>\n";
-    }
-    print "<tr><td><b>Total:</b></td>";
-    foreach ($states as $state) {
-        print "<td style=\"text-align: right\"><b>";
-        if (array_key_exists($state, $state_totals))
-            print $state_totals[$state];
-        else
-            print "&nbsp;";
-        print "</b></td>";
-    }
-    $type_grand_total = array_sum(array_values($type_totals));
-    $state_grand_total = array_sum(array_values($state_totals));
-    if ($type_grand_total != $state_grand_total)
-        die("type_grand_total != state_grand_total");
-    if ($type_grand_total != $stats['message_count'])
-        die("type_grand_total != message_count");
-    print "<td><b>".$type_grand_total."</b></td>";
-    print "</tr>";
-?>
-</table>
+<? $this->_display_state_table($stats, "alltime "); ?>
 
 <h2>Top referrers in last day</h2>
 <table border=1>

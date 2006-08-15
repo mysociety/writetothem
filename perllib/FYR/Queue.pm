@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.215 2006-08-10 12:15:15 chris Exp $
+# $Id: Queue.pm,v 1.216 2006-08-15 16:52:11 francis Exp $
 #
 
 package FYR::Queue;
@@ -1829,7 +1829,25 @@ sub admin_get_stats () {
     my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message group by recipient_type, state', {});
     foreach (@$rows) {
         my ($type, $state, $count) = @$_; 
-        $ret{"both $type $state"} = $count;
+        $ret{"alltime $type $state"} = $count;
+    }
+
+    my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - DAY);
+    foreach (@$rows) {
+        my ($type, $state, $count) = @$_; 
+        $ret{"day $type $state"} = $count;
+    }
+
+    my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - WEEK);
+    foreach (@$rows) {
+        my ($type, $state, $count) = @$_; 
+        $ret{"week $type $state"} = $count;
+    }
+
+    my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - 4 * WEEK);
+    foreach (@$rows) {
+        my ($type, $state, $count) = @$_; 
+        $ret{"fourweek $type $state"} = $count;
     }
 
     $ret{message_count} = dbh()->selectrow_array('select count(*) from message', {});
