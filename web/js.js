@@ -1,5 +1,5 @@
 /* Can be removed when Safari supports CSS counters... */
-if (navigator.vendor.indexOf('Apple') != -1) {
+if (navigator && navigator.vendor && navigator.vendor.indexOf('Apple') != -1) {
     window.onload = function(){
         var bc = document.getElementById('breadcrumbs');
         if (bc) {
