@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.29 2006-08-08 11:52:45 chris Exp $
+# $Id: Fax.pm,v 1.30 2006-08-18 22:39:32 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -499,7 +499,7 @@ again:
                     FYR::Queue::logmsg($id, 1, "lock file contains \"$pid\", not a PID; assuming stale");
                     $again = 1;
                 } elsif (!kill(0, $pid) && !$!{EPERM}) {
-                    FYR::Queue::logmsg($id, 1, "stale lock file (refers to \"$pid\", which is not running");
+                    FYR::Queue::logmsg($id, 1, "stale lock file (refers to \"$pid\", which is not running)");
                     $again = 1;
                 }
 
