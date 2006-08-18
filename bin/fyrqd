@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.16 2006-04-18 11:53:26 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.17 2006-08-18 23:00:39 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -61,9 +61,10 @@ sub run_daemon ($$$$) {
 
     # If the whole daemon is just starting up, then force an immediate queue
     # run.
+    my $nactions = 0;
     if ($seq == 0) {
         print_log('info', "first process running queue");
-        FYR::Queue::process_queue($email, $fax);
+        $nactions = FYR::Queue::process_queue($email, $fax, \$foad);
         print_log('info', "queue run completed");
     }
 
@@ -73,6 +74,8 @@ sub run_daemon ($$$$) {
     my $iter = 0;
     while (!$foad and $iter < 1000) {
         my $doit = 1;
+        # Continue immediately if we've been notified of a new message, or if
+        # the last queue run took any actions.
         if (defined($sel)) {
             if ($sel->can_read(60 + rand(60))) {
                 my $buf = '';
@@ -83,14 +86,14 @@ sub run_daemon ($$$$) {
                     print_log('info', "woken up by external notification");
                 }
             }
-        } else {
+        } elsif ($nactions == 0) {
             sleep(60 + rand(60));
         }
         # we might have received a signal during select.
         last if ($foad);
         if ($doit) {
             print_log('info', "running queue");
-            FYR::Queue::process_queue($email, $fax);
+            $nactions = FYR::Queue::process_queue($email, $fax, \$foad);
             print_log('info', "queue run completed");
         }
     }
@@ -132,13 +135,13 @@ if ($help) {
 FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 if ($once) {
-    FYR::Queue::process_queue($email, $fax);
+    FYR::Queue::process_queue($email, $fax, \$foad);
     exit(0);
 }
 
 if ($multiple) {
-    for(my $i=0;$i<$multiple;++$i) {
-        FYR::Queue::process_queue($email, $fax);
+    for (my $i=0; $i < $multiple; ++$i) {
+        FYR::Queue::process_queue($email, $fax, \$foad);
     }
     exit(0);
 }
@@ -334,5 +337,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.16 2006-04-18 11:53:26 chris Exp $
+$Id: fyrqd,v 1.17 2006-08-18 23:00:39 chris Exp $
 

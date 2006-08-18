@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.218 2006-08-15 17:31:30 francis Exp $
+# $Id: Queue.pm,v 1.219 2006-08-18 23:00:40 chris Exp $
 #
 
 package FYR::Queue;
@@ -1436,13 +1436,21 @@ my %state_action = (
         }
     );
 
-# process_queue EMAIL FAX
+# process_queue EMAIL FAX [FOAD]
 # Drive the state machine round; emails will be sent if EMAIL is true, and
-# faxes if FAX is true.
-sub process_queue ($$) {
-    my ($email, $fax) = @_;
+# faxes if FAX is true. If passed, FOAD should be a reference to a scalar which
+# will be tested periodically for an early abort condition. If the referenced
+# scalar ever becomes true, the queue run will be aborted at the earliest
+# convenient opportunity. Returns the number of message actions taken.
+sub process_queue ($$;$) {
+    my ($email, $fax, $foad) = @_;
     $email ||= 0;
     $fax ||= 0;
+    my $f = 0;
+    $foad ||= \$f;
+
+    my $backend_pid = dbh()->selectrow_array('select pg_backend_pid()');
+    
     # Timeouts. Just lock the whole table to do this -- it should be reasonably
     # quick.
     my $stmt = dbh()->prepare(
@@ -1454,11 +1462,15 @@ sub process_queue ($$) {
     $stmt->execute();
     while (my ($id, $state) = $stmt->fetchrow_array()) {
         state($id, $state_timeout_state{$state});
+        last if ($$foad);
     }
     dbh()->commit();
 
+    return 0 if ($$foad);
+
     # Actions. These are slow (potentially) so lock row-by-row. Process
     # messages in a random order, so that bad ones don't block everything.
+    my $nactions = 0;
     if ($email) {
         $stmt = dbh()->prepare(
             'select id, state from message where ('
@@ -1489,6 +1501,7 @@ sub process_queue ($$) {
                 # Check for ready+frozen again.
                 if (!$msg->{frozen} or $msg->{state} ne 'ready') {
                     &{$state_action{$state}}($email, $fax, $id);
+                    ++$nactions;
                 }
             }
         } catch Error with {
@@ -1526,7 +1539,9 @@ sub process_queue ($$) {
             # Actually superfluous if we caught the error now.
             dbh()->commit();
         };
+        last if ($$foad);
     }
+    return $nactions;
 }
 
 # notify_daemon
