@@ -14,7 +14,7 @@
 # TODO:
 # Cope with messages which have alternating lines repeated many times.
 
-my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.3 2006-08-12 15:09:50 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.4 2006-08-21 14:46:56 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -159,8 +159,8 @@ sub reduce_log($) {
     }
 }
 
-reduce_log('7f715e54e05dd8428f8a');
-exit;
+#reduce_log('7f715e54e05dd8428f8a');
+#exit;
 
 # Read everything with lots of duplicates, using heuristic here
 my $st = dbh()->prepare("select count(*) as c, message_id, message
