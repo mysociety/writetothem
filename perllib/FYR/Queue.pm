@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.219 2006-08-18 23:00:40 chris Exp $
+# $Id: Queue.pm,v 1.220 2006-08-21 12:10:50 chris Exp $
 #
 
 package FYR::Queue;
@@ -1500,8 +1500,8 @@ sub process_queue ($$;$) {
                     or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})) {
                 # Check for ready+frozen again.
                 if (!$msg->{frozen} or $msg->{state} ne 'ready') {
-                    &{$state_action{$state}}($email, $fax, $id);
                     ++$nactions;
+                    &{$state_action{$state}}($email, $fax, $id);
                 }
             }
         } catch Error with {
