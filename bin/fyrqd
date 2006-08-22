@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.19 2006-08-22 11:27:34 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.20 2006-08-22 11:38:34 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -76,18 +76,20 @@ sub run_daemon ($$$$) {
         my $doit = 1;
         # Continue immediately if we've been notified of a new message, or if
         # the last queue run took any actions.
-        if (defined($sel)) {
-            if ($sel->can_read(60 + rand(60))) {
-                my $buf = '';
-                my $n = $notifysock->sysread($buf, 1, 0);
-                if (!defined($n)) {
-                    $doit = 0;
-                } else {
-                    print_log('info', "woken up by external notification");
+        if ($nactions == 0) {
+            if (defined($sel)) {
+                if ($sel->can_read(60 + rand(60))) {
+                    my $buf = '';
+                    my $n = $notifysock->sysread($buf, 1, 0);
+                    if (!defined($n)) {
+                        $doit = 0;
+                    } else {
+                        print_log('info', "woken up by external notification");
+                    }
                 }
+            } else {
+                sleep(60 + rand(60));
             }
-        } elsif ($nactions == 0) {
-            sleep(60 + rand(60));
         }
         # we might have received a signal during select.
         last if ($foad);
@@ -337,5 +339,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.19 2006-08-22 11:27:34 chris Exp $
+$Id: fyrqd,v 1.20 2006-08-22 11:38:34 chris Exp $
 
