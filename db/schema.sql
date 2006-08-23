@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.38 2006-07-13 15:48:06 francis Exp $
+-- $Id: schema.sql,v 1.39 2006-08-23 14:56:20 chris Exp $
 --
 
 set client_min_messages to error;
@@ -154,6 +154,7 @@ create table message_log (
     order_id serial not null primary key,       -- for ordering
     message_id char(20) not null,
     exceptional boolean not null default('f'),  -- is an exceptional (error) condition
+    hostname text,                              -- host where logged
     whenlogged integer not null,                -- UNIX time
     state text not null,                        -- state of message when log item added
     message text not null,
