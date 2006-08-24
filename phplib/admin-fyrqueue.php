@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.111 2006-08-24 09:35:27 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.112 2006-08-24 09:40:10 francis Exp $
  * 
  */
 
@@ -49,29 +49,32 @@ class ADMIN_PAGE_FYR_QUEUE {
         if ($id) $view = "none";
 
         // Quick referrers
-/*        print "<p>";
-        $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);*/
-/*      # for testing  
+        print "<p>";
+        $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
+        # for testing  
         $freq_referrers_day = array(
-        array("http://www.faxyourmp.com/youandyourmp.php3", 7),
+        array("http://www.mouse.com/youandyourmp.php3", 7),
         array("http://www.google.co.uk/search?hl=en&q=fax+your+mp&meta=", 4),
         array("http://www.stophumantraffic.org/writemp.html", 2),
         array("http://www.google.co.uk/search?hl=en&q=faxyourmp&meta=", 2),
         array("http://www.google.co.uk/search?hl=en&client=firefox-a&rls=org.mozilla%3Aen-GB%3Aofficial_s&q=local+mp&btnG=Search&meta=", 2)
-        );*/
-/*        if (msg_get_error($freq_referrers_day)) {
+        );
+        if (msg_get_error($freq_referrers_day)) {
             print "Error contacting queue:";
             print_r($freq_referrers_day);
         }
-        print "top referrers in day (excludes our sites and google): ";
+        print "top referrers in day: ";
+        $topref = array();
         foreach ($freq_referrers_day as $row) {
             if (!preg_match('#^http://(www\.)?(google|faxyourmp|writetothem|theyworkforyou)\.#i', $row[0])) {
                 if ($row[1] > 1 && $row[0] != "") {
-                    print trim_url_to_domain($row[0]) . " $row[1], ";
+                    $topref[] = trim_url_to_domain($row[0]) . " $row[1]";
                 }
             }
         }
-        print "</p>";*/
+        print join(", ", $topref);
+        print " ... <a href=\"$this->self_link&amp;view=statistics\">more stats</a> ";
+        print "</p>";
 
         // Bar to change view
         $qmenu = "";
