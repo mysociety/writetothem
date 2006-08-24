@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.109 2006-08-15 17:31:31 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.110 2006-08-24 09:18:57 francis Exp $
  * 
  */
 
@@ -47,21 +47,9 @@ class ADMIN_PAGE_FYR_QUEUE {
 
     function render_bar($view, $reverse, $id) {
         if ($id) $view = "none";
-    
-        // Activity level
-        $stats = msg_admin_get_stats();
-        if (msg_get_error($stats)) {
-            print "Error contacting queue:";
-            print_r($stats);
-        }
-        print "<p>";
-        print "<b>" . $stats["created_1"] . "</b> new in hour, ";
-        print "<b>" . $stats["created_24"] . "</b> new in day, ";
-        print "<b>" . $stats["created_168"] . "</b> new in week... ";
-        print "last fax sent <b>" . strftime('%e %b %Y, %H:%M', $stats["last_fax_time"]) . "</b> ... ";
-        print "last email sent <b>" . strftime('%e %b %Y, %H:%M', $stats["last_email_time"]) . "</b> ... ";
 
         // Quick referrers
+        print "<p>";
         $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
 /*      # for testing  
         $freq_referrers_day = array(
@@ -83,7 +71,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                 }
             }
         }
-        print " <a href=\"$this->self_link&amp;view=statistics\">more stats...</a> ";
+        print "</p>";
 
         // Bar to change view
         $qmenu = "";
@@ -109,11 +97,17 @@ class ADMIN_PAGE_FYR_QUEUE {
 
         $qmenu .= "[Contains ";
 
+        if ($view != 'statistics')
+            $qmenu2 = "<a href=\"$this->self_link&amp;view=statistics\">[Statistics]</a> ";
+        else
+            $qmenu2 = "[Statistics] ";
+
         $form = new HTML_QuickForm('searchForm', 'post', $this->self_link);
         $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
         $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>12));
         $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
         $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
+        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu2</b>");
         $form->addGroup($searchgroup, "actiongroup", "",' ', false);
         admin_render_form($form);
 
@@ -647,12 +641,16 @@ another way, if you like.
 
             // Navigation bar
             $this->render_bar($view, false, $id);
+
+
 ?>
 <h2>Queue statistics</h2>
 <p>
 <b><?=$stats["created_1"]?></b> new in last hour,
 <b><?=$stats["created_24"]?></b> new in last day,
 <b><?=$stats["created_168"]?></b> new in last week
+<br>last fax sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_fax_time"])?></b>, 
+last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></b>
 </p>
 <h2>Messages in each state by type (created in last day)</h2>
 <? $this->_display_state_table($stats, "day "); ?>
