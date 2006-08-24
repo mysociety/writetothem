@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.40 2006-08-24 22:57:43 francis Exp $
+-- $Id: schema.sql,v 1.41 2006-08-24 23:15:16 francis Exp $
 --
 
 set client_min_messages to error;
@@ -164,6 +164,7 @@ create table message_log (
 create index message_log_order_id_idx on message_log(order_id);
 create index message_log_message_id_idx on message_log(message_id);
 create index message_log_whenlogged_idx on message_log(whenlogged);
+create index message_log_editor_idx on message_log(editor);
 
 -- questionnaire_answer
 -- Results of the questionnaire we send to users.
