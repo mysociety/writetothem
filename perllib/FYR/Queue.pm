@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.220 2006-08-21 12:10:50 chris Exp $
+# $Id: Queue.pm,v 1.221 2006-08-24 15:30:07 chris Exp $
 #
 
 package FYR::Queue;
@@ -381,16 +381,24 @@ sub logmsg ($$$;$) {
     our $dbh;
     # XXX should ping
     $dbh ||= new_dbh();
-    $dbh->do('insert into message_log (message_id, whenlogged, state, message, exceptional, editor) values (?, ?, ?, ?, ?, ?)',
+    our $log_hostname;
+    $log_hostname ||= (POSIX::uname())[1];
+    $dbh->do('
+        insert into message_log (
+            message_id,
+            hostname, whenlogged, state,
+            message, exceptional,
+            editor
+        ) values (?, ?, ?, ?, ?, ?, ?)',
         {},
         $id,
-        FYR::DB::Time(),
-        state($id),
-        $msg,
-        $important ? 't' : 'f',
+        $hostname, FYR::DB::Time(), state($id),
+        $msg, $important ? 't' : 'f',
         $editor);
     $dbh->commit();
-    &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important) if (defined($logmsg_handler));
+    # XXX should we pass the hostname to the handler?
+    &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important)
+        if (defined($logmsg_handler));
 }
 
 # %allowed_transitions
