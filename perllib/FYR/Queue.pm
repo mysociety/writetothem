@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.221 2006-08-24 15:30:07 chris Exp $
+# $Id: Queue.pm,v 1.222 2006-08-25 09:31:01 chris Exp $
 #
 
 package FYR::Queue;
@@ -1067,6 +1067,7 @@ sub confirm_email ($) {
     if (my $id = check_token("confirm", $token)) {
         return $id if (state($id) ne 'pending');
         state($id, 'ready');
+        dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
         logmsg($id, 1, "sender email address confirmed");
         dbh()->commit();
         notify_daemon();
@@ -1328,15 +1329,20 @@ my %state_action = (
                 # the recipient's mailbox is over-quota). In that case we
                 # should try not to send mail too often.
                 if (defined($msg->{dispatched})) {
-                    return if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL);
+                    if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL); {
+                        # Don't attempt redelivery too often.
+                        return;
+                    } elsif ($msg->{confirmed} < time() - $state_timeout{ready}) {
+                        # Time out messages after the same interval they'd have
+                        # lasted if stuck in the "ready" state (i.e. with
+                        # locally-detected delivery errors).
+                        logmsg($id, 1, "message bouncing for too long; failing");
+                        state($id, 'error');
+                        return;
+                    }
                     logmsg($id, 0, "making email redelivery attempt");
                 }
 
-                # XXX we should consider the case where we've made too many
-                # redelivery attempts, but we can't just use the state counter
-                # because redelivery occurs only when a message leaves this
-                # state and then comes back.
-            
                 my $result = deliver_email($msg);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);

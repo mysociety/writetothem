@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.41 2006-08-24 23:15:16 francis Exp $
+-- $Id: schema.sql,v 1.42 2006-08-25 09:31:00 chris Exp $
 --
 
 set client_min_messages to error;
@@ -112,6 +112,9 @@ create table message (
 
     -- when the message was originally queued (UNIX time)
     created integer not null,
+
+    -- when the message was confirmed (UNIX time)
+    confirmed integer,
 
     -- when the message last changed state
     laststatechange integer not null,
