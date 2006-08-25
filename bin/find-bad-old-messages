@@ -3,14 +3,14 @@
 # find-bad-old-message:
 # Find old messages which haven't timed out into failed_closed or finished
 # states.  Also find old messages which haven't been scrubbed for privacy. This
-# makes sure we have no bugs which leave messages in an unreported non-delivery
-# state, or which leave private information for too long.
+# makes sure we have no bugs in fyrqd which leave message in an unreported
+# non-delivery state, or which keep private information for too long.
 #
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: find-bad-old-messages,v 1.1 2006-08-25 10:35:57 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: find-bad-old-messages,v 1.2 2006-08-25 10:39:10 francis Exp $';
 
 use strict;
 require 5.8.0;
