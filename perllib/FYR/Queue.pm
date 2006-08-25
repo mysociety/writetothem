@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.222 2006-08-25 09:31:01 chris Exp $
+# $Id: Queue.pm,v 1.223 2006-08-25 10:18:04 francis Exp $
 #
 
 package FYR::Queue;
@@ -1251,7 +1251,7 @@ my %state_action = (
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
                 state($id, 'pending');
             } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
-	    	state($id, 'failed_closed');
+                state($id, 'failed_closed');
             } else {
                 state($id, 'new');
             }
@@ -1271,7 +1271,7 @@ my %state_action = (
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
                     state($id, 'pending');  # bump actions counter
                 } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
-	    	    state($id, 'failed_closed');
+                    state($id, 'failed_closed');
                 } else {
                     logmsg($id, 1, "error sending confirmation reminder message (will retry)");
                 }
