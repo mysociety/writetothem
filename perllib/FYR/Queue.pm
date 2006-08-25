@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.228 2006-08-25 11:03:29 chris Exp $
+# $Id: Queue.pm,v 1.229 2006-08-25 16:36:11 chris Exp $
 #
 
 package FYR::Queue;
@@ -1456,7 +1456,8 @@ my %state_action = (
 # faxes if FAX is true. If passed, FOAD should be a reference to a scalar which
 # will be tested periodically for an early abort condition. If the referenced
 # scalar ever becomes true, the queue run will be aborted at the earliest
-# convenient opportunity. Returns the number of message actions taken.
+# convenient opportunity. Returns the number of "significant" message actions
+# taken (ones which result in changes to the database, roughly).
 sub process_queue ($$;$) {
     my ($email, $fax, $foad) = @_;
     $email ||= 0;
@@ -1515,8 +1516,15 @@ sub process_queue ($$;$) {
                     or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})) {
                 # Check for ready+frozen again.
                 if (!$msg->{frozen} or $msg->{state} ne 'ready') {
-                    ++$nactions;
                     &{$state_action{$state}}($email, $fax, $id);
+
+                    # See whether anything changed, and if it did update the
+                    # action counter.
+                    my $msg2 = message($id);
+                    ++$nactions
+                        if ($msg2->{state} ne $msg->{state}
+                            || $msg2->{numactions} != $msg->{numactions}
+                            || $msg2->{frozen} != $msg->{frozen});
                 }
             }
         } catch Error with {
