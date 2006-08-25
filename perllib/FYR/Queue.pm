@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.227 2006-08-25 10:48:08 francis Exp $
+# $Id: Queue.pm,v 1.228 2006-08-25 11:03:29 chris Exp $
 #
 
 package FYR::Queue;
@@ -2061,6 +2061,7 @@ administrator making the change.
 sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
     state($id, 'ready');
+    dbh()->do('update message set confirmed = ? where id = ? and confirmed is null', {}, time(), $id);
     dbh()->commit();
     logmsg($id, 1, "$user put message in state 'ready'", $user);
     notify_daemon();
