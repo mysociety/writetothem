@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.43 2006-08-25 10:48:08 francis Exp $
+-- $Id: schema.sql,v 1.44 2006-08-25 13:06:08 chris Exp $
 --
 
 set client_min_messages to error;
@@ -142,6 +142,8 @@ create index message_frozen_idx on message(frozen);
 create index message_laststatechange_idx on message(laststatechange);
 create index message_recipient_type_idx on message(recipient_type);
 create index message_recipient_id_idx on message(recipient_id);
+-- This one's to make the monitoring script faster.
+create index message_dispatched_idx on message(dispatched);
 
 -- message_extradata
 -- Additional (opaque) data about each message.
