@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.223 2006-08-25 10:18:04 francis Exp $
+# $Id: Queue.pm,v 1.224 2006-08-25 10:22:51 francis Exp $
 #
 
 package FYR::Queue;
@@ -1199,7 +1199,7 @@ my %state_timeout = (
 
         # How long to hold on to body of failed messages? After this time they
         # go into failed_closed and after FAILED_RETAIN_TIME get scrubbed.
-        failed          => DAY * 7 * 6
+        failed          => DAY * 7 * 4
     );
 
 # Where we time out to.
