@@ -4,7 +4,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 #
-# $Id: crontab.ugly,v 1.3 2006-08-25 10:39:11 francis Exp $
+# $Id: crontab.ugly,v 1.4 2006-08-25 16:48:31 francis Exp $
 
 MAILTO=team@writetothem.com
 
@@ -13,4 +13,5 @@ MAILTO=team@writetothem.com
 
 # Once a week, on Sunday
 21 3 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/find-bad-old-messages
+21 4 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/find-long-logs
 
