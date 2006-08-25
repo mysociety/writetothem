@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.42 2006-08-25 09:31:00 chris Exp $
+-- $Id: schema.sql,v 1.43 2006-08-25 10:48:08 francis Exp $
 --
 
 set client_min_messages to error;
@@ -161,7 +161,9 @@ create table message_log (
     whenlogged integer not null,                -- UNIX time
     state text not null,                        -- state of message when log item added
     message text not null,
-    editor text                                 -- administrator who performed this action, or NULL
+    editor text                                 -- administrator who performed this action, or NULL.
+                                                -- Note that for historical reasons this is also shown 
+                                                -- in the message content
 );
 
 create index message_log_order_id_idx on message_log(order_id);

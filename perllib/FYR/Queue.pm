@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.226 2006-08-25 10:34:05 francis Exp $
+# $Id: Queue.pm,v 1.227 2006-08-25 10:48:08 francis Exp $
 #
 
 package FYR::Queue;
@@ -1624,13 +1624,14 @@ sub admin_recent_events ($;$) {
 
 Returns an array of hashes of information about events for given message ID. If
 IMPORTANT is true, only request messages for which the "exceptional" flag is
-set.
+set. You probably don't need to display the 'editor' field as it is also shown
+in the message content.
 
 =cut
 sub admin_message_events ($;$) {
     my ($id, $imp) = @_;
     my $sth = dbh()->prepare('
-                    select message_id, whenlogged, state, message, exceptional
+                    select message_id, whenlogged, state, message, exceptional, hostname, editor
                       from message_log
                      where message_id = ? ' . ($imp ? 'and exceptional' : '') .
                    ' order by order_id');
