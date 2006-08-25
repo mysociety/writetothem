@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.225 2006-08-25 10:24:38 francis Exp $
+# $Id: Queue.pm,v 1.226 2006-08-25 10:34:05 francis Exp $
 #
 
 package FYR::Queue;
@@ -392,7 +392,7 @@ sub logmsg ($$$;$) {
         ) values (?, ?, ?, ?, ?, ?, ?)',
         {},
         $id,
-        $hostname, FYR::DB::Time(), state($id),
+        $log_hostname, FYR::DB::Time(), state($id),
         $msg, $important ? 't' : 'f',
         $editor);
     $dbh->commit();
@@ -1330,7 +1330,7 @@ my %state_action = (
                 # the recipient's mailbox is over-quota). In that case we
                 # should try not to send mail too often.
                 if (defined($msg->{dispatched})) {
-                    if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL); {
+                    if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL) {
                         # Don't attempt redelivery too often.
                         return;
                     } elsif ($msg->{confirmed} < time() - $state_timeout{ready}) {
