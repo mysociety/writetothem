@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.30 2006-08-18 22:39:32 chris Exp $
+# $Id: Fax.pm,v 1.31 2006-08-25 16:27:14 chris Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -601,8 +601,10 @@ again:
         alarm($timeout);
 
         # Read output from efax, and log it.
+        my $dial_command_failed = 0; # note "dial command failed" errors
         while (defined(my $line = $rd->getline())) {
             chomp($line);
+            $dial_command_failed = 1 if ($line =~ /Error: dial command failed/);
             FYR::Queue::logmsg($id, 0, "efax output: $line");
             # Record the pages which efax believes it's sent.
             if ($line =~ m#efax: \d+:\d+ sent -> (.+)#) {
@@ -636,9 +638,16 @@ again:
                     # number busy or device in use
                     throw FYR::Fax::HardError("fax number was engaged");
                 } elsif ($st == 2) {
-                    # some kind of fatal error in efax; assume that this is NOT
-                    # a fatal error per sending. (?)
-                    throw FYR::Fax::SoftError("fatal error in efax");
+                    if ($dial_command_failed) {
+                        # Probably some kind of engaged or similar tone that
+                        # the modem didn't recognise; treat it as a remote
+                        # error.
+                        throw FYR::Fax::HardError("failed to connect to number");
+                    } else {
+                        # Some kind of fatal error in efax; assume that this is NOT
+                        # a fatal error per sending.
+                        throw FYR::Fax::SoftError("fatal error in efax");
+                    }
                 } elsif ($st == 3) {
                     # "Modem protocol error"
                     throw FYR::Fax::HardError("modem protocol error (exit status 3) in efax");
