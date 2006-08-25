@@ -1,0 +1,83 @@
+#!/usr/bin/perl -w
+#
+# find-bad-old-message:
+# Find old messages which haven't timed out into failed_closed or finished
+# states.  Also find old messages which haven't been scrubbed for privacy. This
+# makes sure we have no bugs which leave messages in an unreported non-delivery
+# state, or which leave private information for too long.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: find-bad-old-messages,v 1.1 2006-08-25 10:35:57 dademcron Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+
+use Data::Dumper;
+use POSIX qw(strftime);
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use FYR;
+
+# Check for old messages which aren't in a final state.
+
+# Maximum of 1 week before user confirms. After entering ready state, 1 week of
+# delivery attempts happen. Then the message enters failed. After 4 weeks it is
+# moved into failed closed. So that is about 6 weeks. Total max of 6 weeks
+# after creation before a message enters failed closed or finished.
+my $weeks = 6;
+my $old_messages = dbh()->selectall_hashref("select id, created, state from message
+    where created < ? and state <> 'failed_closed' and state <> 'finished' 
+    order by created", 'id', {}, time() - $weeks * 7 * 24 * 60 * 60);
+
+my $c = 0;
+foreach my $id (keys(%$old_messages)) {
+    $c++;
+    print "$id is in state ";
+    print $old_messages->{$id}->{'state'};
+    print " but is more than $weeks weeks old ";
+    print "(created " . strftime("%d %b %Y", localtime($old_messages->{$id}->{'created'})) . ")\n";
+}
+if ($c) {
+    print "\n";
+    print "(All messages older than $weeks weeks should be in either state failed_closed or in state finished)\n";
+    print "\n";
+}
+
+# Check for old messages which haven't been scrubbed
+
+# In addition to the times described above, it takes another 4 weeks from
+# failed_closed before scrubbing.
+my $weeks_scrub = $weeks + 4;
+my $unprivate_messages = dbh()->selectall_hashref("select id, created, state from message
+    where created < ? and (sender_ipaddr <> '' or sender_referrer is not null
+    or (message not like '[ removed message of%]' and length(message) <> 0))
+    order by created", 'id', {}, time() - $weeks_scrub * 7 * 24 * 60 * 60);
+
+my $c2 = 0;
+foreach my $id (keys(%$unprivate_messages)) {
+    $c2++;
+    print "$id has not been scrubbed of private info";
+    print " but is more than $weeks_scrub weeks old ";
+    print "(created " . strftime("%d %b %Y", localtime($unprivate_messages->{$id}->{'created'})) . ")\n";
+}
+if ($c2) {
+    print "\n";
+    print "(All messages older than $weeks_scrub weeks should have been scrubbed of private information)\n";
+    print "\n";
+}
+
+
+
+
