@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.224 2006-08-25 10:22:51 francis Exp $
+# $Id: Queue.pm,v 1.225 2006-08-25 10:24:38 francis Exp $
 #
 
 package FYR::Queue;
@@ -1147,9 +1147,9 @@ use constant QUESTIONNAIRE_INTERVAL => (7 * DAY);
 # questionnaire delay, as the questionnaire includes a copy of the message.
 use constant MESSAGE_RETAIN_TIME => (28 * DAY);
 
-# How long do we retain log and other information from a failed message for
-# operator inspection?
-use constant FAILED_RETAIN_TIME => MESSAGE_RETAIN_TIME;
+# How long do we retain log and other information from a failed closed message
+# for operator inspection?
+use constant FAILED_CLOSED_RETAIN_TIME => MESSAGE_RETAIN_TIME;
 
 # Total number of times we attempt delivery by fax.
 # (note that 'ready' state timeout, below, is 7 days and will most likely cause
@@ -1197,8 +1197,9 @@ my %state_timeout = (
         # the user for a failed message.
         error           => DAY * 7,
 
-        # How long to hold on to body of failed messages? After this time they
-        # go into failed_closed and after FAILED_RETAIN_TIME get scrubbed.
+        # How long to hold on to failed messages? After this time they go into
+        # failed_closed and then after an additional FAILED_CLOSED_RETAIN_TIME
+        # they get scrubbed.
         failed          => DAY * 7 * 4
     );
 
@@ -1441,7 +1442,7 @@ my %state_action = (
         failed_closed => sub ($$$) {
             my ($email, $fax, $id) = @_;
             my $msg = message($id);
-            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_RETAIN_TIME)) {
+            if ($msg->{sender_ipaddr} ne '' and $msg->{laststatechange} < (FYR::DB::Time() - FAILED_CLOSED_RETAIN_TIME)) {
                 # clear data for privacy
                 scrubmessage($id);
             }
