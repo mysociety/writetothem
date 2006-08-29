@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.56 2006-08-24 17:02:47 francis Exp $
+ * $Id: queue.php,v 1.57 2006-08-29 10:44:10 francis Exp $
  *
  */
 
@@ -30,7 +30,8 @@ function msg_check_error($data) {
         err($error_message);
 }
 
-$msg_client = new RABX_Client(OPTION_FYR_QUEUE_URL);
+$msg_client = new RABX_Client(OPTION_FYR_QUEUE_URL, 
+    defined('OPTION_FYR_QUEUE_USERPWD') ? OPTION_FYR_QUEUE_USERPWD : null);
 
 define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);        /*    Tried to send message which has already been sent.  */
 define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);        /*    Tried to confirm message which has already been confirmed.  */
@@ -200,7 +201,8 @@ function msg_admin_recent_events($count, $important = null) {
 
   Returns an array of hashes of information about events for given message
   ID. If IMPORTANT is true, only request messages for which the
-  "exceptional" flag is set. */
+  "exceptional" flag is set. You probably don't need to display the
+  'editor' field as it is also shown in the message content. */
 function msg_admin_message_events($id, $important = null) {
     global $msg_client;
     $params = func_get_args();
