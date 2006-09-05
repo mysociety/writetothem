@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.49 2006-08-15 17:49:21 francis Exp $
+# $Id: AbuseChecks.pm,v 1.50 2006-09-05 17:50:45 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -26,7 +26,9 @@ use POSIX;  # strftime
 use Storable;
 
 use mySociety::Config;
+use mySociety::DaDem;
 use mySociety::DBHandle qw(dbh);
+use mySociety::MaPit;
 use mySociety::Ratty;
 
 use FYR;
@@ -263,6 +265,52 @@ my @tests = (
             }
 
             return %res;
+        },
+
+        # Second postcode given in address.
+        sub ($) {
+            my $msg = shift;
+
+            my $pc = $msg->{sender_postcode};
+
+            # Construct address without postcode.
+            my $addr = $msg->{sender_address};
+            $addr =~ s/$pc\n$//s;
+            
+            # Now look for a postcode in the address.
+            my ($newpc) = ($addr =~ /[A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z]/);
+
+            $newpc_nospaces =~ s/\s//g;
+            $pc_nospaces =~ s/\s//g;
+
+            return () if ($newpc_nospaces eq $pc_nospaces);
+
+            # See whether (a) the postcode they've given is known to us; and
+            # (b) whether it gives the same voting area as the other one.
+            my $is_known = 0;
+            my $yields_same_voting_area
+            try {
+                my $areas = mySociety::MaPit::get_voting_areas($pc);
+                $is_known = 1;
+                my %h = map { $_ => 1 } @$areas;
+                my $rep = mySociety::DaDem::get_representative_info($msg->{recipient_id});
+                $yields_same_voting_area = 1 if (exists($h{$rep->{voting_area}}));
+            } catch RABX::Error with {
+                # don't much care about the error -- presumably it'll be area
+                # not found, though it might (rarely) be some transient error
+                # which we can ignore.
+            };
+
+            return ( sender_address_second_postcode_unknown =>
+                        [$newpc, 'Additional postcode in the address, if present and not known to MaPit'] )
+                if (!$is_known);
+
+            return ( sender_address_second_postcode_same_voting_area =>
+                        [$newpc, 'Additional postcode in the address, if present and lying within the same voting area as the supplied postcode'] )
+                if ($yields_same_voting_area);
+
+            return ( sender_address_second_postcode_different_voting_area =>
+                        [$newpc, 'Additional postcode in the address, if present and lying within a different voting area to the supplied postcode'] );
         }
     );
 
