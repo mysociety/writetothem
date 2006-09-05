@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.50 2006-09-05 17:50:45 chris Exp $
+# $Id: AbuseChecks.pm,v 1.51 2006-09-05 17:52:28 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -20,6 +20,7 @@ use strict;
 
 use Data::Dumper;
 use DBD::Pg; # for BLOB (bytea) support
+use Error qw(:try);
 use Geo::IP;
 use Net::Google::Search;
 use POSIX;  # strftime
@@ -280,15 +281,17 @@ my @tests = (
             # Now look for a postcode in the address.
             my ($newpc) = ($addr =~ /[A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z]/);
 
-            $newpc_nospaces =~ s/\s//g;
-            $pc_nospaces =~ s/\s//g;
+            return () unless defined($newpc);
+
+            my $newpc_nospaces =~ s/\s//g;
+            my $pc_nospaces =~ s/\s//g;
 
             return () if ($newpc_nospaces eq $pc_nospaces);
 
             # See whether (a) the postcode they've given is known to us; and
             # (b) whether it gives the same voting area as the other one.
             my $is_known = 0;
-            my $yields_same_voting_area
+            my $yields_same_voting_area = 0;
             try {
                 my $areas = mySociety::MaPit::get_voting_areas($pc);
                 $is_known = 1;
