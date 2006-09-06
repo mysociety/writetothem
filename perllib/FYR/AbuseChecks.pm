@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.51 2006-09-05 17:52:28 chris Exp $
+# $Id: AbuseChecks.pm,v 1.52 2006-09-06 09:23:02 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -275,7 +275,7 @@ my @tests = (
             my $pc = $msg->{sender_postcode};
 
             # Construct address without postcode.
-            my $addr = $msg->{sender_address};
+            my $addr = $msg->{sender_addr};
             $addr =~ s/$pc\n$//s;
             
             # Now look for a postcode in the address.
@@ -304,15 +304,15 @@ my @tests = (
                 # which we can ignore.
             };
 
-            return ( sender_address_second_postcode_unknown =>
+            return ( sender_addr_second_postcode_unknown =>
                         [$newpc, 'Additional postcode in the address, if present and not known to MaPit'] )
                 if (!$is_known);
 
-            return ( sender_address_second_postcode_same_voting_area =>
+            return ( sender_addr_second_postcode_same_voting_area =>
                         [$newpc, 'Additional postcode in the address, if present and lying within the same voting area as the supplied postcode'] )
                 if ($yields_same_voting_area);
 
-            return ( sender_address_second_postcode_different_voting_area =>
+            return ( sender_addr_second_postcode_different_voting_area =>
                         [$newpc, 'Additional postcode in the address, if present and lying within a different voting area to the supplied postcode'] );
         }
     );
