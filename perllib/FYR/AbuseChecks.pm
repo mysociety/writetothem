@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.53 2006-09-06 16:28:11 francis Exp $
+# $Id: AbuseChecks.pm,v 1.54 2006-09-07 12:29:26 chris Exp $
 #
 
 package FYR::AbuseChecks;
@@ -113,6 +113,10 @@ sub get_similar_messages ($) {
     # "Electronic signature".
     $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
     my $h = FYR::SubstringHash::hash($m, SUBSTRING_LENGTH, NUM_BITS);
+
+    # XXX we should test whether the message is in the database, so that we can
+    # run a fake test message through the abuse tests without having to create
+    # a message in the database.
 
     dbh()->do(q#delete from message_extradata where message_id = ? and name = 'substringhash'#, {}, $msg->{id});
 
@@ -279,7 +283,7 @@ my @tests = (
             $addr =~ s/$pc\n$//s;
             
             # Now look for a postcode in the address.
-            my ($newpc) = ($addr =~ /[A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z]/);
+            my ($newpc) = ($addr =~ /([A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z])/);
 
             return () unless defined($newpc);
 
