@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.44 2006-08-25 13:06:08 chris Exp $
+-- $Id: schema.sql,v 1.45 2006-09-07 11:51:28 francis Exp $
 --
 
 set client_min_messages to error;
@@ -144,6 +144,9 @@ create index message_recipient_type_idx on message(recipient_type);
 create index message_recipient_id_idx on message(recipient_id);
 -- This one's to make the monitoring script faster.
 create index message_dispatched_idx on message(dispatched);
+-- This as when doing customer support, we often look up by email
+create index message_sender_email on message(sender_email);
+create index message_recipient_email on message(recipient_email);
 
 -- message_extradata
 -- Additional (opaque) data about each message.

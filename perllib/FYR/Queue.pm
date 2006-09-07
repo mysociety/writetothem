@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.229 2006-08-25 16:36:11 chris Exp $
+# $Id: Queue.pm,v 1.230 2006-09-07 11:51:28 francis Exp $
 #
 
 package FYR::Queue;
@@ -1689,8 +1689,9 @@ Messages which are similar to the message with ID given in PARAMS->{msgid}.
 
 =item search
 
-Messages which contain terms from PARAMS->{query}. Sender and recipient
-details are searched, as well as matching confirmation tokens.
+Messages which contain terms from PARAMS->{query}. First confirmation and
+questionnaire tokens are looked for, then an exact match on sender email is
+done. Failing that, sender and recipient details are substring searched.
 
 =item logsearch
 
@@ -1746,16 +1747,20 @@ sub admin_get_queue ($$) {
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
     } elsif ($filter eq 'search') {
-        my $tokenfound_id;
+        my $token_found_id;
         if (length($params->{query}) >= 20) {
-            $tokenfound_id = check_token("confirm", $params->{query});
-            if (!defined($tokenfound_id)) {
-                $tokenfound_id = check_token("questionnaire", $params->{query});
+            $token_found_id = check_token("confirm", $params->{query});
+            if (!defined($token_found_id)) {
+                $token_found_id = check_token("questionnaire", $params->{query});
             }
         }
-        if (defined($tokenfound_id)) {
+        if (defined($token_found_id)) {
             $where = "where id = ?";
-            push @params, $tokenfound_id;
+            push @params, $token_found_id;
+        } elsif (mySociety::Util::is_valid_email($params->{query})) {
+            $where = "where sender_email = ? or recipient_email = ?";
+            push @params, $params->{query};
+            push @params, $params->{query};
         } else {
             my $query = merge_spaces($params->{query});
             my @terms = split m/ /, $query;
