@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.54 2006-09-07 12:29:26 chris Exp $
+# $Id: AbuseChecks.pm,v 1.55 2006-09-07 12:36:14 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -280,11 +280,11 @@ my @tests = (
 
             # Construct address without postcode.
             my $addr = $msg->{sender_addr};
-            $addr =~ s/$pc\n$//s;
+            $addr =~ s/$pc\s*$//s;
             
             # Now look for a postcode in the address.
-            my ($newpc) = ($addr =~ /([A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z])/);
-
+            $addr =~ /([A-Z][A-Z]?[0-9][0-9A-Z]?\s*[0-9][A-Z][A-Z])/i;
+            my ($newpc) = $1;
             return () unless defined($newpc);
 
             my $newpc_nospaces = $newpc;
@@ -298,10 +298,11 @@ my @tests = (
             my $is_known = 0;
             my $yields_same_voting_area = 0;
             try {
-                my $areas = mySociety::MaPit::get_voting_areas($pc);
+                my $areas = mySociety::MaPit::get_voting_areas($newpc);
                 $is_known = 1;
                 my %h = map { $_ => 1 } values(%$areas);
                 my $rep = mySociety::DaDem::get_representative_info($msg->{recipient_id});
+                #warn "va: $rep->{voting_area} dump: ".  Dumper(\%h). Dumper($rep);
                 $yields_same_voting_area = 1 if (exists($h{$rep->{voting_area}}));
             } catch RABX::Error with {
                 # don't much care about the error -- presumably it'll be area
