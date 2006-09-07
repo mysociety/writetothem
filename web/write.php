@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.107 2006-08-14 08:22:13 matthew Exp $
+ * $Id: write.php,v 1.108 2006-09-07 12:52:00 francis Exp $
  *
  */
 
@@ -148,7 +148,7 @@ END;
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
-    $form->addRule('body', 'Please sign with your name after "Yours sincerely"', new RuleSigned(), null, null);
+    $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
 
     add_all_variables_hidden($form, $fyr_values);
