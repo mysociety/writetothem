@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.230 2006-09-07 11:51:28 francis Exp $
+# $Id: Queue.pm,v 1.231 2006-09-07 13:46:09 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1758,7 +1758,7 @@ sub admin_get_queue ($$) {
             $where = "where id = ?";
             push @params, $token_found_id;
         } elsif (mySociety::Util::is_valid_email($params->{query})) {
-            $where = "where sender_email = ? or recipient_email = ?";
+            $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
             push @params, $params->{query};
             push @params, $params->{query};
         } else {
