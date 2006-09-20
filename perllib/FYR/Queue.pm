@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.231 2006-09-07 13:46:09 matthew Exp $
+# $Id: Queue.pm,v 1.232 2006-09-20 21:13:53 chris Exp $
 #
 
 package FYR::Queue;
@@ -1218,7 +1218,7 @@ my %state_timeout_state = qw(
 my %state_action_interval = (
         # How often we attempt to send a confirmation mail in the face of
         # soft failures.
-        new             => 300,
+        new             => 30,
 
         # How often we confirmation mail reminders.
         pending         => DAY * 1,
@@ -1247,6 +1247,16 @@ my %state_action = (
         new => sub ($$$) {
             my ($email, $fax, $id) = @_;
             return unless ($email);
+
+            # Early on we make sending attempts frequently, then back off to
+            # the old five minute interval later.
+            my $nactions = actions($id);
+            if ($actions > 10 && ($actions % 10)) {
+                # Bump state counter but don't do anything.
+                state($id, 'new');
+                return;
+            }
+            
             # Construct confirmation email and send it to the sender.
             my $result = send_confirmation_email($id);
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
