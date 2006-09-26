@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.232 2006-09-20 21:13:53 chris Exp $
+# $Id: Queue.pm,v 1.233 2006-09-26 00:52:12 francis Exp $
 #
 
 package FYR::Queue;
@@ -1251,7 +1251,7 @@ my %state_action = (
             # Early on we make sending attempts frequently, then back off to
             # the old five minute interval later.
             my $nactions = actions($id);
-            if ($actions > 10 && ($actions % 10)) {
+            if ($nactions > 10 && ($nactions % 10)) {
                 # Bump state counter but don't do anything.
                 state($id, 'new');
                 return;
