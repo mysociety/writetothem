@@ -1,0 +1,51 @@
+#!/usr/bin/php
+<?php
+/* 
+ * find-councillor-emails
+ * For councils that have a list of councillors, but email addresses are
+ * only on individual councillor pages.
+ *
+ * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org/
+ *
+ * $Id: find-councillor-emails,v 1.1 2006-09-26 14:45:32 matthew Exp $
+ *
+ */
+
+# Edinburgh configuration
+
+# List of councillors
+$url = 'http://www.edinburgh.gov.uk/servlet/QsProtected?IDC=CEC/Member_Services/List_of_Councillors/CllrList.idc';
+
+# Regular expression that matches link to individual councillor page
+$matchlink = 'HREF="(/s.*?)"';
+
+# Are links matched by the above HTML entity encoded?
+$link_html_encoded = true;
+
+# If the links are relative, supply the prefix here
+$matchprefix = 'http://www.edinburgh.gov.uk';
+
+# Regular expression that matches email address on individual councillor page
+$emaillink = '"mailto:(.*?)"';
+
+# Array of email addresses to ignore
+$emailnot = array('justask', 'webmaster', 'Webmaster');
+foreach ($emailnot as $i => $email) {
+    $emailnot[$i] .= '@edinburgh.gov.uk';
+}
+
+# Actual code
+
+$f = file_get_contents($url);
+preg_match_all('#' . $matchlink . '#', $f, $m);
+foreach ($m[1] as $link) {
+    if ($link_html_encoded)
+        $link = html_entity_decode($link);
+    $f = file_get_contents($matchprefix . $link);
+    preg_match_all('#' . $emaillink . '#', $f, $mm);
+    foreach ($mm[1] as $email) {
+        if (!in_array($email, $emailnot))
+	    print "$email\n";
+    }
+}
