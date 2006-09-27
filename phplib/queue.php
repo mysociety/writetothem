@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.60 2006-09-01 11:47:14 francis Exp $
+ * $Id: queue.php,v 1.61 2006-09-27 10:13:05 matthew Exp $
  *
  */
 
@@ -246,8 +246,10 @@ function msg_admin_message_events($id, $important = null) {
 
   * search
 
-    Messages which contain terms from PARAMS->{query}. Sender and recipient
-    details are searched, as well as matching confirmation tokens.
+    Messages which contain terms from PARAMS->{query}. First confirmation
+    and questionnaire tokens are looked for, then an exact match on sender
+    email is done. Failing that, sender and recipient details are substring
+    searched.
 
   * logsearch
 
