@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.45 2006-09-07 11:51:28 francis Exp $
+-- $Id: schema.sql,v 1.46 2006-09-28 10:06:40 francis Exp $
 --
 
 set client_min_messages to error;
@@ -180,7 +180,7 @@ create index message_log_editor_idx on message_log(editor);
 -- Results of the questionnaire we send to users.
 create table questionnaire_answer (
     message_id char(20) not null references message(id) on delete cascade,
-    question_id integer not null default(0),    -- reserved for future expansion
+    question_id integer not null default(0),    -- question number
     answer text not null,
     whenanswered integer -- unix time when question was answered
 );
