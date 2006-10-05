@@ -5,23 +5,19 @@ template_draw('header', $values);
 
 <h1>Thanks for your feedback... and one *last* question</h1>
 
-<p>Oh dear... that's not so good.</p>
-
-<p>We're very grateful for your feedback, although we're as disappointed
-as you must be that your representative has not responded &mdash; sometimes
-they have good reason, sometimes not. Very occasionally, it is our fault
-for having your representative's contact details wrong.</p>
+<p>We hope your representative gets back to you with a full answer soon.
 
 <? if ($values['recipient_type'] == 'WMC') { ?>
-<p>It is worth trying to contact your MP by other means. For example, <strong>call
-their local office</strong> and arrange a session at their "surgery". These are a chance
-to meet your MP face to face and raise your issue with them. 
-Look up the number in your local telephone directory, or try <a
+<p>If they don't, it is worth trying to contact your MP by other means. For
+example, <strong>call their local office</strong> and arrange a session at
+their "surgery". These are a chance to meet your MP face to face and raise your
+issue with them.  Look up the number in your local telephone directory, or try
+<a
 href="http://www.google.co.uk/search?q=<?=urlencode($values['recipient_name'])?>">Googling
 for <?=$values['recipient_name']?></a>.
 </p>
 <? } else { ?>
-<p>It is worth trying to contact your representative by other means. Look up
+<p>If they don't, it is worth trying to contact your representative by other means. Look up
 their telephone number or postal address. 
 <a href="http://www.google.co.uk/search?q=<?=urlencode($values['recipient_name'])?>">Google 
 search for <?=$values['recipient_name']?></a> to do this.
