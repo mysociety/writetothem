@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.29 2006-08-10 10:53:51 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.30 2006-10-05 10:27:28 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -125,6 +125,7 @@ sub name_n { my $n = shift; return "Cate Constituent $n"; }
 print "Set up web test harness...\n" if $verbose > 0;
 our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
+$wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
 $wth->database_connect('RATTY_');
 $wth->database_drop_reload('../../services/Ratty/schema.sql');
 $wth->database_cycle_sequences(200);
@@ -138,13 +139,6 @@ $wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin
 print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../fyr/");
 $wth->php_check_syntax("../../fyr/templates/emails/", qr//);
-
-# Check that we can detect PHP errors
-print "Confirm we can detect errors...\n" if $verbose > 0;
-$wth->log_watcher_check();
-$wth->browser_get($base_url . "/test.php?error=1" );
-my $errors = $wth->log_watcher_get_errors();
-die "Unable to detect errors from PHP" if ($errors !~ m/deliberate_error_to_test_error_handling/);
 
 if ($action{'example'}) {
     print "Sending example message...\n" if $verbose > 0;
