@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.114 2006-08-25 10:48:09 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.115 2006-10-06 10:07:24 matthew Exp $
  * 
  */
 
@@ -27,10 +27,9 @@ $state_help_notes_map = array(
 );
 
 function make_mailto_link($email, $subject, $body, $link) {
-    $body = str_replace("\n", urlencode("\n"), $body);
-    print "<a href=\"mailto:".htmlspecialchars($email).
-        "?subject=".htmlspecialchars($subject)."".
-        "&body=".htmlspecialchars($body)."".
+    print '<a href="mailto:' .urlencode($email) .
+        "?subject=" . urlencode($subject) .
+        "&amp;body=" . urlencode($body) .
     "\">$link</a> ";
 }
 
