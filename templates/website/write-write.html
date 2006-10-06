@@ -59,13 +59,14 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 	<li>Please be polite, concise and to the point.</li>
 	<li>By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.</li>
 	<li><A HREF="about-qa#formletters" TARGET="_blank">Use your own words <small>(new window)</small></A>. <?=$values['voting_area']['rep_name']?>s will ignore copied and pasted 'identikit' messages.</li>
-    <? if ($values['representative']['type'] != 'HOC') { ?>
+<? if ($values['representative']['type'] != 'HOC') { ?>
 	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_blank">waste of time <small>(new window)</small></A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.</li>
 	<li><A HREF="about-yourrep" TARGET="_blank">Read this <small>(new window)</small></A> to learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.</li>
 <? } else { ?>
 <li><a href="about-lords#when" target="_blank">Read this <small>(new window)</small></a> to learn when to contact a Lord.</li>
-<? }
+<? } ?>
 
+<?
        if (isset($values['representative']['parlparse_person_id'])) {
 	$pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['parlparse_person_id']); ?>
        <li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=<?=$pid ?>">Find out more about <?=str_replace('The ', 'the ', $values['representative']['name']) ?> <small>(new window)</small></a> on TheyWorkForYou.com.</li>
@@ -79,6 +80,17 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 <?
     }
 ?>
+
+<?  
+    if ($values['representative']['method'] == 'via') { ?>
+    <li>We do not have direct contact details for <?=$values['representative']['name']?>,
+    <? if ($values['representative']['type'] == 'HOC') { ?>
+        so we will send your message via the central House of Lords fax machine.
+    <? } else { ?>
+        so your message will be sent via the internal mail systems of the body to which they were elected.
+    <? } ?>
+    </li>
+<?  } ?>
 					 
 </ul>
 
