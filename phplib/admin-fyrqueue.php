@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.115 2006-10-06 10:07:24 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.116 2006-10-06 10:26:41 matthew Exp $
  * 
  */
 
@@ -27,9 +27,9 @@ $state_help_notes_map = array(
 );
 
 function make_mailto_link($email, $subject, $body, $link) {
-    print '<a href="mailto:' .urlencode($email) .
-        "?subject=" . urlencode($subject) .
-        "&amp;body=" . urlencode($body) .
+    print '<a href="mailto:' . rawurlencode($email) .
+        "?subject=" . rawurlencode($subject) .
+        "&amp;body=" . rawurlencode($body) .
     "\">$link</a> ";
 }
 
@@ -542,8 +542,7 @@ http://www.writetothem.com/about-qa#onlyrep
 There's a copy of your message below, so you can send it
 another way, if you like.
 
--------------------------------------------------------------\n\n".
-                $message['message'],
+-------------------------------------------------------------\n\n",
                 "write-to-own-reps-only");
             make_mailto_link($message['sender_email'], 
                 "Your message to " . $message['recipient_name'],
