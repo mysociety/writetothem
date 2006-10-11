@@ -8,23 +8,23 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: find-councillor-emails,v 1.1 2006-09-26 14:45:32 matthew Exp $
+ * $Id: find-councillor-emails,v 1.2 2006-10-11 22:55:17 matthew Exp $
  *
  */
 
 # Edinburgh configuration
 
 # List of councillors
-$url = 'http://www.edinburgh.gov.uk/servlet/QsProtected?IDC=CEC/Member_Services/List_of_Councillors/CllrList.idc';
+$url = 'http://www1.dorsetforyou.com/Council/COMMIS.nsf/MEM?OpenView&Count=1000';
 
 # Regular expression that matches link to individual councillor page
-$matchlink = 'HREF="(/s.*?)"';
+$matchlink = 'href="(/council/COMMIS.nsf/MEM/.*?)"';
 
 # Are links matched by the above HTML entity encoded?
-$link_html_encoded = true;
+$link_html_encoded = false;
 
 # If the links are relative, supply the prefix here
-$matchprefix = 'http://www.edinburgh.gov.uk';
+$matchprefix = 'http://www1.dorsetforyou.com';
 
 # Regular expression that matches email address on individual councillor page
 $emaillink = '"mailto:(.*?)"';
@@ -38,7 +38,7 @@ foreach ($emailnot as $i => $email) {
 # Actual code
 
 $f = file_get_contents($url);
-preg_match_all('#' . $matchlink . '#', $f, $m);
+preg_match_all('#' . $matchlink . '#i', $f, $m);
 foreach ($m[1] as $link) {
     if ($link_html_encoded)
         $link = html_entity_decode($link);
