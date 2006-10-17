@@ -3,12 +3,13 @@
 /* 
  * find-councillor-emails
  * For councils that have a list of councillors, but email addresses are
- * only on individual councillor pages.
+ * only on individual councillor pages. Generates JS that can be used in
+ * council admin interface directly.
  *
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: find-councillor-emails,v 1.2 2006-10-11 22:55:17 matthew Exp $
+ * $Id: find-councillor-emails,v 1.3 2006-10-17 15:38:40 matthew Exp $
  *
  */
 
@@ -36,16 +37,24 @@ foreach ($emailnot as $i => $email) {
 }
 
 # Actual code
-
 $f = file_get_contents($url);
 preg_match_all('#' . $matchlink . '#i', $f, $m);
+print "javascript:(function(){var c=0;";
+print "var e=['',";
+$donefirst = 0;
 foreach ($m[1] as $link) {
     if ($link_html_encoded)
         $link = html_entity_decode($link);
     $f = file_get_contents($matchprefix . $link);
     preg_match_all('#' . $emaillink . '#', $f, $mm);
     foreach ($mm[1] as $email) {
-        if (!in_array($email, $emailnot))
-	    print "$email\n";
+        if (!in_array($email, $emailnot)) {
+            if ($donefirst) print ',';
+            print "'$email'";
+            $donefirst = true;
+        }
     }
 }
+
+print "];is=document.getElementsByTagName('input');for(j=0;j<is.length;j++){i=is[j];if(i.name.substring(0,9)=='rep_email'){i.value=e[c++];}}})()";
+
