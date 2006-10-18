@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.234 2006-10-18 09:47:33 chris Exp $
+# $Id: Queue.pm,v 1.235 2006-10-18 11:13:38 chris Exp $
 #
 
 package FYR::Queue;
@@ -1477,10 +1477,11 @@ sub process_queue ($$;$) {
 
     return 0 if (!$email && !$fax);
 
+    my $stmt;
     if ($email) {
-        # Timeouts. Just lock the whole table to do this -- it should be reasonably
-        # quick.
-        my $stmt = dbh()->prepare(
+        # Timeouts. Just lock the whole table to do this -- it should be
+        # reasonably quick.
+        $stmt = dbh()->prepare(
             'select id, state from message where '
             . join(' or ',
                 map { sprintf(q#(state = '%s' and laststatechange < %d)#,
