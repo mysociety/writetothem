@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.233 2006-09-26 00:52:12 francis Exp $
+# $Id: Queue.pm,v 1.234 2006-10-18 09:47:33 chris Exp $
 #
 
 package FYR::Queue;
@@ -1475,22 +1475,25 @@ sub process_queue ($$;$) {
     my $f = 0;
     $foad ||= \$f;
 
-    my $backend_pid = dbh()->selectrow_array('select pg_backend_pid()');
-    
-    # Timeouts. Just lock the whole table to do this -- it should be reasonably
-    # quick.
-    my $stmt = dbh()->prepare(
-        'select id, state from message where '
-        . join(' or ',
-            map { sprintf(q#(state = '%s' and laststatechange < %d)#, $_, FYR::DB::Time() - $state_timeout{$_}) }
-                keys %state_timeout)
-        . ' for update');
-    $stmt->execute();
-    while (my ($id, $state) = $stmt->fetchrow_array()) {
-        state($id, $state_timeout_state{$state});
-        last if ($$foad);
+    return 0 if (!$email && !$fax);
+
+    if ($email) {
+        # Timeouts. Just lock the whole table to do this -- it should be reasonably
+        # quick.
+        my $stmt = dbh()->prepare(
+            'select id, state from message where '
+            . join(' or ',
+                map { sprintf(q#(state = '%s' and laststatechange < %d)#,
+                            $_, FYR::DB::Time() - $state_timeout{$_}) }
+                    keys %state_timeout)
+            . ' for update');
+        $stmt->execute();
+        while (my ($id, $state) = $stmt->fetchrow_array()) {
+            state($id, $state_timeout_state{$state});
+            last if ($$foad);
+        }
+        dbh()->commit();
     }
-    dbh()->commit();
 
     return 0 if ($$foad);
 
@@ -1503,13 +1506,15 @@ sub process_queue ($$;$) {
                 . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
             . ') and (lastaction is null or '
                 . join(' or ',
-                    map { sprintf(q#(state = '%s' and lastaction < %d)#, $_, FYR::DB::Time() - $state_action_interval{$_}) }
+                    map { sprintf(q#(state = '%s' and lastaction < %d)#,
+                                $_, FYR::DB::Time() - $state_action_interval{$_}) }
                         keys %state_action_interval)
             . q#) and (state <> 'ready' or not frozen) order by random()#);
     } else {
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state from message
                 where state = 'ready' and not frozen
+                    and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
                 #, FYR::DB::Time() - $state_action_interval{ready}));
     }
