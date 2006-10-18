@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.82 2006-05-14 14:04:34 chris Exp $
+ * $Id: who.php,v 1.83 2006-10-18 14:09:32 francis Exp $
  *
  */
 
@@ -54,7 +54,7 @@ if ($area_types) {
     }
     $voting_areas = $a;
 
-    $fyr_all_url = htmlspecialchars(url_new('who', true,
+    $fyr_all_url = htmlspecialchars(url_new('who', false,
                     'pc', $fyr_postcode,
                     'fyr_extref', fyr_external_referrer(),
                     'cocode', get_http_var('cocode')));
