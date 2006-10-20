@@ -4,7 +4,7 @@ the letter copied at the bottom of this email to
 
     <?=$values['confirm_url']?>
 
-If your email program does not let you click on this link, just copy and paste
+If your email program does not let you click on this link, copy and paste
 it into your web browser and press return.
 
 If you have changed your mind and don't want us to send the message to
