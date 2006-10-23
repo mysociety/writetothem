@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.55 2006-09-07 12:36:14 francis Exp $
+# $Id: AbuseChecks.pm,v 1.56 2006-10-23 12:50:35 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -91,13 +91,16 @@ use constant SUBSTRING_LENGTH => 32;
 # Number of low bits which must be zero for a hash to be accepted.
 use constant NUM_BITS => 4;
 
-# get_similar_messages MESSAGE
+# get_similar_messages MESSAGE [SAME_REP]
 # Return list of pairs of (message ids, similarity) for messages whose
 # bodies are similar to MESSAGE. "similarity" is between 0.0 and 1.0. This list
 # excludes messages which are from the same email address and postcode (fixes
-# ticket #108).
-sub get_similar_messages ($) {
-    my ($msg) = @_;
+# ticket #108). If SAME_REP is present and true (e.g. has value 1), then
+# only checks against other messages to the same representative (the default
+# is, for some reason, to only check against other messages NOT to the same
+# representative)
+sub get_similar_messages ($;$) {
+    my ($msg, $same_rep) = @_;
     die "get_similar_messages: must call in list context" unless (wantarray());
 
     # Compute and save hash of this message.
@@ -134,12 +137,14 @@ sub get_similar_messages ($) {
     # to (e.g.) all of their MEPs. We compare individuals by comparing postcode
     # and sending email address (so we should catch people spamming by using
     # lots of postcodes to send a single message to several MPs).
+    my $same_rep_check = "recipient_id <> ?";
+    $same_rep_check = "recipient_id = ?" if $same_rep;
     my $stmt = dbh()->prepare(q#
         select message_id, sender_postcode, sender_email, data
             from message, message_extradata
            where message.id = message_extradata.message_id
              and message_id <> ?
-             and recipient_id <> ?
+             and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
         #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
@@ -235,7 +240,7 @@ my @tests = (
             return ( representative_emailing_self_name => [$rep_self, 'Present if representative appears to be emailing themself (similar name)'] );
         },
 
-        # Body of message similar to other messages in queue.
+        # Body of message similar to other messages in queue to different recipients
         sub ($) {
             my ($msg) = @_;
             my @similar = sort { $b->[1] <=> $a->[1] } get_similar_messages($msg);
@@ -267,6 +272,43 @@ my @tests = (
                 next if ($thr < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
                 my $n = scalar(grep { $_->[1] > $thr } @similar);
                 $res{"similarity_num_$thr"} = [$n, "Number of messages at least $thr similar to this one"];
+            }
+
+            return %res;
+        },
+
+        # Body of message similar to other messages to same recipient in queue
+        sub ($) {
+            my ($msg) = @_;
+            my @similar = sort { $b->[1] <=> $a->[1] } get_similar_messages($msg, 1); # 1 means to same rep
+
+            my %res = ( );
+            if (@similar) {
+                my $why = sprintf('message body is very similar to same recipient messages %s (%.2f similar)', $similar[0]->[0], $similar[0]->[1]);
+                for (my $i = 1; $i < 3 && $i < @similar; ++$i) {
+                    $why .= sprintf(", %s (%.2f similar)", $similar[$i]->[0], $similar[$i]->[1]);
+                }
+
+                $why .= sprintf(' and %d others', @similar - 3) if (@similar > 3);
+                FYR::Queue::logmsg($msg->{id}, 0, $why);
+            }
+
+            # Generate a bunch of useful metrics
+
+            my $similarity_max;
+            if (@similar) {
+                $similarity_max = $similar[0]->[1];
+            } else {
+                $similarity_max = undef;
+            }
+            $res{similarity_samerep_max} = [$similarity_max, 
+                'Similarity score of the message to the same recipient whose body is most similar to this one, or absent if none is more than ' .  
+                mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD')];
+
+            foreach my $thr (qw(0.5 0.6 0.7 0.8 0.9 0.95 0.99)) {
+                next if ($thr < mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD'));
+                my $n = scalar(grep { $_->[1] > $thr } @similar);
+                $res{"similarity_samerep_num_$thr"} = [$n, "Number of messages to the same recipient at least $thr similar to this one"];
             }
 
             return %res;
