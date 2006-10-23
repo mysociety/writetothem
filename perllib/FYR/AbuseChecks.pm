@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.56 2006-10-23 12:50:35 francis Exp $
+# $Id: AbuseChecks.pm,v 1.57 2006-10-23 17:41:13 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -96,9 +96,9 @@ use constant NUM_BITS => 4;
 # bodies are similar to MESSAGE. "similarity" is between 0.0 and 1.0. This list
 # excludes messages which are from the same email address and postcode (fixes
 # ticket #108). If SAME_REP is present and true (e.g. has value 1), then
-# only checks against other messages to the same representative (the default
-# is, for some reason, to only check against other messages NOT to the same
-# representative)
+# only checks against other messages to the same representative. The default is
+# to only return other similar messages NOT to the same representative, so you
+# need to call the function with both values for SAME_REP to get everything.
 sub get_similar_messages ($;$) {
     my ($msg, $same_rep) = @_;
     die "get_similar_messages: must call in list context" unless (wantarray());
