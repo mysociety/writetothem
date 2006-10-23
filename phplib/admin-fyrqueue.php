@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.116 2006-10-06 10:26:41 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.117 2006-10-23 15:58:38 francis Exp $
  * 
  */
 
@@ -259,7 +259,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                      * and "to" strings; or a string, representing a common
                      * part; or null, indicating an elided part. */
                     print '<tr'.($c==1?' class="v"':'').'><td colspan = "9">';
-                    print "<b>Differences:</b> ";
+                    print "<b>Differences: </b> ";
                     if (isset($msgid) and $message['id'] == $msgid) {
                         print 'This is the message being compared against. <span class="difffrom">Text that appears only in this message, </span><span class="diffto">or only in the other message.</span>';
                     } else {
@@ -520,9 +520,13 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
             admin_render_form($form);
+            print 'Similar messages: ';
             print '<a href="'
                     .  htmlspecialchars(url_new("", true, 'view', 'similarbody', 'simto', $id, 'id', null))
-                    .  '">View similar messages</a> ';
+                    .  '">different rep</a>, ';
+            print '<a href="'
+                    .  htmlspecialchars(url_new("", true, 'view', 'similarbodysamerep', 'simto', $id, 'id', null))
+                    .  '">same rep</a> ';
 
             // Links to send messages to sender
             print " Email sender: <small>";
@@ -815,7 +819,7 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             }
 
             // Set up additional parameters for view if necessary.
-            if ($view == "similarbody") {
+            if ($view == "similarbody" || $view == 'similarbodysamerep') {
                 $params['msgid'] = get_http_var('simto');
             } else if ($view == "search" || $view == "logsearch") {
                 $params['query'] = get_http_var('query');
@@ -835,7 +839,9 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             // Display messages
             print "<h2>Messages which";
             if ($view == "similarbody") {
-                print " have similar bodies to  " . make_ids_links(get_http_var('simto'));
+                print " have similar bodies to " . make_ids_links(get_http_var('simto'));
+            } elseif ($view == "similarbodysamerep") {
+                print " are to the same representative and have similar bodies to " . make_ids_links(get_http_var('simto'));
             } elseif ($view == "search") {
                 print " match search query '" . htmlspecialchars(get_http_var('query')) . "'";
             } elseif ($view == "logsearch") {
@@ -847,7 +853,7 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
-            $this->print_messages($messages, $view == 'similarbody' ? $params['msgid'] : null);
+            $this->print_messages($messages, ($view == 'similarbody' || $view == 'similarbodysamerep') ? $params['msgid'] : null);
             if ($view == 'recentchanged' or $view == 'recentcreated')
                 print "<p>..."; /* indicate that this isn't all the messages... */
 

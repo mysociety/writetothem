@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.235 2006-10-18 11:13:38 chris Exp $
+# $Id: Queue.pm,v 1.236 2006-10-23 15:58:37 francis Exp $
 #
 
 package FYR::Queue;
@@ -1703,6 +1703,11 @@ Up to 100 of the messages which have recently been created.
 
 Messages which are similar to the message with ID given in PARAMS->{msgid}.
 
+=item similarbodysamerep
+
+Messages which are similar to the message with ID given in PARAMS->{msgid},
+and were sent to the same representative.
+
 =item search
 
 Messages which contain terms from PARAMS->{query}. First confirmation and
@@ -1729,7 +1734,7 @@ All messages which were sent to representative PARAMS->{rep_id}.
 sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
-    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody search logsearch type rep_id);
+    my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody similarbodysamerep search logsearch type rep_id);
     throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
@@ -1759,6 +1764,16 @@ sub admin_get_queue ($$) {
         $sth2->execute($params->{msgid});
         $msg = $sth2->fetchrow_hashref();
         my @similar = FYR::AbuseChecks::get_similar_messages($msg);
+        @params = map { $_->[0] } @similar;
+        push @params, $params->{msgid};
+        $where = "where id in (" . join(",", map { '?' } @params) .  ")";
+    } elsif ($filter eq 'similarbodysamerep') {
+        my $sth2 = dbh()->prepare("
+                select *, length(message) as message_length from message where id = ?
+            ");
+        $sth2->execute($params->{msgid});
+        $msg = $sth2->fetchrow_hashref();
+        my @similar = FYR::AbuseChecks::get_similar_messages($msg, 1);
         @params = map { $_->[0] } @similar;
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
@@ -1828,7 +1843,7 @@ sub admin_get_queue ($$) {
     $sth->execute(@params);
     my @ret;
     while (my $other = $sth->fetchrow_hashref()) {
-        if ($filter eq 'similarbody') {
+        if ($filter eq 'similarbody' || $filter eq 'similarbodysamerep') {
             # Obtain diff, but elide long common substrings.
             $other->{diff} = [map {
                                 if (ref($_) || length($_) < 200) {
