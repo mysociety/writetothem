@@ -86,14 +86,19 @@ END;
 
 <h2><a name="types"></a>Linking to specific types of representative</h2>
 
-<p>The form can also link to a specific type of representative. For example, if
-people on your website are writing only to their MP, add the following to the
-form.  It goes just after the postcode &lt;input&gt; field, and before the
-submit/go button one.</p>
+<p>You can also link to a specific type of representative. 
+For example, if people on your website are writing only to their MP, use an
+address like this.
+
+<pre class="sourcecode">http://www.writetothem.com/?a=westminstermp</pre>
+
+<p>Or if you are using a form to link to us, add this code to your form. It
+goes just after the postcode &lt;input&gt; field, and before the submit/go
+button one.</p>
 
 <pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;westminstermp&quot;&gt;</pre>
 
-<p>Possible values for "a" are:</p>
+<p>Possible values for "a" in both cases are:</p>
 <ul>
 <li>westminstermp &mdash; just your MP</li>
 <li>council &mdash; all local government councillors (in some areas this will return

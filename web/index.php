@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.54 2006-07-25 17:52:12 francis Exp $
+ * $Id: index.php,v 1.55 2006-10-27 11:10:35 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -30,6 +30,7 @@ if ($person) {
     exit;
 }
 
+// Main part of the form
 $form = '<form action="./" method="get" name="postcodeForm" id="postcodeForm"><div id="postcodebox">' . "\n";
 $form .= '<label for="pc"><b>First, type your UK postcode:</b></label>&nbsp;' . "\n";
 $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
@@ -45,8 +46,15 @@ if (isset($ref))
 $cocode = get_http_var('cocode');
 if ($cocode)
     $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
-$form .= '</div></form>';
 
+// Pass on any representative type selection
+$a_forward = get_http_var("a");
+if ($a_forward) 
+    $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
+
+// End the form
+$form .= '</div></form>';
+ 
 // Validate postcode, and prepare appropriate page
 if (isset($_GET['t'])) 
     $template = 'index-'.$_GET['t'];
@@ -114,7 +122,7 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
     if (!rabx_is_error($voting_areas)) {
         /* Possibly a deep link (from another site which knows its users'
          * postcodes) specifying one or more particular area types. */
-        if ($area_types = fyr_parse_area_type_list(get_http_var('a'))) {
+        if ($area_types = fyr_parse_area_type_list($a_forward)) {
             /* At this point we need to check whether we have only one
              * representative. If so grab their ID and redirect through to
              * write.php. Otherwise punt to who.php with the appropriate a
@@ -164,9 +172,9 @@ if ($pc != "" or array_key_exists('pc', $_GET)) {
     }
 }
 
-template_draw($template, array(
-        "title" => "Email or fax your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free",
-        "blurb-top" => <<<END
+// Work out what representative types to show
+$title = "Email or fax your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
+$blurb_top = <<<END
     <h2>Contact your
 Councillors,
 <acronym title="Member of Parliament">MP</acronym>, 
@@ -175,10 +183,36 @@ Councillors,
 <br>Northern Ireland, Welsh and London
 <acronym title="Assembly Members">AMs</acronym>
 for free</h2>
-END
-,
+END;
+
+$fyr_all_url = null;
+if ($a_forward) {
+    # Subset of representatives
+    $area_types = fyr_parse_area_type_list($a_forward);
+    $area_type_desc = fyr_describe_area_type_list($area_types);
+    $fyr_all_url = htmlspecialchars(url_new('', false,
+                    'pc', get_http_var('pc'),
+                    'fyr_extref', fyr_external_referrer(),
+                    'cocode', get_http_var('cocode')));
+} else {
+    # All representatives
+    global $va_child_types;
+    $area_types = array();
+    foreach ($va_child_types as $child) 
+        if ($child != 'HOC')
+            $area_types[$child] = 1;
+    $area_type_desc = fyr_describe_area_type_list($area_types);
+    $area_type_desc = str_replace("or Northern Ireland", "or <br>Northern Ireland", $area_type_desc);
+}
+$blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
+
+// Display page
+template_draw($template, array(
+        "title" => $title,
+        "blurb-top" => $blurb_top,
         "form" => $form, 
-        "error" => $error_message
+        "error" => $error_message,
+        "all_url" => $fyr_all_url
     ));
 
 ?>

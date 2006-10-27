@@ -21,6 +21,11 @@ Due to the General Election, new MPs and County Councillors are not yet availabl
 
 <?=$values['form']?>
 
+<? if ($values['all_url']) { ?>
+    <p align="center">You may also have representatives at other levels of government.
+    <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
+<? } ?>
+
 <p align="center">Do you need <a href="/about-constituency">help with your postcode</a>?</p>
 
 <!--<p><small><a href="http://uk.imdb.com/title/tt0047573/">A horror horde of

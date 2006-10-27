@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.44 2006-08-10 11:36:50 matthew Exp $
+ * $Id: fyr.php,v 1.45 2006-10-27 11:10:35 francis Exp $
  * 
  */
 
@@ -132,25 +132,18 @@ function fyr_parse_area_type_list($types) {
     if (!isset($types) || $types == '')
         return null;
 
-    $aliases = array(
-            /* Councillors of whatever sort */
-            'council' => 'DIW,CED,LBW,COP,LGE,MTW,UTE,UTW',
-            /* MPs */
-            'westminstermp' => 'WMC',
-            /* Devolved assembly members / MSPs */
-            'regionalmp' => 'SPC,SPE,WAC,WAE,LAC,LAE,NIE',
-            /* MEPs */
-            'mep' => 'EUR'
-        );
-    if (array_key_exists($types, $aliases))
-        $types = $aliases[$types];
+    global $va_aliases;
+    if (array_key_exists($types, $va_aliases))
+        $types = join(",",$va_aliases[$types]);
    
+    global $va_child_types;
     $a = array();
     $n = 0;
     foreach (explode(',', $types) as $t) {
-        if (strlen($t) != 3
-            /* Parent types, which we suppress here. */
-            || preg_match('/^(LBO|LAS|LGD|CTY|DIS|UTA|MTD|COI|SPA|WAS|NIA|WMP|EUP)$/', $t))
+        $t = strtoupper(trim($t));
+        if (!in_array($t, $va_child_types))
+            continue;
+        if ($t == 'HOC') // House of Lords doesn't depend on postcode
             continue;
         $a[$t] = 1;
         ++$n;
@@ -160,6 +153,65 @@ function fyr_parse_area_type_list($types) {
         return $a;
     else
         return null;
+}
+
+/* Given a hash of area types, returns a human readable description
+of that list. In some cases, summarises types like all councillors as
+"councillors" etc. */
+function fyr_describe_area_type_list($area_types) {
+    $ret = array();
+    $area_types = array_keys($area_types);
+    global $va_aliases;
+
+    // Most aggregate types
+    $ordered_descs_array = array(
+        'Councillors' => $va_aliases['council'],
+        '<acronym title="Member of Parliament">MP</acronym>' => array('WMC'),
+        '<acronym title="Members of the European Parliament">MEPs</acronym>' => array('EUR'),
+        '<acronym title="Members of the Scottish Parliament">MSPs</acronym>' => array('SPE', 'SPC'),
+    );
+    foreach ($ordered_descs_array as $k => $v) {
+        if (count(array_diff($v, $area_types)) == 0) {
+            $ret[] = $k;
+            $area_types = array_diff($area_types, $v);
+        }
+    }
+
+    // Assembly members
+    $am = array();
+    $am_descs_array = array(
+        'Northern Ireland' => array('NIE'),
+        'Welsh' => array('WAC', 'WAE'),
+        'London' => array('LAC', 'LAE'),
+    );
+    foreach ($am_descs_array as $k => $v) {
+        if (count(array_diff($v, $area_types)) == 0) {
+            $am[] = $k;
+            $area_types = array_diff($area_types, $v);
+        }
+    }
+    if (count($am) > 0) {
+        $am_str = join(", ", array_slice($am, 0, -1));
+        if (count($am) > 1)
+            $am_str .= " and ";
+        $am_str .= $am[count($am) - 1];
+        $am_str .= ' <acronym title="Assembly Members">AMs</acronym>';
+        $ret[] = $am_str;
+    }
+
+    // Others left over
+    global $va_precise_names;
+    foreach ($area_types as $type) {
+        $ret[] = $va_precise_names[$type];
+    }
+
+    if (count($ret) > 0) {
+        $ret_str = join(", ", array_slice($ret, 0, -1));
+        if (count($ret) > 1)
+            $ret_str .= ", or ";
+        $ret_str .= $ret[count($ret) - 1];
+    }
+    return $ret_str;
 }
 
 /* fyr_breadcrumbs NUMBER [TYPE]
