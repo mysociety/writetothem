@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.108 2006-09-07 12:52:00 francis Exp $
+ * $Id: write.php,v 1.109 2006-11-06 19:18:16 francis Exp $
  *
  */
 
@@ -430,7 +430,7 @@ mapit_check_error($eb_area_info);
 $success = msg_recipient_test($fyr_values['who']);
 if (rabx_is_error($success)) {
     if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-        $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['type_name'];
+        $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['name'];
         if ($type_display_name == "the House of Commons")
             $type_display_name .= " (020 7219 3000)";
         template_show_error("
