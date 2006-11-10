@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.22 2006-11-10 17:44:54 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.23 2006-11-10 17:46:42 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -100,7 +100,7 @@ sub run_daemon ($$$$) {
             print_log('info', "running queue");
             $nactions = FYR::Queue::process_queue($email, $fax, \$foad);
             $t = time() - $t;
-            print_log('info', "queue run completed; actions: $naction, time: ${t}s");
+            print_log('info', "queue run completed; actions: $nactions, time: ${t}s");
         }
     }
 
@@ -343,5 +343,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.22 2006-11-10 17:44:54 chris Exp $
+$Id: fyrqd,v 1.23 2006-11-10 17:46:42 chris Exp $
 
