@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.24 2006-11-10 17:58:12 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.25 2006-11-10 18:05:18 chris Exp $';
 
 use strict;
 require 5.8.0;
@@ -82,7 +82,7 @@ sub run_daemon ($$$$) {
         # the last queue run took any actions.
         if ($nactions == 0) {
             if (defined($sel)) {
-                if ($sel->can_read(60 + rand(60))) {
+                if ($sel->can_read(480 + rand(240))) {
                     my $buf = '';
                     my $n = $notifysock->sysread($buf, 1, 0);
                     if (!defined($n)) {
@@ -91,6 +91,8 @@ sub run_daemon ($$$$) {
                         print_log('info', "woken up by external notification");
                         $doit = "notified";
                     }
+                } else {
+                    $doit = "periodic";
                 }
             } else {
                 sleep(60 + rand(60));
@@ -350,5 +352,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.24 2006-11-10 17:58:12 chris Exp $
+$Id: fyrqd,v 1.25 2006-11-10 18:05:18 chris Exp $
 
