@@ -9,26 +9,26 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: find-councillor-emails,v 1.3 2006-10-17 15:38:40 matthew Exp $
+ * $Id: find-councillor-emails,v 1.4 2006-11-13 15:45:58 matthew Exp $
  *
  */
 
 # Edinburgh configuration
 
 # List of councillors
-$url = 'http://www1.dorsetforyou.com/Council/COMMIS.nsf/MEM?OpenView&Count=1000';
+$url = 'http://www.fife.gov.uk/orgs/index.cfm?fuseaction=councillor.all&orgid=60304273-A856-11D6-BF4D0002A5349AC9&contentid=5028';
 
 # Regular expression that matches link to individual councillor page
-$matchlink = 'href="(/council/COMMIS.nsf/MEM/.*?)"';
+$matchlink = '<area href="(.*?)"';
 
 # Are links matched by the above HTML entity encoded?
-$link_html_encoded = false;
+$link_html_encoded = true;
 
 # If the links are relative, supply the prefix here
-$matchprefix = 'http://www1.dorsetforyou.com';
+$matchprefix = 'http://www.sheffield.gov.uk';
 
 # Regular expression that matches email address on individual councillor page
-$emaillink = '"mailto:(.*?)"';
+$emaillink = '"mailto:(.*?@sheffield\.gov\.uk)"';
 
 # Array of email addresses to ignore
 $emailnot = array('justask', 'webmaster', 'Webmaster');
