@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.47 2006-11-10 17:39:26 chris Exp $
+-- $Id: schema.sql,v 1.48 2006-11-13 13:53:38 matthew Exp $
 --
 
 set client_min_messages to error;
@@ -146,7 +146,9 @@ create index message_recipient_id_idx on message(recipient_id);
 create index message_dispatched_idx on message(dispatched);
 -- This as when doing customer support, we often look up by email
 create index message_sender_email on message(sender_email);
+create index message_lower_sender_email on message(lower(sender_email));
 create index message_recipient_email on message(recipient_email);
+create index message_lower_recipient_email on message(lower(recipient_email));
 
 -- message_extradata
 -- Additional (opaque) data about each message.
