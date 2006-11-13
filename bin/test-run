@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.30 2006-10-05 10:27:28 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.31 2006-11-13 22:54:09 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -186,9 +186,10 @@ sub call_fyrqd {
 sub set_fyr_date {
     my $new_date = shift;
     if (defined($new_date)) {
-        dbh()->do('delete from debugdate; insert into debugdate (override_today) values (?);', {}, $new_date);
+        dbh()->do('delete from debugdate');
+        dbh()->do('insert into debugdate (override_today) values (?)', {}, $new_date);
     } else {
-        dbh()->do('delete from debugdate;');
+        dbh()->do('delete from debugdate');
     }
     print "Date changed to $new_date\n" if $verbose > 1;
     dbh()->commit();
