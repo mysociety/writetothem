@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.109 2006-11-06 19:18:16 francis Exp $
+ * $Id: write.php,v 1.110 2006-11-27 16:35:24 matthew Exp $
  *
  */
 
@@ -22,6 +22,11 @@ require_once "../../phplib/utility.php";
 function fix_dear_lord_address($name) {
     // Lords are addressed specially at the start of letters:
     // http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm
+    
+    # Ticket 10264
+    if ($name == 'Baroness Sarah Ludford' || $name == 'Baroness Ludford')
+        return 'Baroness Ludford';
+
     $name = str_replace("Baroness ", "Lady ", $name);
     $name = str_replace("Viscount ", "Lord ", $name);
     $name = str_replace("Countess ", "Lady ", $name);
