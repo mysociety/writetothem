@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.236 2006-10-23 15:58:37 francis Exp $
+# $Id: Queue.pm,v 1.237 2006-12-07 10:38:35 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1205,7 +1205,7 @@ my %state_timeout = (
 
 # Where we time out to.
 my %state_timeout_state = qw(
-        new		failed_closed
+        new             failed_closed
         pending         failed_closed
         ready           error
         bounce_wait     sent
@@ -1376,11 +1376,11 @@ my %state_action = (
             # email was sent, then send another one.
             my ($dosend, $reminder) = (0, 0); 
             if (0 == scalar(dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
-                # XXX this is broken -- emailed MPs get two extra days to
-                # answer, because of the bounce_wait state....
-                if (actions($id) == 14) {
+                my $days_questionnaire = defined($msg->{recipient_email}) ? 12 : 14;
+                my $days_questionnaire_reminder = $days_questionnaire + 7;
+                if (actions($id) == $days_questionnaire) {
                     $dosend = 1;
-                } elsif (actions($id) == 21) {
+                } elsif (actions($id) == $days_questionnaire_reminder) {
                     $dosend = $reminder = 1;
                 }
             }
