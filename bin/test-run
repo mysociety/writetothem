@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.31 2006-11-13 22:54:09 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.32 2006-12-07 11:25:36 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -196,6 +196,8 @@ sub set_fyr_date {
 }
 
 # Run the fyr queue on many sequential dates
+# [note the this is a half-open interval - the first date is the first one
+# used, but the last date is one after the last date which is used)
 sub spin_queue {
     my ($format_string, $from, $to) = @_;
     for (my $i = $from; $i < $to; $i ++) {
@@ -318,21 +320,21 @@ sub do_send_example_message {
 
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 4);
-    # 13 days more, no questionnaire
-    spin_queue('1990-01-%02d', 4, 17);
+    # 13th day after sending, no questionnaire
+    spin_queue('1990-01-%02d', 4, 15);
     $wth->email_check_none_left();
-    # 14th day provokes sending of questionnaire
-    set_fyr_date('1990-01-17');
+    # 14th day after sending provokes sending of questionnaire
+    set_fyr_date('1990-01-15');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
     # 6 days more, no reminder
-    spin_queue('1990-01-%02d', 18, 24);
+    spin_queue('1990-01-%02d', 16, 22);
     $wth->email_check_none_left();
     # 7th day, provokes sending of questionnaire reminder
-    set_fyr_date('1990-01-24');
+    set_fyr_date('1990-01-22');
     call_fyrqd();
     $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
@@ -577,11 +579,11 @@ sub do_send_lords_message {
 
     # 2 days to get over bounce_wait
     spin_queue('1992-01-%02d', 2, 4);
-    # 13 days more, no questionnaire
-    spin_queue('1992-01-%02d', 4, 17);
+    # 13 days after sending, no questionnaire
+    spin_queue('1992-01-%02d', 4, 15);
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
-    set_fyr_date('1992-01-17');
+    set_fyr_date('1992-01-15');
     call_fyrqd();
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your Lord reply to your letter?'.
