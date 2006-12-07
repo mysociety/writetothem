@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.110 2006-11-27 16:35:24 matthew Exp $
+ * $Id: write.php,v 1.111 2006-12-07 13:30:04 francis Exp $
  *
  */
 
@@ -23,7 +23,8 @@ function fix_dear_lord_address($name) {
     // Lords are addressed specially at the start of letters:
     // http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm
     
-    # Ticket 10264
+    # RT ticket 10264 
+    # https://secure.mysociety.org/rt/Ticket/Display.html?id=10264
     if ($name == 'Baroness Sarah Ludford' || $name == 'Baroness Ludford')
         return 'Baroness Ludford';
 
