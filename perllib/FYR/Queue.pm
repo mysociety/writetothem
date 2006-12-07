@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.238 2006-12-07 11:01:57 matthew Exp $
+# $Id: Queue.pm,v 1.239 2006-12-07 11:03:07 francis Exp $
 #
 
 package FYR::Queue;
@@ -1376,8 +1376,8 @@ my %state_action = (
             # email was sent, then send another one.
             my ($dosend, $reminder) = (0, 0); 
             if (0 == scalar(dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
-	        # Emailed messages have already spent 2 days in the bounce_wait state,
-		# so give them two days less in the sent state than faxed messages
+                # Emailed messages have already spent 2 days in the bounce_wait state,
+                # so give them two days less in the sent state than faxed messages
                 my $days_questionnaire = defined($msg->{recipient_email}) ? 12 : 14;
                 my $days_questionnaire_reminder = $days_questionnaire + 7;
                 if (actions($id) == $days_questionnaire) {
