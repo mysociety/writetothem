@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.31 2006-08-10 00:07:28 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.32 2006-12-18 23:47:53 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -289,6 +289,7 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
             my $nextstate;
             
             # Generic handling of the defined status classes.
+            # These are defined in http://www.faqs.org/rfcs/rfc1893.html
             if ($status =~ /^2\./) {
                 $what = 'success';
                 if ($msg->{state} ne 'sent') {
