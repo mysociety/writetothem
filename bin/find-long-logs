@@ -6,7 +6,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: find-long-logs,v 1.5 2006-12-27 18:23:36 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: find-long-logs,v 1.6 2006-12-27 18:44:51 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -45,6 +45,7 @@ foreach my $arr (@$long_msgs) {
                                            # and never timing out. now fixed.
     next if $id eq "386de1cba1d0423e1beb"; # bug when sending questionnaire to now deleted representative.
                                            # TODO: this should be explicitly caught as an error.
+    next if $id eq "8c3c0fb7174973733a08" or $id eq "ff13f9646b7d010c9f2d" or $id eq "0dc6ff5b7530c7ea51e2" or $id eq "805d782d788bb704699f"; # looks like fax server was dead for some reason at this time
 
     my $info = dbh()->selectrow_hashref("select created, state from message where id = ?", {}, $id);
     die "unexpectedly not got info on message $id" if !$info;
