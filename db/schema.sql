@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.48 2006-11-13 13:53:38 matthew Exp $
+-- $Id: schema.sql,v 1.49 2007-01-04 16:08:28 matthew Exp $
 --
 
 set client_min_messages to error;
@@ -150,6 +150,8 @@ create index message_lower_sender_email on message(lower(sender_email));
 create index message_recipient_email on message(recipient_email);
 create index message_lower_recipient_email on message(lower(recipient_email));
 
+alter table message cluster on message_pkey;
+
 -- message_extradata
 -- Additional (opaque) data about each message.
 create table message_extradata (
@@ -182,6 +184,8 @@ create index message_log_order_id_idx on message_log(order_id);
 create index message_log_message_id_idx on message_log(message_id);
 create index message_log_whenlogged_idx on message_log(whenlogged);
 create index message_log_editor_idx on message_log(editor);
+
+alter table message_log cluster on message_log_pkey;
 
 -- questionnaire_answer
 -- Results of the questionnaire we send to users.
