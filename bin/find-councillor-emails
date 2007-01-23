@@ -9,26 +9,25 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: find-councillor-emails,v 1.4 2006-11-13 15:45:58 matthew Exp $
+ * $Id: find-councillor-emails,v 1.5 2007-01-23 18:19:08 matthew Exp $
  *
  */
 
-# Edinburgh configuration
-
 # List of councillors
-$url = 'http://www.fife.gov.uk/orgs/index.cfm?fuseaction=councillor.all&orgid=60304273-A856-11D6-BF4D0002A5349AC9&contentid=5028';
+$url = 'http://www.ealing.gov.uk/services/council/councillors/atoz_councillors/';
 
 # Regular expression that matches link to individual councillor page
-$matchlink = '<area href="(.*?)"';
+$matchlink = '<a href="/([^"]*?atoz_councillors/[^"]*?)"';
+# $matchlink = null;
 
 # Are links matched by the above HTML entity encoded?
-$link_html_encoded = true;
+$link_html_encoded = false;
 
 # If the links are relative, supply the prefix here
-$matchprefix = 'http://www.sheffield.gov.uk';
+$matchprefix = 'http://www.ealing.gov.uk/';
 
 # Regular expression that matches email address on individual councillor page
-$emaillink = '"mailto:(.*?@sheffield\.gov\.uk)"';
+$emaillink = '<p class="story">\s*([^"]*?@ealing\.gov\.uk)\s*</p>';
 
 # Array of email addresses to ignore
 $emailnot = array('justask', 'webmaster', 'Webmaster');
@@ -37,24 +36,34 @@ foreach ($emailnot as $i => $email) {
 }
 
 # Actual code
-$f = file_get_contents($url);
-preg_match_all('#' . $matchlink . '#i', $f, $m);
 print "javascript:(function(){var c=0;";
 print "var e=['',";
+if (is_null($matchlink)) {
+	$m[1] = array($url);
+} else {
+	$f = file_get_contents($url);
+	preg_match_all('#' . $matchlink . '#i', $f, $m);
+}
 $donefirst = 0;
 foreach ($m[1] as $link) {
     if ($link_html_encoded)
         $link = html_entity_decode($link);
     $f = file_get_contents($matchprefix . $link);
-    preg_match_all('#' . $emaillink . '#', $f, $mm);
-    foreach ($mm[1] as $email) {
-        if (!in_array($email, $emailnot)) {
-            if ($donefirst) print ',';
-            print "'$email'";
-            $donefirst = true;
+    preg_match_all('#' . $emaillink . '#i', $f, $mm);
+    if (!count($mm[1])) {
+        if ($donefirst) print ',';
+        print "''";
+        $donefirst = true;
+    } else {
+        foreach ($mm[1] as $email) {
+            if (!in_array($email, $emailnot)) {
+                if ($donefirst) print ',';
+                print "'$email'";
+                $donefirst = true;
+            }
         }
     }
 }
 
-print "];is=document.getElementsByTagName('input');for(j=0;j<is.length;j++){i=is[j];if(i.name.substring(0,9)=='rep_email'){i.value=e[c++];}}})()";
+print "];is=document.getElementsByTagName('input');for(j=0;j<is.length;j++){i=is[j];if(i.name.substring(0,9)=='rep_email'){i.value=e[c++];}}})()\n";
 
