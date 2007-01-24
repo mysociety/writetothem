@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.117 2006-10-23 15:58:38 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.118 2007-01-24 11:38:50 matthew Exp $
  * 
  */
 
@@ -534,19 +534,12 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
                 "Your message to " . $message['recipient_name'] . " has not been sent",
                 "Hi " . $message['sender_name']. ",
 
-Unfortunately, your message to " . $message['recipient_name'] . " 
-has not been sent.  
+Unfortunately, your message to " . $message['recipient_name'] . " has not been sent. You can only use our service to write to your own elected representatives, not to representatives for other places.  Here is a full explanation as to why we have this policy:
+    http://www.writetothem.com/about-qa#onlyrep
 
-You can only use our service to write to your own elected
-representatives, not to representatives for other places.
-Here is a full explanation as to why we have this policy:
+There's a copy of your message below, so you can send it another way, if you like.
 
-http://www.writetothem.com/about-qa#onlyrep
-
-There's a copy of your message below, so you can send it
-another way, if you like.
-
--------------------------------------------------------------\n\n",
+-------------------------------------------------------------",
                 "write-to-own-reps-only");
             make_mailto_link($message['sender_email'], 
                 "Your message to " . $message['recipient_name'],
