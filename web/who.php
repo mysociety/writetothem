@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.83 2006-10-18 14:09:32 francis Exp $
+ * $Id: who.php,v 1.84 2007-01-24 10:17:08 francis Exp $
  *
  */
 
@@ -208,9 +208,13 @@ foreach ($va_display_order as $va_type) {
 
         if ($va_type == 'WMC') {
             $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
-            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
-            $text .= 'New! <a href="/lords">Write to your Lord</a>';
-            $text .= '</div>';
+            # .maincol / .firstcol have margin-bottom set to none, override
+            $text .= '<h3 class="houseoflords">House of Lords</h3>';
+            $text .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
+            $text .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
+#            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
+# yellow flash advert
+#            $text .= '</div>';
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types)) {
