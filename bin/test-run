@@ -12,9 +12,9 @@
 #   local delivery, and
 # * similar address with "team" instead of "n" configured in OPTION_CONTACT_EMAIL
 # * email address set in OPTION_EMAIL_PREFIX configured to pipe to ./handlemail
-# * a Ratty database with name ending "_testharness", also configured in ../general/conf
-#   (an entry not normally present when running FYR) and in the ratty service
-#   that OPTION_RATTY_URL talks to.
+# * a Ratty database with name ending "_testharness", configured in the ratty service
+#   that OPTION_RATTY_URL talks to. This will not be dropped and remade, but rules in 
+#   the scope fyr-abuse will be dropped and recreated. 
 #
 # Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.32 2006-12-07 11:25:36 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.33 2007-01-25 15:10:07 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -44,6 +44,7 @@ use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
+use mySociety::Ratty;
 
 sub help {
 print <<END
@@ -126,9 +127,7 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
-$wth->database_connect('RATTY_');
-$wth->database_drop_reload('../../services/Ratty/schema.sql');
-$wth->database_cycle_sequences(200);
+mySociety::Ratty.delete_rules('fyr-abuse');
 $wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
 $wth->database_cycle_sequences(200);
