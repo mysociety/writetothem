@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.37 2007-01-26 15:02:50 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.38 2007-01-26 16:35:25 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -130,7 +130,7 @@ our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
 $base_url =~ m#^http://(.+)/?$#;
-$wth->browser_credentials("$1:80", "$base_url admin pages", $admin_auth_user, $admin_auth_password);
+$wth->browser_credentials("$1:80", "$1 admin pages", $admin_auth_user, $admin_auth_password);
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
 $wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
