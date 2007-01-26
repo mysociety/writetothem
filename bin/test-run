@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.34 2007-01-26 10:24:47 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.35 2007-01-26 10:35:05 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -127,7 +127,7 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
-mySociety::Ratty::delete_rules('fyr-abuse');
+mySociety::Ratty::admin_delete_rules('fyr-abuse');
 $wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
 $wth->database_cycle_sequences(200);
