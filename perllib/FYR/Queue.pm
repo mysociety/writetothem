@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.239 2006-12-07 11:03:07 francis Exp $
+# $Id: Queue.pm,v 1.240 2007-01-26 12:22:49 francis Exp $
 #
 
 package FYR::Queue;
@@ -1519,6 +1519,7 @@ sub process_queue ($$;$) {
                 where state = 'ready' and not frozen
                     and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
+                order by confirmed
                 #, FYR::DB::Time() - $state_action_interval{ready}));
     }
     $stmt->execute();
