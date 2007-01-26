@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.35 2007-01-26 10:35:05 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.36 2007-01-26 14:45:50 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -116,6 +116,8 @@ die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
+our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
+our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 sub email_n { my $n = shift; return ($n == 666 ? "this-will-bounce\@" : "fyrharness+$n\@") . mySociety::Config::get('EMAIL_DOMAIN'); }
 sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
@@ -127,6 +129,7 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $wth = new mySociety::WebTestHarness();
 $wth->log_watcher_setup($httpd_error_log);
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
+$wth->browser_credentials("$1:80", "$base_url admin pages", $admin_auth_user, $admin_auth_password);
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
 $wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
