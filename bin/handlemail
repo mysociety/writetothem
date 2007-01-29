@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.32 2006-12-18 23:47:53 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.33 2007-01-29 19:01:25 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -114,9 +114,9 @@ if (!$is_bounce_message) {
             if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
                 my $url = $1;
                 $first_url = $url if !$first_url;
-                $confirm_url = $url if ($1 =~ m#/C/#);
-                $yes_url = $url if ($1 =~ m#/Y/#);
-                $no_url = $url if ($1 =~ m#/N/#);
+                $confirm_url = $url if ($url =~ m#/C/#);
+                $yes_url = $url if ($url =~ m#/Y/#);
+                $no_url = $url if ($url =~ m#/N/#);
             }
         }
 
