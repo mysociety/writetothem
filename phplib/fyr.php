@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.45 2006-10-27 11:10:35 francis Exp $
+ * $Id: fyr.php,v 1.46 2007-01-29 19:52:12 louise Exp $
  * 
  */
 
@@ -44,6 +44,10 @@ if (array_key_exists('HTTP_HOST', $_SERVER)) {
 } else {
     $syn = 'www';
 }
+
+# get rid of a testharness subdomain
+$syn = str_replace('.testharness', '', $syn);
+
 $syn = str_replace('.'.OPTION_WEB_DOMAIN, '', $syn);
 # or override for debugging
 if (array_key_exists('syn', $_GET)) {
