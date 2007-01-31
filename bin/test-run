@@ -21,13 +21,12 @@
 #
 
 # TODO:
-# Sending faxes
 # Bounce messages to rep
 # Admin pages
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.38 2007-01-26 16:35:25 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.39 2007-01-31 11:53:33 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -56,6 +55,7 @@ Actions are a list of tests, run if present in this order:
     bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
     cobrand - send example message via a cobrand site (AnimalAid)
     lords   - send example message to a Lord
+    fax     - send example fax message successfully
 If you specify no actions, it will run all of them.
 
 Options are
@@ -91,6 +91,8 @@ foreach (@ARGV) {
         $action{'cobrand'} = 1;
     } elsif ($_ eq "lords") {
         $action{'lords'} = 1;
+     } elsif ($_ eq "fax"){
+        $action{'fax'} = 1;
     } else {
         help();
         print "Action '$_' not known\n";
@@ -102,6 +104,7 @@ if (scalar(@ARGV) == 0) {
     $action{'bounce'} = 1;
     $action{'cobrand'} = 1;
     $action{'lords'} = 1;
+    $action{'fax'} = 1;
 }
 
 
@@ -137,7 +140,7 @@ $wth->database_drop_reload('../db/schema.sql');
 $wth->database_cycle_sequences(200);
 $wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin/eveld",
                     log_mailbox => "log_mailbox" });
-
+$wth->fax_setup();
 # Syntax check all .php files
 print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../fyr/");
@@ -163,13 +166,22 @@ if ($action{'lords'}) {
     print "Sending Lords message...\n" if $verbose > 0;
     do_send_lords_message();
 }
+if ($action{'fax'}) {
+    print "Sending fax message...\n" if $verbose > 0;
+    do_send_fax_message();
+}
+
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
 
-# Check for any unhandled mails or errors
+# Check for any unhandled mails, faxes or errors
 call_fyrqd();
+call_fyrqd('--fax');
+
 print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
+print "Checking no faxes left at end...\n" if $verbose > 1;
+$wth->fax_check_none_left();
 print "Checking no log file errors at end...\n" if $verbose > 1;
 $wth->log_watcher_check();
 print "Everything completed successfully\n";
@@ -179,7 +191,12 @@ print "Everything completed successfully\n";
 
 # Call fyrqd for one pass
 sub call_fyrqd {
-    $wth->multi_spawn($multispawn, "./fyrqd --debug --once --email" 
+    my $delivery_method = shift;
+    if (!defined($delivery_method)){
+          $delivery_method = '--email';
+    }
+
+    $wth->multi_spawn($multispawn, "./fyrqd --debug --once $delivery_method"
             # . ($verbose > 1 ? qw(--verbose) : ())
         , $verbose) ;
 }
@@ -609,6 +626,36 @@ sub do_send_lords_message {
     $wth->browser_follow_link(text_regex => qr/YES/);
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
+
+#############################################################################
+sub do_send_fax_message{
+    set_base_url("");
+    set_fyr_date('1993-01-01');
+    my $dummy_fax = '0000';
+     send_message_to_rep(6,
+        'CB23QJ', #
+        'David Howarth',
+                         {
+            writer_address1 => '75 Toner Place',
+            writer_town => 'Paper Lane',
+            writer_county => 'Facsimileshire',
+            writer_phone => undef,
+            body => "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be \
+delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in bet\
+ween."
+});
+
+     # Set a dummy fax number on the message and erase the recipient email
+    dbh()->do("update message set recipient_fax = ?, recipient_email = null where sender_email = ?", {}, $dummy_fax, email_n(6));
+    dbh()->commit();
+
+     # Run the queue in fax mode
+    call_fyrqd('--fax');
+
+     # Check that a one page fax is sent
+     $wth->fax_get_sent_to($dummy_fax, 1)
+
+     }
 
 #############################################################################
 
