@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.44 2007-01-31 17:46:35 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.45 2007-01-31 17:56:23 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -761,7 +761,7 @@ sub do_send_group_message{
     # them know the message was sent to others 
     my $rep_name;
     foreach $rep_name (@rep_names){
-        check_delivered_to_rep(0, $rep_name, '44 Multiple Street', 'This message was also sent to');
+        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', 'This message was also sent to');
     }
 
     # Check that a questionnaire is never sent for a group mail
