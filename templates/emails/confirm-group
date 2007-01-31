@@ -1,0 +1,29 @@
+Please click on the link below to confirm that you wish WriteToThem.com to send
+the letter copied at the bottom of this email to your
+<?=$values['recipient_position_plural']?>:
+
+    <?=$values['confirm_url']?>
+
+If your email program does not let you click on this link, copy and paste
+it into your web browser and press return.
+
+If you have changed your mind and don't want us to send the message to
+your <?=$values['recipient_position_plural']?>, then do nothing - your
+message will expire and be deleted.
+
+Once you click on the link, we'll send your letter to your
+<?=$values['recipient_position_plural']?>. If for some reason we can't send
+your message or it doesn't get through, we will email you a copy of your
+message so you can contact your <?=$values['recipient_position_plural']?>
+by more traditional, albeit less fun, means.
+
+If you did not request that a message be sent to your
+<?=$values['recipient_position_plural']?>, please let us know by sending an
+email to team@writetothem.com
+
+Please do not reply to this mail. Feel free to email us on
+team@writetothem.com with any comments, problems or suggestions.
+
+-- the WriteToThem.com team
+
+
