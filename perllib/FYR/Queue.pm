@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.241 2007-01-31 14:59:28 louise Exp $
+# $Id: Queue.pm,v 1.242 2007-01-31 17:38:43 louise Exp $
 #
 
 package FYR::Queue;
@@ -263,7 +263,9 @@ This function is called remotely and commits its changes.
 sub write ($$$$;$$$$) {
     my ($id, $sender, $recipient_id, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
 
-    if ($no_questionnaire != 't'){
+    if ($no_questionnaire){
+        $no_questionnaire = 't';
+    }else{
         $no_questionnaire = 'f';
     }
     throw FYR::Error("Bad ID specified")
@@ -340,7 +342,7 @@ sub write ($$$$;$$$$) {
                     $recipient->{via} ? 't' : 'f',
                 $text,
                 FYR::DB::Time(), FYR::DB::Time(),
-                $cobrand, $cocode, $group_id, $no_questionnaire ? 't' : 'f');
+                $cobrand, $cocode, $group_id, $no_questionnaire);
         } catch mySociety::DBHandle::Error with {
             # Assume this is a duplicate-insert error.
             # XXX check by a select?
