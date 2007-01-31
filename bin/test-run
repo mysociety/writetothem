@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.43 2007-01-31 17:43:08 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.44 2007-01-31 17:46:35 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -707,7 +707,7 @@ sub do_send_fax_message{
     #try a multiple page message 
     $dummy_fax = '0002';
 
-    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between."
+    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
 
     for (my $i=1; $i<=3; ++$i) {
         $body = $body . $body; 
