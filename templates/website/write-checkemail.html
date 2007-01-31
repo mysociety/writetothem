@@ -9,9 +9,14 @@
 <div align="center">
 <? print (isset($values['representative']) && $values['representative']['type'] == 'HOC') ? fyr_breadcrumbs(4, 'lords') : fyr_breadcrumbs(5); ?>
 <h1>Nearly Done! Now check your email...</h1>
+<? if (isset($values['error_msg'])){
+print $values['error_msg'];
+} ?>
+
 <h2>The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient.</h2>
+
 <p>If you use web-based email or have 'junk mail' filters, you may wish to check your bulk&#47;spam mail folders: sometimes, our messages are marked that way.</p>
-<p>You must now click on the link within the email we've just sent you -<br>if you do not, your message to your <?=$values['voting_area']['rep_name']?> will not be sent.</p>
+<p>You must now click on the link within the email we've just sent you -<br>if you do not, your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> will not be sent.</p>
 <p>(Don't worry - we'll hang on to your message while you're checking your email.)</p>
 </div>
 </body>

@@ -53,6 +53,12 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
     representative, so you can see what it looks like.</p>
 <?  } ?>
 
+<? if ($values['warning_text']){ ?>
+<div id="bad_contact_warning">
+<?=$values['warning_text']?>
+</div>
+<? } ?>
+
 <h2>Read this before writing your message</h2>
 
 <ul>

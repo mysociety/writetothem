@@ -1,6 +1,8 @@
-<? 
-$values['title'] = "Problem with your message";
-template_draw('header', $values);
+<?
+ if (!isset($values['skip_header'])){
+     $values['title'] = "Problem with your message";
+     template_draw('header', $values);
+}
 ?>
 
 <h2>You seem to be sending messages with several different postcodes</h2>
@@ -26,7 +28,15 @@ If you wish to send a message, please <a href="/">start again from the
 beginning</a> and give only your own, real address and postcode when asked.
 </p>
 
-<p>All the usuals<br>
--The WriteToThem.com Team</p>
 
-<? template_draw('footer', $values); ?>
+<?
+if (!isset($values['skip_header'])){
+?><p>All the usuals<br>
+-The WriteToThem.com Team</p>
+<?
+    template_draw('footer', $values);
+
+}
+?>
+
+

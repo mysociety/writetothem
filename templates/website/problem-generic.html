@@ -1,6 +1,8 @@
 <? 
-$values['title'] = "Problem with your message";
-template_draw('header', $values);
+ if (!isset($values['skip_header'])){
+     $values['title'] = "Problem with your message";
+     template_draw('header', $values);
+}
 ?>
 
 <h2>Message Rejected</h2>
@@ -10,7 +12,13 @@ any of our <a href="about-guidelines">Guidelines for Campaigning</a>. If you
 don't think that you have, then contact us at
 <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.
 
-<p>All the usuals<br>
--The WriteToThem.com Team</p>
 
-<? template_draw('footer', $values); ?>
+<? 
+if (!isset($values['skip_header'])){
+
+?> <p>All the usuals<br>
+-The WriteToThem.com Team</p>
+<?
+    template_draw('footer', $values); 
+}
+?>

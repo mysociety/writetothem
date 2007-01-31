@@ -1,6 +1,8 @@
-<? 
-$values['title'] = "Problem with your message";
-template_draw('header', $values);
+<?
+ if (!isset($values['skip_header'])){
+     $values['title'] = "Problem with your message";
+     template_draw('header', $values);
+}
 ?>
 
 <h2>You have sent too many messages to Lords</h2>
@@ -17,7 +19,14 @@ details of how to send mailshots to all Lords by post</a>.</p>
 href="/about-lords">Frequently Asked Questions</a> for more information about
 WriteToThem Lords.</p>
 
-<p>All the usuals<br>
+<?
+if (!isset($values['skip_header'])){
+?><p>All the usuals<br>
 -The WriteToThem.com Team</p>
+<?
+    template_draw('footer', $values);
 
-<? template_draw('footer', $values); ?>
+}
+?>
+
+

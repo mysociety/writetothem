@@ -11,7 +11,7 @@ print $values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') :
 <?=$values['form']?>
 
 <p align="center">(We will email you asking for confirmation before we send the message to
-your <?=$values['voting_area']['rep_name']?>)
+your  <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>)
 </p>
 
 <? template_draw('footer', $values); ?>

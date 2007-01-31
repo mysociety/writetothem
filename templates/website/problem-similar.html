@@ -1,6 +1,8 @@
-<? 
-$values['title'] = "Problem with your message";
-template_draw('header', $values);
+<?
+ if (!isset($values['skip_header'])){
+     $values['title'] = "Problem with your message";
+     template_draw('header', $values);
+}
 ?>
 
 <h2>Your message is near-identical to others sent previously</h2>
@@ -22,7 +24,14 @@ If you wish to send a message, use the "back" button in your browser
 and write it in your own, original, words.
 </p>
 
-<p>All the usuals<br>
--The WriteToThem.com Team</p>
 
-<? template_draw('footer', $values); ?>
+<?
+if (!isset($values['skip_header'])){
+?> <p>All the usuals<br>
+-The WriteToThem.com Team</p>
+<?
+    template_draw('footer', $values);
+}
+?>
+
+
