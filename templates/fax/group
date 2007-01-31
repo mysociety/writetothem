@@ -1,2 +1,0 @@
-This message was also sent to: <?=$values['other_recipient_list']?>
-
