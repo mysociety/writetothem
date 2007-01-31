@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.32 2007-01-31 14:59:28 louise Exp $
+# $Id: Fax.pm,v 1.33 2007-01-31 17:36:35 louise Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -233,6 +233,7 @@ sub format_text ($$$$$$;$$) {
 # number of rows of the image used for the address (zero on failure).
 sub format_postal_address ($$$$;$) {
     my ($img, $text, $y, $height, $force) = @_;
+    my $x;
     $force ||= 0;
     my @lines = split(/\n/, $text);
     my $width = TEXT_CX / 2;
@@ -249,12 +250,12 @@ sub format_postal_address ($$$$;$) {
     $max = TEXT_CX / 2 if ($max > TEXT_CX / 2);
     $max = int($max);
     
-    my ($x, $y) = (LMARGIN_CX + (TEXT_CX) - $max, $y);
+    ($x, $y) = (LMARGIN_CX + (TEXT_CX) - $max, $y);
    
     if ($force || ($required_height < $height)){
         # actually format the address to the image
-        ($y, my $remainder) = format_text($img, $text, $x, $y, $max, $height);
-        return (1, $y);
+        my ($y_offset, $remainder) = format_text($img, $text, $x, $y, $max, $height);
+        return (1, $y_offset + $y);
     }else{
         return (0, 0);    
      }
@@ -264,7 +265,7 @@ sub format_postal_address ($$$$;$) {
 # Return text for the fax listing the other recipients of the same message
 sub group_text($$){
     my ($group_id, $id) = @_;
-    my $text = FYR::EmailTemplate::format(fax_template('group'),{other_representative_list => FYR::Queue::other_recipient_list($group_id, $id)}, 1);
+    my $text = FYR::EmailTemplate::format(fax_template('group'),{other_recipient_list => FYR::Queue::other_recipient_list($group_id, $id)}, 1);
     return $text;
 }
 
