@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.49 2007-01-04 16:08:28 matthew Exp $
+-- $Id: schema.sql,v 1.50 2007-01-31 14:59:27 louise Exp $
 --
 
 set client_min_messages to error;
@@ -70,6 +70,7 @@ insert into state (name) values ('finished');
 insert into state (name) values ('failed');
 insert into state (name) values ('failed_closed');
 
+
 -- message
 -- List of messages to be sent.
 create table message (
@@ -132,7 +133,12 @@ create table message (
 
     -- cobranding (e.g. see http://cheltenham.writetothem.com)
     cobrand text check (cobrand ~* '^[a-z0-9]+$'), -- first part of domain (e.g. cheltenham, animalaid), NULL for no cobranding
-    cocode text check (cocode ~* '^[a-zA-Z0-9-]+$') -- extra code for cobranding organisation
+    cocode text check (cocode ~* '^[a-zA-Z0-9-]+$'), -- extra code for cobranding organisation
+
+    -- a group of messages can be sent at one time with the same text 
+    -- to multiple representatives. A group_id identifies the group 
+    -- that the message belongs to.
+    group_id char(20) 
 );
 
 -- Various indices to make the queue pages quicker.
@@ -215,3 +221,4 @@ create table confirmation_mail_autoreply (
     url text not null primary key,
     whenreceived integer not null
 );
+

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.84 2007-01-24 10:17:08 francis Exp $
+ * $Id: who.php,v 1.85 2007-01-31 14:59:28 louise Exp $
  *
  */
 
@@ -174,6 +174,9 @@ foreach ($va_display_order as $va_type) {
             $text .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
+        if ($rep_counts[0]>1) {
+            $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
+	}
         $text .= display_reps($representatives[0]);
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
@@ -184,6 +187,11 @@ foreach ($va_display_order as $va_type) {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
         }
         $text .= '.</p>';
+        
+        if ($rep_counts[1]>1) {
+            $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
+        }
+
         $text .= display_reps($representatives[1]);
     } else {
         // Singular
@@ -200,6 +208,10 @@ foreach ($va_display_order as $va_type) {
         if (!$va_salaried[$va_type])
             $text .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
         $text .= "</p>";
+	
+	if ($rep_count > 1) {
+            $text .= write_all_link($va_type, $va_info['rep_name_plural']);
+        }
 
         if($va_type == 'WMC' && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
@@ -254,6 +266,19 @@ template_draw("who", array(
 
 debug_timestamp();
 
+function write_all_link($va_type, $rep_desc_plural){
+    global $fyr_postcode;
+    $a = '<a href="' .
+                htmlspecialchars(url_new('write', true,
+                                         'who', 'all',
+                                         'type', $va_type,
+                                         'pc', $fyr_postcode,
+                                         'fyr_extref', fyr_external_referrer(),
+                                         'cocode', get_http_var('cocode')))
+                . '">Write to all your ' . $rep_desc_plural . '</a>';
+    return $a;
+
+}
 function display_reps($representatives) {
     global $representatives_info, $fyr_postcode;
     $rep_list = ''; $photo = 0;

@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.240 2007-01-26 12:22:49 francis Exp $
+# $Id: Queue.pm,v 1.241 2007-01-31 14:59:28 louise Exp $
 #
 
 package FYR::Queue;
@@ -96,6 +96,10 @@ Contact data not available for that representative.
 
 Representative does not want to be contacted 
 
+=item GROUP_ALREADY_QUEUED 4006
+
+Tried to send group of messages which has already been sent.
+
 =back
 
 =head1 FUNCTIONS
@@ -112,6 +116,30 @@ use constant MESSAGE_ID_LENGTH => 20;
 sub create () {
     # Assume collision probability == 0.
     return unpack('h20', mySociety::Util::random_bytes(MESSAGE_ID_LENGTH / 2));
+}
+
+=item create_group
+
+Return an ID for a new group of messages. Group IDs, like messages IDs, are 20
+characters long and consist of characters [0-9a-f] only.
+
+=cut
+sub create_group () {
+    return create();
+}
+
+=item check_group_unused GROUP_ID
+
+Throws an error if the GROUP_ID is already present in the message table
+
+=cut
+sub check_group_unused($){
+    my ($group_id) = @_;
+    my $ret = undef;
+    if (my $msg = dbh()->selectrow_hashref("select * from message where group_id = ?", {}, $group_id)){
+        throw FYR::Error("You've already sent these messages, there's no need to send them twice.", FYR::Error::GROUP_ALREADY_QUEUED);
+    }
+    return $ret;
 }
 
 # get_via_representative ID
@@ -209,7 +237,7 @@ sub recipient_test ($) {
     return 1
 }
 
-=item write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE]
+=item write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE] [GROUP_ID]
 
 Write details of a message for sending. ID is the identity of the message,
 
@@ -226,12 +254,18 @@ code on failure.
 COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
 a reference code for them.
 
+GROUP_ID is the identity of a group of messages sent by the same sender at the
+same time with the same content to a group of representatives.
+
 This function is called remotely and commits its changes.
 
 =cut
-sub write ($$$$;$$) {
-    my ($id, $sender, $recipient_id, $text, $cobrand, $cocode) = @_;
+sub write ($$$$;$$$$) {
+    my ($id, $sender, $recipient_id, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
 
+    if ($no_questionnaire != 't'){
+        $no_questionnaire = 'f';
+    }
     throw FYR::Error("Bad ID specified")
         unless ($id =~ m/^[0-9a-f]{20}$/i);
 
@@ -286,7 +320,7 @@ sub write ($$$$;$$) {
                     state,
                     created, laststatechange,
                     numactions, dispatched,
-                    cobrand, cocode
+                    cobrand, cocode, group_id, no_questionnaire
                 ) values (
                     ?,
                     ?, ?, ?, ?, ?, ?, ?,
@@ -297,7 +331,7 @@ sub write ($$$$;$$) {
                     'new',
                     ?, ?,
                     0, null,
-                    ?, ?
+                    ?, ?, ?, ?
                 )#, {},
                 $id,
                 (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
@@ -306,7 +340,7 @@ sub write ($$$$;$$) {
                     $recipient->{via} ? 't' : 'f',
                 $text,
                 FYR::DB::Time(), FYR::DB::Time(),
-                $cobrand, $cocode);
+                $cobrand, $cocode, $group_id, $no_questionnaire ? 't' : 'f');
         } catch mySociety::DBHandle::Error with {
             # Assume this is a duplicate-insert error.
             # XXX check by a select?
@@ -480,6 +514,72 @@ sub state ($;$) {
     }
 }
 
+=item group_state ID [STATE] [GROUP_ID]
+
+If the message with the ID passed belongs to a group, get/change the state
+of the messages in the group with the given ID to STATE, using the state 
+method. Otherwise get/change the state of the message, using the state 
+method.
+
+=cut
+sub group_state ($;$$){
+    my ($id, $state, $group_id) = @_;
+    if (defined($group_id)){
+        if (defined($state)) {
+
+            # Get all the message IDs in the group
+            my $msgs = group_messages($group_id);
+     
+            # Set the state for each one
+            foreach $id (@$msgs){
+                state($id, $state);
+            }
+        }
+        my $states = dbh()->selectcol_arrayref("select distinct
+         state from message where group_id = ?", {}, $group_id);
+        return $states;
+    }else{
+        return state($id, $state);
+    }
+   
+}
+
+=item group_messages GROUP_ID
+
+Return an array of the IDs for messages in the group GROUP_ID
+
+=cut
+
+sub group_messages($){
+    my ($group_id) = @_;
+     # Get all the message IDs in the group
+    my $msgs = dbh()->selectcol_arrayref("select id from message where group_id = ?", {}, $group_id);
+    return $msgs;
+}
+
+=item other_recipient_list GROUP_ID ID
+
+Return a string consisting of comma-delimited recipient names for other messages in GROUP_ID, omitting the recipient of message ID
+
+=cut
+
+sub other_recipient_list($$){
+    my ($group_id, $id) = @_;
+    my @recipients;
+    my $recipient_string;
+    my $memberid;
+    my $msgs = group_messages($group_id);
+    foreach $memberid (@$msgs){
+        if ($memberid ne $id){
+            my $msg = message($memberid);
+            push @recipients, $msg->{recipient_name};
+        }
+    }
+    $recipient_string = join(", ", @recipients);
+    return $recipient_string;
+}
+
+
 =item actions ID
 
 Get the number of actions taken on this message while in the current state.
@@ -505,6 +605,16 @@ sub message ($;$) {
         throw FYR::Error("No message '$id'.");
     }
 }
+
+# lock_group GROUP_ID
+# Lock the GROUP_ID group of messages using SELECT ... FOR UPDATE
+sub lock_group($) {
+    my ($group_id) = @_;
+    my $sth = dbh()->prepare("select * from message where group_id = ? for update");
+    $sth->execute($group_id);
+    throw FYR::Error("No group '$group_id'.") unless ($sth->rows > 0);
+}
+
 
 # EMAIL_COLUMNS
 # How long a line we permit in an email.
@@ -664,6 +774,16 @@ sub make_representative_email ($) {
         $bodytext = FYR::EmailTemplate::format(
                 email_template('via-coversheet'),
                 email_template_params($msg, representative_url => '')
+            );
+    }
+
+    # If this message was sent as part of a group to all a user's representatives
+    # add text letting the recipient know who the other recipients are.
+    if ($msg->{group_id}){
+        $bodytext .= "\n\n"
+            . FYR::EmailTemplate::format(
+               email_template('group'),
+               email_template_params($msg, other_recipient_list => other_recipient_list($msg->{group_id},$msg->{id}))
             );
     }
 
@@ -843,19 +963,28 @@ sub email_template_params ($%) {
 sub make_confirmation_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
-
+    
     my $token = make_token("confirm", $msg->{id});
     my $url_start = mySociety::Config::get('BASE_URL');
     if ($msg->{cobrand}) {
         $url_start = "http://" . $msg->{cobrand} . "." . mySociety::Config::get('WEB_DOMAIN');
     }
     my $confirm_url = $url_start . '/C/' . $token;
-
-    my $bodytext = FYR::EmailTemplate::format(
+    
+    my $bodytext;
+    if ($msg->{group_id}){
+        $bodytext = FYR::EmailTemplate::format(
+                    email_template($reminder ? 'confirm-reminder-group' : 'confirm-group'),
+                    email_template_params($msg, confirm_url => $confirm_url)
+                );
+        
+    }else{
+        $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder' : 'confirm'),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
-
+    }
+    
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in
     # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
@@ -875,11 +1004,17 @@ sub make_confirmation_email ($;$) {
         $bodytext = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $bodytext;
     }
 
-
+    my $subject_text;
+    if ($msg->{group_id}){
+        $subject_text = "your $msg->{recipient_position_plural}";
+    }else{
+        $subject_text = $msg->{recipient_name};
+    }
+        
     return mySociety::Email::construct_email({
             From => [do_not_reply_sender(), 'WriteToThem'],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
-            Subject => "Please confirm that you want to send a message to $msg->{recipient_name}",
+            Subject => "Please confirm that you want to send a message to $subject_text",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
             _body_ => $bodytext
@@ -1066,9 +1201,25 @@ sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
         return $id if (state($id) ne 'pending');
-        state($id, 'ready');
-        dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
-        logmsg($id, 1, "sender email address confirmed");
+        # Check to see if this message belongs to a group - if it does,
+        # all the emails in the group can be confirmed
+        my $msg = message($id);
+        group_state($id, 'ready', $msg->{group_id});
+        if (defined($msg->{group_id})){
+            my $group_id = $msg->{group_id};
+            dbh()->do('update message set confirmed = ? where group_id = ?', {}, time(), $group_id);
+            logmsg($id, 1, "sender email address confirmed (group confirmation)");
+            my $memberid;
+            my $msgs = group_messages($group_id);
+            foreach $memberid (@$msgs){
+                if ($memberid ne $id){
+                    logmsg($memberid, 1, "sender email address confirmed (via group confirmation from message $id)");
+                }
+            }
+        }else{
+            dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
+            logmsg($id, 1, "sender email address confirmed");
+        }
         dbh()->commit();
         notify_daemon();
         return $id;
@@ -1248,41 +1399,45 @@ my %state_action = (
             my ($email, $fax, $id) = @_;
             return unless ($email);
 
+            my $msg = message($id);
             # Early on we make sending attempts frequently, then back off to
             # the old five minute interval later.
             my $nactions = actions($id);
             if ($nactions > 10 && ($nactions % 10)) {
                 # Bump state counter but don't do anything.
-                state($id, 'new');
+                # For group messages, bump the state counter of all
+                # messages in the group
+                group_state($id, 'new', $msg->{group_id});
                 return;
             }
             
             # Construct confirmation email and send it to the sender.
             my $result = send_confirmation_email($id);
             if ($result == mySociety::Util::EMAIL_SUCCESS) {
-                state($id, 'pending');
+                group_state($id, 'pending', $msg->{group_id});
             } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
-                state($id, 'failed_closed');
+                group_state($id, 'failed_closed', $msg->{group_id});
             } else {
-                state($id, 'new');
+                group_state($id, 'new', $msg->{group_id});
             }
         },
 
         pending => sub ($$$) {
             my ($email, $fax, $id) = @_;
             return unless ($email);
+            my $msg = message($id);
             # Send reminder confirmation if necessary. We don't send one
             # immediately on entering this state, but do thereafter.
             if (actions($id) == 0) {
                 # Bump action counter but don't do anything else.
-                state($id, 'pending');
+                group_state($id, 'pending', $msg->{group_id});
                 return;
             } elsif (actions($id) < NUM_CONFIRM_MESSAGES) {
                 my $result = send_confirmation_email($id, 1);
                 if ($result == mySociety::Util::EMAIL_SUCCESS) {
-                    state($id, 'pending');  # bump actions counter
+                    group_state($id, 'pending', $msg->{group_id});  # bump actions counter
                 } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
-                    state($id, 'failed_closed');
+                    group_state($id, 'failed_closed', $msg->{group_id});
                 } else {
                     logmsg($id, 1, "error sending confirmation reminder message (will retry)");
                 }
@@ -1505,7 +1660,7 @@ sub process_queue ($$;$) {
     my $nactions = 0;
     if ($email) {
         $stmt = dbh()->prepare(
-            'select id, state from message where ('
+            'select id, state, group_id from message where ('
                 . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
             . ') and (lastaction is null or '
                 . join(' or ',
@@ -1515,7 +1670,7 @@ sub process_queue ($$;$) {
             . q#) and (state <> 'ready' or not frozen) order by random()#);
     } else {
         $stmt = dbh()->prepare(sprintf(q#
-                select id, state from message
+                select id, state, group_id from message
                 where state = 'ready' and not frozen
                     and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
@@ -1523,13 +1678,22 @@ sub process_queue ($$;$) {
                 #, FYR::DB::Time() - $state_action_interval{ready}));
     }
     $stmt->execute();
-    while (my ($id, $state) = $stmt->fetchrow_array()) {
+    while (my ($id, $state, $group_id) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
         # still meets the criteria for sending. Do things this way round so
         # that we can have several queue-running daemons operating
         # simultaneously.
         try {
-            my $msg = message($id, 1);
+            # If the email belongs to a group and we are sending confirmation emails,
+            # lock every email in the group - we are going to update all their states
+            # as a result of the action
+            my $msg;
+            if (defined($group_id) and $email and ($state eq 'new' or $state eq 'pending')){
+                lock_group($group_id);
+                $msg = message($id, 0);
+            }else{
+                $msg = message($id, 1);
+            }
             if ($msg->{state} eq $state
                 and (!defined($msg->{lastaction})
                     or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})) {

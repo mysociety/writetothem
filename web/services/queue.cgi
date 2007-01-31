@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.26 2006-08-15 17:31:31 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.27 2007-01-31 14:59:29 louise Exp $';
 
 require 5.8.0;
 
@@ -33,8 +33,14 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.create' => sub {
                 return FYR::Queue::create();
             },
+            'FYR.Queue.create_group' => sub {
+                return FYR::Queue::create_group();
+            },
+            'FYR.Queue.check_group_unused' => sub {
+                return FYR::Queue::check_group_unused($_[0]);
+            },
             'FYR.Queue.write' => sub {
-                return FYR::Queue::write($_[0], $_[1], $_[2], $_[3], $_[4], $_[5]);
+                return FYR::Queue::write($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]);
             },
             'FYR.Queue.recipient_test' => sub {
                 return FYR::Queue::recipient_test($_[0]);

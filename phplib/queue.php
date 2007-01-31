@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.62 2006-09-28 10:06:40 francis Exp $
+ * $Id: queue.php,v 1.63 2007-01-31 14:59:28 louise Exp $
  *
  */
 
@@ -30,13 +30,15 @@ function msg_check_error($data) {
         err($error_message);
 }
 
-$msg_client = new RABX_Client(OPTION_FYR_QUEUE_URL, 
-    defined('OPTION_FYR_QUEUE_USERPWD') ? OPTION_FYR_QUEUE_USERPWD : null);
+if (defined('OPTION_FYR_QUEUE_URL'))
+    $msg_client = new RABX_Client(OPTION_FYR_QUEUE_URL, 
+        defined('OPTION_FYR_QUEUE_USERPWD') ? OPTION_FYR_QUEUE_USERPWD : null);
 
 define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);        /*    Tried to send message which has already been sent.  */
 define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);        /*    Tried to confirm message which has already been confirmed.  */
 define('FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA', 4003);        /*    Contact data not available for that representative.  */
 define('FYR_QUEUE_MESSAGE_SHAME', 4004);        /*    Representative does not want to be contacted   */
+define('FYR_QUEUE_GROUP_ALREADY_QUEUED', 4006);        /*    Tried to send group of messages which has already been sent.  */
 
 /* msg_create
 
@@ -46,6 +48,27 @@ function msg_create() {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.create', $params);
+    return $result;
+}
+
+/* msg_create_group
+
+  Return an ID for a new group of messages. Group IDs, like messages IDs,
+  are 20 characters long and consist of characters [0-9a-f] only. */
+function msg_create_group() {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.create_group', $params);
+    return $result;
+}
+
+/* msg_check_group_unused GROUP_ID
+
+  Throws an error if the GROUP_ID is already present in the message table */
+function msg_check_group_unused($group_id) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.check_group_unused', $params);
     return $result;
 }
 
@@ -61,7 +84,7 @@ function msg_recipient_test($recipient) {
     return $result;
 }
 
-/* msg_write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE]
+/* msg_write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE] [GROUP_ID]
 
   Write details of a message for sending. ID is the identity of the
   message,
@@ -79,8 +102,11 @@ function msg_recipient_test($recipient) {
   COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE
   is a reference code for them.
 
+  GROUP_ID is the identity of a group of messages sent by the same sender
+  at the same time with the same content to a group of representatives.
+
   This function is called remotely and commits its changes. */
-function msg_write($id, $sender, $recipient, $text, $cobrand = null, $cocode = null) {
+function msg_write($id, $sender, $recipient, $text, $cobrand = null, $cocode = null, $group_id = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.write', $params);
@@ -99,6 +125,40 @@ function msg_state($id, $state = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.state', $params);
+    return $result;
+}
+
+/* msg_group_state ID [STATE] [GROUP_ID]
+
+  If the message with the ID passed belongs to a group, get/change the
+  state of the messages in the group with the given ID to STATE, using the
+  state method. Otherwise get/change the state of the message, using the
+  state method. */
+function msg_group_state($id, $state = null, $group_id = null) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.group_state', $params);
+    return $result;
+}
+
+/* msg_group_messages GROUP_ID
+
+  Return an array of the IDs for messages in the group GROUP_ID */
+function msg_group_messages($group_id) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.group_messages', $params);
+    return $result;
+}
+
+/* msg_other_recipient_list GROUP_ID ID
+
+  Return a string consisting of comma-delimited recipient names for other
+  messages in GROUP_ID, omitting the recipient of message ID */
+function msg_other_recipient_list($group_id, $id) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.other_recipient_list', $params);
     return $result;
 }
 
@@ -243,6 +303,11 @@ function msg_admin_message_events($id, $important = null) {
 
     Messages which are similar to the message with ID given in
     PARAMS->{msgid}.
+
+  * similarbodysamerep
+
+    Messages which are similar to the message with ID given in
+    PARAMS->{msgid}, and were sent to the same representative.
 
   * search
 

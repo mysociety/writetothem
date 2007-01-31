@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.31 2006-08-25 16:27:14 chris Exp $
+# $Id: Fax.pm,v 1.32 2007-01-31 14:59:28 louise Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -226,30 +226,46 @@ sub format_text ($$$$$$;$$) {
     return ($y, join('', @stuff));
 }
 
-# format_postal_address IMAGE TEXT
+# format_postal_address IMAGE TEXT Y_OFFSET HEIGHT
 # Format TEXT as a postal address, right-aligned in the appropriate place on
-# IMAGE. Returns the number of rows of the image used for the address.
-sub format_postal_address ($$) {
-    my ($img, $text) = @_;
+# IMAGE. Returns a boolean flag indicating whether there was enough room to
+# format the address within the rectangle whose height is HEIGHT, and the 
+# number of rows of the image used for the address (zero on failure).
+sub format_postal_address ($$$$;$) {
+    my ($img, $text, $y, $height, $force) = @_;
+    $force ||= 0;
     my @lines = split(/\n/, $text);
     my $width = TEXT_CX / 2;
-
+    my $required_height = 0;
     # Find largest line width.
     my $max = 0;
     foreach (@lines) {
         my ($w, $h) = text_dimensions($_, FONT_SIZE_BODY);
         $max = $w if ($w > $max);
+        $required_height += $h;
     }
 
     $max *= 1.05; # XXX
     $max = TEXT_CX / 2 if ($max > TEXT_CX / 2);
     $max = int($max);
     
-    my ($x, $y) = (LMARGIN_CX + (TEXT_CX) - $max, TMARGIN_CY);
+    my ($x, $y) = (LMARGIN_CX + (TEXT_CX) - $max, $y);
+   
+    if ($force || ($required_height < $height)){
+        # actually format the address to the image
+        ($y, my $remainder) = format_text($img, $text, $x, $y, $max, $height);
+        return (1, $y);
+    }else{
+        return (0, 0);    
+     }
+}
 
-    ($y, my $remainder) = format_text($img, $text, $x, $y, $max, TEXT_CY);
-    # XXX Assume that remainder is '', i.e. address fits on one page.
-    return $y;
+# group_text GROUP_ID MESSAGE_ID
+# Return text for the fax listing the other recipients of the same message
+sub group_text($$){
+    my ($group_id, $id) = @_;
+    my $text = FYR::EmailTemplate::format(fax_template('group'),{other_representative_list => FYR::Queue::other_recipient_list($group_id, $id)}, 1);
+    return $text;
 }
 
 # footer_text PAGE TOTAL URL FAX
@@ -333,6 +349,20 @@ sub make_pbm_file ($) {
     return $name;
 }
 
+=item new_fax_page
+
+Create a new page image for sending by fax. Returns 
+the image with starting coordinates at the top left
+corner of the page.
+
+=cut
+sub new_fax_page(){
+    my $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
+    $im->colorAllocate(255, 255, 255);
+    $im->colorAllocate(0, 0, 0);
+    return ($im, 0, 0);
+}
+
 =item make_representative_fax MESSAGE
 
 Generates page images suitable for sending MESSAGE to its recipient by fax.
@@ -349,11 +379,9 @@ sub make_representative_fax ($) {
 
     try {
         my @pages = ( );
-
-        my $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
-        $im->colorAllocate(255, 255, 255);
-        $im->colorAllocate(0, 0, 0);
-
+        my ($im, $x, $y) = new_fax_page();
+        push(@pages, $im);
+        
         # First thing to do is to format the fax footers. The purpose of this
         # is just to figure out how much space it takes up, so that we can
         # subtract that from the space available for the text.
@@ -362,6 +390,29 @@ sub make_representative_fax ($) {
         $text = footer_text(2, 99, $url, $msg->{recipient_fax});
         my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_FOOTER))[0];
 
+        my $pagenum = 1;
+        my $remainder = '';
+        my $f = $firstfooterheight;
+        
+        # For messages that are being sent as part of a group
+        # add text letting the recipient know who else this
+        # message has been sent to.
+        if ($msg->{group_id}){
+            $text = group_text($msg->{group_id}, $msg->{id}) . "\n";
+            while(length($text) > 0){
+                ($y, $remainder) = format_text($im, $text, $x + LMARGIN_CX, TMARGIN_CY, TEXT_CX, (TEXT_CY - $f - FMARGIN_CY));   
+                if (length($remainder) > 0){
+                    # now just use the regular footer
+                    $f = $footerheight;
+                    ($im, $x, $y) = new_fax_page();
+                    ++$pagenum;
+                    push(@pages, $im);
+                }
+                $text = $remainder;
+            }
+        }
+        
+        # add the sender's address
         my $addr = $msg->{sender_name} . "\n" . $msg->{sender_addr};
         $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
         $addr .= "\n\n" . "Email: $msg->{sender_email}";
@@ -370,10 +421,19 @@ sub make_representative_fax ($) {
         # right-justified.
         $addr .= "\n\n" . strftime("%A %d %B %Y", localtime($msg->{created}));
 
-        # Coordinates relative to text area.
-        my ($x, $y) = (0, format_postal_address($im, $addr));
-        my $pagenum = 0;
+        # Try and format the address to current page
+        my $success;
+        ($success, $y) =  format_postal_address($im, $addr, $y + TMARGIN_CY, (TEXT_CY - $y - $f - FMARGIN_CY));
+        if (!$success){
+            # Need a new page
+            $f = $footerheight;
+            ($im, $x, $y) = new_fax_page();
+            ++$pagenum;
+            push(@pages, $im);
 
+            #XXX Assumes that address on its own won't overflow page
+            ($success, $y) = format_postal_address($im, $addr, TMARGIN_CY, (TEXT_CY - $y - $f - FMARGIN_CY), 1);
+        }
         $text = "\n";
 
         # For members of the House of Lords whose messages reach them via the
@@ -389,19 +449,15 @@ sub make_representative_fax ($) {
 
         $text .= "\n\n" . $msg->{message};
         while (length($text) > 0) {
-            ++$pagenum;
+            ($y, $remainder) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
 
-            my $f = ($pagenum > 1 ? $footerheight : $firstfooterheight);
-
-            my ($dy, $text2) = format_text($im, $text, $x + LMARGIN_CX, $y + TMARGIN_CY, TEXT_CX, (TEXT_CY - $y - $f - FMARGIN_CY));
-
-            push(@pages, $im);
-
-            ($x, $y) = (0, 0);
-            $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
-            $im->colorAllocate(255, 255, 255);
-            $im->colorAllocate(0, 0, 0);
-            $text = $text2;
+            if (length($remainder) > 0){
+                $f = $footerheight;
+                ($im, $x, $y) = new_fax_page();
+                ++$pagenum;
+                push(@pages, $im);
+            }
+            $text = $remainder;
         }
         
         # At this point, generate a cover sheet if we need one.
@@ -409,12 +465,9 @@ sub make_representative_fax ($) {
         # -- instead we stick their address into the letter as would be done on
         # a normal letter, above.
         if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
-            $im = new GD::Image(FAX_PAGE_CX, FAX_PAGE_CY) or die "unable to create GD image: $!";
-            $im->colorAllocate(255, 255, 255);
-            $im->colorAllocate(0, 0, 0);
+            ($im, $x, $y) = new_fax_page();
             my $cover = cover_text($msg);
             my $coverheight = (format_text($im, $cover, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_COVER))[0];
-
             format_text($im, $cover, LMARGIN_CX, TMARGIN_CY + int((TEXT_CY - $coverheight) / 2), TEXT_CX, $coverheight + 100, 0, FONT_SIZE_COVER);
             push(@imgfiles, make_pbm_file($im));
         }
@@ -423,7 +476,7 @@ sub make_representative_fax ($) {
         # the pages to temporary PBM files whose names we return.
         for (my $i = 0; $i < @pages; ++$i) {
             $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax});
-            my $f = ($i > 0 ? $footerheight : $firstfooterheight);
+            $f = ($i > 0 ? $footerheight : $firstfooterheight);
             format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_FOOTER);
             $pages[$i]->setThickness(2);
             $pages[$i]->line(LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f - 10, LMARGIN_CX + TEXT_CX, TMARGIN_CY + TEXT_CY - $f - 10, 1);

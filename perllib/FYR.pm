@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.14 2006-02-27 17:09:33 chris Exp $
+# $Id: FYR.pm,v 1.15 2007-01-31 14:59:27 louise Exp $
 #
 
 use strict;
@@ -44,6 +44,7 @@ use constant MESSAGE_ALREADY_CONFIRMED  => 4002;
 use constant MESSAGE_BAD_ADDRESS_DATA  => 4003;
 use constant MESSAGE_SHAME  => 4004;
 use constant MESSAGE_SUSPECTED_ABUSE => 4005;
+use constant GROUP_ALREADY_QUEUED => 4006;
 
 package FYR::DB;
 

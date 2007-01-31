@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.118 2007-01-24 11:38:50 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.119 2007-01-31 14:59:28 louise Exp $
  * 
  */
 
@@ -133,6 +133,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>Sender</th>
         <th>Recipient</th>
         <th>Client IP / <br> Referrer / Cobrand</th>
+        <th>Group ID</th>
         <th>Length (chars)</th>
         <th>Questionnaire</th>
         <th>Tick</th>
@@ -222,6 +223,8 @@ class ADMIN_PAGE_FYR_QUEUE {
                     "<br>" . $message['cobrand'] . " " . $message['cocode'] .
                     "</td>";
                 print "<td>${message['message_length']}</td>";
+
+                print "<td>${message['group_id']}</td>";
 
                 $outof0 = ($message['questionnaire_0_no'] + $message['questionnaire_0_yes']);
                 $outof1 = ($message['questionnaire_1_no'] + $message['questionnaire_1_yes']);
