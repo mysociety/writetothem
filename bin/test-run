@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.40 2007-01-31 12:11:11 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.41 2007-01-31 14:53:19 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -39,7 +39,7 @@ use Getopt::Long;
 use IO::Handle;
 
 use mySociety::Util;
-use mySociety::Config;
+use mySociety::Config;  
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
@@ -56,6 +56,7 @@ Actions are a list of tests, run if present in this order:
     cobrand - send example message via a cobrand site (AnimalAid)
     lords   - send example message to a Lord
     fax     - send example fax message successfully
+    group   - send example message to a group of reps
 If you specify no actions, it will run all of them.
 
 Options are
@@ -93,6 +94,8 @@ foreach (@ARGV) {
         $action{'lords'} = 1;
     } elsif ($_ eq "fax"){
         $action{'fax'} = 1;
+    } elsif ($_ eq "group"){
+        $action{'group'} = 1;
     } else {
         help();
         print "Action '$_' not known\n";
@@ -105,6 +108,7 @@ if (scalar(@ARGV) == 0) {
     $action{'cobrand'} = 1;
     $action{'lords'} = 1;
     $action{'fax'} = 1;
+    $action{'group'} = 1;
 }
 
 
@@ -170,6 +174,11 @@ if ($action{'fax'}) {
     print "Sending fax message...\n" if $verbose > 0;
     do_send_fax_message();
 }
+if ($action{'group'}) {
+    print "Sending group messages...\n" if $verbose > 0;
+    do_send_group_message();
+}
+
 
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
@@ -229,7 +238,7 @@ sub spin_queue {
 }
 
 sub send_message_to_rep {
-    my ($who, $postcode, $repname, $fields, $cobrand, $birthday) = @_;
+    my ($who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
     $fields->{writer_name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     $fields->{writer_email2} = email_n($who);
@@ -244,7 +253,11 @@ sub send_message_to_rep {
             fields => { pc => $postcode},  
             );
         $wth->browser_check_contents("Now select the representative you'd like to contact");
-        $wth->browser_follow_link(text_regex => qr/$repname/);
+        if ($repname eq 'all'){
+            $wth->browser_follow_link(text_regex => qr/"All your $reptype"/);
+        }else{
+            $wth->browser_follow_link(text_regex => qr/$repname/);
+        }
     } else {
         # House of Lords selection by birthday
         $wth->browser_get($base_url . "/lords");
@@ -259,7 +272,14 @@ sub send_message_to_rep {
     # Fill in a test letter
     $wth->browser_check_contents("Now Write Your Message");
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
-    $wth->browser_check_contents($repname);
+    if ($repname eq 'all'){
+        my $one_rep;
+        foreach $one_rep (@$repnames){
+            $wth->browser_check_contents($one_rep);
+        }
+    }else{
+        $wth->browser_check_contents($repname);
+    }
     $wth->browser_submit_form(form_name => 'writeForm',
         fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
@@ -280,8 +300,14 @@ sub send_message_to_rep {
         dbh()->commit();
     } else {
         # Click link in the confirmation email
+        my $conf_name;
+        if ($repname eq 'all'){
+            $conf_name = "your $reptype";
+        }else{
+            $conf_name = $repname;
+        }
         my $confirmation_email = $wth->email_get_containing(
-            '%Subject: Please confirm that you want to send a message to %'.$repname.
+            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
             '%To: "'.name_n($who).'" <'.email_n($who).'>'.
             '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
             '%to confirm that you wish%');
@@ -653,6 +679,52 @@ sub do_send_fax_message{
     # Check that a one page fax is sent
     $wth->fax_get_sent_to($dummy_fax, 1)
 
+}
+
+#############################################################################
+sub do_send_group_message{
+    set_base_url("");
+    set_fyr_date('1994-01-01');
+    my @rep_names = ('Christopher Beazley','Robert Sturdy','Jeffrey Titford','Geoffrey Van Orden','Tom Wise','Andrew Duff','Richard Howitt');
+    
+    
+    send_message_to_rep(7,
+        'CB23QJ', #
+        'all',
+                        {
+            writer_address1 => '44 Multiple Street',
+            writer_town => 'Batchcester',
+            writer_county => 'Groupshire',
+            writer_phone => undef,
+            body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+},
+        undef,
+        undef,
+        'MEPs',
+        \@rep_names);
+    
+    # check that all the reps got the message and that it lets 
+    # them know the message was sent to others 
+    my $rep_name;
+    foreach $rep_name (@rep_names){
+        check_delivered_to_rep(0, $rep_name, '44 Multiple Street', 'This message was also sent to');
+    }
+
+    # Check that a questionnaire is never sent for a group mail
+    # 2 days to get over bounce_wait
+    spin_queue('1994-01-%02d', 2, 4);
+    # 13th day after sending, no questionnaire
+    spin_queue('1994-01-%02d', 4, 15);
+    $wth->email_check_none_left();
+    # 14th day after sending, still no questionnaire
+    set_fyr_date('1994-01-15');
+    $wth->email_check_none_left();
+    # 6 days more, no reminder
+    spin_queue('1994-01-%02d', 16, 22);
+    $wth->email_check_none_left();
+    # 7th day, still no reminder
+    set_fyr_date('1994-01-22');
+    $wth->email_check_none_left();
 }
 
 #############################################################################
