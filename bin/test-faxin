@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+#
+# test-faxin:
+# Receives incoming fax images for the test harness. Set up as
+# the FAX_COMMAND option
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+use Getopt::Long;
+
+chdir $FindBin::Bin;
+
+use mySociety::Config;
+mySociety::Config::set_file('../conf/general');
+use mySociety::Util;
+use mySociety::WebTestHarness;
+
+our ($device, $message_types, $sender, $header, $sent_to);
+GetOptions(
+           't=s' =>  \$sent_to,
+           'd=s' => \$device,
+           'v=s' => \$message_types,
+           'l=s' => \$sender,
+           'h=s' => \$header
+           );
+
+
+our $wth = new mySociety::WebTestHarness();
+$wth->database_connect('FYR_QUEUE_');
+$wth->fax_incoming($sent_to, scalar(@ARGV), \@ARGV, "sent_faxes");
+
