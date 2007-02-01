@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.119 2007-01-31 14:59:28 louise Exp $
+ * $Id: admin-fyrqueue.php,v 1.120 2007-02-01 01:28:26 francis Exp $
  * 
  */
 
@@ -127,13 +127,12 @@ class ADMIN_PAGE_FYR_QUEUE {
 <table border="1" width="100%">
     <tr>
         <th>Created</th>
-        <th>ID</th>
-        <th>Last State Change</th>
-        <th>State</th>
+        <th>Message ID /<br>Group ID</th>
+        <th>Last state change</th>
+        <th>State /<br>Last action</th>
         <th>Sender</th>
         <th>Recipient</th>
         <th>Client IP / <br> Referrer / Cobrand</th>
-        <th>Group ID</th>
         <th>Length (chars)</th>
         <th>Questionnaire</th>
         <th>Tick</th>
@@ -147,8 +146,9 @@ class ADMIN_PAGE_FYR_QUEUE {
                 print '<td><a href="'
                         . $this->self_link . "&id=".urlencode($message['id'])
                         . '">'
-                        .  substr($message['id'], 0, 10) . "<br/>" .  substr($message['id'], 10)
-                        . '</a></td>';
+                        .  $message['id'] . '</a>' 
+                        . "<br>${message['group_id']}"
+                        . '</td>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
                 print "<td>";
                 print add_tooltip($message['state'], $this->state_help_notes($message['state']));
@@ -161,23 +161,25 @@ class ADMIN_PAGE_FYR_QUEUE {
                     else
                         print "<br>frozen";
                 }
-                if ($message['no_questionnaire']) {
-                        print "<br><b>no quest</b>";
-                }
 
                 if ($message['numactions'] > 0) {
                     if ($message['state'] == 'pending')  {
                         print "<br>" .  ($message['numactions'] - 1) . " ".
                         make_plural(($message['numactions'] - 1), 'reminder');
+                    } elseif ($message['state'] == 'sent' || $message['state'] == 'failed_closed')  {
+                        print "<br>". $message['numactions'] . " " .
+                        make_plural($message['numactions'], 'day');
+                    } elseif ($message['state'] == 'ready')  {
+                        print "<br>". $message['numactions'] . " " .
+                        make_plural($message['numactions'], 'failure');
                     } else {
                         print "<br>". $message['numactions'] . " " .
                         make_plural($message['numactions'], 'attempt');
-
                     }
                 }
 
                 if ($message['lastaction'] > 0)
-                    print "<br>Last: " .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
+                    print "<br>" .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
 
                 print "</td>";
                 print "<td>"
@@ -224,8 +226,6 @@ class ADMIN_PAGE_FYR_QUEUE {
                     "</td>";
                 print "<td>${message['message_length']}</td>";
 
-                print "<td>${message['group_id']}</td>";
-
                 $outof0 = ($message['questionnaire_0_no'] + $message['questionnaire_0_yes']);
                 $outof1 = ($message['questionnaire_1_no'] + $message['questionnaire_1_yes']);
                 print '<td>';
@@ -238,6 +238,9 @@ class ADMIN_PAGE_FYR_QUEUE {
                 if ($outof1) {
                     print ' firsttime:';
                     print $message['questionnaire_1_yes'] .'/'. $outof1;
+                }
+                if ($message['no_questionnaire']) {
+                        print "<br>no quest";
                 }
                 if (!$outof0 && !$outof1) {
                     print '&nbsp;';
