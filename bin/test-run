@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.45 2007-01-31 17:56:23 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.46 2007-02-01 09:30:46 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -55,7 +55,7 @@ Actions are a list of tests, run if present in this order:
     bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
     cobrand - send example message via a cobrand site (AnimalAid)
     lords   - send example message to a Lord
-    fax     - send example fax message successfully
+    fax     - send example fax message successfully (no faxes sent 8pm-8am - tests will fail)
     group   - send example message to a group of reps
 If you specify no actions, it will run all of them.
 
