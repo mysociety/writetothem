@@ -30,15 +30,20 @@ sending.
 Emails and the available variables are:
 
   - confirm
+  - confirm-group
   - confirm-reminder
-
+  - confirm-reminder-group
     Sent to the user to ask them to confirm their email address. Extra variables
     are,
 
       - confirm_url, the URL which they should click to confirm their address.
 
-    -reminder is the reminder mail, sent one day after the original.
-
+    -confirm-reminder and confirm-reminder-group are the reminder mails, sent one 
+    day after the original.
+    
+    -confirm-group and confirm-reminder-group are the versions of the templates 
+    for messages sent to groups of representatives, with appropriate text changes.  
+    
     The text of the constituent's letter is appended to the confirmation mail.
 
   - via-coversheet
