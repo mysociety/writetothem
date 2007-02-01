@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.112 2007-01-31 14:59:28 louise Exp $
+ * $Id: write.php,v 1.113 2007-02-01 10:06:48 louise Exp $
  *
  */
 
@@ -358,6 +358,14 @@ function renderForm($form, $pageName)
             'cobrand_letter_help' => $cobrand_letter_help, 
             'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text));
 
+    if ($fyr_group_msg){
+        $our_values['title_text'] = "your " . $fyr_voting_area['rep_name_long_plural'] ;
+    }else{
+        $our_values['title_text'] = trim($fyr_voting_area['rep_prefix'] . " " .
+                                    $fyr_representative['name'] . " " .
+                                    $fyr_voting_area['rep_suffix']) . ", " .
+                                    $fyr_voting_area['name'];
+    }
     $our_values['spell'] = "true";
 
     if ($pageName == "writeForm") {

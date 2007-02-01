@@ -1,9 +1,5 @@
 <? 
-$values['title'] = "Now write your message to ". 
-    trim($values['voting_area']['rep_prefix'] . " " .
-    $values['representative']['name'] . " " .
-    $values['voting_area']['rep_suffix']) . ", " .
-    $values['voting_area']['name'];
+$values['title'] = "Now write your message to ". $values['title_text'];
 $values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
@@ -63,10 +59,10 @@ that allows non-constituents to contact the Prime Minister</a>.</p>
 
 <ul>
 	<li>Please be polite, concise and to the point.</li>
-	<li>By abusing your <?=$values['voting_area']['rep_name']?> you devalue the service for all users.</li>
+	<li>By abusing your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
 	<li><A HREF="about-qa#formletters" TARGET="_blank">Use your own words <small>(new window)</small></A>. <?=$values['voting_area']['rep_name']?>s will ignore copied and pasted 'identikit' messages.</li>
 <? if ($values['representative']['type'] != 'HOC') { ?>
-	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_blank">waste of time <small>(new window)</small></A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If this isn't your <?=$values['voting_area']['rep_name']?>, your message will be ignored.</li>
+	<li>It's a <A HREF="about-qa#onlyrep" TARGET="_blank">waste of time <small>(new window)</small></A> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own. If <? print $values['group_msg'] ? "these aren't your " . $values['voting_area']['rep_name_plural'] : "this isn't your " .$values['voting_area']['rep_name']; ?>, your message will be ignored.</li>
 	<li><A HREF="about-yourrep" TARGET="_blank">Read this <small>(new window)</small></A> to learn when a <?=$values['voting_area']['rep_name']?> can help you - and when they can't.</li>
 <? } else { ?>
 <li><a href="about-lords#when" target="_blank">Read this <small>(new window)</small></a> to learn when to contact a Lord.</li>
