@@ -18,3 +18,8 @@ Format as for ../emails. Templates are:
 
       - representative_url, the URL which a representative may visit to forward
         the fax etc.
+
+  - group 
+    
+    Template for text prepended to messages sent to a group of representatives. 
+    Lets recipients know who the other recipients of the message are. 
