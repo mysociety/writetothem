@@ -2,9 +2,9 @@
 #
 # stats-yearly-report:
 #
-# Creates response report for given calendar year, which is the only argument.
-# Run at least four weeks after end of the year, so questionnaire responses
-# have had time to come in.
+# Creates response report for given calendar year, which is the first argument.
+# The second argument is the output format. Run at least four weeks after end
+# of the year, so questionnaire responses have had time to come in.
 
 # Notes and caveats:
 #
@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.10 2006-02-20 09:51:05 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.11 2007-02-02 12:17:08 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -84,7 +84,7 @@ my $stcon = dbh()->prepare("select * from (select message_id, question_id, count
 questionnaire_answer group by message_id, question_id) as foo where c > 1");
 $stcon->execute();
 while (my ($message_id, $question_id, $c) = $stcon->fetchrow_array()) {
-    die "\nmessage $message_id has contradictory responses to question $question_id, please fix\n";
+    die "\nmessage $message_id has contradictory responses to question $question_id, please fix (maybe by going to admin interface and doing 'No Questionnaire' to remove the responses)\n";
 }
 print STDERR "done\n";
  
@@ -222,8 +222,7 @@ foreach my $repid (@allreps) {
             $interval_info->{'to'} = $h->{'whenedited'};
             if ($interval_info->{'from'} > $interval_info->{'to'}) {
                 if ($on_first) {
-                    die if $year ne "2005"; # only 2005 stuff can have this bad date
-                    # first interval can be out of order due to bad data
+                    # first interval can be out of order due to bad data from early days of WTT
                     $interval_info->{'from'} = $interval_info->{'to'};
                 } else {
                     die "$repid has out-of-order interval that is not first";
@@ -256,7 +255,7 @@ foreach my $repid (@allreps) {
     } @intervals;
     @intervals = grep { $_->{'from'} < $_->{'to'} } @intervals;
     # add initial interval (for later back-extension data from early days of code)
-    die "no intervals for $repid" if !scalar(@intervals);
+    die "no intervals for rep $repid" if !scalar(@intervals);
     my $initial_epoch = $intervals[0]->{'from'};
     if ($initial_epoch > $start_epoch) {
         my $interval_info;
@@ -325,7 +324,7 @@ $stq->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 while (my ($msgid, $dispatched, $created, $qid, $answer, $repid) = $stq->fetchrow_array()) {
     my $intervals = $allintervals->{$repid};
     next if $debug_fewer_reps && !defined($intervals); 
-    die "intervals for $repid not found" if !defined($intervals);
+    die "intervals for rep $repid not found, msg $msgid" if !defined($intervals);
     my $found = 0;
     my $first = 1;
     foreach my $interval (@$intervals) {
@@ -353,7 +352,7 @@ while (my ($msgid, $dispatched, $created, $qid, $answer, $repid) = $stq->fetchro
         }
         $first = 0;
     }
-    die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched no interval rep $repid created $created" if !$found;
+    die Dumper($repinfo{$repid}) . Dumper($intervals) . "matched no interval rep $repid msg $msgid created $created" if !$found;
 }
 foreach my $repid (@allreps) {
     my $intervals = $allintervals->{$repid};
@@ -473,7 +472,7 @@ sub work_out_rep_category($) {
         $sent_m += $sent_messages{$repid};
         my @newints = @{$allintervals->{$repid}};
         if (scalar(@ints) > 0) {
-            die Dumper(\@ints) . Dumper(\@newints). "out of order intervals for person $person_id" 
+            die Dumper(\@ints) . Dumper(\@newints). "out of order intervals when merging the separate sets of intervals for each rep id belonging to person $person_id" 
                 if $ints[-1]->{'to'} >= $newints[0]->{'from'} + 30; # 30 seconds for scripts that del/add at once but with small gap
         }
         push @ints, @newints;
