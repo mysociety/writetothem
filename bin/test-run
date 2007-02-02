@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.46 2007-02-01 09:30:46 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.47 2007-02-02 07:47:20 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -353,7 +353,7 @@ sub do_send_example_message {
     set_base_url("");
     set_fyr_date('1990-01-01');
     send_message_to_rep(0, 
-        'CB23QJ', # The Guildhall, Cambridege 
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
         { 
             writer_address1 => '23 Something Street',
@@ -435,7 +435,7 @@ sub do_send_blocked_message {
 
     # The message shouldn't be delivered, as it should be frozen
     send_message_to_rep(1, 
-        'CB23QJ', # The Guildhall, Cambridege 
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
         { 
             writer_address1 => '23 Something Street',
@@ -655,12 +655,13 @@ sub do_send_lords_message {
 }
 
 #############################################################################
-sub do_send_fax_message{
+
+sub do_send_fax_message {
     set_base_url("");
     set_fyr_date('1993-01-01');
     my $dummy_fax = '0000';
     send_message_to_rep(6,
-        'CB23QJ', #
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth',
                          {
             writer_address1 => '75 Toner Place',
@@ -684,7 +685,7 @@ sub do_send_fax_message{
     $dummy_fax = '0001';
 
     send_message_to_rep(8,
-        'CB23QJ', #
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth',
                            {
             writer_address1 => '75 Toner Place',
@@ -704,7 +705,7 @@ sub do_send_fax_message{
     # Check that a two page fax is sent (one page and one cover)
     $wth->fax_get_sent_to($dummy_fax, 2);
 
-    #try a multiple page message 
+    # Try a multiple page message 
     $dummy_fax = '0002';
 
     my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
@@ -713,7 +714,7 @@ sub do_send_fax_message{
         $body = $body . $body; 
     }
     send_message_to_rep(9,
-        'CB23QJ', #
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth',
                         {
             writer_address1 => '75 Toner Place',
@@ -736,14 +737,15 @@ sub do_send_fax_message{
 }
 
 #############################################################################
-sub do_send_group_message{
+
+sub do_send_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01');
     my @rep_names = ('Christopher Beazley','Robert Sturdy','Jeffrey Titford','Geoffrey Van Orden','Tom Wise','Andrew Duff','Richard Howitt');
     
     
     send_message_to_rep(7,
-        'CB23QJ', #
+        'CB23QJ', # The Guildhall, Cambridge 
         'all',
                         {
             writer_address1 => '44 Multiple Street',
@@ -787,7 +789,7 @@ sub do_send_group_message{
 sub do_send_bouncing_message() {
     set_base_url("");
     send_message_to_rep(0, 
-        'CB23QJ', # The Guildhall, Cambridege 
+        'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
         { 
             writer_address1 => '10 Boing Boing Land',
