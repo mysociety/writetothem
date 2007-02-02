@@ -8,7 +8,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.7 2006-02-17 15:56:13 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.8 2007-02-02 12:21:22 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -58,8 +58,9 @@ print STDERR "year: $year epochs of calculation: $start_epoch => $end_epoch\n";
 my $summary_types = {
     # Councillors of whatever sort 
     'council' => ['DIW','CED','LBW','COP','LGE','MTW','UTE','UTW'],
-    # MPs 
+    # Parliament 
     'westminster' => ['WMC'],
+    'lords' => ['HOC'],
     # Devolved assembly members / MSPs
     'scotland' => ['SPC','SPE'],
     'wales' => ['WAC','WAE'],
@@ -94,6 +95,7 @@ my $stn = dbh()->prepare("
 my $sent_messages;
 $stn->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 while (my ($n, $reptype) = $stn->fetchrow_array()) {
+    die "$reptype not known" if !$summary_reverse->{$reptype};
     $sent_messages->{$summary_reverse->{$reptype}} += $n;
 }
 print STDERR "done\n";
