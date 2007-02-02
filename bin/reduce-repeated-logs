@@ -7,6 +7,9 @@
 # e.g.
 # unexpected error (type RABX::Error::User) while processing message: Representative ID '13531' not found (repeated 16138 times)
 #
+# By default, scans all messages with more log file entries than $low below.
+# Or specify a message id to do just that message.
+#
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
@@ -14,7 +17,7 @@
 # TODO:
 # Cope with messages which have alternating lines repeated many times.
 
-my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.4 2006-08-21 14:46:56 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.5 2007-02-02 12:16:35 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -162,9 +165,14 @@ sub reduce_log($) {
 #reduce_log('7f715e54e05dd8428f8a');
 #exit;
 
+my $one_id = "";
+if (defined($ARGV[0])) {
+    $one_id = " and message_id = '" . $ARGV[0] . "'";
+}
+
 # Read everything with lots of duplicates, using heuristic here
 my $st = dbh()->prepare("select count(*) as c, message_id, message
-    from message_log group by message_id, message having count(*) > $low order by c desc");
+    from message_log group by message_id, message having count(*) > $low $one_id order by c desc");
 $st->execute();
 while (my ($count, $message_id, $message) = $st->fetchrow_array()) {
     my ($total_rows) = dbh()->selectrow_array("select count(*) from message_log");
