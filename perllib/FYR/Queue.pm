@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.242 2007-01-31 17:38:43 louise Exp $
+# $Id: Queue.pm,v 1.243 2007-02-03 14:27:01 matthew Exp $
 #
 
 package FYR::Queue;
@@ -230,6 +230,7 @@ sub recipient_test ($) {
     throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
     my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
     throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
+    throw FYR::Error('This is a deleted representative') if $recipient->{deleted};
 
     # Decide how to send message
     work_out_destination($recipient);
