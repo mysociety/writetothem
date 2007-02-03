@@ -32,22 +32,19 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 
 <p id="zeitgeist_nav"><strong>Summary</strong> | <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
 
+<? if ($values['year'] == '2005') { ?>
 <p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
 table of MP responsiveness data, measuring
 the proportion of users who said that they had heard something back
 from their MP after they had written to them.</p>
-
 <p>In 2005 <a href="http://www.mysociety.org/">mySociety</a> held off publishing an updated version of this data
 because we were busy totally rebuilding FaxYourMP as <a href="/">WriteToThem</a>,
 adding all the UK's 20,000+ other elected representatives, such as
 councillors and MSPs.</p>
-
 <p>We are now publishing this data to celebrate WriteToThem's first
 birthday, and to fulfil our parent charity's registered objects &mdash; to
 conduct research into the interaction between elected bodies and the
 Internet.</p>
-
-
 <h3>Messages to MPs during 2005</h3>
 <map name="imap">
 <area shape="rect" coords="172,66,250,86" href="http://www.feedmebetter.com/getinvolved/lobbymp.php">
@@ -60,6 +57,8 @@ Internet.</p>
 <p><strong>Note:</strong> During the period up to a General Election there are
 no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
 MPs on 14th April, enabling it again a week after the election on 12th May.</p>
+
+<? } ?>
 
 <h3>Performance of elected bodies</h3>
 <table class="zeitgeist">
@@ -76,7 +75,8 @@ $type_map = array( 'europe' => 'Members of the European Parliament',
     'wales' => 'Welsh Assembly Members',
     'northern_ireland' => 'Northern Ireland Assembly Members',
     'london' => 'London Assembly Members',
-    'westminster' => 'Members of Parliament',
+    'westminster' => 'House of Commons',
+    'lords' => 'House of Lords',
     'council' => 'Councillors',
     'total' => 'Total / average');
 foreach ($values['types_by_responsiveness'] as $type) {

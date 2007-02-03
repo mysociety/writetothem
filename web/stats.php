@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.16 2006-02-20 18:41:13 francis Exp $
+ * $Id: stats.php,v 1.17 2007-02-03 02:33:57 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -25,6 +25,9 @@ if (!get_http_var('type') || !get_http_var('year')) {
     exit;
 }
 $postcode = get_http_var('pc');
+$previous_year = $year - 1;
+if ($year == 2005)
+    $previous_year = 'FYMP';
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
@@ -49,9 +52,11 @@ if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
 }
 
 if ($type == 'mps') {
-    require_once "../phplib/questionnaire_report_FYMP_WMC.php";
-    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_FYMP_WMC"]);
+    // Table of responsiveness of MPs
+    require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
+    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_{$previous_year}_WMC"]);
 } elseif ($type == 'zeitgeist') {
+    // Miscellaneous general statistics
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
         $GLOBALS["party_report_${year}_WMC"],
         $GLOBALS["questionnaire_report_${year}_WMC"]
@@ -117,23 +122,23 @@ function by_response($a, $b) {
     return 0;
 }
 
-function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $fymp_report) {
-    foreach ($fymp_report as $key => $row) {
-	$fymp_data[] = array(
-            'name' => $row['name'],
-            'person_id' => $row['person_id'],
-            'category' => $row['category'],
-            'response' => $row['responded_mean'],
-            'low' => $row['responded_95_low'],
-            'high' => $row['responded_95_high']
-	);
+function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report) {
+    foreach ($last_year_report as $key => $row) {
+        $last_year_data[] = array(
+                'name' => $row['name'],
+                'person_id' => $row['person_id'],
+                'category' => $row['category'],
+                'response' => $row['responded_mean'],
+                'low' => $row['responded_95_low'],
+                'high' => $row['responded_95_high']
+        );
     }
-    usort($fymp_data, 'by_response');
+    usort($last_year_data, 'by_response');
     $position = 0;
     $same_stat = 1;
     $last_response = -1;
     $last_low = -1;
-    foreach ($fymp_data as $key => $row) {
+    foreach ($last_year_data as $key => $row) {
         if ($row['response'] != $last_response || $row['low'] != $last_low) {
 	    $position += $same_stat;
 	    $same_stat = 1;
