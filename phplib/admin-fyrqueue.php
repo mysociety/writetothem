@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.120 2007-02-01 01:28:26 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.121 2007-02-05 16:08:07 matthew Exp $
  * 
  */
 
@@ -517,6 +517,8 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
             if ($message['state'] == 'pending')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
+	    elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed')
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Retry');
 
             if (!get_http_var('body'))
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
@@ -902,6 +904,7 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
 <br><b>error with email</b> rejects a message, sending a "could not deliver" email to constituent.
 <br><b>fail silently</b> rejects a message, with no email to the constituent.
 <br><b>confirm</b> moves 'pending' to 'ready', the same as user clicking confirm link in email
+<br><b>retry</b> moves a failed message back to 'ready', restarting the sending process
 <br><b>view body</b> should only be done if you have good reason to believe it is an abuse of our service.
 <br><b>edit contact details</b> by clicking on the recipient name
 </p>
@@ -931,11 +934,11 @@ successfully sent; <em>or</em> it has been sent by email but encountered a
 fatal bounce for a transient error condition (such as the recipient's mailbox
 being full).</dd>
 
-<dt>bounce-wait <em>email only</em></dt>
+<dt>bounce_wait <em>email only</em></dt>
 <dd>The message has been sent, but we hang on to it for a little while in case
 a bounce message arrives. Bounce messages are either automatically classified
 (where they meet the RFC1892 standard for delivery status notifications) or
-passed into the bounce-confirm state for manual classification.</dd>
+passed into the bounce_confirm state for manual classification.</dd>
 
 <dt>sent</dt>
 <dd>The message has been sent (and, in case of an email, no bounce message has

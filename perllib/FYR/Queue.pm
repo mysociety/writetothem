@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.243 2007-02-03 14:27:01 matthew Exp $
+# $Id: Queue.pm,v 1.244 2007-02-05 16:08:07 matthew Exp $
 #
 
 package FYR::Queue;
@@ -441,16 +441,16 @@ sub logmsg ($$$;$) {
 # %allowed_transitions
 # Transitions we're allowed to make in the state machine.
 my %allowed_transitions = (
-        new =>              [qw(pending failed)],
-        pending =>          [qw(ready failed failed_closed)],
+        new =>              [qw(pending failed_closed)],
+        pending =>          [qw(ready failed_closed)],
         ready =>            [qw(error bounce_wait sent)],
-        bounce_wait =>      [qw(bounce_confirm sent ready)],
+        bounce_wait =>      [qw(bounce_confirm sent ready error)],
         bounce_confirm =>   [qw(bounce_wait error ready)],
         error =>            [qw(failed)],
         sent =>             [qw(finished)],
-        failed =>           [qw(failed_closed)],
+        failed =>           [qw(ready failed_closed)],
         finished =>         [],
-        failed_closed =>    []
+        failed_closed =>    [qw(ready)]
     );
 
 # turn this into hash-of-hashes
@@ -1363,7 +1363,7 @@ my %state_timeout_state = qw(
         pending         failed_closed
         ready           error
         bounce_wait     sent
-        sent            finished
+        error           failed
         failed          failed_closed
     );
 
@@ -1500,13 +1500,6 @@ my %state_action = (
                 if (defined($msg->{dispatched})) {
                     if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL) {
                         # Don't attempt redelivery too often.
-                        return;
-                    } elsif ($msg->{confirmed} < time() - $state_timeout{ready}) {
-                        # Time out messages after the same interval they'd have
-                        # lasted if stuck in the "ready" state (i.e. with
-                        # locally-detected delivery errors).
-                        logmsg($id, 1, "message bouncing for too long; failing");
-                        state($id, 'error');
                         return;
                     }
                     logmsg($id, 0, "making email redelivery attempt");
