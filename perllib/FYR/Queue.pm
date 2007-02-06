@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.244 2007-02-05 16:08:07 matthew Exp $
+# $Id: Queue.pm,v 1.245 2007-02-06 11:15:17 louise Exp $
 #
 
 package FYR::Queue;
@@ -1207,9 +1207,10 @@ sub confirm_email ($) {
         # Check to see if this message belongs to a group - if it does,
         # all the emails in the group can be confirmed
         my $msg = message($id);
-        group_state($id, 'ready', $msg->{group_id});
         if (defined($msg->{group_id})){
             my $group_id = $msg->{group_id};
+            lock_group($group_id);
+            group_state($id, 'ready', $group_id);
             dbh()->do('update message set confirmed = ? where group_id = ?', {}, time(), $group_id);
             logmsg($id, 1, "sender email address confirmed (group confirmation)");
             my $memberid;
@@ -1220,6 +1221,7 @@ sub confirm_email ($) {
                 }
             }
         }else{
+            state($id, 'ready');
             dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
             logmsg($id, 1, "sender email address confirmed");
         }
