@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.50 2007-01-31 14:59:27 louise Exp $
+-- $Id: schema.sql,v 1.51 2007-02-07 14:23:38 louise Exp $
 --
 
 set client_min_messages to error;
@@ -155,7 +155,8 @@ create index message_sender_email on message(sender_email);
 create index message_lower_sender_email on message(lower(sender_email));
 create index message_recipient_email on message(recipient_email);
 create index message_lower_recipient_email on message(lower(recipient_email));
-
+-- Group actions look up messages by group
+create index message_group_id_idx on message(group_id);
 alter table message cluster on message_pkey;
 
 -- message_extradata
