@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.245 2007-02-06 11:15:17 louise Exp $
+# $Id: Queue.pm,v 1.246 2007-02-07 11:28:00 louise Exp $
 #
 
 package FYR::Queue;
@@ -238,9 +238,13 @@ sub recipient_test ($) {
     return 1
 }
 
-=item write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE] [GROUP_ID]
 
-Write details of a message for sending. ID is the identity of the message,
+
+=item write_messages IDLIST SENDER RECIPIENTLIST TEXT [COBRAND] [COCODE] [GROUP_ID] [NO_QUESTIONNAIRE]
+
+Write details of a set of messages for sending in one transaction.
+
+IDLIST is a list of the identities of the messages,
 
 SENDER is a reference to hash containing details of the sender including
 elements: name, the sender's full name; email, their email address; address,
@@ -248,9 +252,8 @@ their full postal address; postcode, their post code; and optionally phone,
 their phone number; ipaddr, their IP address; referrer, website that referred
 them to this one. 
 
-RECIPIENT is the DaDem ID number of the recipient of the message; and TEXT is
-the text of the message, with line breaks. Returns true on success, or an error
-code on failure.
+RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of the message; 
+and TEXT is the text of the message, with line breaks. 
 
 COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
 a reference code for them.
@@ -258,150 +261,225 @@ a reference code for them.
 GROUP_ID is the identity of a group of messages sent by the same sender at the
 same time with the same content to a group of representatives.
 
+NO_QUESTIONNAIRE is an optional flag indicating that no questionnaires should be sent
+for these messages
+
+Returns an associative array keyed on message ID. Each value is a associative array
+with the following keys
+
+'recipient_id' - DaDem id of the recipient
+'status_code' - 0 = success, 1 = FYR::Error in queueing, 2 = Flagged for abuse 
+'abuse_result' - result of abuse flagging or undef
+'error_code'  - FYR::Error code or undef 
+'error_text'- FYR::Error text or undef
+
 This function is called remotely and commits its changes.
 
 =cut
-sub write ($$$$;$$$$) {
-    my ($id, $sender, $recipient_id, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
+sub write_messages($$$$;$$$$){
+    
+    my ($msgidlist, $sender, $recipient_list, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
+    my %ret = ();
+    my $recipient_id;
+    my $id;
 
+    # should have the same number of msgids as recipients
+    if (scalar(@$msgidlist) != scalar(@$recipient_list)){
+		throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params");
+	}
+	# If there are multiple messages, there should be a group id
+	if (scalar(@$msgidlist) > 1 && !defined($group_id)){
+		throw FYR::Error("No group ID supplied for multiple messages");	
+	}
+    
     if ($no_questionnaire){
         $no_questionnaire = 't';
     }else{
         $no_questionnaire = 'f';
     }
-    throw FYR::Error("Bad ID specified")
-        unless ($id =~ m/^[0-9a-f]{20}$/i);
-
-    my $ret = undef;
-    try {
-        # Get details of the recipient.
-        throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
-        my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-        throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
+    
+    try{
 
         # Check that sender contains appropriate information.
-        throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
-        foreach (qw(name email address postcode)) {
-            throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
+		throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
+		foreach (qw(name email address postcode)) {
+		    throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
+		}
+		throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
+		throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid") unless (mySociety::Util::is_valid_postcode($sender->{postcode}));
+				
+		foreach $id (@$msgidlist){
+		    try{
+		
+				$recipient_id = pop(@$recipient_list);
+				
+                $ret{$id} = {recipient_id => $recipient_id,
+						  	 status_code  => undef,
+					   		 abuse_result => undef,
+					  		 error_code   => undef, 
+				  	 		 error_text   => undef};
+				  
+				#pre insertion checks
+				throw FYR::Error("Bad ID specified")
+				    unless ($id =~ m/^[0-9a-f]{20}$/i);
+				# Get details of the recipient.
+				throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
+				my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
+				throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
+		
+                $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
+		
+				# Give recipient their proper prefixes/suffixes.
+				$recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
+		
+				# Decide how to send message
+				work_out_destination($recipient);
+		
+				# Bodge things so that mails go to sender if in testing
+				# ids > 2000000 are the ZZ9 9ZZ postcode test addresses.
+				if ($recipient_id < 2000000) {
+				    if (mySociety::Config::get('FYR_REFLECT_EMAILS')) {
+					$recipient->{email} = $sender->{email};
+					$recipient->{fax} = undef;
+				    }
+				}
+		
+				# Strip any leading spaces from the address.
+				$sender->{address} = join("\n", map { s#^\s+##; $_ } split("\n", $sender->{address}));
+								      
+				#check for existing message with this ID
+				if (my $msg = dbh()->selectrow_hashref("select * from message where id = ?", {}, $id)){
+					throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
+				}
+		
+				# XXX should also check that the text bits are valid UTF-8.
+		
+				# Queue the message.
+						      
+				dbh()->do(q#
+					insert into message (
+						id,
+						sender_name, sender_email, sender_addr, sender_phone,
+						sender_postcode, sender_ipaddr, sender_referrer,
+						recipient_id, recipient_name, recipient_type,
+						recipient_email, recipient_fax,
+						recipient_via,
+						message,
+						state,
+						created, laststatechange,
+						numactions, dispatched,
+						cobrand, cocode, group_id, no_questionnaire
+				    ) values (
+						?,
+						?, ?, ?, ?, ?, ?, ?,
+						?, ?, ?,
+						?, ?,
+						?,
+						?,
+						'new',
+						?, ?,
+						0, null,
+						?, ?, ?, ?
+					)#, {},
+						$id,
+						(map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
+						$recipient_id,
+						(map { $recipient->{$_} || undef } qw(name type email fax)),
+						$recipient->{via} ? 't' : 'f',
+						$text,
+						FYR::DB::Time(), FYR::DB::Time(),
+						$cobrand, $cocode, $group_id, $no_questionnaire);
+						      
+				# Log creation of message but don't commit yet
+				my $logaddr = $sender->{address};
+				$logaddr =~ s#\n#, #gs;
+				$logaddr =~ s#,+#,#g;
+				$logaddr =~ s#, *$##;
+
+				logmsg($id, 1,
+    	                sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
+					$sender->{name},
+					$sender->{email},
+					$sender->{phone} ? " $sender->{phone}" : "",
+    	        	$logaddr,
+					$recipient->{name},
+					defined($recipient->{fax}) ? "fax" : "email",
+					$recipient->{fax} || $recipient->{email}), undef, 1 );
+            	$ret{$id}{status_code} = 0;
+			}catch FYR::Error with{
+				#add the error to the result for this message
+				my $E = shift;
+				$ret{$id}{status_code} = 1;
+				$ret{$id}{error_code} = $E->value();
+				$ret{$id}{error_text} = $E->text();
+			};					  
+		}		
+	}otherwise{
+		
+		# If there's a real problem inserting one of the messages, 
+		# rollback the whole set
+		my $E = shift;
+		if ($E->value()) {
+		   warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";
+		}
+		dbh()->rollback();
+		throw $E;
+	}finally{
+		dbh()->commit();
+	};
+	    
+ 	try{
+ 		# now do abuse checks on the messages
+ 		my $abuse_result;
+        # lock the group until we know if they're OK
+        # otherwise the queue could send the confirmation
+        if (defined($group_id)){
+            lock_group($group_id);
         }
-        throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
-        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid") unless (mySociety::Util::is_valid_postcode($sender->{postcode}));
+ 		foreach $id (@$msgidlist){
+ 			# If the message already threw an error
+ 			# it won't be in the queue
+ 			if ($ret{$id}{status_code} == 0){
+ 				# Check for possible abuse
+ 				my $abuse_result = FYR::AbuseChecks::test(message($id));
+                
+                if (defined($abuse_result)) {
+                    if ($abuse_result eq 'freeze') {
+ 						logmsg($id, 1, "abuse system froze message", undef, 1);
+ 						dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+ 				    } else {
+ 						logmsg($id, 1, "abuse system REJECTED message", undef, 1);
+ 						dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+ 						state($id, 'failed_closed');
+ 						# Delete the message, so people can go back and try again
+ 						dbh()->do("delete from message_bounce where message_id = ?", {}, $id);
+ 						dbh()->do("delete from message_extradata where message_id = ?", {}, $id);
+ 						dbh()->do("delete from message_log where message_id = ?", {}, $id);
+ 						dbh()->do("delete from message where id = ?", {}, $id);
+ 						$ret{$id}{status_code} = 2;
+ 						$ret{$id}{abuse_result} = $abuse_result;
+ 				    }
+ 				}
+ 	    	}
+ 		}
+ 		    
+ 	    # Commit changes
+ 		dbh()->commit();
+ 		
+ 		# Wake up the daemon to send the confirmation mail.
+ 		notify_daemon();   
+ 	}otherwise{
+ 		# If there's a real problem with the abuse stuff
+ 		# rollback all the abuse checks
+ 		my $E = shift;
+ 		if ($E->value()) {
+ 		    warn "fyr queue rolling back transaction after error in abuse check: " . $E->text() . "\n";
+ 		}
+ 		dbh()->rollback();
+ 		throw $E;
+ 	};
 
-        $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
-
-        # Give recipient their proper prefixes/suffixes.
-        $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
-
-        # Decide how to send message
-        work_out_destination($recipient);
-
-        # Bodge things so that mails go to sender if in testing
-        # ids > 2000000 are the ZZ9 9ZZ postcode test addresses.
-        if ($recipient_id < 2000000) {
-            if (mySociety::Config::get('FYR_REFLECT_EMAILS')) {
-                $recipient->{email} = $sender->{email};
-                $recipient->{fax} = undef;
-            }
-        }
-
-        # Strip any leading spaces from the address.
-        $sender->{address} = join("\n", map { s#^\s+##; $_ } split("\n", $sender->{address}));
-
-        # XXX should also check that the text bits are valid UTF-8.
-
-        # Queue the message.
-        try {
-            dbh()->do(q#
-                insert into message (
-                    id,
-                    sender_name, sender_email, sender_addr, sender_phone,
-                    sender_postcode, sender_ipaddr, sender_referrer,
-                    recipient_id, recipient_name, recipient_type,
-                        recipient_email, recipient_fax,
-                        recipient_via,
-                    message,
-                    state,
-                    created, laststatechange,
-                    numactions, dispatched,
-                    cobrand, cocode, group_id, no_questionnaire
-                ) values (
-                    ?,
-                    ?, ?, ?, ?, ?, ?, ?,
-                    ?, ?, ?,
-                        ?, ?,
-                        ?,
-                    ?,
-                    'new',
-                    ?, ?,
-                    0, null,
-                    ?, ?, ?, ?
-                )#, {},
-                $id,
-                (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
-                $recipient_id,
-                    (map { $recipient->{$_} || undef } qw(name type email fax)),
-                    $recipient->{via} ? 't' : 'f',
-                $text,
-                FYR::DB::Time(), FYR::DB::Time(),
-                $cobrand, $cocode, $group_id, $no_questionnaire);
-        } catch mySociety::DBHandle::Error with {
-            # Assume this is a duplicate-insert error.
-            # XXX check by a select?
-            throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
-        };
-
-        dbh()->commit();
-
-        # Log creation of message
-        my $logaddr = $sender->{address};
-        $logaddr =~ s#\n#, #gs;
-        $logaddr =~ s#,+#,#g;
-        $logaddr =~ s#, *$##;
-
-        logmsg($id, 1,
-                    sprintf("created new message from %s <%s>%s, %s, to %s via %s to %s",
-                    $sender->{name},
-                    $sender->{email},
-                    $sender->{phone} ? " $sender->{phone}" : "",
-                    $logaddr,
-                    $recipient->{name},
-                    defined($recipient->{fax}) ? "fax" : "email",
-                    $recipient->{fax} || $recipient->{email}));
-
-        # Check for possible abuse
-        my $abuse_result = FYR::AbuseChecks::test(message($id));
-        if (defined($abuse_result)) {
-            if ($abuse_result eq 'freeze') {
-                logmsg($id, 1, "abuse system froze message");
-                dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-            } else {
-                logmsg($id, 1, "abuse system REJECTED message");
-                dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-                state($id, 'failed_closed');
-                # Delete the message, so people can go back and try again
-                dbh()->do("delete from message_bounce where message_id = ?", {}, $id);
-                dbh()->do("delete from message_extradata where message_id = ?", {}, $id);
-                dbh()->do("delete from message_log where message_id = ?", {}, $id);
-                dbh()->do("delete from message where id = ?", {}, $id);
-                $ret = $abuse_result;
-            }
-        }
-    
-        # Commit changes
-        dbh()->commit();
-
-        # Wake up the daemon to send the confirmation mail.
-        notify_daemon();
-    } otherwise {
-        my $E = shift;
-        if ($E->value() && $E->value() != FYR::Error::MESSAGE_ALREADY_QUEUED) {
-            warn "fyr queue rolling back transaction after error: " . $E->text() . "\n";
-        }
-        dbh()->rollback();
-        throw $E;
-    };
-
-    return $ret;
+	return \%ret;
 }
 
 my $logmsg_handler;
@@ -409,12 +487,15 @@ sub logmsg_set_handler ($) {
     $logmsg_handler = $_[0];
 }
 
-# logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
+
+# logmsg ID IMPORTANT DIAGNOSTIC [EDITOR] [NO_COMMIT]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
 # then mark the log message as exceptional. Optionally, EDITOR is the name
-# of the human who performed the action relating to the log message.
-sub logmsg ($$$;$) {
-    my ($id, $important, $msg, $editor) = @_;
+# of the human who performed the action relating to the log message. NO_COMMIT
+# is an optonal flag indicating that the calling procedure will handle commits
+# on the db handle. The default behaviour of this method is to commit.
+sub logmsg ($$$;$$) {
+    my ($id, $important, $msg, $editor, $no_commit) = @_;
     our $dbh;
     # XXX should ping
     $dbh ||= new_dbh();
@@ -427,16 +508,17 @@ sub logmsg ($$$;$) {
             message, exceptional,
             editor
         ) values (?, ?, ?, ?, ?, ?, ?)',
-        {},
+	     {},
         $id,
         $log_hostname, FYR::DB::Time(), state($id),
         $msg, $important ? 't' : 'f',
-        $editor);
-    $dbh->commit();
+	     $editor);
+    $dbh->commit() unless $no_commit;
     # XXX should we pass the hostname to the handler?
     &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important)
         if (defined($logmsg_handler));
 }
+
 
 # %allowed_transitions
 # Transitions we're allowed to make in the state machine.
