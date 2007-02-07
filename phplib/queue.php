@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.66 2007-02-01 18:22:50 francis Exp $
+ * $Id: queue.php,v 1.67 2007-02-07 11:31:57 louise Exp $
  *
  */
 
@@ -84,10 +84,12 @@ function msg_recipient_test($recipient) {
     return $result;
 }
 
-/* msg_write ID SENDER RECIPIENT TEXT [COBRAND] [COCODE] [GROUP_ID]
+/* msg_write_messages IDLIST SENDER RECIPIENTLIST TEXT [COBRAND] [COCODE]
+  [GROUP_ID] [NO_QUESTIONNAIRE]
 
-  Write details of a message for sending. ID is the identity of the
-  message,
+  Write details of a set of messages for sending in one transaction.
+
+  IDLIST is a list of the identities of the messages,
 
   SENDER is a reference to hash containing details of the sender including
   elements: name, the sender's full name; email, their email address;
@@ -95,9 +97,8 @@ function msg_recipient_test($recipient) {
   optionally phone, their phone number; ipaddr, their IP address; referrer,
   website that referred them to this one. 
 
-  RECIPIENT is the DaDem ID number of the recipient of the message; and
-  TEXT is the text of the message, with line breaks. Returns true on
-  success, or an error code on failure.
+  RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of
+  the message; and TEXT is the text of the message, with line breaks. 
 
   COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE
   is a reference code for them.
@@ -105,11 +106,22 @@ function msg_recipient_test($recipient) {
   GROUP_ID is the identity of a group of messages sent by the same sender
   at the same time with the same content to a group of representatives.
 
+  NO_QUESTIONNAIRE is an optional flag indicating that no questionnaires
+  should be sent for these messages
+
+  Returns an associative array keyed on message ID. Each value is a
+  associative array with the following keys
+
+  'recipient_id' - DaDem id of the recipient 'status_code' - 0 = success, 1
+  = FYR::Error in queueing, 2 = Flagged for abuse 'abuse_result' - result
+  of abuse flagging or undef 'error_code' - FYR::Error code or undef
+  'error_text'- FYR::Error text or undef
+
   This function is called remotely and commits its changes. */
-function msg_write($id, $sender, $recipient, $text, $cobrand = null, $cocode = null, $group_id = null) {
+function msg_write_messages($idlist, $sender, $recipientlist, $text, $cobrand = null, $cocode = null, $group_id = null, $no_questionnaire = null) {
     global $msg_client;
     $params = func_get_args();
-    $result = $msg_client->call('FYR.Queue.write', $params);
+    $result = $msg_client->call('FYR.Queue.write_messages', $params);
     return $result;
 }
 
