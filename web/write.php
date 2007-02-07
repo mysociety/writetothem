@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.114 2007-02-07 11:19:50 louise Exp $
+ * $Id: write.php,v 1.115 2007-02-07 11:52:47 louise Exp $
  *
  */
 
@@ -436,10 +436,12 @@ function submitFaxes(){
     // send the message to each representative
     $any_success = false;
     $error_msg = "";
-    $no_questionnaire = true;
     
     if ($grpid){
-		    
+	
+        // No questionnaire for group mails
+        $no_questionnaire = true;
+    	    
     	// check the group id  
     	if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
     	template_show_error('Sorry, but your browser seems to be transmitting
@@ -458,6 +460,7 @@ function submitFaxes(){
     	   exit;
     	}   
     }else{
+        $no_questionnaire = false;
     	$msgid_list = array($msgid);
     	$repid_list = array($fyr_who);
     }      
