@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.246 2007-02-07 11:28:00 louise Exp $
+# $Id: Queue.pm,v 1.247 2007-02-07 11:41:48 louise Exp $
 #
 
 package FYR::Queue;
@@ -404,7 +404,7 @@ sub write_messages($$$$;$$$$){
     	        	$logaddr,
 					$recipient->{name},
 					defined($recipient->{fax}) ? "fax" : "email",
-					$recipient->{fax} || $recipient->{email}), undef, 1 );
+					$recipient->{fax} || $recipient->{email}));
             	$ret{$id}{status_code} = 0;
 			}catch FYR::Error with{
 				#add the error to the result for this message
@@ -445,10 +445,10 @@ sub write_messages($$$$;$$$$){
                 
                 if (defined($abuse_result)) {
                     if ($abuse_result eq 'freeze') {
- 						logmsg($id, 1, "abuse system froze message", undef, 1);
+ 						logmsg($id, 1, "abuse system froze message");
  						dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
  				    } else {
- 						logmsg($id, 1, "abuse system REJECTED message", undef, 1);
+ 						logmsg($id, 1, "abuse system REJECTED message");
  						dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
  						state($id, 'failed_closed');
  						# Delete the message, so people can go back and try again
@@ -488,14 +488,12 @@ sub logmsg_set_handler ($) {
 }
 
 
-# logmsg ID IMPORTANT DIAGNOSTIC [EDITOR] [NO_COMMIT]
+# logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
 # then mark the log message as exceptional. Optionally, EDITOR is the name
-# of the human who performed the action relating to the log message. NO_COMMIT
-# is an optonal flag indicating that the calling procedure will handle commits
-# on the db handle. The default behaviour of this method is to commit.
-sub logmsg ($$$;$$) {
-    my ($id, $important, $msg, $editor, $no_commit) = @_;
+# of the human who performed the action relating to the log message. 
+sub logmsg ($$$;$) {
+    my ($id, $important, $msg, $editor) = @_;
     our $dbh;
     # XXX should ping
     $dbh ||= new_dbh();
@@ -513,7 +511,7 @@ sub logmsg ($$$;$$) {
         $log_hostname, FYR::DB::Time(), state($id),
         $msg, $important ? 't' : 'f',
 	     $editor);
-    $dbh->commit() unless $no_commit;
+    $dbh->commit();
     # XXX should we pass the hostname to the handler?
     &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important)
         if (defined($logmsg_handler));
