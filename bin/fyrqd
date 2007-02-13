@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.25 2006-11-10 18:05:18 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.26 2007-02-13 07:49:03 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -50,12 +50,13 @@ sub logmsg_handler ($$$$$) {
                 if ($time > time() + 5);
 }
 
-# run_daemon EMAIL FAX SEQUENCE SOCKET
+# run_daemon EMAIL FAX SEQUENCE SOCKET [MSGID]
 # Actual guts of the thing. SEQUENCE is the total number of daemon processes
 # which have been started before this one. FAX and EMAIL indicate whether this
-# process should try to send emails and/or faxes, respectively.
-sub run_daemon ($$$$) {
-    my ($email, $fax, $seq, $notifysock) = @_;
+# process should try to send emails and/or faxes, respectively. MSGID
+# is optional, and restricts the daemon to only working on the given message.
+sub run_daemon ($$$$;$) {
+    my ($email, $fax, $seq, $notifysock, $msgid) = @_;
     $email ||= 0;
     $fax ||= 0;
 
@@ -66,7 +67,7 @@ sub run_daemon ($$$$) {
         my $t = time();
         print_log('info', "first process running queue");
         $0 = "fyrqd (running queue - startup)";
-        $nactions = FYR::Queue::process_queue($email, $fax, \$foad);
+        $nactions = FYR::Queue::process_queue($email, $fax, \$foad, $msgid);
         $0 = "fyrqd";
         $t = time() - $t;
         print_log('info', "queue run completed; actions: $nactions, time: ${t}s");
@@ -105,7 +106,7 @@ sub run_daemon ($$$$) {
             my $t = time();
             print_log('info', "running queue");
             $0 = "fyrqd (running queue - $doit)";
-            $nactions = FYR::Queue::process_queue($email, $fax, \$foad);
+            $nactions = FYR::Queue::process_queue($email, $fax, \$foad, $msgid);
             $0 = "fyrqd";
             $t = time() - $t;
             print_log('info', "queue run completed; actions: $nactions, time: ${t}s");
@@ -123,6 +124,7 @@ my $pidfilepath = mySociety::Config::get('QUEUE_DAEMON_PIDFILE', '/var/run/fyrqd
 my $email = mySociety::Config::get('QUEUE_DAEMON_SEND_EMAIL', 0);
 my $fax = mySociety::Config::get('QUEUE_DAEMON_SEND_FAX', 0);
 my $once = 0;
+my $msgid = 0;
 my $nodetach = 0;
 my $help = 0;
 my $multiple = 0;
@@ -133,6 +135,7 @@ if (!GetOptions(
         'email' =>          \$email,
         'fax' =>            \$fax,
         'once' =>           \$once,
+        'msgid=s' =>        \$msgid,
         'multiple=i' =>     \$multiple,
         'debug' =>          \$nodetach,
         'help' =>           \$help
@@ -150,13 +153,13 @@ if ($help) {
 FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 if ($once) {
-    FYR::Queue::process_queue($email, $fax, \$foad);
+    FYR::Queue::process_queue($email, $fax, \$foad, $msgid);
     exit(0);
 }
 
 if ($multiple) {
     for (my $i=0; $i < $multiple; ++$i) {
-        FYR::Queue::process_queue($email, $fax, \$foad);
+        FYR::Queue::process_queue($email, $fax, \$foad, $msgid);
     }
     exit(0);
 }
@@ -214,7 +217,7 @@ while ($foad == 0) {
             print_log('err', "fork: $!");
         } elsif ($pid == 0) {
             try {
-                run_daemon($email, $fax, $num, $notifysock);
+                run_daemon($email, $fax, $num, $notifysock, $msgid);
             } catch Error with {
                 my $E = shift;
                 print_log('err', "process failed with error $E");
@@ -340,6 +343,10 @@ Send faxes or emails respectively. Default is neither.
 
 Run the queue once, then exit.
 
+=item --msgid MSGID
+
+Run for just the specified message.
+
 =item --multiple NUM
 
 Run the queue NUM times, then exit.
@@ -352,5 +359,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.25 2006-11-10 18:05:18 chris Exp $
+$Id: fyrqd,v 1.26 2007-02-13 07:49:03 francis Exp $
 

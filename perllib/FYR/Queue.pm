@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.248 2007-02-07 12:34:21 louise Exp $
+# $Id: Queue.pm,v 1.249 2007-02-13 07:49:03 francis Exp $
 #
 
 package FYR::Queue;
@@ -1695,15 +1695,17 @@ my %state_action = (
         }
     );
 
-# process_queue EMAIL FAX [FOAD]
+# process_queue EMAIL FAX [FOAD] [MSGID]
 # Drive the state machine round; emails will be sent if EMAIL is true, and
 # faxes if FAX is true. If passed, FOAD should be a reference to a scalar which
 # will be tested periodically for an early abort condition. If the referenced
 # scalar ever becomes true, the queue run will be aborted at the earliest
-# convenient opportunity. Returns the number of "significant" message actions
-# taken (ones which result in changes to the database, roughly).
-sub process_queue ($$;$) {
-    my ($email, $fax, $foad) = @_;
+# convenient opportunity. If passed, MSGID should be a message identifier,
+# and the queue is run only for that one message. Returns the number of
+# "significant" message actions taken (ones which result in changes to the
+# database, roughly).
+sub process_queue ($$;$$) {
+    my ($email, $fax, $foad, $msgid) = @_;
     $email ||= 0;
     $fax ||= 0;
     my $f = 0;
@@ -1735,7 +1737,13 @@ sub process_queue ($$;$) {
     # Actions. These are slow (potentially) so lock row-by-row. Process
     # messages in a random order, so that bad ones don't block everything.
     my $nactions = 0;
-    if ($email) {
+    if ($msgid) {
+        # Command line override for just one message
+        $stmt = dbh()->prepare(q#
+                select id, state, group_id from message
+                where id = ?#);
+        $stmt->execute($msgid);
+    } elsif ($email) {
         $stmt = dbh()->prepare(
             'select id, state, group_id from message where ('
                 . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
@@ -1745,6 +1753,7 @@ sub process_queue ($$;$) {
                                 $_, FYR::DB::Time() - $state_action_interval{$_}) }
                         keys %state_action_interval)
             . q#) and (state <> 'ready' or not frozen) order by random()#);
+        $stmt->execute();
     } else {
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state, group_id from message
@@ -1753,8 +1762,8 @@ sub process_queue ($$;$) {
                     and (lastaction is null or lastaction < %d)
                 order by confirmed
                 #, FYR::DB::Time() - $state_action_interval{ready}));
+        $stmt->execute();
     }
-    $stmt->execute();
     while (my ($id, $state, $group_id) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
         # still meets the criteria for sending. Do things this way round so
