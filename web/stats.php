@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.17 2007-02-03 02:33:57 francis Exp $
+ * $Id: stats.php,v 1.18 2007-02-13 14:25:21 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -17,7 +17,7 @@ require_once '../../phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2005';
+$year = '2005';
 $year = intval($year);
 $xml = get_http_var('xml');
 if (!get_http_var('type') || !get_http_var('year')) {
