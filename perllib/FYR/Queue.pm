@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.249 2007-02-13 07:49:03 francis Exp $
+# $Id: Queue.pm,v 1.250 2007-02-13 07:58:23 francis Exp $
 #
 
 package FYR::Queue;
@@ -1543,8 +1543,7 @@ my %state_action = (
                 # Don't attempt to send faxes outside reasonably sane hours --
                 # if we have a typo in a phone number we don't want to call the
                 # victim at all hours of the night.
-                my $hour = (localtime(FYR::DB::Time()))[2];
-                return if ($hour < 8 || $hour > 20);
+                return if outside_fax_hours();
 
                 # Abandon faxes after a few failures.
                 if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
@@ -1694,6 +1693,15 @@ my %state_action = (
             state($id, 'failed_closed');
         }
     );
+
+
+# outside_fax_hours
+# Returns true if time of day is not suitable for sending faxes.
+sub outside_fax_hours() {
+    my $hour = (localtime(FYR::DB::Time()))[2];
+    return 1 if ($hour < 8 || $hour > 20);
+    return 0;
+}
 
 # process_queue EMAIL FAX [FOAD] [MSGID]
 # Drive the state machine round; emails will be sent if EMAIL is true, and
