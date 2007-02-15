@@ -3,9 +3,9 @@
 # Plot graph of WriteToThem message creation rate.
 #
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
-# Email: francsi@mysociety.org. WWW: http://www.mysociety.org/
+# Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: message-send-graph,v 1.13 2006-04-28 23:56:30 francis Exp $
+# $Id: message-send-graph,v 1.14 2007-02-15 18:32:49 francis Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
