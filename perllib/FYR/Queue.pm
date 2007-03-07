@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.250 2007-02-13 07:58:23 francis Exp $
+# $Id: Queue.pm,v 1.251 2007-03-07 14:07:27 louise Exp $
 #
 
 package FYR::Queue;
@@ -635,7 +635,7 @@ Return an array of the IDs for messages in the group GROUP_ID
 sub group_messages($){
     my ($group_id) = @_;
      # Get all the message IDs in the group
-    my $msgs = dbh()->selectcol_arrayref("select id from message where group_id = ?", {}, $group_id);
+    my $msgs = dbh()->selectcol_arrayref("select id from message where group_id = ? order by id", {}, $group_id);
     return $msgs;
 }
 
@@ -692,9 +692,13 @@ sub message ($;$) {
 # Lock the GROUP_ID group of messages using SELECT ... FOR UPDATE
 sub lock_group($) {
     my ($group_id) = @_;
-    my $sth = dbh()->prepare("select * from message where group_id = ? for update");
-    $sth->execute($group_id);
-    throw FYR::Error("No group '$group_id'.") unless ($sth->rows > 0);
+    my $memberid;
+    my $msgs = group_messages($group_id);
+    throw FYR::Error("No group '$group_id'.") unless ($msgs > 0);
+    foreach $memberid (@$msgs){
+        my $sth = dbh()->prepare("select * from message where id = ? for update");
+        $sth->execute($memberid);
+    }
 }
 
 
@@ -1784,7 +1788,7 @@ sub process_queue ($$;$$) {
             my $msg;
             if (defined($group_id) and $email and ($state eq 'new' or $state eq 'pending')){
                 lock_group($group_id);
-                $msg = message($id, 0);
+                $msg = message($id); 
             }else{
                 $msg = message($id, 1);
             }
