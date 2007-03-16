@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.251 2007-03-07 14:07:27 louise Exp $
+# $Id: Queue.pm,v 1.252 2007-03-16 19:35:44 louise Exp $
 #
 
 package FYR::Queue;
@@ -1776,6 +1776,7 @@ sub process_queue ($$;$$) {
                 #, FYR::DB::Time() - $state_action_interval{ready}));
         $stmt->execute();
     }
+    my $process_msg = 0;
     while (my ($id, $state, $group_id) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
         # still meets the criteria for sending. Do things this way round so
@@ -1786,13 +1787,23 @@ sub process_queue ($$;$$) {
             # lock every email in the group - we are going to update all their states
             # as a result of the action
             my $msg;
+            $process_msg = 0;
             if (defined($group_id) and $email and ($state eq 'new' or $state eq 'pending')){
-                lock_group($group_id);
-                $msg = message($id); 
+                $msg = message($id);
+                # Group messages are more likely to have been updated by another process
+                # so check again before spending time locking them
+                if ($msg->{state} eq $state
+                and (!defined($msg->{lastaction})
+                     or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})){
+                    lock_group($group_id);
+                    $msg = message($id);
+                    $process_msg = 1;
+                }
             }else{
                 $msg = message($id, 1);
+                $process_msg = 1;
             }
-            if ($msg->{state} eq $state
+            if ($process_msg and $msg->{state} eq $state
                 and (!defined($msg->{lastaction})
                     or $msg->{lastaction} < FYR::DB::Time() - $state_action_interval{$state})) {
                 # Check for ready+frozen again.
