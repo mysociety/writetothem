@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.58 2007-04-02 17:09:44 louise Exp $
+# $Id: AbuseChecks.pm,v 1.59 2007-04-02 17:18:33 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -180,11 +180,11 @@ sub get_similar_messages ($;$) {
 # on one message as they will produce the same results for every message in a 
 # message group. 
 my @individual_tests = (
-      sub ($) {
         # Representative emailing themself, i.e. same email address
         # TODO Actually look up email address in DaDem, as it won't work if
         # they are somebody who is faxed, even if we know their email.  This
         # can also spot representatives emailing each other, is that useful?
+      sub ($) {
             my ($msg) = @_;
             my $rep_self = undef;
             if (!mySociety::Config::get('FYR_REFLECT_EMAILS')
