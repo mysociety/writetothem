@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.47 2007-02-02 07:47:20 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.48 2007-04-02 17:16:11 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -51,7 +51,7 @@ print <<END
 Usage: test-run [OPTION] [ACTION]...
 
 Actions are a list of tests, run if present in this order:
-    example - send example message successfully, and an example message blocked by ratty
+    example - send example message successfully, and some example messages blocked by ratty
     bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
     cobrand - send example message via a cobrand site (AnimalAid)
     lords   - send example message to a Lord
@@ -156,7 +156,10 @@ if ($action{'example'}) {
     print "Testing ratty blocking message...\n" if $verbose > 0;
     # do_send_blocked_message depends on do_send_example_message having
     # been already called, to populate the Ratty example fields table
-    do_send_blocked_message();
+    do_send_blocked_message(); 
+    # do_send_group_abuse is also dependent on do_send_example_message
+    do_send_group_abuse();
+
 }
 if ($action{'bounce'}) {
     print "Testing bouncing stuff...\n" if $verbose > 0;
@@ -735,6 +738,167 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 2);
 
 }
+
+#############################################################################
+sub do_send_group_abuse {
+    set_base_url("");
+    set_fyr_date('1990-07-30');
+    # Go to abuse rules page
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
+    # Test that the abuse rule is there
+    $wth->browser_check_contents('Block quicker than you can imagine');
+
+    # All mails in a group should be checked for abuse
+    my @rep_names = ('Christopher Beazley','Robert Sturdy','Jeffrey Titford','Geoffrey Van Orden','Tom Wise','Andrew Duff','Richard Howitt');
+    send_message_to_rep(10,
+                        'CB23QJ', # The Guildhall, Cambridge
+                        'all',
+                        {
+            writer_address1 => '44 Multiple Street',
+            writer_town => 'Batchcester',
+            writer_county => 'Groupshire',
+            writer_phone => undef,
+            body => "V. short"
+            },
+        undef,
+        undef,
+        'MEPs',
+        \@rep_names);
+    # None of the messages in the group should be sent
+    call_fyrqd();
+    $wth->email_check_none_left();
+
+    # Check for email telling the constituent that their messages weren't sent
+    set_fyr_date('1990-08-08');
+    call_fyrqd();
+    my $rep_name;
+    my $confirmation_email;
+    foreach $rep_name (@rep_names){
+        $confirmation_email = $wth->email_get_containing(
+        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
+        '%To: "'.name_n(10).'" <'.email_n(10).'>'.
+                                                         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+
+    }
+
+    # Check that rules are applied correctly to individual mails in a group
+    # ... make a new Ratty rule for similar messages to different reps
+    # Go to abuse rules page
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
+    $wth->browser_follow_link(text_regex => qr/New rule/);
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
+                              fields => {}, button => 'newfilter');
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
+                              fields => {
+            note => 'Similar body, different rep',
+            sequence => 2,
+            requests => 0, interval => 0,
+            message => 'freeze',
+            field1 => 'similarity_num_0.5',
+            condition1 => '+>',
+            value1 => '1',
+        },
+                              button => 'done');
+
+    $wth->browser_check_contents('Similar body, different rep');
+
+    # Make a new rule for similar messages to the same rep
+    # Go to abuse rules page
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
+
+    $wth->browser_follow_link(text_regex => qr/New rule/);
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
+                              fields => {}, button => 'newfilter');
+    $wth->browser_submit_form(form_name => 'adminRattyRuleForm',
+                              fields => {
+            note => 'Similar body, same rep',
+            sequence => 2,
+            requests => 0, interval => 0,
+            message => 'freeze',
+            field1 => 'similarity_samerep_num_0.5',
+            condition1 => '+>',
+            value1 => '0',
+        },
+        button => 'done');
+    $wth->browser_check_contents('Similar body, same rep');
+
+    # This message should get through
+    send_message_to_rep(11,
+        'CB23QJ', # The Guildhall, Cambridge
+        'Richard Howitt',
+                        {
+            writer_address1 => '23 Something Street',
+            writer_town => 'Someplace',
+            writer_county => 'Someshire',
+            writer_phone => undef,
+            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
+}
+                        );
+        # All these messages should get through except the one to the same rep
+    send_message_to_rep(12,
+       'CB23QJ', # The Guildhall, Cambridge
+       'all',
+                        {
+            writer_address1 => '44 Multiple Street',
+            writer_town => 'Batchcester',
+            writer_county => 'Groupshire',
+            writer_phone => undef,
+            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
+},
+        undef,
+        undef,
+        'MEPs',
+        \@rep_names);
+
+    call_fyrqd();
+    # First mail sent
+    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street');
+
+    # Check for successes and for email telling group constituent that one message wasn't sent
+    set_fyr_date('1990-08-17');
+    call_fyrqd();
+    foreach $rep_name (@rep_names){
+        if ($rep_name ne 'Richard Howitt'){
+            check_delivered_to_rep(12, $rep_name, '44 Multiple Street');
+        }else{
+            $confirmation_email = $wth->email_get_containing(
+            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
+            '%To: "'.name_n(12).'" <'.email_n(12).'>'.
+            '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+        }
+    }
+    # None of these messages should get through
+    my @new_rep_names = ('Sushila Devi Dhall', 'Paul Sargent');
+    send_message_to_rep(13,
+       'OX 13d R', # Lincoln college, Oxford
+       'all',
+                        {
+            writer_address1 => '32 Wheresome Wroad',
+            writer_town => 'Whereville',
+            writer_county => 'Whereex',
+            writer_phone => undef,
+            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "},
+        undef,
+        undef,
+        'District Councillors',
+                        \@new_rep_names);
+
+    set_fyr_date('1990-08-26');
+    call_fyrqd();
+    foreach $rep_name (@new_rep_names){
+            $confirmation_email = $wth->email_get_containing(
+            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
+            '%To: "'.name_n(13).'" <'.email_n(13).'>'.
+            '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+        }
+
+
+}
+
+
 
 #############################################################################
 
