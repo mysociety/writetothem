@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.254 2007-04-03 20:47:26 louise Exp $
+# $Id: Queue.pm,v 1.255 2007-04-03 21:08:06 louise Exp $
 #
 
 package FYR::Queue;
@@ -466,9 +466,9 @@ sub write_messages($$$$;$$$$){
                          dbh()->do("delete from message where id = ?", {}, $id);
                          $ret{$id}{status_code} = 2;
                          $ret{$id}{abuse_result} = $abuse_result;
+                     }
                  }
              }
-         }
          }    
          # Commit changes
          dbh()->commit();
