@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.253 2007-04-02 17:04:28 louise Exp $
+# $Id: Queue.pm,v 1.254 2007-04-03 20:47:26 louise Exp $
 #
 
 package FYR::Queue;
@@ -447,28 +447,29 @@ sub write_messages($$$$;$$$$){
          }
 
          # Check for possible abuse
-         my $abuse_results = FYR::AbuseChecks::test(\%msg_hash);
-         foreach $id (keys %$abuse_results) {
-             $abuse_result = $abuse_results->{$id};
-             if (defined($abuse_result)) {
-                 if ($abuse_result eq 'freeze') {
-                     logmsg($id, 1, "abuse system froze message");
-                     dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-                 } else {
-                     logmsg($id, 1, "abuse system REJECTED message");
-                     dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-                     state($id, 'failed_closed');
-                     # Delete the message, so people can go back and try again
-                     dbh()->do("delete from message_bounce where message_id = ?", {}, $id);
-                     dbh()->do("delete from message_extradata where message_id = ?", {}, $id);
-                     dbh()->do("delete from message_log where message_id = ?", {}, $id);
-                     dbh()->do("delete from message where id = ?", {}, $id);
-                     $ret{$id}{status_code} = 2;
-                     $ret{$id}{abuse_result} = $abuse_result;
+         if (keys %msg_hash){
+             my $abuse_results = FYR::AbuseChecks::test(\%msg_hash);
+             foreach $id (keys %$abuse_results) {
+                 $abuse_result = $abuse_results->{$id};
+                 if (defined($abuse_result)) {
+                     if ($abuse_result eq 'freeze') {
+                         logmsg($id, 1, "abuse system froze message");
+                         dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+                     } else {
+                         logmsg($id, 1, "abuse system REJECTED message");
+                         dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
+                         state($id, 'failed_closed');
+                         # Delete the message, so people can go back and try again
+                         dbh()->do("delete from message_bounce where message_id = ?", {}, $id);
+                         dbh()->do("delete from message_extradata where message_id = ?", {}, $id);
+                         dbh()->do("delete from message_log where message_id = ?", {}, $id);
+                         dbh()->do("delete from message where id = ?", {}, $id);
+                         $ret{$id}{status_code} = 2;
+                         $ret{$id}{abuse_result} = $abuse_result;
                  }
              }
          }
-             
+         }    
          # Commit changes
          dbh()->commit();
          
