@@ -1,0 +1,69 @@
+#!/usr/bin/perl -w
+
+# emergency-parse-log:
+# For when we need to apologise to some people and need to find out who
+# 
+# Used for a logfile containing fyrqd lines only, already tweaked to be
+# bare essentials. April 11th was lost, April 12th was running by mistake.
+# 
+# Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+#
+# $Id: emergency-parse-log,v 1.1 2007-04-12 14:04:40 matthew Exp $
+
+print "This was hopefully a one-off script!";
+exit;
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+use File::Slurp;
+
+use mySociety::Config;
+use mySociety::DBHandle qw(dbh select_all);
+
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+    mySociety::DBHandle::configure(
+        Name => mySociety::Config::get('FYR_QUEUE_DB_NAME'),
+        User => mySociety::Config::get('FYR_QUEUE_DB_USER'),
+        Password => mySociety::Config::get('FYR_QUEUE_DB_PASS'),
+        Host => mySociety::Config::get('FYR_QUEUE_DB_HOST', undef),
+        Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef)
+    );
+}
+
+my %messages;
+while (<>) {
+    /^Apr (11|12) .*? message (.*?)\((.*?)\): (.*)/;
+    my ($date, $id, $newstate, $msg) = ($1, $2, $3, $4);
+    push @{$messages{$id}{states}}, $newstate;
+    # push @{$messages{$id}{msgs}}, $1 if $msg =~ /([^ ]+\@[^ ]+)/;
+    $messages{$id}{last_state} = $newstate;
+    if ($date == 12 && !$messages{$id}{last_state_11}) {
+        $messages{$id}{last_state_11} = $messages{$id}{states}[@{$messages{$id}{states}}-2];
+    }
+}
+
+foreach (keys %messages) {
+    my $current_db = select_all('select state from message where id=?', $_);
+    my %data = %{$messages{$_}};
+    if (@$current_db) {
+        # Something left in the db
+	my $state_in_db = $current_db->[0]{state};
+	my $state_11 = $data{last_state_11} || "<NO 12th LOG>";
+	next if $state_in_db eq $data{last_state} && $data{last_state} eq $state_11;
+	print "$_ : $state_in_db in db, $data{last_state} in log, $state_11 in log end of 11th\n";
+    } else {
+        # Nothing in the db
+        my $last_state = $data{last_state};
+	next if $last_state eq 'sent' || $last_state eq 'finished' || $last_state eq 'bounce_wait' || $last_state eq 'failed' || $last_state eq 'failed_closed';
+        print "MISSING $_ : last state was $last_state";
+	# print "\t" . join(',',@{$data{msgs}}) if $data{msgs};
+	print "\n";
+    }
+}
