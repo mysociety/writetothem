@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.255 2007-04-03 21:08:06 louise Exp $
+# $Id: Queue.pm,v 1.256 2007-04-15 08:00:28 matthew Exp $
 #
 
 package FYR::Queue;
@@ -284,13 +284,13 @@ sub write_messages($$$$;$$$$){
     my $id;
 
     # should have the same number of msgids as recipients
-    if (scalar(@$msgidlist) != scalar(@$recipient_list)){
-		throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params");
-	}
-	# If there are multiple messages, there should be a group id
-	if (scalar(@$msgidlist) > 1 && !defined($group_id)){
-		throw FYR::Error("No group ID supplied for multiple messages");	
-	}
+    if (scalar(@$msgidlist) != scalar(@$recipient_list)) {
+        throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params");
+    }
+    # If there are multiple messages, there should be a group id
+    if (scalar(@$msgidlist) > 1 && !defined($group_id)) {
+        throw FYR::Error("No group ID supplied for multiple messages");        
+    }
     
     if ($no_questionnaire){
         $no_questionnaire = 't';
@@ -301,7 +301,7 @@ sub write_messages($$$$;$$$$){
     try{
 
         # Check that sender contains appropriate information.
-	    throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
+        throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
         foreach (qw(name email address postcode)) {
             throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
         }
@@ -1593,6 +1593,13 @@ my %state_action = (
                     if ($msg->{dispatched} > time() - EMAIL_REDELIVERY_INTERVAL) {
                         # Don't attempt redelivery too often.
                         return;
+                    } elsif ($msg->{confirmed} < time() - $state_timeout{ready}) {
+                        # Time out messages after the same interval they'd have
+                        # lasted if stuck in the "ready" state (i.e. with
+                        # locally-detected delivery errors).
+                        logmsg($id, 1, "message bouncing for too long; failing");
+                        state($id, 'error');
+                        return;
                     }
                     logmsg($id, 0, "making email redelivery attempt");
                 }
@@ -2389,7 +2396,7 @@ administrator making the change.
 sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
     state($id, 'ready');
-    dbh()->do('update message set confirmed = ? where id = ? and confirmed is null', {}, time(), $id);
+    dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
     dbh()->commit();
     logmsg($id, 1, "$user put message in state 'ready'", $user);
     notify_daemon();
