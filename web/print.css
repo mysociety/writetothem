@@ -1,0 +1,23 @@
+/*
+ * print.css
+ * Top-level print style sheet for WriteToThem.com.
+ * 
+ * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+ *
+ * $Id: print.css,v 1.1 2007-04-16 16:40:06 matthew Exp $
+ * 
+ */
+
+#content {
+    width: auto !important; /* !important needed for IE */
+}
+
+#footer, #breadcrumbs, #sidebar {
+    display: none;
+}
+
+#preview, #buttonbox {
+    width: auto;
+}
+

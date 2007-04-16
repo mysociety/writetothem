@@ -7,6 +7,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WriteToThem.com - <? print $values['title']; ?></title>
 <link href="/wtt.css" rel="stylesheet" type="text/css" media="all">
+<link href="/print.css" rel="stylesheet" type="text/css" media="print">
 <?php if (array_key_exists('stylesheet', $values)) { ?>
 <style type="text/css">@import "<?=$values['stylesheet'] ?>";</style>
 <?php }

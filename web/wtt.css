@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.45 2007-01-24 10:17:08 francis Exp $
+ * $Id: wtt.css,v 1.46 2007-04-16 16:40:06 matthew Exp $
  * 
  */
 
@@ -25,7 +25,7 @@ acronym {
 
 h1#heading {
     color: #000000;
-    background-color: #ffe88c; /* #dbfd8c; */ /* #b3d386; */ /* #7bc618; */
+    background-color: #ffe88c;
     border-bottom: solid 2px #a5a57c;
     font-size: 200%;
     padding: 0.4em 1em;
@@ -33,7 +33,7 @@ h1#heading {
     margin: 0 auto;
 }
 h1#heading a, h1#heading a:link, h1#heading a:visited {
-    color: #373f23; /*333f16;*/ /* 252916; */
+    color: #373f23;
     text-decoration: none;
 }
 h1#heading a:hover {
@@ -77,14 +77,6 @@ label {
     cursor: pointer;
 }
 
-.smallb {
-    font-weight: bold;
-}
-
-/* a:link {    color: #843f23; /* #639c18;* / }
-a:visited {    color: #422012; /* 527b10; * / }
-a:hover {    color: #000000; }
-*/
 a:link { color: #0000cc; }
 a:visited { color: #330066; }
 a:active, a:hover { color: #ff0000; }
@@ -102,22 +94,6 @@ a:active, a:hover { color: #ff0000; }
 .repwarning a {
     color: #990000;
     background-color: #ffffff;
-}
-
-#nav {
-    text-align: center;
-    background-image: url("/images/mosaic.gif");
-    background-repeat: repeat-x;
-    padding: 24px 0 0 0;
-    margin: 0;
-}
-
-#nav li {
-    margin: 10px 2px 0 2px;
-    display: inline;
-    background-color: #cccc99;
-    color: #006666;
-    padding: 4px 1em;
 }
 
 #content {
@@ -169,25 +145,9 @@ ol#breadcrumbs li.hilight {
 ol#breadcrumbs li.hilight em {
     font-style: normal;
 }
-/*
-ol#instructions li#one { }
-ol#instructions li#two { padding-left: 1em; }
-ol#instructions li#thr { padding-left: 2em; }
-ol#instructions li#fou { padding-left: 3em; }
-ol#instructions li#fiv { padding-left: 4em; }
-ol#instructions li span {
-    padding: 5px;
-    color: #ffffff;
-}
-ol#instructions li#one span { background-color: #cccc99; }
-ol#instructions li#two span { background-color: #999966; }
-ol#instructions li#thr span { background-color: #9c9c9c; }
-ol#instructions li#fou span { background-color: #99cc99; }
-ol#instructions li#fiv span { background-color: #000066; }
-*/
 
 #postcodebox, #writebox, #preview, #buttonbox {
-    background-color: #d0bf69; /* #b3d386; #94d639; ccff99; */
+    background-color: #d0bf69;
     color: #000000;
 }
 
@@ -196,7 +156,7 @@ ol#instructions li#fiv span { background-color: #000066; }
     display: table;
     margin: 1em auto 1em;
     text-align: center;
-    border: solid 2px #9c8f4f; /* #a5a57c; */ /* 314208; */
+    border: solid 2px #9c8f4f;
     padding: 8px;
 }
 #writebox {
@@ -232,9 +192,6 @@ ol#instructions li#fiv span { background-color: #000066; }
 .maincol {
     border-left: solid 1px #9c8f4f;
 }
-/* td.firstcol, td.maincol {
-    font-size: 90%;
-} */
 
 #repstable ul#photo {
     list-style-type: none;
@@ -336,13 +293,6 @@ pre.sourcecode {
     background-color: #d9ecff;
     padding: 5px;
     margin-bottom: 1em;
-}
-
-p#contactemail {
-    width: 33em; /* Aim to miss the sidebar. */
-    background-color: #f88;
-    border: 2px solid #d00;
-    padding: 1em;
 }
 
 /* Box with notes for writing letters on cobranded site */
