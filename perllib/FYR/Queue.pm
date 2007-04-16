@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.256 2007-04-15 08:00:28 matthew Exp $
+# $Id: Queue.pm,v 1.257 2007-04-16 13:26:17 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1148,8 +1148,15 @@ sub send_confirmation_email ($;$) {
 sub make_failure_email ($) {
     my ($msg) = @_;
 
+    my $bounced = dbh()->selectrow_array("
+        select message_id from message_log
+        where message_id = ? and editor='handlemail'
+	    and message like 'message bounced because recipient\'s mailbox is full%'
+    ", {}, $id);
+    my $template = $bounced ? 'failure-mailbox-full' : 'failure';
+
     my $text = FYR::EmailTemplate::format(
-                    email_template('failure'),
+                    email_template($template),
                     email_template_params($msg)
                 )
                 . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"

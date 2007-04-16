@@ -1,0 +1,17 @@
+We're very sorry, but it wasn't possible to send your letter to
+<?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
+
+We tried for a week, but it appears that their mailbox was full and so your
+message to them bounced back to us.
+
+We've attached a copy of your letter to the bottom of this email, so that
+you can print it out and send it by more traditional means. Or, try again
+via our site in a week or so -- hopefully they'll have cleared out some of
+their backlog by then.
+
+Please do not reply to this mail. If you have a question or comment about the
+site, please send an email to team@writetothem.com
+
+-- the WriteToThem.com team
+
+
