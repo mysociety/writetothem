@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.115 2007-02-07 11:52:47 louise Exp $
+ * $Id: write.php,v 1.116 2007-04-16 17:38:36 matthew Exp $
  *
  */
 
@@ -331,7 +331,7 @@ function renderForm($form, $pageName)
     // Add time-shift warning if in debug mode
     $fyr_today = msg_get_date();
     msg_check_error($fyr_today);
-    if ($fyr_today != date('Y-m-d')) {
+    if ($fyr_today != date('Y-m-d') && OPTION_FYR_REFLECT_EMAILS) {
         $fyr_form = "<p style=\"text-align: center; color: #ff0000; \">Note: On this test site, the date is faked to be $fyr_today</p>" . $fyr_form;
     }
 
