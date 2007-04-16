@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.46 2007-01-29 19:52:12 louise Exp $
+ * $Id: fyr.php,v 1.47 2007-04-16 22:09:07 francis Exp $
  * 
  */
 
@@ -140,7 +140,7 @@ function fyr_parse_area_type_list($types) {
     if (array_key_exists($types, $va_aliases))
         $types = join(",",$va_aliases[$types]);
    
-    global $va_child_types;
+    global $va_child_types, $va_inside;
     $a = array();
     $n = 0;
     foreach (explode(',', $types) as $t) {
@@ -151,6 +151,12 @@ function fyr_parse_area_type_list($types) {
             continue;
         $a[$t] = 1;
         ++$n;
+        // add sibling types
+        $parent = $va_inside[$t];
+        foreach ($va_inside as $k=>$v) {
+            if ($v == $parent) 
+                $a[$k] =1;
+        }
     }
 
     if ($n > 0)
