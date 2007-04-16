@@ -1,40 +1,31 @@
 <div id="preview">
-	<table width="100%" cellpadding="0" cellspacing="0" border="0">
-		<tr>
-
-            <TD VALIGN="top" ALIGN="left"><B>FOR THE ATTENTION OF:</B><BR><BR>
-    <B>
+    <div id="preview_to">
+        <b>FOR THE ATTENTION OF:</b><br><br>
+    <b>
     <?=$values['rep_text']?>
-    <BR>
+    <br>
     <?=$values['voting_area']['name']?> 
-    <BR><BR>
-    <?=$values['date']?>      </B>
-    </TD>
-    <TD VALIGN="top" ALIGN="right">
-    <BR>
+    <br><br>
+    <?=$values['date']?> </b>
 
-    <?=$values['writer_name']?><BR>
-    <?=$values['writer_address1']?><BR>
-    <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<BR>";?>
-    <?=$values['writer_town']?><BR>
-    <?=$values['writer_county']?><? if ($values['writer_county']) print "<BR>";?>
-    <?=$values['pc']?><BR>
-    <BR>
-    <?=$values['writer_email']?><BR>
+    </div>
+    <div id="preview_from">
+    <br>
+
+    <?=$values['writer_name']?><br>
+    <?=$values['writer_address1']?><br>
+    <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<br>";?>
+    <?=$values['writer_town']?><br>
+    <?=$values['writer_county']?><? if ($values['writer_county']) print "<br>";?>
+    <?=$values['pc']?><br>
+    <br>
+    <?=$values['writer_email']?><br>
     <?=$values['writer_phone']?>
-    </TD>
-    </TR>
-    <TR>
-    <TD COLSPAN="2"><IMG SRC="/images/tiny.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
-    </TR>
+    </div>
 
-    <TR>
-
-    <TD COLSPAN="2" ALIGN="left">
+    <div id="preview_body">
     <p>
     <?=nl2br(htmlspecialchars($values['body_indented']))?>
     </p>
-    </TD>
-    </TR>
-    </TABLE>
+    </div>
 </div>
