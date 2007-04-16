@@ -1,31 +1,19 @@
 <div id="preview">
-    <div id="preview_to">
-        <b>FOR THE ATTENTION OF:</b><br><br>
-    <b>
-    <?=$values['rep_text']?>
-    <br>
-    <?=$values['voting_area']['name']?> 
-    <br><br>
-    <?=$values['date']?> </b>
-
-    </div>
-    <div id="preview_from">
-    <br>
-
+  <div id="preview_to">
+    <b>FOR THE ATTENTION OF:<br><br>
+    <?=$values['rep_text']?><br>
+    <?=$values['voting_area']['name']?><br><br>
+    <?=$values['date']?></b>
+  </div>
+  <div id="preview_from">
     <?=$values['writer_name']?><br>
     <?=$values['writer_address1']?><br>
     <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<br>";?>
     <?=$values['writer_town']?><br>
     <?=$values['writer_county']?><? if ($values['writer_county']) print "<br>";?>
-    <?=$values['pc']?><br>
-    <br>
+    <?=$values['pc']?><br><br>
     <?=$values['writer_email']?><br>
     <?=$values['writer_phone']?>
-    </div>
-
-    <div id="preview_body">
-    <p>
-    <?=nl2br(htmlspecialchars($values['body_indented']))?>
-    </p>
-    </div>
+  </div>
+  <p><?=nl2br(htmlspecialchars($values['body_indented']))?></p>
 </div>
