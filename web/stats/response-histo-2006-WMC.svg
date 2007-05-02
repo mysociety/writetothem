@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="480"
+   height="360"
+   viewBox="0 0 480 360"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45"
+   sodipodi:docname="response-histo-2006-WMC.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:docbase="/home/francis/keep/devel/mysociety/fyr/web/stats"
+   sodipodi:modified="true">
+  <metadata
+     id="metadata273">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:window-height="582"
+     inkscape:window-width="845"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="1"
+     inkscape:cx="240"
+     inkscape:cy="178.845"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:current-layer="svg2" />
+  <desc
+     id="desc4">Produced by GNUPLOT 4.2 patchlevel 0 </desc>
+  <defs
+     id="defs6">
+    <circle
+       id="gpDot"
+       r="1" />
+    <path
+       id="gpPt0"
+       style="stroke-width:0.222"
+       d="M-1,0 h2 M0,-1 v2" />
+    <path
+       id="gpPt1"
+       style="stroke-width:0.222"
+       d="M-1,-1 L1,1 M1,-1 L-1,1" />
+    <path
+       id="gpPt2"
+       style="stroke-width:0.222"
+       d="M-1,0 L1,0 M0,-1 L0,1 M-1,-1 L1,1 M-1,1 L1,-1" />
+    <rect
+       id="gpPt3"
+       style="stroke-width:0.222"
+       x="-1"
+       y="-1"
+       width="2"
+       height="2" />
+    <use
+       xlink:href="#gpPt3"
+       id="gpPt4"
+       style="fill:currentColor; stroke:none" />
+    <circle
+       id="gpPt5"
+       style="stroke-width:0.222"
+       cx="0"
+       cy="0"
+       r="1" />
+    <use
+       xlink:href="#gpPt5"
+       id="gpPt6"
+       style="fill:currentColor; stroke:none" />
+    <path
+       id="gpPt7"
+       style="stroke-width:0.222"
+       d="M0,-1.33 L-1.33,0.67 L1.33,0.67 z" />
+    <use
+       xlink:href="#gpPt7"
+       id="gpPt8"
+       style="fill:currentColor; stroke:none" />
+    <use
+       xlink:href="#gpPt7"
+       id="gpPt9"
+       transform="rotate(180)" />
+    <use
+       xlink:href="#gpPt9"
+       id="gpPt10"
+       style="fill:currentColor; stroke:none" />
+    <use
+       xlink:href="#gpPt3"
+       id="gpPt11"
+       transform="rotate(45)" />
+    <use
+       xlink:href="#gpPt11"
+       id="gpPt12"
+       style="fill:currentColor; stroke:none" />
+  </defs>
+  <g
+     style="fill:none; color:white; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g22" />
+  <g
+     style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g24">
+    <path
+       d="M68.5,306.0 L77.5,306.0 "
+       id="path26" />
+    <g
+       transform="translate(60.2,310.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g28">
+      <text
+         id="text30"> 0</text>
+    </g>
+    <path
+       d="M68.5,273.8 L77.5,273.8 "
+       id="path32" />
+    <g
+       transform="translate(60.2,278.3)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g34">
+      <text
+         id="text36"> 2</text>
+    </g>
+    <path
+       d="M68.5,241.7 L77.5,241.7 "
+       id="path38" />
+    <g
+       transform="translate(60.2,246.2)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g40">
+      <text
+         id="text42"> 4</text>
+    </g>
+    <path
+       d="M68.5,209.5 L77.5,209.5 "
+       id="path44" />
+    <g
+       transform="translate(60.2,214.0)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g46">
+      <text
+         id="text48"> 6</text>
+    </g>
+    <path
+       d="M68.5,177.4 L77.5,177.4 "
+       id="path50" />
+    <g
+       transform="translate(60.2,181.9)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g52">
+      <text
+         id="text54"> 8</text>
+    </g>
+    <path
+       d="M68.5,145.2 L77.5,145.2 "
+       id="path56" />
+    <g
+       transform="translate(60.2,149.7)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g58">
+      <text
+         id="text60"> 10</text>
+    </g>
+    <path
+       d="M68.5,113.1 L77.5,113.1 "
+       id="path62" />
+    <g
+       transform="translate(60.2,117.6)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g64">
+      <text
+         id="text66"> 12</text>
+    </g>
+    <path
+       d="M68.5,80.9 L77.5,80.9 "
+       id="path68" />
+    <g
+       transform="translate(60.2,85.4)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g70">
+      <text
+         id="text72"> 14</text>
+    </g>
+    <path
+       d="M68.5,48.8 L77.5,48.8 "
+       id="path74" />
+    <g
+       transform="translate(60.2,53.3)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g76">
+      <text
+         id="text78"> 16</text>
+    </g>
+    <path
+       d="M68.5,16.6 L77.5,16.6 "
+       id="path80" />
+    <g
+       transform="translate(60.2,21.1)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g82">
+      <text
+         id="text84"> 18</text>
+    </g>
+    <path
+       d="M107.1,306.0 L107.1,297.0 "
+       id="path86" />
+    <g
+       transform="translate(107.1,328.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g88">
+      <text
+         id="text90">0-10%</text>
+    </g>
+    <path
+       d="M212.3,306.0 L212.3,297.0 "
+       id="path92" />
+    <g
+       transform="translate(212.3,328.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g94">
+      <text
+         id="text96">30-40%</text>
+    </g>
+    <path
+       d="M317.6,306.0 L317.6,297.0 "
+       id="path98" />
+    <g
+       transform="translate(317.6,328.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g100">
+      <text
+         id="text102">60-70%</text>
+    </g>
+    <path
+       d="M422.8,306.0 L422.8,297.0 "
+       id="path104" />
+    <g
+       transform="translate(422.8,328.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g106">
+      <text
+         id="text108">90-100%</text>
+    </g>
+    <g
+       transform="translate(22.5,161.3) rotate(-90)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g110">
+      <text
+         id="text112">% of MPs with responsiveness rate in given range</text>
+    </g>
+    <g
+       transform="translate(261.4,355.5)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:middle"
+       id="g114">
+      <text
+         id="text116">Mean response rate of MPs to messages sent via WriteToThem</text>
+    </g>
+  </g>
+  <g
+     style="fill:none; color:green; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g118" />
+  <g
+     style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g120">
+    <g
+       transform="translate(110.0,39.1)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g122">
+      <text
+         id="text124">2005</text>
+    </g>
+  </g>
+  <g
+     style="fill:#0000cc;color:green;stroke:none;stroke-width:1.00;stroke-linecap:butt;stroke-linejoin:miter;fill-opacity:0.94117647;"
+     id="g126">
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g128">
+      <polygon
+         points="118.3,39.1 160.5,39.1 160.5,30.1 118.3,30.1 "
+         id="polygon130"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M118.3,39.1 L160.5,39.1 L160.5,30.1 L118.3,30.1 L118.3,39.1 Z "
+       id="path132"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g134">
+      <polygon
+         points="92.5,306.0 103.1,306.0 103.1,230.0 92.5,230.0 "
+         id="polygon136"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M92.5,306.0 L92.5,230.1 L103.0,230.1 L103.0,306.0 L92.5,306.0 Z "
+       id="path138"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g140">
+      <polygon
+         points="127.6,306.0 138.2,306.0 138.2,264.9 127.6,264.9 "
+         id="polygon142"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M127.6,306.0 L127.6,265.0 L138.1,265.0 L138.1,306.0 L127.6,306.0 Z "
+       id="path144"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g146">
+      <polygon
+         points="162.6,306.0 173.3,306.0 173.3,236.2 162.6,236.2 "
+         id="polygon148"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M162.6,306.0 L162.6,236.3 L173.2,236.3 L173.2,306.0 L162.6,306.0 Z "
+       id="path150"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g152">
+      <polygon
+         points="197.7,306.0 208.3,306.0 208.3,174.7 197.7,174.7 "
+         id="polygon154"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M197.7,306.0 L197.7,174.8 L208.2,174.8 L208.2,306.0 L197.7,306.0 Z "
+       id="path156"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g158">
+      <polygon
+         points="232.8,306.0 243.4,306.0 243.4,143.9 232.8,143.9 "
+         id="polygon160"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M232.8,306.0 L232.8,144.0 L243.3,144.0 L243.3,306.0 L232.8,306.0 Z "
+       id="path162"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g164">
+      <polygon
+         points="267.9,306.0 278.5,306.0 278.5,123.4 267.9,123.4 "
+         id="polygon166"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M267.9,306.0 L267.9,123.5 L278.4,123.5 L278.4,306.0 L267.9,306.0 Z "
+       id="path168"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g170">
+      <polygon
+         points="303.0,306.0 313.6,306.0 313.6,78.3 303.0,78.3 "
+         id="polygon172"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M303.0,306.0 L303.0,78.4 L313.5,78.4 L313.5,306.0 L303.0,306.0 Z "
+       id="path174"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g176">
+      <polygon
+         points="338.0,306.0 348.7,306.0 348.7,80.3 338.0,80.3 "
+         id="polygon178"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M338.0,306.0 L338.0,80.4 L348.6,80.4 L348.6,306.0 L338.0,306.0 Z "
+       id="path180"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g182">
+      <polygon
+         points="373.1,306.0 383.8,306.0 383.8,47.5 373.1,47.5 "
+         id="polygon184"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M373.1,306.0 L373.1,47.6 L383.7,47.6 L383.7,306.0 L373.1,306.0 Z "
+       id="path186"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;fill:#0000cc;fill-opacity:0.94117647"
+       id="g188">
+      <polygon
+         points="408.2,306.0 418.8,306.0 418.8,176.7 408.2,176.7 "
+         id="polygon190"
+         style="stroke:none;fill:#0000cc;fill-opacity:0.94117647"
+         fill="currentColor" />
+    </g>
+    <path
+       d="M408.2,306.0 L408.2,176.8 L418.7,176.8 L418.7,306.0 L408.2,306.0 Z "
+       id="path192"
+       style="stroke:none;fill:#0000cc;fill-opacity:0.94117647" />
+  </g>
+  <g
+     style="fill:none; color:blue; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g194" />
+  <g
+     style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g196">
+    <g
+       transform="translate(110.0,57.1)"
+       style="stroke:none; fill:black; font-family:Arial; font-size:12.00; text-anchor:end"
+       id="g198">
+      <text
+         id="text200">2006</text>
+    </g>
+  </g>
+  <g
+     style="fill:#ffe92c;color:blue;stroke:none;stroke-width:1.00;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+     id="g202">
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g204">
+      <polygon
+         points="118.3,57.1 160.5,57.1 160.5,48.1 118.3,48.1 "
+         id="polygon206"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M118.3,57.1 L160.5,57.1 L160.5,48.1 L118.3,48.1 L118.3,57.1 Z "
+       id="path208"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g210">
+      <polygon
+         points="104.2,306.0 114.8,306.0 114.8,276.2 104.2,276.2 "
+         id="polygon212"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M104.2,306.0 L104.2,276.3 L114.7,276.3 L114.7,306.0 L104.2,306.0 Z "
+       id="path214"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g216">
+      <polygon
+         points="139.2,306.0 149.9,306.0 149.9,276.2 139.2,276.2 "
+         id="polygon218"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M139.2,306.0 L139.2,276.3 L149.8,276.3 L149.8,306.0 L139.2,306.0 Z "
+       id="path220"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g222">
+      <polygon
+         points="174.3,306.0 185.0,306.0 185.0,224.3 174.3,224.3 "
+         id="polygon224"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M174.3,306.0 L174.3,224.4 L184.9,224.4 L184.9,306.0 L174.3,306.0 Z "
+       id="path226"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g228">
+      <polygon
+         points="209.4,306.0 220.0,306.0 220.0,184.7 209.4,184.7 "
+         id="polygon230"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M209.4,306.0 L209.4,184.8 L219.9,184.8 L219.9,306.0 L209.4,306.0 Z "
+       id="path232"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g234">
+      <polygon
+         points="244.5,306.0 255.1,306.0 255.1,110.5 244.5,110.5 "
+         id="polygon236"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M244.5,306.0 L244.5,110.6 L255.0,110.6 L255.0,306.0 L244.5,306.0 Z "
+       id="path238"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g240">
+      <polygon
+         points="279.6,306.0 290.2,306.0 290.2,68.4 279.6,68.4 "
+         id="polygon242"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M279.6,306.0 L279.6,68.5 L290.1,68.5 L290.1,306.0 L279.6,306.0 Z "
+       id="path244"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g246">
+      <polygon
+         points="314.7,306.0 325.3,306.0 325.3,16.5 314.7,16.5 "
+         id="polygon248"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M314.7,306.0 L314.7,16.6 L325.2,16.6 L325.2,306.0 L314.7,306.0 Z "
+       id="path250"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g252">
+      <polygon
+         points="349.7,306.0 360.4,306.0 360.4,21.4 349.7,21.4 "
+         id="polygon254"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M349.7,306.0 L349.7,21.5 L360.3,21.5 L360.3,306.0 L349.7,306.0 Z "
+       id="path256"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g258">
+      <polygon
+         points="384.8,306.0 395.4,306.0 395.4,41.2 384.8,41.2 "
+         id="polygon260"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M384.8,306.0 L384.8,41.3 L395.3,41.3 L395.3,306.0 L384.8,306.0 Z "
+       id="path262"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    <g
+       style="stroke:none;shape-rendering:crispEdges;stroke-opacity:1;fill:#ffe92c;fill-opacity:1"
+       id="g264">
+      <polygon
+         points="419.9,306.0 430.5,306.0 430.5,236.6 419.9,236.6 "
+         id="polygon266"
+         fill="currentColor"
+         style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+    </g>
+    <path
+       d="M419.9,306.0 L419.9,236.7 L430.4,236.7 L430.4,306.0 L419.9,306.0 Z "
+       id="path268"
+       style="stroke:none;stroke-opacity:1;fill:#ffe92c;fill-opacity:1" />
+  </g>
+  <g
+     style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:butt; stroke-linejoin:miter"
+     id="g270" />
+</svg>
