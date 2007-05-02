@@ -60,16 +60,18 @@ MPs on 14th April, enabling it again a week after the election on 12th May.</p>
 <? } ?>
 
 <? if ($values['year'] == '2006') { ?>
-<h3>Comparing this year and last</h3>
+<h3>Did MPs do better this year or last year?</h3>
 
 <p>Overall, according to our users' questionnaire responses, MPs were 2% less
 responsive to constituents' messages sent via WriteToThem in 2006 compared to in
-2005. Most of this is because of a sharp drop in the number of MPs getting 90%
-or higher responsiveness ratings.</p>
+2005. This is partly because of a sharp drop in the number of MPs getting those
+near-perfect scores of 90% or higher responsiveness. On the other hand,
+far fewer MPs have woeful response rates less than 20%.
+More details in the full <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a>.</p>
 
 <p align="center"><img border="0" src="/stats/response-histo-2006-WMC.png" alt=""></p>
 
-<h3>Messages sent by deprivation level</h3>
+<h3>Are our users rich or poor?</h3>
 <p>Sometimes people say that websites like WriteToThem only help people who are
 already better off in society, because they have better access to
 computers. One of our volunteers, Sam Smith, has tested this and found that
@@ -90,9 +92,11 @@ their MP using WriteToThem during 2006. For more details on the methodology
 behind this research, see Sam Smith's paper TODO add link.  
 <? } ?>
 
-<h3>Performance of elected bodies</h3>
 <? if (array_key_exists('lords', $values['type_summary'])) { ?>
-<p align="center" style="margin-top:-1em">(and the House of Lords)</p>
+<h3>Which elected body* has the most responsive members?</h3>
+<p align="center" style="margin-top:-1em">(* and the House of Lords)</p>
+<? } else { ?>
+<h3>Performance of elected bodies</h3>
 <? } ?>
 <table class="zeitgeist">
 <tr>
@@ -211,11 +215,12 @@ that it is 95% certain that the true values lie between the two limits of the
 confidence intervals. You can read <a href="http://www.mysociety.org/?p=117">more discussion of this and other details of the stats</a> by one of our developers.</p>
 
 
-<p align="center"><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
+<p id="zeitgeist_nav"><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
+
 
 <ul>
 <li><a href="http://www.mysociety.org/volunteertasks">Volunteer to help build sites like this</a></li>
-<li><a href="http://www.hearfromyourmp.com/">New: HearFromYourMP.com</a></li>
+<li><a href="http://www.hearfromyourmp.com/">Sign up to HearFromYourMP.com</a></li>
 </ul>
 
 <?  template_draw('footer', $values); ?>
