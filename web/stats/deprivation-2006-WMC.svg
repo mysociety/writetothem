@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3250"
+   sodipodi:version="0.32"
+   inkscape:version="0.45"
+   sodipodi:docbase="/home/francis/keep/devel/mysociety/fyr/web/stats"
+   sodipodi:docname="deprivation-2006-WMC.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/francis/keep/devel/mysociety/fyr/web/stats/deprivation-2006-WMC.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:modified="true">
+  <defs
+     id="defs3252" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="250.6246"
+     inkscape:cy="918.1363"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="903"
+     inkscape:window-height="678"
+     inkscape:window-x="79"
+     inkscape:window-y="10" />
+  <metadata
+     id="metadata3255">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffe92c;fill-opacity:1;stroke-width:14.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:14.5, 174;stroke-dashoffset:0;text-anchor:middle;text-align:center"
+       id="rect3258"
+       width="25"
+       height="110"
+       x="175"
+       y="90"
+       inkscape:export-filename="/home/francis/keep/devel/mysociety/fyr/web/stats/deprivation-2006-WMC.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="text-align:center;text-anchor:middle;fill:#ffe92c;fill-opacity:1;stroke-width:14.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:14.5, 174;stroke-dashoffset:0"
+       id="rect3259"
+       width="25"
+       height="88"
+       x="206.125"
+       y="112" />
+    <rect
+       style="text-align:center;text-anchor:middle;fill:#ffe92c;fill-opacity:1;stroke-width:14.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:14.5, 174;stroke-dashoffset:0"
+       id="rect3260"
+       width="25"
+       height="73.199997"
+       x="237.25"
+       y="126.8" />
+    <rect
+       style="text-align:center;text-anchor:middle;fill:#ffe92c;fill-opacity:1;stroke-width:14.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:14.5, 174;stroke-dashoffset:0"
+       id="rect3261"
+       width="25"
+       height="62"
+       x="299.5"
+       y="138" />
+    <rect
+       style="text-align:center;text-anchor:middle;fill:#ffe92c;fill-opacity:1;stroke-width:14.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:14.5, 174;stroke-dashoffset:0"
+       id="rect3262"
+       width="25"
+       height="66.800003"
+       x="268.375"
+       y="133.2" />
+    <g
+       id="g80"
+       style="font-size:12px;text-align:center;text-anchor:middle;color:#000000;fill:#000000;stroke:none;stroke-width:1;font-family:Arial"
+       transform="translate(144.86952,84.58749)">
+      <text
+         id="text82"
+         style="text-align:center;text-anchor:middle">30%</text>
+    </g>
+    <path
+       style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;text-anchor:middle;text-align:center"
+       inkscape:label="#path78"
+       id="pathflipme"
+       d="M 161.5,200 L 170.5,200" />
+    <g
+       id="g4345"
+       style="font-size:12px;text-align:center;text-anchor:middle;color:#000000;fill:#000000;stroke:none;stroke-width:1;font-family:Arial"
+       transform="translate(148.68983,204.55521)">
+      <text
+         id="text4347"
+         style="text-align:center;text-anchor:middle">0%</text>
+    </g>
+    <path
+       style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;text-anchor:middle;text-align:center"
+       inkscape:label="#path79"
+       id="path4349"
+       d="M 161.5,80 L 170.5,80" />
+    <path
+       style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;text-anchor:middle;text-align:center"
+       inkscape:label="#path80"
+       id="path2302"
+       d="M 161.5,160 L 170.5,160" />
+    <path
+       style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;text-anchor:middle;text-align:center"
+       inkscape:label="#path81"
+       id="path2304"
+       d="M 161.5,120 L 326.5,120"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g4351"
+       style="font-size:12px;text-align:center;text-anchor:middle;color:#000000;fill:#000000;stroke:none;stroke-width:1;font-family:Arial"
+       transform="translate(251.05807,267.13472)">
+      <text
+         style="text-align:center;text-anchor:middle"
+         id="text2183">Deprivation level of ward user lives in</text>
+    </g>
+    <g
+       id="g158"
+       style="font-size:12px;text-align:center;text-anchor:middle;color:#000000;fill:#000000;stroke:none;stroke-width:1;font-family:Arial"
+       transform="matrix(0,-1,1,0,106.08367,139.27132)">
+      <text
+         id="text160"
+         style="text-align:center;text-anchor:middle">Proportion of users from</text>
+      <text
+         id="text4377"
+         style="text-align:center;text-anchor:middle"> </text>
+    </g>
+    <g
+       id="g4379"
+       style="font-size:12px;text-align:center;text-anchor:middle;color:#000000;fill:#000000;stroke:none;stroke-width:1;font-family:Arial"
+       transform="matrix(0,-1,1,0,135.66084,41.2742)">
+      <text
+         id="text4381"
+         x="-96.166519"
+         y="-13.435029"
+         style="text-align:center;text-anchor:middle">each deprivation 'quintile'</text>
+      <text
+         id="text4383"
+         style="text-align:center;text-anchor:middle"> </text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="185.26196"
+       y="217.9762"
+       id="text4397"><tspan
+         sodipodi:role="line"
+         id="tspan4399"
+         x="187.17212"
+         y="217.9762">Most </tspan><tspan
+         sodipodi:role="line"
+         x="185.26196"
+         y="232.9762"
+         id="tspan4403">deprived</tspan><tspan
+         sodipodi:role="line"
+         x="185.26196"
+         y="247.9762"
+         id="tspan2190">'quintile'</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="313.24832"
+       y="215.85486"
+       id="text4407"><tspan
+         sodipodi:role="line"
+         id="tspan4409"
+         x="313.24832"
+         y="215.85486">Least</tspan><tspan
+         sodipodi:role="line"
+         x="313.24832"
+         y="230.85486"
+         id="tspan4411">deprived</tspan><tspan
+         sodipodi:role="line"
+         x="313.24832"
+         y="245.85486"
+         id="tspan2192">'quintile'</tspan><tspan
+         sodipodi:role="line"
+         x="313.24832"
+         y="260.85486"
+         id="tspan4413" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="131.52187"
+       y="124.51679"
+       id="text2323"><tspan
+         sodipodi:role="line"
+         id="tspan2325"
+         x="131.52187"
+         y="124.51679">20%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="131.52187"
+       y="163.87213"
+       id="text2327"><tspan
+         sodipodi:role="line"
+         id="tspan2329"
+         x="131.52187"
+         y="163.87213">10%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="304.86353"
+       y="107.91019"
+       id="text2331"><tspan
+         sodipodi:role="line"
+         id="tspan2333"
+         x="304.86353"
+         y="107.91019">Average</tspan></text>
+  </g>
+</svg>

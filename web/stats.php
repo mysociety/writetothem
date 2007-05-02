@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.20 2007-04-03 10:21:20 francis Exp $
+ * $Id: stats.php,v 1.21 2007-05-02 12:54:38 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -30,6 +30,24 @@ $postcode = get_http_var('pc');
 $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
+
+$years = array('2005', '2006');
+$got_year = 0;
+$year_bar_array = array();
+foreach ($years as $y) {
+    if ($year == $y) {
+        $year_bar_array[] = "<strong>$y</strong>";
+        $got_year = 1;
+    } else {
+        $year_bar_array[] = "<a href=\"/stats/$y/$type\">$y</a>";
+    }
+}
+if (!$got_year) {
+    template_show_error("We don't have statistics for that year");
+}
+$year_bar = "Statistics for other years: " . join($year_bar_array, " | ");
+if (!get_http_var('really'))
+    $year_bar = "";
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
@@ -95,9 +113,11 @@ function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) 
                 $questionnaire_report['uk.org.publicwhip/person/10298'],
                 );
     }
+    global $year_bar;
     template_draw('stats-zeitgeist', array(
             "title" => "WriteToThem.com Zeitgeist $year",
             'year' => $year,
+            'year_bar' => $year_bar,
             'type_summary' => $type_summary,
             'party_summary' => $party_summary,
             'parties_by_responsiveness' => $parties_by_responsiveness,
@@ -218,9 +238,11 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     }
 
     # Output data
+    global $year_bar;
     template_draw($xml ? 'stats-mp-twfy' : 'stats-mp-performance', array(
         "title" => "WriteToThem.com Zeitgeist $year",
         'year' => $year,
+        'year_bar' => $year_bar,
         'data' => $data
         ));
 }
