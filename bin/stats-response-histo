@@ -1,0 +1,63 @@
+#!/bin/bash
+# message-send-graph
+# Plot graph of WriteToThem message creation rate.
+#
+# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
+# Email: francis@mysociety.org. WWW: http://www.mysociety.org/
+# 
+# $Id: stats-response-histo,v 1.1 2007-05-02 16:40:31 dademcron Exp $
+
+GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 480,360"
+EXTENSION=".png"
+#GPLOT_OUTPUT="set terminal fig color big thickness 1"
+#EXTENSION=".fig"
+#GPLOT_OUTPUT="set terminal svg size 800 250"
+#EXTENSION=".svg"
+
+cd `dirname $0`
+cd ../../
+source shlib/deployfns
+
+read_conf fyr/conf/general
+
+SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
+SOURCEE=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
+GPSCRIPT=/tmp/fyr-signup-rate-graph-script-$RANDOM$RANDOM
+
+fyr/bin/stats-response-histo-out 2005 >$SOURCED
+fyr/bin/stats-response-histo-out 2006 >$SOURCEE
+
+cat >$GPSCRIPT <<END 
+    unset border
+    $GPLOT_OUTPUT
+
+    # set xrange ["2005-01-01":"2006-01-01"];
+    # set xlabel "WriteToThem.com in 2005"
+    unset xlabel
+    set key left
+
+    #set ylabel "cumulative messages"
+    set ylabel "% of MPs with responsiveness rate in given range"
+    set xlabel "Mean responsiveness %"
+    set xtics nomirror
+    set ytics nomirror
+    # set y2tics nomirror tc lt 3
+
+    set boxwidth 0.9 relative
+    set style fill solid 1.0
+
+    n = 0
+
+    plot "$SOURCED" using 1:2 with boxes axes x1y2 lt 2 title "2005"
+
+#    plot "$SOURCED" using 1:2 with boxes axes x1y2 lt 2 title "2005", \
+#        "$SOURCEE" using 1:2 with boxes axes x1y2 lt 3 title "2006" 
+#        "< awk 'BEGIN { n = 0 } { n += \$2; print \$1, \$2, n; }' $SOURCED" using 1:3 with lines lt 2 lw 2 title "cumulative 2005",\
+#        "< awk 'BEGIN { n = 0 } { n += \$2; print \$1, \$2, n; }' $SOURCEE" using 1:3 with lines lt 3 lw 2 title "cumulative 2006"
+END
+#echo "gpscript $GPSCRIPT"
+
+export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
+#gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups$EXTENSION
+gnuplot < $GPSCRIPT > ~/public_html/fyr-stats-response-histo$EXTENSION
+

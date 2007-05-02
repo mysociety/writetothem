@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.11 2007-02-02 12:17:08 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.12 2007-05-02 16:40:31 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -58,7 +58,7 @@ die "enter a reasonable year as first argument, or 2005post for 2005 post-electi
 my $output_format = shift;
 # Output formats are:
 #    PHP - for fyr/phplib/questionnaire_report_2005_WMC.php and the like
-#    debug - for debugging
+#    debug - for debugging, only prints 'unknown' MPs
 #    mapcsv - for plotting responsivness/activity maps of country
 die "enter PHP, debug or mapcsv for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug' && $output_format ne 'mapcsv');
 my $area_type = 'WMC';
@@ -519,7 +519,7 @@ sub work_out_rep_category($) {
         $confidence_length = $re_high - $re_low;
     }
 
-    print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length intervals_with_no_q_response: $intervals_with_no_q_response no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
+    #print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length intervals_with_no_q_response: $intervals_with_no_q_response no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
     #print "confidence: ".($confidence_length ? $confidence_length : "none")."\n" if $output_format eq 'debug';
 
     # Work out what we are
@@ -546,6 +546,11 @@ sub emit_php($$) {
 
 sub display_rep($$) {
     my ($person_id, $category) = @_;
+
+    # only print unknowns in debug mode
+    if ($category ne "unknown" && $output_format eq "debug") {
+        return;
+    }
 
     # add up Q results for each rep id for the person
     my $q_data;
@@ -714,7 +719,7 @@ foreach my $person_id (keys %$reps_by_person) {
         $total_firsttime_outof += $q_data->[3];
         $total_fails_after_dispatch += ($fails_after_dispatch{$repid} || 0); 
 
-        print "\n" if $output_format eq 'debug';
+        #print "\n" if $output_format eq 'debug';
     }
 }
 

@@ -1,0 +1,32 @@
+#!/usr/bin/php -q
+<?php
+/* 
+ * stats-repsonse-histo-out:
+ * Outputs data for response rate histogram.
+ *
+ * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
+ *
+ * $Id: stats-response-histo-out,v 1.1 2007-05-02 16:40:31 dademcron Exp $
+ *
+ */
+
+$bars = 10;
+
+include "fyr/phplib/questionnaire_report_$argv[1]_WMC.php";
+
+$histvals = array();
+$total_mps = 0;
+foreach ($GLOBALS["questionnaire_report_$argv[1]_WMC"] as $k=>$v) {
+    if (!is_array($v)) continue;
+    $val = intval($v['responded_mean'] * $bars);
+#    print $val . " " . $v['responded_mean'].  " " . $v['person_id']."\n";
+    $histvals[$val]++;
+    $total_mps ++;
+}
+
+for ($i = 0; $i < $bars; $i++) {
+    print $i / $bars * 100 . " " . $histvals[$i] / $total_mps * 100 . "\n";
+}
+
+
