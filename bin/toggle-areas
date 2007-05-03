@@ -9,7 +9,7 @@
 # Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.1 2007-05-03 12:59:46 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.2 2007-05-03 13:01:42 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -75,7 +75,7 @@ foreach (@$ids) {
     my $curr_status = mySociety::DaDem::get_area_status($_);
     next if $curr_status eq $status;
     print "Setting $_ ($name) to $status\n";
-    mySociety::DaDem::set_area_status($_, $status);
+    mySociety::DaDem::admin_set_area_status($_, $status);
     $count++;
 }
 print "\nMade $count changes\n";
