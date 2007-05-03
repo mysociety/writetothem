@@ -1,0 +1,81 @@
+#!/usr/bin/perl -w
+#
+# toggle-areas:
+# At time of an election, switch off whole locale (e.g. Wales).
+# Or "every district council except these 7". Can switch them
+# back on as well.
+#
+# Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
+#
+
+my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.1 2007-05-03 12:59:46 matthew Exp $';
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
+use Getopt::Long;
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DaDem;
+use mySociety::MaPit;
+
+my $type = '';
+my $country = '';
+my $exceptions = '';
+my $status = '';
+unless (GetOptions(
+        'type=s' => \$type,
+	'country:s' => \$country,
+	'exceptions:s' => \$exceptions,
+	'status=s' => \$status)
+    && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
+    && $status =~ /^(pending|recent|none)$/) {
+    print <<EOF;
+--type - Three-letter type to switch on/off.
+	 COI - Isles of Scilly
+	 CTY - 34 county councils
+	 DIS - 238 district councils
+	 EUR - 12 European regions
+	 LAC - 14 London Assembly areas
+	 LBO - 33 London boroughs (32 + City)
+	 LGD - 26 NI Local Government Districts
+	 MTD - 36 Metropolitan Districts
+	 NIE - 18 Northern Ireland Assembly
+	 SPC - 73 Scottish Parliament
+	 UTA - 100 Unitary Authorities (46 E, 32 S, 22 W)
+	 WAC - 40 Welsh Assembly
+	 WMC - 646 MPs
+--country - one letter if type is UTA, to turn off only Scotland or Wales.
+--exceptions - names or area IDs, comma separated, to exempt.
+--status should be pending, recent, or none to turn them back on.
+EOF
+    exit 1;
+}
+
+my %exceptions = map { $_ => 1 } split /,/, $exceptions;
+$exceptions =~ s/,/|/g;
+$status .= '_election' unless $status eq 'none';
+
+my $ids = mySociety::MaPit::get_areas_by_type($type);
+my $areas_info = mySociety::MaPit::get_voting_areas_info($ids);
+my $count = 0;
+foreach (@$ids) {
+    next if $exceptions{$_};
+    my $name = $areas_info->{$_}->{name};
+    next if $exceptions{$name} or $name =~ /$exceptions/;
+    next if $type eq 'UTA' && $country && $country ne $areas_info->{$_}->{country};
+    my $curr_status = mySociety::DaDem::get_area_status($_);
+    next if $curr_status eq $status;
+    print "Setting $_ ($name) to $status\n";
+    mySociety::DaDem::set_area_status($_, $status);
+    $count++;
+}
+print "\nMade $count changes\n";
