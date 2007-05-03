@@ -102,9 +102,10 @@ behind this research, see Sam Smith's paper TODO add link.
 <tr>
 <th>Rank</th>
 <th>Elected body</th>
-<th>Messages sent</th>
 <th>Response rate (in 2 to 3 weeks) *</th>
 <th>People writing for first time &#8224;</th>
+<th>Messages sent</th>
+<!--<th>First time</th>-->
 </tr>
 <?
 $c = 0;
@@ -127,7 +128,6 @@ foreach ($values['types_by_responsiveness'] as $type) {
     else
         print "<td>&nbsp;</td>";
     print "<td><strong>".$type_map[$type]."</strong></td>";
-    print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
     print "<td>";
     if ($type == 'total') {
         print display_range($value['responded'] / $value['responded_outof']);
@@ -142,6 +142,8 @@ foreach ($values['types_by_responsiveness'] as $type) {
         print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high']);
     }
     print "</td>";
+    print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
+    #print "<td align=\"right\">".number_format($value['dispatched_success'] * $value['firsttime'] / $value['firsttime_outof'])."</td>";
     print "</tr>";
 }
 ?>
@@ -153,9 +155,9 @@ WriteToThem.com in February 2006, so does not appear here.
 <p><strong>Note:</strong> The Northern Ireland Assembly was added to
 WriteToThem.com in February 2006, so figures are for only part of the year.
 <? } ?>
-<br>* Measured by survey of users, asking 2 to 3 weeks after sending the message
+<br>* Measured by survey of all users, asking 2 to 3 weeks after sending the message
 if they have got a response yet.
-<br>&#8224; Measured by survey of users, asking if this is the first time they
+<br>&#8224; Measured by survey of all users, asking if this is the first time they
 have written to an elected representative of any kind.
 </p>
 
