@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.35 2007-04-16 13:26:17 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.36 2007-05-08 13:26:23 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -280,7 +280,7 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
         my $status = parse_dsn_bounce(\@lines);
 
         if (!defined($status)) {
-            FYR::Queue::logmsg($id, 0, "bounce message could not be parsed as an RFC1892/1894 DSN", 'handlemail');
+            FYR::Queue::logmsg($id, 1, "bounce message could not be parsed as an RFC1892/1894 DSN", 'handlemail');
             if ($msg->{state} eq 'bounce_wait') { # XXX is this condition right?
                 FYR::Queue::state($id, 'bounce_confirm');
             }
@@ -313,7 +313,7 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
                 $nextstate = 'bounce_confirm';  # XXX check current state as above?
             }
 
-            FYR::Queue::logmsg($id, 0, "message delivery status: $status ($what)", 'handlemail');
+            FYR::Queue::logmsg($id, 1, "message delivery status: $status ($what)", 'handlemail');
 
             # Special cases.
             if ($status eq '5.2.2') {
