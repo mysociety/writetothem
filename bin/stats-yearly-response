@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.12 2007-05-02 16:40:31 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.13 2007-05-09 11:38:29 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -637,31 +637,41 @@ sub display_rep($$) {
             #print ",";
             print "\n";
         }
+    } elsif ($output_format eq 'debug') {
+        die if $category ne "unknown";
+        print sprintf("%s (%s) of %s\n", $rep_name, $party, $area_name);
+        print "\tPerson: $person_id Rep ids: $repids\n";
+        foreach my $url_rep_id (@{$reps_by_person->{$person_id}}) {
+            print "\thttps://secure.mysociety.org/admin/fyr/index.php?page=reps&rep_id=$url_rep_id\n";
+        }
+        print sprintf("\tMessages sent in year: %d Response rate: %d/%d First time: %d/%d\n",
+                $sent_m, $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3]);
     } else {
-        print sprintf("personid:$person_id repids:$repids %s (%s) of %s 
-        sent-success:%d Qresponded:%d/%d Qfirsttime:%d/%d\n",
-                $rep_name, $party, $area_name,
-                $sent_m, $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3],
-                );
+        die "unknown output_format $output_format";
     }
 
     # pretty display of intervals for one MP
     if ($output_format eq 'debug') {
-        my $first = 1;
-        print "    ";
         foreach my $interval (@ints) {
-            if ($first) {
-                print strftime("(%d %b %Y)", localtime($interval->{'from'}));
+            print "\t";
+            print strftime("(%d %b %Y", localtime($interval->{'from'}));
+            print " - ";
+            print strftime("%d %b %Y)", localtime($interval->{'to'}));
+            print " ";
+            if ($interval->{'valid_method'}) {
+                print "Valid (maybe) ";
+            } else {
+                print "Invalid (known) ";
             }
-            print sprintf("<v%sQr%d/%d>", 
-                    $interval->{'valid_method'}, 
-                    $interval->{'r'}->[0], $interval->{'r'}->[1], 
-            );
-            print strftime("(%d %b %Y)", localtime($interval->{'to'}));
-            $first = 0;
+            print sprintf("Response rate: %d/%d", $interval->{'r'}->[0], $interval->{'r'}->[1]);
+            print " Method: ";
+            print $interval->{'method'};
+            print " ";
+            print $interval->{'fax'} if ($interval->{'method'} eq 'fax');
+            print $interval->{'email'} if ($interval->{'method'} eq 'email');
+            print "\n";
         }
         print "\n";
-        print "    category: $category\n";
     }
 }
 
