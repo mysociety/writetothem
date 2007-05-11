@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.59 2007-04-02 17:18:33 louise Exp $
+# $Id: AbuseChecks.pm,v 1.60 2007-05-11 08:49:56 matthew Exp $
 #
 
 package FYR::AbuseChecks;
@@ -136,6 +136,7 @@ sub get_similar_messages ($;$) {
     # to (e.g.) all of their MEPs. We compare individuals by comparing postcode
     # and sending email address (so we should catch people spamming by using
     # lots of postcodes to send a single message to several MPs).
+    # We only look at messages that might be or have been sent to representatives.
     my $same_rep_check = "recipient_id <> ?";
     $same_rep_check = "recipient_id = ?" if $same_rep;
     my $stmt = dbh()->prepare(q#
@@ -145,6 +146,7 @@ sub get_similar_messages ($;$) {
              and message_id <> ?
              and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
+             and state not in ('error', 'failed', 'failed_closed')
         #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
     my $thr = mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD');
