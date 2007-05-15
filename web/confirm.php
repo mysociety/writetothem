@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.15 2006-05-26 08:44:32 matthew Exp $
+ * $Id: confirm.php,v 1.16 2007-05-15 10:54:46 matthew Exp $
  * 
  */
 
@@ -32,7 +32,9 @@ if (!$result) {
     template_draw("confirm-trouble");
 } else {
     $values = msg_admin_get_message($result);
-    if ($values['cobrand'] && $values['cobrand'] == 'animalaid') {
+    if (rabx_is_error($values)) {
+        template_show_error($values->text);
+    } elseif ($values['cobrand'] && $values['cobrand'] == 'animalaid') {
         header("Location: http://www.animalaiduk.com/h/f/ACTIVE/blog//1//?id=".$values['cocode']);
         exit;
     } else {
