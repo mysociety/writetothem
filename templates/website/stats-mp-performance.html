@@ -52,7 +52,7 @@ Statistics without a referenced source are dangerous, so please do this.</p>
 <? if ($mp['notes']) { ?>
 <li><?=$mp['notes'] ?>
 <? } else { ?>
-<li>Response rate: <strong><?=quintile($mp['response']) ?></strong> 
+<li>Response rate: <strong><?=fuzzy_response_descripton($mp['response']) ?></strong> 
 (<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
 <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
 <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong> 
@@ -173,7 +173,7 @@ foreach ($data as $row) {
         print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'] . '</td>';
     } else {
         print "<td align='right' class=\"$tdclass\">".$row['responded']." out of ". $row['responded_outof']."</td>";
-        print "<td align='right' class=\"$tdclass\">" . quintile($row['response']) . "</td>";
+        print "<td align='right' class=\"$tdclass\">" . fuzzy_response_descripton($row['response']) . "</td>";
         #print "<td align='right' class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
         #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
     }

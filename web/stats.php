@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.23 2007-05-18 11:54:53 francis Exp $
+ * $Id: stats.php,v 1.24 2007-05-18 12:20:59 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -85,7 +85,7 @@ if ($type == 'mps') {
     template_show_error("Unknown report type '".htmlspecialchars($type)."'");
 }
 
-function quintile($a) {
+function fuzzy_response_description($a) {
     if ($a < 0.20)
         return "very low";
     else if ($a < 0.40) 
