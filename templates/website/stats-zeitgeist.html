@@ -60,9 +60,54 @@ MPs on 14th April, enabling it again a week after the election on 12th May.</p>
 <? } ?>
 
 <? if ($values['year'] == '2006') { ?>
-<h3>Did MPs do better this year or last year?</h3>
+<p>WriteToThem sent a total of
+<strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
+messages to elected representatives (and Lords) in the year 2006. This page contains
+some facts and figures about those messages. You can find information about
+your MP in the <a href="/stats/<?=$values['year']?>/mps">MP
+Responsiveness League Table</a>.
 
-<p>Overall, according to our users' questionnaire responses, MPs were 2% less
+<p align="center">
+<a href="#referrers">What do people write letters about?</a>
+<br><a href="#responsehistogram">Did MPs do better this year or last year?</a>
+<br><a href="#deprivation">Do only the better off use WriteToThem?</a>
+<br><a href="#electedbodies">Which elected body has the most responsive members?</a>
+<br><a href="#parties">Which party has the most responsive MPs?</a>
+
+<h3><a name="referrers">What do people write letters about?</a></h3>
+
+<p>We don't look at your messages (see our <a href="/about-qa#personal">privacy
+policy</a> for details), so we don't know what you write about. However, we do
+run standard web statistics software, so we know which sites people click
+through to WriteToThem from. Here is the top campaign website which linked to
+WriteToThem in each month.
+
+<table class="zeitgeist">
+<tr><th>Month in 2006</th><th>Top campaign site linking to WriteToThem</th>
+<tr><td>January</td><td><a href="http://smokefree.ash.positive-dedicated.net/action.html">Smokefree ACTION</a></td>
+<tr class="a"><td>February</td><td><a href="http://www.natfhe.org.uk">National Association of Teachers in Further and Higher Education</a></td>
+<tr><td>March</td><td><a href="http://www.saveparliament.org.uk/index.php">Save Parliament</a></td>
+<tr class="a"><td>April</td><td><a href="http://www.pressureworks.org/">Pressureworks (Christian Aid)</a></td>
+<tr><td>May</td><td><a href="http://forums.moneysavingexpert.com/">Money Saving Expert forums</a></td>
+<tr class="a"><td>June</td><td><a href="http://www.pistonheads.com/news/default.asp">PistonHeads &ndash; Speed Matters</a></td>
+<tr><td>July</td><td><a href="http://www.voice4sportsw.org/site/">Voice4SportsSW</a></td>
+<tr class="a"><td>August</td><td><a href="http://www.savethechildren.org.uk/">Save the Children (ceasefire day)</a></td>
+<tr><td>September</td><td><a href="http://www.traidcraftinteractive.com/news.php">Traidcraft InterActive</a></td>
+<tr class="a"><td>October</td><td><a href="http://www.mike-stevens.co.uk/defracuts/what-to-do/letters.htm">Save our Waterways</a></td>
+<tr><td>November</td><td><a href="http://www.immigrationboards.com/">Immigrationboards.com</a></td>
+<tr class="a"><td>December</td><td><a href="http://www.antislavery.org/2007/actionmp.html">anti-slavery</a></td>
+</table>
+
+<p><small>Where a site was top for more than one month, it has been excluded
+from the later months for variety. Non-campaigning sites, such as search
+engines, directories, TheyWorkForYou, Public Whip, and news stories about mySociety, have
+been excluded from this table. Most of the campaigns were short term, and their specific
+page no longer works, so we have instead linked to the top level of the campaigning site.
+</small>
+
+<h3><a name="responsehistogram">Did MPs do better this year or last year?</a></h3>
+
+<p>Overall, according to our users' survey responses, MPs were 2% less
 responsive to constituents' messages sent via WriteToThem in 2006 compared to in
 2005. This is partly because of a sharp drop in the number of MPs getting those
 near-perfect scores of 90% or higher responsiveness. On the other hand,
@@ -71,7 +116,7 @@ More details in the full <a href="/stats/<?=$values['year']?>/mps">MP Responsive
 
 <p align="center"><img border="0" src="/stats/response-histo-2006-WMC.png" alt=""></p>
 
-<h3>Do only the better off use WriteToThem?</h3>
+<h3><a name="deprivation">Do only the better off use WriteToThem?</a></h3>
 
 <p>Sometimes people have told us that websites like WriteToThem only help
 people who are already better off in society, because they have better access
@@ -85,7 +130,7 @@ from better off areas. You can read his full paper on the subject here. </p>
 <? } ?>
 
 <? if (array_key_exists('lords', $values['type_summary'])) { ?>
-<h3>Which elected body* has the most responsive members?</h3>
+<h3><a name="electedbodies">Which elected body* has the most responsive members?</a></h3>
 <p align="center" style="margin-top:-1em">(* and the House of Lords)</p>
 <? } else { ?>
 <h3>Performance of elected bodies</h3>
@@ -122,10 +167,14 @@ foreach ($values['types_by_responsiveness'] as $type) {
     print "<td><strong>".$type_map[$type]."</strong></td>";
     print "<td>";
     if ($type == 'total') {
-        print display_range($value['responded'] / $value['responded_outof']);
+        #print display_range($value['responded'] / $value['responded_outof']);
+        print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
+        print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
     } else {
-        print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
-    }
+        #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
+        print round(100 * $value['responded_mean'], 0) . "%";
+        print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+    } 
     print "</td>";
     print "<td>";
     if ($type == 'total') {
@@ -155,9 +204,9 @@ have written to an elected representative of any kind.
 
 <table id="zeitgeist_cols" border="0" cellpadding="0" cellspacing="0"><tr><td width="50%" valign="top" class="left">
 
-<h3>Response rate of MPs of each party</h3>
+<h3><a name="parties">Which party has the most responsive MPs?</a></h3>
 <table class="zeitgeist">
-<tr> <th>Party</th> <th>Response rate<br>(in 2 to 3 weeks)</th></tr>
+<tr> <th>Party</th> <th>Response rate of MPs<br>(in 2 to 3 weeks)</th></tr>
 <?
 $c = 0;
 foreach ($values['parties_by_responsiveness'] as $party) {
@@ -167,7 +216,9 @@ foreach ($values['parties_by_responsiveness'] as $party) {
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>";
-    print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
+    #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
+    print fuzzy_response_description($value['responded_mean']);
+    print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
     print "</td>";
     print "</tr>";
 }
@@ -176,6 +227,7 @@ foreach ($values['parties_by_responsiveness'] as $party) {
 
 </td><td valign="top" class="right">
 
+<? if ($values['year'] == '2005') { ?>
 <h3>First time writers by party</h3>
 <table class="zeitgeist">
 <tr> <th>Party</th> <th>First time</th> </tr>
@@ -188,7 +240,9 @@ foreach ($values['parties_by_firsttime'] as $party) {
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>";
-    print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
+    #print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
+    print fuzzy_response_description($value['responded_mean']);
+    print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
     print "</td>";
     print "</tr>";
 }
@@ -198,6 +252,8 @@ foreach ($values['parties_by_firsttime'] as $party) {
 <p>This table shows our estimate of the percentage of authors contacting MPs of
 each party who were writing to an elected representative for the first
 time.</p>
+
+<? } ?>
 
 </td></tr></table>
 
