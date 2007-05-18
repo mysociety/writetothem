@@ -27,13 +27,12 @@ foreach ($data as $row) {
     print 'constituency="'.htmlspecialchars($row['area']).'" ';
     print 'party="'.htmlspecialchars($row['party']).'" ';
 
-    print 'writetothem_responsiveness_category="'.$row['category'].'" ';
+    print 'writetothem_responsiveness_data_quality_category="'.$row['category'].'" ';
     if ($row['notes']) {
         print 'writetothem_responsiveness_notes="'.htmlspecialchars($row['notes']).'" ';
     } else {
-        print 'writetothem_responsiveness_mean_'.$year.'="'.round($row['response']*100, 1).'%" ';
-        print 'writetothem_responsiveness_low_'.$year.'="'.round($row['low']*100, 0).'%" ';
-        print 'writetothem_responsiveness_high_'.$year.'="'.round($row['high']*100, 0).'%" ';
+        print 'writetothem_responsiveness_mean_'.$year.'="'.round($row['response']*100, 0).'%" ';
+        print 'writetothem_responsiveness_quintile_'.$year.'="'.quintile($row['response']).'" ';
     }
     print "/>\n";
 }

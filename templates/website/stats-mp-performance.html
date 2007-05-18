@@ -6,19 +6,6 @@ $data = $data['data'];
 $sort = $info['sort'];
 $mp = $info['mp'];
 
-function quintile($a) {
-    if ($a < 0.20)
-        return "very low";
-    else if ($a < 0.40) 
-        return "low"; 
-    else if ($a < 0.60) 
-        return "average"; 
-    else if ($a < 0.80) 
-        return "high"; 
-    else if ($a <= 1.00) 
-        return "very high"; 
-    return "unknown $a";
-}
 ?>
 <p id="year_nav"><?=$values['year_bar']?></p>
 <h2><?=$values['title']?></h2>
@@ -174,7 +161,9 @@ foreach ($data as $row) {
     if ($href == 'angela_smith' || $href == 'gareth_thomas')
         $href .= ',' . str_replace(' ', '_', strtolower($row['area']));
     print '<a name="' . $href . '"></a>';
+    print '<a href="http://www.theyworkforyou.com/mp?pid='.str_replace('uk.org.publicwhip/person/', '', $row['person_id']).'">';
     print str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
+    print '</a>';
     print '<br><small>';
     print $row['party'];
     print "</small></td>";
