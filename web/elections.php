@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: elections.php,v 1.1 2007-05-21 13:49:38 matthew Exp $
+ * $Id: elections.php,v 1.2 2007-05-21 13:50:16 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -14,25 +14,7 @@ require_once '../../phplib/mapit.php';
 require_once '../../phplib/dadem.php';
 
 $dates = array(
-	'2006-05-15' => array(2502,2489,2492,2487,2493,2500,2494,2509,2486,2482,2497,2507,2480,2488,2490,2499),
-	'2006-05-16' => array(2451,2318,2343,2449,2339,2485,2501,2508,2506,2481,2498),
-	'2006-05-17' => array(2496,2505),
-	'2006-05-18' => array(2516,2510,2345,2495,2504,2491,2612,2526),
-	'2006-05-19' => array(2483,2484,2511),
-	'2006-05-20' => array(2606,2607),
-	'2006-05-23' => array(2527,2290,2541,2264,2529,2515),
-	'2006-05-26' => array(2530,2542),
-	'2006-05-30' => array(2548,2455,2311,2523,2391,2596,2536,2525,2540,2539,2519,2334,2581,2263,2544,2252,2589,2421,2407,2537,2532,2588,2517),
-	'2006-05-31' => array(2453,2379,2339,2513,2319,2260,2518),
-	'2006-06-01' => array(2338,2545),
-	'2006-06-02' => array(2514,2520),
-	'2006-06-06' => array(2615,2291),
-	'2006-06-07' => array(2253,2262,2266,2267,2268,2315,2344,2405,2524,2533,2561,2566,2618,2633),
-	'2006-06-09' => array(2333,2543,2657,2326,2272,2281),
-	'2006-06-10' => array(2387,2435,2371,2528,2308,2364,2336),
-	'2006-06-11' => array(2522),
-	'2006-06-13' => array(2307,2562,2329),
-	'2006-06-15' => array(2538,2440,2410,2468,2478,2310,2438,2547,2552,2479,2366,2419,2426,2323,2327,2273,2535,2331,2462,2362,2469,2337,2370,2464,2546,2368),
+	'2007-05-19' => array(2465,2455,2516,2556,2448,2280,2596,2256,2449,2628,2562,2524,2313,2591,2457,2343,2518,2404,2473,2451,2589,2606,2346,2408,2407,2443,2456,2623,2431,2546,2342,2452,2403,2282, 2345,2470,2608,2341),
 );
 foreach ($dates as $date=>$ids) {
 	foreach ($ids as $id) {
@@ -71,7 +53,7 @@ foreach ($lookup as $area_id => $status) {
 	}
 }
 
-template_draw('header', array('title'=>'2006 elections'));
+template_draw('header', array('title'=>'2007 elections'));
 if (isset($out['none'])) { ?>
 <div style="float: left; width: 48%;">
 <p>Here is a list of the areas for which we have received new data since the election:</p>
@@ -87,7 +69,7 @@ if (isset($out['none'])) { ?>
 if (isset($out['recent_election'])) {
 ?>
 <div style="float: left; width: 48%;">
-<p>Here is a list of the <?=count($out['recent_election']) ?> areas for which we are still awaiting election results:</p>
+<p>Here's a list of areas with new data, but there have been boundary changes:</p>
 <?
 	foreach ($out['recent_election'] as $date => $data) {
 		if (!preg_match('#\d\d\d\d-\d\d-\d\d#', $date))
@@ -99,6 +81,7 @@ if (isset($out['recent_election'])) {
 		unset($out['recent_election'][$date]);
 	}
 ?>
+<p>Here is a list of the <?=count($out['recent_election']) ?> areas for which we are still awaiting election results:</p>
 <ul><li><?
 	print join("\n<li>", $out['recent_election']);
 	print '</ul></div>';
