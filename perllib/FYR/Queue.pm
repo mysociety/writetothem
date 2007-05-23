@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.260 2007-04-16 14:08:39 matthew Exp $
+# $Id: Queue.pm,v 1.261 2007-05-23 10:44:14 francis Exp $
 #
 
 package FYR::Queue;
@@ -1790,12 +1790,16 @@ sub process_queue ($$;$$) {
             . q#) and (state <> 'ready' or not frozen) order by random()#);
         $stmt->execute();
     } else {
+        # XXX should be "order by confirmed", but that way they are all
+        # deadlocking, rather than trying the next one as they should be. That
+        # bug needs fixing, then this putting back from "order by random()" to
+        # "order by confirmed"
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state, group_id from message
                 where state = 'ready' and not frozen
                     and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
-                order by confirmed
+                order by random()
                 #, FYR::DB::Time() - $state_action_interval{ready}));
         $stmt->execute();
     }
