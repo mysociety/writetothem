@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.116 2007-04-16 17:38:36 matthew Exp $
+ * $Id: write.php,v 1.117 2007-05-25 11:44:09 matthew Exp $
  *
  */
 
@@ -259,6 +259,7 @@ END;
 
     $form->addElement('text', 'writer_email2', "Confirm email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
+    $form->applyFilter('writer_email2', 'trim');
     $form->addFormRule('compare_email_addrs');
 
     /* add additional text explaining why we ask for email address twice? */
