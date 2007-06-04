@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.118 2007-06-04 10:31:54 matthew Exp $
+ * $Id: write.php,v 1.119 2007-06-04 13:27:40 matthew Exp $
  *
  */
 
@@ -223,9 +223,9 @@ END;
     // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
     $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
 
-    $form->addElement('text', 'writer_name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_name', 'Please enter your name', 'required', null, null);
-    $form->applyFilter('writer_name', 'trim');
+    $form->addElement('text', 'name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+    $form->addRule('name', 'Please enter your name', 'required', null, null);
+    $form->applyFilter('name', 'trim');
 
     $form->addElement('text', 'writer_address1', "Address 1:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
@@ -238,8 +238,9 @@ END;
     $form->addRule('writer_town', 'Please enter your town', 'required', null, null);
     $form->applyFilter('writer_town', 'trim');
 
-    $form->addElement('text', 'writer_county', 'County:', array('size' => 20, 'maxlength' => 255));
-    $form->applyFilter('writer_county', 'trim');
+    # Call it state so that Google Toolbar (and presumably others) can auto-fill.
+    $form->addElement('text', 'state', 'County:', array('size' => 20, 'maxlength' => 255));
+    $form->applyFilter('state', 'trim');
 
     if ($fyr_postcode_editable) {
         // House of Lords
@@ -581,7 +582,7 @@ function prepare_address(){
         $fyr_values['writer_address1'] . "\n" .
         $fyr_values['writer_address2'] . "\n" .
         $fyr_values['writer_town'] . "\n" .
-        $fyr_values['writer_county'] . "\n" .
+        $fyr_values['state'] . "\n" .
         $fyr_values['pc'] . "\n";
     $address = str_replace("\n\n", "\n", $address);
     return $address;
@@ -602,7 +603,7 @@ function prepare_message_array($address){
 	   sender */
     global $fyr_values;
     return array(
-    'name' => $fyr_values['writer_name'],
+    'name' => $fyr_values['name'],
     'email' => $fyr_values['writer_email'],
     'address' => $address,
     'postcode' => $fyr_values['pc'],
@@ -628,12 +629,22 @@ function check_message_id($msgid){
 // Get all fyr_values
 $fyr_values = get_all_variables();
 
+# Form field name changes
+if (array_key_exists('writer_name', $fyr_values)) {
+    $fyr_values['name'] = $fyr_values['writer_name'];
+    unset($fyr_values['writer_name']);
+}
+if (array_key_exists('writer_county', $fyr_values)) {
+    $fyr_values['state'] = $fyr_values['writer_county'];
+    unset($fyr_values['writer_county']);
+}
+
 // Normalise text part of message here, before we modify it.
 if (array_key_exists('body', $fyr_values))
     $fyr_values['body'] = convert_to_unix_newlines($fyr_values['body']);
 
-if (!array_key_exists('pc', $fyr_values) || $fyr_values['pc'] == "") {
-    $fyr_values['pc'] = "";
+if (!array_key_exists('pc', $fyr_values)) {
+    $fyr_values['pc'] = '';
 }
 
 debug("FRONTEND", "All variables:", $fyr_values);
@@ -906,7 +917,6 @@ if ($on_page == "write") {
     renderForm($writeForm, "writeForm");
 } else if ($on_page == "preview") {
     $previewForm = buildPreviewForm();
-#    $previewForm->setConstants($fyr_values); # WHAT DID THIS LINE DO?
     renderForm($previewForm, "previewForm");
 } else if ($on_page =="sendfax") {
  	submitFaxes();
