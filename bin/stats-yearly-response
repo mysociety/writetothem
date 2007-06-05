@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.13 2007-05-09 11:38:29 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.14 2007-06-05 15:57:05 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -481,7 +481,6 @@ sub work_out_rep_category($) {
     my $rep_length = $ints[-1]->{'to'} - $ints[0]->{'from'};
 
     # Gather data
-    my $intervals_with_no_q_response = 0;
     my $intervals_with_no_q_response_and_validmethod = 0;
     my $no_q_response_and_validmethod_time = 0;
     my $shametime = 0;
@@ -491,7 +490,7 @@ sub work_out_rep_category($) {
         my $length = $interval->{'to'} - $interval->{'from'};
 
         if ($interval->{'r'}->[0] == 0 && $interval->{'r'}->[1] >= 2) { # got no positive q responses, out of at least 2
-            $intervals_with_no_q_response++;
+#        if ($interval->{'r'}->[0] <= 2 && $interval->{'r'}->[1] >= 10) { # got no positive q responses, out of at least 2
             if ($interval->{'valid_method'}) { 
                 $intervals_with_no_q_response_and_validmethod++; 
                 $no_q_response_and_validmethod_time += $length;
@@ -519,7 +518,7 @@ sub work_out_rep_category($) {
         $confidence_length = $re_high - $re_low;
     }
 
-    #print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length intervals_with_no_q_response: $intervals_with_no_q_response no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
+    #print "shametime: $shametime knowninvalidtime: $knowninvalidtime replength: $rep_length no_q_response_and_validmethod_time: $no_q_response_and_validmethod_time\n" if $output_format eq 'debug';
     #print "confidence: ".($confidence_length ? $confidence_length : "none")."\n" if $output_format eq 'debug';
 
     # Work out what we are
@@ -527,7 +526,6 @@ sub work_out_rep_category($) {
     return 'toofew' if ($sent_m < 10);
 #    return 'toofew' if ($q_data->[1] < 10);
     #return 'toofew' if (!defined($confidence_length) || $confidence_length > 0.50);
-    return 'good' if ($intervals_with_no_q_response == 0);
     return 'good' if ($intervals_with_no_q_response_and_validmethod == 0);
     return 'good' if ($no_q_response_and_validmethod_time < $rep_length * 0.1);
     #return 'badcontact' if ($knowninvalidtime > $rep_length * 0.5);
@@ -715,6 +713,21 @@ foreach my $person_id (keys %$reps_by_person) {
             $person_id eq "uk.org.publicwhip/person/10088" ||
             $person_id eq "uk.org.publicwhip/person/10128" ||
             $person_id eq "uk.org.publicwhip/person/10562") {
+            $category = "badcontact";
+        }
+    } elsif ($year == 2006) {
+        if ($person_id eq "uk.org.publicwhip/person/10492" ||
+            $person_id eq "uk.org.publicwhip/person/10257" ||
+            $person_id eq "uk.org.publicwhip/person/11970" ||
+            $person_id eq "uk.org.publicwhip/person/10256" ||
+            $person_id eq "uk.org.publicwhip/person/10440" ||
+            $person_id eq "uk.org.publicwhip/person/10780" ||
+            $person_id eq "uk.org.publicwhip/person/10678"
+            ) {
+            $category = "good";
+        }
+        if ($person_id eq "uk.org.publicwhip/person/11792" || # Nick Hurd, 1st Jan to 23rd Feb bad
+            $person_id eq "uk.org.publicwhip/person/10220") { # Barry Gardiner, 2006-07-25 to 2006-08-19 bad
             $category = "badcontact";
         }
     }
