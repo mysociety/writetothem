@@ -55,10 +55,13 @@ Statistics without a referenced source are dangerous, so please do this.</p>
 <li>Response rate: <strong><?=fuzzy_response_description($mp['response']) ?></strong> 
 (<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
 <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
+<? if ($mp['fymp_response']) { ?>
+<li>Previous year's response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
+<? } ?>
 <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong> 
 (<?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys)
 <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>-->
-<li>Ranking: 
+<!--<li>Ranking: -->
 <?
     $same_stat = 1;
     $position = 0;
@@ -73,8 +76,10 @@ Statistics without a referenced source are dangerous, so please do this.</p>
 	} else {
 	    $same_stat++;
 	}
-        if ($row['person_id'] == $mp['person_id']) {
-	    print "<strong>$position</strong> (";
+    if ($row['person_id'] == $mp['person_id']) {
+        /*
+	    print "<strong>$position</strong>";
+        print "(";
             if ($row['fymp_rank']) {
 		$diff = $position - $row['fymp_rank'];
                 if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
@@ -84,6 +89,7 @@ Statistics without a referenced source are dangerous, so please do this.</p>
 	        print 'New';
             }
 	    print ')';
+        */
 	    break;
 	}
     }
@@ -91,7 +97,7 @@ Statistics without a referenced source are dangerous, so please do this.</p>
 </ul>
 <p align="center">
 <a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a>
-<br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Look up <?=$h_name ?> on TheyWorkForYou</a>
+<br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a>
 </p>
 </div>
 
@@ -101,10 +107,11 @@ $head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . 
 $head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
 $head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
 $head_response = 'Response rate of MP'; if ($sort != 'r') $head_response = '<a href="?">' . $head_response . '</a>';
+$head_response .= '<br>(Previous year)';
 ?>
 <table class="zeitgeist">
 <tr>
-<? if ($sort == 'r') print '<th>Position<br><small>(change)</small></th>'; ?>
+<? if ($sort == 'r') print '<th>Position</th>'; ?>
 <th><?=$head_name ?></th>
 <th><?=$head_cons ?></th>
 <th><?=$head_messages ?></th>
@@ -143,7 +150,9 @@ foreach ($data as $row) {
         }
         print '<td class="c '.$tdclass.'">';
         if (!$row['notes']) {
-            print "$position<br><small>";
+            print "$position";
+            /*
+            print "<br><small>";
             if ($row['fymp_rank']) {
                 $diff = $position - $row['fymp_rank'];
             if ($diff<0) print '(<img alt="Up" src="/images/arrow_up.png"> ' . -$diff . ')';
@@ -153,6 +162,7 @@ foreach ($data as $row) {
                 print '(New)';
                 }
             print '</small>';
+            */
         }
         print '</td>';
     }
@@ -173,7 +183,11 @@ foreach ($data as $row) {
         print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'] . '</td>';
     } else {
         print "<td align='right' class=\"$tdclass\">".$row['responded']." out of ". $row['responded_outof']."</td>";
-        print "<td align='right' class=\"$tdclass\">" . fuzzy_response_description($row['response']) . "</td>";
+        print "<td align='right' class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
+        if ($row['fymp_response']) {
+           print '<br>(' . fuzzy_response_description($row['fymp_response']). ')';
+        }
+        print "</td>";
         #print "<td align='right' class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
         #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
     }

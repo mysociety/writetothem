@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.24 2007-05-18 12:20:59 francis Exp $
+ * $Id: stats.php,v 1.25 2007-06-06 14:39:05 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -176,14 +176,15 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     $last_low = -1;
     foreach ($last_year_data as $key => $row) {
         if ($row['response'] != $last_response || $row['low'] != $last_low) {
-	    $position += $same_stat;
-	    $same_stat = 1;
-	    $last_response = $row['response'];
-	    $last_low = $row['low'];
-	} else {
-	    $same_stat++;
-	}
+            $position += $same_stat;
+            $same_stat = 1;
+            $last_response = $row['response'];
+            $last_low = $row['low'];
+        } else {
+            $same_stat++;
+        }
         $fymp_ranked[$row['person_id']] = $position;
+        $fymp_response[$row['person_id']] = $row['response'];
     }
 
     # Read in data
@@ -203,7 +204,8 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
                 'high' => $row['responded_95_high'],
                 'responded' => $row['responded'],
                 'responded_outof' => $row['responded_outof'],
-                'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
+                'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null,
+                'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null
             );
         } else {
             $data['info'][$key] = $row;
@@ -249,7 +251,8 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
             'response' => $row['responded_mean'],
             'low' => $row['responded_95_low'],
             'high' => $row['responded_95_high'],
-            'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null
+            'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null,
+            'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null
 	));
     }
 
