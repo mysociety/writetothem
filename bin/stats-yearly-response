@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.15 2007-06-06 15:09:28 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.16 2007-06-06 15:32:52 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -728,7 +728,11 @@ foreach my $person_id (keys %$reps_by_person) {
             $category = "good";
         }
         if ($person_id eq "uk.org.publicwhip/person/11792" || # Nick Hurd, 1st Jan to 23rd Feb bad
-            $person_id eq "uk.org.publicwhip/person/10220") { # Barry Gardiner, 2006-07-25 to 2006-08-19 bad
+            $person_id eq "uk.org.publicwhip/person/10220" || # Barry Gardiner, 2006-07-25 to 2006-08-19 bad
+            $person_id eq "uk.org.publicwhip/person/10308" || # Glenda Jackson, suspect gmail address
+            $person_id eq "uk.org.publicwhip/person/10294" || # Kim Howells, suspect fax
+            $person_id eq "uk.org.publicwhip/person/11784" || # Paul Rowne, suspect cix address
+            ) { 
             $category = "badcontact";
         }
     }
