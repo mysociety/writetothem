@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.14 2007-06-05 15:57:05 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.15 2007-06-06 15:09:28 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -490,7 +490,8 @@ sub work_out_rep_category($) {
         my $length = $interval->{'to'} - $interval->{'from'};
 
         if ($interval->{'r'}->[0] == 0 && $interval->{'r'}->[1] >= 2) { # got no positive q responses, out of at least 2
-#        if ($interval->{'r'}->[0] <= 2 && $interval->{'r'}->[1] >= 10) { # got no positive q responses, out of at least 2
+# XXX change it to this to catch a few more MPs to check if you really want them
+#        if ($interval->{'r'}->[0] <= 2 && $interval->{'r'}->[1] >= 10) {
             if ($interval->{'valid_method'}) { 
                 $intervals_with_no_q_response_and_validmethod++; 
                 $no_q_response_and_validmethod_time += $length;
