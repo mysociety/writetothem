@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: stats-response-histo,v 1.2 2007-05-02 17:17:51 francis Exp $
+# $Id: stats-response-histo,v 1.3 2007-06-07 14:58:03 francis Exp $
 
 #GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 480,360"
 #EXTENSION=".png"
@@ -43,7 +43,7 @@ cat >$GPSCRIPT <<END
     set ytics nomirror
     # set y2tics nomirror tc lt 3
 
-    set boxwidth 0.9 relative
+    set boxwidth 0.8 relative
     set style fill solid 1.0
     set style histogram clustered gap 1
 
@@ -65,5 +65,5 @@ END
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
 #gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups$EXTENSION
-gnuplot < $GPSCRIPT > ~/public_html/fyr-stats-response-histo$EXTENSION
+gnuplot < $GPSCRIPT > /tmp/fyr-stats-response-histo$EXTENSION
 
