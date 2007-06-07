@@ -8,7 +8,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.8 2007-02-02 12:21:22 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.9 2007-06-07 10:14:27 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -101,13 +101,16 @@ while (my ($n, $reptype) = $stn->fetchrow_array()) {
 print STDERR "done\n";
 
 print STDERR "get overall questionnaire responses... ";
+# 2419200 is 4 weeks.
 my $stqo = dbh()->prepare("
-            select distinct on(message_id, question_id)
+            select distinct on(question_id, sender_email)
                 message_id, dispatched, question_id, answer, recipient_type
             from questionnaire_answer, message
             where questionnaire_answer.message_id = message.id
                 and dispatched >= ? and dispatched < ?
-                and dispatched < ?");
+                and dispatched < ?
+                and (whenanswered is null or whenanswered < dispatched + 2419200)
+                order by question_id, sender_email, dispatched");
 $stqo->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 my $r;
 while (my ($msgid, $dispatched, $qid, $answer, $reptype) = $stqo->fetchrow_array()) {

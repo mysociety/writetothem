@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.17 2007-06-06 17:03:01 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.18 2007-06-07 10:14:27 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -75,6 +75,7 @@ while (my ($message_id, $question_id, $answer, $c) = $stfix->fetchrow_array()) {
     # print "removing duplicate responses: $message_id $question_id $answer $c\n";
     # remove duplicates, by deleting all and reinserting one
     dbh()->do("delete from questionnaire_answer where message_id = ? and question_id = ? and answer = ?", {}, $message_id, $question_id, $answer);
+    # XXX needs date reinserting, and to pick earliest one
     dbh()->do("insert into questionnaire_answer (message_id, question_id, answer) values (?, ?, ?)", {}, $message_id, $question_id, $answer);
 }
 print STDERR "done\n";
@@ -316,7 +317,7 @@ print STDERR "get interval questionnaire responses... ";
 # from our address database, so is what we want to compare against for interval checking.
 # 2419200 is 4 weeks.
 my $stq = dbh()->prepare("
-            select distinct on(message_id, question_id)
+            select distinct on(question_id, sender_email)
                 message_id, dispatched, created, question_id, answer, recipient_id
             from questionnaire_answer, message
             where questionnaire_answer.message_id = message.id
@@ -324,6 +325,7 @@ my $stq = dbh()->prepare("
                 and created >= ? and created < ?
                 and dispatched < ?
                 and (whenanswered is null or whenanswered < dispatched + 2419200)
+                order by question_id, sender_email, dispatched
                 ");
 $stq->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 while (my ($msgid, $dispatched, $created, $qid, $answer, $repid) = $stq->fetchrow_array()) {
@@ -374,7 +376,7 @@ print STDERR "get overall questionnaire responses... ";
 # Note that this is done by dispatched date, and is what we base real stats on.
 # 2419200 is 4 weeks.
 my $stqo = dbh()->prepare("
-            select distinct on(message_id, question_id)
+            select distinct on(question_id, sender_email)
                 message_id, dispatched, question_id, answer, recipient_id
             from questionnaire_answer, message
             where questionnaire_answer.message_id = message.id
@@ -382,6 +384,7 @@ my $stqo = dbh()->prepare("
                 and dispatched >= ? and dispatched < ?
                 and dispatched < ?
                 and (whenanswered is null or whenanswered < dispatched + 2419200)
+                order by question_id, sender_email, dispatched
                 ");
 $stqo->execute($start_epoch, $end_epoch, time() - 86400 * 28);
 my %r;
