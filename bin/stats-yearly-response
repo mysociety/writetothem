@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.18 2007-06-07 10:14:27 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.19 2007-06-07 16:06:35 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -581,6 +581,7 @@ sub display_rep($$) {
         my $r_info = $repinfo{$repid};
         my $sparty = $r_info->{'party'};
         $sparty = "Labour" if $sparty eq "Labour / Co-operative";
+        utf8::decode($sparty);
         $parties->{$sparty} = 1;
         $rep_names->{$r_info->{'name'}} = 1;
         my $a_info = $areainfo{$reptoarea->{$repid}};
