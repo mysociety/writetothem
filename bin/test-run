@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.49 2007-04-03 19:31:20 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.50 2007-06-07 15:03:22 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -242,7 +242,7 @@ sub spin_queue {
 
 sub send_message_to_rep {
     my ($who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
-    $fields->{writer_name} = name_n($who);
+    $fields->{name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     $fields->{writer_email2} = email_n($who);
     
@@ -361,7 +361,7 @@ sub do_send_example_message {
         { 
             writer_address1 => '23 Something Street',
             writer_town => 'Someplace',
-            writer_county => 'Someshire',
+            state => 'Someshire',
             writer_phone => undef,
             body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         } 
@@ -443,7 +443,7 @@ sub do_send_blocked_message {
         { 
             writer_address1 => '23 Something Street',
             writer_town => 'Someplace',
-            writer_county => 'Someshire',
+            state => 'Someshire',
             writer_phone => undef,
             body => "V. short"
         } 
@@ -477,7 +477,7 @@ sub do_test_bounce_stuff {
     #    { 
     #        writer_address1 => '82 Mouse Road',
     #        writer_town => 'Cheeseland',
-    #        writer_county => 'Emmentalshire',
+    #        state => 'Emmentalshire',
     #        writer_phone => undef,
     #        body => "I think that more cheese should be sent to more mice. How are the mignon little souris meant to be happy when they aren't fully fed with the freshest, creamiest, tastiest coagulated, separated milk curd?"
     #    } 
@@ -598,7 +598,7 @@ sub do_send_cobrand_message {
         { 
             writer_address1 => '32 Wheresome Wroad',
             writer_town => 'Whereville',
-            writer_county => 'Whereex',
+            state => 'Whereex',
             writer_phone => undef,
             body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example.",
         },
@@ -618,7 +618,7 @@ sub do_send_lords_message {
         { 
             writer_address1 => '99 Subject\'s Square',
             writer_town => 'Plebsville',
-            writer_county => 'Fiefdom',
+            state => 'Fiefdom',
             writer_phone => undef,
             body => "I know it is odd for somebody to write to a Lord, as they are not officially representative. However, they ought to respond to the needs and wants of the country, because that's the right thing to do. So I'm writing to you anyway, so altering reality to be as I want, by assuming that it already is."
         },
@@ -669,7 +669,7 @@ sub do_send_fax_message {
                          {
             writer_address1 => '75 Toner Place',
             writer_town => 'Paper Lane',
-            writer_county => 'Facsimileshire',
+            state => 'Facsimileshire',
             writer_phone => undef,
             body => "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between."
 });
@@ -693,7 +693,7 @@ sub do_send_fax_message {
                            {
             writer_address1 => '75 Toner Place',
             writer_town => 'Paper Lane',
-            writer_county => 'Facsimileshire',
+            state => 'Facsimileshire',
             writer_phone => undef,
             body => "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between."
 });
@@ -722,7 +722,7 @@ sub do_send_fax_message {
                         {
             writer_address1 => '75 Toner Place',
             writer_town => 'Paper Lane',
-            writer_county => 'Facsimileshire',
+            state => 'Facsimileshire',
             writer_phone => undef,
             body => $body
 });
@@ -757,7 +757,7 @@ sub do_send_group_abuse {
                         {
             writer_address1 => '44 Multiple Street',
             writer_town => 'Batchcester',
-            writer_county => 'Groupshire',
+            state => 'Groupshire',
             writer_phone => undef,
             body => "V. short"
             },
@@ -832,7 +832,7 @@ sub do_send_group_abuse {
                         {
             writer_address1 => '23 Something Street',
             writer_town => 'Someplace',
-            writer_county => 'Someshire',
+            state => 'Someshire',
             writer_phone => undef,
             body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
 }
@@ -844,7 +844,7 @@ sub do_send_group_abuse {
                         {
             writer_address1 => '44 Multiple Street',
             writer_town => 'Batchcester',
-            writer_county => 'Groupshire',
+            state => 'Groupshire',
             writer_phone => undef,
             body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
 },
@@ -878,7 +878,7 @@ sub do_send_group_abuse {
                         {
             writer_address1 => '32 Wheresome Wroad',
             writer_town => 'Whereville',
-            writer_county => 'Whereex',
+            state => 'Whereex',
             writer_phone => undef,
             body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "},
         undef,
@@ -916,7 +916,7 @@ sub do_send_group_message {
                         {
             writer_address1 => '44 Multiple Street',
             writer_town => 'Batchcester',
-            writer_county => 'Groupshire',
+            state => 'Groupshire',
             writer_phone => undef,
             body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
 },
@@ -960,7 +960,7 @@ sub do_send_bouncing_message() {
         { 
             writer_address1 => '10 Boing Boing Land',
             writer_town => 'Springy Street',
-            writer_county => 'Thumpshire',
+            state => 'Thumpshire',
             writer_phone => '01234 567890',
             body => "Bouncing message this is.  A test."
         } 
