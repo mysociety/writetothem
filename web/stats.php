@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.25 2007-06-06 14:39:05 francis Exp $
+ * $Id: stats.php,v 1.26 2007-06-09 22:05:58 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -17,9 +17,9 @@ require_once '../../phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2005';
-if (!get_http_var('really'))
-    $year = '2005'; # XXX temp
+if (!$year) $year = '2006';
+#if (!get_http_var('really'))
+#    $year = '2005'; # XXX temp
 $year = intval($year);
 $xml = get_http_var('xml');
 if (!get_http_var('type') || !get_http_var('year')) {
@@ -46,8 +46,8 @@ if (!$got_year) {
     template_show_error("We don't have statistics for that year");
 }
 $year_bar = "Statistics for other years: " . join($year_bar_array, " | ");
-if (!get_http_var('really'))
-    $year_bar = "";
+#if (!get_http_var('really'))
+#    $year_bar = "";
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
