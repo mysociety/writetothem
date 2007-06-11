@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.26 2007-06-09 22:05:58 francis Exp $
+ * $Id: stats.php,v 1.27 2007-06-11 12:52:37 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -91,7 +91,7 @@ function fuzzy_response_description($a) {
     else if ($a < 0.40) 
         return "low"; 
     else if ($a < 0.60) 
-        return "average"; 
+        return "medium"; 
     else if ($a < 0.80) 
         return "high"; 
     else if ($a <= 1.00) 
