@@ -185,17 +185,21 @@ foreach ($data as $row) {
     print "<td class=\"$tdclass\">$row[area]</td>";
     print "<td align='right' class=\"$tdclass\">$row[sent]</td>";
     if ($row['notes']) {
-        print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'] . '</td>';
+        print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'];
     } else {
         print "<td align='right' class=\"$tdclass\">".$row['responded']." out of ". $row['responded_outof']."</td>";
         print "<td align='right' class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
-        if ($row['fymp_response']) {
-           print '<br>(' . fuzzy_response_description($row['fymp_response']). ')';
-        }
-        print "</td>";
         #print "<td align='right' class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
         #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
+        if ($row['fymp_response']) {
+            if ($row['fymp_notes']) {
+                print '<br> (unknown)';
+            } else {
+                print '<br> (' . fuzzy_response_description($row['fymp_response']). ')';
+            }
+        }
     }
+    print "</td>";
     print "</tr>\n";
 }
 print '</table>';

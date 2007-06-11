@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.27 2007-06-11 12:52:37 francis Exp $
+ * $Id: stats.php,v 1.28 2007-06-11 15:26:16 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -185,6 +185,7 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
         }
         $fymp_ranked[$row['person_id']] = $position;
         $fymp_response[$row['person_id']] = $row['response'];
+        $fymp_category[$row['person_id']] = $row['category'];
     }
 
     # Read in data
@@ -204,8 +205,10 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
                 'high' => $row['responded_95_high'],
                 'responded' => $row['responded'],
                 'responded_outof' => $row['responded_outof'],
+                # XXX fymp_ means really 'last_year_', should fix that
                 'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null,
-                'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null
+                'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null,
+                'fymp_notes' => array_key_exists($key, $fymp_category) ? category_lookup($fymp_category[$key]) : ''
             );
         } else {
             $data['info'][$key] = $row;
@@ -251,8 +254,10 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
             'response' => $row['responded_mean'],
             'low' => $row['responded_95_low'],
             'high' => $row['responded_95_high'],
+            # XXX fymp_ means really 'last_year_', should fix that
             'fymp_rank' => array_key_exists($key, $fymp_ranked) ? $fymp_ranked[$key] : null,
-            'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null
+            'fymp_response' => array_key_exists($key, $fymp_response) ? $fymp_response[$key] : null,
+            'fymp_notes' => array_key_exists($key, $fymp_category) ? category_lookup($fymp_category[$key]) : ''
 	));
     }
 
