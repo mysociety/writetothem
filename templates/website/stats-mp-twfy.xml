@@ -34,7 +34,7 @@ foreach ($data as $row) {
         print 'writetothem_responsiveness_responded_'.$year.'="'.$row['responded'].'" ';
         print 'writetothem_responsiveness_responded_outof_'.$year.'="'.$row['responded_outof'].'" ';
         print 'writetothem_responsiveness_mean_'.$year.'="'.round($row['response']*100, 0).'%" ';
-        print 'writetothem_responsiveness_fuzzy_response_descripton_'.$year.'="'.fuzzy_response_description($row['response']).'" ';
+        print 'writetothem_responsiveness_fuzzy_response_description_'.$year.'="'.fuzzy_response_description($row['response']).'" ';
     }
     print "/>\n";
 }
