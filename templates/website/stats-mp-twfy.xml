@@ -27,9 +27,9 @@ foreach ($data as $row) {
     print 'constituency="'.htmlspecialchars($row['area']).'" ';
     print 'party="'.htmlspecialchars($row['party']).'" ';
 
-    print 'writetothem_responsiveness_data_quality_category="'.$row['category'].'" ';
+    print 'writetothem_responsiveness_data_quality_category_'.$year.'="'.$row['category'].'" ';
     if ($row['notes']) {
-        print 'writetothem_responsiveness_notes="'.htmlspecialchars($row['notes']).'" ';
+        print 'writetothem_responsiveness_notes_'.$year.'="'.htmlspecialchars($row['notes']).'" ';
     } else {
         print 'writetothem_responsiveness_responded_'.$year.'="'.$row['responded'].'" ';
         print 'writetothem_responsiveness_responded_outof_'.$year.'="'.$row['responded_outof'].'" ';
