@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.86 2007-04-16 22:09:08 francis Exp $
+ * $Id: who.php,v 1.87 2007-07-11 12:01:01 matthew Exp $
  *
  */
 
@@ -164,23 +164,25 @@ foreach ($va_display_order as $va_type) {
         $disabled = true;
     }
 
+    $col_blurb = '';
+    $text = '';
+    $col_after = '';
     // Create HTML
     global $disabled_child_types;
     if (is_array($va_type)) {
         // Plural
         if ($rep_count > 1) {
             $heading = "Your {$va_info[0]['rep_name_long_plural']}";
-            $text = "<p>";
         } else {
             $heading = "Your {$va_info[0]['rep_name_long']}";
-            $text = "<p>";
         }
+        $col_blurb = "<p>";
         if ($rep_counts[0]>1) {
-            $text .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+            $col_blurb .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
-            $text .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
+            $col_blurb .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
-        $text .= "${eb_info['name']}.  ${eb_info['description']}</p>";
+        $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}</p>";
         if ($rep_counts[0]>1) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
 	}
@@ -204,17 +206,17 @@ foreach ($va_display_order as $va_type) {
         // Singular
         if ($rep_count > 1) {
             $heading = "Your ${va_info['rep_name_long_plural']}";
-            $text = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+            $col_blurb = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
             $heading = "Your ${va_info['rep_name_long']}";
-            $text = "<p>Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+            $col_blurb = "<p>Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
-        $text .= "${eb_info['name']}.  ${eb_info['description']}";
+        $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}";
         /* Note categories of representatives who typically aren't paid for
          * their work.... */
         if (!$va_salaried[$va_type])
-            $text .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
-        $text .= "</p>";
+            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
+        $col_blurb .= "</p>";
 	
 	if ($rep_count > 1) {
             $text .= write_all_link($va_type, $va_info['rep_name_plural']);
@@ -228,9 +230,9 @@ foreach ($va_display_order as $va_type) {
         if ($va_type == 'WMC') {
             $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
             # .maincol / .firstcol have margin-bottom set to none, override
-            $text .= '<h3 class="houseoflords">House of Lords</h3>';
-            $text .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
-            $text .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
+            $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
+            $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
+            $col_after .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
 #            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
 # yellow flash advert
 #            $text .= '</div>';
@@ -242,7 +244,11 @@ foreach ($va_display_order as $va_type) {
     }
 
     if ($disabled) {
-        if ($status == "recent_election" || $parent_status == "recent_election") {
+        if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
+            $text = "<p>There have been boundary changes at the last election that
+	    means we can't yet say who your representative is. We hope to get our
+	    boundary database updated as soon as we can.</p>";
+        } elseif ($status == "recent_election" || $parent_status == "recent_election") {
             $text = "<p>Due to the recent election, we don't yet have details for this
                 representative.  We'll be adding them as soon as we can.</p>";
         } elseif ($status == "pending_election" || $parent_status == "pending_election") {
@@ -253,10 +259,10 @@ foreach ($va_display_order as $va_type) {
         }
         $text .="<p>Why not take this as an opportunity to <strong>write to one of your
             other representatives</strong>? Their job is to help you too!</p>";
-        array_push($fyr_representatives, $text);
+        array_push($fyr_representatives, "$col_blurb$text$col_after");
         array_push($fyr_headings, "<h3><strike>$heading</strike></h3>");
     } else {
-        array_push($fyr_representatives, $text);
+        array_push($fyr_representatives, "$col_blurb$text$col_after");
         array_push($fyr_headings, "<h3>$heading</h3>");
     }
     debug_timestamp();
