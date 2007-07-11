@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.261 2007-05-23 10:44:14 francis Exp $
+# $Id: Queue.pm,v 1.262 2007-07-11 10:37:40 francis Exp $
 #
 
 package FYR::Queue;
@@ -2179,7 +2179,7 @@ sub admin_get_message ($) {
     my $hash_ref = $sth->fetchrow_hashref();
 
     my $bounces = dbh()->selectcol_arrayref("select 
-        bouncetext from message_bounce where message_id = ?", {}, $id);
+        bouncetext from message_bounce where message_id = ? order by whenreceived", {}, $id);
     $hash_ref->{bounces} = $bounces;
 
     $sth = dbh()->prepare("select question_id, answer from
