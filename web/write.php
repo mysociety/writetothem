@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.119 2007-06-04 13:27:40 matthew Exp $
+ * $Id: write.php,v 1.120 2007-07-23 12:41:28 matthew Exp $
  *
  */
 
@@ -339,7 +339,7 @@ function renderForm($form, $pageName)
 
     $prime_minister = false;
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
-    if ($fyr_values['who'] == 1702) {
+    if ($fyr_values['who'] == 26413) { # Hardcoded Gordon Brown
         $prime_minister = true;
     }
 
