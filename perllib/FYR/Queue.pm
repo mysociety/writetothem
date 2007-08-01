@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.262 2007-07-11 10:37:40 francis Exp $
+# $Id: Queue.pm,v 1.263 2007-08-01 10:36:13 matthew Exp $
 #
 
 package FYR::Queue;
@@ -456,9 +456,6 @@ sub write_messages($$$$;$$$$){
                          logmsg($id, 1, "abuse system froze message");
                          dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
                      } else {
-                         logmsg($id, 1, "abuse system REJECTED message");
-                         dbh()->do("update message set frozen = 't' where id = ?", {}, $id);
-                         state($id, 'failed_closed');
                          # Delete the message, so people can go back and try again
                          dbh()->do("delete from message_bounce where message_id = ?", {}, $id);
                          dbh()->do("delete from message_extradata where message_id = ?", {}, $id);

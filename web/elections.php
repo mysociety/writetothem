@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: elections.php,v 1.3 2007-07-11 12:01:01 matthew Exp $
+ * $Id: elections.php,v 1.4 2007-08-01 10:36:13 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -117,6 +117,8 @@ function by_name($a, $b) {
 uksort($lookup, 'by_name');
 foreach ($lookup as $area_id => $status) {
 	$o = $areas_info[$area_id]['name'];
+	if ($status == 'boundary_changes')
+		$status = 'recent_election';
 	if (isset($date_done[$area_id])) {
 		$out[$status][$date_done[$area_id]][] = $o;
 	} else {

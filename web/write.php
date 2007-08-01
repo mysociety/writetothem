@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.120 2007-07-23 12:41:28 matthew Exp $
+ * $Id: write.php,v 1.121 2007-08-01 10:36:13 matthew Exp $
  *
  */
 
@@ -41,14 +41,14 @@ function fix_dear_lord_address($name) {
     return $name;
 }
 
-function group_address(){
+function group_address() {
     /* Generate a comma-separated list of correct address forms
      * for a list of representatives */
 
     global $fyr_valid_reps;
     $i = 0;
     $names = array();
-    foreach($fyr_valid_reps as $rep){
+    foreach ($fyr_valid_reps as $rep) {
         $names[$i] = $rep['name'];
         $i++;
     }
@@ -56,7 +56,7 @@ function group_address(){
     return $address;
 }
 
-function is_postcode_editable($rep_type){
+function is_postcode_editable($rep_type) {
     /* Is the postcode editable for a rep. type? */
     global $postcodeless_child_types;
     $postcode_editable = false;
@@ -66,7 +66,7 @@ function is_postcode_editable($rep_type){
     return $postcode_editable;
 }
 
-function verify_rep_postcode($postcode, $rep_info){
+function verify_rep_postcode($postcode, $rep_info) {
 
     /* Verify that representative represents this postcode */
     global $fyr_postcode_editable;
@@ -76,7 +76,7 @@ function verify_rep_postcode($postcode, $rep_info){
     if (is_array($verify_voting_area_map))
         $verify_voting_areas = array_values($verify_voting_area_map);
     else
-       $verify_voting_areas = array();
+        $verify_voting_areas = array();
 
     if (!$fyr_postcode_editable) {
         if (!in_array($rep_info['voting_area'], $verify_voting_areas)) {
@@ -87,7 +87,7 @@ function verify_rep_postcode($postcode, $rep_info){
 
 }
 
-function redirect_if_disabled($type, $group_msg){
+function redirect_if_disabled($type, $group_msg) {
     /* Go back to the 'choose your rep' stage if 
      * the rep. type is disabled, or if the request is to send
      * a group mail to all reps. for an area and the rep. type
@@ -97,12 +97,12 @@ function redirect_if_disabled($type, $group_msg){
     global $postcodeless_child_types;
     // For URLs like http://writetothem.com/?a=WMC;pc=XXXXX    
     if (in_array($type, $disabled_child_types) || ($group_msg && in_array($type, $postcodeless_child_types))) {
-        header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
+        header("Location: who?pc=" . urlencode($fyr_postcode));
         exit;
     }
 }
 
-function bad_contact_error_msg($eb_area_info){
+function bad_contact_error_msg($eb_area_info) {
     /* Generate an error string for when contact details for
      * a representative are not available */
 
@@ -123,7 +123,7 @@ function bad_contact_error_msg($eb_area_info){
     return $error_msg;
 }
 
-function shame_error_msg($fyr_voting_area, $fyr_representative){
+function shame_error_msg($fyr_voting_area, $fyr_representative) {
     /* Generate an error string for when a representative has
      * requested not to be contacted */
     global $fyr_postcode;
@@ -149,30 +149,30 @@ EOF;
     return $error_msg;
 }
 
-function correct_address(){
+function correct_address() {
     /* Generate a correct form of address for a representative
      * or group of reprsentatives */
 
     global $fyr_representative, $fyr_group_msg;    
     $address = "";
-     if ($fyr_group_msg){
-         $address = group_address();
-     }else{
-         $address = fix_dear_lord_address($fyr_representative['name']);
-     }
+    if ($fyr_group_msg) {
+        $address = group_address();
+    } else {
+        $address = fix_dear_lord_address($fyr_representative['name']);
+    }
     return $address;
 }
 
 function default_body_text() {     
-        return "Dear " . correct_address() . ",\n\n\n\nYours sincerely,\n\n";
+    return "Dear " . correct_address() . ",\n\n\n\nYours sincerely,\n\n";
 }
 
 function default_body_regex() {
-        return '^Dear ' . correct_address() . ',\s+Yours sincerely,\s+';
+    return '^Dear ' . correct_address() . ',\s+Yours sincerely,\s+';
 }
 
 function default_body_notsigned() {
-        return 'Yours sincerely,\s+$';
+    return 'Yours sincerely,\s+$';
 }
 
 
@@ -201,8 +201,7 @@ function compare_email_addrs($F) {
 }
 
 // Class representing form they enter message of letter in
-function buildWriteForm()
-{
+function buildWriteForm() {
     $form = new HTML_QuickForm('writeForm', 'post', 'write');
     global $fyr_values, $fyr_postcode, $fyr_who, $fyr_type;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
@@ -210,7 +209,7 @@ function buildWriteForm()
     global $rep_text;
 
     if ($fyr_voting_area['name']=='United Kingdom')
-    	$fyr_voting_area['name'] = 'House of Lords';
+        $fyr_voting_area['name'] = 'House of Lords';
  
     // TODO: CSS this:
     $stuff_on_left = <<<END
@@ -359,28 +358,27 @@ function renderForm($form, $pageName)
             'cobrand_letter_help' => $cobrand_letter_help, 
             'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text));
 
-    if ($fyr_group_msg){
+    if ($fyr_group_msg) {
         # check if there are any reps whose message will be sent via somewhere 
         # else
         $any_via = false;
-        foreach ($fyr_valid_reps as $rep){
-            if ($rep['method'] == 'via'){
+        foreach ($fyr_valid_reps as $rep) {
+            if ($rep['method'] == 'via') {
                 $any_via = true;
             }
         }
         $our_values['any_via'] = $any_via;
         $our_values['title_text'] = "your " . $fyr_voting_area['rep_name_long_plural'] ;
-    }else{
+    } else {
         $our_values['title_text'] = trim($fyr_voting_area['rep_prefix'] . " " .
-                                    $fyr_representative['name'] . " " .
-                                    $fyr_voting_area['rep_suffix']) . ", " .
-                                    $fyr_voting_area['name'];
+            $fyr_representative['name'] . " " . $fyr_voting_area['rep_suffix']) . ", " .
+            $fyr_voting_area['name'];
     }
     $our_values['spell'] = "true";
 
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);
-    } else if ($pageName == 'previewForm') {
+    } elseif ($pageName == 'previewForm') {
         // Generate preview
         /* Horrid. We need to turn leading spaces into non-breaking spaces, so
          * that indentation appears roughly the same in the preview as it will
@@ -417,7 +415,7 @@ function renderForm($form, $pageName)
 }
 
 
-function submitFaxes(){
+function submitFaxes() {
 
     /* Submit a group of messages or an individual message 
      * and show the results to the user */
@@ -439,39 +437,39 @@ function submitFaxes(){
     $any_success = false;
     $error_msg = "";
     
-    if ($grpid){
-	
+    if ($grpid) {
+
         // No questionnaire for group mails
         $no_questionnaire = true;
-    	    
-    	// check the group id  
-    	if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
-    	template_show_error('Sorry, but your browser seems to be transmitting
-        	erroneous data to us. Please try again, or contact us at
-        	<a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
-    		exit;
-    	}
-		// double check that the group_id isn't already being used
-    	// This could mean that these messages have already been
-    	// queued or (with a very small probability) that someone
-    	// else got the same group id 
-	    $result = msg_check_group_unused($grpid);    
-    	if (isset($result)){
-        	$error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br />";        
-  		   template_show_error("Sorry, we were unable to send your messages for the following reasons: <br />" . $error_msg);
-    	   exit;
-    	}   
-    }else{
+
+        // check the group id  
+        if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
+        template_show_error('Sorry, but your browser seems to be transmitting
+            erroneous data to us. Please try again, or contact us at
+            <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
+                exit;
+        }
+        // double check that the group_id isn't already being used
+        // This could mean that these messages have already been
+        // queued or (with a very small probability) that someone
+        // else got the same group id 
+        $result = msg_check_group_unused($grpid);    
+        if (isset($result)) {
+            $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br />";        
+                     template_show_error("Sorry, we were unable to send your messages for the following reasons: <br />" . $error_msg);
+            exit;
+        }   
+    } else {
         $no_questionnaire = false;
-    	$msgid_list = array($msgid);
-    	$repid_list = array($fyr_who);
+        $msgid_list = array($msgid);
+        $repid_list = array($fyr_who);
     }      
         
     # set up the address      
     $address = prepare_address();
     check_message_length();
     # check the msgids
-    foreach ($msgid_list as $msgid){
+    foreach ($msgid_list as $msgid) {
         check_message_id($msgid);
     }
     $cocode = $fyr_values['cocode'];
@@ -479,92 +477,91 @@ function submitFaxes(){
         $cocode = null;
     $message_array = prepare_message_array($address);
     $result = msg_write_messages($msgid_list,
-                        		 $message_array,
-                        		 $repid_list,
-                        		 $fyr_values['signedbody'],
-                        		 $cobrand, $cocode, $grpid, $no_questionnaire);       
+                                     $message_array,
+                                     $repid_list,
+                                     $fyr_values['signedbody'],
+                                     $cobrand, $cocode, $grpid, $no_questionnaire);       
 
     #check for error    
-    if (rabx_is_error($result)){
+    if (rabx_is_error($result)) {
         template_show_error(rabx_mail_error_msg($result->code, $result->text));
         exit;
 
     } 
 
-    foreach (array_keys($result) as $id){
+    foreach (array_keys($result) as $id) {
         $res = $result[$id];
-        $rep_id = $res['recipient_id'];	
+        $rep_id = $res['recipient_id'];        
         $abuse_res = $res['abuse_result'];
         $status = $res['status_code'];
         $err = $res['error_text'];
-		$code = $res['error_code'];
-        if($status != 0){
+        $code = $res['error_code'];
+        if ($status != 0) {
             $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .
             $representatives_info[$rep_id]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
             
-            if($status == 1){
+            if ($status == 1) {
                 # FYR Error code
-                if ($grpid){    
+                if ($grpid) { 
                     $error_msg .= $rep_name . ": " . rabx_mail_error_msg($code, $err) . "<br />";
-                }else{
+                } else {
                     template_show_error(rabx_mail_error_msg($code, $err));
                     exit;
                 }
-            }elseif($status == 2){
+            } elseif ($status == 2) {
                 # flagged for abuse
-                if ($grpid){
-			    	if (array_key_exists($abuse_res, $errors)){
-                           $error_msg .= "<p>" .$rep_name . ": " . $errors[$abuse_res]
-                         . " <a href=\"/"  . $abuse_res . "\">read more</a></p>";
-                    }else{
-                            $error_msg .= "<p>" .$rep_name . ": Message Rejected</p>";
+                if ($grpid) {
+                    if (array_key_exists($abuse_res, $errors)) {
+                        $error_msg .= "<p>" . $rep_name . ": " . $errors[$abuse_res]
+                            . " <a href=\"/"  . $abuse_res . "\">read more</a></p>";
+                    } else {
+                        $error_msg .= "<p>" .$rep_name . ": Message Rejected</p>";
                     }
-                }else{
+                } else {
                     template_draw($abuse_res,  $fyr_values);
                     exit;
                 }
             }
-        }else{
+        } else {
             $any_success = true;
         }   
 
     }
           
-    if (!$any_success){
+    if (!$any_success) {
         // None of the messages could be sent
         template_show_error("Sorry, we were unable to send your messages for the following reasons: <br />" . $error_msg);
-    }else if($error_msg){
+    } elseif ($error_msg) {
         // Some problems 
         $error_msg = "
     <p style=\"text-align: center; color: #ff0000; \">Note: 
     Some of your messages could not be sent for the following reasons: </p>
     " . $error_msg;
         show_check_email($error_msg);
-    }else{
+    } else {
         //no problems
         show_check_email($error_msg);
     } 
  
 }
 
-function rabx_mail_error_msg($code, $text){   
+function rabx_mail_error_msg($code, $text) { 
      /* Return an appropriate error message for a RABX error code. 
       * Log errors other than multiple send attempts */
      
-     $error_msg = "";
-     if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED){
-         $error_msg = "You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.";
-    }else if ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED){
+    $error_msg = "";
+    if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) {
+        $error_msg = "You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.";
+    } elseif ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED) {
         $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"/\">start again</a>."; 
-    }else{
-         error_log("write.php msg_write error: ". $code . " " . $text);
-         $error_msg = "Sorry, an error has occured. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";
-     }  
-     return $error_msg;
+    } else {
+        error_log("write.php msg_write error: ". $code . " " . $text);
+        $error_msg = "Sorry, an error has occured. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";
+    }  
+    return $error_msg;
 }
-
  
-function show_check_email($error_msg){
+function show_check_email($error_msg) {
      
     /* Show them the "check your email and click the link" template. */
      global $fyr_representative, $fyr_voting_area; 
@@ -575,8 +572,8 @@ function show_check_email($error_msg){
      template_draw("write-checkemail", $our_values); 
 }
 
-function prepare_address(){
-	/* Format the message sender's address */
+function prepare_address() {
+        /* Format the message sender's address */
     global $fyr_values;
     $address =
         $fyr_values['writer_address1'] . "\n" .
@@ -588,8 +585,8 @@ function prepare_address(){
     return $address;
 }
 
-function check_message_length(){
-	/* check message not too long */
+function check_message_length() {
+        /* check message not too long */
     global $fyr_values;
     if (strlen($fyr_values['body']) > OPTION_MAX_BODY_LENGTH) {
         template_show_error("Sorry, but your message is a bit too long
@@ -598,9 +595,9 @@ function check_message_length(){
     }
 }
 
-function prepare_message_array($address){
-	/* Set up an array of information about the message
-	   sender */
+function prepare_message_array($address) {
+        /* Set up an array of information about the message
+           sender */
     global $fyr_values;
     return array(
     'name' => $fyr_values['name'],
@@ -613,7 +610,7 @@ function prepare_message_array($address){
     );
 }
 
-function check_message_id($msgid){
+function check_message_id($msgid) {
 
     /* Check that they've come back with a valid message ID. Really we should
      * be verifying all the data that we've retrieved from the browser with a
@@ -665,7 +662,7 @@ msg_check_error($fyr_time);
 $fyr_date = strftime('%A %e %B %Y', $fyr_time);
 
 if (!isset($fyr_who) || ($fyr_who == "all" && !isset($fyr_type))) {
-    header("Location: who?pc=" . urlencode($fyr_postcode) . "&err=1\n");
+    header("Location: who?pc=" . urlencode($fyr_postcode));
     exit;
 }
 
@@ -676,7 +673,7 @@ if ($fyr_who == 'all')
 
 // Rate limiter
 $limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"));
-if ($fyr_who != 'all'){
+if ($fyr_who != 'all') {
     $limit_values['who'] = array($fyr_who, "Representative id from DaDem");
 }
 if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
@@ -686,7 +683,7 @@ fyr_rate_limit($limit_values);
 
 // For a group mail, get a group_id for transaction with the fax queue now
 // and generate message ids later
-if ($fyr_group_msg){
+if ($fyr_group_msg) {
     
     if (array_key_exists('fyr_grpid', $fyr_values))
         $grpid = $fyr_values['fyr_grpid'];
@@ -696,7 +693,7 @@ if ($fyr_group_msg){
         $fyr_values['fyr_grpid'] = $grpid;
     }
 
-}else{
+} else {
 
     $grpid = null;
     // Message id for transaction with fax queue
@@ -710,7 +707,7 @@ if ($fyr_group_msg){
 }
 
 $warning_text = "";
-if ($fyr_group_msg){
+if ($fyr_group_msg) {
 
     //Message intended for group of representatives
     redirect_if_disabled($fyr_type, $fyr_group_msg);
@@ -723,20 +720,20 @@ if ($fyr_group_msg){
     mapit_check_error($voting_areas);
     $eb_type = $va_inside[$fyr_type];
 
-    if (array_key_exists($eb_type, $voting_areas)){
+    if (array_key_exists($eb_type, $voting_areas)) {
         $eb_id = $voting_areas[$eb_type];
         $eb_area_info = mapit_get_voting_area_info($eb_id);
         mapit_check_error($eb_area_info);
-    }else{
+    } else {
         template_show_error("There's been a mismatch error.  Sorry about
                this, <a href=\"/\">please start again</a>.");
     }
 
-     if (array_key_exists($fyr_type, $voting_areas)){
+     if (array_key_exists($fyr_type, $voting_areas)) {
          $va_id = $voting_areas[$fyr_type]; 
          $fyr_voting_area =  mapit_get_voting_area_info($va_id);
          mapit_check_error($fyr_voting_area);
-     }else{
+     } else {
          template_show_error("There's been a mismatch error.  Sorry about
                 this, <a href=\"/\">please start again</a>.");
      }
@@ -744,7 +741,6 @@ if ($fyr_group_msg){
 
     // Get the representative info
     $area_representatives = dadem_get_representatives($va_id);
-    $error = dadem_get_error($area_representatives);
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
     $all_representatives = array();
@@ -766,71 +762,74 @@ if ($fyr_group_msg){
     foreach ($all_representatives as $rep_specificid) {
        
         $success = msg_recipient_test($rep_specificid);
- 	    $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .  
+        $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .  
         $representatives_info[$rep_specificid]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
 
 
         if (rabx_is_error($success)) {    
 
-           if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-                 $error_msg .= "<p>" . $rep_name . ": " . bad_contact_error_msg($eb_area_info) . "</p>"; 
-           } else if ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
-                 $error_msg .= "<p>" . shame_error_msg($fyr_voting_area, $representatives_info[$rep_specificid]) . "</p>";
-           } else {
-                 $error_msg .= "<p>" . $rep_name . ": " . $success->text . "</p>";
-           }
- 	    }else{
+            if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
+                $error_msg .= "<p>" . $rep_name . ": " . bad_contact_error_msg($eb_area_info) . "</p>"; 
+            } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
+                $error_msg .= "<p>" . shame_error_msg($fyr_voting_area, $representatives_info[$rep_specificid]) . "</p>";
+            } else {
+                $error_msg .= "<p>" . $rep_name . ": " . $success->text . "</p>";
+            }
+        } else {
             $any_contacts = true;
             $fyr_valid_reps[$rep_specificid] = $representatives_info[$rep_specificid];
         }
+
+    }
  
-     }
- 
-     // None of the group of representatives can be contacted
-     if (!$any_contacts){
-         template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br /> " . $error_msg);
+    // None of the group of representatives can be contacted
+    if (!$any_contacts) {
+        template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br /> " . $error_msg);
         // Some problems, but some reps can be contacted, proceed with a note
-     }else if($error_msg){
+    } elseif ($error_msg) {
         $warning_text = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br /> " . $error_msg;
-     }
+    }
 
     // Assemble the name string 
     $rep_text = "";
-    foreach ($fyr_valid_reps as $rep){
+    foreach ($fyr_valid_reps as $rep) {
         $rep_text .= $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "<br />";    
     }
 
     debug("FRONTEND", "Valid reps $fyr_valid_reps");
     // Set a msgid for each rep in the list
  
-     if (array_key_exists('fyr_msgid_list', $fyr_values) && array_key_exists('fyr_repid_list', $fyr_values)){
+    if (array_key_exists('fyr_msgid_list', $fyr_values) && array_key_exists('fyr_repid_list', $fyr_values)) {
  
-         $msgid_list = explode('_', $fyr_values['fyr_msgid_list']);
-         $repid_list = explode('_', $fyr_values['fyr_repid_list']);
+        $msgid_list = explode('_', $fyr_values['fyr_msgid_list']);
+        $repid_list = explode('_', $fyr_values['fyr_repid_list']);
  
-     }else{
+    } else {
          
-         $repid_list = array();
-         $msgid_list = array();
+        $repid_list = array();
+        $msgid_list = array();
          
-         foreach (array_keys($fyr_valid_reps) as $repid){
-             $msgid = msg_create();
-             msg_check_error($msgid);
-             array_push($msgid_list, $msgid);
-             array_push($repid_list, $repid);
-         }
+        foreach (array_keys($fyr_valid_reps) as $repid) {
+            $msgid = msg_create();
+            msg_check_error($msgid);
+            array_push($msgid_list, $msgid);
+            array_push($repid_list, $repid);
+        }
 
-         $fyr_values['fyr_msgid_list'] = implode('_', $msgid_list);
-         $fyr_values['fyr_repid_list'] = implode('_', $repid_list);
-     }
+        $fyr_values['fyr_msgid_list'] = implode('_', $msgid_list);
+        $fyr_values['fyr_repid_list'] = implode('_', $repid_list);
+    }
 
-}else{
+} else {
 
     // Message intended for individual representative
     // Information specific to this representative
     debug("FRONTEND", "Single representative $fyr_who");
     $fyr_representative = dadem_get_representative_info($fyr_who);
-    dadem_check_error($fyr_representative);
+    if (dadem_get_error($fyr_representative)) {
+        header("Location: who?pc=" . urlencode($fyr_postcode));
+        exit;
+    }
 
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
@@ -862,7 +861,7 @@ if ($fyr_group_msg){
     if (rabx_is_error($success)) {
         if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
             $error_msg = bad_contact_error_msg($eb_area_info);
-        } else if ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
+        } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
             $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
         } else {
             $error_msg= $success->text;
@@ -886,7 +885,7 @@ $fyr_values[body]
 $fyr_values[signature]
 (Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)
 EOF;
-} else if (array_key_exists('body', $fyr_values))
+} elseif (array_key_exists('body', $fyr_values))
     $fyr_values['signedbody'] = $fyr_values['body'];
 
 // Work out which page we are on, using which submit button was pushed
@@ -895,7 +894,7 @@ $on_page = "write";
 if (isset($fyr_values['submitWrite'])) {
     $on_page = "write";
     unset($fyr_values['submitWrite']);
-} else if (isset($fyr_values['submitPreview'])) {
+} elseif (isset($fyr_values['submitPreview'])) {
     unset($fyr_values['submitPreview']);
     $writeForm = buildWriteForm();
     if ($writeForm->validate()) {
@@ -903,7 +902,7 @@ if (isset($fyr_values['submitWrite'])) {
     } else {
         $on_page = "write";
     }
-} else if (isset($fyr_values['submitSendFax'])) {
+} elseif (isset($fyr_values['submitSendFax'])) {
     $on_page = "sendfax";
     unset($fyr_values['submitSendFax']);
 }
@@ -915,11 +914,11 @@ if ($on_page == "write") {
     $writeForm->setDefaults(array('body' => default_body_text()));
     $writeForm->setConstants($fyr_values);
     renderForm($writeForm, "writeForm");
-} else if ($on_page == "preview") {
+} elseif ($on_page == "preview") {
     $previewForm = buildPreviewForm();
     renderForm($previewForm, "previewForm");
-} else if ($on_page =="sendfax") {
- 	submitFaxes();
+} elseif ($on_page == "sendfax") {
+         submitFaxes();
 } else {
     template_show_error(
             'Sorry. An error has occurred: on_page "'
