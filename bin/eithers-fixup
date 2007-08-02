@@ -9,7 +9,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: eithers-fixup,v 1.1 2006-03-13 11:46:54 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: eithers-fixup,v 1.2 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -36,7 +36,6 @@ use mySociety::DBHandle qw(dbh);
 use mySociety::DaDem;
 use mySociety::MaPit;
 use mySociety::VotingArea;
-use mySociety::Util;
 use mySociety::Parties;
 
 use FYR;

@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.50 2007-06-07 15:03:22 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.51 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -38,7 +38,8 @@ use FindBin;
 use Getopt::Long;
 use IO::Handle;
 
-use mySociety::Util;
+use mySociety::EmailUtil;
+use mySociety::TempFiles;
 use mySociety::Config;  
 mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
@@ -345,7 +346,7 @@ sub check_delivered_to_rep {
 # Send one mail to bounce handling script
 sub call_handlemail {
     my ($content) = @_;
-    my $p = mySociety::Util::pipe_via("./handlemail") or die "failed to call handlemail";
+    my $p = mySociety::TempFiles::pipe_via("./handlemail") or die "failed to call handlemail";
     $p->print($content);
     $p->close(); 
 }
@@ -523,7 +524,7 @@ On Mon, Jan 01, 1990 at 03:04:58PM +0000, WriteToThem wrote:
 > 
 > -- the WriteToThem.com team
 END
-    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
     $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
     $wth->email_check_none_left();
@@ -545,7 +546,7 @@ Status: RO
 
 Woot woot woot!
 END
-    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # .. check that administrator gets the message
     $wth->email_get_containing('%To: WriteToThem <'.$bounce_address.'>%Woot woot woot!%');
     $wth->email_check_none_left();
@@ -581,7 +582,7 @@ On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
 >
 > ... snipped for brevity ...
 END
-    mySociety::Util::send_email($msg, $user_email, $bounce_address);
+    mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
     $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
     $wth->email_check_none_left();

@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.27 2007-02-13 07:58:23 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: fyrqd,v 1.28 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -31,7 +31,7 @@ BEGIN {
     mySociety::Config::set_file("$FindBin::Bin/../conf/general");
 }
 use mySociety::PIDFile;
-use mySociety::Util qw(print_log);
+use mySociety::SystemMisc qw(print_log);
 
 use FYR::Queue;
 
@@ -170,7 +170,7 @@ if ($multiple) {
 
 $numprocesses = 5 if ($numprocesses < 1 or $numprocesses > 100);
 
-mySociety::Util::daemon() unless ($nodetach);
+mySociety::SystemMisc::daemon() unless ($nodetach);
 
 my $pidfile;
 try {
@@ -363,5 +363,5 @@ Copyright (c) 2004 UK Citizens Online Democracy
 
 =head1 VERSION
 
-$Id: fyrqd,v 1.27 2007-02-13 07:58:23 francis Exp $
+$Id: fyrqd,v 1.28 2007-08-02 11:45:00 matthew Exp $
 

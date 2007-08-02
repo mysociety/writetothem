@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.15 2007-01-31 14:59:27 louise Exp $
+# $Id: FYR.pm,v 1.16 2007-08-02 11:45:02 matthew Exp $
 #
 
 use strict;
@@ -50,7 +50,7 @@ package FYR::DB;
 
 use mySociety::Config;
 use mySociety::DBHandle qw(dbh);
-use mySociety::Util qw(random_bytes);
+use mySociety::Random qw(random_bytes);
 use DBI;
 
 BEGIN {

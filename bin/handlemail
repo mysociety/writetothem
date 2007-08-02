@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.36 2007-05-08 13:26:23 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.37 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -35,11 +35,12 @@ BEGIN {
     mySociety::Config::set_file("$FindBin::Bin/../conf/general");
 }
 use mySociety::DBHandle qw(dbh);
-use mySociety::Util qw(print_log);
+use mySociety::SystemMisc qw(print_log);
+use mySociety::EmailUtil;
 
 # Don't print diagnostics to standard error, as this can result in bounce
 # messages being generated (only in response to non-bounce input, obviously).
-mySociety::Util::log_to_stderr(0);
+mySociety::SystemMisc::log_to_stderr(0);
 
 use FYR;
 use FYR::EmailTemplate;
@@ -141,8 +142,8 @@ if (!$is_bounce_message) {
 
         if ($forward) {
             # Forward this on to team@writetothem.com
-            if (mySociety::Util::EMAIL_SUCCESS
-                    != mySociety::Util::send_email(join("\n", @lines) . "\n", $return_path, mySociety::Config::get('CONTACT_EMAIL'))) {
+            if (mySociety::EmailUtil::EMAIL_SUCCESS
+                    != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $return_path, mySociety::Config::get('CONTACT_EMAIL'))) {
                 print_log('err', 'unable to forward non-bounce to contact email address; deferring');
                 exit(75);
             }
@@ -188,8 +189,8 @@ if (!$is_bounce_message) {
                         Data => FYR::Queue::as_utf8_octets($text)
                     );
         
-        if (mySociety::Util::EMAIL_SUCCESS
-                != mySociety::Util::send_email($mail->stringify(), '<>', $return_path)) {
+        if (mySociety::EmailUtil::EMAIL_SUCCESS
+                != mySociety::EmailUtil::send_email($mail->stringify(), '<>', $return_path)) {
             print_log('err', 'unable to send patronising reply; deferring');
             exit(75);
         }

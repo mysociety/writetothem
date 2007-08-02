@@ -17,7 +17,6 @@ chdir $FindBin::Bin;
 
 use mySociety::Config;
 mySociety::Config::set_file('../conf/general');
-use mySociety::Util;
 use mySociety::WebTestHarness;
 
 our ($device, $message_types, $sender, $header, $sent_to);

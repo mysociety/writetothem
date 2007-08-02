@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-my $rcsid = ''; $rcsid .= '$Id: stats-redo-fymp,v 1.2 2006-02-19 22:09:17 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-redo-fymp,v 1.3 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -13,7 +13,7 @@ use lib "$FindBin::Bin/../../perllib";
 use utf8;
 binmode(STDOUT, ':utf8');
 
-use mySociety::Util;
+use mySociety::Sundries;
 
 # XXX: Yes, this isn't proper or anything, but I just wanted it done.
 my %reps_by_name;
@@ -44,7 +44,7 @@ while (/<tr>(.*?)<\/tr>/sg) {
     $cons =~ s/'/\\'/g;
     $party =~ s/<\/?font.*?>//g;
     my $responded_outof = $yes+$no;
-    my ($re_mean, $re_low, $re_high) = $responded_outof>0 ? mySociety::Util::binomial_confidence_interval($yes, $responded_outof) : ('', '', '');
+    my ($re_mean, $re_low, $re_high) = $responded_outof>0 ? mySociety::Sundries::binomial_confidence_interval($yes, $responded_outof) : ('', '', '');
     my $time = time();
     my $category = 'good';
     $category = 'toofew' if ($notes eq 'No data');

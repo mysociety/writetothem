@@ -8,7 +8,7 @@
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.9 2007-06-07 10:14:27 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-zeitgeist,v 1.10 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -35,7 +35,7 @@ use mySociety::DBHandle qw(dbh);
 use mySociety::DaDem;
 use mySociety::MaPit;
 use mySociety::VotingArea;
-use mySociety::Util;
+use mySociety::Sundries;
 
 use FYR;
 
@@ -159,9 +159,9 @@ foreach my $summary_type (keys %$summary_types) {
         next;
     }
     my ($re_mean, $re_low, $re_high) = 
-        $data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($data->[0], $data->[1]) : undef;
+        $data->[1] > 0 ? mySociety::Sundries::binomial_confidence_interval($data->[0], $data->[1]) : undef;
     my ($ft_mean, $ft_low, $ft_high) = 
-        $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
+        $data->[3] > 0 ? mySociety::Sundries::binomial_confidence_interval($data->[2], $data->[3]) : undef;
     print "    '$summary_type' => array(\n";
     emit_php("dispatched_success", $sent_messages->{$summary_type});
     emit_php('responded', $data->[0]);

@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.19 2007-06-07 16:06:35 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.20 2007-08-02 11:45:00 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -46,7 +46,7 @@ use mySociety::DBHandle qw(dbh);
 use mySociety::DaDem;
 use mySociety::MaPit;
 use mySociety::VotingArea;
-use mySociety::Util;
+use mySociety::Sundries;
 use mySociety::Parties;
 
 use FYR;
@@ -527,7 +527,7 @@ sub work_out_rep_category($) {
 
     my $confidence_length;
     if ($q_data->[1] > 0) {
-        my ($re_mean, $re_low, $re_high) = mySociety::Util::binomial_confidence_interval($q_data->[0], $q_data->[1]);
+        my ($re_mean, $re_low, $re_high) = mySociety::Sundries::binomial_confidence_interval($q_data->[0], $q_data->[1]);
         $confidence_length = $re_high - $re_low;
     }
 
@@ -601,9 +601,9 @@ sub display_rep($$) {
         die "rep $person_id has missing q data" if !defined($q_data->[$_]);
     }
     my ($re_mean, $re_low, $re_high) = 
-        $q_data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[0], $q_data->[1]) : undef;
+        $q_data->[1] > 0 ? mySociety::Sundries::binomial_confidence_interval($q_data->[0], $q_data->[1]) : undef;
     my ($ft_mean, $ft_low, $ft_high) = 
-        $q_data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
+        $q_data->[3] > 0 ? mySociety::Sundries::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
 
     if ($output_format eq "PHP") {
         print "    '$person_id' => array(\n";
@@ -786,9 +786,9 @@ if ($output_format eq "PHP") {
 foreach my $party (keys %$partyr) {
     my $data = $partyr->{$party};
     my ($re_mean, $re_low, $re_high) = 
-        $data->[1] > 0 ? mySociety::Util::binomial_confidence_interval($data->[0], $data->[1]) : undef;
+        $data->[1] > 0 ? mySociety::Sundries::binomial_confidence_interval($data->[0], $data->[1]) : undef;
     my ($ft_mean, $ft_low, $ft_high) = 
-        $data->[3] > 0 ? mySociety::Util::binomial_confidence_interval($data->[2], $data->[3]) : undef;
+        $data->[3] > 0 ? mySociety::Sundries::binomial_confidence_interval($data->[2], $data->[3]) : undef;
 
     if ($output_format eq "PHP") {
         print "   '$party' => array(\n";

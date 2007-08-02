@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.263 2007-08-01 10:36:13 matthew Exp $
+# $Id: Queue.pm,v 1.264 2007-08-02 11:45:01 matthew Exp $
 #
 
 package FYR::Queue;
@@ -44,7 +44,9 @@ use mySociety::DaDem;
 use mySociety::DBHandle qw(dbh new_dbh);
 use mySociety::Email;
 use mySociety::MaPit;
-use mySociety::Util;
+use mySociety::EmailUtil;
+use mySociety::PostcodeUtil;
+use mySociety::Random;
 use mySociety::VotingArea;
 use mySociety::StringUtils qw(trim merge_spaces string_diff);
 
@@ -115,7 +117,7 @@ of characters [0-9a-f] only.
 use constant MESSAGE_ID_LENGTH => 20;
 sub create () {
     # Assume collision probability == 0.
-    return unpack('h20', mySociety::Util::random_bytes(MESSAGE_ID_LENGTH / 2));
+    return unpack('h20', mySociety::Random::random_bytes(MESSAGE_ID_LENGTH / 2));
 }
 
 =item create_group
@@ -306,7 +308,7 @@ sub write_messages($$$$;$$$$){
             throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
         }
         throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
-        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid") unless (mySociety::Util::is_valid_postcode($sender->{postcode}));
+        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid") unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
                 
         foreach $id (@$msgidlist){
             try{
@@ -994,10 +996,10 @@ sub check_token ($$) {
 sub send_user_email ($$$) {
     my ($id, $descr, $mail) = @_;
     my $msg = message($id);
-    my $result = mySociety::Util::send_email($mail, do_not_reply_sender(), $msg->{sender_email});
-    if ($result == mySociety::Util::EMAIL_SUCCESS) {
+    my $result = mySociety::EmailUtil::send_email($mail, do_not_reply_sender(), $msg->{sender_email});
+    if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
         logmsg($id, 1, "sent $descr mail to $msg->{sender_email}");
-    } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
+    } elsif ($result == mySociety::EmailUtil::EMAIL_SOFT_ERROR) {
         logmsg($id, 1, "soft error sending $descr email to $msg->{sender_email}");
     } else {
         logmsg($id, 1, "hard error sending $descr email to $msg->{sender_email}");
@@ -1251,10 +1253,10 @@ sub deliver_email ($) {
                             mySociety::Config::get('EMAIL_PREFIX'),
                             make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
-    my $result = mySociety::Util::send_email($mail, $sender, $msg->{recipient_email});
-    if ($result == mySociety::Util::EMAIL_SUCCESS) {
+    my $result = mySociety::EmailUtil::send_email($mail, $sender, $msg->{recipient_email});
+    if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
         logmsg($id, 1, "delivered message by email to $msg->{recipient_email}");
-    } elsif ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
+    } elsif ($result == mySociety::EmailUtil::EMAIL_SOFT_ERROR) {
         logmsg($id, 1, "soft error delivering message by email to $msg->{recipient_email}");
     } else {
         logmsg($id, 1, "hard error delivering message by email to $msg->{recipient_email}");
@@ -1514,9 +1516,9 @@ my %state_action = (
             
             # Construct confirmation email and send it to the sender.
             my $result = send_confirmation_email($id);
-            if ($result == mySociety::Util::EMAIL_SUCCESS) {
+            if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
                 group_state($id, 'pending', $msg->{group_id});
-            } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
+            } elsif ($result == mySociety::EmailUtil::EMAIL_HARD_ERROR) {
                 group_state($id, 'failed_closed', $msg->{group_id});
             } else {
                 group_state($id, 'new', $msg->{group_id});
@@ -1535,9 +1537,9 @@ my %state_action = (
                 return;
             } elsif (actions($id) < NUM_CONFIRM_MESSAGES) {
                 my $result = send_confirmation_email($id, 1);
-                if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
                     group_state($id, 'pending', $msg->{group_id});  # bump actions counter
-                } elsif ($result == mySociety::Util::EMAIL_HARD_ERROR) {
+                } elsif ($result == mySociety::EmailUtil::EMAIL_HARD_ERROR) {
                     group_state($id, 'failed_closed', $msg->{group_id});
                 } else {
                     logmsg($id, 1, "error sending confirmation reminder message (will retry)");
@@ -1610,7 +1612,7 @@ my %state_action = (
                 }
 
                 my $result = deliver_email($msg);
-                if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
                     dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);
                     state($id, 'bounce_wait');
                 } else {
@@ -1648,7 +1650,7 @@ my %state_action = (
 
             if ($dosend) {
                 my $result = send_questionnaire_email($id, $reminder);
-                if ($result == mySociety::Util::EMAIL_SUCCESS) {
+                if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
                     logmsg($id, 1, "sent questionnaire " . ($reminder ? 'reminder ' : '') . "email");
                 } # should trap hard error case
             }
@@ -1669,12 +1671,12 @@ my %state_action = (
 
             # Send failure report to sender.
             my $result = send_failure_email($id);
-            if ($result == mySociety::Util::EMAIL_SOFT_ERROR) {
+            if ($result == mySociety::EmailUtil::EMAIL_SOFT_ERROR) {
                 state($id, 'error');    # bump timer for redelivery
                 return;
             }
             # Give up -- it's all really bad.
-            logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::Util::EMAIL_HARD_ERROR);
+            logmsg($id, 1, "unable to send failure report to user") if ($result == mySociety::EmailUtil::EMAIL_HARD_ERROR);
             state($id, 'failed');
 
             # Now try to mark the contact as failing, if the message is not
@@ -2088,7 +2090,7 @@ sub admin_get_queue ($$) {
         if (defined($token_found_id)) {
             $where = "where id = ?";
             push @params, $token_found_id;
-        } elsif (mySociety::Util::is_valid_email($params->{query})) {
+        } elsif (mySociety::EmailUtil::is_valid_email($params->{query})) {
             $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
             push @params, $params->{query};
             push @params, $params->{query};

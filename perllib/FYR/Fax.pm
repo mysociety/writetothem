@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.33 2007-01-31 17:36:35 louise Exp $
+# $Id: Fax.pm,v 1.34 2007-08-02 11:45:01 matthew Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -37,6 +37,7 @@ use utf8;
 
 use FYR::EmailTemplate;
 use mySociety::Config;
+use mySociety::TempFiles;
 
 # Faxes are generated at a resolution of 204x196 dpi (this is the "fine"
 # setting on a fax machine). 196 lines per inch is apparently a historic
@@ -306,8 +307,8 @@ sub make_pbm_file ($) {
     # specification, apparently). This is designed for mobile phones with 2x3
     # pixel screens or whatever, and so is not quite the right thing for
     # thousands-of-pixels-square fax images. But it seems to work.
-    my ($h, $name) = mySociety::Util::named_tempfile('.pbm');
-    my ($p, $pid) = mySociety::Util::pipe_via('wbmptopbm', $h);
+    my ($h, $name) = mySociety::TempFiles::named_tempfile('.pbm');
+    my ($p, $pid) = mySociety::TempFiles::pipe_via('wbmptopbm', $h);
     $h->close() or die "close: $name: $!";;
     $p->print($im->wbmp(1)) or die "write: $name: $!";
     $p->close() or die "close: $!";
@@ -641,7 +642,7 @@ again:
         $wr = new IO::Handle();
         my $p = new IO::Pipe($rd, $wr) or throw FYR::Fax::SoftError("pipe: $!");
 
-        my ($p2, $pid) = mySociety::Util::pipe_via(@efaxcmd, $wr);
+        my ($p2, $pid) = mySociety::TempFiles::pipe_via(@efaxcmd, $wr);
         $wr->close();
         $p2->close();   # efax needs nothing on standard input.
         

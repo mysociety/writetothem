@@ -8,10 +8,10 @@ use FindBin;
 use lib "$FindBin::Bin/../perllib";
 use lib "$FindBin::Bin/../../perllib";
 
-use mySociety::Util;
+use mySociety::Sundries;
 
 my ($x, $N) = @ARGV;
-my ($mean, $lower, $upper) = mySociety::Util::binomial_confidence_interval($x, $N);
+my ($mean, $lower, $upper) = mySociety::Sundries::binomial_confidence_interval($x, $N);
 printf "%d / %d: mean = %f; 95%% CI = [%f, %f]\n", $x, $N, $mean, $lower, $upper;
 
 
