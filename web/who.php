@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.88 2007-08-01 10:36:13 matthew Exp $
+ * $Id: who.php,v 1.89 2007-08-08 14:39:28 matthew Exp $
  *
  */
 
@@ -212,7 +212,7 @@ foreach ($va_display_order as $va_type) {
         /* Note categories of representatives who typically aren't paid for
          * their work.... */
         if (!$va_salaried[$va_type])
-            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid for the work they do.";
+            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
         $col_blurb .= "</p>";
 	
 	if ($rep_count > 1) {
