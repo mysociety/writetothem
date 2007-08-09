@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.264 2007-08-02 11:45:01 matthew Exp $
+# $Id: Queue.pm,v 1.265 2007-08-09 14:21:50 matthew Exp $
 #
 
 package FYR::Queue;
@@ -2426,6 +2426,7 @@ sub admin_get_diligency_queue($) {
     my ($from_time) = @_;
     my $admin_activity = dbh()->selectall_arrayref("select count(*) as c, editor 
         from message_log where whenlogged >= ? and editor is not null
+        and message not like '% viewed body of message in admin interface'
         group by editor order by c desc", {}, $from_time);
     return $admin_activity;
 }
