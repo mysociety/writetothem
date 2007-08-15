@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.265 2007-08-09 14:21:50 matthew Exp $
+# $Id: Queue.pm,v 1.266 2007-08-15 11:31:44 matthew Exp $
 #
 
 package FYR::Queue;
@@ -153,9 +153,9 @@ sub get_via_representative ($) {
     my $ainfo = mySociety::MaPit::get_voting_area_info($aid);
     my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area_id});
 
-    throw FYR::Error("Bad return from DaDem looking up contact via info")
+    throw FYR::Error("Bad return from DaDem looking up contact via info", FYR::Error::BAD_DATA_PROVIDED)
         unless (ref($vainfo) eq 'ARRAY');
-    throw FYR::Error("More than one via contact (shouldn't happen)")
+    throw FYR::Error("More than one via contact (shouldn't happen)", FYR::Error::BAD_DATA_PROVIDED)
         if (@$vainfo > 1);
     throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
         if (!@$vainfo);
@@ -203,7 +203,7 @@ sub work_out_destination ($) {
         # Representative should be contacted via the elected body on which they
         # sit.
         my $viainfo = get_via_representative($recipient->{voting_area});
-        throw FYR::Error("Bad contact mehod for via contact (shouldn't happen)")
+        throw FYR::Error("Bad contact method for via contact (shouldn't happen)", FYR::Error::BAD_DATA_PROVIDED)
             if ($viainfo->{method} eq 'via');
         
         foreach (qw(method fax email)) {
@@ -229,10 +229,13 @@ sub recipient_test ($) {
     my ($recipient_id) = @_;
 
     # Get details of the recipient.
-    throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
+    throw FYR::Error("No RECIPIENT specified", FYR::Error::BAD_DATA_PROVIDED)
+        if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
     my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-    throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
-    throw FYR::Error('This is a deleted representative') if $recipient->{deleted};
+    throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem", FYR::Error::BAD_DATA_PROVIDED)
+        if (!$recipient or ref($recipient) ne 'HASH');
+    throw FYR::Error('This is a deleted representative', FYR::Error::REPRESENTATIVE_DELETED)
+        if $recipient->{deleted};
 
     # Decide how to send message
     work_out_destination($recipient);
@@ -287,11 +290,11 @@ sub write_messages($$$$;$$$$){
 
     # should have the same number of msgids as recipients
     if (scalar(@$msgidlist) != scalar(@$recipient_list)) {
-        throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params");
+        throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params", FYR::Error::BAD_DATA_PROVIDED);
     }
     # If there are multiple messages, there should be a group id
     if (scalar(@$msgidlist) > 1 && !defined($group_id)) {
-        throw FYR::Error("No group ID supplied for multiple messages");        
+        throw FYR::Error("No group ID supplied for multiple messages", FYR::Error::BAD_DATA_PROVIDED);
     }
     
     if ($no_questionnaire){
@@ -303,12 +306,16 @@ sub write_messages($$$$;$$$$){
     try{
 
         # Check that sender contains appropriate information.
-        throw FYR::Error("Bad SENDER (not reference-to-hash") unless (ref($sender) eq 'HASH');
+        throw FYR::Error("Bad SENDER (not reference-to-hash", FYR::Error::BAD_DATA_PROVIDED)
+            unless (ref($sender) eq 'HASH');
         foreach (qw(name email address postcode)) {
-            throw FYR::Error("Missing required '$_' element in SENDER") unless (exists($sender->{$_}));
+            throw FYR::Error("Missing required '$_' element in SENDER", FYR::Error::BAD_DATA_PROVIDED)
+                unless (exists($sender->{$_}));
         }
-        throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid") unless (Mail::RFC822::Address::valid($sender->{email}));
-        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid") unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
+        throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
+            unless (Mail::RFC822::Address::valid($sender->{email}));
+        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
+            unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
                 
         foreach $id (@$msgidlist){
             try{
@@ -321,12 +328,14 @@ sub write_messages($$$$;$$$$){
                              error_text   => undef};
                   
                 #pre insertion checks
-                throw FYR::Error("Bad ID specified")
+                throw FYR::Error("Bad ID specified", FYR::Error::BAD_DATA_PROVIDED)
                     unless ($id =~ m/^[0-9a-f]{20}$/i);
                 # Get details of the recipient.
-                throw FYR::Error("No RECIPIENT specified") if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
+                throw FYR::Error("No RECIPIENT specified", FYR::Error::BAD_DATA_PROVIDED)
+                    if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
                 my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-                throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem") if (!$recipient or ref($recipient) ne 'HASH');
+                throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem", FYR::Error::BAD_DATA_PROVIDED)
+                    if (!$recipient or ref($recipient) ne 'HASH');
         
                 $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
         
@@ -691,7 +700,7 @@ sub message ($;$) {
         $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
         return $msg;
     } else {
-        throw FYR::Error("No message '$id'.");
+        throw FYR::Error("No message '$id'.", FYR::Error::BAD_DATA_PROVIDED);
     }
 }
 
@@ -701,7 +710,7 @@ sub lock_group($) {
     my ($group_id) = @_;
     my $memberid;
     my $msgs = group_messages($group_id);
-    throw FYR::Error("No group '$group_id'.") unless ($msgs > 0);
+    throw FYR::Error("No group '$group_id'.", FYR::Error::BAD_DATA_PROVIDED) unless ($msgs > 0);
     foreach $memberid (@$msgs){
         my $sth = dbh()->prepare("select * from message where id = ? for update");
         $sth->execute($memberid);
@@ -1341,8 +1350,10 @@ success.
 =cut
 sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
-    throw FYR::Error("Bad QUESTION (should be '0' or '1')") if ($qn ne '0' and $qn ne '1');
-    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')") if ($answer !~ /^(yes|no)$/i);
+    throw FYR::Error("Bad QUESTION (should be '0' or '1')", FYR::Error::BAD_DATA_PROVIDED)
+        if ($qn ne '0' and $qn ne '1');
+    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')", FYR::Error::BAD_DATA_PROVIDED)
+        if ($answer !~ /^(yes|no)$/i);
     if (my $id = check_token("questionnaire", $token)) {
         my $msg = message($id);
 
@@ -2037,7 +2048,8 @@ sub admin_get_queue ($$) {
     my ($filter, $params) = @_;
 
     my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody similarbodysamerep search logsearch type rep_id);
-    throw FYR::Error("Bad filter type '$filter'") if (!exists($allowed{$filter}));
+    throw FYR::Error("Bad filter type '$filter'", FYR::Error::BAD_DATA_PROVIDED)
+        if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
     my $msg;
@@ -2173,8 +2185,10 @@ sub admin_get_message ($) {
         *, $message_calculated_values from message where id =
         ?");
     $sth->execute($id);
-    throw FYR::Error("admin_get_message: Message not found '$id'") if ($sth->rows == 0);
-    throw FYR::Error("admin_get_message: Multiple messages with '$id' found") if ($sth->rows > 1);
+    throw FYR::Error("admin_get_message: Message not found '$id'", FYR::Error::BAD_DATA_PROVIDED)
+        if ($sth->rows == 0);
+    throw FYR::Error("admin_get_message: Multiple messages with '$id' found", FYR::Error::BAD_DATA_PROVIDED)
+        if ($sth->rows > 1);
     my $hash_ref = $sth->fetchrow_hashref();
 
     my $bounces = dbh()->selectcol_arrayref("select 

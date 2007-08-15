@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.67 2007-02-07 11:31:57 louise Exp $
+ * $Id: queue.php,v 1.68 2007-08-15 11:31:44 matthew Exp $
  *
  */
 
@@ -39,6 +39,8 @@ define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);        /*    Tried to confi
 define('FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA', 4003);        /*    Contact data not available for that representative.  */
 define('FYR_QUEUE_MESSAGE_SHAME', 4004);        /*    Representative does not want to be contacted   */
 define('FYR_QUEUE_GROUP_ALREADY_QUEUED', 4006);        /*    Tried to send group of messages which has already been sent.  */
+define('FYR_QUEUE_BAD_DATA_PROVIDED', 4007); # Client or server has sent/returned some bad data
+define('FYR_QUEUE_REPRESENTATIVE_DELETED', 4008); # Representative has been deleted, presumably left office
 
 /* msg_create
 
