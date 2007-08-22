@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.121 2007-08-01 10:36:13 matthew Exp $
+ * $Id: write.php,v 1.122 2007-08-22 20:08:55 matthew Exp $
  *
  */
 
@@ -743,10 +743,9 @@ if ($fyr_group_msg) {
     $area_representatives = dadem_get_representatives($va_id);
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
-    $all_representatives = array();
-    foreach (array_values($area_representatives) as $rr) {
-        $all_representatives = array_merge($all_representatives, $rr);
-    }
+    $area_representatives = array($va_id => $area_representatives);
+    euro_check($area_representatives, $voting_areas['WMC']);
+    $all_representatives = array_values($area_representatives[$va_id]);
     $representatives_info = dadem_get_representatives_info($all_representatives);
     dadem_check_error($representatives_info);
     debug_timestamp();

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.47 2007-04-16 22:09:07 francis Exp $
+ * $Id: fyr.php,v 1.48 2007-08-22 20:08:55 matthew Exp $
  * 
  */
 
@@ -315,6 +315,40 @@ function parse_date($date) {
 	if ($epoch == 0)
 		return null;
 	return array('iso'=>"$year-$month-$day", 'epoch'=>$epoch, 'day'=>$day, 'month'=>$month, 'year'=>$year);
+}
+
+# Special case West Midlands Conservative MEPs
+function euro_check(&$area_reps, $wmc) {
+    if (!isset($area_reps[11809])) return;
+    $meps = array(
+        1071 => array( # Harbour
+            # Birmingham
+            12920,12921,12922,12923,12924,12925,12926,12927,12928,12929,
+            # Hereford, Leominster, Ludlow, Meriden, Newcastle, Solihull, Stoke, Sutton Coldfield
+            13147,13191,13209,13224,13245,13355,13386,13387,13388,13403
+        ),
+	1088 => array( # Bushill-Matthews
+            # Aldridge, Bromsgrove, Coventry, Nuneaton, Redditch, Rugby, Stratford, Walsall
+            12889,12969,13021,13022,13023,13285,13313,13328,13391,13434,13435,
+            # Warley, Warwick, Warwichshire, West Bromwich, Worcester, Worcestershire, Wyre Forest
+            13440,13443,13274,13454,13455,13477,13233,13463,13483
+        ),
+	1089 => array( # Bradbourn
+            # Burton, Cannock Chase, Dudley, Halesowen, Lichfield, Shrewsbury, Shropshire, Staffs
+            12974,12982,13047,13048,13124,13197,13350,13268,13369,13379,13378,
+            # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
+            13389,13390,13406,13410,13473,13474,13475,13412
+        )
+    );
+    foreach ($meps as $id => $wmcs) {
+        if (in_array($wmc, $wmcs)) {
+	    foreach ($area_reps[11809] as $k => $v) {
+	        if ($v != $id && in_array($v, array_keys($meps)))
+		    unset($area_reps[11809][$k]);
+	    }
+	    break;
+	}
+    }
 }
 
 ?>

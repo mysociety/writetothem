@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.89 2007-08-08 14:39:28 matthew Exp $
+ * $Id: who.php,v 1.90 2007-08-22 20:08:55 matthew Exp $
  *
  */
 
@@ -73,6 +73,8 @@ $area_representatives = dadem_get_representatives(array_values($voting_areas));
 $error = dadem_get_error($area_representatives);
 dadem_check_error($area_representatives);
 debug_timestamp();
+
+euro_check($area_representatives, $voting_areas['WMC']);
 
 $all_representatives = array();
 foreach (array_values($area_representatives) as $rr) {
@@ -182,7 +184,7 @@ foreach ($va_display_order as $va_type) {
         $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}</p>";
         if ($rep_counts[0]>1) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
-	}
+        }
         $text .= display_reps($representatives[0]);
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
@@ -214,8 +216,8 @@ foreach ($va_display_order as $va_type) {
         if (!$va_salaried[$va_type])
             $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
         $col_blurb .= "</p>";
-	
-	if ($rep_count > 1) {
+        
+        if ($rep_count > 1) {
             $text .= write_all_link($va_type, $va_info['rep_name_plural']);
         }
 
@@ -243,8 +245,8 @@ foreach ($va_display_order as $va_type) {
     if ($disabled) {
         if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
             $text = "<p>There have been boundary changes at the last election that
-	    means we can't yet say who your representative is. We hope to get our
-	    boundary database updated as soon as we can.</p>";
+            means we can't yet say who your representative is. We hope to get our
+            boundary database updated as soon as we can.</p>";
         } elseif ($status == "recent_election" || $parent_status == "recent_election") {
             $text = "<p>Due to the recent election, we don't yet have details for this
                 representative.  We'll be adding them as soon as we can.</p>";
