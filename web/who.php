@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.90 2007-08-22 20:08:55 matthew Exp $
+ * $Id: who.php,v 1.91 2007-08-24 16:51:21 matthew Exp $
  *
  */
 
@@ -37,6 +37,7 @@ fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been ty
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
+$wmc = $voting_areas['WMC'];
 
 // Limit to specific types of representatives
 $fyr_all_url = null;
@@ -74,7 +75,7 @@ $error = dadem_get_error($area_representatives);
 dadem_check_error($area_representatives);
 debug_timestamp();
 
-euro_check($area_representatives, $voting_areas['WMC']);
+euro_check($area_representatives, $wmc);
 
 $all_representatives = array();
 foreach (array_values($area_representatives) as $rr) {
