@@ -15,5 +15,5 @@
     <?=$values['writer_email']?><br>
     <?=$values['writer_phone']?>
   </div>
-  <p><?=nl2br(htmlspecialchars($values['body_indented']))?></p>
+  <p><?=str_replace("\n", "<br>\n", htmlspecialchars($values['body_indented']))?></p>
 </div>
