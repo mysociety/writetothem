@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.23 2007-03-19 10:29:49 francis Exp $
+ * $Id: index.php,v 1.24 2007-09-19 15:43:57 francis Exp $
  * 
  */
 
@@ -43,7 +43,8 @@ available.</dd>
 </dl>
 EOF
             ),
-    new ADMIN_PAGE_RATTY(
+    /* Disabled for now - see fyr_rate_limit in fyr.php
+        new ADMIN_PAGE_RATTY(
             'fyr-web',
             "Web Abuse",
             "These rules limit access to the WriteToThem website.",
@@ -52,7 +53,7 @@ An HTML fragment which is displayed to the user in an error page when
 the rule fires. If left blank, the message "Sorry, we are experiencing
 technical difficulties" is displayed.
 EOF
-        ),
+        ), */
     null, // space separator on menu
     new ADMIN_PAGE_REPS,
     new ADMIN_PAGE_EMBED('fyrmatch', 'Councillor Data', OPTION_ADMIN_SERVICES_CGI . 'match.cgi'),
