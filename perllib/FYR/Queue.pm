@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.266 2007-08-15 11:31:44 matthew Exp $
+# $Id: Queue.pm,v 1.267 2007-09-20 11:04:06 matthew Exp $
 #
 
 package FYR::Queue;
@@ -2106,6 +2106,10 @@ sub admin_get_queue ($$) {
             $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
             push @params, $params->{query};
             push @params, $params->{query};
+        } elsif ($params->{query} =~ /^(ready) (CED|COP|DIW|EUR|HOC|LAC|LAE|LBW|LGE|MTW|NIE|SPC|SPE|UTE|UTW|WAC|WAE|WMC)$/) {
+            $where = "where state = ? and recipient_type = ?";
+            push @params, $1;
+            push @params, $2;
         } else {
             my $query = merge_spaces($params->{query});
             my @terms = split m/ /, $query;
