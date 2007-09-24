@@ -6,25 +6,10 @@ template_draw('header', $values);
 <h1>Thanks for your feedback... and one *last* question</h1>
 
 <p>We hope your representative gets back to you with a full answer soon.
+</p>
 
-<? if ($values['recipient_type'] == 'WMC') { ?>
-<p>If they don't, it is worth trying to contact your MP by other means. For
-example, <strong>call their local office</strong> and arrange a session at
-their "surgery". These are a chance to meet your MP face to face and raise your
-issue with them.  Look up the number in your local telephone directory, or try
-<a
-href="http://www.google.co.uk/search?q=<?=urlencode($values['recipient_name'])?>">Googling
-for <?=$values['recipient_name']?></a>.
+<p>If they don't then see... <a href="/about-qa#noreply" target="_blank">What should I do if my MP (or other representative) doesn't reply?</a> (opens in new window)
 </p>
-<? } else { ?>
-<p>If they don't, it is worth trying to contact your representative by other means. Look up
-their telephone number or postal address. 
-<a href="http://www.google.co.uk/search?q=<?=urlencode($values['recipient_name'])?>">Google 
-search for <?=$values['recipient_name']?></a> to do this.
-If you like, ask to meet up with them in person; most representatives have
-"surgeries".
-</p>
-<? } ?>
 
 <p>One last, *last* question (we promise...)</p>
 
