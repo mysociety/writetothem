@@ -3,3 +3,6 @@ receiving this message, please email team@writetothem.com and we'll get
 back to you. See www.writetothem.com for more details about the service.
 We have sent this email to <?=$values['recipient_email']?>; if this
 address is out of date please email us so that we can update our records. ]
+
+http://www.fixmystreet.com/ - report local problems like graffiti and
+fly tipping, and sign up for email alerts when new problems are reported

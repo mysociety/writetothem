@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.268 2007-09-24 13:30:30 matthew Exp $
+# $Id: Queue.pm,v 1.269 2007-09-24 23:01:00 matthew Exp $
 #
 
 package FYR::Queue;
@@ -889,11 +889,14 @@ sub make_representative_email ($) {
             );
     }
 
+    my $footer_template = 'footer';
+    my %council_child_type  = map { $_ => 1 } @$mySociety::VotingArea::council_child_types;
+    $footer_template .= '-cllr' if $council_child_type{$msg->{recipient_type}};
     $bodytext .= "\n\n"
             . format_email_body($msg)
             . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
             . FYR::EmailTemplate::format(
-                email_template('footer'),
+                email_template($footer_template),
                 email_template_params($msg, representative_url => '') # XXX
             );
 

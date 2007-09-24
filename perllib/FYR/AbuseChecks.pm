@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.60 2007-05-11 08:49:56 matthew Exp $
+# $Id: AbuseChecks.pm,v 1.61 2007-09-24 23:01:00 matthew Exp $
 #
 
 package FYR::AbuseChecks;
@@ -111,7 +111,7 @@ sub get_similar_messages ($;$) {
     # Salutation.
     $m =~ s#^\s+Dear\s+[^\n]+\n##gs;
     # Signoff.
-    $m =~ s#^\s*Yours sincerely,?\s*\n##gs;
+    $m =~ s#^\s*Yours sincerely,?\s*\n##gsm;
     # "Electronic signature".
     $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
     my $h = FYR::SubstringHash::hash($m, SUBSTRING_LENGTH, NUM_BITS);

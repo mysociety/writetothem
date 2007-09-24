@@ -4,6 +4,6 @@ PLEASE FORWARD TO: <?=$values['recipient_name']?>
 
 OR, if they are no longer <?=$values['recipient_position']?>, please forward it to the current <?=$values['recipient_position']?> or <?=$values['recipient_position_plural']?> for <?=$values['recipient_area_name']?>.
 
-IF IT IS NOT YOUR JOB TO FORWARD THIS MAIL, or if there is a more appropriate email address or fax number for messages to this <?=$values['recipient_position']?>, please let us know by calling 07031 150 115 or sending an email to feedback@writetothem.com, quoting reference <?=$values['recipient_id']?>. This will prevent you from receiving further mail, and improve the service for local people. We also welcome any other feedback you may have.
+IF IT IS NOT YOUR JOB TO FORWARD THIS MAIL, or if there is a more appropriate email address or fax number for messages to this <?=$values['recipient_position']?>, please let us know by sending an email to feedback@writetothem.com, quoting reference <?=$values['recipient_id']?>. This will prevent you from receiving further mail, and improve the service for local people. We also welcome any other feedback you may have.
 
 (Sent via WriteToThem.com, a project of UKCOD, registered charity number 1076346.)
