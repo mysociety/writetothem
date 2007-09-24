@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.267 2007-09-20 11:04:06 matthew Exp $
+# $Id: Queue.pm,v 1.268 2007-09-24 13:30:30 matthew Exp $
 #
 
 package FYR::Queue;
@@ -2078,7 +2078,7 @@ sub admin_get_queue ($$) {
         $sth2->execute($params->{msgid});
         $msg = $sth2->fetchrow_hashref();
         my @similar = FYR::AbuseChecks::get_similar_messages($msg);
-        @params = map { $_->[0] } @similar;
+        @params = map { $_->[0] } grep { $_->[1] > 0.7 } @similar;
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
     } elsif ($filter eq 'similarbodysamerep') {
@@ -2088,7 +2088,7 @@ sub admin_get_queue ($$) {
         $sth2->execute($params->{msgid});
         $msg = $sth2->fetchrow_hashref();
         my @similar = FYR::AbuseChecks::get_similar_messages($msg, 1);
-        @params = map { $_->[0] } @similar;
+        @params = map { $_->[0] } grep { $_->[1] > 0.7 } @similar;
         push @params, $params->{msgid};
         $where = "where id in (" . join(",", map { '?' } @params) .  ")";
     } elsif ($filter eq 'search') {
