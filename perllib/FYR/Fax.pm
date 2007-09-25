@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.35 2007-09-24 23:01:00 matthew Exp $
+# $Id: Fax.pm,v 1.36 2007-09-25 12:05:07 matthew Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -276,7 +276,7 @@ sub group_text($$){
 # TOTAL is the total number of pages; URL is the URL a representative may visit
 # to forward the message to others; and FAX is the fax number to which the fax
 # is being delivered.
-sub footer_text ($$$$) {
+sub footer_text ($$$$$) {
     my ($page, $total, $url, $number, $rep_type) = @_;
     my $footer_template = 'footer-first';
     my %council_child_type  = map { $_ => 1 } @$mySociety::VotingArea::council_child_types;
