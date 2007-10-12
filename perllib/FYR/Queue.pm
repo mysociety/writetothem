@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.269 2007-09-24 23:01:00 matthew Exp $
+# $Id: Queue.pm,v 1.270 2007-10-12 13:58:45 matthew Exp $
 #
 
 package FYR::Queue;
@@ -894,7 +894,7 @@ sub make_representative_email ($) {
     $footer_template .= '-cllr' if $council_child_type{$msg->{recipient_type}};
     $bodytext .= "\n\n"
             . format_email_body($msg)
-            . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+            . "\n\n\n"
             . FYR::EmailTemplate::format(
                 email_template($footer_template),
                 email_template_params($msg, representative_url => '') # XXX
@@ -1100,7 +1100,7 @@ sub make_confirmation_email ($;$) {
         if ($msg->{sender_email} =~ m/\@aol\./i);
 
     # Append a separator and the text of the ms
-    $bodytext .= "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+    $bodytext .= "\n\n\n"
                 . format_email_body($msg);
 
     # Add header if site in test mode
@@ -1171,7 +1171,7 @@ sub make_failure_email ($) {
                     email_template($template),
                     email_template_params($msg)
                 )
-                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . "\n\n\n"
                 . format_email_body($msg);
 
     return mySociety::Email::construct_email({
@@ -1215,7 +1215,7 @@ sub make_questionnaire_email ($;$) {
                         their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
                         )
                 )
-                . "\n\n" . ('x' x EMAIL_COLUMNS) . "\n\n"
+                . "\n\n\n"
                 . format_email_body($msg);
 
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
