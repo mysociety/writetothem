@@ -5,7 +5,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>WriteToThem.com - <? print $values['title']; ?></title>
+<title>WriteToThem - <? print $values['title']; ?></title>
 <link href="/wtt.css" rel="stylesheet" type="text/css" media="all">
 <link href="/print.css" rel="stylesheet" type="text/css" media="print">
 <?php if (array_key_exists('stylesheet', $values)) { ?>
@@ -24,7 +24,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
           print $values['header'];
       } ?>
 <h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
-WriteToThem.com<?
+WriteToThem<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';
 if ($_SERVER['REQUEST_URI']!='/')
     print ' <span id="homelink">(<a href="/">home</a>)</span>';
