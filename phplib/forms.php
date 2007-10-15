@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.12 2005-02-16 18:31:31 matthew Exp $
+ * $Id: forms.php,v 1.13 2007-10-15 15:36:19 matthew Exp $
  * 
  */
 
@@ -19,6 +19,8 @@ require_once "HTML/QuickForm/Renderer/Default.php";
 function get_all_variables() {
     debug("SERIALIZE", "_GET", $_GET);
     debug("SERIALIZE", "_POST", $_POST);
+
+    if (isset($_GET['body'])) unset($_GET['body']);
 
     // All post and get variables, get have priority
     $variables = array_merge($_POST, $_GET);
