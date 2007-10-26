@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.91 2007-08-24 16:51:21 matthew Exp $
+ * $Id: who.php,v 1.92 2007-10-26 13:44:22 matthew Exp $
  *
  */
 
@@ -20,7 +20,7 @@ require_once "../../phplib/votingarea.php";
 // Input data
 
 // Postcode
-$fyr_postcode = get_http_var('pc');
+$fyr_postcode = canonicalise_postcode(preg_replace('#[^A-Z0-9]#i', '', get_http_var('pc')));
 if ($fyr_postcode == '') {
     header('Location: /');
     exit();

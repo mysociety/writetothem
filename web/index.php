@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.55 2006-10-27 11:10:35 francis Exp $
+ * $Id: index.php,v 1.56 2007-10-26 13:44:22 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -15,7 +15,7 @@ require_once "../../phplib/mapit.php";
 require_once '../../phplib/dadem.php';
 require_once "../../phplib/votingarea.php";
 
-$pc = get_http_var("pc");
+$pc = canonicalise_postcode(preg_replace('#[^A-Z0-9]#i', '', get_http_var('pc')));
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
 // Redirect from parlparse person identifier
@@ -61,7 +61,7 @@ if (isset($_GET['t']))
 else 
     $template = "index-index";
 $error_message = null;
-if ($pc != "" or array_key_exists('pc', $_GET)) {
+if ($pc) {
     /* Test for various special-case postcodes which lie outside the UK. Many
      * of these aren't valid UK postcode formats, so do a special-case test
      * here rather than passing them down to MaPit. See

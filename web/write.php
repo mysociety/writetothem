@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.122 2007-08-22 20:08:55 matthew Exp $
+ * $Id: write.php,v 1.123 2007-10-26 13:44:22 matthew Exp $
  *
  */
 
@@ -645,7 +645,7 @@ if (!array_key_exists('pc', $fyr_values)) {
 }
 
 debug("FRONTEND", "All variables:", $fyr_values);
-$fyr_values['pc'] = strtoupper(trim($fyr_values['pc']));
+$fyr_values['pc'] = canonicalise_postcode($fyr_values['pc']);
 if (!isset($fyr_values['fyr_extref']))
     $fyr_values['fyr_extref'] = fyr_external_referrer();
 if (!isset($fyr_values['cocode']))
