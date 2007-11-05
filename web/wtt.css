@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.50 2007-11-05 15:58:33 angie Exp $
+ * $Id: wtt.css,v 1.51 2007-11-05 17:07:37 matthew Exp $
  * 
  */
 
@@ -362,17 +362,18 @@ table.zeitgeist td.c {
 }
 
 #sendmess {
-	float: left; 
-	margin: 0px 20px 0px 0px;
+    float: left; 
+    margin: 0px 1em 0px 0px;
 }
-	
+    
 #sendmess label {
-	text-align: right; 
-	vertical-align: top;
-	display: block;
-	width: 250px;
-	float: left;
-	margin-right: 5px;
+    text-align: right; 
+    vertical-align: top;
+    display: block;
+    width: 15em;
+    float: left;
+    margin-right: 0.25em;
+    font-weight: normal;
 }
 
 #sendmess p.alert {color: #B1181C}

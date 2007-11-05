@@ -6,7 +6,7 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.3 2007-11-05 17:02:10 angie Exp $
+ * $Id: emailform.php,v 1.4 2007-11-05 17:07:37 matthew Exp $
  * 
  */
 
@@ -62,7 +62,7 @@ function emailform_display ($messages) {
         } else {
             print '<p class="warning">';
             foreach ($messages as $inp => $mess) {
-                print '' . $mess . '<br />';
+                print '' . $mess . '<br>';
             }
             print '</p>';
         }
@@ -71,42 +71,47 @@ function emailform_display ($messages) {
     $emailformfields = get_emailform_config();
     
     print '<form action="about-contactresponse" accept-charset="utf8" method="post">';
-    print '<input name="action" type="hidden" value="testmess" />';
+    print '<input name="action" type="hidden" value="testmess">';
     
     foreach ($emailformfields as $row => $defs) {
         $input = '';
         $value='';
-        if(isset($defs['value'])) {$value = $defs['value'];}
-        if(isset($_POST[$defs['inputname']])) {$value = $_POST[$defs['inputname']];}
+        if (isset($defs['value']))
+            $value = $defs['value'];
+        if (isset($_POST[$defs['inputname']]))
+            $value = $_POST[$defs['inputname']];
         $htmlvalue = htmlentities($value, ENT_QUOTES, 'UTF-8');
         //$htmlvalue = mb_convert_encode($value,'HTML-ENTITIES','UTF-8');
         //$htmlvalue = $value;
         
         if ($defs['inputtype'] == 'text') {
-            $input = '<input type="text" name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" size="' . $defs['size'] . '" value="' . $htmlvalue . '" />';
+            $input = '<input type="text" name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" size="' . $defs['size'] . '" value="' . $htmlvalue . '">';
         }
         if ($defs['inputtype'] == 'textarea') {
             $sizes = explode(",", $defs['size']);
             $input = '<textarea name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" rows="' . $sizes[0] . '" cols="' . $sizes[1] . '">' . $htmlvalue . '</textarea>';
         }
         if ($defs['inputtype'] == 'submit') {
-            $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '" />';
+            $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '">';
         }
         if ($defs['inputtype'] == 'radio') {
             $radiovalues = $defs['values'];
             foreach ($radiovalues as $radvalue) {
                 $checked = ($value == $radvalue) ? ' checked' : '';
-                $input .= '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="radio" value="' . $radvalue . '" ' . $checked . ' /> ' . $radvalue . '<br/>';
+                $input .= '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="radio" value="' . $radvalue . '" ' . $checked . '> ' . $radvalue . '<br>';
             }
         }
         $label = $defs['label'];
         if (isset($defs['required']) && $defs['required']) {
             if (isset($errors[$defs['inputname']])) {
                 $label .= ' <span class="alert">(required)</span>';
-            } else {$label .= ' (required)';}
+            } else {
+                $label .= ' (required)';
+            }
         }
         
-        $out = '<p><label for="' . $defs['inputname'] . '">' . $label .  '</label>' . $input . '</p>';
+        if ($label) $label .= ':';
+        $out = '<p><label for="' . $defs['inputname'] . '">' . $label . '</label>' . $input . '</p>';
         print $out;
     }
     print '</form>';
@@ -129,7 +134,7 @@ function emailform_test_message () {
         }
         if (isset($defs['validate']) && $defs['validate'] == 'emailaddress') {
             if (! validate_email($_POST[$defs['inputname']]) ) {
-                $ermess = 'email address is not correct';
+                $ermess = 'Please enter a valid email address';
                 if ($ermess) {
                     $errors[$defs['inputname']] = $ermess;
                 }
