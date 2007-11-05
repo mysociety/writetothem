@@ -6,7 +6,7 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.2 2007-11-05 16:23:07 angie Exp $
+ * $Id: emailform.php,v 1.3 2007-11-05 17:02:10 angie Exp $
  * 
  */
 
@@ -60,7 +60,7 @@ function emailform_display ($messages) {
         if (isset($messages['messagesent'])) {
             print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
         } else {
-            print '<p class="alert">';
+            print '<p class="warning">';
             foreach ($messages as $inp => $mess) {
                 print '' . $mess . '<br />';
             }
@@ -118,7 +118,7 @@ function emailform_test_message () {
     $errors = array ();
     foreach ($emailformfields as $row => $defs) {
         if (isset($defs['required']) && $defs['required'] && !$_POST[$defs['inputname']]) {
-            $errors[$defs['inputname']] = $defs['label'] . " must not be empty";
+            $errors[$defs['inputname']] = "Please enter your " . $defs['label'];
         }
         if (isset($defs['spamcheck']) && $defs['spamcheck']) {
             $ermess = emailform_test_spam($defs['inputname']);
