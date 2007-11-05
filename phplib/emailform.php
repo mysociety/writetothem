@@ -6,29 +6,24 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.5 2007-11-05 17:53:09 matthew Exp $
+ * $Id: emailform.php,v 1.6 2007-11-05 18:02:34 matthew Exp $
  * 
  */
-
-
-// Load configuration file
-require_once "../conf/general";
 
 /* setup the fields that are wanted on the contact form, 
  *    this will be dynamically built using emailform_entry_output,
  * it will also be checked by emailform_test_message, if you want to add another field stick it in here.
  */
 $emailformfields = array (
-    array ('label' => 'Email Address', 'inputname' => 'emailaddy', 'inputtype' => 'text', 'size' => '30', 'validate' => "emailaddress", 'required' => 1, 'emailoutput' => 'sender'),
     array ('label' => 'Name', 'inputname' => 'name', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'required' => 1),
+    array ('label' => 'Email Address', 'inputname' => 'emailaddy', 'inputtype' => 'text', 'size' => '30', 'validate' => "emailaddress", 'required' => 1, 'emailoutput' => 'sender'),
     array ('label' => 'Subject', 'inputname' => 'subject', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'emailoutput' => 'subject'),
     array ('label' => 'Message', 'inputname' => 'notjunk', 'inputtype' => 'textarea', 'size' => '10,29', 'spamcheck' => "1", 'required' => 1),
     array ('label' => '', 'inputname' => 'send', 'inputtype' => 'submit', 'value' => 'Send us your thoughts'),
 );
 
 function fyr_display_emailform () {
-    $sendnow = 0;
-    $messages = '';
+    $messages = array();
     if (isset($_POST['action'])  && $_POST['action']== 'testmess') {
         $messages = emailform_test_message();
         if ($messages) {
@@ -54,11 +49,11 @@ function emailform_display ($messages) {
         if (isset($messages['messagesent'])) {
             print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
         } else {
-            print '<p class="warning">';
+            print '<ul class="repwarning">';
             foreach ($messages as $inp => $mess) {
-                print $mess . '<br>';
+                print '<li>' . $mess;
             }
-            print '</p>';
+            print '</ul>';
         }
     }
     
@@ -95,15 +90,14 @@ function emailform_display ($messages) {
         }
         $label = $defs['label'];
         if (isset($defs['required']) && $defs['required']) {
-            if (isset($errors[$defs['inputname']])) {
-                $label .= ' <span class="alert">(required)</span>';
-            } else {
-                $label .= ' (required)';
-            }
+            $label .= ' (required)';
         }
         
         if ($label) $label .= ':';
-        $out = '<p><label for="' . $defs['inputname'] . '">' . $label . '</label>' . $input . '</p>';
+        $out = '<p><label for="' . $defs['inputname'] . '"';
+        if (isset($messages[$defs['inputname']]))
+            $out .= ' class="repwarning"';
+        $out .= '>' . $label . '</label>' . $input . '</p>';
         print $out;
     }
     print '</form>';
