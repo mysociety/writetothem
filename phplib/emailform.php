@@ -3,10 +3,10 @@
  * emailform.php:
  * Email Form for contacting site administrators.
  * 
- * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: angie@vertebrate.co.uk; WWW: http://www.mysociety.org
+ * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+ * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.1 2007-11-05 15:58:33 angie Exp $
+ * $Id: emailform.php,v 1.2 2007-11-05 16:23:07 angie Exp $
  * 
  */
 
