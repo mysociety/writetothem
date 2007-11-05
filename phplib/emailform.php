@@ -6,7 +6,7 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.4 2007-11-05 17:07:37 matthew Exp $
+ * $Id: emailform.php,v 1.5 2007-11-05 17:53:09 matthew Exp $
  * 
  */
 
@@ -14,25 +14,17 @@
 // Load configuration file
 require_once "../conf/general";
 
-function get_emailform_config () {
-
 /* setup the fields that are wanted on the contact form, 
  *    this will be dynamically built using emailform_entry_output,
  * it will also be checked by emailform_test_message, if you want to add another field stick it in here.
  */
-
-    $emailformfields = array (
-        '01' => array ('label' => 'Email Address', 'inputname' => 'emailaddy', 'inputtype' => 'text', 'size' => '30', 'validate' => "emailaddress", 'required' => 1, 'emailoutput' => 'sender'),
-        '02' => array ('label' => 'Name', 'inputname' => 'name', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'required' => 1),
-        '03' => array ('label' => 'Subject', 'inputname' => 'subject', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'emailoutput' => 'subject'),
-        '04' => array ('label' => 'Message', 'inputname' => 'notjunk', 'inputtype' => 'textarea', 'size' => '10,29', 'spamcheck' => "1", 'required' => 1),
-        '07' => array ('label' => '', 'inputname' => 'send', 'inputtype' => 'submit', 'value' => 'Send us your thoughts'),
-    );
-
-
-    return $emailformfields;
-}
-
+$emailformfields = array (
+    array ('label' => 'Email Address', 'inputname' => 'emailaddy', 'inputtype' => 'text', 'size' => '30', 'validate' => "emailaddress", 'required' => 1, 'emailoutput' => 'sender'),
+    array ('label' => 'Name', 'inputname' => 'name', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'required' => 1),
+    array ('label' => 'Subject', 'inputname' => 'subject', 'inputtype' => 'text', 'size' => '30', 'spamcheck' => "1", 'emailoutput' => 'subject'),
+    array ('label' => 'Message', 'inputname' => 'notjunk', 'inputtype' => 'textarea', 'size' => '10,29', 'spamcheck' => "1", 'required' => 1),
+    array ('label' => '', 'inputname' => 'send', 'inputtype' => 'submit', 'value' => 'Send us your thoughts'),
+);
 
 function fyr_display_emailform () {
     $sendnow = 0;
@@ -56,24 +48,24 @@ function fyr_display_emailform () {
 }
 
 function emailform_display ($messages) {
+    global $emailformfields;
+
     if ($messages) {
         if (isset($messages['messagesent'])) {
             print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
         } else {
             print '<p class="warning">';
             foreach ($messages as $inp => $mess) {
-                print '' . $mess . '<br>';
+                print $mess . '<br>';
             }
             print '</p>';
         }
     }
-    // load up the config
-    $emailformfields = get_emailform_config();
     
     print '<form action="about-contactresponse" accept-charset="utf8" method="post">';
     print '<input name="action" type="hidden" value="testmess">';
     
-    foreach ($emailformfields as $row => $defs) {
+    foreach ($emailformfields as $defs) {
         $input = '';
         $value='';
         if (isset($defs['value']))
@@ -119,9 +111,9 @@ function emailform_display ($messages) {
 
 
 function emailform_test_message () {
-    $emailformfields = get_emailform_config();
+    global $emailformfields;
     $errors = array ();
-    foreach ($emailformfields as $row => $defs) {
+    foreach ($emailformfields as $defs) {
         if (isset($defs['required']) && $defs['required'] && !$_POST[$defs['inputname']]) {
             $errors[$defs['inputname']] = "Please enter your " . $defs['label'];
         }
@@ -154,15 +146,15 @@ function emailform_test_spam ($inputname) {
 }
 
 
+// we could put the testing of the message in here, but not doing so allows us to test that messages can be sent without having to check everything first.
 function emailform_send_message () {
-    // we could put the testing of the message in here, but not doing so allows us to test that messages can be sent without having to check everything first.
+    global $emailformfields;
     $sendto = OPTION_CONTACT_EMAIL;
-    $emailformfields = get_emailform_config();
     $mailbody = '';
     $subject = 'no subject';
     $sender = '';
     $messagesent = 0;
-    foreach ($emailformfields as $row => $defs) {
+    foreach ($emailformfields as $defs) {
     // loop through emailformfields and fill in the mail body
         if (isset($defs['emailoutput']) && isset($_POST[$defs['inputname']])) {
             // this value goes into the subject or sender    
@@ -186,9 +178,3 @@ function emailform_send_message () {
     return 0;
 }
 
-function emailform_response_output() {
-
-}
-
-
-?>
