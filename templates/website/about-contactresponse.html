@@ -1,0 +1,11 @@
+<? $values['title'] = "Emailing WriteToThem.com";
+template_draw('header', $values); ?>
+
+<h2>Emailing WriteToThem.com</h3>
+
+<div id ="sendmess">
+<h3>Tell us what you think</h3>
+<? fyr_display_emailform($values); ?>
+</div>
+
+<? template_draw('footer', $values); ?>

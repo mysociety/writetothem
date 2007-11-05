@@ -6,11 +6,12 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.12 2007-05-22 12:20:24 matthew Exp $
+ * $Id: about.php,v 1.13 2007-11-05 15:58:33 angie Exp $
  * 
  */
 
 require_once "../phplib/fyr.php";
+require_once "../phplib/emailform.php";
 
 /* 
  * This page is called through a rewrite mechanism which maps
