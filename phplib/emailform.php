@@ -6,7 +6,7 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.6 2007-11-05 18:02:34 matthew Exp $
+ * $Id: emailform.php,v 1.7 2007-11-06 15:35:29 angie Exp $
  * 
  */
 
@@ -164,11 +164,24 @@ function emailform_send_message () {
             }
         }
     }
+
+	$success = FALSE;
     if ($sender && $mailbody) {
-        $from = 'From: ' . $sender;
-        $messagesent = mail($sendto, $subject, $mailbody, $from);
+		$from = $_POST['name'] ? array ($sender, $_POST['name']) : $sender;
+		$spec = array(
+			'_unwrapped_body_' => $mailbody,
+			'Subject' => $subject,
+			'From' =>$from,
+			'To' => array($sendto, 'WriteToThem'),
+		);
+		
+		$result = evel_send($spec, $sendto);
+		$error = evel_get_error($result);
+		if ($error) 
+			error_log("fyr_send_email_internal: " . $error);
+		$success = $error ? FALSE : TRUE;
+	
     }
-    if ($messagesent) {return 1;}
-    return 0;
+	return $success;
 }
 
