@@ -6,9 +6,11 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.7 2007-11-06 15:35:29 angie Exp $
+ * $Id: emailform.php,v 1.8 2007-11-07 22:56:44 matthew Exp $
  * 
  */
+
+require_once '../../phplib/evel.php';
 
 /* setup the fields that are wanted on the contact form, 
  *    this will be dynamically built using emailform_entry_output,
