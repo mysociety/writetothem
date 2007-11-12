@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.35 2007-01-26 14:07:55 louise Exp $
+ * $Id: general-example,v 1.36 2007-11-12 18:31:01 matthew Exp $
  * 
  */
 
@@ -22,6 +22,7 @@
 define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
 define('OPTION_MAPIT_URL', 'http://services.mysociety.org/mapit');
 define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
+define('OPTION_EVEL_URL', 'http://services.mysociety.org/evel.cgi');
 
 // Where the FYR queue service is.
 define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/queue');
