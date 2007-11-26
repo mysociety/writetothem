@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.123 2007-10-26 13:44:22 matthew Exp $
+ * $Id: write.php,v 1.124 2007-11-26 13:46:59 francis Exp $
  *
  */
 
@@ -280,7 +280,7 @@ END;
 
     add_all_variables_hidden($form, $fyr_values);
 
-    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/></td></tr>\')</script>');
+    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
 
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
