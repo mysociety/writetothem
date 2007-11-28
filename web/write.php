@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.124 2007-11-26 13:46:59 francis Exp $
+ * $Id: write.php,v 1.125 2007-11-28 15:51:52 matthew Exp $
  *
  */
 
@@ -314,7 +314,7 @@ function renderForm($form, $pageName)
         $renderer->setElementTemplate('
         <!-- BEGIN error -->
         <TR><TD colspan=2>
-        <span style="color: #ff0000"><br>{error}:</span>
+        <span class="error">{error}:</span>
         </TD></TR>
         <!-- END error -->
         <TR><TD colspan=2>

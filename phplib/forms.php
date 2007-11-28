@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.13 2007-10-15 15:36:19 matthew Exp $
+ * $Id: forms.php,v 1.14 2007-11-28 15:51:51 matthew Exp $
  * 
  */
 
@@ -68,21 +68,17 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
             </form>');
         $this->setElementTemplate('
                 <!-- BEGIN error -->
-                <TR>
-                <TD colspan="2">
-                    <span style="color: #ff0000">{error}:</span>
-                    <br>
-                </TD>
-                </TR>
+                <tr>
+                <td colspan="2">
+                    <span class="error">{error}:</span>
+                </td>
+                </tr>
                 <!-- END error --> 
-                <TR valign="top">  
-                <TD>
-                {label}
-                </TD>
-                <TD>
-                    {element} 
-                </TD>
-                </TR>
+
+                <tr valign="top">
+                <td>{label}</td>
+                <td>{element}</td>
+                </tr>
         ');
         $this->setRequiredNoteTemplate("");
         // Not sure what this is for - just set to default for now:
