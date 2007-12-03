@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.125 2007-11-28 15:51:52 matthew Exp $
+ * $Id: write.php,v 1.126 2007-12-03 17:24:08 matthew Exp $
  *
  */
 
@@ -718,7 +718,8 @@ if ($fyr_group_msg) {
     //Get the electoral body information
     $voting_areas = mapit_get_voting_areas($fyr_postcode);
     mapit_check_error($voting_areas);
-    $eb_type = $va_inside[$fyr_type];
+    $eb_type = array_key_exists($fyr_type, $va_inside)
+        ? $va_inside[$fyr_type] : '';
 
     if (array_key_exists($eb_type, $voting_areas)) {
         $eb_id = $voting_areas[$eb_type];
