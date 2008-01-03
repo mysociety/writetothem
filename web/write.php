@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.128 2008-01-03 23:06:09 matthew Exp $
+ * $Id: write.php,v 1.129 2008-01-03 23:31:09 matthew Exp $
  *
  */
 
@@ -118,8 +118,8 @@ function bad_contact_error_msg($eb_area_info) {
     them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
     full) or incorrect$via_error.
 
-    We'd be <em>really</em> grateful if you could <strong>spend five minutes on their website or on the phone
-    to $type_display_name</strong>, asking for the contact details.
+    We'd be <em>really</em> grateful if you could <strong>spend five minutes on the website of
+    $type_display_name</strong> (or even the phone), finding out the contact details.
     Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
     your representative.
     ";
