@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.126 2007-12-03 17:24:08 matthew Exp $
+ * $Id: write.php,v 1.127 2008-01-03 12:24:27 matthew Exp $
  *
  */
 
@@ -102,20 +102,22 @@ function redirect_if_disabled($type, $group_msg) {
     }
 }
 
+/* Generate an error string for when contact details for
+ * a representative are not available */
 function bad_contact_error_msg($eb_area_info) {
-    /* Generate an error string for when contact details for
-     * a representative are not available */
+    $via_error = '';
+    if (in_array($eb_area_info['type'], $va_council_parent_types))
+        $via_error = '; or we might only have a central contact for the council, which similarly might not be working';
 
     $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['name'];
     if ($type_display_name == "the House of Commons")
         $type_display_name .= " (020 7219 3000)";
     $error_msg = "
     Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send
-    them a message. We may have had details in the past, which have since proven to be erroneous.
+    them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
+    full) or incorrect$via_error.
 
-    Please <a href=\"mailto:team&#64;writetothem.com\">email us</a> to encourage us to find the contact details.
-
-    We'd be <em>really</em> grateful if you could <strong>spend five minutes on the phone
+    We'd be <em>really</em> grateful if you could <strong>spend five minutes on their website or on the phone
     to $type_display_name</strong>, asking for the contact details.
     Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
     your representative.
@@ -407,7 +409,7 @@ function renderForm($form, $pageName)
                 'Sorry. An error has occurred: pageName "'
                     . htmlspecialchars($pageName) .
                 '". Please get in touch with us at
-                <a href="mailto:team@writetothem.com">team@writetothem.com</a>,
+                <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
                 quoting this message. You can <a href="/">try again from the
                 beginning</a>.'
             );
@@ -446,7 +448,7 @@ function submitFaxes() {
         if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
         template_show_error('Sorry, but your browser seems to be transmitting
             erroneous data to us. Please try again, or contact us at
-            <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
+            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.');
                 exit;
         }
         // double check that the group_id isn't already being used
@@ -618,7 +620,7 @@ function check_message_id($msgid) {
     if (!preg_match("/^[0-9a-f]{20}$/i", $msgid)) {
         template_show_error('Sorry, but your browser seems to be transmitting
             erroneous data to us. Please try again, or contact us at
-            <a href="mailto:team@writetothem.com">team@writetothem.com</a>.');
+            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.');
     }
 
 }
@@ -924,7 +926,7 @@ if ($on_page == "write") {
             'Sorry. An error has occurred: on_page "'
                 . htmlspecialchars($on_page) .
             '". Please get in touch with us at
-            <a href="mailto:team@writetothem.com">team@writetothem.com</a>,
+            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
             quoting this message. You can <a href="/">try again from the
             beginning</a>.'
         );
