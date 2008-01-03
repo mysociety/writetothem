@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.127 2008-01-03 12:24:27 matthew Exp $
+ * $Id: write.php,v 1.128 2008-01-03 23:06:09 matthew Exp $
  *
  */
 
@@ -105,6 +105,7 @@ function redirect_if_disabled($type, $group_msg) {
 /* Generate an error string for when contact details for
  * a representative are not available */
 function bad_contact_error_msg($eb_area_info) {
+    global $va_council_parent_types;
     $via_error = '';
     if (in_array($eb_area_info['type'], $va_council_parent_types))
         $via_error = '; or we might only have a central contact for the council, which similarly might not be working';
