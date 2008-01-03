@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.270 2007-10-12 13:58:45 matthew Exp $
+# $Id: Queue.pm,v 1.271 2008-01-03 12:31:09 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1174,14 +1174,14 @@ sub make_failure_email ($) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
-    return mySociety::Email::construct_email({
+    return ($bounced, mySociety::Email::construct_email({
             From => [do_not_reply_sender(), 'WriteToThem'],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
             _body_ => $text
-        });
+        }));
 }
 
 # send_failure_email ID
@@ -1189,11 +1189,9 @@ sub make_failure_email ($) {
 sub send_failure_email ($) {
     my ($id) = @_;
     my $msg = message($id);
-    return send_user_email(
-                $id,
-                'failure report',
-                make_failure_email($msg)
-            );
+    my ($bounced, $email) = make_failure_email($msg);
+    my $descr = $bounced ? 'mailbox full' : 'normal';
+    return send_user_email($id, "failure report ($descr)", $email);
 }
 
 # make_questionnaire_email MESSAGE [REMINDER]
