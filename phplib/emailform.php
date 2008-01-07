@@ -6,7 +6,7 @@
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: emailform.php,v 1.8 2007-11-07 22:56:44 matthew Exp $
+ * $Id: emailform.php,v 1.9 2008-01-07 11:12:59 matthew Exp $
  * 
  */
 
@@ -167,23 +167,23 @@ function emailform_send_message () {
         }
     }
 
-	$success = FALSE;
+    $success = FALSE;
     if ($sender && $mailbody) {
-		$from = $_POST['name'] ? array ($sender, $_POST['name']) : $sender;
-		$spec = array(
-			'_unwrapped_body_' => $mailbody,
-			'Subject' => $subject,
-			'From' =>$from,
-			'To' => array($sendto, 'WriteToThem'),
-		);
-		
-		$result = evel_send($spec, $sendto);
-		$error = evel_get_error($result);
-		if ($error) 
-			error_log("fyr_send_email_internal: " . $error);
-		$success = $error ? FALSE : TRUE;
-	
+        $from = $_POST['name'] ? array ($sender, $_POST['name']) : $sender;
+        $spec = array(
+            '_unwrapped_body_' => $mailbody,
+            'Subject' => $subject,
+            'From' =>$from,
+            'To' => array(array($sendto, 'WriteToThem')),
+        );
+        
+        $result = evel_send($spec, $sendto);
+        $error = evel_get_error($result);
+        if ($error) 
+            error_log("fyr_send_email_internal: " . $error);
+        $success = $error ? FALSE : TRUE;
+    
     }
-	return $success;
+    return $success;
 }
 
