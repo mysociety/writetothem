@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.52 2007-11-28 15:51:52 matthew Exp $
+ * $Id: wtt.css,v 1.53 2008-01-22 16:57:02 matthew Exp $
  * 
  */
 
@@ -23,42 +23,17 @@ acronym {
     cursor: help;
 }
 
-h1#heading {
-    color: #000000;
-    background-color: #ffe88c;
-    border-bottom: solid 2px #a5a57c;
-    font-size: 200%;
-    padding: 0.4em 1em;
-    text-align: left;
-    margin: 0 auto;
-}
-h1#heading a, h1#heading a:link, h1#heading a:visited {
-    color: #373f23;
-    text-decoration: none;
-}
-h1#heading a:hover {
-    text-decoration: underline;
-}
 h2,h3 {
     margin-top: 0;
 }
 h2,h3,h4 {
     text-align: center;
 }
-h2 {    font-size: 150%; }
-h3 {    font-size: 120%; }
-.maincol h3, .firstcol h3, #zeitgeist p.n {
-    margin-bottom: 0;
+h2 {
+    font-size: 150%;
 }
-.maincol h3.houseoflords, .firstcol h3.houseoflords {
-    margin-bottom: 0.6em;
-    margin-top: 2em;
-}
-#zeitgeist h3 {
-    margin-top: 2em;
-}
-.maincol p, .firstcol p {
-    margin-top: 0;
+h3 {
+    font-size: 120%;
 }
 
 blockquote {
@@ -81,6 +56,8 @@ a:link { color: #0000cc; }
 a:visited { color: #330066; }
 a:active, a:hover { color: #ff0000; }
 
+/* Generic classes */
+
 .warning {
     color: #ff0000;
     background-color: #ffffff;
@@ -96,6 +73,47 @@ a:active, a:hover { color: #ff0000; }
     background-color: #ffffff;
 }
 
+#error {
+    color: #ff0000;
+    background-color: #ffffff;
+}
+.error {
+    color: #ff0000;
+    background-color: #ffcccc;
+    padding: 2px;
+}
+
+/* Header/ body/ footer */
+
+h1#heading {
+    color: #000000;
+    background-color: #ffe88c;
+    border-bottom: solid 2px #a5a57c;
+    font-size: 200%;
+    padding: 0.4em 1em;
+    text-align: left;
+    margin: 0 auto;
+}
+h1#heading a, h1#heading a:link, h1#heading a:visited {
+    color: #373f23;
+    text-decoration: none;
+}
+h1#heading a:hover {
+    text-decoration: underline;
+}
+
+#betatest {
+    font-size: 25%;
+    vertical-align: top;
+}
+#homelink {
+    font-size: 25%;
+}
+
+h1 #homelink a:link, h1 #homelink a:visited, h1 #homelink a:hover, h1 #homelink a {
+    color: #0000cc;
+    text-decoration: underline;
+}
 #content {
     margin: 0 auto;
     width: expression(document.body.clientWidth > (904/12) * parseInt(document.body.currentStyle.fontSize)?"55em":"auto");
@@ -112,6 +130,8 @@ a:active, a:hover { color: #ff0000; }
     margin: 1em auto 0;
     clear: both;
 }
+
+/* Site breadcrumbs */
 
 ol#breadcrumbs {
     font-size: 80%;
@@ -146,6 +166,8 @@ ol#breadcrumbs li.hilight em {
     font-style: normal;
 }
 
+/* Boxes */
+
 #postcodebox, #writebox, #preview, #buttonbox {
     background-color: #d0bf69;
     color: #000000;
@@ -166,6 +188,8 @@ ol#breadcrumbs li.hilight em {
     border: solid 2px #314208;
     padding: 8px;
 }
+
+/* Preview page */
 
 #preview {
     width: 33em;
@@ -194,6 +218,18 @@ ol#breadcrumbs li.hilight em {
     padding: 8px;
 }
 
+/* List of reps page */
+
+.maincol h3, .firstcol h3, #zeitgeist p.n {
+    margin-bottom: 0;
+}
+.maincol h3.houseoflords, .firstcol h3.houseoflords {
+    margin-bottom: 0.6em;
+    margin-top: 2em;
+}
+.maincol p, .firstcol p {
+    margin-top: 0;
+}
 #repstable {
     border: solid 2px #9c8f4f;
     border-width: 2px 0;
@@ -224,6 +260,15 @@ ol#breadcrumbs li.hilight em {
     padding-left: 1.5em;
 }
 
+.notebox {
+    padding: 5px;
+    border: solid 1px #9c8f4f;
+    background-color: #d0bf69;
+    margin: 0 0 1em 10px;
+}
+
+/* Sidebar is on all the about pages */
+
 #sidebar {
     float: right;
     width: 14em;
@@ -252,6 +297,7 @@ ol#breadcrumbs li.hilight em {
 }
 
 /* Used for q&a page */
+
 dt {
     font-weight: bold;
 }
@@ -261,28 +307,23 @@ p.toplink {
     text-align: right;
 }
 
+/* Confirm page stuff - #advert is just for correction thanks page at present */
+
 #advert {
     padding: 1em;
     font-size: 200%;
 }
 
-#betatest {
-    font-size: 25%;
-    vertical-align: top;
+#confirm_message {
+    text-align: center;
+    font-size:115%;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: dotted 1px #999999;
 }
-#homelink {
-    font-size: 25%;
-}
-h1 #homelink a:link, h1 #homelink a:visited, h1 #homelink a:hover, h1 #homelink a {
-    color: #0000cc;
-    text-decoration: underline;
-}
-.notebox {
-    padding: 5px;
-    border: solid 1px #9c8f4f;
-    background-color: #d0bf69;
-    margin: 0 0 1em 10px;
-}
+
+/* Link to us page */
+
 pre.sourcecode {
     clear: both; 
     border: solid 1px #006666; 
@@ -315,6 +356,12 @@ pre.sourcecode {
 }
 #cobrand_letter_help p {
     margin-left: 1em;
+}
+
+/* Zeitgeist/ stats */
+
+#zeitgeist h3 {
+    margin-top: 2em;
 }
 
 table.zeitgeist {
@@ -356,15 +403,7 @@ table.zeitgeist td.c {
     padding-left: 1em;
 }
 
-#error {
-    color: #ff0000;
-    background-color: #ffffff;
-}
-.error {
-    color: #ff0000;
-    background-color: #ffcccc;
-    padding: 2px;
-}
+/* Contact Us form */
 
 #sendmess {
     float: left; 
