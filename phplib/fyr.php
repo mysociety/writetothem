@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.50 2007-11-28 11:12:11 francis Exp $
+ * $Id: fyr.php,v 1.51 2008-01-29 16:44:52 matthew Exp $
  * 
  */
 
@@ -71,7 +71,7 @@ function fyr_display_error($num, $message, $file, $line, $context) {
     } else {
         /* Message will be in log file, don't display it for cleanliness */
         template_show_error("Please try again later, or <a
-            href=\"mailto:team@writetothem.com\">email us</a> to let us know.");
+            href=\"mailto:team&#64;writetothem.com\">email us</a> to let us know.");
     }
 }
 
@@ -272,87 +272,128 @@ function fyr_display_advert($values) {
     global $track;
     $advert_shown = 'none';
     if (array_key_exists('sender_email', $values))
-        $advert_shown = crosssell_display_advert('wtt', $values['sender_email'], $values['sender_name'], $values['sender_postcode']);
+        $advert_shown = crosssell_display_advert('wtt', $values['sender_email'], $values['sender_name'], $values['sender_postcode'],
+            array(
+                array('twfy_alerts', '<h2>Get emailed every time your MP says something in Parliament</h2> <p style="font-size:150%">Keep an eye on them for free</p> [form]Sign me up![/form]'),
+                array('twfy_alerts', '<h2>Get emailed every time your MP says something in Parliament</h2> [button]Keep an eye on them for free![/button]'),
+                array('hfymp', '<h2>Have a long term relationship with your MP</h2>[form]Sign up to HearFromYourMP[/form]'),
+                array('hfymp', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [form]Sign up to HearFromYourMP[/form]'),
+                array('gny', '<h2>Help us build a map of the world&rsquo;s local communities &ndash;<br><a href="http://www.groupsnearyou.com/">Add one to GroupsNearYou</a></h2>'),
+                array('gny', '<h2>Are you a member of a local group&hellip;</h2> &hellip;which uses the internet to coordinate itself, such as a neighbourhood watch? If so, please help the charity that runs WriteToThem by <a href="http://www.groupsnearyou.com/">adding some information about it</a> to our new site, GroupsNearYou.'),
+                array('fms', 'Got a local problem like potholes or flytipping in your street?<br><a href="http://www.fixmystreet.com/">Report it at FixMyStreet</a>'),
+                array('fms', '<a href="http://www.fixmystreet.com/">Find out what problems people are reporting in your local area</a>'),
+            )
+        );
     $track = 'advert=' . $advert_shown;
 }
 
 function parse_date($date) {
-	$now = time();
-	$date = preg_replace('#\b([a-z]|on|an|of|in|the|year of our lord)\b#i','',$date);
-	if (!$date)
-		return null;
+        $now = time();
+        $date = preg_replace('#\b([a-z]|on|an|of|in|the|year of our lord)\b#i','',$date);
+        if (!$date)
+                return null;
 
-	$epoch = 0;
-	$day = null;
-	$year = null;
-	$month = null;
-	if (preg_match('#(\d+)/(\d+)/(\d+)#',$date,$m)) {
-		$day = $m[1]; $month = $m[2]; $year = $m[3];
-		if ($year<100) $year += 2000;
-	} elseif (preg_match('#(\d+)/(\d+)#',$date,$m)) {
-		$day = $m[1]; $month = $m[2]; $year = date('Y');
-	} elseif (preg_match('#^([0123][0-9])([01][0-9])([0-9][0-9])$#',$date,$m)) {
-		$day = $m[1]; $month = $m[2]; $year = $m[3];
-	} else {
-		$dayofweek = date('w'); # 0 Sunday, 6 Saturday
-			if (preg_match('#next\s+(sun|sunday|mon|monday|tue|tues|tuesday|wed|wednes|wednesday|thu|thur|thurs|thursday|fri|friday|sat|saturday)\b#i',$date,$m)) {
-				$date = preg_replace('#next#i','this',$date);
-				if ($dayofweek == 5) {
-					$now = strtotime('3 days', $now);
-				} elseif ($dayofweek == 4) {
-					$now = strtotime('4 days', $now);
-				} else {
-					$now = strtotime('5 days', $now);
-				}
-			}
-		$t = strtotime($date,$now);
-		if ($t != -1) {
-			$day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
-		}
-	}
-	if (!$epoch && $day && $month && $year) {
-		$t = mktime(0,0,0,$month,$day,$year);
-		$day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
-	}
+        $epoch = 0;
+        $day = null;
+        $year = null;
+        $month = null;
+        if (preg_match('#(\d+)/(\d+)/(\d+)#',$date,$m)) {
+                $day = $m[1]; $month = $m[2]; $year = $m[3];
+                if ($year<100) $year += 2000;
+        } elseif (preg_match('#(\d+)/(\d+)#',$date,$m)) {
+                $day = $m[1]; $month = $m[2]; $year = date('Y');
+        } elseif (preg_match('#^([0123][0-9])([01][0-9])([0-9][0-9])$#',$date,$m)) {
+                $day = $m[1]; $month = $m[2]; $year = $m[3];
+        } else {
+                $dayofweek = date('w'); # 0 Sunday, 6 Saturday
+                        if (preg_match('#next\s+(sun|sunday|mon|monday|tue|tues|tuesday|wed|wednes|wednesday|thu|thur|thurs|thursday|fri|friday|sat|saturday)\b#i',$date,$m)) {
+                                $date = preg_replace('#next#i','this',$date);
+                                if ($dayofweek == 5) {
+                                        $now = strtotime('3 days', $now);
+                                } elseif ($dayofweek == 4) {
+                                        $now = strtotime('4 days', $now);
+                                } else {
+                                        $now = strtotime('5 days', $now);
+                                }
+                        }
+                $t = strtotime($date,$now);
+                if ($t != -1) {
+                        $day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
+                }
+        }
+        if (!$epoch && $day && $month && $year) {
+                $t = mktime(0,0,0,$month,$day,$year);
+                $day = date('d',$t); $month = date('m',$t); $year = date('Y',$t); $epoch = $t;
+        }
 
-	if ($epoch == 0)
-		return null;
-	return array('iso'=>"$year-$month-$day", 'epoch'=>$epoch, 'day'=>$day, 'month'=>$month, 'year'=>$year);
+        if ($epoch == 0)
+                return null;
+        return array('iso'=>"$year-$month-$day", 'epoch'=>$epoch, 'day'=>$day, 'month'=>$month, 'year'=>$year);
 }
 
-# Special case West Midlands Conservative MEPs
+# Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $wmc) {
-    if (!isset($area_reps[11809])) 
+    if (!isset($area_reps[11809]) && !isset($area_reps[11814])) 
         return;
 
-    $meps = array(
-        1071 => array( # Harbour
-            # Birmingham
-            12920,12921,12922,12923,12924,12925,12926,12927,12928,12929,
-            # Hereford, Leominster, Ludlow, Meriden, Newcastle, Solihull, Stoke, Sutton Coldfield
-            13147,13191,13209,13224,13245,13355,13386,13387,13388,13403
-        ),
-        1088 => array( # Bushill-Matthews
-            # Aldridge, Bromsgrove, Coventry, Nuneaton, Redditch, Rugby, Stratford, Walsall
-            12889,12969,13021,13022,13023,13285,13313,13328,13391,13434,13435,
-            # Warley, Warwick, Warwichshire, West Bromwich, Worcester, Worcestershire, Wyre Forest
-            13440,13443,13274,13454,13455,13477,13233,13463,13483
-        ),
-        1089 => array( # Bradbourn
-            # Burton, Cannock Chase, Dudley, Halesowen, Lichfield, Shrewsbury, Shropshire, Staffs
-            12974,12982,13047,13048,13124,13197,13350,13268,13369,13379,13378,
-            # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
-            13389,13390,13406,13410,13473,13474,13475,13412
-        )
-    );
+    if (isset($area_reps[11814])) {
+        # South West Conservative MEPs
+        $area_id = 11814;
+        $meps = array(
+            1048 => array( # Parish
+                12946,12947,13230,13258,13363,13458,13003,13303, # Dorset
+                12960,13356,13408,13449,13485,                   # Somerset
+                12908,13491,13476,                               # Somerset (were in Avon - Bath, Weston, Woodspring)
+                12964,12965,12966,12967,                         # Bristol - but Bristol NW includes bits of S.Glos, e.g. Filton
+                13178,                                           # Kingswood - S.Glos + part of Bristol
+                13256,                                           # Northavon - S.Glos but includes outskirts of Bristol
+                13438                                            # Wansdyke - most in B&NES, but a bit in S.Glos
+            ),
+            1064 => array( # Jackson
+                13041,13270,13371,13280,13336,13452, # Wiltshire
+                12996,13020,13096,13112,13394,13411, # Gloucestershire
+                12964,12965,12966,12967,             # Bristol
+                13178,                               # Kingswood
+                13256,                               # Northavon
+                13438                                # Wansdyke
+            ),
+            1085 => array( # Chichester
+                13062,13257,13300,13499,13493,13087,13501,13409,13414,13417,13419, # Devon
+                13090,13494,13498,13503,13500                                      # Cornwall
+            )
+        );
+    } elseif (isset($area_reps[11809])) {
+        # West Midland Conservative MEPs
+        $area_id = 11809;
+        $meps = array(
+            1071 => array( # Harbour
+                # Birmingham
+                12920,12921,12922,12923,12924,12925,12926,12927,12928,12929,
+                # Hereford, Leominster, Ludlow, Meriden, Newcastle, Solihull, Stoke, Sutton Coldfield
+                13147,13191,13209,13224,13245,13355,13386,13387,13388,13403
+            ),
+            1088 => array( # Bushill-Matthews
+                # Aldridge, Bromsgrove, Coventry, Nuneaton, Redditch, Rugby, Stratford, Walsall
+                12889,12969,13021,13022,13023,13285,13313,13328,13391,13434,13435,
+                # Warley, Warwick, Warwichshire, West Bromwich, Worcester, Worcestershire, Wyre Forest
+                13440,13443,13274,13454,13455,13477,13233,13463,13483
+            ),
+            1089 => array( # Bradbourn
+                # Burton, Cannock Chase, Dudley, Halesowen, Lichfield, Shrewsbury, Shropshire, Staffs
+                12974,12982,13047,13048,13124,13197,13350,13268,13369,13379,13378,
+                # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
+                13389,13390,13406,13410,13473,13474,13475,13412
+            )
+        );
+    }
+    $keep = array();
     foreach ($meps as $id => $wmcs) {
-        if (in_array($wmc, $wmcs)) {
-            foreach ($area_reps[11809] as $k => $v) {
-                if ($v != $id && in_array($v, array_keys($meps)))
-                    unset($area_reps[11809][$k]);
-            }
-            break;
-        }
+        if (in_array($wmc, $wmcs))
+            $keep[$id] = 1;
+    }
+    foreach ($area_reps[$area_id] as $k => $v) {
+        if (!isset($keep[$v]) && in_array($v, array_keys($meps)))
+            unset($area_reps[$area_id][$k]);
     }
 }
 

@@ -26,7 +26,10 @@ foreach ($links as $uri => $text) {
     $footer[] = $f;
 }
 print join(' | ', $footer);
-?>
-</div>
-</body>
-</html>
+echo '</div>';
+
+global $track;
+if (isset($track) && $track) {
+    track_event($track);
+}
+echo '</body></html>';
