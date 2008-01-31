@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.51 2008-01-29 16:44:52 matthew Exp $
+ * $Id: fyr.php,v 1.52 2008-01-31 15:42:57 matthew Exp $
  * 
  */
 
@@ -384,6 +384,34 @@ function euro_check(&$area_reps, $wmc) {
                 # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
                 13389,13390,13406,13410,13473,13474,13475,13412
             )
+        );
+    } elseif (isset($area_reps[11811])) {
+        $area_id = 11811;
+        $meps = array(
+            1072 => array( # Hannan
+                # Arundel & South Downs, Bognor Regis & Littlehampton, Brighton Kemptown, Brighton Pavilion, Hove, Chichester, Eastbourne, Lewes, Mid-Sussex, E Worthing & Shoreham, W Worthing Gosport, E Hants, NE Hants, NW Hants, Havant, New Forest E, New Forest W, Portsmouth N, Portsmouth S, Romsey, Winchester, Isle of Wight (23)
+                12894, 12938, 12962, 12963, 12999, 13059, 13159,
+                13192, 13232, 13067, 13480, 13113, 13063, 13263,
+                13277, 13140, 13251, 13252, 13305, 13495, 13323, 13466, 13496
+            ),
+            1079 => array( # Elles
+                # Bucks, Berks, Oxon (21)
+                12898, 12899, 12911, 12948, 12972, 12997, 13146,
+                13213, 13234, 13265, 13292, 13293, 13244, 13310,
+                13311, 13354, 13439, 13467, 13470, 13471, 13482
+            ),
+            1082 => array( # Deva
+                # Surrey, Horsham, Crawley, Aldershot, Basingstoke, Eastleigh, Fareham, Southampton Itchen, Southampton Test (19)
+                12888, 12906, 13024, 13060, 13066, 13083, 13086,
+                13091, 13121, 13157, 13236, 13315, 13330, 13357,
+                13358, 13376, 13377, 13401, 13472
+            ),
+            1101 => array( # Ashworth
+                # Kent, Bexhill & Battle, Wealden, Hastings & Rye. (20)
+                12896, 12916, 12983, 12994, 13035, 13046, 13092,
+                13095, 13101, 13116, 13139, 13214, 13222, 13272,
+                13341, 13351, 13372, 13415, 13421, 13446
+            ),
         );
     }
     $keep = array();
