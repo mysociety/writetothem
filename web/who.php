@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.94 2008-01-31 17:29:28 matthew Exp $
+ * $Id: who.php,v 1.95 2008-01-31 18:36:18 matthew Exp $
  *
  */
 
@@ -250,9 +250,22 @@ write to your constituency MSP above, or pick just one of your regional MSPs';
         } elseif ($va_type == 'EUR' && count($meps_hidden)) {
             # XXX Specific to what euro_check currently does!
             $text .= '<p style="margin-top:2em"><small>The Conservative MEPs
-for your region have informed us that they have divided it into areas, with one
-MEP dealing with constituent correspondence per area, so we only show that MEP
-above; you can contact the others here:</small></p>';
+for your region have informed us that they have divided it into areas, with ';
+            if (count($meps_hidden)==1)
+                $text .= 'one or two MEPs';
+            else
+                $text .= 'one MEP';
+            $text .= ' dealing with constituent correspondence per area, so we only show ';
+            if (count($meps_hidden)==1)
+                $text .= 'them';
+            else
+                $text .= 'that MEP';
+            $text .= ' above; you can contact the ';
+            if (count($meps_hidden)==1)
+                $text .= 'other';
+            else
+                $text .= 'others';
+            $text .= ' here:</small></p>';
             $text .= display_reps($meps_hidden, true);
         }
         global $va_council_child_types;
