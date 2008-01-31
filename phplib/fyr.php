@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.52 2008-01-31 15:42:57 matthew Exp $
+ * $Id: fyr.php,v 1.53 2008-01-31 15:45:06 matthew Exp $
  * 
  */
 
@@ -333,7 +333,7 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $wmc) {
-    if (!isset($area_reps[11809]) && !isset($area_reps[11814])) 
+    if (!isset($area_reps[11809]) && !isset($area_reps[11814]) && !isset($area_reps[11811])) 
         return;
 
     if (isset($area_reps[11814])) {
