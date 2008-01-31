@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.53 2008-01-31 15:45:06 matthew Exp $
+ * $Id: fyr.php,v 1.54 2008-01-31 17:12:38 matthew Exp $
  * 
  */
 
@@ -334,7 +334,7 @@ function parse_date($date) {
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $wmc) {
     if (!isset($area_reps[11809]) && !isset($area_reps[11814]) && !isset($area_reps[11811])) 
-        return;
+        return 0;
 
     if (isset($area_reps[11814])) {
         # South West Conservative MEPs
@@ -419,10 +419,15 @@ function euro_check(&$area_reps, $wmc) {
         if (in_array($wmc, $wmcs))
             $keep[$id] = 1;
     }
+
+    $hidden = array();
     foreach ($area_reps[$area_id] as $k => $v) {
-        if (!isset($keep[$v]) && in_array($v, array_keys($meps)))
+        if (!isset($keep[$v]) && in_array($v, array_keys($meps))) {
             unset($area_reps[$area_id][$k]);
+            $hidden[] = $v;
+        }
     }
+    return $hidden;
 }
 
 ?>

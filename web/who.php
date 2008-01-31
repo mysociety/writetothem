@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.92 2007-10-26 13:44:22 matthew Exp $
+ * $Id: who.php,v 1.93 2008-01-31 17:12:38 matthew Exp $
  *
  */
 
@@ -75,8 +75,6 @@ $error = dadem_get_error($area_representatives);
 dadem_check_error($area_representatives);
 debug_timestamp();
 
-euro_check($area_representatives, $wmc);
-
 $all_representatives = array();
 foreach (array_values($area_representatives) as $rr) {
     $all_representatives = array_merge($all_representatives, $rr);
@@ -84,6 +82,8 @@ foreach (array_values($area_representatives) as $rr) {
 $representatives_info = dadem_get_representatives_info($all_representatives);
 dadem_check_error($representatives_info);
 debug_timestamp();
+
+$meps_hidden = euro_check($area_representatives, $wmc);
 
 // For each voting area in order, find all the representatives.  Put
 // descriptive text and form text in an array for the template to
@@ -205,6 +205,8 @@ foreach ($va_display_order as $va_type) {
     } else {
         // Singular
         if ($rep_count > 1) {
+            if ($va_type == 'EUR' && count($meps_hidden))
+                $rep_count += count($meps_hidden);
             $heading = "Your ${va_info['rep_name_long_plural']}";
             $col_blurb = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
@@ -236,6 +238,13 @@ foreach ($va_display_order as $va_type) {
 #            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
 # yellow flash advert
 #            $text .= '</div>';
+        } elseif ($va_type == 'EUR' && count($meps_hidden)) {
+            # XXX Specific to what euro_check currently does!
+            $text .= '<p style="margin-top:2em"><small>The Conservative MEPs
+for your region have informed us that they have divided it into areas, with one
+MEP dealing with constituent correspondence per area, so we only show that MEP
+above; you can contact the others here:</small></p>';
+            $text .= display_reps($meps_hidden, true);
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types)) {
@@ -292,7 +301,7 @@ function write_all_link($va_type, $rep_desc_plural){
     return $a;
 
 }
-function display_reps($representatives) {
+function display_reps($representatives, $small = false) {
     global $representatives_info, $fyr_postcode;
     $rep_list = ''; $photo = 0;
     foreach ($representatives as $rep_specificid) {
@@ -317,6 +326,11 @@ function display_reps($representatives) {
         if (array_key_exists('party', $rep_info))
                        $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
     }
-    return '<ul'.($photo==1?' id="photo"':'').'>' . $rep_list . '</ul>';
+    $out = '<ul';
+    if ($photo==1) $out .= ' id="photo"';
+    if ($small) $out .= ' style="font-size:83%"';
+    $out .= '>';
+    $out .= $rep_list . '</ul>';
+    return $out;
 }
 ?>
