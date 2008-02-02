@@ -7,9 +7,10 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.28 2007-02-07 11:21:44 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.29 2008-02-02 00:01:46 matthew Exp $';
 
 require 5.8.0;
+use strict;
 
 BEGIN {
     use mySociety::Config;
@@ -28,7 +29,15 @@ use FYR::Queue;
 my $req = FCGI::Request();
 my $W = new mySociety::WatchUpdate();
 
-while ($req->Accept() >= 0) {
+# FastCGI signal handling
+my $exit_requested = 0;
+my $handling_request = 0;
+$SIG{TERM} = $SIG{USR1} = sub {
+    $exit_requested = 1;
+    exit(0) unless $handling_request;
+};
+
+while ($handling_request = ($req->Accept() >= 0)) {
     RABX::Server::CGI::dispatch(
             'FYR.Queue.create' => sub {
                 return FYR::Queue::create();
@@ -116,6 +125,8 @@ while ($req->Accept() >= 0) {
             }
           );
     $W->exit_if_changed();
+    $handling_request = 0;
+    last if $exit_requested;
 }
 
 
