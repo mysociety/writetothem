@@ -7,14 +7,14 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.2 2005-01-31 14:03:03 chris Exp $';
+my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.3 2008-02-04 22:50:29 matthew Exp $';
 
 use strict;
 
 require 5.8.0;
 
 use CGI qw(-nosticky);
-use CGI::Fast;
+use mySociety::CGIFast;
 use Geo::IP;
 use Geography::Countries;
 use HTML::Entities;
@@ -24,7 +24,7 @@ use Socket;
 
 my $g = new Geo::IP(GEOIP_STANDARD);
 
-while (my $q = new CGI::Fast()) {
+while (my $q = new mySociety::CGIFast()) {
     STDOUT->autoflush(1);
     my $addr = $q->param('ipaddr');
     print $q->header(),

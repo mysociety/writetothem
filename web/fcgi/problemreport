@@ -7,12 +7,12 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.7 2008-02-02 19:45:53 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.8 2008-02-04 22:50:28 matthew Exp $';
 
 use strict;
 
 use CGI;
-use CGI::Fast;
+use mySociety::CGIFast;
 use HTTP::Request;
 use HTTP::Response;
 use LWP::UserAgent;
@@ -85,16 +85,7 @@ sub submit_problem_to_cvstrac ($) {
     return $res->is_success();
 }
 
-# FastCGI signal handling
-my $exit_requested = 0;
-my $handling_request = 0;
-#$SIG{TERM} = $SIG{USR1} = sub {
-#    $exit_requested = 1;
-#    # exit(0) unless $handling_request;
-#};
-
-while (my $q = new CGI::Fast()) {
-    $handling_request = 1;
+while (my $q = new mySociety::CGIFast()) {
     my %probs;
     if (check_all_params($q, \%probs)) {
         submit_problem_to_cvstrac($q);
@@ -129,7 +120,5 @@ while (my $q = new CGI::Fast()) {
             $q->end_form(),
             $q->end_html();
     }
-    $handling_request = 0;
-    last if $exit_requested;
 }
 
