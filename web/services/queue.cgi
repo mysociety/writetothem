@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.33 2008-02-04 17:44:43 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: queue.cgi,v 1.34 2008-02-04 17:49:30 matthew Exp $';
 
 require 5.8.0;
 use strict;
@@ -17,7 +17,7 @@ BEGIN {
     mySociety::Config::set_file('../../conf/general');
 }
 
-use CGI::Fast;
+use FCGI;
 use RABX;
 
 use mySociety::DaDem;
@@ -26,9 +26,10 @@ use mySociety::WatchUpdate;
 use FYR;
 use FYR::Queue;
 
+my $req = FCGI::Request();
 my $W = new mySociety::WatchUpdate();
 
-while (my $q = new CGI::Fast()) {
+while ($req->Accept() >= 0) {
     RABX::Server::CGI::dispatch(
             'FYR.Queue.create' => sub {
                 return FYR::Queue::create();
