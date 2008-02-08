@@ -14,7 +14,7 @@ mySociety</a>.
     '/lords' => 'Lords',
     '/stats' => 'Statistics',
     '/about-linktous' => 'Link to us',
-    '/about-copyright' => 'Copyright', /* for Affero GPL */
+    '/about-copyright' => 'Copyright', /* for GNU Affero GPL */
 );
 foreach ($links as $uri => $text) {
     $f = '';
