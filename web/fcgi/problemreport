@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w -I../../perllib -I../../../perllib
 #
 # problemreport:
 # Simple problem report, passing data on to CVSTrac.
@@ -7,7 +7,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.8 2008-02-04 22:50:28 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: problemreport,v 1.9 2008-02-11 23:41:55 matthew Exp $';
 
 use strict;
 
