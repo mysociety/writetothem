@@ -24,13 +24,12 @@ respect for their conscientiousness.
 Likewise, we're keen to expose the minority of
 <?=$values['recipient_position_plural']?> who don't seem to give a damn.
 
-Rest assured that we will not store ANY data that could be used to identify
-you. We do not keep a copy of the letter you sent to your
-<?=$values['recipient_position']?>.
+The letter you sent to your <?=$values['recipient_position']?> will be deleted
+from our database within the next two weeks. Our full privacy policy can be read here:
+    http://www.writetothem.com/about-qa#personal
 
 Please do not reply to this mail. If you have a question or comment about the
 site, please send an email to team@writetothem.com
 
 -- the WriteToThem.com team
-
 
