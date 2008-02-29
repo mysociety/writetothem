@@ -39,7 +39,7 @@ if ($values['cobrand_letter_help']) {
     echo '<div id="cobrand_letter_help">', $values['cobrand_letter_help'], '</div>';
 }
 
-if (!OPTION_FYR_REFLECT_EMAILS) { ?>
+if (OPTION_FYR_REFLECT_EMAILS) { ?>
     <p style="text-align: center; color: #ff0000;"><b>Note:</b> This is a test version of the
     site.  Messages will <b>not</b> be delivered to representatives.
     Instead a copy will be sent to you as if you were the
