@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.121 2007-02-05 16:08:07 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.122 2008-03-06 14:19:21 matthew Exp $
  * 
  */
 
@@ -178,7 +178,7 @@ class ADMIN_PAGE_FYR_QUEUE {
                     }
                 }
 
-                if ($message['lastaction'] > 0)
+                if ($message['lastaction'] > 0 && $message['state'] != 'failed_closed')
                     print "<br>" .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
 
                 print "</td>";
