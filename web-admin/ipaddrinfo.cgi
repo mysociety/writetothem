@@ -7,11 +7,16 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.3 2008-02-04 22:50:29 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: ipaddrinfo.cgi,v 1.4 2008-03-06 14:46:27 matthew Exp $';
 
 use strict;
 
 require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../../perllib";
 
 use CGI qw(-nosticky);
 use mySociety::CGIFast;
