@@ -5,7 +5,7 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: stats-response-histo,v 1.4 2008-03-18 17:28:56 dademcron Exp $
+# $Id: stats-response-histo,v 1.5 2008-03-18 17:37:28 francis Exp $
 
 #GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 480,360"
 #EXTENSION=".png"
@@ -22,11 +22,12 @@ read_conf fyr/conf/general
 
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 SOURCEE=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
+SOURCEF=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 GPSCRIPT=/tmp/fyr-signup-rate-graph-script-$RANDOM$RANDOM
 
 fyr/bin/stats-response-histo-out 2005 >$SOURCED
 fyr/bin/stats-response-histo-out 2006 >$SOURCEE
-fyr/bin/stats-response-histo-out 2007 >$SOURCEE
+fyr/bin/stats-response-histo-out 2007 >$SOURCEF
 
 cat >$GPSCRIPT <<END 
     unset border
@@ -54,7 +55,7 @@ cat >$GPSCRIPT <<END
 
     plot "$SOURCED" using 2 with histograms lt 2 title "2005", \
     "$SOURCEE" using 2 with histograms lt 3 title "2006", \
-    "$SOURCEE" using 2 with histograms lt 4 title "2007"
+    "$SOURCEF" using 2 with histograms lt 4 title "2007"
 END
 #echo "gpscript $GPSCRIPT"
 
