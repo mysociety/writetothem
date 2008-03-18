@@ -169,11 +169,11 @@ foreach ($values['types_by_responsiveness'] as $type) {
     if ($type == 'total') {
         #print display_range($value['responded'] / $value['responded_outof']);
         print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
-        print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+        print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     } else {
         #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
         print round(100 * $value['responded_mean'], 0) . "%";
-        print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+        print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     } 
     print "</td>";
     print "<td>";
