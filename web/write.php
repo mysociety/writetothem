@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.129 2008-01-03 23:31:09 matthew Exp $
+ * $Id: write.php,v 1.130 2008-03-18 10:04:18 matthew Exp $
  *
  */
 
@@ -111,15 +111,18 @@ function bad_contact_error_msg($eb_area_info) {
         $via_error = '; or we might only have a central contact for the council, which similarly might not be working';
 
     $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['name'];
-    if ($type_display_name == "the House of Commons")
-        $type_display_name .= " (020 7219 3000)";
+    $type_display_phone = '';
+    if ($type_display_name == "the House of Commons") {
+        $type_display_name = ' the MP, the House of Commons';
+        $type_display_phone = ', 020 7219 3000';
+    }
     $error_msg = "
     Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send
     them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
     full) or incorrect$via_error.
 
     We'd be <em>really</em> grateful if you could <strong>spend five minutes on the website of
-    $type_display_name</strong> (or even the phone), finding out the contact details.
+    $type_display_name</strong> (or even the phone$type_display_phone), finding out the contact details.
     Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
     your representative.
     ";
