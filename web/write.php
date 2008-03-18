@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.130 2008-03-18 10:04:18 matthew Exp $
+ * $Id: write.php,v 1.131 2008-03-18 12:33:54 matthew Exp $
  *
  */
 
@@ -134,21 +134,20 @@ function shame_error_msg($fyr_voting_area, $fyr_representative) {
      * requested not to be contacted */
     global $fyr_postcode;
     if ($fyr_voting_area['type'] == 'WMC') {
-        $url = 'http://www.locata.co.uk/cgi-bin/phpdriver?MIval=hoc_search&postcode=' . urlencode($fyr_postcode);
+        $url = 'http://findyourmp.parliament.uk/hcoi/hcoiSearch.php?postcode=' . urlencode($fyr_postcode);
         $error_msg = <<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name]. Instead you can try contacting them via
+$fyr_voting_area[name]. Instead you can try looking them up on
 <a href="$url">the Parliament website</a>. There you will get a phone number, a
-postal address, and for some MPs a way to contact them by email.
+postal address, and for some MPs a website or way to contact them by email.
 EOF;
 
     } else {
         $error_msg = <<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name]. Please <a href="mailto:team&#64;writetothem.com">email
-us</a> to let us know what you think about this.
+$fyr_voting_area[name].
 EOF;
 
     }
