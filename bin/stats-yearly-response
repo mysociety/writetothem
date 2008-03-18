@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.20 2007-08-02 11:45:00 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.21 2008-03-18 17:28:56 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -84,9 +84,12 @@ print STDERR "checking contradictory responses... ";
 my $stcon = dbh()->prepare("select * from (select message_id, question_id, count(*) as c from
 questionnaire_answer group by message_id, question_id) as foo where c > 1");
 $stcon->execute();
+my $contradict = 0;
 while (my ($message_id, $question_id, $c) = $stcon->fetchrow_array()) {
-    die "\nmessage $message_id has contradictory responses to question $question_id, please fix (maybe by going to admin interface and doing 'No Questionnaire' to remove the responses)\n";
+    warn "\nmessage $message_id has contradictory responses to question $question_id, please fix (maybe by going to admin interface and doing 'No Questionnaire' to remove the responses)\n";
+    $contradict = 1;
 }
+exit if $contradict;
 print STDERR "done\n";
  
 ############################################################################
