@@ -33,99 +33,159 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 <p id="zeitgeist_nav"><strong>Summary</strong> | <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></p>
 
 <? if ($values['year'] == '2005') { ?>
-<p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
-table of MP responsiveness data, measuring
-the proportion of users who said that they had heard something back
-from their MP after they had written to them.</p>
-<p>In 2005 <a href="http://www.mysociety.org/">mySociety</a> held off publishing an updated version of this data
-because we were busy totally rebuilding FaxYourMP as <a href="/">WriteToThem</a>,
-adding all the UK's 20,000+ other elected representatives, such as
-councillors and MSPs.</p>
-<p>We are now publishing this data to celebrate WriteToThem's first
-birthday, and to fulfil our parent charity's registered objects &mdash; to
-conduct research into the interaction between elected bodies and the
-Internet.</p>
-<h3>Messages to MPs during 2005</h3>
-<map name="imap">
-<area shape="rect" coords="172,66,250,86" href="http://www.feedmebetter.com/getinvolved/lobbymp.php">
-<area shape="rect" coords="404,10,424,130" href="http://www.owos.info/how_you_can_help/contact_MP.php">
-<area shape="rect" coords="522,140,562,160" href="http://www.no2id.net/">
-<area shape="rect" coords="622,5,718,25" href="http://www.animalsasia.org/">
-</map>
-<p align="center"><img border="0" src="/stats/signups-2005-WMC.png" alt="The number of messages sent to MPs via WriteToThem varied throughout the year. Peaks included the Jamie Oliver campaign in March, Our World Our Say at the end of June, and animalsasia.org in November" usemap="#imap"></p>
-<p align="center"><strong><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></strong></p>
-<p><strong>Note:</strong> During the period up to a General Election there are
-no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
-MPs on 14th April, enabling it again a week after the election on 12th May.</p>
+    <p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
+    table of MP responsiveness data, measuring
+    the proportion of users who said that they had heard something back
+    from their MP after they had written to them.</p>
+    <p>In 2005 <a href="http://www.mysociety.org/">mySociety</a> held off publishing an updated version of this data
+    because we were busy totally rebuilding FaxYourMP as <a href="/">WriteToThem</a>,
+    adding all the UK's 20,000+ other elected representatives, such as
+    councillors and MSPs.</p>
+    <p>We are now publishing this data to celebrate WriteToThem's first
+    birthday, and to fulfil our parent charity's registered objects &mdash; to
+    conduct research into the interaction between elected bodies and the
+    Internet.</p>
+    <h3>Messages to MPs during 2005</h3>
+    <map name="imap">
+    <area shape="rect" coords="172,66,250,86" href="http://www.feedmebetter.com/getinvolved/lobbymp.php">
+    <area shape="rect" coords="404,10,424,130" href="http://www.owos.info/how_you_can_help/contact_MP.php">
+    <area shape="rect" coords="522,140,562,160" href="http://www.no2id.net/">
+    <area shape="rect" coords="622,5,718,25" href="http://www.animalsasia.org/">
+    </map>
+    <p align="center"><img border="0" src="/stats/signups-2005-WMC.png" alt="The number of messages sent to MPs via WriteToThem varied throughout the year. Peaks included the Jamie Oliver campaign in March, Our World Our Say at the end of June, and animalsasia.org in November" usemap="#imap"></p>
+    <p align="center"><strong><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></strong></p>
+    <p><strong>Note:</strong> During the period up to a General Election there are
+    no MPs, by electoral law.  We disabled WriteToThem's facility for writing to
+    MPs on 14th April, enabling it again a week after the election on 12th May.</p>
+<? } else { ?>
+    <p>WriteToThem sent a total of
+    <strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
+    messages to elected representatives (and Lords) in the year 2006. This page contains
+    some facts and figures about those messages. You can find information about
+    your MP in the <a href="/stats/<?=$values['year']?>/mps">MP
+    Responsiveness League Table</a>.
 <? } ?>
 
+
 <? if ($values['year'] == '2006') { ?>
-<p>WriteToThem sent a total of
-<strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
-messages to elected representatives (and Lords) in the year 2006. This page contains
-some facts and figures about those messages. You can find information about
-your MP in the <a href="/stats/<?=$values['year']?>/mps">MP
-Responsiveness League Table</a>.
+    <p align="center">
+    <a href="#referrers">What do people write letters about?</a>
+    <br><a href="#responsehistogram">Did MPs do better this year or last year?</a>
+    <br><a href="#deprivation">Do only the better off use WriteToThem?</a>
+    <br><a href="#electedbodies">Which elected body has the most responsive members?</a>
+    <br><a href="#parties">Which party has the most responsive MPs?</a>
+    </p>
 
-<p align="center">
-<a href="#referrers">What do people write letters about?</a>
-<br><a href="#responsehistogram">Did MPs do better this year or last year?</a>
-<br><a href="#deprivation">Do only the better off use WriteToThem?</a>
-<br><a href="#electedbodies">Which elected body has the most responsive members?</a>
-<br><a href="#parties">Which party has the most responsive MPs?</a>
+    <h3><a name="referrers">What do people write letters about?</a></h3>
 
-<h3><a name="referrers">What do people write letters about?</a></h3>
+    <p>We don't look at your messages (see our <a href="/about-qa#personal">privacy
+    policy</a> for details), so we don't know what you write about. However, we do
+    run standard web statistics software, so we know which sites people click
+    through to WriteToThem from. Here is the top campaign website which linked to
+    WriteToThem in each month.
 
-<p>We don't look at your messages (see our <a href="/about-qa#personal">privacy
-policy</a> for details), so we don't know what you write about. However, we do
-run standard web statistics software, so we know which sites people click
-through to WriteToThem from. Here is the top campaign website which linked to
-WriteToThem in each month.
+    <table class="zeitgeist">
+    <tr><th>Month in 2006</th><th>Top campaign site linking to WriteToThem</th>
+    <tr><td>January</td><td><a href="http://smokefree.ash.positive-dedicated.net/action.html">Smokefree ACTION</a></td>
+    <tr class="a"><td>February</td><td><a href="http://www.natfhe.org.uk">National Association of Teachers in Further and Higher Education</a></td>
+    <tr><td>March</td><td><a href="http://www.saveparliament.org.uk/index.php">Save Parliament</a></td>
+    <tr class="a"><td>April</td><td><a href="http://www.pressureworks.org/">Pressureworks (Christian Aid)</a></td>
+    <tr><td>May</td><td><a href="http://forums.moneysavingexpert.com/">Money Saving Expert forums</a></td>
+    <tr class="a"><td>June</td><td><a href="http://www.pistonheads.com/news/default.asp">PistonHeads &ndash; Speed Matters</a></td>
+    <tr><td>July</td><td><a href="http://www.voice4sportsw.org/site/">Voice4SportsSW</a></td>
+    <tr class="a"><td>August</td><td><a href="http://www.savethechildren.org.uk/">Save the Children (ceasefire day)</a></td>
+    <tr><td>September</td><td><a href="http://www.traidcraftinteractive.com/news.php">Traidcraft InterActive</a></td>
+    <tr class="a"><td>October</td><td><a href="http://www.mike-stevens.co.uk/defracuts/what-to-do/letters.htm">Save our Waterways</a></td>
+    <tr><td>November</td><td><a href="http://www.immigrationboards.com/">Immigrationboards.com</a></td>
+    <tr class="a"><td>December</td><td><a href="http://www.antislavery.org/2007/actionmp.html">anti-slavery</a></td>
+    </table>
 
-<table class="zeitgeist">
-<tr><th>Month in 2006</th><th>Top campaign site linking to WriteToThem</th>
-<tr><td>January</td><td><a href="http://smokefree.ash.positive-dedicated.net/action.html">Smokefree ACTION</a></td>
-<tr class="a"><td>February</td><td><a href="http://www.natfhe.org.uk">National Association of Teachers in Further and Higher Education</a></td>
-<tr><td>March</td><td><a href="http://www.saveparliament.org.uk/index.php">Save Parliament</a></td>
-<tr class="a"><td>April</td><td><a href="http://www.pressureworks.org/">Pressureworks (Christian Aid)</a></td>
-<tr><td>May</td><td><a href="http://forums.moneysavingexpert.com/">Money Saving Expert forums</a></td>
-<tr class="a"><td>June</td><td><a href="http://www.pistonheads.com/news/default.asp">PistonHeads &ndash; Speed Matters</a></td>
-<tr><td>July</td><td><a href="http://www.voice4sportsw.org/site/">Voice4SportsSW</a></td>
-<tr class="a"><td>August</td><td><a href="http://www.savethechildren.org.uk/">Save the Children (ceasefire day)</a></td>
-<tr><td>September</td><td><a href="http://www.traidcraftinteractive.com/news.php">Traidcraft InterActive</a></td>
-<tr class="a"><td>October</td><td><a href="http://www.mike-stevens.co.uk/defracuts/what-to-do/letters.htm">Save our Waterways</a></td>
-<tr><td>November</td><td><a href="http://www.immigrationboards.com/">Immigrationboards.com</a></td>
-<tr class="a"><td>December</td><td><a href="http://www.antislavery.org/2007/actionmp.html">anti-slavery</a></td>
-</table>
+    <p><small>Where a site was top for more than one month, it has been excluded
+    from the later months for variety. Non-campaigning sites, such as search
+    engines, directories, TheyWorkForYou, Public Whip, and news stories about mySociety, have
+    been excluded from this table. Most of the campaigns were short term, and their specific
+    page no longer works, so we have instead linked to the top level of the campaigning site.
+    </small>
 
-<p><small>Where a site was top for more than one month, it has been excluded
-from the later months for variety. Non-campaigning sites, such as search
-engines, directories, TheyWorkForYou, Public Whip, and news stories about mySociety, have
-been excluded from this table. Most of the campaigns were short term, and their specific
-page no longer works, so we have instead linked to the top level of the campaigning site.
-</small>
+    <h3><a name="responsehistogram">Did MPs do better this year or last year?</a></h3>
 
-<h3><a name="responsehistogram">Did MPs do better this year or last year?</a></h3>
+    <p>Overall, according to our users' survey responses, MPs were 2% less
+    responsive to constituents' messages sent via WriteToThem in 2006 compared to in
+    2005. This is partly because of a sharp drop in the number of MPs getting those
+    near-perfect scores of 90% or higher responsiveness. On the other hand,
+    far fewer MPs have woeful response rates less than 20%.
+    More details in the full <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a>.</p>
 
-<p>Overall, according to our users' survey responses, MPs were 2% less
-responsive to constituents' messages sent via WriteToThem in 2006 compared to in
-2005. This is partly because of a sharp drop in the number of MPs getting those
-near-perfect scores of 90% or higher responsiveness. On the other hand,
-far fewer MPs have woeful response rates less than 20%.
-More details in the full <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a>.</p>
+    <p align="center"><img border="0" src="/stats/response-histo-2006-WMC.png" alt=""></p>
 
-<p align="center"><img border="0" src="/stats/response-histo-2006-WMC.png" alt=""></p>
+    <h3><a name="deprivation">Do only the better off use WriteToThem?</a></h3>
 
-<h3><a name="deprivation">Do only the better off use WriteToThem?</a></h3>
+    <p>Sometimes people have told us that websites like WriteToThem only help
+    people who are already better off in society, because they have better access
+    to computers.  One of our volunteers, Sam Smith, has tested this and found that
+    people from deprived areas use WriteToThem as much or more than people
+    from better off areas. You can read his full paper on the subject here. </p>
 
-<p>Sometimes people have told us that websites like WriteToThem only help
-people who are already better off in society, because they have better access
-to computers.  One of our volunteers, Sam Smith, has tested this and found that
-people from deprived areas use WriteToThem as much or more than people
-from better off areas. You can read his full paper on the subject here. </p>
+    <p align="center"><a href="/stats/deprivation-samsmith-2006.pdf">Deprivation Measure of Users of WriteToThem.com in England</a>
+    (PDF) - Sam Smith, April 2007 
 
-<p align="center"><a href="/stats/deprivation-samsmith-2006.pdf">Deprivation Measure of Users of WriteToThem.com in England</a>
-(PDF) - Sam Smith, April 2007 
+<? } ?>
+
+
+<? if ($values['year'] == '2007') { ?>
+    <p align="center">
+    <a href="#referrers">What do people write letters about?</a>
+    <br><a href="#electedbodies">Which elected body has the most responsive members?</a>
+    <br><a href="#parties">Which party has the most responsive MPs?</a>
+    </p>
+
+    <h3><a name="referrers">What do people write letters about?</a></h3>
+
+    <p>We don't look at your messages (see our <a href="/about-qa#personal">privacy
+    policy</a> for details), so we don't know what you write about. However, we do
+    run standard web statistics software, so we know which sites people click
+    through to WriteToThem from. Here is the top campaign website which linked to
+    WriteToThem in each month.
+
+    <table class="zeitgeist">
+    <tr><th>Month in 2007</th><th>Top campaign site linking to WriteToThem</th>
+    <tr>
+    <td>January</td><td><a href="http://www.everyinvestor.co.uk/">everyinvestor.co.uk</a> ("independent financial news")</td>
+    <tr class="a">
+    <td>February</td><td><a href="http://www.animalaid.org.uk/h/f/ACTIVE/writetothem_redirector/">Animal Aid</a> &dagger; ("the UK's largest animal rights group")</td>
+    <tr>
+    <td>March</td><td><a href="http://www.ourworldoursay.org/trident_replacement_action.php">Our World Our Say</a> (on Trident replacement)</td>
+    <tr class="a">
+    <td>April</td><td><a href="http://www.ctc.org.uk/DesktopDefault.aspx">CTC</a> ("the UK’s National Cyclists’ Organisation")</td>
+    <tr>
+    <td>May</td><td><a href="http://www.ourcampaign.org.uk/foi">Liberal Democrats</a> (on Freedom of Information and Parliament)</td>
+    <tr class="a">
+    <td>June</td><td><a href="http://www.oxfam.org.uk/get_involved/campaign/index.html">Oxfam</a> (an international development NGO)</td>
+    <tr>
+    <td>July</td><td><a href="http://www.republic.org.uk/">Republic</a> ("the Campaign for an Elected Head of State")</td>
+    <tr class="a">
+    <td>August</td><td><a href="http://getactive.peta.org/PETA/home.html">People for the Ethical Treatment of Animals</a> (on foie gras)</td>
+    <tr>
+    <td>September &Dagger;</td><td><a href="http://www.iwantareferendum.com/involved.aspx">I want a referendum</a> (on "EU's constitutional treaty")</td>
+    <tr class="a">
+    <td>October</td><td><a href="http://www.radiohead.com/deadairspace/">Radiohead</a> (an English alternative rock band)</td>
+    <tr>
+    <td>November</td><td><a href="http://www.unsubscribe-me.org/actionofthemonth.php?">unsubscribe-me</a> (an Amnesty International campaign)</td>
+    <tr class="a">
+    <td>December</td><td><a href="http://www.no2id.net/">NO2ID</a> ("Stop ID cards and the database state")</td>
+    </table>
+
+    <p>&dagger; AnimalAid use a special <a href="http://animalaid.writetothem.com">branded version of WriteToThem</a>. If you would like one, or customised versions of any of mySociety's sites, please email <a href="mailto:karl@mysociety.org">karl@mysociety.org</a>.
+
+    <p>&Dagger; In September we also had a lot of traffic from easyJet, see "<a href="http://www.theregister.co.uk/2007/09/19/easyjet_spam_writetothem/">easyJet's cheapo astroturfing campaign downs charity servers</a>". However, they were links from an email, which web statistics software can't track the source of, so they don't appear in this table.
+
+    <p><small>Where a site was top for more than one month, it has been excluded
+    from the later months for variety. Non-campaigning sites, such as search
+    engines, directories, TheyWorkForYou, Public Whip, and news stories about mySociety, have
+    been excluded from this table. Most of the campaigns were short term, and their specific
+    page no longer works, so we have instead linked to the top level of the campaigning site.
+    </small></p>
+
 
 <? } ?>
 
@@ -218,7 +278,7 @@ foreach ($values['parties_by_responsiveness'] as $party) {
     print "<td>";
     #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
     print fuzzy_response_description($value['responded_mean']);
-    print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+    print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     print "</td>";
     print "</tr>";
 }
@@ -262,7 +322,8 @@ time.</p>
 
 <ul>
 <li><a href="http://www.mysociety.org/volunteertasks">Volunteer to help build sites like this</a></li>
-<li><a href="http://www.hearfromyourmp.com/">Sign up to HearFromYourMP.com</a></li>
+<li><a href="https://secure.mysociety.org/donate/">Make a donation to mySociety</a> (we're run by a charity!)</li>
+<li><a href="http://www.hearfromyourmp.com/">Form a long term relationship with your MP</a> (using HearFromYourMP.com)</li>
 </ul>
 
 <?  template_draw('footer', $values); ?>
