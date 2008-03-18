@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.18 2006-08-15 17:31:29 francis Exp $
+ * $Id: admin_reminder_mail,v 1.19 2008-03-18 17:06:21 dademcron Exp $
  *
  */
 
@@ -26,7 +26,7 @@ function error($str) {
 function verbose($str) {
     global $verbose;
     if ($verbose)
-        fwrite(STDERR, "admin_reminder_mail: $str\n");
+        fwrite(STDERR, date('r') . " admin_reminder_mail: $str\n");
 }
 
 $short_opts = '';
