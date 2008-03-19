@@ -135,6 +135,7 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 <? if ($values['year'] == '2007') { ?>
     <p align="center">
     <a href="#referrers">What do people write letters about?</a>
+    <br><a href="#responsehistogram">Did MPs do better this year or last year?</a>
     <br><a href="#electedbodies">Which elected body has the most responsive members?</a>
     <br><a href="#parties">Which party has the most responsive MPs?</a>
     </p>
@@ -185,6 +186,19 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
     been excluded from this table. Most of the campaigns were short term, and their specific
     page no longer works, so we have instead linked to the top level of the campaigning site.
     </small></p>
+
+    <h3><a name="responsehistogram">Did MPs do better this year or last year?</a></h3>
+
+    <p>Overall, according to our users' survey responses, MPs were 1% less
+    responsive to constituents' messages sent via WriteToThem in 2007 compared to in
+    2006. Once again MPs have moved to the middle - there are slightly fewer MPs with dire
+    response rates (below 20%) and also fewer with tip top scores
+    (above 80%). Unfortunately, the now fatter bump in the middle has
+    shifted leftwards a bit, meaning more MPs are scoring below 50% than last
+    year.
+    More details in the full <a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a>.</p>
+
+    <p align="center"><img border="0" src="/stats/response-histo-<?=$values['year']?>-WMC.png" alt=""></p>
 
 
 <? } ?>
