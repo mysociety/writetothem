@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: wtt.css,v 1.55 2008-02-29 11:22:57 matthew Exp $
+ * $Id: wtt.css,v 1.56 2008-03-19 02:51:26 francis Exp $
  * 
  */
 
@@ -397,6 +397,9 @@ table.zeitgeist .a, table.zeitgeist th {
 }
 table.zeitgeist td.c {
     text-align: center;
+}
+table.zeitgeist th .nostrong {
+    font-weight: normal;
 }
 #year_nav {
    text-align: center;
