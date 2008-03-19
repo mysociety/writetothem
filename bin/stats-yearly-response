@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.21 2008-03-18 17:28:56 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.22 2008-03-19 13:20:38 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -59,10 +59,20 @@ my $output_format = shift;
 # Output formats are:
 #    PHP - for fyr/phplib/questionnaire_report_2005_WMC.php and the like
 #    debug - for debugging, only prints 'unknown' MPs
+#    thorough - as debug, but flags more MPs as needing manual checking
 #    mapcsv - for plotting responsivness/activity maps of country
-die "enter PHP, debug or mapcsv for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug' && $output_format ne 'mapcsv');
+die "enter PHP, debug, thorough or mapcsv for output format" if !$output_format || ($output_format ne 'PHP' && $output_format ne 'debug' && $output_format ne 'thorough' && $output_format ne 'mapcsv');
 my $area_type = 'WMC';
 my $debug_fewer_reps = undef; # undef or 100;# for testing, run with fewer reps than all
+
+our $valid_interval_low = 0;
+our $valid_interval_high = 2;
+if ($output_format eq 'thorough') {
+    # XXX change it to this to catch a few more MPs to check if you really want them
+    $::valid_interval_low = 2;
+    $::valid_interval_high = 10;
+    $output_format = 'debug'
+}
 
 ############################################################################
 # Fix duplicate questionnaire data
@@ -504,9 +514,7 @@ sub work_out_rep_category($) {
     foreach my $interval (@ints) {
         my $length = $interval->{'to'} - $interval->{'from'};
 
-        if ($interval->{'r'}->[0] == 0 && $interval->{'r'}->[1] >= 2) { # got no positive q responses, out of at least 2
-# XXX change it to this to catch a few more MPs to check if you really want them
-#        if ($interval->{'r'}->[0] <= 2 && $interval->{'r'}->[1] >= 10) {
+        if ($interval->{'r'}->[0] <= $::valid_interval_low && $interval->{'r'}->[1] >= $valid_interval_high) { # defaults to, got no positive q responses, out of at least 2, can be more aggressive with option
             if ($interval->{'valid_method'}) { 
                 $intervals_with_no_q_response_and_validmethod++; 
                 $no_q_response_and_validmethod_time += $length;
@@ -749,6 +757,10 @@ foreach my $person_id (keys %$reps_by_person) {
             $person_id eq "uk.org.publicwhip/person/10294" || # Kim Howells, suspect fax
             $person_id eq "uk.org.publicwhip/person/11784"    # Paul Rowne, suspect cix address
             ) { 
+            $category = "badcontact";
+        }
+    } elsif ($year == 2007) {
+        if ($person_id eq "uk.org.publicwhip/person/10496") { # Bill Rammell, we had bad fax for half the year
             $category = "badcontact";
         }
     }
