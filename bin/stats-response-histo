@@ -5,13 +5,13 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: stats-response-histo,v 1.5 2008-03-18 17:37:28 francis Exp $
+# $Id: stats-response-histo,v 1.6 2008-03-19 13:47:26 francis Exp $
 
 #GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 480,360"
 #EXTENSION=".png"
 #GPLOT_OUTPUT="set terminal fig color big thickness 1"
 #EXTENSION=".fig"
-GPLOT_OUTPUT="set terminal svg size 480 360"
+GPLOT_OUTPUT="set terminal svg size 510 360"
 EXTENSION=".svg"
 
 cd `dirname $0`
@@ -53,9 +53,9 @@ cat >$GPSCRIPT <<END
 
     n = 0
 
-    plot "$SOURCED" using 2 with histograms lt 2 title "2005", \
-    "$SOURCEE" using 2 with histograms lt 3 title "2006", \
-    "$SOURCEF" using 2 with histograms lt 4 title "2007"
+    plot "$SOURCED" using 2 with histograms lt rgb "#330066" title "2005", \
+    "$SOURCEE" using 2 with histograms lt rgb "#FFE92C" title "2006", \
+    "$SOURCEF" using 2 with histograms lt rgb "#0000CC" title "2007"
 END
 #echo "gpscript $GPSCRIPT"
 
