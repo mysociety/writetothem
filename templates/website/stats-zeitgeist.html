@@ -60,7 +60,7 @@ function display_range($mean, $low=null, $high=null, $display_type = 0) {
 <? } else { ?>
     <p>WriteToThem sent a total of
     <strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
-    messages to elected representatives (and Lords) in the year 2006. This page contains
+    messages to elected representatives (and Lords) in the year <?=$values['year']?>. This page contains
     some facts and figures about those messages. You can find information about
     your MP in the <a href="/stats/<?=$values['year']?>/mps">MP
     Responsiveness League Table</a>.
