@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.57 2008-03-27 17:21:34 matthew Exp $
+ * $Id: index.php,v 1.58 2008-03-27 17:22:12 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -73,7 +73,7 @@ if ($pc) {
 	       are all the same, though they are thousands of miles apart.... */
             'ASCN1ZZ' => 'sthelena',
 	    'BBND1ZZ' => 'biot',
-            'BIQQ1ZZ' => 'antarctica'
+            'BIQQ1ZZ' => 'antarctica',
             'FIQQ1ZZ' => 'falklands',
 	    'PCRN1ZZ' => 'pitcairn',
             'SIQQ1ZZ' => 'southgeorgia',
