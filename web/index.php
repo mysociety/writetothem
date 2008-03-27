@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.56 2007-10-26 13:44:22 matthew Exp $
+ * $Id: index.php,v 1.57 2008-03-27 17:21:34 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -69,21 +69,25 @@ if ($pc) {
     $pc2 = preg_replace('/\\s+/', '', strtoupper($pc));
     $pc22 = substr($pc2, 0, 2); $pc23 = substr($pc2, 0, 3);
     $otmap = array(
+            /* For our purposes, St Helena, Ascension, and Tristan da Cunha
+	       are all the same, though they are thousands of miles apart.... */
+            'ASCN1ZZ' => 'sthelena',
+	    'BBND1ZZ' => 'biot',
+            'BIQQ1ZZ' => 'antarctica'
             'FIQQ1ZZ' => 'falklands',
+	    'PCRN1ZZ' => 'pitcairn',
             'SIQQ1ZZ' => 'southgeorgia',
             'STHL1ZZ' => 'sthelena',
-            /* For our purposes, St Helena and Ascension are the same, though
-             * they are thousands of miles apart.... */
-            'ASCN1ZZ' => 'sthelena',
-            'BIQQ1ZZ' => 'antarctica'
+	    'TDCU1ZZ' => 'sthelena',
+	    'TKCA1ZZ' => 'turksandcaicos',
         );
     $ot = null;
     if (array_key_exists($pc2, $otmap)) {
         $ot = $otmap[$pc2];
     } elseif ($pc22 == 'JE') {
-        $ot = 'jersey';
+        $ot = 'channel';
     } elseif ($pc22 == 'GY') {
-        $ot = 'guernsey';
+        $ot = 'channel';
     } elseif ($pc22 == 'IM') {
         $ot = 'isleofman';
     }
