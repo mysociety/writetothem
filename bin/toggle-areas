@@ -9,7 +9,7 @@
 # Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.2 2007-05-03 13:01:42 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.3 2008-04-03 15:12:26 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -30,11 +30,13 @@ use mySociety::MaPit;
 my $type = '';
 my $country = '';
 my $exceptions = '';
+my $only = '';
 my $status = '';
 unless (GetOptions(
         'type=s' => \$type,
 	'country:s' => \$country,
 	'exceptions:s' => \$exceptions,
+	'only:s' => \$only,
 	'status=s' => \$status)
     && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
     && $status =~ /^(pending|recent|none)$/) {
@@ -62,6 +64,9 @@ EOF
 
 my %exceptions = map { $_ => 1 } split /,/, $exceptions;
 $exceptions =~ s/,/|/g;
+my %only = map { $_ => 1 } split /,/, $only;
+$only =~ s/,/|/g;
+
 $status .= '_election' unless $status eq 'none';
 
 my $ids = mySociety::MaPit::get_areas_by_type($type);
@@ -70,7 +75,8 @@ my $count = 0;
 foreach (@$ids) {
     next if $exceptions{$_};
     my $name = $areas_info->{$_}->{name};
-    next if $exceptions{$name} or $name =~ /$exceptions/;
+    next if $exceptions && ($exceptions{$name} || $name =~ /$exceptions/);
+    next if $only && !$only{$_} && !$only{$name} && $name !~ /$only/;
     next if $type eq 'UTA' && $country && $country ne $areas_info->{$_}->{country};
     my $curr_status = mySociety::DaDem::get_area_status($_);
     next if $curr_status eq $status;
