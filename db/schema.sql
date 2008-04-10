@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.53 2007-05-11 10:08:21 matthew Exp $
+-- $Id: schema.sql,v 1.54 2008-04-10 16:08:51 francis Exp $
 --
 
 set client_min_messages to error;
@@ -170,7 +170,7 @@ create table message_extradata (
 
 create index message_extradata_message_id_idx
     on message_extradata(message_id);
-create index message_extradata_message_id_name_idx
+create unique index message_extradata_message_id_name_idx
     on message_extradata(message_id, name);
 
 -- message_log
