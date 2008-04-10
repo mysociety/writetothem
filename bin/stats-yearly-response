@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.22 2008-03-19 13:20:38 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.23 2008-04-10 12:28:21 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -760,7 +760,8 @@ foreach my $person_id (keys %$reps_by_person) {
             $category = "badcontact";
         }
     } elsif ($year == 2007) {
-        if ($person_id eq "uk.org.publicwhip/person/10496") { # Bill Rammell, we had bad fax for half the year
+        if ($person_id eq "uk.org.publicwhip/person/10496" || # Bill Rammell, we had bad fax for half the year
+            $person_id eq "uk.org.publicwhip/person/10095" ) { # Bill Cash, we had maybe dodgy wanadoo email
             $category = "badcontact";
         }
     }
