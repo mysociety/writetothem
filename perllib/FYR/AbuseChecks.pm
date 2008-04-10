@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.61 2007-09-24 23:01:00 matthew Exp $
+# $Id: AbuseChecks.pm,v 1.62 2008-04-10 11:24:36 francis Exp $
 #
 
 package FYR::AbuseChecks;
@@ -146,7 +146,7 @@ sub get_similar_messages ($;$) {
              and message_id <> ?
              and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
-             and state not in ('error', 'failed', 'failed_closed')
+             and state not in ('error', 'failed', 'failed_closed', 'finished')
         #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
     my $thr = mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD');
