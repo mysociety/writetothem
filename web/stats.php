@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.28 2007-06-11 15:26:16 francis Exp $
+ * $Id: stats.php,v 1.29 2008-04-10 15:23:40 francis Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -17,7 +17,7 @@ require_once '../../phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2006';
+if (!$year) $year = '2007';
 #if (!get_http_var('really'))
 #    $year = '2005'; # XXX temp
 $year = intval($year);
@@ -31,7 +31,7 @@ $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
 
-$years = array('2005', '2006');
+$years = array('2005', '2006', '2007');
 $got_year = 0;
 $year_bar_array = array();
 foreach ($years as $y) {
