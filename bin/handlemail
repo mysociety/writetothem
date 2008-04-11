@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.37 2007-08-02 11:45:00 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.38 2008-04-11 22:33:15 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -21,13 +21,7 @@ use FindBin;
 use lib "$FindBin::Bin/../perllib";
 use lib "$FindBin::Bin/../../perllib";
 
-use IO::Handle;
-use Mail::Address;
-use Mail::Internet;
-use Mail::Header;
 use MIME::Entity;
-use MIME::Parser;
-use MIME::Words;
 use POSIX qw(strftime);
 
 use mySociety::Config;
@@ -37,6 +31,7 @@ BEGIN {
 use mySociety::DBHandle qw(dbh);
 use mySociety::SystemMisc qw(print_log);
 use mySociety::EmailUtil;
+use mySociety::HandleMail;
 
 # Don't print diagnostics to standard error, as this can result in bounce
 # messages being generated (only in response to non-bounce input, obviously).
@@ -60,205 +55,117 @@ sub logmsg_handler ($$$$$) {
 
 FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
-my @lines = ( );
+my %data = mySociety::HandleMail::get_message();
+my @lines = @$data{lines};
 
-my $is_bounce_message = 0;
-
-while (defined($_ = STDIN->getline())) {
-    chomp();
-    # Skip any From_ line-- we don't need it. BUT, on some systems (e.g.
-    # FreeBSD with default exim config), there will be no Return-Path in a
-    # message even at final delivery time. So use the insanely ugly
-    # "From MAILER-DAEMON ..." thing to distinguish bounces, if it is present.
-    if (@lines == 0 and m#^From #) {
-        $is_bounce_message = 1 if (m#^From MAILER-DAEMON #);
-    } else {
-        push(@lines, $_);
-    }
-}
-
-if (STDIN->error()) {
-    # Failed to read it; should defer.
-    print_log('err', "read message from standard input: $!; deferring");
-    exit(75);   # EX_TEMPFAIL
-}
-
-my $m = new Mail::Internet([@lines]);
-if (!defined($m)) {
-    # Unable to parse message; should drop.
-    print_log('err', "unable to parse message from standard input; discarding");
-    exit(1);
-}
-
-if (!$is_bounce_message) {
-    # RFC2822: 'The "Return-Path:" header field contains a pair of angle
-    # brackets that enclose an optional addr-spec.'
-    my $return_path = $m->head()->get("Return-Path");
-
-    if (!defined($return_path)) {
-        # No Return-Path; we're screwed.
-        print_log('err', "message had no Return-Path and was not a bounce according to any From_ line; discarding");
-        print_log('err', "configure your MDA to add a Return-Path to messages at delivery time");
-        exit(0);
-    } elsif ($return_path =~ m#<>#) {
-        $is_bounce_message = 1;
-    } else {
-        # This is not a bounce message. We pass it on to contact email address
-        # (e.g. team@writetothem.com), and also send a patronising response
-        # about clicking the link.
-        print_log('info', "message was not a bounce message");
+if (!$data{is_bounce_message}) {
+    # This is not a bounce message. We pass it on to contact email address
+    # (e.g. team@writetothem.com), and also send a patronising response
+    # about clicking the link.
+    #print_log('info', "message was not a bounce message");
         
-        # See whether the email contains one of our URLs.
-        my ($first_url, $confirm_url, $yes_url, $no_url);
-        foreach (@lines) {
-            my $base_url = mySociety::Config::get('BASE_URL');
-            if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
-                my $url = $1;
-                $first_url = $url if !$first_url;
-                $confirm_url = $url if ($url =~ m#/C/#);
-                $yes_url = $url if ($url =~ m#/Y/#);
-                $no_url = $url if ($url =~ m#/N/#);
-            }
+    # See whether the email contains one of our URLs.
+    my ($first_url, $confirm_url, $yes_url, $no_url);
+    foreach (@lines) {
+        my $base_url = mySociety::Config::get('BASE_URL');
+        if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
+            my $url = $1;
+            $first_url = $url if !$first_url;
+            $confirm_url = $url if ($url =~ m#/C/#);
+            $yes_url = $url if ($url =~ m#/Y/#);
+            $no_url = $url if ($url =~ m#/N/#);
         }
+    }
 
-        my $forward = 0;
-        if ($first_url) {
-            print_log('info', "mail contains first URL $first_url");
-            my $h = dbh();
-            local $h->{HandleError};
-            if (!$h->do('
-                        insert into confirmation_mail_autoreply
-                                (url, whenreceived)
-                        values (?, ?)',
-                        {}, $first_url, time())) {
-                # Have already sent an autoreply to this one, so forward instead
-                print_log('info', "have already sent one autoresponse for this confirm/questionnaire URL");
-                $forward = 1;
-            }
-        } else {
-            # No URL, so just forward rather than autoreply
+    my $forward = 0;
+    if ($first_url) {
+        print_log('info', "mail contains first URL $first_url");
+        my $h = dbh();
+        local $h->{HandleError};
+        if (!$h->do('
+                    insert into confirmation_mail_autoreply
+                            (url, whenreceived)
+                    values (?, ?)',
+                    {}, $first_url, time())) {
+            # Have already sent an autoreply to this one, so forward instead
+            print_log('info', "have already sent one autoresponse for this confirm/questionnaire URL");
             $forward = 1;
         }
+    } else {
+        # No URL, so just forward rather than autoreply
+        $forward = 1;
+    }
 
-        if ($forward) {
-            # Forward this on to team@writetothem.com
-            if (mySociety::EmailUtil::EMAIL_SUCCESS
-                    != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $return_path, mySociety::Config::get('CONTACT_EMAIL'))) {
-                print_log('err', 'unable to forward non-bounce to contact email address; deferring');
-                exit(75);
-            }
-
-            exit(0);
-        }
-
-        # OK, we drop the message here, and send patronising reply instead
-        print_log('info', "sending patronising reply");
-
-        # Now we need to construct some text to send to them.
-        my $template = 'reply-autoresponse';
-        my $vv;
-        if ($confirm_url) {
-            $template = 'reply-autoresponse-confirm';
-            $vv->{'confirm_url'} = $confirm_url;
-        } elsif ($yes_url && $no_url) {
-            $template = 'reply-autoresponse-questionnaire';
-            $vv->{'yes_url'} = $yes_url;
-            $vv->{'no_url'} = $no_url;
-        }
-
-        my $text = FYR::EmailTemplate::format(
-                        FYR::Queue::email_template($template),
-                        $vv
-                    );
-
-        $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
-
-        my $from = sprintf('%sDO-NOT-REPLY@%s',
-                        mySociety::Config::get('EMAIL_PREFIX'),
-                        mySociety::Config::get('EMAIL_DOMAIN'));
-
-        # We generate this as a bounce.
-        my $mail = MIME::Entity->build(
-                        Sender => '<>',
-                        From => mySociety::Email::format_email_address("WriteToThem", $from),
-                        To => $return_path,
-                        Subject => 'Automatic reply to your message to WriteToThem',
-                        Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-                        Type => 'text/plain; charset="utf-8"',
-                        Encoding => 'quoted-printable',
-                        Data => FYR::Queue::as_utf8_octets($text)
-                    );
-        
+    if ($forward) {
+        # Forward this on to team@writetothem.com
         if (mySociety::EmailUtil::EMAIL_SUCCESS
-                != mySociety::EmailUtil::send_email($mail->stringify(), '<>', $return_path)) {
-            print_log('err', 'unable to send patronising reply; deferring');
+                != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $data{return_path}, mySociety::Config::get('CONTACT_EMAIL'))) {
+            print_log('err', 'unable to forward non-bounce to contact email address; deferring');
             exit(75);
         }
 
-        dbh()->commit();
-        
         exit(0);
     }
+
+    # OK, we drop the message here, and send patronising reply instead
+    #print_log('info', "sending patronising reply");
+
+    # Now we need to construct some text to send to them.
+    my $template = 'reply-autoresponse';
+    my $vv;
+    if ($confirm_url) {
+        $template = 'reply-autoresponse-confirm';
+        $vv->{'confirm_url'} = $confirm_url;
+    } elsif ($yes_url && $no_url) {
+        $template = 'reply-autoresponse-questionnaire';
+        $vv->{'yes_url'} = $yes_url;
+        $vv->{'no_url'} = $no_url;
+    }
+
+    my $text = FYR::EmailTemplate::format(
+                    FYR::Queue::email_template($template),
+                    $vv
+                );
+
+    $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
+
+    my $from = sprintf('%sDO-NOT-REPLY@%s',
+                    mySociety::Config::get('EMAIL_PREFIX'),
+                    mySociety::Config::get('EMAIL_DOMAIN'));
+
+    # We generate this as a bounce.
+    my $mail = MIME::Entity->build(
+                    Sender => '<>',
+                    From => mySociety::Email::format_email_address("WriteToThem", $from),
+                    To => $data{return_path},
+                    Subject => 'Automatic reply to your message to WriteToThem',
+                    Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+                    Type => 'text/plain; charset="utf-8"',
+                    Encoding => 'quoted-printable',
+                    Data => FYR::Queue::as_utf8_octets($text)
+                );
+
+    if (mySociety::EmailUtil::EMAIL_SUCCESS
+            != mySociety::EmailUtil::send_email($mail->stringify(), '<>', $data{return_path})) {
+        print_log('err', 'unable to send patronising reply; deferring');
+        exit(75);
+    }
+
+    dbh()->commit();
+
+    exit(0);
 }
 
 # Now we have a bounce. We need to know the address to which it was sent so
 # that we can distinguish VERP bounces (which must be recorded) from others
 # which we don't care about.
-my $to = $m->head()->get("To");
-
-if (!defined($to)) {
-    # Not a lot we can do without an address to parse.
-    print_log('err', "received bounce message had no To: header; discarding");
-    exit(0);
-}
-
-my ($a) = Mail::Address->parse($to);
-
-if (!defined($a)) {
-    # Couldn't parse first To: address.
-    print_log('err', "unable to parse address from To: header '$to' in received bounce message; discarding");
-    exit(0);
-}
+my $a = mySociety::HandleMail::get_bounce_recipient($data{message});
 
 my $prefix = mySociety::Config::get("EMAIL_PREFIX");
 if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get("EMAIL_DOMAIN"))) {
     # Not one of our bounces; discard.
     print_log('info', "bounce sent to '" . $a->address() . "' is not for us; discarding");
     exit(0);
-}
-
-# parse_dsn_bounce TEXT
-# Attempt to parse TEXT (scalar or reference to list of lines) as an RFC1894
-# delivery status notification email. On success, return the DSN status string
-# "x.y.z" (class, subject, detail). On failure (when TEXT cannot be parsed)
-# return undef.
-sub parse_dsn_bounce ($) {
-    my $P = new MIME::Parser();
-    $P->output_to_core(1);  # avoid temporary files when we can
-
-    my $ent = $P->parse_data(join("\n", @{$_[0]}) . "\n");
-
-    return undef if (!$ent || !$ent->is_multipart() || lc($ent->mime_type()) ne 'multipart/report');
-    # The second part of the multipart entity should be of type
-    # message/delivery-status.
-    my $status = $ent->parts(1);
-    return undef if (!$status || lc($status->mime_type()) ne 'message/delivery-status');
-
-    # The status is given in an RFC822-format header field within the body of
-    # the delivery status message.
-    my $h = $status->bodyhandle()->open('r');
-
-    my $r;
-    while (defined($_ = $h->getline())) {
-        chomp();
-        if (/^Status:\s+(\d\.\d+\.\d+)\s*$/) {
-            $r = $1;
-            last;
-        }
-    }
-    $h->close();
-
-    return $r;
 }
 
 # NB we make no assumptions about the contens of the token.
@@ -278,7 +185,7 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
         FYR::Queue::logmsg($id, 1, "received email bounce message", 'handlemail');
         dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines) . "\n");
 
-        my $status = parse_dsn_bounce(\@lines);
+        my $status = mySociety::HandleMail::parse_dsn_bounce(\@lines);
 
         if (!defined($status)) {
             FYR::Queue::logmsg($id, 1, "bounce message could not be parsed as an RFC1892/1894 DSN", 'handlemail');
