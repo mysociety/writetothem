@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.60 2008-03-13 12:40:15 matthew Exp $
+ * $Id: fyr.php,v 1.61 2008-04-11 10:14:48 matthew Exp $
  * 
  */
 
@@ -273,14 +273,14 @@ function fyr_display_advert($values) {
     $advert_shown = 'none';
     if (array_key_exists('sender_email', $values)) {
         $adverts = array(
-                array('twfy_alerts0', '<h2>Get emailed every time your MP says something in Parliament</h2> <p style="font-size:150%">Keep an eye on them for free</p> [form]Sign me up![/form]'),
+                #array('twfy_alerts0', '<h2>Get emailed every time your MP says something in Parliament</h2> <p style="font-size:150%">Keep an eye on them for free</p> [form]Sign me up![/form]'),
                 array('twfy_alerts2', '<h2>Wonder what your MP says in Parliament?</h2> <p>Sign up to get emailed when they speak &ndash; find out what they&rsquo;re saying on your behalf!</p> [form]Sign me up![/form]'),
-                array('hfymp1', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [button]Sign up to HearFromYourMP[/button]'),
+                #array('hfymp1', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [button]Sign up to HearFromYourMP[/button]'),
                 array('hfymp2', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [form]Sign up to HearFromYourMP[/form]'),
                 #array('gny0', '<h2>Help us build a map of the world&rsquo;s local communities &ndash;<br><a href="http://www.groupsnearyou.com/add/about/">Add one to GroupsNearYou</a></h2>'),
                 #array('gny1', '<h2>Are you a member of a local group&hellip;</h2> &hellip;which uses the internet to coordinate itself, such as a neighbourhood watch? If so, please help the charity that runs WriteToThem by <a href="http://www.groupsnearyou.com/add/about/">adding some information about it</a> to our new site, GroupsNearYou.'),
-                array('fms0', 'Got a local problem like potholes or flytipping in your street?<br><a href="http://www.fixmystreet.com/">Report it at FixMyStreet</a>'),
-                array('fms1', '<a href="http://www.fixmystreet.com/">Find out what problems people are reporting in your local area</a>'),
+                #array('fms0', 'Got a local problem like potholes or flytipping in your street?<br><a href="http://www.fixmystreet.com/">Report it at FixMyStreet</a>'),
+                #array('fms1', '<a href="http://www.fixmystreet.com/">Find out what problems people are reporting in your local area</a>'),
         );
         if (isset($values['advert'])) {
             $newads = array();
