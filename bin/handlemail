@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.38 2008-04-11 22:33:15 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.39 2008-04-12 11:06:12 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -56,7 +56,7 @@ sub logmsg_handler ($$$$$) {
 FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
 my %data = mySociety::HandleMail::get_message();
-my @lines = @$data{lines};
+my @lines = @{$data{lines}};
 
 if (!$data{is_bounce_message}) {
     # This is not a bounce message. We pass it on to contact email address
