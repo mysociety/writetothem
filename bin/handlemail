@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.39 2008-04-12 11:06:12 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.40 2008-04-12 11:27:52 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -161,16 +161,9 @@ if (!$data{is_bounce_message}) {
 # which we don't care about.
 my $a = mySociety::HandleMail::get_bounce_recipient($data{message});
 
-my $prefix = mySociety::Config::get("EMAIL_PREFIX");
-if ($a->user() !~ m#^\Q$prefix\E# or lc($a->host()) ne lc(mySociety::Config::get("EMAIL_DOMAIN"))) {
-    # Not one of our bounces; discard.
-    print_log('info', "bounce sent to '" . $a->address() . "' is not for us; discarding");
-    exit(0);
-}
-
-# NB we make no assumptions about the contens of the token.
-my ($token) = ($a->user() =~ m#^\Q$prefix\E(.*)#);
-#print "token $token\n";
+my $token = mySociety::HandleMail::get_token($a,
+    mySociety::Config::get('EMAIL_PREFIX'), mySociety::Config::get('EMAIL_DOMAIN')
+);
 
 my $id;
 if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-reply') {
