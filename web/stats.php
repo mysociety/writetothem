@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.29 2008-04-10 15:23:40 francis Exp $
+ * $Id: stats.php,v 1.30 2008-04-16 09:03:55 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -273,7 +273,7 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
 
 function category_lookup($cat) {
     if ($cat == 'good') return '';
-    elseif ($cat == 'shame') return "MP doesn't accept messages via WriteToThem";
+    elseif ($cat == 'shame') return "MP did not accept messages via WriteToThem";
     elseif ($cat == 'toofew') return 'Too little data for valid analysis';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
     elseif ($cat == 'cheat') return '<a href="http://www.writetothem.com/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
