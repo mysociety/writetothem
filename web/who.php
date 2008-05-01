@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.95 2008-01-31 18:36:18 matthew Exp $
+ * $Id: who.php,v 1.96 2008-05-01 08:22:17 matthew Exp $
  *
  */
 
@@ -286,10 +286,8 @@ for your region have informed us that they have divided it into areas, with ';
             $text = "<p>There's an upcoming election.  We'll be adding your new
                     representative as soon as we can after the election.</p>";
         } else {
-            $text = "Representative details not available for unknown reason.";
+            $text = "Representative details are not available for an unknown reason.";
         }
-        $text .="<p>Why not take this as an opportunity to <strong>write to one of your
-            other representatives</strong>? Their job is to help you too!</p>";
         array_push($fyr_representatives, "$col_blurb$text$col_after");
         array_push($fyr_headings, "<h3><strike>$heading</strike></h3>");
     } else {
