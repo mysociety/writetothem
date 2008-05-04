@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.131 2008-03-18 12:33:54 matthew Exp $
+ * $Id: write.php,v 1.132 2008-05-04 17:03:31 matthew Exp $
  *
  */
 
@@ -460,8 +460,8 @@ function submitFaxes() {
         // else got the same group id 
         $result = msg_check_group_unused($grpid);    
         if (isset($result)) {
-            $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br />";        
-                     template_show_error("Sorry, we were unable to send your messages for the following reasons: <br />" . $error_msg);
+            $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br>";        
+                     template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
             exit;
         }   
     } else {
@@ -508,7 +508,7 @@ function submitFaxes() {
             if ($status == 1) {
                 # FYR Error code
                 if ($grpid) { 
-                    $error_msg .= $rep_name . ": " . rabx_mail_error_msg($code, $err) . "<br />";
+                    $error_msg .= $rep_name . ": " . rabx_mail_error_msg($code, $err) . "<br>";
                 } else {
                     template_show_error(rabx_mail_error_msg($code, $err));
                     exit;
@@ -535,7 +535,7 @@ function submitFaxes() {
           
     if (!$any_success) {
         // None of the messages could be sent
-        template_show_error("Sorry, we were unable to send your messages for the following reasons: <br />" . $error_msg);
+        template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
     } elseif ($error_msg) {
         // Some problems 
         $error_msg = "
@@ -789,16 +789,16 @@ if ($fyr_group_msg) {
  
     // None of the group of representatives can be contacted
     if (!$any_contacts) {
-        template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br /> " . $error_msg);
+        template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br> " . $error_msg);
         // Some problems, but some reps can be contacted, proceed with a note
     } elseif ($error_msg) {
-        $warning_text = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br /> " . $error_msg;
+        $warning_text = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br> " . $error_msg;
     }
 
     // Assemble the name string 
     $rep_text = "";
     foreach ($fyr_valid_reps as $rep) {
-        $rep_text .= $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "<br />";    
+        $rep_text .= $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . '<br>';
     }
 
     debug("FRONTEND", "Valid reps $fyr_valid_reps");
@@ -859,6 +859,14 @@ if ($fyr_group_msg) {
     
     $eb_area_info = mapit_get_voting_area_info($eb_id);
     mapit_check_error($eb_area_info);
+
+    // Data bad due to election etc?
+    $parent_status = dadem_get_area_status($eb_id);
+    dadem_check_error($parent_status);
+    $status = dadem_get_area_status($fyr_representative['voting_area']);
+    dadem_check_error($status);
+    if ($parent_status != 'none' || $status != 'none')
+        template_show_error('Sorry, an election is forthcoming or has recently happened here.');
 
     //Check the contact method exists
     $success = msg_recipient_test($fyr_values['who']);
