@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.132 2008-05-04 17:03:31 matthew Exp $
+ * $Id: write.php,v 1.133 2008-05-04 17:17:10 matthew Exp $
  *
  */
 
@@ -744,6 +744,14 @@ if ($fyr_group_msg) {
                 this, <a href=\"/\">please start again</a>.");
      }
 
+
+    // Data bad due to election etc?
+    $parent_status = dadem_get_area_status($eb_id);
+    dadem_check_error($parent_status);
+    $status = dadem_get_area_status($va_id);
+    dadem_check_error($status);
+    if ($parent_status != 'none' || $status != 'none')
+        template_show_error('Sorry, an election is forthcoming or has recently happened here.');
 
     // Get the representative info
     $area_representatives = dadem_get_representatives($va_id);
