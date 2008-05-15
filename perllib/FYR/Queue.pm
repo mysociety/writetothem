@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.271 2008-01-03 12:31:09 matthew Exp $
+# $Id: Queue.pm,v 1.272 2008-05-15 12:32:45 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1805,12 +1805,14 @@ sub process_queue ($$;$$) {
         # deadlocking, rather than trying the next one as they should be. That
         # bug needs fixing, then this putting back from "order by random()" to
         # "order by confirmed"
+	# XXX XXX This change has never been deployed to fax server, so am reverting
+	# as need to update deployed code
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state, group_id from message
                 where state = 'ready' and not frozen
                     and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
-                order by random()
+                order by confirmed
                 #, FYR::DB::Time() - $state_action_interval{ready}));
         $stmt->execute();
     }
