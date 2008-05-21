@@ -23,7 +23,10 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <?php if (array_key_exists('header', $values)) {
           print $values['header'];
       } ?>
-<h1 id="heading"><? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
+<h1 id="heading">
+<a href="http://www.mysociety.org/"><img id="logo" src="/images/mysociety-dark-50.png"></a>
+
+<? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem<?
 if ($_SERVER['REQUEST_URI']!='/') print '</a>';
 if ($_SERVER['REQUEST_URI']!='/')
