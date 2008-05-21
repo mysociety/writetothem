@@ -3,10 +3,12 @@
 }
 
 #logoie {
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/mysociety-dark-50.png',sizingMethod='crop');
     width: 133px;
     height: 26px;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/mysociety-dark-50.png',sizingMethod='crop');
+    margin-left: 10px;
     position: absolute;
     top: 0.7em;
     right: 1.1em;
+    cursor: pointer;
 }
