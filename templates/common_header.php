@@ -27,7 +27,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
           print $values['header'];
       } ?>
 <h1 id="heading">
-<a href="http://www.mysociety.org/"><img id="logo" src="/images/mysociety-dark-50.png"><span id="logoie"></span></a>
+<a href="http://www.mysociety.org/"><img id="logo" alt="Visit mySociety.org" src="/images/mysociety-dark-50.png"><span id="logoie"></span></a>
 
 <? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem<?
