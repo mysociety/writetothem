@@ -1,0 +1,12 @@
+#logo {
+    display: none;
+}
+
+#logoie {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/mysociety-dark-50.png',sizingMethod='crop');
+    width: 133px;
+    height: 26px;
+    position: absolute;
+    top: 0.7em;
+    right: 1.1em;
+}

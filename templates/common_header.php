@@ -8,6 +8,9 @@ header("Content-Type: text/html; charset=utf-8"); ?>
 <title>WriteToThem - <? print $values['title']; ?></title>
 <link href="/wtt.css" rel="stylesheet" type="text/css" media="all">
 <link href="/print.css" rel="stylesheet" type="text/css" media="print">
+<!--[if LT IE 7]>
+<style type="text/css">@import url("/ie6.css");</style>
+<![endif]-->
 <?php if (array_key_exists('stylesheet', $values)) { ?>
 <style type="text/css">@import "<?=$values['stylesheet'] ?>";</style>
 <?php }
@@ -24,7 +27,7 @@ header("Content-Type: text/html; charset=utf-8"); ?>
           print $values['header'];
       } ?>
 <h1 id="heading">
-<a href="http://www.mysociety.org/"><img id="logo" src="/images/mysociety-dark-50.png"></a>
+<a href="http://www.mysociety.org/"><img id="logo" src="/images/mysociety-dark-50.png"><span id="logoie"></span></a>
 
 <? if ($_SERVER['REQUEST_URI']!='/') print '<a href="/">'; ?>
 WriteToThem<?
