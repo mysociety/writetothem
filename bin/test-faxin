@@ -3,8 +3,9 @@
 # test-faxin:
 # Receives incoming fax images for the test harness. Set up as
 # the FAX_COMMAND option
+#
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
-# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
+# Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
 
 # Horrible boilerplate to set up appropriate library paths.
