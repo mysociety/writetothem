@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.133 2008-05-04 17:17:10 matthew Exp $
+ * $Id: write.php,v 1.134 2008-05-29 12:03:35 matthew Exp $
  *
  */
 
@@ -195,7 +195,7 @@ class RuleSigned extends HTML_QuickForm_Rule {
 
 class RulePostcode extends HTML_QuickForm_Rule {
     function validate($value, $options) {
-        return validate_postcode($value);
+        return validate_postcode(canonicalise_postcode($value));
     }
 }
 
