@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: firsttime.php,v 1.3 2005-12-05 20:57:33 francis Exp $
+ * $Id: firsttime.php,v 1.4 2008-06-03 19:05:31 francis Exp $
  * 
  */
 
@@ -15,6 +15,7 @@ require_once "../phplib/fyr.php";
 require_once "../phplib/queue.php";
 
 require_once "../../phplib/utility.php";
+require_once "../../phplib/survey.php";
 
 fyr_rate_limit(array());
 
@@ -33,12 +34,17 @@ if (rabx_is_error($result)) {
     template_show_error($result->text);
 }
 $values = msg_admin_get_message($result);
-if ($answer == "yes") {
-    template_draw("firsttime-yes", $values);
-} elseif ($answer == "no") {
-    template_draw("firsttime-no", $values);
+
+// Demographic survey
+#list($values['user_code'], $values['auth_signature']) = survey_sign_email_address($values['recipient_email']);
+#$survey = !survey_check_if_already_done($values['user_code'], $values['auth_signature']);
+$survey = false;
+if ($survey) {
+    $values['return_url'] = OPTION_BASE_URL . $_SERVER['REQUEST_URI'];
+    template_draw("survey-questions", $values);
 } else {
-    template_show_error("Unknown answer.");
+    // Either the questionnaire or the survey done
+    template_draw("survey-done", $values);
 }
 
 ?>

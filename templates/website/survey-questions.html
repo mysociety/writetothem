@@ -5,24 +5,27 @@ template_draw('header', $values);
 
 <div id="survey">
 
-<h1>
-	Quick and painless user survey
-</h1>
 <div id="disclaimer">
-This survey is run by us at mySociety to find out more about the people using WriteToThem and how it is useful to them. This will help us to make the site better and also allow us to assess our success in reaching out to people. You might also be interested to know the following:<ul>
+    <h1>Thanks again!  ... just a few more questions</h1>
+
+    <ul>
+
 	<li>
-		This survey is completely anonymous. We only know whether you've answered it or not. But we don't know which were YOUR answers.
+		The questions from here on are <strong>completely anonymous</strong>. We only record whether you've answered or not. But we don't know which were YOUR answers.
+	</li>
+    <li>
+		This also means that we cannot connect your answers to the letter you wrote.
 	</li>
 	<li>
-		This also means that we cannot connect your answers to whatever you do on our sites.
-	</li>
-	<li>
-		These are all the questions. We won't ask more. So it should take only 5 minutes.
+		These are all the questions. <strong>We won't ask more</strong>. So it should take only 5 minutes.
 	</li>
 	<li>
 		Of course we would like you to answer all of our questions but you don't have to.
 	</li>
 </ul>
+    <p>Your feedback will help us <strong>make the site better</strong>, and help us tell more people about it.
+    </p>
+
 </div>
 <hr />
 <form method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
@@ -420,9 +423,17 @@ This survey is run by us at mySociety to find out more about the people using Wr
 	<td class="us_formelement"><textarea name="survey_comment"  rows="5" cols="50" id="id_survey_comment"></textarea></td>
 </tr>
 </table>
+
+<p>(And I promise, that's the <strong>last question</strong>!)</p>
+<input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
+<input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
+<input type="hidden" name="questionnaire_0_yes" value="<?=$values['questionnaire_0_yes']?>"  />
+<input type="hidden" name="questionnaire_1_no" value="<?=$values['questionnaire_1_no']?>"  />
+<input type="hidden" name="questionnaire_1_yes" value="<?=$values['questionnaire_1_yes']?>"  />
 <input type="hidden" name="user_code" value="<?=$values['user_code']?>"  />
-<input type="hidden" name="signature" value="<?=$values['signature']?>"  />
-<input type="submit" name="submit_usersurvey" value="Submit user survey" /><div>
+<input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>"  />
+<input type="hidden" name="return_url" value="<?=$values['return_url']?>"  />
+<input type="submit" name="submit_usersurvey" value="Submit survey -- thank you!" /><div>
 </div></form>
 
 </div>
