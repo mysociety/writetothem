@@ -26,7 +26,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.52 2008-04-10 11:33:30 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.53 2008-06-05 10:02:40 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -595,7 +595,7 @@ sub do_send_cobrand_message {
     set_fyr_date('1991-02-03');
     send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
-       'Paul Sargent', 
+       'Stephen Brown', 
         { 
             writer_address1 => '32 Wheresome Wroad',
             writer_town => 'Whereville',
@@ -605,7 +605,7 @@ sub do_send_cobrand_message {
         },
         'animalaid'
     );
-    check_delivered_to_rep(2, 'Paul Sargent', '32 Wheresome Wroad');
+    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad');
 }
 
 #############################################################################
@@ -872,7 +872,7 @@ sub do_send_group_abuse {
         }
     }
     # None of these messages should get through
-    my @new_rep_names = ('Sushila Devi Dhall', 'Paul Sargent');
+    my @new_rep_names = ('Sushila Devi Dhall', 'Stephen Brown');
     send_message_to_rep(13,
        'OX 13d R', # Lincoln college, Oxford
        'all',
