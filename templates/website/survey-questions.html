@@ -32,6 +32,9 @@ template_draw('header', $values);
 <input type="hidden" name="version" value="1.25"  />
 <input type="hidden" name="sourceidentifier" value="wtt"  />
 <input type="hidden" name="subgroup" value="0"  />
+
+<!--- Tobias, begin replacing here -->
+
 <table>
 <colgroup>
 	<col id="col_label" />
@@ -423,6 +426,8 @@ template_draw('header', $values);
 	<td class="us_formelement"><textarea name="survey_comment"  rows="5" cols="50" id="id_survey_comment"></textarea></td>
 </tr>
 </table>
+
+<!--- Tobias, end replacing here -->
 
 <p>(And I promise, that's the <strong>last question</strong>!)</p>
 <input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
