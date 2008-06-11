@@ -6,22 +6,22 @@ template_draw('header', $values);
   <div id="disclaimer">
     <h1>Thanks again!  ... just a few more questions</h1>
     <ul>
-      <li>The questions from here on are 
+      <li> The questions from here on are
       <strong>completely anonymous</strong>. We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
-      <li> This also means that we cannot connect your answers to the letter you wrote.</li>
-      <li>These are all the questions. 
+      <li>This also means that we cannot connect your answers to the letter you wrote.</li>
+      <li> These are all the questions.
       <strong>We won't ask more</strong>. So it should take only 5 minutes.</li>
-      <li> Of course we would like you to answer all of our questions but you don't have to.</li>
+      <li>Of course we would like you to answer all of our questions but you don't have to.</li>
     </ul>
-    <p>
-      Your feedback will help us 
+    <p> Your feedback will help us
       <strong>make the site better</strong>, and help us tell more people about it.
     </p>
   </div>
   <hr />
   <form method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
+
     <!--- Tobias, begin replacing here -->
-    <input type="hidden" name="version" value="1.5"  />
+    <input type="hidden" name="version" value="1.51"  />
     <input type="hidden" name="sourceidentifier" value="wtt"  />
     <input type="hidden" name="subgroup" value="0"  />
     <table>
@@ -29,9 +29,10 @@ template_draw('header', $values);
       <col id="col_label" />
       <col id="col_formelelemt" />
       </colgroup>
-      <tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>"<td class="us_label">
-        <div class="us_label"> Were you satisfied with the response you got from your representative?
-        </div></td>
+      <tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+        <td class="us_label">
+          <div class="us_label"> Were you satisfied with the response you got from your representative?
+          </div></td>
         <td class="us_formelement">
           <label>
             <input type="radio" name="satisfaction" value="1" /> yes
@@ -41,9 +42,10 @@ template_draw('header', $values);
           </label><br /><br />
 <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
       </tr>
-      <tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>"<td class="us_label">
-        <div class="us_label"> Will you reply to the email you got from your representative?
-        </div></td>
+      <tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+        <td class="us_label">
+          <div class="us_label"> Will you reply to the email you got from your representative?
+          </div></td>
         <td class="us_formelement">
           <label>
             <input type="radio" name="dialogue" value="1" /> yes
@@ -726,10 +728,8 @@ document.getElementById("id_edu_highest").style.display='none';
       </tr>
     </table>
     <!--- Tobias, end replacing here -->
-    <p>
-      (And I promise, that's the 
-      <strong>last question</strong>
-      !)
+    <p> (And I promise, that's the
+      <strong>last question</strong> !)
     </p>
     <input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
     <input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
