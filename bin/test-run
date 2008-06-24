@@ -15,6 +15,7 @@
 # * a Ratty database with name ending "_testharness", configured in the ratty service
 #   that OPTION_RATTY_URL talks to. This will not be dropped and remade, but rules in 
 #   the scope fyr-abuse will be dropped and recreated. 
+# * likewise, an "_testharness" survey database whose entries will be deleted.
 #
 # Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org; WWW: http://www.mysociety.org/
@@ -26,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.53 2008-06-05 10:02:40 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.54 2008-06-24 16:41:21 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -351,6 +352,13 @@ sub call_handlemail {
     $p->close(); 
 }
 
+# Clear survey result, so can take survey again
+sub call_allow_new_survey {
+    my $email = shift;
+
+    $wth->multi_spawn(1, "./allow-new-survey $email", $verbose) ;
+}
+
 #############################################################################
 
 sub do_send_example_message {
@@ -402,9 +410,14 @@ sub do_send_example_message {
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
 
+    call_allow_new_survey(email_n(0));
+
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
     $wth->browser_follow_link(text_regex => qr/YES/);
+    $wth->browser_check_contents("Thanks again! ... just a few more questions");
+    $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
+
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
@@ -652,9 +665,14 @@ sub do_send_lords_message {
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
 
+    call_allow_new_survey(email_n(50));
+
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
     $wth->browser_follow_link(text_regex => qr/YES/);
+    $wth->browser_check_contents("Thanks again! ... just a few more questions");
+    $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
+
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 

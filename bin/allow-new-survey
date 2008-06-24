@@ -1,0 +1,32 @@
+#!/usr/bin/php
+<?php
+/* 
+ * allow-new-survey
+ * Given an email, calls survey code and allows user to answer survey again.
+ * (This is the demographic survey at survey.mysociety.org, not the much older,
+ * shorter questionnaire).
+ *
+ * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
+ *
+ * $Id: allow-new-survey,v 1.1 2008-06-24 16:41:21 francis Exp $
+ *
+ */
+
+require_once "../conf/general";
+require_once "../../phplib/survey.php";
+require_once "../../phplib/auth.php";
+
+$short_opts = '';
+$long_opts = array();
+require_once '../../phplib/phpcli.php';
+
+if (count($args) != 2) {
+    print "Specify email as only argument\n";
+    exit;
+}
+$email = $args[1];
+
+list($user_code, $auth_signature) = survey_sign_email_address($email);
+survey_allow_new_survey($user_code, $auth_signature);
+
