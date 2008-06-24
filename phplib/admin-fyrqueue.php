@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.122 2008-03-06 14:19:21 matthew Exp $
+ * $Id: admin-fyrqueue.php,v 1.123 2008-06-24 11:50:22 francis Exp $
  * 
  */
 
@@ -388,6 +388,10 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
             $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message in admin interface');
             msg_check_error($result);
             print "<p><b><i>Logged that you are viewing body of message $id</i></b></p>";
+        } else if (get_http_var('wire_emails')) {
+            $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message (via wire text of emails) in admin interface');
+            msg_check_error($result);
+            print "<p><b><i>Logged that you are viewing body of message (via wire text of emails) $id</i></b></p>";
         }
     return $redirect;
     }
@@ -524,6 +528,10 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
             else
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
+            if (!get_http_var('wire_emails'))
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'wire_emails', 'View Emails');
+            else
+                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_wire_emails', 'Hide Emails');
             $form->addElement('hidden', 'id', $id);
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
@@ -566,6 +574,22 @@ There's a copy of your message below, so you can send it another way, if you lik
                 print "<blockquote>";
                 print nl2br(htmlspecialchars($message['message']));
                 print "</blockquote>";
+            }
+
+            // Body text if enabled
+            if (get_http_var('wire_emails')) {
+                foreach (array('representative', 'confirm', 'confirm-reminder', 'failure', 'questionnaire', 'questionnaire-reminder') as $type) {
+                    print "<h2>Wire text of email - $type</h2>";
+                    $wire = msg_admin_get_wire_email($message['id'], $type);
+                    if (msg_get_error($wire)) {
+                        print "Error contacting queue:";
+                        print_r($wire);
+                    } else {
+                        print "<pre>";
+                        print ms_make_clickable(htmlspecialchars($wire));
+                        print "</pre>";
+                    }
+                }
             }
 
             // Questionnaire answers if there are any

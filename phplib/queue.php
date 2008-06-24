@@ -8,7 +8,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * WWW: http://www.mysociety.org
  *
- * $Id: queue.php,v 1.68 2007-08-15 11:31:44 matthew Exp $
+ * $Id: queue.php,v 1.69 2008-06-24 11:50:22 francis Exp $
  *
  */
 
@@ -39,8 +39,6 @@ define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);        /*    Tried to confi
 define('FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA', 4003);        /*    Contact data not available for that representative.  */
 define('FYR_QUEUE_MESSAGE_SHAME', 4004);        /*    Representative does not want to be contacted   */
 define('FYR_QUEUE_GROUP_ALREADY_QUEUED', 4006);        /*    Tried to send group of messages which has already been sent.  */
-define('FYR_QUEUE_BAD_DATA_PROVIDED', 4007); # Client or server has sent/returned some bad data
-define('FYR_QUEUE_REPRESENTATIVE_DELETED', 4008); # Representative has been deleted, presumably left office
 
 /* msg_create
 
@@ -479,6 +477,18 @@ function msg_admin_add_note_to_message($id, $user, $note) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.admin_add_note_to_message', $params);
+    return $result;
+}
+
+/* msg_admin_get_wire_email ID TYPE
+
+  Returns the text of an email as would be sent for this message in various
+  circumstances. The TYPE can be representative, confirm, confirm-reminder,
+  failure, questionnaire or questionnaire-reminder. */
+function msg_admin_get_wire_email($id, $type) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.admin_get_wire_email', $params);
     return $result;
 }
 

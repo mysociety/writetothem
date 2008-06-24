@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.272 2008-05-15 12:32:45 matthew Exp $
+# $Id: Queue.pm,v 1.273 2008-06-24 11:50:22 francis Exp $
 #
 
 package FYR::Queue;
@@ -1038,7 +1038,8 @@ sub email_message_id ($) {
 sub email_template ($) {
     my ($name) = @_;
     my $fn = "$FindBin::Bin/../templates/emails/$name";
-    die "unable to locate email template '$name'" if (!-e $fn);
+    $fn = "$FindBin::Bin/../../templates/emails/$name" if (!-e $fn);
+    die "unable to locate email template '$name', tried from '$FindBin::Bin'" if (!-e $fn);
     return $fn;
 }
 
@@ -2417,6 +2418,34 @@ sub admin_add_note_to_message ($$$) {
     my ($id, $user, $note) = @_;
     logmsg($id, 1, "$user added note: $note", $user);
     return 0;
+}
+
+=item admin_get_wire_email ID TYPE
+
+Returns the text of an email as would be sent for this message in various
+circumstances. The TYPE can be representative, confirm, confirm-reminder,
+failure, questionnaire or questionnaire-reminder.
+
+=cut
+sub admin_get_wire_email ($$) {
+    my ($id, $type) = @_;
+    my $msg = message($id);
+
+    if ($type eq 'representative') {
+        return make_representative_email($msg);
+    } elsif ($type eq 'confirm') {
+        return make_confirmation_email($msg);
+    } elsif ($type eq 'confirm-reminder') {
+        return make_confirmation_email($msg, 1);
+    } elsif ($type eq 'failure') {
+        return make_failure_email($msg);
+    } elsif ($type eq 'questionnaire') {
+        return make_questionnaire_email($msg);
+    } elsif ($type eq 'questionnaire-reminder') {
+        return make_questionnaire_email($msg, 1);
+    } else {
+        throw FYR::Error("admin_get_wire_email: Type not known '$type'", FYR::Error::BAD_DATA_PROVIDED);
+    }
 }
 
 =item admin_set_message_to_ready ID USER
