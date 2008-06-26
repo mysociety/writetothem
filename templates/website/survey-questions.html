@@ -4,24 +4,24 @@ template_draw('header', $values);
 ?>
 <div id="survey">
   <div id="disclaimer">
-    <h1>Thanks again! ... just a few more questions</h1>
+    <h1>Thanks again! ... just a few more questions</h1> We (ie. the folks of mySociety) hope these questions will allow us to assess our success in reaching out to all sorts of people and not just a few. We know we ask some personal stuff but be assured:
     <ul>
-      <li> The questions from here on are
-      <strong>completely anonymous</strong>. We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
-      <li>This also means that we cannot connect your answers to the letter you wrote.</li>
-      <li> These are all the questions.
-      <strong>We won't ask more</strong>. So it should take only 5 minutes.</li>
-      <li>Of course we would like you to answer all of our questions but you don't have to.</li>
+      <li>The questions from here on are 
+      <strong>completely anonymous.</strong> We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
+      <li> This also means that we cannot connect your answers to whatever you do on our sites.</li>
+      <li> Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
+      <li>These are all the questions. 
+      <strong>We won't ask more.</strong> So it should take only 5 minutes.</li>
     </ul>
-    <p> Your feedback will help us
+    <p>
+      Your feedback will help us 
       <strong>make the site better</strong>, and help us tell more people about it.
     </p>
   </div>
   <hr />
   <form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
-
     <!--- Tobias, begin replacing here -->
-    <input type="hidden" name="version" value="1.51"  />
+    <input type="hidden" name="version" value="1.6"  />
     <input type="hidden" name="sourceidentifier" value="wtt"  />
     <input type="hidden" name="subgroup" value="0"  />
     <table>
@@ -29,7 +29,7 @@ template_draw('header', $values);
       <col id="col_label" />
       <col id="col_formelelemt" />
       </colgroup>
-      <tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
+      <tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
         <td class="us_label">
           <div class="us_label"> Were you satisfied with the response you got from your representative?
           </div></td>
@@ -42,7 +42,7 @@ template_draw('header', $values);
           </label><br /><br />
 <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
       </tr>
-      <tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
+      <tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
         <td class="us_label">
           <div class="us_label"> Will you reply to the email you got from your representative?
           </div></td>
@@ -140,7 +140,7 @@ template_draw('header', $values);
           <label>
             <input type="radio" name="groups" value="1"  id="id_groups_yes_community"/>
             a community group 
-            <small>(e.g. a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
+            <small>(e.g.a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
           </label><br />
           <label>
             <input type="radio" name="groups" value="3"  id="id_groups_yes_both"/> both community as well as political group(s)
@@ -475,23 +475,17 @@ template_draw('header', $values);
         <td class="us_label">
 <script type="text/javascript">    function edu_any_select(){
 if(document.forms[0].education_any[1].checked){
-document.getElementById("id_edu_prof").style.display='';
+//document.getElementById("id_edu_prof").style.display='';
 document.getElementById("id_edu_highest").style.display='none';
 }else{
-document.getElementById("id_edu_prof").style.display='none';
+//document.getElementById("id_edu_prof").style.display='none';
 document.getElementById("id_edu_highest").style.display='';
 }
 }
-function edu_prof_select(){
-if(document.forms[0].education_professional[0].checked){
-document.getElementById("id_edu_highest").style.display='';
-}else{
-document.getElementById("id_edu_highest").style.display='none';
-}
-}    </script>
+</script>
           <div class="us_label">
-            Do you have any educational qualifications for which you received a certificate?<br />
-            <small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas etc)</small>
+            Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br />
+            <small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
           </div></td>
         <td class="us_formelement">
           <label>
@@ -499,20 +493,6 @@ document.getElementById("id_edu_highest").style.display='none';
           </label>
           <label>
             <input type="radio" name="education_any" value="0" onclick="edu_any_select()"  id="id_education_any_no"/> no
-          </label></td>
-      </tr>
-      <tr id="id_edu_prof" style="display:none">
-        <td class="us_label">
-          <div class="us_label">
-            Do you have any professional, vocational or other work-related qualifications for which you received a certificate?<br />
-            <small> (This includes NVQ/SVQ, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="education_professional" value="1" onclick="edu_prof_select()"  id="id_education_professional_yes"/> yes
-          </label>
-          <label>
-            <input type="radio" name="education_professional" value="0" onclick="edu_prof_select()"  id="id_education_professional_no"/> no
           </label></td>
       </tr>
       <tr id="id_edu_highest" style="display:none">
@@ -536,7 +516,7 @@ document.getElementById("id_edu_highest").style.display='none';
           </label><br />
           <label>
             <input type="radio" name="education_highest" value="0"  id="id_education_highest_belowdegree"/>
-            another kind of qualification<br />
+            below degree level<br />
             <span style="position:relative; left:50px">
               <small>
                 <span style="position:relative; left:-20px">
@@ -728,8 +708,7 @@ document.getElementById("id_edu_highest").style.display='none';
       </tr>
     </table>
     <!--- Tobias, end replacing here -->
-    <p> (And I promise, that's the
-      <strong>last question</strong> !)
+    <p> Thank you very much! (And I promise, that's the <strong>last question</strong> !)
     </p>
     <input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
     <input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
