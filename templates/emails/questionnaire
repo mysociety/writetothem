@@ -7,8 +7,8 @@ click on the link below:
 
     <?=$values['yes_url']?>
 
-- If you HAVE NOT had a reply, or you have only had an acknowledgement, please
-click on the link below:
+- If you HAVE NOT had any reply at all, OR you have only had an
+acknowledgement, please click on the link below:
 
     <?=$values['no_url']?>
 
