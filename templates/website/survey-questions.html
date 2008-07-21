@@ -3,724 +3,477 @@ $values['title'] = "Help us by answering a few quick questions";
 template_draw('header', $values);
 ?>
 <div id="survey">
-  <div id="disclaimer">
-    <h1>Thanks again! ... just a few more questions</h1> We (ie. the folks of mySociety) hope these questions will allow us to assess our success in reaching out to all sorts of people and not just a few. We know we ask some personal stuff but be assured:
-    <ul>
-      <li>The questions from here on are 
-      <strong>completely anonymous.</strong> We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
-      <li> This also means that we cannot connect your answers to whatever you do on our sites.</li>
-      <li> Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
-      <li>These are all the questions. 
-      <strong>We won't ask more.</strong> So it should take only 5 minutes.</li>
-    </ul>
-    <p>
-      Your feedback will help us 
-      <strong>make the site better</strong>, and help us tell more people about it.
-    </p>
-  </div>
-  <hr />
-  <form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
-    <!--- Tobias, begin replacing here -->
-    <input type="hidden" name="version" value="1.6"  />
-    <input type="hidden" name="sourceidentifier" value="wtt"  />
-    <input type="hidden" name="subgroup" value="0"  />
-    <table>
-      <colgroup>
-      <col id="col_label" />
-      <col id="col_formelelemt" />
-      </colgroup>
-      <tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
-        <td class="us_label">
-          <div class="us_label"> Were you satisfied with the response you got from your representative?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="satisfaction" value="1" /> yes
-          </label>
-          <label>
-            <input type="radio" name="satisfaction" value="0" /> no
-          </label><br /><br />
+	<div id="disclaimer">
+		<h1>Thanks again! ... just a few more questions</h1> We (ie. the folks of mySociety) hope these questions will allow us to assess our success in reaching out to all sorts of people and not just a few. We know we ask some personal stuff but be assured:
+		<ul>
+			<li> The questions from here on are
+			<strong>completely anonymous.</strong>
+			We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
+			<li>This also means that we cannot connect your answers to whatever you do on our sites.</li>
+			<li>Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
+			<li> These are all the questions.
+			<strong>We won't ask more.</strong>
+			So it should take only 5 minutes.</li>
+		</ul>
+		<p> Your feedback will help us
+			<strong>make the site better</strong>, and help us tell more people about it.
+		</p>
+	</div>
+	<hr />
+	<form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
+		<!--- Tobias, begin replacing here -->
+		<input type="hidden" name="version" value="1.7"  />
+		<input type="hidden" name="sourceidentifier" value="wtt"  />
+		<input type="hidden" name="subgroup" value="0"  />
+		<table>
+			<colgroup>
+			<col id="col_label" />
+			<col id="col_formelelemt" />
+			</colgroup>
+			<tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+				<td class="us_label">
+					<div class="us_label"> Were you satisfied with the response you got from your representative?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="satisfaction" value="1" /> yes
+					</label>
+					<label>
+						<input type="radio" name="satisfaction" value="0" /> no
+					</label><br /><br />
 <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
-      </tr>
-      <tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
-        <td class="us_label">
-          <div class="us_label"> Will you reply to the email you got from your representative?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="dialogue" value="1" /> yes
-          </label>
-          <label>
-            <input type="radio" name="dialogue" value="0" /> no
-          </label></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> How likely is it that you would recommend this site to a friend or colleague? (assuming they would be interested in such a service)
-          </div></td>
-        <td class="us_formelement">
-          <div align="center" id="id_netpromoter">
-            <i> not at all likely</i>
-            <label>
-              <input type="radio" name="netpromoter" value="0" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="1" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="2" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="3" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="4" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="5" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="6" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="7" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="8" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="9" />
-            </label>
-            <label>
-              <input type="radio" name="netpromoter" value="10" />
-            </label>
-            <i> extremely likely</i><br />
-            <i> neutral</i>
-          </div><br />
+			</tr>
+			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+				<td class="us_label">
+					<div class="us_label"> Will you reply to the email you got from your representative?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="dialogue" value="1" /> yes
+					</label>
+					<label>
+						<input type="radio" name="dialogue" value="0" /> no
+					</label></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> How likely is it that you would recommend this site to a friend or colleague? (assuming they would be interested in such a service)
+					</div></td>
+				<td class="us_formelement">
+					<div align="center" id="id_netpromoter">
+						<i> not at all likely</i>
+						<label>
+							<input type="radio" name="netpromoter" value="0" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="1" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="2" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="3" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="4" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="5" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="6" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="7" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="8" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="9" />
+						</label>
+						<label>
+							<input type="radio" name="netpromoter" value="10" />
+						</label>
+						<i> extremely likely</i><br />
+						<i> neutral</i>
+					</div><br />
 <textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> How did you find out about this site?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="referrer" value="1" /> from another mySociety site
-          </label><br />
-          <label>
-            <input type="radio" name="referrer" value="2" /> from media such as newspapers, etc
-          </label><br />
-          <label>
-            <input type="radio" name="referrer" value="3" /> from a search engine (e.g. Google or Yahoo)
-          </label><br />
-          <label>
-            <input type="radio" name="referrer" value="4" /> recommendation by friends or colleagues
-          </label><br />
-          <label>
-            <input type="radio" name="referrer" value="5" /> from a campaigning website
-          </label><br />
-          <label>
-            <input type="radio" name="referrer" value="9" />
-            other 
-          </label>
-          <label>
-            <input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[5].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other" />
-          </label><br /></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> In the last twelve months have you been involved with a political or a community group, e.g. by being a formal member or by volunteering?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="groups" value="2"  id="id_groups_yes_political"/>
-            a political group 
-            <small>(e.g. a party, an union, a civic organisation e.g. for human rights)</small>
-          </label><br />
-          <label>
-            <input type="radio" name="groups" value="1"  id="id_groups_yes_community"/>
-            a community group 
-            <small>(e.g.a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
-          </label><br />
-          <label>
-            <input type="radio" name="groups" value="3"  id="id_groups_yes_both"/> both community as well as political group(s)
-          </label><br />
-          <label>
-            <input type="radio" name="groups" value="0"  id="id_groups_no"/> none of the above
-          </label><br /></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label">
-            Apart from your use of this website: Within the last twelve months have you taken part in any broadly political activity? <br />
-            <small> (This includes for example demonstrations, signing a petition, contacting a politician, boycotting a product, donating money or displaying a campaign badge)</small>
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="activity" value="2"  id="id_activity_yes_online"/> yes, online
-          </label><br />
-          <label>
-            <input type="radio" name="activity" value="1"  id="id_activity_yes_offline"/> yes, offline
-          </label><br />
-          <label>
-            <input type="radio" name="activity" value="3"  id="id_activity_yes_both"/> yes both online as well as offline
-          </label><br />
-          <label>
-            <input type="radio" name="activity" value="0"  id="id_community_no"/> none of the above
-          </label><br /></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> In what year were you born?
-          </div></td>
-        <td class="us_formelement">
-          <select name="age"  id="id_age">
-            <option selected="selected" value="------">
-            ------
-            </option>
-            <option value="1908">
-            1908
-            </option>
-            <option value="1909">
-            1909
-            </option>
-            <option value="1910">
-            1910
-            </option>
-            <option value="1911">
-            1911
-            </option>
-            <option value="1912">
-            1912
-            </option>
-            <option value="1913">
-            1913
-            </option>
-            <option value="1914">
-            1914
-            </option>
-            <option value="1915">
-            1915
-            </option>
-            <option value="1916">
-            1916
-            </option>
-            <option value="1917">
-            1917
-            </option>
-            <option value="1918">
-            1918
-            </option>
-            <option value="1919">
-            1919
-            </option>
-            <option value="1920">
-            1920
-            </option>
-            <option value="1921">
-            1921
-            </option>
-            <option value="1922">
-            1922
-            </option>
-            <option value="1923">
-            1923
-            </option>
-            <option value="1924">
-            1924
-            </option>
-            <option value="1925">
-            1925
-            </option>
-            <option value="1926">
-            1926
-            </option>
-            <option value="1927">
-            1927
-            </option>
-            <option value="1928">
-            1928
-            </option>
-            <option value="1929">
-            1929
-            </option>
-            <option value="1930">
-            1930
-            </option>
-            <option value="1931">
-            1931
-            </option>
-            <option value="1932">
-            1932
-            </option>
-            <option value="1933">
-            1933
-            </option>
-            <option value="1934">
-            1934
-            </option>
-            <option value="1935">
-            1935
-            </option>
-            <option value="1936">
-            1936
-            </option>
-            <option value="1937">
-            1937
-            </option>
-            <option value="1938">
-            1938
-            </option>
-            <option value="1939">
-            1939
-            </option>
-            <option value="1940">
-            1940
-            </option>
-            <option value="1941">
-            1941
-            </option>
-            <option value="1942">
-            1942
-            </option>
-            <option value="1943">
-            1943
-            </option>
-            <option value="1944">
-            1944
-            </option>
-            <option value="1945">
-            1945
-            </option>
-            <option value="1946">
-            1946
-            </option>
-            <option value="1947">
-            1947
-            </option>
-            <option value="1948">
-            1948
-            </option>
-            <option value="1949">
-            1949
-            </option>
-            <option value="1950">
-            1950
-            </option>
-            <option value="1951">
-            1951
-            </option>
-            <option value="1952">
-            1952
-            </option>
-            <option value="1953">
-            1953
-            </option>
-            <option value="1954">
-            1954
-            </option>
-            <option value="1955">
-            1955
-            </option>
-            <option value="1956">
-            1956
-            </option>
-            <option value="1957">
-            1957
-            </option>
-            <option value="1958">
-            1958
-            </option>
-            <option value="1959">
-            1959
-            </option>
-            <option value="1960">
-            1960
-            </option>
-            <option value="1961">
-            1961
-            </option>
-            <option value="1962">
-            1962
-            </option>
-            <option value="1963">
-            1963
-            </option>
-            <option value="1964">
-            1964
-            </option>
-            <option value="1965">
-            1965
-            </option>
-            <option value="1966">
-            1966
-            </option>
-            <option value="1967">
-            1967
-            </option>
-            <option value="1968">
-            1968
-            </option>
-            <option value="1969">
-            1969
-            </option>
-            <option value="1970">
-            1970
-            </option>
-            <option value="1971">
-            1971
-            </option>
-            <option value="1972">
-            1972
-            </option>
-            <option value="1973">
-            1973
-            </option>
-            <option value="1974">
-            1974
-            </option>
-            <option value="1975">
-            1975
-            </option>
-            <option value="1976">
-            1976
-            </option>
-            <option value="1977">
-            1977
-            </option>
-            <option value="1978">
-            1978
-            </option>
-            <option value="1979">
-            1979
-            </option>
-            <option value="1980">
-            1980
-            </option>
-            <option value="1981">
-            1981
-            </option>
-            <option value="1982">
-            1982
-            </option>
-            <option value="1983">
-            1983
-            </option>
-            <option value="1984">
-            1984
-            </option>
-            <option value="1985">
-            1985
-            </option>
-            <option value="1986">
-            1986
-            </option>
-            <option value="1987">
-            1987
-            </option>
-            <option value="1988">
-            1988
-            </option>
-            <option value="1989">
-            1989
-            </option>
-            <option value="1990">
-            1990
-            </option>
-            <option value="1991">
-            1991
-            </option>
-            <option value="1992">
-            1992
-            </option>
-            <option value="1993">
-            1993
-            </option>
-            <option value="1994">
-            1994
-            </option>
-            <option value="1995">
-            1995
-            </option>
-            <option value="1996">
-            1996
-            </option>
-            <option value="1997">
-            1997
-            </option>
-            <option value="1998">
-            1998
-            </option>
-            <option value="1999">
-            1999
-            </option>
-            <option value="2000">
-            2000
-            </option>
-          </select></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> Could you please indicate your gender?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="gender" value="1"  id="id_gender_female"/> female
-          </label>
-          <label>
-            <input type="radio" name="gender" value="0"  id="id_gender_male"/> male
-          </label></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-<script type="text/javascript">    function edu_any_select(){
-if(document.forms[0].education_any[1].checked){
-//document.getElementById("id_edu_prof").style.display='';
-document.getElementById("id_edu_highest").style.display='none';
-}else{
-//document.getElementById("id_edu_prof").style.display='none';
-document.getElementById("id_edu_highest").style.display='';
-}
-}
-</script>
-          <div class="us_label">
-            Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br />
-            <small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="education_any" value="1" onclick="edu_any_select()"  id="id_education_any_yes"/> yes
-          </label>
-          <label>
-            <input type="radio" name="education_any" value="0" onclick="edu_any_select()"  id="id_education_any_no"/> no
-          </label></td>
-      </tr>
-      <tr id="id_edu_highest" style="display:none">
-        <td class="us_label">
-          <div class="us_label"> Was your highest qualification...
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="education_highest" value="1"  id="id_education_highest_abovedegree"/>
-            at degree level or above<br />
-            <span style="position:relative; left:50px">
-              <small>
-                <span style="position:relative; left:-20px">
-                  <i> such as:</i>
-                </span><br />
-                higher degree and postgraduate qualifications <br />
-                first degree (e.g. BA) <br />
-                postgraduate diplomas and certificates (including PGCE) <br />
-                professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br /> NVQ or SVQ level 4 or 5</small>
-            </span>
-          </label><br />
-          <label>
-            <input type="radio" name="education_highest" value="0"  id="id_education_highest_belowdegree"/>
-            below degree level<br />
-            <span style="position:relative; left:50px">
-              <small>
-                <span style="position:relative; left:-20px">
-                  <i> all other qualifications not mentioned above such as:</i>
-                </span><br />
-                diplomas in higher education &amp; other higher education qualifications <br />
-                HNC, HND, Higher level BTEC <br />
-                teaching qualifications for schools or further education (below Degree level standard) <br />
-                nursing, or other medical qualifications not covered above (below Degree level standard) <br />
-                RSA higher diploma <br />
-                NVQ/SVQ level 1, 2 and 3 <br /> A-levels, GCSE</small>
-            </span>
-          </label><br /></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> Which of these descriptions best describes your current situation?
-          </div></td>
-        <td class="us_formelement">
-          <select name="lifestage" >
-            <option selected="selected" value="please select what applies to you">
-            please select what applies to you
-            </option>
-            <option value="1">
-            working full time (30 hours a week or more)
-            </option>
-            <option value="2">
-            working part time (8-29 hours a week)
-            </option>
-            <option value="3">
-            retired
-            </option>
-            <option value="4">
-            unemployed
-            </option>
-            <option value="5">
-            permanently sick or disabled
-            </option>
-            <option value="6">
-            in community or military service
-            </option>
-            <option value="7">
-            undergraduate student
-            </option>
-            <option value="8">
-            postgraduate student
-            </option>
-            <option value="9">
-            in full time education (not degree or higher)
-            </option>
-            <option value="10">
-            in part time education (not degree or higher)
-            </option>
-            <option value="11">
-            doing housework, looking after children or other persons
-            </option>
-            <option value="98">
-            none of the above
-            </option>
-          </select></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> The incomes of households differ a lot in Britain today. Which figures best represents the total income of your household before tax?
-          </div></td>
-        <td>
-          <select name="income" >
-            <option selected="selected" value="please select what applies to you">
-            please select what applies to you
-            </option>
-            <option value="1">
-            up to £12,500 per year
-            </option>
-            <option value="2">
-            £12,501 to £25,000 per year
-            </option>
-            <option value="3">
-            £25,001 to £37,500 per year
-            </option>
-            <option value="4">
-            £37,501 to £50,000 per year
-            </option>
-            <option value="5">
-            £50,001 to £75,000 per year
-            </option>
-            <option value="6">
-            £75,001 to £100,000 per year
-            </option>
-            <option value="7">
-            more than £100,000 per year
-            </option>
-            <option value="98">
-            don't want to answer
-            </option>
-          </select></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> To which one of these ethnic groups do you consider you belong?
-          </div></td>
-        <td class="us_formelement">
-          <select name="ethnicity" >
-            <option selected="selected" value="please select what applies to you">
-            please select what applies to you
-            </option>
-            <optgroup label="A White">
-              <option value="1">
-              British
-              </option>
-              <option value="2">
-              Irish
-              </option>
-              <option value="3">
-              Other white
-              </option>
-              </optgroup>
-              <optgroup label="B Mixed">
-                <option value="4">
-                White and Black Caribbean
-                </option>
-                <option value="5">
-                White and Black African
-                </option>
-                <option value="6">
-                White and Asian
-                </option>
-                <option value="7">
-                Other Mixed
-                </option>
-                </optgroup>
-                <optgroup label="C Asian or Asian British">
-                  <option value="8">
-                  Indian
-                  </option>
-                  <option value="9">
-                  Pakistani
-                  </option>
-                  <option value="10">
-                  Bangladeshi
-                  </option>
-                  <option value="11">
-                  Other Asian
-                  </option>
-                  </optgroup>
-                  <optgroup label="D Black or Black British">
-                    <option value="12">
-                    Caribbean
-                    </option>
-                    <option value="13">
-                    African
-                    </option>
-                    <option value="14">
-                    Other Black
-                    </option>
-                    </optgroup>
-                    <optgroup label="E Chinese or other ethnic group">
-                      <option value="15">
-                      Chinese
-                      </option>
-                      <option value="16">
-                      any other ethnic group
-                      </option>
-                      </optgroup>
-                      <optgroup label="----">
-                        <option value="98">
-                        none of the above
-                        </option>
-                        </optgroup>
-          </select></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> Do you have a health problem or disability which prevents you from doing every day tasks at home, work or school or which limits the kind or amount of work you can do?
-          </div></td>
-        <td class="us_formelement">
-          <label>
-            <input type="radio" name="disability" value="1"  id="id_disability_yes"/> yes
-          </label>
-          <label>
-            <input type="radio" name="disability" value="0"  id="id_disability_no"/> no
-          </label></td>
-      </tr>
-      <tr>
-        <td class="us_label">
-          <div class="us_label"> Do you have any other comments (e.g. on the survey, on your usage, etc)?
-          </div></td>
-        <td class="us_formelement">
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> How did you find out about this site?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="referrer" value="1" /> from another mySociety site
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="2" /> from media such as newspapers, etc
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="3" /> from a search engine (e.g. Google or Yahoo)
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="4" /> recommendation by friends or colleagues
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="5" /> from a campaigning website
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="9" />
+						other 
+					</label>
+					<label>
+						<input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[5].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other" />
+					</label><br /></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> In the last twelve months have you been involved with a political or a community group, e.g. by being a formal member or by volunteering?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="groups" value="2"  id="id_groups_yes_political"/>
+						a political group 
+						<small>(e.g. a party, an union, a civic organisation e.g. for human rights)</small>
+					</label><br />
+					<label>
+						<input type="radio" name="groups" value="1"  id="id_groups_yes_community"/>
+						a community group 
+						<small>(e.g.a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
+					</label><br />
+					<label>
+						<input type="radio" name="groups" value="3"  id="id_groups_yes_both"/> both community as well as political group(s)
+					</label><br />
+					<label>
+						<input type="radio" name="groups" value="0"  id="id_groups_no"/> none of the above
+					</label><br /></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label">
+						Apart from your use of this website: Within the last twelve months have you taken part in any broadly political activity? <br />
+						<small> (This includes for example demonstrations, signing a petition, contacting a politician, boycotting a product, donating money or displaying a campaign badge)</small>
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="activity" value="2"  id="id_activity_yes_online"/> yes, online
+					</label><br />
+					<label>
+						<input type="radio" name="activity" value="1"  id="id_activity_yes_offline"/> yes, offline
+					</label><br />
+					<label>
+						<input type="radio" name="activity" value="3"  id="id_activity_yes_both"/> yes both online as well as offline
+					</label><br />
+					<label>
+						<input type="radio" name="activity" value="0"  id="id_community_no"/> none of the above
+					</label><br /></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> How old are you?
+					</div></td>
+				<td class="us_formelement">
+					<select name="age" >
+						<option selected="selected" value="please select what applies to you">
+						please select what applies to you
+						</option>
+						<option value="1">
+						less than 18 years old
+						</option>
+						<option value="2">
+						18-24 years old
+						</option>
+						<option value="3">
+						25-29 years old
+						</option>
+						<option value="4">
+						30-34 years old
+						</option>
+						<option value="5">
+						35-39 years old
+						</option>
+						<option value="6">
+						40-44 years old
+						</option>
+						<option value="7">
+						45-49 years old
+						</option>
+						<option value="8">
+						50-54 years old
+						</option>
+						<option value="9">
+						55-59 years old
+						</option>
+						<option value="10">
+						60-64 years old
+						</option>
+						<option value="11">
+						65-69 years old
+						</option>
+						<option value="12">
+						70-74 years old
+						</option>
+						<option value="13">
+						75 years and older
+						</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> Could you please indicate your gender?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="gender" value="1"  id="id_gender_female"/> female
+					</label>
+					<label>
+						<input type="radio" name="gender" value="0"  id="id_gender_male"/> male
+					</label></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label">
+						Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br />
+						<small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="education_any" value="1"  id="id_education_any_yes"/> yes
+					</label>
+					<label>
+						<input type="radio" name="education_any" value="0"  id="id_education_any_no"/> no
+					</label></td>
+			</tr>
+			<tr id="id_edu_highest" style="display:''">
+				<td class="us_label">
+					<div class="us_label">
+						<i> If you have answered yes to the previous question:</i><br /> Was your highest qualification...
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="education_highest" value="1"  id="id_education_highest_abovedegree"/>
+						at degree level or above<br />
+						<span style="position:relative; left:50px">
+							<small>
+								<span style="position:relative; left:-20px">
+									<i> such as:</i>
+								</span><br />
+								higher degree and postgraduate qualifications <br />
+								first degree (e.g. BA) <br />
+								postgraduate diplomas and certificates (including PGCE) <br />
+								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br /> NVQ or SVQ level 4 or 5</small>
+						</span>
+					</label><br />
+					<label>
+						<input type="radio" name="education_highest" value="0"  id="id_education_highest_belowdegree"/>
+						below degree level<br />
+						<span style="position:relative; left:50px">
+							<small>
+								<span style="position:relative; left:-20px">
+									<i> all other qualifications not mentioned above such as:</i>
+								</span><br />
+								diplomas in higher education &amp; other higher education qualifications <br />
+								HNC, HND, Higher level BTEC <br />
+								teaching qualifications for schools or further education (below Degree level standard) <br />
+								nursing, or other medical qualifications not covered above (below Degree level standard) <br />
+								RSA higher diploma <br />
+								NVQ/SVQ level 1, 2 and 3 <br /> A-levels, GCSE</small>
+						</span>
+					</label><br /></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> Which of these descriptions best describes your current situation?
+					</div></td>
+				<td class="us_formelement">
+					<select name="lifestage" >
+						<option selected="selected" value="please select what applies to you">
+						please select what applies to you
+						</option>
+						<option value="1">
+						working full time (30 hours a week or more)
+						</option>
+						<option value="2">
+						working part time (8-29 hours a week)
+						</option>
+						<option value="3">
+						retired
+						</option>
+						<option value="4">
+						unemployed
+						</option>
+						<option value="5">
+						permanently sick or disabled
+						</option>
+						<option value="6">
+						in community or military service
+						</option>
+						<option value="7">
+						undergraduate student
+						</option>
+						<option value="8">
+						postgraduate student
+						</option>
+						<option value="9">
+						in full time education (not degree or higher)
+						</option>
+						<option value="10">
+						in part time education (not degree or higher)
+						</option>
+						<option value="11">
+						doing housework, looking after children or other persons
+						</option>
+						<option value="98">
+						none of the above
+						</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> The incomes of households differ a lot in Britain today. Which figures best represents the total income of your household before tax?
+					</div></td>
+				<td>
+					<select name="income" >
+						<option selected="selected" value="please select what applies to you">
+						please select what applies to you
+						</option>
+						<option value="1">
+						up to	£12,500 per year
+						</option>
+						<option value="2">
+						£12,501 to £25,000 per year
+						</option>
+						<option value="3">
+						£25,001 to £37,500 per year
+						</option>
+						<option value="4">
+						£37,501 to £50,000 per year
+						</option>
+						<option value="5">
+						£50,001 to £75,000 per year
+						</option>
+						<option value="6">
+						£75,001 to £100,000 per year
+						</option>
+						<option value="7">
+						more than £100,000 per year
+						</option>
+						<option value="98">
+						don't want to answer
+						</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> To which one of these ethnic groups do you consider you belong?
+					</div></td>
+				<td class="us_formelement">
+					<select name="ethnicity" >
+						<option selected="selected" value="please select what applies to you">
+						please select what applies to you
+						</option>
+						<optgroup label="A White">
+							<option value="1">
+							British
+							</option>
+							<option value="2">
+							Irish
+							</option>
+							<option value="3">
+							Other white
+							</option>
+							</optgroup>
+							<optgroup label="B Mixed">
+								<option value="4">
+								White and Black Caribbean
+								</option>
+								<option value="5">
+								White and Black African
+								</option>
+								<option value="6">
+								White and Asian
+								</option>
+								<option value="7">
+								Other Mixed
+								</option>
+								</optgroup>
+								<optgroup label="C Asian or Asian British">
+									<option value="8">
+									Indian
+									</option>
+									<option value="9">
+									Pakistani
+									</option>
+									<option value="10">
+									Bangladeshi
+									</option>
+									<option value="11">
+									Other Asian
+									</option>
+									</optgroup>
+									<optgroup label="D Black or Black British">
+										<option value="12">
+										Caribbean
+										</option>
+										<option value="13">
+										African
+										</option>
+										<option value="14">
+										Other Black
+										</option>
+										</optgroup>
+										<optgroup label="E Chinese or other ethnic group">
+											<option value="15">
+											Chinese
+											</option>
+											<option value="16">
+											any other ethnic group
+											</option>
+											</optgroup>
+											<optgroup label="----">
+												<option value="98">
+												none of the above
+												</option>
+												</optgroup>
+					</select></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> Do you have a health problem or disability which prevents you from doing every day tasks at home, work or school or which limits the kind or amount of work you can do?
+					</div></td>
+				<td class="us_formelement">
+					<label>
+						<input type="radio" name="disability" value="1"  id="id_disability_yes"/> yes
+					</label>
+					<label>
+						<input type="radio" name="disability" value="0"  id="id_disability_no"/> no
+					</label></td>
+			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> Do you have any other comments (e.g. on the survey, on your usage, etc)?
+					</div></td>
+				<td class="us_formelement">
 <textarea name="survey_comment"  rows="5" cols="50" id="id_survey_comment"></textarea></td>
-      </tr>
-    </table>
-    <!--- Tobias, end replacing here -->
-    <p> Thank you very much! (And I promise, that's the <strong>last question</strong> !)
-    </p>
-    <input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
-    <input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
-    <input type="hidden" name="questionnaire_0_yes" value="<?=$values['questionnaire_0_yes']?>"  />
-    <input type="hidden" name="questionnaire_1_no" value="<?=$values['questionnaire_1_no']?>"  />
-    <input type="hidden" name="questionnaire_1_yes" value="<?=$values['questionnaire_1_yes']?>"  />
-    <input type="hidden" name="user_code" value="<?=$values['user_code']?>"  />
-    <input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>"  />
-    <input type="hidden" name="return_url" value="<?=$values['return_url']?>"  />
-    <input type="submit" name="submit_usersurvey" value="Submit survey -- thank you!" />
-    <div>
-    </div>
-  </form>
+			</tr>
+		</table>
+		<!--- Tobias, end replacing here -->
+		<p> Thank you very much! (And I promise, that's the
+			<strong>last question</strong> !)
+		</p>
+		<input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
+		<input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
+		<input type="hidden" name="questionnaire_0_yes" value="<?=$values['questionnaire_0_yes']?>"  />
+		<input type="hidden" name="questionnaire_1_no" value="<?=$values['questionnaire_1_no']?>"  />
+		<input type="hidden" name="questionnaire_1_yes" value="<?=$values['questionnaire_1_yes']?>"  />
+		<input type="hidden" name="user_code" value="<?=$values['user_code']?>"  />
+		<input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>"  />
+		<input type="hidden" name="return_url" value="<?=$values['return_url']?>"  />
+		<input type="submit" name="submit_usersurvey" value="Submit survey -- thank you!" />
+		<div>
+		</div>
+	</form>
 </div>
 <? template_draw('footer', $values); ?>
