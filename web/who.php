@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.97 2008-05-29 11:53:09 matthew Exp $
+ * $Id: who.php,v 1.98 2008-08-05 14:38:37 matthew Exp $
  *
  */
 
@@ -201,13 +201,13 @@ write to your constituency MSP above, or pick just one of your regional MSPs';
 }
         $text .= '.</p>';
         
-        if ($rep_counts[1]>1 && $va_type[1] != 'SPE') {
+        if ($rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE') {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
         $text .= display_reps($representatives[1]);
 
-        if ($rep_counts[1]>1 && $va_type[1] == 'SPE') {
+        if ($rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE')) {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
@@ -308,8 +308,10 @@ template_draw("who", array(
 
 debug_timestamp();
 
-function write_all_link($va_type, $rep_desc_plural){
+function write_all_link($va_type, $rep_desc_plural) {
     global $fyr_postcode;
+    if ($rep_desc_plural == 'London Assembly Members')
+        $rep_desc_plural = 'London Assembly list members';
     $a = '<a href="' .
                 htmlspecialchars(url_new('write', true,
                                          'who', 'all',
