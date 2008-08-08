@@ -36,7 +36,6 @@ if (isset($track) && $track) {
 if (OPTION_WEB_DOMAIN == 'writetothem.com') {
 ?>
 <!-- Piwik -->
-<a href="http://piwik.org" title="Web analytics" onclick="window.open(this.href);return(false);">
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.mysociety.org/" : "http://piwik.mysociety.org/");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
@@ -48,9 +47,8 @@ piwik_idsite = 2;
 piwik_url = pkBaseURL + "piwik.php";
 piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 //-->
-</script><object>
-<noscript><p>Web analytics <img src="http://piwik.mysociety.org/piwik.php" style="border:0" alt="piwik"/></p>
-</noscript></object></a>
+</script>
+<noscript><img src="http://piwik.mysociety.org/piwik.php?i=1" style="border:0" alt=""></noscript>
 <!-- /Piwik --> 
 <?
 }
