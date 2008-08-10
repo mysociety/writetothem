@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.273 2008-06-24 11:50:22 francis Exp $
+# $Id: Queue.pm,v 1.274 2008-08-10 11:06:11 matthew Exp $
 #
 
 package FYR::Queue;
@@ -1207,12 +1207,26 @@ sub make_questionnaire_email ($;$) {
     my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
     my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
 
+    my $params;
+    try {
+        $params = email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
+            weeks_ago => $reminder ? 'Three' : 'Two',
+            their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
+        );
+    } catch RABX::Error::User with {
+        # If representative ID no longer exists (councillors can be fully deleted), that is caught here.
+        my $E = shift;
+        if ($E->value() == mySociety::DaDem::REP_NOT_FOUND) {
+            state($msg->{id}, 'failed');
+            dbh()->commit();
+            throw FYR::Error('This representative is no longer in the database', FYR::Error::REPRESENTATIVE_DELETED);
+        }
+        $E->throw(); # Otherwise, throw it upwards
+    };
+
     my $text = FYR::EmailTemplate::format(
                     email_template('questionnaire'),
-                    email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
-                        weeks_ago => $reminder ? 'Three' : 'Two',
-                        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
-                        )
+                    $params
                 )
                 . "\n\n\n"
                 . format_email_body($msg);
@@ -1806,8 +1820,8 @@ sub process_queue ($$;$$) {
         # deadlocking, rather than trying the next one as they should be. That
         # bug needs fixing, then this putting back from "order by random()" to
         # "order by confirmed"
-	# XXX XXX This change has never been deployed to fax server, so am reverting
-	# as need to update deployed code
+        # XXX XXX This change has never been deployed to fax server, so am reverting
+        # as need to update deployed code
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state, group_id from message
                 where state = 'ready' and not frozen
