@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.62 2008-04-24 12:48:25 matthew Exp $
+ * $Id: fyr.php,v 1.63 2008-08-11 09:02:33 matthew Exp $
  * 
  */
 
@@ -346,6 +346,7 @@ function euro_check(&$area_reps, $wmc) {
         $area_id = 11814;
         $meps = array(
             1048 => array( # Parish
+                13414                                            # Devon, Tiverton & Hontion
                 12946,12947,13230,13258,13363,13458,13003,13303, # Dorset
                 12960,13356,13408,13449,13485,                   # Somerset
                 12908,13491,13476,                               # Somerset (were in Avon - Bath, Weston, Woodspring)
@@ -363,8 +364,8 @@ function euro_check(&$area_reps, $wmc) {
                 13438                                # Wansdyke
             ),
             1085 => array( # Chichester
-                13062,13257,13300,13499,13493,13087,13501,13409,13414,13417,13419, # Devon
-                13090,13494,13498,13503,13500                                      # Cornwall
+                13062,13257,13300,13499,13493,13087,13501,13409,13417,13419, # Devon, except Tiverton & Honiton
+                13090,13494,13498,13503,13500                                # Cornwall
             )
         );
     } elseif (isset($area_reps[11809])) {
