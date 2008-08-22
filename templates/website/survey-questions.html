@@ -4,25 +4,25 @@ template_draw('header', $values);
 ?>
 <div id="survey">
 	<div id="disclaimer">
-		<h1>Thanks again! ... just a few more questions</h1> We (ie. the folks of mySociety) hope these questions will allow us to assess our success in reaching out to all sorts of people and not just a few. We know we ask some personal stuff but be assured:
+		<h1>Thanks again! ... just a few more questions</h1>
+		We (ie. the people from mySociety, the independent non-profit who runs this site) hate to bother you with this but we need to know whether our site is used by a representative share of the population (we would not want to only serve one particular group exclusively). We know we ask some personal stuff but be assured:
 		<ul>
-			<li> The questions from here on are
-			<strong>completely anonymous.</strong>
-			We only record whether you've answered or not. But we don't know which were YOUR answers.</li>
-			<li>This also means that we cannot connect your answers to whatever you do on our sites.</li>
-			<li>Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
-			<li> These are all the questions.
-			<strong>We won't ask more.</strong>
-			So it should take only 5 minutes.</li>
+			<li>The questions from here on are  
+			<strong> completely anonymous.</strong> We only record whether you've answered or not. So nobody (not even we) can know how YOU answered.</li>
+			<li> This also means that we cannot connect your answers to whatever you do on our sites.</li>
+			<li> Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
+			<li>These are all the questions.  
+			<strong> We won't ask more.</strong> So it should take only 5 minutes.</li>
 		</ul>
-		<p> Your feedback will help us
-			<strong>make the site better</strong>, and help us tell more people about it.
+		<p>
+			Your feedback will help us  
+			<strong> make the site better</strong> and help us tell more people about it.
 		</p>
 	</div>
 	<hr />
 	<form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>" enctype="multipart/form-data">
 		<!--- Tobias, begin replacing here -->
-		<input type="hidden" name="version" value="1.7"  />
+		<input type="hidden" name="version" value="1.8"  />
 		<input type="hidden" name="sourceidentifier" value="wtt"  />
 		<input type="hidden" name="subgroup" value="0"  />
 		<table>
@@ -45,7 +45,7 @@ template_draw('header', $values);
 			</tr>
 			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
 				<td class="us_label">
-					<div class="us_label"> Will you reply to the email you got from your representative?
+					<div class="us_label"> Will you reply to the answer you got from your representative?
 					</div></td>
 				<td class="us_formelement">
 					<label>
@@ -61,7 +61,7 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<div align="center" id="id_netpromoter">
-						<i> not at all likely</i>
+						<i>not at all likely</i>
 						<label>
 							<input type="radio" name="netpromoter" value="0" />
 						</label>
@@ -95,8 +95,8 @@ template_draw('header', $values);
 						<label>
 							<input type="radio" name="netpromoter" value="10" />
 						</label>
-						<i> extremely likely</i><br />
-						<i> neutral</i>
+						<i>extremely likely</i><br />
+						<i>neutral</i>
 					</div><br />
 <textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea></td>
 			</tr>
@@ -121,11 +121,16 @@ template_draw('header', $values);
 						<input type="radio" name="referrer" value="5" /> from a campaigning website
 					</label><br />
 					<label>
-						<input type="radio" name="referrer" value="9" />
-						other 
+						<input type="radio" name="referrer" value="6" /> used this site before
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="9" /> other
 					</label>
 					<label>
-						<input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[5].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other" />
+						<input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[6].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other" />
+					</label><br />
+					<label>
+						<input type="radio" name="referrer" value="98" /> can't remember
 					</label><br /></td>
 			</tr>
 			<tr>
@@ -134,13 +139,11 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<label>
-						<input type="radio" name="groups" value="2"  id="id_groups_yes_political"/>
-						a political group 
+						<input type="radio" name="groups" value="2"  id="id_groups_yes_political"/> a political group
 						<small>(e.g. a party, an union, a civic organisation e.g. for human rights)</small>
 					</label><br />
 					<label>
-						<input type="radio" name="groups" value="1"  id="id_groups_yes_community"/>
-						a community group 
+						<input type="radio" name="groups" value="1"  id="id_groups_yes_community"/> a community group
 						<small>(e.g.a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
 					</label><br />
 					<label>
@@ -154,7 +157,7 @@ template_draw('header', $values);
 				<td class="us_label">
 					<div class="us_label">
 						Apart from your use of this website: Within the last twelve months have you taken part in any broadly political activity? <br />
-						<small> (This includes for example demonstrations, signing a petition, contacting a politician, boycotting a product, donating money or displaying a campaign badge)</small>
+						<small>(This includes for example demonstrations, signing a petition, contacting a politician, boycotting a product, donating money or displaying a campaign badge)</small>
 					</div></td>
 				<td class="us_formelement">
 					<label>
@@ -176,47 +179,33 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<select name="age" >
-						<option selected="selected" value="please select what applies to you">
-						please select what applies to you
+						<option selected="selected" value="please select what applies to you"> please select what applies to you
 						</option>
-						<option value="1">
-						less than 18 years old
+						<option value="1"> less than 18 years old
 						</option>
-						<option value="2">
-						18-24 years old
+						<option value="2"> 18-24 years old
 						</option>
-						<option value="3">
-						25-29 years old
+						<option value="3"> 25-29 years old
 						</option>
-						<option value="4">
-						30-34 years old
+						<option value="4"> 30-34 years old
 						</option>
-						<option value="5">
-						35-39 years old
+						<option value="5"> 35-39 years old
 						</option>
-						<option value="6">
-						40-44 years old
+						<option value="6"> 40-44 years old
 						</option>
-						<option value="7">
-						45-49 years old
+						<option value="7"> 45-49 years old
 						</option>
-						<option value="8">
-						50-54 years old
+						<option value="8"> 50-54 years old
 						</option>
-						<option value="9">
-						55-59 years old
+						<option value="9"> 55-59 years old
 						</option>
-						<option value="10">
-						60-64 years old
+						<option value="10"> 60-64 years old
 						</option>
-						<option value="11">
-						65-69 years old
+						<option value="11"> 65-69 years old
 						</option>
-						<option value="12">
-						70-74 years old
+						<option value="12"> 70-74 years old
 						</option>
-						<option value="13">
-						75 years and older
+						<option value="13"> 75 years and older
 						</option>
 					</select></td>
 			</tr>
@@ -236,7 +225,7 @@ template_draw('header', $values);
 				<td class="us_label">
 					<div class="us_label">
 						Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br />
-						<small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
+						<small>(This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
 					</div></td>
 				<td class="us_formelement">
 					<label>
@@ -249,7 +238,7 @@ template_draw('header', $values);
 			<tr id="id_edu_highest" style="display:''">
 				<td class="us_label">
 					<div class="us_label">
-						<i> If you have answered yes to the previous question:</i><br /> Was your highest qualification...
+						<i>If you have answered yes to the previous question:</i><br /> Was your highest qualification...
 					</div></td>
 				<td class="us_formelement">
 					<label>
@@ -258,12 +247,13 @@ template_draw('header', $values);
 						<span style="position:relative; left:50px">
 							<small>
 								<span style="position:relative; left:-20px">
-									<i> such as:</i>
+									<i>such as:</i>
 								</span><br />
 								higher degree and postgraduate qualifications <br />
 								first degree (e.g. BA) <br />
 								postgraduate diplomas and certificates (including PGCE) <br />
-								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br /> NVQ or SVQ level 4 or 5</small>
+								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br />
+								NVQ or SVQ level 4 or 5</small>
 						</span>
 					</label><br />
 					<label>
@@ -272,14 +262,15 @@ template_draw('header', $values);
 						<span style="position:relative; left:50px">
 							<small>
 								<span style="position:relative; left:-20px">
-									<i> all other qualifications not mentioned above such as:</i>
+									<i>all other qualifications not mentioned above such as:</i>
 								</span><br />
 								diplomas in higher education &amp; other higher education qualifications <br />
 								HNC, HND, Higher level BTEC <br />
 								teaching qualifications for schools or further education (below Degree level standard) <br />
 								nursing, or other medical qualifications not covered above (below Degree level standard) <br />
 								RSA higher diploma <br />
-								NVQ/SVQ level 1, 2 and 3 <br /> A-levels, GCSE</small>
+								NVQ/SVQ level 1, 2 and 3 <br />
+								A-levels, GCSE</small>
 						</span>
 					</label><br /></td>
 			</tr>
@@ -289,44 +280,31 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<select name="lifestage" >
-						<option selected="selected" value="please select what applies to you">
-						please select what applies to you
+						<option selected="selected" value="please select what applies to you"> please select what applies to you
 						</option>
-						<option value="1">
-						working full time (30 hours a week or more)
+						<option value="1"> working full time (30 hours a week or more)
 						</option>
-						<option value="2">
-						working part time (8-29 hours a week)
+						<option value="2"> working part time (8-29 hours a week)
 						</option>
-						<option value="3">
-						retired
+						<option value="3"> retired
 						</option>
-						<option value="4">
-						unemployed
+						<option value="4"> unemployed
 						</option>
-						<option value="5">
-						permanently sick or disabled
+						<option value="5"> permanently sick or disabled
 						</option>
-						<option value="6">
-						in community or military service
+						<option value="6"> in community or military service
 						</option>
-						<option value="7">
-						undergraduate student
+						<option value="7"> undergraduate student
 						</option>
-						<option value="8">
-						postgraduate student
+						<option value="8"> postgraduate student
 						</option>
-						<option value="9">
-						in full time education (not degree or higher)
+						<option value="9"> in full time education (not degree or higher)
 						</option>
-						<option value="10">
-						in part time education (not degree or higher)
+						<option value="10"> in part time education (not degree or higher)
 						</option>
-						<option value="11">
-						doing housework, looking after children or other persons
+						<option value="11"> doing housework, looking after children or other persons
 						</option>
-						<option value="98">
-						none of the above
+						<option value="98"> none of the above
 						</option>
 					</select></td>
 			</tr>
@@ -336,32 +314,23 @@ template_draw('header', $values);
 					</div></td>
 				<td>
 					<select name="income" >
-						<option selected="selected" value="please select what applies to you">
-						please select what applies to you
+						<option selected="selected" value="please select what applies to you"> please select what applies to you
 						</option>
-						<option value="1">
-						up to	£12,500 per year
+						<option value="1"> up to	£12,500 per year
 						</option>
-						<option value="2">
-						£12,501 to £25,000 per year
+						<option value="2"> £12,501 to £25,000 per year
 						</option>
-						<option value="3">
-						£25,001 to £37,500 per year
+						<option value="3"> £25,001 to £37,500 per year
 						</option>
-						<option value="4">
-						£37,501 to £50,000 per year
+						<option value="4"> £37,501 to £50,000 per year
 						</option>
-						<option value="5">
-						£50,001 to £75,000 per year
+						<option value="5"> £50,001 to £75,000 per year
 						</option>
-						<option value="6">
-						£75,001 to £100,000 per year
+						<option value="6"> £75,001 to £100,000 per year
 						</option>
-						<option value="7">
-						more than £100,000 per year
+						<option value="7"> more than £100,000 per year
 						</option>
-						<option value="98">
-						don't want to answer
+						<option value="98"> don't want to answer
 						</option>
 					</select></td>
 			</tr>
@@ -371,70 +340,58 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<select name="ethnicity" >
-						<option selected="selected" value="please select what applies to you">
-						please select what applies to you
+						<option selected="selected" value="please select what applies to you"> please select what applies to you
 						</option>
 						<optgroup label="A White">
-							<option value="1">
-							British
+							<option value="1"> British
 							</option>
-							<option value="2">
-							Irish
+							<option value="21"> English
 							</option>
-							<option value="3">
-							Other white
+							<option value="22"> Welsh
+							</option>
+							<option value="23"> Scottish
+							</option>
+							<option value="2"> Irish
+							</option>
+							<option value="3"> Other white
 							</option>
 							</optgroup>
 							<optgroup label="B Mixed">
-								<option value="4">
-								White and Black Caribbean
+								<option value="4"> White and Black Caribbean
 								</option>
-								<option value="5">
-								White and Black African
+								<option value="5"> White and Black African
 								</option>
-								<option value="6">
-								White and Asian
+								<option value="6"> White and Asian
 								</option>
-								<option value="7">
-								Other Mixed
+								<option value="7"> Other Mixed
 								</option>
 								</optgroup>
 								<optgroup label="C Asian or Asian British">
-									<option value="8">
-									Indian
+									<option value="8"> Indian
 									</option>
-									<option value="9">
-									Pakistani
+									<option value="9"> Pakistani
 									</option>
-									<option value="10">
-									Bangladeshi
+									<option value="10"> Bangladeshi
 									</option>
-									<option value="11">
-									Other Asian
+									<option value="11"> Other Asian
 									</option>
 									</optgroup>
 									<optgroup label="D Black or Black British">
-										<option value="12">
-										Caribbean
+										<option value="12"> Caribbean
 										</option>
-										<option value="13">
-										African
+										<option value="13"> African
 										</option>
-										<option value="14">
-										Other Black
+										<option value="14"> Other Black
 										</option>
 										</optgroup>
 										<optgroup label="E Chinese or other ethnic group">
-											<option value="15">
-											Chinese
+											<option value="15"> Chinese
 											</option>
-											<option value="16">
-											any other ethnic group
+											<option value="16"> any other ethnic group
 											</option>
 											</optgroup>
 											<optgroup label="----">
-												<option value="98">
-												none of the above
+												<option value="98"> none of the above
 												</option>
 												</optgroup>
 					</select></td>
