@@ -30,7 +30,7 @@ template_draw('header', $values);
 			<col id="col_label" />
 			<col id="col_formelelemt" />
 			</colgroup>
-			<tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+			<tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
 				<td class="us_label">
 					<div class="us_label"> Were you satisfied with the response you got from your representative?
 					</div></td>
@@ -46,7 +46,7 @@ template_draw('header', $values);
 					</label><br /><br />
 <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
 			</tr>
-			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "'none'"; } ?>">
+			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
 				<td class="us_label">
 					<div class="us_label"> Will you reply to the answer you got from your representative?
 					</div></td>
