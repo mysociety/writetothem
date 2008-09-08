@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.63 2008-08-11 09:02:33 matthew Exp $
+ * $Id: fyr.php,v 1.64 2008-09-08 14:48:50 francis Exp $
  * 
  */
 
@@ -346,7 +346,7 @@ function euro_check(&$area_reps, $wmc) {
         $area_id = 11814;
         $meps = array(
             1048 => array( # Parish
-                13414                                            # Devon, Tiverton & Hontion
+                13414,                                            # Devon, Tiverton & Hontion
                 12946,12947,13230,13258,13363,13458,13003,13303, # Dorset
                 12960,13356,13408,13449,13485,                   # Somerset
                 12908,13491,13476,                               # Somerset (were in Avon - Bath, Weston, Woodspring)
