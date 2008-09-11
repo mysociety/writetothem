@@ -9,7 +9,7 @@
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: admin_reminder_mail,v 1.19 2008-03-18 17:06:21 dademcron Exp $
+ * $Id: admin_reminder_mail,v 1.20 2008-09-11 14:08:32 matthew Exp $
  *
  */
 
@@ -142,6 +142,7 @@ if ($councils_not_matched > 0) {
 }
 
 // Outstanding customer support mail
+/*
 verbose("querying rt for count of outstanding support mail");
 $rt_messages = `psql rt rt --pset t -c "
     select count(*) from tickets 
@@ -156,6 +157,7 @@ if ($rt_messages > 0) {
   https://secure.mysociety.org/rt/
 ";
 }
+*/
 
 // Combine the first part.
 if ($mail) {
@@ -204,6 +206,7 @@ if (count($diligency_councils) > 0) {
     $dili_mail .= "\n";
 }
 // ... for doing things on RT
+/*
 verbose("diligency league - handling customer support in RT");
 $diligency_rt = `psql rt rt --pset t -c "
     select users.name, count(*) as c from transactions 
@@ -218,6 +221,7 @@ $diligency_rt = `psql rt rt --pset t -c "
 $diligency_rt = str_replace("|", " ", $diligency_rt);
 $dili_mail .= "* At lovingly dealing with mail from our users:\n";
 $dili_mail .= $diligency_rt;
+*/
 // Combine the second part.
 if ($dili_mail) {
     if ($mail) {
