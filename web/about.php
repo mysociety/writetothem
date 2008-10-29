@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.13 2007-11-05 15:58:33 angie Exp $
+ * $Id: about.php,v 1.14 2008-10-29 19:29:43 matthew Exp $
  * 
  */
 
@@ -43,6 +43,12 @@ if ($page == 'write-checkemail')
     /* Fill in some other values as required. */
     $values['voting_area'] = array('rep_name' => 'MP' /* ... XXX */);
 
+if ($page == 'confirm-accept') {
+    $values['recipient_via'] = '';
+}
+if ($page == 'write-checkemail') {
+    $values['group_msg'] = '';
+}
 
 /* Don't want problem pages to be indexed, really. */
 if (preg_match('/^problem-/', $page))
