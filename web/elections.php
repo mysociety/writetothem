@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: elections.php,v 1.5 2008-09-26 15:24:59 matthew Exp $
+ * $Id: elections.php,v 1.6 2008-10-30 16:42:51 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -14,6 +14,37 @@ require_once '../../phplib/mapit.php';
 require_once '../../phplib/dadem.php';
 
 $dates = array(
+	'2008-05-10' => array(2596, 2468),
+	'2008-05-16' => array(
+	 2618,2360,2542,2544,2421,2521,2547,2527,2548,
+	 2639,2455,2516,2523,2448,2453,2440,2533,2410,2379,
+	 2290,2262,2567,2563,2543,2310,2438,2525,2454,2540,
+	 2534,2562,2309,2366,2419,2405,2334,2530,2263,
+	 2528,2518,2545,2580,2308,2451,2446,2356,2658,2326,
+	 2532,2357,2515,2364,2566,2588,2420,2526,2281,
+	 2260,2552,2323,
+	 2387,2345,2536,2478,2385,2581,2541,2439,2370,2336 # Small changes
+	 ),
+	'2008-05-15' => array(
+	    11815, 11816, 11817, 11818, 11819, 11820, 11821, 11822, 11823, 11824, 11825, 11826, 11827, 11828,
+	),
+	'2008-05-18' => array(
+		2464,2514,2554,2592,2517,2558,2604,2640,2315,2570,
+		2520,2469,2602,2522,2311,2605,2325,2638,2318,2339,
+		2524,2585,2603,2560,2435,2559,2462,2368,2657,2595,
+		2291,2599,2459,2535,2537,2606,2538,2607,2347,2461,
+		2549,2612,2615,2616,2348,2296,2331,2623,2519,
+	), 
+	'2008-05-23' => array(
+		2333,2479,2343,2362,2337,2475,
+		2273,2344,2276,2327
+	),
+	'2008-05-24' => array(2513,2371,2637,2529,2589,2391,2641,2539,2568,2338,2557,2346,2449,2624),
+	'2008-06-05' => array(2340,2223,2248, 13025),
+	'2008-06-28' => array(2407, 2531),
+	'2008-08-12' => array(2272, 2394, 2329),
+	'2008-08-28' => array(2319),
+
 	# First lot is always councils with new data
 #	'2007-05-19' => array(
 #		2465,2455,2516,2556,2448,2280,2596,2256,2449,2628,2562,2524,2313,2591,2457,2343,2518,2404,2473,2451,2589,2606,2346,2408,2407,2443,2456,2623,2431,2546,2342,2452,2403,2282,
@@ -116,7 +147,7 @@ function by_name($a, $b) {
 }
 uksort($lookup, 'by_name');
 foreach ($lookup as $area_id => $status) {
-	$o = $areas_info[$area_id]['name'];
+	$o = '<span title="' . $area_id . ', ' . $areas_info[$area_id]['type'] . '">' . $areas_info[$area_id]['name'] . '</span>';
 	if ($status == 'boundary_changes')
 		$status = 'recent_election';
 	if (isset($date_done[$area_id])) {
@@ -126,15 +157,15 @@ foreach ($lookup as $area_id => $status) {
 	}
 }
 
-template_draw('header', array('title'=>'2007 elections'));
+template_draw('header', array('title'=>'2008 elections'));
 if (isset($out['none'])) { ?>
 <div style="float: left; width: 48%;">
 <p>Here is a list of the areas for which we have received new data since the election:</p>
 <?
 	foreach ($out['none'] as $date => $data) {
-	print '<strong>'.$date.'</strong> <ul><li>';
+	print '<strong>'.$date.'</strong> ('.count($data).') <ul><li>';
 	if (is_array($data)) print join("\n<li>", $data);
-	else print "<li>$data";
+	else print $data;
 	print '</ul>';
 	}
 	print '</div>';
@@ -147,17 +178,21 @@ if (isset($out['recent_election'])) {
 	foreach ($out['recent_election'] as $date => $data) {
 		if (!preg_match('#\d\d\d\d-\d\d-\d\d#', $date))
 			continue;
-		print '<strong>'.$date.'</strong> <ul><li>';
+		print '<strong>'.$date.'</strong> ('.count($data).') <ul><li>';
 		if (is_array($data)) print join("\n<li>", $data);
 		else print "<li>$data";
 		print '</ul>';
 		unset($out['recent_election'][$date]);
 	}
-?>
+	if (count($out['recent_election'])) { ?>
 <p>Here is a list of the <?=count($out['recent_election']) ?> areas for which we are still awaiting election results:</p>
 <ul><li><?
-	print join("\n<li>", $out['recent_election']);
-	print '</ul></div>';
+		echo join("\n<li>", $out['recent_election']);
+		echo '</ul>';
+	} else {
+		echo '<p>We are not awaiting any results.</p>';
+	}
+	echo '</div>';
 }
 template_draw('footer', array());
 
