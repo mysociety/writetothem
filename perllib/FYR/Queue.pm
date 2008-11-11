@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.274 2008-08-10 11:06:11 matthew Exp $
+# $Id: Queue.pm,v 1.275 2008-11-11 09:21:31 matthew Exp $
 #
 
 package FYR::Queue;
@@ -2156,8 +2156,8 @@ sub admin_get_queue ($$) {
                         #
                     } @terms
                 );
-            $where .= " order by created desc";
         }
+        $where .= " order by created desc";
     } elsif ($filter eq 'logsearch') {
         my $logmatches = dbh()->selectcol_arrayref(q#select message_id from message_log
             where message ilike '%' || ? || '%'#, {}, $params->{query});
