@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.65 2008-11-18 14:17:45 matthew Exp $
+ * $Id: fyr.php,v 1.66 2008-11-18 14:48:21 francis Exp $
  * 
  */
 
@@ -20,6 +20,8 @@ require_once "../../phplib/utility.php";
 require_once "../../phplib/auth.php";
 require_once "../../phplib/crosssell.php";
 require_once "../../phplib/tracking.php";
+
+require_once "../phplib/cobrand.php";
 
 // Disable these types (due to elections / pending elections etc.)
 $disabled_child_types = array();
@@ -53,7 +55,7 @@ $syn = str_replace('.'.OPTION_WEB_DOMAIN, '', $syn);
 if (array_key_exists('syn', $_GET)) {
     $syn = $_GET['syn'];
 }
-$cobrand_allowed = array('cheltenham'=>1, 'animalaid'=>1, 'freeourbills'=>1);
+$cobrand_allowed = cobrand_allowed();
 if (array_key_exists($syn, $cobrand_allowed)) {
     template_set_style("../templates/$syn", true);
     global $cobrand;

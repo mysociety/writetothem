@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.17 2008-03-10 17:49:35 matthew Exp $
+ * $Id: confirm.php,v 1.18 2008-11-18 14:48:21 francis Exp $
  * 
  */
 
@@ -45,9 +45,8 @@ if (!$result) {
     $values = msg_admin_get_message($result);
     if (rabx_is_error($values)) {
         template_show_error($values->text);
-    } elseif ($values['cobrand'] && $values['cobrand'] == 'animalaid') {
-        header("Location: http://www.animalaiduk.com/h/f/ACTIVE/blog//1//?id=".$values['cocode']);
-        exit;
+    } elseif ($values['cobrand'] && cobrand_post_letter_send($values))
+        // Do nothing - cobrand_post_letter_send must do the special action e.g. header or template_draw etc.
     } else {
         template_draw("confirm-accept", $values);
     }

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.135 2008-11-18 14:17:45 matthew Exp $
+ * $Id: write.php,v 1.136 2008-11-18 14:48:21 francis Exp $
  *
  */
 
@@ -350,14 +350,9 @@ function renderForm($form, $pageName)
     $cobrand_letter_help = false;
     global $cobrand;
     if ($pageName == 'writeForm' && $cobrand) {
-        if ($cobrand == 'animalaid' && $fyr_values['cocode']) {
-            $cobrand_letter_help = file_get_contents("http://www.animalaiduk.com/functions/custom/action_snippet.php?id=" . $fyr_values['cocode']);
-            $cobrand_letter_help = str_replace('<h1>', '<h2>', $cobrand_letter_help);
-            $cobrand_letter_help = str_replace('</h1>', '</h2>', $cobrand_letter_help);
-        } elseif ($cobrand == 'freeourbills') {
-            $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/freeourbills/edm?wtt=1&pc=" . $fyr_values['postcode']);
-        }
-    }
+        $cobrand_letter_help = cobrand_get_letter_help($cobrand, $fyr_values);
+
+   }
     
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form,

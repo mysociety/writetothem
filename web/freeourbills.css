@@ -1,0 +1,64 @@
+/*
+ * syn.css
+ * Things that are most likely to change in syndicated stylesheets.
+ * 
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+ *
+ * $Id: freeourbills.css,v 1.1 2008-11-18 14:48:21 francis Exp $
+ * 
+ */
+
+img#cobrand_logo {
+    background-color: #ffffff;
+    float: right;
+    border: solid 2px #4d6c25;
+    padding: 5px;
+    margin: 10px;
+}
+
+body {
+    color: #000000;
+    background-color: #ffffff;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+h1#heading {
+    color: #000000;
+    background-color: #e8fdcb;
+    border-bottom: solid 2px #4d6c25;
+}
+h1#heading a, h1#heading a:link, h1#heading a:visited {
+    color: #4d6c25;
+}
+
+#footer {
+    border-top: solid 1px #4d6c25;
+}
+
+#postcodebox, #writebox, #preview, #buttonbox {
+    background-color: #e8fdcb;
+    color: #000000;
+}
+
+#postcodebox {
+    border: solid 2px #4d6c25;
+}
+#writebox, #preview, #buttonbox {
+    border: solid 2px #4d6c25;
+}
+
+.maincol {
+    border-left: solid 1px #4d6c25;
+}
+
+#sidebar {
+    border: solid 1px #4d6c25;
+    background-color: #e8fdcb;
+}
+
+.notebox {
+    border: none;
+    background-color: #ffffff;
+    color: #cc0000;
+}

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.59 2008-05-29 11:53:09 matthew Exp $
+ * $Id: index.php,v 1.60 2008-11-18 14:48:21 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -44,11 +44,17 @@ $ref = fyr_external_referrer();
 if (isset($ref))
     $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
 $cocode = get_http_var('cocode');
+if ($cobrand) {
+    $cocode = cobrand_force_default_cocode($cobrand, $cocode);
+}
 if ($cocode)
     $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
 
 // Pass on any representative type selection
 $a_forward = get_http_var("a");
+if ($cobrand) {
+    $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
+}
 if ($a_forward) 
     $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
 
