@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.60 2008-11-18 14:48:21 francis Exp $
+ * $Id: index.php,v 1.61 2008-11-18 16:42:53 francis Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -52,8 +52,13 @@ if ($cocode)
 
 // Pass on any representative type selection
 $a_forward = get_http_var("a");
+$forced_rep_type = false;
 if ($cobrand) {
+    $old_a_forward = $a_forward;
     $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
+    if ($old_a_forward != $a_forward) {
+        $forced_rep_type = true;
+    }
 }
 if ($a_forward) 
     $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
@@ -200,10 +205,12 @@ if ($a_forward) {
     # Subset of representatives
     $area_types = fyr_parse_area_type_list($a_forward);
     $area_type_desc = fyr_describe_area_type_list($area_types);
-    $fyr_all_url = htmlspecialchars(url_new('', false,
-                    'pc', get_http_var('pc'),
-                    'fyr_extref', fyr_external_referrer(),
-                    'cocode', get_http_var('cocode')));
+    if (!$forced_rep_type) {
+        $fyr_all_url = htmlspecialchars(url_new('', false,
+                        'pc', get_http_var('pc'),
+                        'fyr_extref', fyr_external_referrer(),
+                        'cocode', get_http_var('cocode')));
+    }
 } else {
     # All representatives
     global $va_child_types;
