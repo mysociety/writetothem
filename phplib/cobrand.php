@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.2 2008-11-18 17:03:23 francis Exp $
+ * $Id: cobrand.php,v 1.3 2008-11-18 17:40:51 francis Exp $
  * 
  */
 
@@ -25,7 +25,7 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
         $cobrand_letter_help = str_replace('<h1>', '<h2>', $cobrand_letter_help);
         $cobrand_letter_help = str_replace('</h1>', '</h2>', $cobrand_letter_help);
     } elseif ($cobrand == 'freeourbills') {
-        # First one was really: $fyr_values['cocode'] == 'email_3'
+        # First one was really: $fyr_values['cocode'] == 'email3'
         # But we make it the default also for now, so nothing to check.
         $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/freeourbills/edm?wtt=1&pc=" . urlencode($fyr_values['pc']));
     }
@@ -52,7 +52,7 @@ function cobrand_post_letter_send($values) {
 // forced value, or if another code isn't set).
 function cobrand_force_default_cocode($cobrand, $cocode) {
     if ($cobrand == 'freeourbills' && !$cocode) {
-        $cocode = "email_3";
+        $cocode = "email3";
     }
     return $cocode;
 }
@@ -64,7 +64,7 @@ function cobrand_force_default_cocode($cobrand, $cocode) {
 // $type input is the value set with the 'a' URL parameter, if there is one.
 function cobrand_force_representative_type($cobrand, $cocode, $type) {
     if ($cobrand == 'freeourbills') {
-        if ($cocode && $cocode == 'email_3') {
+        if ($cocode && $cocode == 'email3') {
             $type = 'westminstermp';
         }
     }
