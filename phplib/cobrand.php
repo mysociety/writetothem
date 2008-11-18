@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.1 2008-11-18 14:48:21 francis Exp $
+ * $Id: cobrand.php,v 1.2 2008-11-18 17:03:23 francis Exp $
  * 
  */
 
@@ -39,6 +39,10 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
 function cobrand_post_letter_send($values) {
     if ($values['cobrand'] == 'animalaid') {
         header("Location: http://www.animalaiduk.com/h/f/ACTIVE/blog//1//?id=".$values['cocode']);
+        exit;
+    }
+    if ($values['cobrand'] == 'freeourbills') {
+        header("Location: http://www.theyworkforyou.com/freeourbills/doshare.php?letterthanks=1");
         exit;
     }
     return false;
