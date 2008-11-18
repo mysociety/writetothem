@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.54 2008-04-10 16:08:51 francis Exp $
+-- $Id: schema.sql,v 1.55 2008-11-18 17:39:08 francis Exp $
 --
 
 set client_min_messages to error;
@@ -133,7 +133,7 @@ create table message (
 
     -- cobranding (e.g. see http://cheltenham.writetothem.com)
     cobrand text check (cobrand ~* '^[a-z0-9]+$'), -- first part of domain (e.g. cheltenham, animalaid), NULL for no cobranding
-    cocode text check (cocode ~* '^[a-zA-Z0-9-]+$'), -- extra code for cobranding organisation
+    cocode text check (cocode ~* '^[a-zA-Z0-9-_]+$'), -- extra code for cobranding organisation
 
     -- a group of messages can be sent at one time with the same text 
     -- to multiple representatives. A group_id identifies the group 
