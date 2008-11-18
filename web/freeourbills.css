@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: freeourbills.css,v 1.1 2008-11-18 14:48:21 francis Exp $
+ * $Id: freeourbills.css,v 1.2 2008-11-18 17:23:40 matthew Exp $
  * 
  */
 
@@ -37,7 +37,7 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 }
 
 #postcodebox, #writebox, #preview, #buttonbox {
-    background-color: #e8fdcb;
+    background-color: #F5FDEA;
     color: #000000;
 }
 
@@ -54,7 +54,7 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 
 #sidebar {
     border: solid 1px #4d6c25;
-    background-color: #e8fdcb;
+    background-color: #F5FDEA;
 }
 
 .notebox {
