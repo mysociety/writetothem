@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.275 2008-11-11 09:21:31 matthew Exp $
+# $Id: Queue.pm,v 1.276 2008-12-03 13:23:44 matthew Exp $
 #
 
 package FYR::Queue;
@@ -117,7 +117,7 @@ of characters [0-9a-f] only.
 use constant MESSAGE_ID_LENGTH => 20;
 sub create () {
     # Assume collision probability == 0.
-    return unpack('h20', mySociety::Random::random_bytes(MESSAGE_ID_LENGTH / 2));
+    return unpack('h20', mySociety::Random::random_bytes(MESSAGE_ID_LENGTH / 2, 1));
 }
 
 =item create_group
