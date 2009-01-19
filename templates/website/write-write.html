@@ -51,7 +51,7 @@ if ($values['warning_text']) {
     echo '<div id="bad_contact_warning">', $values['warning_text'], '</div>';
 }
 
-?>
+if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_help']) { ?>
 
 <h2>Read this before writing your message</h2>
 
@@ -124,6 +124,8 @@ if ($values['representative']['method'] == 'via') {
 }
 
 echo '</ul>';
+
+}
 
 echo $values['form'];
 template_draw('footer', $values);
