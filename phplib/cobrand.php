@@ -5,13 +5,13 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.3 2008-11-18 17:40:51 francis Exp $
+ * $Id: cobrand.php,v 1.4 2009-01-19 09:56:19 matthew Exp $
  * 
  */
 
 // List of subdomains of WriteToThem which are cobrands.
 function cobrand_allowed() {
-    return array('cheltenham'=>1, 'animalaid'=>1, 'freeourbills'=>1);
+    return array('cheltenham'=>1, 'animalaid'=>1, 'freeourbills'=>1, 'foiorder2009'=>1);
 }
 
 // To change look and feel, make new files in templates/. Look at cheltenham
@@ -28,6 +28,8 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
         # First one was really: $fyr_values['cocode'] == 'email3'
         # But we make it the default also for now, so nothing to check.
         $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/freeourbills/edm?wtt=1&pc=" . urlencode($fyr_values['pc']));
+    } elseif ($cobrand == 'foiorder2009') {
+        $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/foiorder2009/wtt.html");
     }
     return $cobrand_letter_help;
 }
@@ -45,6 +47,10 @@ function cobrand_post_letter_send($values) {
         header("Location: http://www.theyworkforyou.com/freeourbills/doshare.php?letterthanks=1");
         exit;
     }
+    if ($values['cobrand'] == 'foiorder2009') {
+        header("Location: http://www.theyworkforyou.com/foiorder2009/share");
+        exit;
+    }
     return false;
 }
 
@@ -53,6 +59,9 @@ function cobrand_post_letter_send($values) {
 function cobrand_force_default_cocode($cobrand, $cocode) {
     if ($cobrand == 'freeourbills' && !$cocode) {
         $cocode = "email3";
+    }
+    if ($cobrand == 'foiorder2009' && !$cocode) {
+        $cocode = "email1";
     }
     return $cocode;
 }
@@ -65,6 +74,11 @@ function cobrand_force_default_cocode($cobrand, $cocode) {
 function cobrand_force_representative_type($cobrand, $cocode, $type) {
     if ($cobrand == 'freeourbills') {
         if ($cocode && $cocode == 'email3') {
+            $type = 'westminstermp';
+        }
+    }
+    if ($cobrand == 'foiorder2009') {
+        if ($cocode && $cocode == 'email1') {
             $type = 'westminstermp';
         }
     }
