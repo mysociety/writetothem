@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: EmailTemplate.pm,v 1.2 2004-11-18 13:27:57 chris Exp $
+# $Id: EmailTemplate.pm,v 1.3 2009-01-26 12:54:08 matthew Exp $
 #
 
 package FYR::EmailTemplate;
@@ -70,8 +70,8 @@ sub format ($$;$) {
 
     return $text if ($nowrap);
 
-    local($Text::Wrap::columns = 72);
-    local($Text::Wrap::huge = 'overflow');
+    local($Text::Wrap::columns) = 72;
+    local($Text::Wrap::huge) = 'overflow';
 
     return Text::Wrap::wrap('', '', $text);
 }
