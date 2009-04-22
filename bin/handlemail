@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.40 2008-04-12 11:27:52 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.41 2009-04-22 13:40:26 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -178,14 +178,16 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
         FYR::Queue::logmsg($id, 1, "received email bounce message", 'handlemail');
         dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines) . "\n");
 
-        my $status = mySociety::HandleMail::parse_dsn_bounce(\@lines);
+        my $r = mySociety::HandleMail::parse_dsn_bounce(\@lines);
 
-        if (!defined($status)) {
+        if (!defined($r)) {
             FYR::Queue::logmsg($id, 1, "bounce message could not be parsed as an RFC1892/1894 DSN", 'handlemail');
             if ($msg->{state} eq 'bounce_wait') { # XXX is this condition right?
                 FYR::Queue::state($id, 'bounce_confirm');
             }
         } else {
+            my %attributes = %{$r};  
+            my $status = $attributes{status};
             my $what;
             my $nextstate;
             
