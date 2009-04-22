@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.54 2008-06-24 16:41:21 francis Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.55 2009-04-22 14:00:08 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -415,9 +415,10 @@ sub do_send_example_message {
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
     $wth->browser_follow_link(text_regex => qr/YES/);
-    $wth->browser_check_contents("Thanks again! ... just a few more questions");
-    $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
-
+    my $content = $wth->browser_content();
+    if ($content =~ "Thanks again! ... just a few more questions"){
+        $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
+    }
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
@@ -670,9 +671,10 @@ sub do_send_lords_message {
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
     $wth->browser_follow_link(text_regex => qr/YES/);
-    $wth->browser_check_contents("Thanks again! ... just a few more questions");
-    $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
-
+    my $content = $wth->browser_content();
+    if ($content =~ "Thanks again! ... just a few more questions"){
+        $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
+    }
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
