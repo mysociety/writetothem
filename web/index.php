@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.61 2008-11-18 16:42:53 francis Exp $
+ * $Id: index.php,v 1.62 2009-04-28 10:10:32 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -222,6 +222,8 @@ if ($a_forward) {
     $area_type_desc = str_replace("or Northern Ireland", "or <br>Northern Ireland", $area_type_desc);
 }
 $blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
+
+header('Cache-Control: max-age=3600');
 
 // Display page
 template_draw($template, array(
