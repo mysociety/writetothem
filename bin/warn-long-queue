@@ -1,0 +1,86 @@
+#!/usr/bin/php -q
+<?php
+/* 
+ * warn-long-queue:
+ * Send a warning email if the FYR needs_admin queue gets over a certain size
+ *
+ * Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
+ * Email: louise@mysociety.org. WWW: http://www.mysociety.org/
+ *
+ * $Id: warn-long-queue,v 1.1 2009-04-29 10:28:21 louise Exp $
+ *
+ */
+ 
+ 
+require_once "../conf/general";
+require_once "../phplib/queue.php";
+$long_opts = array('help', 'verbose');
+require_once '../../phplib/phpcli.php';
+
+$switches = $options[0];
+$args = $options[1];
+$realrun = 0;
+if (count($args) > 1) {
+    print "Specify at most one argument.\n";
+    exit;
+}
+if (count($args) == 1) {
+    $realrun = 1;
+    $email_to = $args[0];
+}
+$verbose = 0;
+foreach ($switches as $switch) {
+    if ($switch[0]=='--verbose') $verbose = 1;
+    if ($switch[0]=='--help') {
+?>
+
+Usage: warn-long-queue [--verbose] [TO_ADDRESS]
+
+TO_ADDRESS is the (comma separated) list of email addresses to send to.
+If no TO_ADDRESS is specified command runs in test mode, and outputs
+to stdout.
+
+--help      Display this help message
+--verbose   Display more information while working
+
+<?
+        exit;
+    }
+}
+
+function verbose($str) {
+   global $verbose;
+   if ($verbose)
+       fwrite(STDERR, date('r') . " warn-long-queue: $str\n");
+}
+
+$threshold = -1;
+$mail = '';
+// Messages in "need attention" state
+verbose("getting messages in 'need attention' state");
+$need_attention_messages = msg_admin_get_queue('needattention', array());
+$url = OPTION_ADMIN_URL . '?page=fyrqueue';
+$need_attention_messages_count = count($need_attention_messages);
+if ($need_attention_messages_count > $threshold) {
+    $mail .= "This is an email to let you know that that 
+$need_attention_messages_count messages are frozen, or have bounced.
+Perhaps someone is running a campaign? You can take a look at:
+$url
+
+-- The Quality Deity
+";
+}
+if ($mail) {
+    $subject = "The queue for WriteToThem is over " . $threshold;
+    if ($realrun) {
+        $dest = $email_to;
+        verbose("sending email to $dest");
+      //  mail($dest, $subject, $mail,
+      //      "From: The Quality Deity <team@writetothem.com>\n".
+       //     "X-Mailer: PHP/" . phpversion());
+    } else {
+        verbose("printing email");
+        print "Subject: $subject\n\n";
+        print $mail;
+    }
+}
