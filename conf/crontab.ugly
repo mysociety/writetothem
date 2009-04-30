@@ -4,9 +4,12 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 #
-# $Id: crontab.ugly,v 1.7 2009-04-29 14:34:01 matthew Exp $
+# $Id: crontab.ugly,v 1.8 2009-04-30 11:43:52 louise Exp $
 
 MAILTO=team@writetothem.com
+
+# Once an hour
+44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/warn-long-queue
 
 # Once a day
 33 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/message-send-graph
