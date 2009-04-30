@@ -7,7 +7,7 @@
  * Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
  * Email: louise@mysociety.org. WWW: http://www.mysociety.org/
  *
- * $Id: warn-long-queue,v 1.1 2009-04-29 10:28:21 louise Exp $
+ * $Id: warn-long-queue,v 1.2 2009-04-30 11:31:08 louise Exp $
  *
  */
  
@@ -54,16 +54,16 @@ function verbose($str) {
        fwrite(STDERR, date('r') . " warn-long-queue: $str\n");
 }
 
-$threshold = -1;
+$threshold = 100;
 $mail = '';
 // Messages in "need attention" state
 verbose("getting messages in 'need attention' state");
 $need_attention_messages = msg_admin_get_queue('needattention', array());
+verbose("got the messages");
 $url = OPTION_ADMIN_URL . '?page=fyrqueue';
 $need_attention_messages_count = count($need_attention_messages);
 if ($need_attention_messages_count > $threshold) {
-    $mail .= "This is an email to let you know that that 
-$need_attention_messages_count messages are frozen, or have bounced.
+    $mail .= "This is an email to let you know that that $need_attention_messages_count messages are frozen, or have bounced.
 Perhaps someone is running a campaign? You can take a look at:
 $url
 
@@ -75,12 +75,14 @@ if ($mail) {
     if ($realrun) {
         $dest = $email_to;
         verbose("sending email to $dest");
-      //  mail($dest, $subject, $mail,
-      //      "From: The Quality Deity <team@writetothem.com>\n".
-       //     "X-Mailer: PHP/" . phpversion());
+        mail($dest, $subject, $mail,
+             "From: The Quality Deity <team@writetothem.com>\n".
+             "X-Mailer: PHP/" . phpversion());
     } else {
         verbose("printing email");
         print "Subject: $subject\n\n";
         print $mail;
     }
 }
+
+exit(0);
