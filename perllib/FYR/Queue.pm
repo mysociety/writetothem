@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.277 2009-05-12 10:30:02 louise Exp $
+# $Id: Queue.pm,v 1.278 2009-05-12 14:11:40 louise Exp $
 #
 
 package FYR::Queue;
@@ -712,20 +712,33 @@ sub actions ($) {
     return scalar(dbh()->selectrow_array('select numactions from message where id = ?', {}, $id));
 }
 
-# message ID [LOCK]
+# message ID [LOCK] [NOWAIT]
 # Return a hash of data about message ID. If LOCK is true, retrieves the fields
-# using SELECT ... FOR UPDATE.
-sub message ($;$) {
-    my ($id, $forupdate) = @_;
+# using SELECT ... FOR UPDATE. If NOWAIT is true, uses the NOWAIT option of the FOR UPDATE
+# clause, returning undef if no lock can be obtained on the message. 
+sub message ($;$$) {
+    my ($id, $forupdate, $nowait) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
-    if (my $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate", {}, $id)) {
-        # Add some convenience fields.
-        $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
-        $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
-        return $msg;
-    } else {
-        throw FYR::Error("No message '$id'.", FYR::Error::BAD_DATA_PROVIDED);
-    }
+    $nowait = defined($nowait) ? ' nowait' : '';
+    my $msg;
+    try{
+        $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait", {}, $id); 
+	if ($msg) {
+            # Add some convenience fields.
+            $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
+            $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
+            return $msg;
+        } else {
+            throw FYR::Error("No message '$id'.", FYR::Error::BAD_DATA_PROVIDED);
+        }
+    } catch mySociety::DBHandle::Error with {
+        my $E = shift;
+        if ($E->text() =~ /could not obtain lock on row/){
+          return undef;
+        }else{
+           throw mySociety::DBHandle::Error($E->text());
+        }
+    };
 }
 
 # lock_group GROUP_ID
@@ -1879,7 +1892,10 @@ sub process_queue ($$;$$) {
                     $process_msg = 1;
                 }
             }else{
-                $msg = message($id, 1);
+                my $lock = 1;
+                my $nowait = 1;
+                $msg = message($id, $lock, $nowait);
+                next unless defined($msg);
                 $process_msg = 1;
             }
             if ($process_msg and $msg->{state} eq $state
