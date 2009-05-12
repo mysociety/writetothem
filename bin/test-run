@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.58 2009-05-12 14:19:44 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.59 2009-05-12 14:20:33 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -737,7 +737,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 2);
 
     # Try a multiple page message 
-    my $dummy_fax = '0002';
+    $dummy_fax = '0002';
 
     send_fax(9, $dummy_fax, 3);
 
