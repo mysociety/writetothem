@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.278 2009-05-12 14:11:40 louise Exp $
+# $Id: Queue.pm,v 1.279 2009-05-12 14:47:00 louise Exp $
 #
 
 package FYR::Queue;
@@ -719,10 +719,10 @@ sub actions ($) {
 sub message ($;$$) {
     my ($id, $forupdate, $nowait) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
-    $nowait = defined($nowait) ? ' nowait' : '';
+    my $nowait_str = defined($nowait) ? ' nowait' : '';
     my $msg;
     try{
-        $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait", {}, $id); 
+        $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait_str", {}, $id); 
 	if ($msg) {
             # Add some convenience fields.
             $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
@@ -733,10 +733,10 @@ sub message ($;$$) {
         }
     } catch mySociety::DBHandle::Error with {
         my $E = shift;
-        if ($E->text() =~ /could not obtain lock on row/){
-          return undef;
+        if ($E->text() =~ /could not obtain lock on row/ && defined($nowait)){
+            return undef;
         }else{
-           throw mySociety::DBHandle::Error($E->text());
+            throw mySociety::DBHandle::Error($E->text());
         }
     };
 }
@@ -1853,12 +1853,6 @@ sub process_queue ($$;$$) {
             . q#) and (state <> 'ready' or not frozen) order by random()#);
         $stmt->execute();
     } else {
-        # XXX should be "order by confirmed", but that way they are all
-        # deadlocking, rather than trying the next one as they should be. That
-        # bug needs fixing, then this putting back from "order by random()" to
-        # "order by confirmed"
-        # XXX XXX This change has never been deployed to fax server, so am reverting
-        # as need to update deployed code
         $stmt = dbh()->prepare(sprintf(q#
                 select id, state, group_id from message
                 where state = 'ready' and not frozen
@@ -1895,8 +1889,9 @@ sub process_queue ($$;$$) {
                 my $lock = 1;
                 my $nowait = 1;
                 $msg = message($id, $lock, $nowait);
-                next unless defined($msg);
-                $process_msg = 1;
+                if (defined($msg)){
+                    $process_msg = 1;
+                }
             }
             if ($process_msg and $msg->{state} eq $state
                 and (!defined($msg->{lastaction})
