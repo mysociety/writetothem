@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.276 2008-12-03 13:23:44 matthew Exp $
+# $Id: Queue.pm,v 1.277 2009-05-12 10:30:02 louise Exp $
 #
 
 package FYR::Queue;
@@ -49,6 +49,7 @@ use mySociety::PostcodeUtil;
 use mySociety::Random;
 use mySociety::VotingArea;
 use mySociety::StringUtils qw(trim merge_spaces string_diff);
+use mySociety::SystemMisc qw(print_log);
 
 use FYR;
 use FYR::AbuseChecks;
@@ -120,6 +121,19 @@ sub create () {
     return unpack('h20', mySociety::Random::random_bytes(MESSAGE_ID_LENGTH / 2, 1));
 }
 
+=item logmsg_handler ID TIME STATE MESSAGE IMPORTANT
+# Default callback for logmsg, so that we can log fyrqd messages to the system log or
+# standard error for easier debugging.
+=cut
+sub logmsg_handler ($$$$$) {
+    mySociety::SystemMisc::log_to_stderr(0);
+    my ($id, $time, $state, $msg, $important) = @_;
+    print_log('info',
+            "message $id($state): $msg");
+    print_log('info',
+            "last message delayed by " . (time() - $time) . " seconds")
+                if ($time > time() + 5);
+}
 =item create_group
 
 Return an ID for a new group of messages. Group IDs, like messages IDs, are 20
@@ -501,7 +515,8 @@ my $logmsg_handler;
 sub logmsg_set_handler ($) {
     $logmsg_handler = $_[0];
 }
-
+# Set default handler
+logmsg_set_handler(\&logmsg_handler);
 
 # logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
@@ -532,6 +547,15 @@ sub logmsg ($$$;$) {
         if (defined($logmsg_handler));
 }
 
+# log_to_handler IMPORTANT DIAGNOSTIC [EDITOR]
+# log a DIAGNOSTIC only to any log handler that has been set, not to the database. 
+# If IMPORTANT is true, then mark the log message as exceptional. Optionally, 
+# EDITOR is the name of the human who performed the action relating to the log message.
+sub log_to_handler($$$;$){
+    my ($id, $important, $msg, $editor) = @_;
+    &$logmsg_handler($id, FYR::DB::Time(), state($id), $msg, $important)
+        if (defined($logmsg_handler));
+}
 
 # %allowed_transitions
 # Transitions we're allowed to make in the state machine.

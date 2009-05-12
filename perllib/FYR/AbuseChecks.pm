@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.64 2009-04-29 14:04:06 louise Exp $
+# $Id: AbuseChecks.pm,v 1.65 2009-05-12 10:30:01 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -25,6 +25,7 @@ use Geo::IP;
 use Net::Google::Search;
 use POSIX;  # strftime
 use Storable;
+use Time::HiRes;
 
 use mySociety::Config;
 use mySociety::DaDem;
@@ -114,7 +115,14 @@ sub get_similar_messages ($;$) {
     $m =~ s#^\s*Yours sincerely,?\s*\n##gsm;
     # "Electronic signature".
     $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
+   
+        
+    my $start_time = Time::HiRes::time();
+    my $elapsed_time;
     my $h = FYR::SubstringHash::hash($m, SUBSTRING_LENGTH, NUM_BITS);
+
+    $elapsed_time = Time::HiRes::time() - $start_time;
+    FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash. Time taken: $elapsed_time");
 
     # XXX we should test whether the message is in the database, so that we can
     # run a fake test message through the abuse tests without having to create
@@ -137,6 +145,7 @@ sub get_similar_messages ($;$) {
     # and sending email address (so we should catch people spamming by using
     # lots of postcodes to send a single message to several MPs).
     # We only look at messages that might be or have been sent to representatives.
+    $start_time = Time::HiRes::time();
     my $same_rep_check = "recipient_id <> ?";
     $same_rep_check = "recipient_id = ?" if $same_rep;
     my $stmt = dbh()->prepare(q#
@@ -147,8 +156,13 @@ sub get_similar_messages ($;$) {
              and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
              and state not in ('error', 'failed', 'failed_closed', 'finished')
+             order by created desc
+             limit 5000
         #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
+    $elapsed_time = Time::HiRes::time() - $start_time;
+    FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash query, samerep : $same_rep. Time taken: $elapsed_time");
+
     my $thr = mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD');
     my @similar = ( );
 
@@ -157,6 +171,8 @@ sub get_similar_messages ($;$) {
     my $email = lc($msg->{sender_email});
     $email =~ s#\s##g;
 
+    $start_time = Time::HiRes::time();
+    my $rows = 0;
     while (my ($id2, $pc2, $email2, $h2) = $stmt->fetchrow_array()) {
         $pc2 =~ s#\s##g;
         $email2 =~ s#\s##g;
@@ -166,8 +182,10 @@ sub get_similar_messages ($;$) {
         my $similarity = FYR::SubstringHash::similarity($h, $h2);
         #warn "$id2 $similarity\n";
         push(@similar, [$id2, $similarity]) if ($similarity > $thr);
+        $rows++;  
     }
-
+    $elapsed_time = Time::HiRes::time() - $start_time;
+    FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash similarity comparison, samerep : $same_rep. Num hashes: $rows. Time taken: $elapsed_time");
     return @similar;
 }
 
