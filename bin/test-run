@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.57 2009-05-12 14:14:17 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.58 2009-05-12 14:19:44 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -727,7 +727,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($second_dummy_fax, 1);
 
     # try a via message
-    $dummy_fax = '0001';
+    my $dummy_fax = '0001';
     send_fax(8, $dummy_fax, 1, 1);
 
     # Run the queue in fax mode
