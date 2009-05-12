@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.55 2009-04-22 14:00:08 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.56 2009-05-12 11:35:47 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -679,12 +679,14 @@ sub do_send_lords_message {
 }
 
 #############################################################################
+sub send_fax($$$;$){
+    my ($email_num, $dummy_fax, $repeat_text, $recipient_via) = @_;
+    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
 
-sub do_send_fax_message {
-    set_base_url("");
-    set_fyr_date('1993-01-01');
-    my $dummy_fax = '0000';
-    send_message_to_rep(6,
+    for (my $i=1; $i<=$repeat_text; ++$i) {
+        $body = $body . $body; 
+    }
+    send_message_to_rep($email_num,
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth',
                          {
@@ -692,36 +694,41 @@ sub do_send_fax_message {
             writer_town => 'Paper Lane',
             state => 'Facsimileshire',
             writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between."
-});
-
+            body => $body
+    });
+    
     # Set a dummy fax number on the message and erase the recipient email
-    dbh()->do("update message set recipient_fax = ?, recipient_email = null where sender_email = ?", {}, $dummy_fax, email_n(6));
+    dbh()->do("update message set recipient_fax = ?, recipient_email = null where sender_email = ?", {}, $dummy_fax, email_n($email_num));
     dbh()->commit();
+    if ($recipient_via){
+        # Set a via flag on the message 
+        dbh()->do("update message set recipient_via = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
+        dbh()->commit();  
+    }
+    
+}
+#############################################################################
+
+sub do_send_fax_message {
+    set_base_url("");
+    set_fyr_date('1993-01-01');
+    
+    # set up a couple of fax messages
+    my $first_dummy_fax = '0000';
+    my $second_dummy_fax = '0001';
+    send_fax(6, $first_dummy_fax, 1);
+    send_fax(14, $second_dummy_fax, 1);
 
     # Run the queue in fax mode
     call_fyrqd('--fax');
 
-    # Check that a one page fax is sent
-    $wth->fax_get_sent_to($dummy_fax, 1);
+    # Check that a one page fax is sent to each 
+    $wth->fax_get_sent_to($first_dummy_fax, 1);
+    $wth->fax_get_sent_to($second_dummy_fax, 1);
 
     # try a via message
     $dummy_fax = '0001';
-
-    send_message_to_rep(8,
-        'CB23QJ', # The Guildhall, Cambridge 
-        'David Howarth',
-                           {
-            writer_address1 => '75 Toner Place',
-            writer_town => 'Paper Lane',
-            state => 'Facsimileshire',
-            writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between."
-});
-
-    # Set a dummy fax number and via flag on the message and erase the recipient email
-    dbh()->do("update message set recipient_fax = ?, recipient_email = null, recipient_via = 't' where sender_email = ?", {}, $dummy_fax, email_n(8));
-    dbh()->commit();
+    send_fax(8, $dummy_fax, 1, 1);
 
     # Run the queue in fax mode
     call_fyrqd('--fax');
@@ -732,25 +739,7 @@ sub do_send_fax_message {
     # Try a multiple page message 
     $dummy_fax = '0002';
 
-    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
-
-    for (my $i=1; $i<=3; ++$i) {
-        $body = $body . $body; 
-    }
-    send_message_to_rep(9,
-        'CB23QJ', # The Guildhall, Cambridge 
-        'David Howarth',
-                        {
-            writer_address1 => '75 Toner Place',
-            writer_town => 'Paper Lane',
-            state => 'Facsimileshire',
-            writer_phone => undef,
-            body => $body
-});
-
-    # Set a dummy fax number on the message and erase the recipient email
-    dbh()->do("update message set recipient_fax = ?, recipient_email = null where sender_email = ?", {}, $dummy_fax, email_n(9));
-    dbh()->commit();
+    send_fax(9, $dummy_fax, 3);
 
     # Run the queue in fax mode
     call_fyrqd('--fax');
