@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.56 2009-05-12 11:35:47 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.57 2009-05-12 14:14:17 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -702,7 +702,7 @@ sub send_fax($$$;$){
     dbh()->commit();
     if ($recipient_via){
         # Set a via flag on the message 
-        dbh()->do("update message set recipient_via = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
+        dbh()->do("update message set recipient_via = 't' where sender_email = ?", {},  email_n($email_num));
         dbh()->commit();  
     }
     
@@ -737,7 +737,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 2);
 
     # Try a multiple page message 
-    $dummy_fax = '0002';
+    my $dummy_fax = '0002';
 
     send_fax(9, $dummy_fax, 3);
 
