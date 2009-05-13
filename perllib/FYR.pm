@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.19 2009-05-13 12:07:12 louise Exp $
+# $Id: FYR.pm,v 1.20 2009-05-13 12:35:28 louise Exp $
 #
 
 use strict;
@@ -92,7 +92,7 @@ my $date_offset;
 my $time_offset;
 sub Time () {
     if (!defined($date_offset)) {
-        $time_offset =
+        $date_offset =
             FYR::DB::dbh()->selectrow_array('
                         select extract(epoch from
                                 fyr_current_date())');
@@ -102,9 +102,9 @@ sub Time () {
             FYR::DB::dbh()->selectrow_array('
                         select extract(epoch from
                                 fyr_current_timestamp() - fyr_current_date())');
-        $time_offset = int($time_offset - time());
+        $time_offset = int($time_offset) - time();
     }
-    return time() + ($time_offset) + int($date_offset);
+    return time() + $time_offset + int($date_offset);
 }
 
 1;

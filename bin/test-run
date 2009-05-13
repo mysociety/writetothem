@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.62 2009-05-13 11:50:14 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.63 2009-05-13 12:35:27 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -224,7 +224,7 @@ sub set_fyr_date {
     if (defined($new_date)) {
         dbh()->do('delete from debugdate');
         if (defined($new_time)){
-            dbh()->do('insert into debugdate (override_today, override_time) values (??)', {}, $new_date, $new_time);
+            dbh()->do('insert into debugdate (override_today, override_time) values (?,?)', {}, $new_date, $new_time);
         }else{
             dbh()->do('insert into debugdate (override_today) values (?)', {}, $new_date);
         }
