@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.56 2008-11-18 17:43:57 francis Exp $
+-- $Id: schema.sql,v 1.57 2009-05-13 11:36:48 louise Exp $
 --
 
 set client_min_messages to error;
@@ -20,6 +20,7 @@ create table secret (
 -- to advance time without having to wait.
 create table debugdate (
     override_today date
+    override_time time
 );
 
 -- Returns the date of "today", which can be overriden for testing.
@@ -38,18 +39,18 @@ create function fyr_current_date()
     end;
 ' language 'plpgsql';
 
--- Returns the timestamp of current time, but with possibly overriden "today".
+-- Returns the timestamp of current time, but with possibly overriden "today" and "time".
 create function fyr_current_timestamp()
     returns timestamp as '
     declare
-        today date;
+      time_now time;
     begin
-        today = (select override_today from debugdate);
-        if today is not null then
-           return today + current_time;
+        time_now = (select override_time from debugdate);
+        if time_now is not null then
+            return fyr_current_date() + time_now;
         else
-           return current_timestamp;
-        end if;
+          return fyr_current_date() + current_time;
+        end_if;
     end;
 ' language 'plpgsql';
 

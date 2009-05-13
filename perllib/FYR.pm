@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.17 2007-08-15 11:31:44 matthew Exp $
+# $Id: FYR.pm,v 1.18 2009-05-13 11:36:49 louise Exp $
 #
 
 use strict;
@@ -88,15 +88,23 @@ sub secret () {
 Return time, offset to debug time.
 
 =cut
+my $date_offset;
 my $time_offset;
 sub Time () {
+    if (!defined($date_offset)) {
+        $time_offset =
+            FYR::DB::dbh()->selectrow_array('
+                        select extract(epoch from
+                                fyr_current_date() - current_date)');
+    }
     if (!defined($time_offset)) {
         $time_offset =
             FYR::DB::dbh()->selectrow_array('
                         select extract(epoch from
-                                fyr_current_timestamp() - current_timestamp)');
+                                fyr_current_timestamp() - fyr_current_date())');
+        $time_offset = int($time_offset - time());
     }
-    return time() + int($time_offset);
+    return time() + ($time_offset) + int($date_offset);
 }
 
 1;

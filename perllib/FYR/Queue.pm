@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.279 2009-05-12 14:47:00 louise Exp $
+# $Id: Queue.pm,v 1.280 2009-05-13 11:36:49 louise Exp $
 #
 
 package FYR::Queue;
@@ -1626,7 +1626,12 @@ my %state_action = (
                 # Don't attempt to send faxes outside reasonably sane hours --
                 # if we have a typo in a phone number we don't want to call the
                 # victim at all hours of the night.
-                return if outside_fax_hours();
+                # Allow for the option to fax the Lords fax machine out of hours.
+                if ($msg->{recipient_via} && $msg->{recipient_type} eq 'HOC') {
+                    return if outside_fax_hours() && ! mySociety::Config::get('FAX_LORDS_OUTSIDE_FAX_HOURS', 0);
+                }else{
+                    return if outside_fax_hours();
+                }
 
                 # Abandon faxes after a few failures.
                 if ($msg->{numactions} > FAX_DELIVERY_ATTEMPTS) {
