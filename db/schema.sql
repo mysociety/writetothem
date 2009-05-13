@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.58 2009-05-13 11:44:29 louise Exp $
+-- $Id: schema.sql,v 1.59 2009-05-13 11:51:37 louise Exp $
 --
 
 set client_min_messages to error;
@@ -50,7 +50,7 @@ create function fyr_current_timestamp()
             return fyr_current_date() + time_now;
         else
           return fyr_current_date() + current_time;
-        end_if;
+        end if;
     end;
 ' language 'plpgsql';
 
