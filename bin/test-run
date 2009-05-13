@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.69 2009-05-13 17:38:27 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.70 2009-05-13 17:47:12 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -774,6 +774,7 @@ sub do_send_fax_message {
     
     # next day time, other fax should get sent
     set_fyr_date('1995-01-02', '10:00:00');
+    call_fyrqd('--fax');
     $wth->fax_get_sent_to($dummy_fax, 1);
     
     $wth->fax_check_none_left();
