@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.280 2009-05-13 11:36:49 louise Exp $
+# $Id: Queue.pm,v 1.281 2009-05-13 17:38:27 louise Exp $
 #
 
 package FYR::Queue;
@@ -1908,6 +1908,7 @@ sub process_queue ($$;$$) {
                     # See whether anything changed, and if it did update the
                     # action counter.
                     my $msg2 = message($id);
+                    
                     ++$nactions
                         if ($msg2->{state} ne $msg->{state}
                             || $msg2->{numactions} != $msg->{numactions}
