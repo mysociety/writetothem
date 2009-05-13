@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.61 2009-05-13 11:46:51 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.62 2009-05-13 11:50:14 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -686,7 +686,7 @@ sub do_send_lords_message {
 }
 
 #############################################################################
-sub send_fax($$$$$$$;$){
+sub send_fax($$$$$$;$$){
     my ($email_num, $dummy_fax, $repeat_text, $postcode, $repname, $fields, $birthday, $recipient_via) = @_;
     my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
 
