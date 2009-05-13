@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.63 2009-05-13 12:35:27 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.64 2009-05-13 12:41:54 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -710,7 +710,10 @@ sub send_fax($$$$$$;$$){
 
 sub do_send_fax_message {
     set_base_url("");
-    set_fyr_date('1993-01-01');
+    
+    # Make sure we're in working hours
+    set_fyr_date('1993-01-01', '12:00:00');
+    
     my $postcode = 'CB23QJ';
     my $repname = 'David Howarth';
     my $fields = { writer_address1 => '75 Toner Place',
