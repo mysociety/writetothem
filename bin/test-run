@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.60 2009-05-13 11:36:48 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.61 2009-05-13 11:46:51 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -693,6 +693,7 @@ sub send_fax($$$$$$$;$){
     for (my $i=1; $i<=$repeat_text; ++$i) {
         $body = $body . $body; 
     }
+    $fields->{body} = $body;
     send_message_to_rep($email_num, $postcode, $repname, $fields, undef, $birthday);
     
     # Set a dummy fax number on the message and erase the recipient email
@@ -715,8 +716,7 @@ sub do_send_fax_message {
     my $fields = { writer_address1 => '75 Toner Place',
                    writer_town => 'Paper Lane',
                    state => 'Facsimileshire',
-                   writer_phone => undef,
-                   body => $body
+                   writer_phone => undef
                 };  
     # set up a couple of fax messages
     my $first_dummy_fax = '0000';
