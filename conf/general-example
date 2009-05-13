@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.37 2008-05-27 18:57:40 francis Exp $
+ * $Id: general-example,v 1.38 2009-05-13 09:58:01 louise Exp $
  * 
  */
 
@@ -93,6 +93,8 @@ define('OPTION_FAX_OPTIONS', '-iZ -i&FE0&D2S7=120 -i&C0 -kZ -iM1L0');
 define('OPTION_FAX_STATIONID', '000000000000');
 // Fax header (sent by the fax machine, not written into the fax).
 define('OPTION_FAX_HEADER', 'Sent via WRITE TO THEM http://www.writetothem.com/');
+// Do faxes to the Lords fax machine continue outside fax hours?
+define('OPTION_FAX_LORDS_OUTSIDE_FAX_HOURS', 0);
 
 
 // Configuration of the queue management daemon:
