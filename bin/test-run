@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.66 2009-05-13 12:51:45 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.67 2009-05-13 16:16:18 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -710,9 +710,9 @@ sub send_fax($$$$$$;$$){
 
 sub do_send_fax_message {
     set_base_url("");
-    
+
     # Make sure we're in working hours
-    set_fyr_date('1993-01-01', '12:00:00');
+    set_fyr_date('1995-01-01', '12:00:00');
     
     my $postcode = 'CB23QJ';
     my $repname = 'David Howarth';
@@ -756,7 +756,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 2);
     
     # Check that a fax won't be sent out of hours
-    set_fyr_date('1993-01-01', '21:00:00');
+    set_fyr_date('1995-01-01', '21:00:00');
     send_fax(15, $dummy_fax, 1, $postcode, $repname, $fields);
     
     # Run the queue in fax mode
