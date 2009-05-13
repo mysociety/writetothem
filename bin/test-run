@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.67 2009-05-13 16:16:18 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.68 2009-05-13 17:19:37 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -697,7 +697,7 @@ sub send_fax($$$$$$;$$){
     send_message_to_rep($email_num, $postcode, $repname, $fields, undef, $birthday);
     
     # Set a dummy fax number on the message and erase the recipient email
-    dbh()->do("update message set recipient_fax = ?, recipient_email = null where sender_email = ?", {}, $dummy_fax, email_n($email_num));
+    dbh()->do("update message set recipient_fax = ?, recipient_email = null, no_questionnaire = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
     dbh()->commit();
     if ($recipient_via){
         # Set a via flag on the message 
@@ -771,6 +771,7 @@ sub do_send_fax_message {
     call_fyrqd('--fax');
     # If a Lords message is being sent 'via', we don't add a cover page
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
+    
 }
 
 #############################################################################
