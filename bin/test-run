@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.64 2009-05-13 12:41:54 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.65 2009-05-13 12:50:28 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -766,7 +766,7 @@ sub do_send_fax_message {
     # Check that a fax to the Lords will be sent out of hours
     # Relies on FAX_LORDS_OUTSIDE_FAX_HOURS being set to 1 for the testharness
     my $lords_dummy_fax = '0003';
-    send_fax(16, $dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
+    send_fax(16, $lords_dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
  
     call_fyrqd('--fax');
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
