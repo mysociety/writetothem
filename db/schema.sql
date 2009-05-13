@@ -5,7 +5,7 @@
 -- Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 -- Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 --
--- $Id: schema.sql,v 1.57 2009-05-13 11:36:48 louise Exp $
+-- $Id: schema.sql,v 1.58 2009-05-13 11:44:29 louise Exp $
 --
 
 set client_min_messages to error;
@@ -19,7 +19,7 @@ create table secret (
 -- If a row is present, that is date which is "today".  Used for debugging
 -- to advance time without having to wait.
 create table debugdate (
-    override_today date
+    override_today date,
     override_time time
 );
 
