@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.65 2009-05-13 12:50:28 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.66 2009-05-13 12:51:45 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -769,6 +769,7 @@ sub do_send_fax_message {
     send_fax(16, $lords_dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
  
     call_fyrqd('--fax');
+    # If a Lords message is being sent 'via', we don't add a cover page
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
 }
 
