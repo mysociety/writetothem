@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.66 2009-05-12 15:50:16 louise Exp $
+# $Id: AbuseChecks.pm,v 1.67 2009-05-14 10:53:46 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -147,7 +147,11 @@ sub get_similar_messages ($;$) {
     # We only look at messages that might be or have been sent to representatives.
     $start_time = Time::HiRes::time();
     my $same_rep_check = "recipient_id <> ?";
-    $same_rep_check = "recipient_id = ?" if $same_rep;
+    my $order_limit_clause = "order by created desc limit 10000";
+    if ($same_rep){
+        $same_rep_check = "recipient_id = ?" 
+        $order_limit_clause = '';
+    }
     my $stmt = dbh()->prepare(q#
         select message_id, sender_postcode, sender_email, data
             from message, message_extradata
@@ -156,9 +160,7 @@ sub get_similar_messages ($;$) {
              and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
              and state not in ('error', 'failed', 'failed_closed', 'finished')
-             order by created desc
-             limit 5000
-        #);
+             #.$order_limit_clause);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
     $elapsed_time = Time::HiRes::time() - $start_time;
     FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash query, samerep : $same_rep. Time taken: $elapsed_time");
