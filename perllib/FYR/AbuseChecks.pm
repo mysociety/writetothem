@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.67 2009-05-14 10:53:46 louise Exp $
+# $Id: AbuseChecks.pm,v 1.68 2009-05-14 10:56:31 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -149,7 +149,7 @@ sub get_similar_messages ($;$) {
     my $same_rep_check = "recipient_id <> ?";
     my $order_limit_clause = "order by created desc limit 10000";
     if ($same_rep){
-        $same_rep_check = "recipient_id = ?" 
+        $same_rep_check = "recipient_id = ?"; 
         $order_limit_clause = '';
     }
     my $stmt = dbh()->prepare(q#
