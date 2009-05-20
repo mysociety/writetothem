@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.281 2009-05-13 17:38:27 louise Exp $
+# $Id: Queue.pm,v 1.282 2009-05-20 08:53:27 louise Exp $
 #
 
 package FYR::Queue;
@@ -516,7 +516,7 @@ sub logmsg_set_handler ($) {
     $logmsg_handler = $_[0];
 }
 # Set default handler
-logmsg_set_handler(\&logmsg_handler);
+#logmsg_set_handler(\&logmsg_handler);
 
 # logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
