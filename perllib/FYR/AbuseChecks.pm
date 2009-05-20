@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.68 2009-05-14 10:56:31 louise Exp $
+# $Id: AbuseChecks.pm,v 1.69 2009-05-20 07:35:09 matthew Exp $
 #
 
 package FYR::AbuseChecks;
@@ -306,6 +306,7 @@ my @group_tests = (
 
         # Body of message similar to other messages in queue to different recipients
         sub ($) {
+	    return (); # XXX Taking far too long
             my ($msg) = @_;
             my @similar = sort { $b->[1] <=> $a->[1] } get_similar_messages($msg);
 
