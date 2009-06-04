@@ -9,7 +9,7 @@
 # Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.3 2008-04-03 15:12:26 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: toggle-areas,v 1.4 2009-06-04 14:37:12 francis Exp $';
 
 use strict;
 require 5.8.0;
@@ -41,7 +41,9 @@ unless (GetOptions(
     && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
     && $status =~ /^(pending|recent|none)$/) {
     print <<EOF;
---type - Three-letter type to switch on/off.
+--type - Three-letter type to switch on/off. (Note that the code in write.php
+     checks both the area and its parent, so often you could do either e.g.
+     COI or COP, but for clarity use the ones in this list)
 	 COI - Isles of Scilly
 	 CTY - 34 county councils
 	 DIS - 238 district councils
