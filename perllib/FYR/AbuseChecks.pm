@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.69 2009-05-20 07:35:09 matthew Exp $
+# $Id: AbuseChecks.pm,v 1.70 2009-06-22 09:23:48 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -147,10 +147,8 @@ sub get_similar_messages ($;$) {
     # We only look at messages that might be or have been sent to representatives.
     $start_time = Time::HiRes::time();
     my $same_rep_check = "recipient_id <> ?";
-    my $order_limit_clause = "order by created desc limit 10000";
     if ($same_rep){
         $same_rep_check = "recipient_id = ?"; 
-        $order_limit_clause = '';
     }
     my $stmt = dbh()->prepare(q#
         select message_id, sender_postcode, sender_email, data
@@ -160,7 +158,7 @@ sub get_similar_messages ($;$) {
              and #.$same_rep_check.q#
              and message_extradata.name = 'substringhash'
              and state not in ('error', 'failed', 'failed_closed', 'finished')
-             #.$order_limit_clause);
+             #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
     $elapsed_time = Time::HiRes::time() - $start_time;
     FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash query, samerep : $same_rep. Time taken: $elapsed_time");
@@ -306,7 +304,7 @@ my @group_tests = (
 
         # Body of message similar to other messages in queue to different recipients
         sub ($) {
-	    return (); # XXX Taking far too long
+	    
             my ($msg) = @_;
             my @similar = sort { $b->[1] <=> $a->[1] } get_similar_messages($msg);
 
