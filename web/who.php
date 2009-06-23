@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.100 2009-06-23 15:45:30 matthew Exp $
+ * $Id: who.php,v 1.101 2009-06-23 15:47:12 matthew Exp $
  *
  */
 
@@ -240,7 +240,8 @@ write to your constituency MSP above, or pick just one of your regional MSPs';
         $text .= display_reps($representatives);
 
         if ($va_type == 'WMC') {
-            $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+	    if ($rep_count)
+                $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
             # .maincol / .firstcol have margin-bottom set to none, override
             $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
             $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
