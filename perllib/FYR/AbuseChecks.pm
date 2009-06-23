@@ -11,7 +11,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: AbuseChecks.pm,v 1.70 2009-06-22 09:23:48 louise Exp $
+# $Id: AbuseChecks.pm,v 1.71 2009-06-23 08:36:01 louise Exp $
 #
 
 package FYR::AbuseChecks;
@@ -161,7 +161,7 @@ sub get_similar_messages ($;$) {
              #);
     $stmt->execute($msg->{id}, $msg->{recipient_id});
     $elapsed_time = Time::HiRes::time() - $start_time;
-    FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash query, samerep : $same_rep. Time taken: $elapsed_time");
+    # FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash query, samerep : $same_rep. Time taken: $elapsed_time");
 
     my $thr = mySociety::Config::get('MESSAGE_SIMILARITY_THRESHOLD');
     my @similar = ( );
@@ -185,7 +185,7 @@ sub get_similar_messages ($;$) {
         $rows++;  
     }
     $elapsed_time = Time::HiRes::time() - $start_time;
-    FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash similarity comparison, samerep : $same_rep. Num hashes: $rows. Time taken: $elapsed_time");
+    # FYR::Queue::log_to_handler($msg->{id}, 1, "Made hash similarity comparison, samerep : $same_rep. Num hashes: $rows. Time taken: $elapsed_time");
     return @similar;
 }
 
