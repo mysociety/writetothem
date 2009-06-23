@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.98 2008-08-05 14:38:37 matthew Exp $
+ * $Id: who.php,v 1.99 2009-06-23 15:34:04 matthew Exp $
  *
  */
 
@@ -147,8 +147,6 @@ foreach ($va_display_order as $va_type) {
         $rep_count = count($representatives);
         shuffle($representatives);
     }
-
-    if ($rep_count == 0) continue;
 
     // Data bad due to election etc?
     $disabled = false;
