@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.99 2009-06-23 15:34:04 matthew Exp $
+ * $Id: who.php,v 1.100 2009-06-23 15:45:30 matthew Exp $
  *
  */
 
@@ -134,6 +134,7 @@ foreach ($va_display_order as $va_type) {
 
     // Count representatives
     unset($representatives);
+    $rep_counts = array();
     if (is_array($va_type)) {
         foreach ($va_specificid as $vasid) $representatives[] = $area_representatives[$vasid];
         $rep_count = 0;
@@ -175,20 +176,21 @@ foreach ($va_display_order as $va_type) {
             $heading = "Your {$va_info[0]['rep_name_long']}";
         }
         $col_blurb = "<p>";
-        if ($rep_counts[0]>1) {
+        if ($rep_count && $rep_counts[0]>1) {
             $col_blurb .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
             $col_blurb .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}</p>";
-        if ($rep_counts[0]>1) {
+        if ($rep_count && $rep_counts[0]>1) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
-        $text .= display_reps($representatives[0]);
+	if ($rep_count)
+            $text .= display_reps($representatives[0]);
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
             $text .= "$rep_counts[1] London Assembly list members also represent you";
-        } elseif ($rep_counts[1] > 1) {
+        } elseif ($rep_count && $rep_counts[1] > 1) {
             $text .= "$rep_counts[1] {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name_plural']} also represent you";
         } else {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
@@ -199,13 +201,14 @@ write to your constituency MSP above, or pick just one of your regional MSPs';
 }
         $text .= '.</p>';
         
-        if ($rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE') {
+        if ($rep_count && $rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE') {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
-        $text .= display_reps($representatives[1]);
+        if ($rep_count)
+            $text .= display_reps($representatives[1]);
 
-        if ($rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE')) {
+        if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE')) {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
@@ -231,7 +234,7 @@ write to your constituency MSP above, or pick just one of your regional MSPs';
             $text .= write_all_link($va_type, $va_info['rep_name_plural']);
         }
 
-        if($va_type == 'WMC' && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
+        if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
         $text .= display_reps($representatives);
