@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.102 2009-06-26 09:23:51 matthew Exp $
+ * $Id: who.php,v 1.103 2009-06-26 10:22:42 matthew Exp $
  *
  */
 
@@ -196,8 +196,8 @@ foreach ($va_display_order as $va_type) {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
         }
         if ($va_type[1] == 'SPE') {
-            $text .= '; if you are writing on a constituency matter, ideally
-write to your constituency MSP above, or pick just one of your regional MSPs';
+            $text .= '; if you are writing on a <strong>constituency matter</strong>, ideally
+write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs';
 }
         $text .= '.</p>';
         
