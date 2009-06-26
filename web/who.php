@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.101 2009-06-23 15:47:12 matthew Exp $
+ * $Id: who.php,v 1.102 2009-06-26 09:23:51 matthew Exp $
  *
  */
 
@@ -314,6 +314,8 @@ function write_all_link($va_type, $rep_desc_plural) {
     global $fyr_postcode;
     if ($rep_desc_plural == 'London Assembly Members')
         $rep_desc_plural = 'London Assembly list members';
+    if ($rep_desc_plural == 'MSPs')
+        $rep_desc_plural = 'regional MSPs';
     $a = '<a href="' .
                 htmlspecialchars(url_new('write', true,
                                          'who', 'all',
