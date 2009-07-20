@@ -19,7 +19,7 @@
 # To run via squid:
 # export http_proxy=http://localhost:3128
 
-my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.24 2009-07-20 15:24:03 dademcron Exp $';
+my $rcsid = ''; $rcsid .= '$Id: stats-yearly-response,v 1.25 2009-07-20 15:27:29 dademcron Exp $';
 
 use strict;
 require 5.8.0;
@@ -547,8 +547,8 @@ sub work_out_rep_category($) {
 
     # Work out what we are
     return 'shame' if ($shametime > $rep_length * 0.1);
-    return 'toofew' if ($sent_m < 10);
-#    return 'toofew' if ($q_data->[1] < 10);
+    return 'toofew' if ($sent_m < 10); # less than 10 messages
+    return 'toofew' if ($q_data->[1] < 10); # less than 10 questionnaire responses
     #return 'toofew' if (!defined($confidence_length) || $confidence_length > 0.50);
     return 'good' if ($intervals_with_no_q_response_and_validmethod == 0);
     return 'good' if ($no_q_response_and_validmethod_time < $rep_length * 0.1);
