@@ -5,13 +5,13 @@
 # Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
 # Email: francis@mysociety.org. WWW: http://www.mysociety.org/
 # 
-# $Id: stats-response-histo,v 1.6 2008-03-19 13:47:26 francis Exp $
+# $Id: stats-response-histo,v 1.7 2009-07-20 15:28:31 francis Exp $
 
 #GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 480,360"
 #EXTENSION=".png"
 #GPLOT_OUTPUT="set terminal fig color big thickness 1"
 #EXTENSION=".fig"
-GPLOT_OUTPUT="set terminal svg size 510 360"
+GPLOT_OUTPUT="set terminal svg size 560 360"
 EXTENSION=".svg"
 
 cd `dirname $0`
@@ -23,11 +23,13 @@ read_conf fyr/conf/general
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 SOURCEE=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 SOURCEF=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
+SOURCEG=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
 GPSCRIPT=/tmp/fyr-signup-rate-graph-script-$RANDOM$RANDOM
 
 fyr/bin/stats-response-histo-out 2005 >$SOURCED
 fyr/bin/stats-response-histo-out 2006 >$SOURCEE
 fyr/bin/stats-response-histo-out 2007 >$SOURCEF
+fyr/bin/stats-response-histo-out 2008 >$SOURCEG
 
 cat >$GPSCRIPT <<END 
     unset border
@@ -55,7 +57,8 @@ cat >$GPSCRIPT <<END
 
     plot "$SOURCED" using 2 with histograms lt rgb "#330066" title "2005", \
     "$SOURCEE" using 2 with histograms lt rgb "#FFE92C" title "2006", \
-    "$SOURCEF" using 2 with histograms lt rgb "#0000CC" title "2007"
+    "$SOURCEF" using 2 with histograms lt rgb "#0000CC" title "2007", \
+    "$SOURCEG" using 2 with histograms lt rgb "#666600" title "2008"
 END
 #echo "gpscript $GPSCRIPT"
 
