@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.42 2009-04-29 12:46:38 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.43 2009-08-10 12:48:58 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -209,7 +209,10 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
                 }
             } elsif ($status =~ /^5\./) {
                 $what = 'permanent failure';
-                $nextstate = 'error';   # XXX check current state as above?
+                if ($msg->{state} ne 'finished') { # XXX is this condition right? Don't send error email if message scrubbed:
+                    # Can only really happen with Demon's 30 day bounce...
+                    $nextstate = 'error';
+                }
             } else {
                 # Dunno what this is; need operator attention.
                 $what = 'unknown status';
