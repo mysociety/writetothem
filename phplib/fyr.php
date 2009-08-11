@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.68 2009-07-14 17:12:39 matthew Exp $
+ * $Id: fyr.php,v 1.69 2009-08-11 17:55:42 louise Exp $
  * 
  */
 
@@ -42,15 +42,12 @@ ob_start();
 template_set_style("../templates/website");
 # syndication type, read from domain name
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
-    $syn = str_replace('.writetothem.com', '', $_SERVER['HTTP_HOST']);
+    $host_parts = explode('.', $_SERVER['HTTP_HOST']);
+    $syn = $host_parts[0];
 } else {
     $syn = 'www';
 }
 
-# get rid of a testharness subdomain
-$syn = str_replace('.testharness', '', $syn);
-
-$syn = str_replace('.'.OPTION_WEB_DOMAIN, '', $syn);
 # or override for debugging
 if (array_key_exists('syn', $_GET)) {
     $syn = $_GET['syn'];
