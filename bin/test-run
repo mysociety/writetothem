@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.71 2009-08-11 16:36:34 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.72 2009-08-11 17:04:01 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -331,6 +331,7 @@ sub send_message_to_rep {
     
         if ($cobrand && $cobrand eq "animalaid") {
             # TODO: Add check when their site is ready
+            $wth->browser_check_contents("Thank you! You've completed the action for \"Let's stop veal farming for good\".");
         } else {
             $wth->browser_check_contents("All done&hellip; We&rsquo;ll send your message now");
         }
