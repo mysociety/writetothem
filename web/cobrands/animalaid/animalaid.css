@@ -5,14 +5,14 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: freeourbills.css,v 1.2 2008-11-18 17:23:40 matthew Exp $
+ * $Id: animalaid.css,v 1.1 2009-08-11 18:15:56 louise Exp $
  * 
  */
 
 img#cobrand_logo {
     background-color: #ffffff;
     float: right;
-    border: solid 2px #4d6c25;
+    border: solid 2px #02927b;
     padding: 5px;
     margin: 10px;
 }
@@ -23,38 +23,42 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+a:link { color: #660066; }
+a:visited { color: #330033; }
+a:active, a:hover { text-decoration: none; }
+
 h1#heading {
-    color: #000000;
-    background-color: #e8fdcb;
-    border-bottom: solid 2px #4d6c25;
+    color: #660066;
+    background-color: #99CD99;
+    border-bottom: solid 2px #02927B;
 }
 h1#heading a, h1#heading a:link, h1#heading a:visited {
-    color: #4d6c25;
+    color: #660066;
 }
 
 #footer {
-    border-top: solid 1px #4d6c25;
+    border-top: solid 1px #02927B;
 }
 
 #postcodebox, #writebox, #preview, #buttonbox {
-    background-color: #F5FDEA;
+    background-color: #99CD99;
     color: #000000;
 }
 
 #postcodebox {
-    border: solid 2px #4d6c25;
+    border: solid 2px #02927b;
 }
 #writebox, #preview, #buttonbox {
-    border: solid 2px #4d6c25;
+    border: solid 2px #02927B;
 }
 
 .maincol {
-    border-left: solid 1px #4d6c25;
+    border-left: solid 1px #02927B;
 }
 
 #sidebar {
-    border: solid 1px #4d6c25;
-    background-color: #F5FDEA;
+    border: solid 1px #02927b;
+    background-color: #99CD99;
 }
 
 .notebox {
@@ -62,3 +66,4 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
     background-color: #ffffff;
     color: #cc0000;
 }
+

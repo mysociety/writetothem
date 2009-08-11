@@ -5,14 +5,14 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: cheltenham.css,v 1.4 2007-10-30 10:04:38 matthew Exp $
+ * $Id: freeourbills.css,v 1.1 2009-08-11 18:15:57 louise Exp $
  * 
  */
 
 img#cobrand_logo {
     background-color: #ffffff;
     float: right;
-    border: solid 2px #02927b;
+    border: solid 2px #4d6c25;
     padding: 5px;
     margin: 10px;
 }
@@ -25,36 +25,36 @@ body {
 
 h1#heading {
     color: #000000;
-    background-color: #eeffee;
-    border-bottom: solid 2px #02927B;
+    background-color: #e8fdcb;
+    border-bottom: solid 2px #4d6c25;
 }
 h1#heading a, h1#heading a:link, h1#heading a:visited {
-    color: #02927B;
+    color: #4d6c25;
 }
 
 #footer {
-    border-top: solid 1px #02927B;
+    border-top: solid 1px #4d6c25;
 }
 
 #postcodebox, #writebox, #preview, #buttonbox {
-    background-color: #eeffee;
+    background-color: #F5FDEA;
     color: #000000;
 }
 
 #postcodebox {
-    border: solid 2px #02927b;
+    border: solid 2px #4d6c25;
 }
 #writebox, #preview, #buttonbox {
-    border: solid 2px #02927B;
+    border: solid 2px #4d6c25;
 }
 
 .maincol {
-    border-left: solid 1px #02927B;
+    border-left: solid 1px #4d6c25;
 }
 
 #sidebar {
-    border: solid 1px #02927b;
-    background-color: #eeffee;
+    border: solid 1px #4d6c25;
+    background-color: #F5FDEA;
 }
 
 .notebox {

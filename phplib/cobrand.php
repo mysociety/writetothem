@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.6 2009-08-11 16:02:11 louise Exp $
+ * $Id: cobrand.php,v 1.7 2009-08-11 18:15:55 louise Exp $
  * 
  */
 
@@ -21,7 +21,7 @@ function cobrand_allowed() {
 }
 
 // To change look and feel, make new files in templates/. Look at cheltenham
-// for examples. Also need to make file like web/cheltenham.css. To change the 
+// for examples. Also need to make file like web/cobrands/cheltenham/cheltenham.css. To change the 
 // behaviour of a cobranded site, add a function to phplib/cobrands/[cobrand name]/utils.php
 // and add a hook function with default behaviour here. 
 

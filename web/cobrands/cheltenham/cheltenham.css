@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: animalaid.css,v 1.2 2006-01-20 12:24:33 francis Exp $
+ * $Id: cheltenham.css,v 1.1 2009-08-11 18:15:57 louise Exp $
  * 
  */
 
@@ -23,17 +23,13 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-a:link { color: #660066; }
-a:visited { color: #330033; }
-a:active, a:hover { text-decoration: none; }
-
 h1#heading {
-    color: #660066;
-    background-color: #99CD99;
+    color: #000000;
+    background-color: #eeffee;
     border-bottom: solid 2px #02927B;
 }
 h1#heading a, h1#heading a:link, h1#heading a:visited {
-    color: #660066;
+    color: #02927B;
 }
 
 #footer {
@@ -41,7 +37,7 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 }
 
 #postcodebox, #writebox, #preview, #buttonbox {
-    background-color: #99CD99;
+    background-color: #eeffee;
     color: #000000;
 }
 
@@ -58,7 +54,7 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
 
 #sidebar {
     border: solid 1px #02927b;
-    background-color: #99CD99;
+    background-color: #eeffee;
 }
 
 .notebox {
@@ -66,4 +62,3 @@ h1#heading a, h1#heading a:link, h1#heading a:visited {
     background-color: #ffffff;
     color: #cc0000;
 }
-
