@@ -5,33 +5,41 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.5 2009-01-19 11:05:40 matthew Exp $
+ * $Id: cobrand.php,v 1.6 2009-08-11 16:02:11 louise Exp $
  * 
  */
 
 // List of subdomains of WriteToThem which are cobrands.
 function cobrand_allowed() {
-    return array('cheltenham'=>1, 'animalaid'=>1, 'freeourbills'=>1, 'foiorder2009'=>1);
+    $allowed_cobrands_string = OPTION_ALLOWED_COBRANDS;
+    $allowed_cobrands_list = explode('|', $allowed_cobrands_string);
+    $allowed_cobrands = array();
+    foreach ($allowed_cobrands_list as $i => $cobrand) {
+       $allowed_cobrands[$cobrand] = 1;
+    }
+    return $allowed_cobrands;
 }
 
 // To change look and feel, make new files in templates/. Look at cheltenham
-// for examples. Also need to make file like web/cheltenham.css.
+// for examples. Also need to make file like web/cheltenham.css. To change the 
+// behaviour of a cobranded site, add a function to phplib/cobrands/[cobrand name]/utils.php
+// and add a hook function with default behaviour here. 
+
+// Include any cobrand-specific code
+function include_cobrand($cobrand){
+  $dir = dirname(__FILE__);
+  if (file_exists("$dir/cobrands/$cobrand/utils.php")){
+      include_once("$dir/cobrands/$cobrand/utils.php");
+  }
+}
 
 // Bullet points / tips to put at the top of a letter.
 function cobrand_get_letter_help($cobrand, $fyr_values) {
-    $cobrand_letter_help = false;
-    if ($cobrand == 'animalaid' && $fyr_values['cocode']) {
-        $cobrand_letter_help = file_get_contents("http://www.animalaiduk.com/functions/custom/action_snippet.php?id=" . $fyr_values['cocode']);
-        $cobrand_letter_help = str_replace('<h1>', '<h2>', $cobrand_letter_help);
-        $cobrand_letter_help = str_replace('</h1>', '</h2>', $cobrand_letter_help);
-    } elseif ($cobrand == 'freeourbills') {
-        # First one was really: $fyr_values['cocode'] == 'email3'
-        # But we make it the default also for now, so nothing to check.
-        $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/freeourbills/edm?wtt=1&pc=" . urlencode($fyr_values['pc']));
-    } elseif ($cobrand == 'foiorder2009') {
-        $cobrand_letter_help = file_get_contents("http://www.theyworkforyou.com/foiorder2009/wtt.html");
+    include_cobrand($cobrand);
+    if (function_exists('get_letter_help')){
+        return get_letter_help($fyr_values);
     }
-    return $cobrand_letter_help;
+    return false;
 }
 
 // Action to perform after the letter has been sent.
@@ -39,13 +47,10 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
 // Exit if you've done a redirect with header().
 // Return false for default behaviour.
 function cobrand_post_letter_send($values) {
-    if ($values['cobrand'] == 'animalaid') {
-        header("Location: http://www.animalaiduk.com/h/f/ACTIVE/blog//1//?id=".$values['cocode']);
-        exit;
-    }
-    if ($values['cobrand'] == 'freeourbills') {
-        header("Location: http://www.theyworkforyou.com/freeourbills/doshare.php?letterthanks=1");
-        exit;
+    $cobrand = $values['cobrand']; 
+    include_cobrand($cobrand);
+    if (function_exists('post_letter_send')){
+        return post_letter_send($values);
     }
     return false;
 }
@@ -53,11 +58,9 @@ function cobrand_post_letter_send($values) {
 // On front page, force a particular campaign code as default for site (either
 // forced value, or if another code isn't set).
 function cobrand_force_default_cocode($cobrand, $cocode) {
-    if ($cobrand == 'freeourbills' && !$cocode) {
-        $cocode = "email3";
-    }
-    if ($cobrand == 'foiorder2009' && !$cocode) {
-        $cocode = "email1";
+    include_cobrand($cobrand);
+    if (function_exists('force_default_cocode')){
+        return force_default_cocode($cocode);
     }
     return $cocode;
 }
@@ -68,18 +71,11 @@ function cobrand_force_default_cocode($cobrand, $cocode) {
 // parameter in http://www.writetothem.com/about-linktous
 // $type input is the value set with the 'a' URL parameter, if there is one.
 function cobrand_force_representative_type($cobrand, $cocode, $type) {
-    if ($cobrand == 'freeourbills') {
-        if ($cocode && $cocode == 'email3') {
-            $type = 'westminstermp';
-        }
-    }
-    if ($cobrand == 'foiorder2009') {
-        if ($cocode && $cocode == 'email1') {
-            $type = 'westminstermp';
-        }
+    include_cobrand($cobrand);
+    if (function_exists('force_representative_type')){
+        return force_representative_type($cocode, $type);
     }
     return $type;
 }
-
 
 
