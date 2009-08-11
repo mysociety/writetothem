@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.38 2009-05-13 09:58:01 louise Exp $
+ * $Id: general-example,v 1.39 2009-08-11 15:46:33 louise Exp $
  * 
  */
 
@@ -134,5 +134,7 @@ define('OPTION_TRACKING_SECRET', 'really-secret-value');
 define('OPTION_SURVEY_SECRET', 'your-secret-value-here');
 define('OPTION_SURVEY_URL', 'http://survey.mysociety.org');
 
+// Cobrands
+define('OPTION_ALLOWED_COBRANDS', 'animalaid|foiorder2009|freeourbills|cheltenham')
 
 ?>
