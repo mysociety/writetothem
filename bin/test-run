@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.70 2009-05-13 17:47:12 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.71 2009-08-11 16:36:34 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -792,7 +792,7 @@ sub do_send_group_abuse {
     $wth->browser_check_contents('Block quicker than you can imagine');
 
     # All mails in a group should be checked for abuse
-    my @rep_names = ('Christopher Beazley','Robert Sturdy','Jeffrey Titford','Geoffrey Van Orden','Tom Wise','Andrew Duff','Richard Howitt');
+    my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     send_message_to_rep(10,
                         'CB23QJ', # The Guildhall, Cambridge
                         'all',
@@ -949,8 +949,7 @@ sub do_send_group_abuse {
 sub do_send_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01');
-    my @rep_names = ('Christopher Beazley','Robert Sturdy','Jeffrey Titford','Geoffrey Van Orden','Tom Wise','Andrew Duff','Richard Howitt');
-    
+    my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     
     send_message_to_rep(7,
         'CB23QJ', # The Guildhall, Cambridge 
