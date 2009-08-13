@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.104 2009-08-13 13:06:17 louise Exp $
+ * $Id: who.php,v 1.105 2009-08-13 13:49:18 louise Exp $
  *
  */
 
@@ -186,7 +186,7 @@ foreach ($va_display_order as $va_type) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
 	if ($rep_count)
-            $text .= display_reps($representatives[0]);
+            $text .= display_reps($va_type[0], $representatives[0]);
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
             $text .= "$rep_counts[1] London Assembly list members also represent you";
@@ -206,7 +206,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
         }
 
         if ($rep_count)
-            $text .= display_reps($representatives[1]);
+            $text .= display_reps($va_type[1], $representatives[1]);
 
         if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE')) {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
@@ -237,7 +237,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
         if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
-        $text .= display_reps($representatives);
+        $text .= display_reps($va_type, $representatives);
 
         if ($va_type == 'WMC') {
 	    if ($rep_count)
@@ -268,7 +268,7 @@ for your region have informed us that they have divided it into areas, with ';
             else
                 $text .= 'others';
             $text .= ' here:</small></p>';
-            $text .= display_reps($meps_hidden, true);
+            $text .= display_reps($va_type, $meps_hidden, true);
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types)) {
@@ -323,29 +323,31 @@ function write_all_link($va_type, $rep_desc_plural) {
     return $a;
 
 }
- 
+
 function general_write_all_url($va_type, $fyr_postcode){
     return htmlspecialchars(url_new('write', true,
-                   'who', 'all',
-                   'type', $va_type,
-                   'pc', $fyr_postcode,
-                   'fyr_extref', fyr_external_referrer(),
-                   'cocode', get_http_var('cocode')));
+                                    'who', 'all',
+                                    'type', $va_type,
+                                    'pc', $fyr_postcode,
+                                    'fyr_extref', fyr_external_referrer(),
+                                    'cocode', get_http_var('cocode')));
 }
 
-function display_reps($representatives, $small = false) {
-    global $representatives_info, $fyr_postcode;
+function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
+    return htmlspecialchars(url_new('write', true,
+                                    'who', $rep_specificid,
+                                    'pc', $fyr_postcode,
+                                    'fyr_extref', fyr_external_referrer(),
+                                    'cocode', get_http_var('cocode')));
+}
+
+function display_reps($va_type, $representatives, $small = false) {
+    global $representatives_info, $fyr_postcode, $cobrand;
     $rep_list = ''; $photo = 0;
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
-        $a = '<a href="' .
-                    htmlspecialchars(url_new('write', true,
-                                        'who', $rep_specificid,
-                                        'pc', $fyr_postcode,
-                                        'fyr_extref', fyr_external_referrer(),
-                                        'cocode', get_http_var('cocode')))
-                . '">';
+        $a = '<a href="' . cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcode) . '">';
         if ($rep_specificid == '2000005') {
             $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0">';
             $photo = 1;

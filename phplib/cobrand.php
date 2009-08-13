@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.8 2009-08-13 13:06:16 louise Exp $
+ * $Id: cobrand.php,v 1.9 2009-08-13 13:49:18 louise Exp $
  * 
  */
 
@@ -87,5 +87,16 @@ function cobrand_write_all_url($cobrand, $va_type, $fyr_postcode){
     }
   }
  return general_write_all_url($va_type, $fyr_postcode);
+}
+
+// Generate a url for writing to a specific rep 
+function cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcode){
+  if ($cobrand){
+    include_cobrand($cobrand);
+    if (function_exists('write_rep_url')){
+        return write_rep_url($va_type, $rep_specificid, $fyr_postcode);
+    }
+  }
+ return general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
 }
 
