@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.103 2009-06-26 10:22:42 matthew Exp $
+ * $Id: who.php,v 1.104 2009-08-13 13:06:17 louise Exp $
  *
  */
 
@@ -311,22 +311,28 @@ template_draw("who", array(
 debug_timestamp();
 
 function write_all_link($va_type, $rep_desc_plural) {
+    global $cobrand;
     global $fyr_postcode;
     if ($rep_desc_plural == 'London Assembly Members')
         $rep_desc_plural = 'London Assembly list members';
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
     $a = '<a href="' .
-                htmlspecialchars(url_new('write', true,
-                                         'who', 'all',
-                                         'type', $va_type,
-                                         'pc', $fyr_postcode,
-                                         'fyr_extref', fyr_external_referrer(),
-                                         'cocode', get_http_var('cocode')))
-                . '">Write to all your ' . $rep_desc_plural . '</a>';
+               cobrand_write_all_url($cobrand, $va_type, $fyr_postcode)
+                . '">Write to all your ' . $rep_desc_plural . '</a>';  
     return $a;
 
 }
+ 
+function general_write_all_url($va_type, $fyr_postcode){
+    return htmlspecialchars(url_new('write', true,
+                   'who', 'all',
+                   'type', $va_type,
+                   'pc', $fyr_postcode,
+                   'fyr_extref', fyr_external_referrer(),
+                   'cocode', get_http_var('cocode')));
+}
+
 function display_reps($representatives, $small = false) {
     global $representatives_info, $fyr_postcode;
     $rep_list = ''; $photo = 0;

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.69 2009-08-11 17:55:42 louise Exp $
+ * $Id: fyr.php,v 1.70 2009-08-13 13:06:16 louise Exp $
  * 
  */
 
@@ -40,6 +40,7 @@ $postcodeless_child_types = array('HOC');
 ob_start();
 
 template_set_style("../templates/website");
+
 # syndication type, read from domain name
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
     $host_parts = explode('.', $_SERVER['HTTP_HOST']);
@@ -437,5 +438,4 @@ function euro_check(&$area_reps, $wmc) {
     }
     return $hidden;
 }
-
 ?>
