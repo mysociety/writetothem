@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: stats.php,v 1.31 2009-07-20 15:28:32 francis Exp $
+ * $Id: stats.php,v 1.32 2009-09-02 18:11:29 matthew Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -62,13 +62,14 @@ if (!rabx_is_error($voting_areas)) {
     $rep_info = dadem_get_representative_info($area_representatives[0]);
     dadem_check_error($rep_info);
     $rep_info['postcode'] = $postcode;
-}
-if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
-    $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
-    $template = "index-advice";
-} elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
-    $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
-    $template = "index-advice";
+} else {
+    if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
+        $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
+        $template = "index-advice";
+    } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
+        $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
+        $template = "index-advice";
+    }
 }
 
 if ($type == 'mps') {
