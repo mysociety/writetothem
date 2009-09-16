@@ -10,3 +10,8 @@ php-pear
 libcrypt-idea-perl
 netpbm
 ttf-bitstream-vera
+libio-string-perl
+libjson-perl
+libregexp-common-perl
+libgeo-ip-perl
+libstring-crc32-perl
