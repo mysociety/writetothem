@@ -1,7 +1,7 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.1 2009-09-29 14:14:53 louise Exp $
+ * $Id: cobrand_test.php,v 1.2 2009-09-29 14:18:15 louise Exp $
  */
 error_reporting (E_ALL);
 ini_set("display_errors", 1);
@@ -20,5 +20,5 @@ class CobrandTest extends UnitTestCase{
 } 
 
 $test = new CobrandTest();
-$test->run(new TextReporter);
+exit ($test->run(new TextReporter()) ? 0 : 1);
 ?>
