@@ -6,22 +6,23 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.70 2009-08-13 13:06:16 louise Exp $
+ * $Id: fyr.php,v 1.71 2009-09-29 13:12:15 louise Exp $
  * 
  */
 
 // Load configuration file
-require_once "../conf/general";
+$dir = dirname(__FILE__);
+require_once $dir . "/../conf/general";
 
-require_once "../../phplib/error.php";
-require_once "../../phplib/ratty.php";
-require_once "../../phplib/template.php";
-require_once "../../phplib/utility.php";
-require_once "../../phplib/auth.php";
-require_once "../../phplib/crosssell.php";
-require_once "../../phplib/tracking.php";
+require_once $dir . "/../../phplib/error.php";
+require_once $dir . "/../../phplib/ratty.php";
+require_once $dir . "/../../phplib/template.php";
+require_once $dir . "/../../phplib/utility.php";
+require_once $dir . "/../../phplib/auth.php";
+require_once $dir . "/../../phplib/crosssell.php";
+require_once $dir . "/../../phplib/tracking.php";
 
-require_once "../phplib/cobrand.php";
+require_once $dir . "/../phplib/cobrand.php";
 
 // Disable these types (due to elections / pending elections etc.)
 $disabled_child_types = array();
@@ -39,7 +40,7 @@ $postcodeless_child_types = array('HOC');
  * horribly.*/
 ob_start();
 
-template_set_style("../templates/website");
+template_set_style($dir . "/../templates/website");
 
 # syndication type, read from domain name
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
