@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.138 2009-09-29 15:49:46 louise Exp $
+ * $Id: write.php,v 1.139 2009-09-29 16:59:10 louise Exp $
  *
  */
 
@@ -570,7 +570,7 @@ function show_check_email($error_msg) {
      
     /* Show them the "check your email and click the link" template. */
      global $fyr_representative, $fyr_voting_area; 
-     global $fyr_values, $fyr_date, $fyr_group_msg;
+     global $fyr_values, $fyr_date, $fyr_group_msg, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'date' => $fyr_date, 'group_msg' => $fyr_group_msg,
             'error_msg' => $error_msg, 'cobrand' => $cobrand));
