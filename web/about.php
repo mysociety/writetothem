@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: about.php,v 1.14 2008-10-29 19:29:43 matthew Exp $
+ * $Id: about.php,v 1.15 2009-09-29 15:49:46 louise Exp $
  * 
  */
 
@@ -37,7 +37,7 @@ if ($page == 'about-pledgebank') {
     exit;
 }
     
-$values = array();
+$values = array('cobrand' => $cobrand);
 
 if ($page == 'write-checkemail')
     /* Fill in some other values as required. */

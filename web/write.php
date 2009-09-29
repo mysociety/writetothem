@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.137 2009-04-28 10:22:39 matthew Exp $
+ * $Id: write.php,v 1.138 2009-09-29 15:49:46 louise Exp $
  *
  */
 
@@ -360,6 +360,7 @@ function renderForm($form, $pageName)
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form,
             'date' => $fyr_date, 'prime_minister' => $prime_minister,
             'cobrand_letter_help' => $cobrand_letter_help, 
+            'cobrand' => $cobrand,
             'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text));
 
     if ($fyr_group_msg) {
@@ -572,7 +573,7 @@ function show_check_email($error_msg) {
      global $fyr_values, $fyr_date, $fyr_group_msg;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'date' => $fyr_date, 'group_msg' => $fyr_group_msg,
-            'error_msg' => $error_msg));
+            'error_msg' => $error_msg, 'cobrand' => $cobrand));
      template_draw("write-checkemail", $our_values); 
 }
 

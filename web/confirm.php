@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.19 2008-11-18 15:08:11 francis Exp $
+ * $Id: confirm.php,v 1.20 2009-09-29 15:49:46 louise Exp $
  * 
  */
 
@@ -23,7 +23,7 @@ if ($ad) {
     $values = array(
         'recipient_via' => null, 'recipient_name' => 'Recipient Name', 'recipient_type' => 'Type',
         'sender_name' => 'Sender Name', 'sender_email' => 'email', 'sender_postcode' => 'SW1A1AA',
-        'advert' => $ad,
+        'advert' => $ad, 'cobrand' => $cobrand
     );
     template_draw("confirm-accept", $values);
     exit;
@@ -40,9 +40,10 @@ if (rabx_is_error($result)) {
     template_show_error($result->text);
 }
 if (!$result) {
-    template_draw("confirm-trouble");
+    template_draw("confirm-trouble", array('cobrand' => $cobrand));
 } else {
     $values = msg_admin_get_message($result);
+    $values['cobrand'] = $cobrand;
     if (rabx_is_error($values)) {
         template_show_error($values->text);
     } elseif ($values['cobrand'] && cobrand_post_letter_send($values)) {

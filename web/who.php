@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.105 2009-08-13 13:49:18 louise Exp $
+ * $Id: who.php,v 1.106 2009-09-29 15:49:46 louise Exp $
  *
  */
 
@@ -306,6 +306,7 @@ template_draw("who", array(
     "error" => $fyr_error,
     "county_note" => $fyr_county_note,
     "all_url" => $fyr_all_url,
+    "cobrand" => $cobrand
     ));
 
 debug_timestamp();

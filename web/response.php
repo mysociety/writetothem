@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: response.php,v 1.3 2006-12-15 17:38:54 francis Exp $
+ * $Id: response.php,v 1.4 2009-09-29 15:49:46 louise Exp $
  * 
  */
 
@@ -30,7 +30,8 @@ if ($answer != "yes" && $answer != "no") {
 
 $values = array(
     'first_time_yes' => "\"firsttime?token=" . urlencode($token) .  "&answer=yes\"",
-    'first_time_no' => "\"firsttime?token=" . urlencode($token) .  "&answer=no\""
+    'first_time_no' => "\"firsttime?token=" . urlencode($token) .  "&answer=no\"",
+    'cobrand' => $cobrand
     );
 
 // Look up info about the message

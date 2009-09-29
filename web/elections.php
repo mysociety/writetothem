@@ -6,7 +6,7 @@
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: elections.php,v 1.6 2008-10-30 16:42:51 matthew Exp $
+ * $Id: elections.php,v 1.7 2009-09-29 15:49:46 louise Exp $
  * 
  */
 require_once '../phplib/fyr.php';
@@ -157,7 +157,7 @@ foreach ($lookup as $area_id => $status) {
 	}
 }
 
-template_draw('header', array('title'=>'2008 elections'));
+template_draw('header', array('title'=>'2008 elections', 'cobrand' => $cobrand));
 if (isset($out['none'])) { ?>
 <div style="float: left; width: 48%;">
 <p>Here is a list of the areas for which we have received new data since the election:</p>

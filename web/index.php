@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.62 2009-04-28 10:10:32 matthew Exp $
+ * $Id: index.php,v 1.63 2009-09-29 15:49:46 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -231,7 +231,8 @@ template_draw($template, array(
         "blurb-top" => $blurb_top,
         "form" => $form, 
         "error" => $error_message,
-        "all_url" => $fyr_all_url
+        "all_url" => $fyr_all_url,
+        "cobrand" => $cobrand
     ));
 
 ?>

@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: firsttime.php,v 1.7 2009-02-10 15:23:48 matthew Exp $
+ * $Id: firsttime.php,v 1.8 2009-09-29 15:49:46 louise Exp $
  * 
  */
 
@@ -34,7 +34,7 @@ if (rabx_is_error($result)) {
     template_show_error($result->text);
 }
 $values = msg_admin_get_message($result);
-
+$values['cobrand'] = $cobrand;
 // Demographic survey
 list($values['user_code'], $values['auth_signature']) = survey_sign_email_address($values['sender_email']);
 $done_survey = survey_check_if_already_done($values['user_code'], $values['auth_signature']);
