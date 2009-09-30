@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.3 2009-09-30 14:48:16 louise Exp $
+# $Id: TestHarness.pm,v 1.4 2009-09-30 14:56:34 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -30,7 +30,7 @@ sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 # Call fyrqd for one pass
 sub call_fyrqd {
-    my ($wth, $delivery_method) = @_;
+    my ($wth, $verbose, $multispawn, $delivery_method) = @_;
     
     if (!defined($delivery_method)){
           $delivery_method = '--email';
@@ -70,9 +70,9 @@ sub spin_queue {
     my ($format_string, $from, $to, $wth) = @_;
     for (my $i = $from; $i < $to; $i ++) {
         set_fyr_date(sprintf($format_string, $i));
-        call_fyrqd($wth);
-        call_fyrqd($wth);
-        call_fyrqd($wth);
+        call_fyrqd($wth, $verbose, $multispawn);
+        call_fyrqd($wth, $verbose, $multispawn);
+        call_fyrqd($wth, $verbose, $multispawn);
     }
 }
 
@@ -132,7 +132,7 @@ sub send_message_to_rep {
 
     # TODO: Check message isn't sent early
     # Wait for confirmation email to arrive
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     if ($who == 666) {
         # Mail to and from same deliberately invalid address, so will not arrive
         $wth->email_check_none_left();
@@ -168,7 +168,7 @@ sub send_message_to_rep {
 sub check_delivered_to_rep {
     my ($who, $repname, $extra_check, $wth) = @_;
 
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     my $content = $wth->email_get_containing(
         '%Subject: Letter from %'.name_n($who).
         '%To: "%'.$repname.'%" <'.email_n($who).'>'.
@@ -190,6 +190,6 @@ sub call_handlemail {
 
 # Clear survey result, so can take survey again
 sub call_allow_new_survey {
-    my ($email, $wth) = @_;
+    my ($email, $wth, $verbose) = @_;
     $wth->multi_spawn(1, "./allow-new-survey $email", $verbose) ;
 }

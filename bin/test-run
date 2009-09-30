@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.79 2009-09-30 14:48:16 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.80 2009-09-30 14:56:35 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -198,8 +198,8 @@ if ($action{'unit'}) {
 #do_send_bouncing_message();
 
 # Check for any unhandled mails, faxes or errors
-call_fyrqd($wth);
-call_fyrqd($wth, '--fax');
+call_fyrqd($wth, $verbose, $multispawn);
+call_fyrqd($wth, $verbose, $multispawn, '--fax');
 
 print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
@@ -236,7 +236,7 @@ sub do_send_example_message {
     $wth->email_check_none_left();
     # 14th day after sending provokes sending of questionnaire
     set_fyr_date('1990-01-15');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
@@ -246,7 +246,7 @@ sub do_send_example_message {
     $wth->email_check_none_left();
     # 7th day, provokes sending of questionnaire reminder
     set_fyr_date('1990-01-22');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
@@ -262,7 +262,7 @@ sub do_send_example_message {
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
 
-    call_allow_new_survey(email_n(0));
+    call_allow_new_survey(email_n(0), $wth, $verbose);
 
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
@@ -317,12 +317,12 @@ sub do_send_blocked_message {
             body => "V. short"
         } 
     );
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their message wasn't sent
     set_fyr_date('1990-07-08');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
         '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
         '%To: "'.name_n(1).'" <'.email_n(1).'>'.
@@ -523,7 +523,7 @@ sub do_send_lords_message {
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
     set_fyr_date('1992-01-15');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your Lord reply to your letter?'.
         '%To: "'.name_n(50).'" <'.email_n(50).'>'.
@@ -540,7 +540,7 @@ sub do_send_lords_message {
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
 
-    call_allow_new_survey(email_n(50));
+    call_allow_new_survey(email_n(50), $wth, $verbose);
 
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
@@ -595,7 +595,7 @@ sub do_send_fax_message {
     send_fax(14, $second_dummy_fax, 1, $postcode, $repname, $fields);
 
     # Run the queue in fax mode
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
 
     # Check that a one page fax is sent to each 
     $wth->fax_get_sent_to($first_dummy_fax, 1);
@@ -606,7 +606,7 @@ sub do_send_fax_message {
     send_fax(8, $dummy_fax, 1, $postcode, $repname, $fields, undef, 1);
 
     # Run the queue in fax mode
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
 
     # Check that a two page fax is sent (one page and one cover)
     $wth->fax_get_sent_to($dummy_fax, 2);
@@ -617,7 +617,7 @@ sub do_send_fax_message {
     send_fax(9, $dummy_fax, 3, $postcode, $repname, $fields);
 
     # Run the queue in fax mode
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
 
     # Check that a two page fax is sent
     $wth->fax_get_sent_to($dummy_fax, 2);
@@ -627,7 +627,7 @@ sub do_send_fax_message {
     send_fax(15, $dummy_fax, 1, $postcode, $repname, $fields);
     
     # Run the queue in fax mode
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
     $wth->fax_check_none_left();
     
     # Check that a fax to the Lords will be sent out of hours
@@ -635,13 +635,13 @@ sub do_send_fax_message {
     my $lords_dummy_fax = '0003';
     send_fax(16, $lords_dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
  
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
     # If a Lords message is being sent 'via', we don't add a cover page
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
     
     # next day time, other fax should get sent
     set_fyr_date('1995-01-02', '10:00:00');
-    call_fyrqd($wth, '--fax');
+    call_fyrqd($wth, $verbose, $multispawn, '--fax');
     $wth->fax_get_sent_to($dummy_fax, 1);
     
     $wth->fax_check_none_left();
@@ -677,12 +677,12 @@ sub do_send_group_abuse {
         'MEPs',
         \@rep_names);
     # None of the messages in the group should be sent
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their messages weren't sent
     set_fyr_date('1990-08-08');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     my $rep_name;
     my $confirmation_email;
     foreach $rep_name (@rep_names){
@@ -768,13 +768,13 @@ sub do_send_group_abuse {
         'MEPs',
         \@rep_names);
 
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     # First mail sent
     check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street');
 
     # Check for successes and for email telling group constituent that one message wasn't sent
     set_fyr_date('1990-08-17');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@rep_names){
         if ($rep_name ne 'Richard Howitt'){
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street');
@@ -804,7 +804,7 @@ sub do_send_group_abuse {
                         \@new_rep_names);
 
     set_fyr_date('1990-08-26');
-    call_fyrqd($wth);
+    call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
             $confirmation_email = $wth->email_get_containing(
             '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
