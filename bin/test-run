@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.76 2009-09-30 14:09:16 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.77 2009-09-30 14:25:59 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -57,7 +57,7 @@ Usage: test-run [OPTION] [ACTION]...
 Actions are a list of tests, run if present in this order:
     example - send example message successfully, and some example messages blocked by ratty
     bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
-    cobrand - send example message via a cobrand site (AnimalAid)
+    cobrand - send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files
     lords   - send example message to a Lord
     fax     - send example fax message successfully (no faxes sent 8pm-8am - tests will fail)
     group   - send example message to a group of reps
@@ -471,6 +471,22 @@ sub do_send_cobrand_message {
         'animalaid'
     );
     check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad');
+
+    # Run tests in any TestHarness.pm files in for Cobrands
+    my $allowed_cobrands = Cobrand::get_allowed_cobrands();
+    foreach my $cobrand (@{$allowed_cobrands}){
+        my $cobrand_class = ucfirst($cobrand);
+        my $class = "Cobrands::" . $cobrand_class . "::TestHarness";
+        comment "Looking for tests for $cobrand_class";
+        eval "use $class";
+        my $test_handle;
+        eval{ $test_handle = $class->new($wth, $verbose); };
+        next if $@;
+        comment "Running tests for $cobrand_class";
+        foreach my $test_function ($test_handle->test_functions()){
+            $test_handle->$test_function();    
+	    }
+    }
 }
 
 #############################################################################

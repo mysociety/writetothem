@@ -7,7 +7,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.2 2009-09-30 10:09:07 louise Exp $
+# $Id: Cobrand.pm,v 1.3 2009-09-30 14:25:59 louise Exp $
 
 package FYR::Cobrand;
 use strict;
@@ -47,17 +47,30 @@ sub get_cobrand_conf {
     my $value; 
     if ($cobrand){
         (my $dir = __FILE__) =~ s{/[^/]*?$}{};
-        if (-e "$dir/../conf/cobrands/$cobrand/general"){
-            mySociety::Config::set_file("$dir/../conf/cobrands/$cobrand/general");            
+        my $cobrand_conf_file = "$dir/../../conf/cobrands/$cobrand/general";
+        my $main_conf_file = "$dir/../../conf/general";
+        if (-e $cobrand_conf_file){
+            mySociety::Config::set_file($cobrand_conf_file);            
             $cobrand = uc($cobrand);
             $value = mySociety::Config::get($key . "_" . $cobrand, undef);
-            mySociety::Config::set_file("$dir/../conf/general");
+            mySociety::Config::set_file($main_conf_file);
         }
     }
     if (!defined($value)){
         $value = mySociety::Config::get($key);
     }
     return $value;
+}
+
+=item get_allowed_cobrands
+
+Return an array reference of allowed cobrand subdomains
+
+=cut
+sub get_allowed_cobrands {
+    my $allowed_cobrand_string = mySociety::Config::get('ALLOWED_COBRANDS');
+    my @allowed_cobrands = split(/\|/, $allowed_cobrand_string);
+    return \@allowed_cobrands;
 }
 
 =item base_url_for_emails COBRAND
