@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.77 2009-09-30 14:25:59 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.78 2009-09-30 14:30:59 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -47,6 +47,8 @@ mySociety::Config::set_file('../conf/general');
 use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
 use mySociety::Ratty;
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness;
 
 sub help {
