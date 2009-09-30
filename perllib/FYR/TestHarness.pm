@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.7 2009-09-30 15:26:15 louise Exp $
+# $Id: TestHarness.pm,v 1.8 2009-09-30 15:28:31 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -24,7 +24,7 @@ require 5.8.0;
 use FindBin;
 use lib "$FindBin::Bin/../../perllib";
 use lib "$FindBin::Bin/../../../perllib";
-
+use mySociety::DBHandle qw(dbh);
 use mySociety::Config;  
 mySociety::Config::set_file('../../conf/general');
 
