@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.9 2009-09-30 15:50:07 louise Exp $
+# $Id: TestHarness.pm,v 1.10 2009-09-30 16:22:12 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -180,7 +180,6 @@ sub check_delivered_to_rep {
         '%From: "'.name_n($who).'" <'.email_n($who).'>'.
         '%'.$extra_check.
         '%Signed with an electronic signature%');
-    print "there\n";
     return $content;
 }
 
