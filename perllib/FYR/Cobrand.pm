@@ -7,12 +7,12 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.1 2009-09-29 16:51:46 louise Exp $
+# $Id: Cobrand.pm,v 1.2 2009-09-30 10:09:07 louise Exp $
 
 package FYR::Cobrand;
 use strict;
 use Carp;
-
+use mySociety::Config;
 
 =item cobrand_handle Q
 
@@ -37,6 +37,28 @@ sub cobrand_handle {
     return $handles{$cobrand};
 }
 
+=item get_cobrand_conf COBRAND KEY
+
+Get the value for KEY from the config file for COBRAND
+
+=cut
+sub get_cobrand_conf {
+    my ($cobrand, $key) = @_;
+    my $value; 
+    if ($cobrand){
+        (my $dir = __FILE__) =~ s{/[^/]*?$}{};
+        if (-e "$dir/../conf/cobrands/$cobrand/general"){
+            mySociety::Config::set_file("$dir/../conf/cobrands/$cobrand/general");            
+            $cobrand = uc($cobrand);
+            $value = mySociety::Config::get($key . "_" . $cobrand, undef);
+            mySociety::Config::set_file("$dir/../conf/general");
+        }
+    }
+    if (!defined($value)){
+        $value = mySociety::Config::get($key);
+    }
+    return $value;
+}
 
 =item base_url_for_emails COBRAND
 
