@@ -6,10 +6,17 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.6 2009-09-30 15:12:22 louise Exp $
+# $Id: TestHarness.pm,v 1.7 2009-09-30 15:26:15 louise Exp $
 #
 
 package FYR::TestHarness;
+
+
+BEGIN {
+    use Exporter ();
+    our @ISA = qw(Exporter);
+    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_handlemail &call_allow_new_survey);
+}
 
 use strict;
 require 5.8.0;

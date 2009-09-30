@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.83 2009-09-30 15:17:02 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.84 2009-09-30 15:26:14 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -49,7 +49,7 @@ use mySociety::WebTestHarness;
 use mySociety::Ratty;
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use FYR::TestHarness;
+use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail call_allow_new_survey);
 
 sub help {
 print <<END
@@ -488,7 +488,7 @@ sub do_send_cobrand_message {
     foreach my $cobrand (@{$allowed_cobrands}){
         my $cobrand_class = ucfirst($cobrand);
         my $class = "Cobrands::" . $cobrand_class . "::TestHarness";
-         "Looking for tests for $cobrand_class";
+        print "Looking for tests for $cobrand_class" if $verbose > 0;
         eval "use $class";
         my $test_handle;
         eval{ $test_handle = $class->new($wth, $verbose); };
