@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.8 2009-09-30 15:28:31 louise Exp $
+# $Id: TestHarness.pm,v 1.9 2009-09-30 15:50:07 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -75,7 +75,7 @@ sub set_fyr_date {
 sub spin_queue {
     my ($format_string, $from, $to, $wth, $verbose, $multispawn) = @_;
     for (my $i = $from; $i < $to; $i ++) {
-        set_fyr_date(sprintf($format_string, $i), $verbose);
+        set_fyr_date(sprintf($format_string, $i), undef, $verbose);
         call_fyrqd($wth, $verbose, $multispawn);
         call_fyrqd($wth, $verbose, $multispawn);
         call_fyrqd($wth, $verbose, $multispawn);
@@ -162,7 +162,6 @@ sub send_message_to_rep {
         print "Message confirm URL is $1\n" if $verbose > 1;
         $wth->email_check_url($1);
         $wth->browser_get($1);
- 
         if ($cobrand && $cobrand eq "animalaid") {
             $wth->browser_check_contents("Thank you! You've completed the action for \"Let's stop veal farming for good\".");
         } else {
@@ -181,7 +180,7 @@ sub check_delivered_to_rep {
         '%From: "'.name_n($who).'" <'.email_n($who).'>'.
         '%'.$extra_check.
         '%Signed with an electronic signature%');
-
+    print "there\n";
     return $content;
 }
 
