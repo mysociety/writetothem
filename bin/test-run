@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.81 2009-09-30 15:02:48 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.82 2009-09-30 15:12:23 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -216,6 +216,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-01', undef, $verbose);
     send_message_to_rep($base_url, 
         $wth,
+        $verbose, 
+        $multispawn,     
         0, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
@@ -227,7 +229,7 @@ sub do_send_example_message {
             body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         } 
     );
-    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street');
+    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street', $wth, $verbose, $multispawn);
 
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 4, $wth, $verbose, $multispawn);
@@ -306,6 +308,8 @@ sub do_send_blocked_message {
     # The message shouldn't be delivered, as it should be frozen
     send_message_to_rep($base_url, 
         $wth, 
+        $verbose, 
+        $multispawn,
         1, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
@@ -339,7 +343,7 @@ sub do_test_bounce_stuff {
     # Really we need to turn off the test mode, and have a real representative
     # in DaDem that can be failed. That's pretty complicated to set up - need
     # a test DaDem database as well, really.
-    #send_message_to_rep($base_url, $wth, 666, # invalid email address, for reflected email 
+    #send_message_to_rep($base_url, $wth, $verbose, $multispawn, 666, # invalid email address, for reflected email 
     #                         # (send_message_to_rep has a hack to do confirm)
     #    'CB23QJ', # The Guildhall, Cambridege 
     #    'David Howarth', 
@@ -351,7 +355,7 @@ sub do_test_bounce_stuff {
     #        body => "I think that more cheese should be sent to more mice. How are the mignon little souris meant to be happy when they aren't fully fed with the freshest, creamiest, tastiest coagulated, separated milk curd?"
     #    } 
     #);
-    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road');
+    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road', $wth, $verbose, $multispawn);
 
     # Pretend to be somebody replying to a questionnaire message
     # - the message is just hard wired here as that is easiest.
@@ -463,6 +467,8 @@ sub do_send_cobrand_message {
     set_fyr_date('1991-02-03', undef, $verbose);
     send_message_to_rep($base_url, 
        $wth, 
+       $verbose, 
+       $multispawn, 
        2, 
        'OX 13d R', # Lincoln college, Oxford
        'Stephen Brown', 
@@ -475,7 +481,7 @@ sub do_send_cobrand_message {
         },
         'animalaid'
     );
-    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad');
+    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad', $wth, $verbose, $multispawn);
 
     # Run tests in any TestHarness.pm files in for Cobrands
     my $allowed_cobrands = Cobrand::get_allowed_cobrands();
@@ -501,6 +507,8 @@ sub do_send_lords_message {
     set_fyr_date('1992-01-01', undef, $verbose);
     send_message_to_rep($base_url, 
         $wth,  
+        $verbose, 
+        $multispawn, 
         50, 
         'PE35 6EN',
         'Lord Rogers', # Subject: in confirmation email wraps, so just check without "of Riverside"
@@ -514,7 +522,7 @@ sub do_send_lords_message {
         undef,
         '23 July', 
     );
-    check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square');
+    check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square', $wth, $verbose, $multispawn);
 
     # 2 days to get over bounce_wait
     spin_queue('1992-01-%02d', 2, 4, $wth, $verbose, $multispawn);
@@ -561,7 +569,7 @@ sub send_fax($$$$$$;$$){
         $body = $body . $body; 
     }
     $fields->{body} = $body;
-    send_message_to_rep($base_url, $wth, $email_num, $postcode, $repname, $fields, undef, $birthday);
+    send_message_to_rep($base_url, $wth, $verbose, $multispawn, $email_num, $postcode, $repname, $fields, undef, $birthday);
     
     # Set a dummy fax number on the message and erase the recipient email
     dbh()->do("update message set recipient_fax = ?, recipient_email = null, no_questionnaire = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
@@ -662,6 +670,8 @@ sub do_send_group_abuse {
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     send_message_to_rep($base_url, 
                         $wth,
+                        $verbose, 
+                        $multispawn, 
                         10,
                         'CB23QJ', # The Guildhall, Cambridge
                         'all',
@@ -739,6 +749,8 @@ sub do_send_group_abuse {
     # This message should get through
     send_message_to_rep($base_url, 
         $wth, 
+        $verbose, 
+        $multispawn, 
         11,
         'CB23QJ', # The Guildhall, Cambridge
         'Richard Howitt',
@@ -753,6 +765,8 @@ sub do_send_group_abuse {
         # All these messages should get through except the one to the same rep
     send_message_to_rep($base_url, 
        $wth, 
+       $verbose, 
+       $multispawn,     
        12,
        'CB23QJ', # The Guildhall, Cambridge
        'all',
@@ -770,14 +784,14 @@ sub do_send_group_abuse {
 
     call_fyrqd($wth, $verbose, $multispawn);
     # First mail sent
-    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street');
+    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street', $wth, $verbose, $multispawn);
 
     # Check for successes and for email telling group constituent that one message wasn't sent
     set_fyr_date('1990-08-17', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@rep_names){
         if ($rep_name ne 'Richard Howitt'){
-            check_delivered_to_rep(12, $rep_name, '44 Multiple Street');
+            check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $wth, $verbose, $multispawn);
         }else{
             $confirmation_email = $wth->email_get_containing(
             '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
@@ -789,6 +803,8 @@ sub do_send_group_abuse {
     my @new_rep_names = ('Sushila Devi Dhall', 'Stephen Brown');
     send_message_to_rep($base_url, 
        $wth, 
+       $verbose, 
+       $multispawn,     
        13,
        'OX 13d R', # Lincoln college, Oxford
        'all',
@@ -828,6 +844,8 @@ sub do_send_group_message {
     
     send_message_to_rep($base_url, 
         $wth, 
+        $verbose, 
+        $multispawn,     
         7,
         'CB23QJ', # The Guildhall, Cambridge 
         'all',
@@ -847,7 +865,7 @@ sub do_send_group_message {
     # them know the message was sent to others 
     my $rep_name;
     foreach $rep_name (@rep_names){
-        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', 'This message was also sent to');
+        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $wth, $verbose, $multispawn);
     }
 
     # Check that a questionnaire is never sent for a group mail
@@ -890,7 +908,9 @@ sub do_send_bouncing_message() {
     set_base_url("");
     send_message_to_rep($base_url, 
        $wth, 
-        0, 
+       $verbose, 
+       $multispawn,     
+       0, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
         { 
@@ -901,7 +921,7 @@ sub do_send_bouncing_message() {
             body => "Bouncing message this is.  A test."
         } 
     );
-    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land');
+    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land', $wth, $verbose, $multispawn);
 
     # Now fake that it bounced
     call_handlemail($content);

@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.5 2009-09-30 15:02:45 louise Exp $
+# $Id: TestHarness.pm,v 1.6 2009-09-30 15:12:22 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -77,7 +77,7 @@ sub spin_queue {
 
 
 sub send_message_to_rep {
-    my ($base_url, $wth, $who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
+    my ($base_url, $wth, $verbose, $multispawn, $who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
     $fields->{name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     $fields->{writer_email2} = email_n($who);
@@ -165,7 +165,7 @@ sub send_message_to_rep {
 } 
 
 sub check_delivered_to_rep {
-    my ($who, $repname, $extra_check, $wth) = @_;
+    my ($who, $repname, $extra_check, $wth, $verbose, $multispawn) = @_;
 
     call_fyrqd($wth, $verbose, $multispawn);
     my $content = $wth->email_get_containing(
