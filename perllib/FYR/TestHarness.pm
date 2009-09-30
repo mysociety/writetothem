@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.2 2009-09-30 14:09:16 louise Exp $
+# $Id: TestHarness.pm,v 1.3 2009-09-30 14:48:16 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -30,7 +30,8 @@ sub name_n { my $n = shift; return "Cate Constituent $n"; }
 
 # Call fyrqd for one pass
 sub call_fyrqd {
-    my $delivery_method = shift;
+    my ($wth, $delivery_method) = @_;
+    
     if (!defined($delivery_method)){
           $delivery_method = '--email';
     }
@@ -66,18 +67,18 @@ sub set_fyr_date {
 # [note the this is a half-open interval - the first date is the first one
 # used, but the last date is one after the last date which is used)
 sub spin_queue {
-    my ($format_string, $from, $to) = @_;
+    my ($format_string, $from, $to, $wth) = @_;
     for (my $i = $from; $i < $to; $i ++) {
         set_fyr_date(sprintf($format_string, $i));
-        call_fyrqd();
-        call_fyrqd();
-        call_fyrqd();
+        call_fyrqd($wth);
+        call_fyrqd($wth);
+        call_fyrqd($wth);
     }
 }
 
 
 sub send_message_to_rep {
-    my ($who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
+    my ($base_url, $wth, $who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
     $fields->{name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     $fields->{writer_email2} = email_n($who);
@@ -131,7 +132,7 @@ sub send_message_to_rep {
 
     # TODO: Check message isn't sent early
     # Wait for confirmation email to arrive
-    call_fyrqd();
+    call_fyrqd($wth);
     if ($who == 666) {
         # Mail to and from same deliberately invalid address, so will not arrive
         $wth->email_check_none_left();
@@ -165,9 +166,9 @@ sub send_message_to_rep {
 } 
 
 sub check_delivered_to_rep {
-    my ($who, $repname, $extra_check) = @_;
+    my ($who, $repname, $extra_check, $wth) = @_;
 
-    call_fyrqd();
+    call_fyrqd($wth);
     my $content = $wth->email_get_containing(
         '%Subject: Letter from %'.name_n($who).
         '%To: "%'.$repname.'%" <'.email_n($who).'>'.
@@ -189,6 +190,6 @@ sub call_handlemail {
 
 # Clear survey result, so can take survey again
 sub call_allow_new_survey {
-    my $email = shift;
+    my ($email, $wth) = @_;
     $wth->multi_spawn(1, "./allow-new-survey $email", $verbose) ;
 }

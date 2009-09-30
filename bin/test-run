@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.78 2009-09-30 14:30:59 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.79 2009-09-30 14:48:16 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -198,8 +198,8 @@ if ($action{'unit'}) {
 #do_send_bouncing_message();
 
 # Check for any unhandled mails, faxes or errors
-call_fyrqd();
-call_fyrqd('--fax');
+call_fyrqd($wth);
+call_fyrqd($wth, '--fax');
 
 print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
@@ -215,6 +215,7 @@ sub do_send_example_message {
     set_base_url("");
     set_fyr_date('1990-01-01');
     send_message_to_rep($base_url, 
+        $wth,
         0, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
@@ -229,23 +230,23 @@ sub do_send_example_message {
     check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street');
 
     # 2 days to get over bounce_wait
-    spin_queue('1990-01-%02d', 2, 4);
+    spin_queue('1990-01-%02d', 2, 4, $wth);
     # 13th day after sending, no questionnaire
-    spin_queue('1990-01-%02d', 4, 15);
+    spin_queue('1990-01-%02d', 4, 15, $wth);
     $wth->email_check_none_left();
     # 14th day after sending provokes sending of questionnaire
     set_fyr_date('1990-01-15');
-    call_fyrqd();
+    call_fyrqd($wth);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
     # 6 days more, no reminder
-    spin_queue('1990-01-%02d', 16, 22);
+    spin_queue('1990-01-%02d', 16, 22, $wth);
     $wth->email_check_none_left();
     # 7th day, provokes sending of questionnaire reminder
     set_fyr_date('1990-01-22');
-    call_fyrqd();
+    call_fyrqd($wth);
     $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
@@ -304,6 +305,7 @@ sub do_send_blocked_message {
 
     # The message shouldn't be delivered, as it should be frozen
     send_message_to_rep($base_url, 
+        $wth, 
         1, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
@@ -315,12 +317,12 @@ sub do_send_blocked_message {
             body => "V. short"
         } 
     );
-    call_fyrqd();
+    call_fyrqd($wth);
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their message wasn't sent
     set_fyr_date('1990-07-08');
-    call_fyrqd();
+    call_fyrqd($wth);
     my $confirmation_email = $wth->email_get_containing(
         '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
         '%To: "'.name_n(1).'" <'.email_n(1).'>'.
@@ -337,7 +339,7 @@ sub do_test_bounce_stuff {
     # Really we need to turn off the test mode, and have a real representative
     # in DaDem that can be failed. That's pretty complicated to set up - need
     # a test DaDem database as well, really.
-    #send_message_to_rep($base_url, 666, # invalid email address, for reflected email 
+    #send_message_to_rep($base_url, $wth, 666, # invalid email address, for reflected email 
     #                         # (send_message_to_rep has a hack to do confirm)
     #    'CB23QJ', # The Guildhall, Cambridege 
     #    'David Howarth', 
@@ -460,6 +462,7 @@ sub do_send_cobrand_message {
     set_base_url("animalaid.");
     set_fyr_date('1991-02-03');
     send_message_to_rep($base_url, 
+       $wth, 
        2, 
        'OX 13d R', # Lincoln college, Oxford
        'Stephen Brown', 
@@ -497,6 +500,7 @@ sub do_send_lords_message {
     set_base_url("");
     set_fyr_date('1992-01-01');
     send_message_to_rep($base_url, 
+        $wth,  
         50, 
         'PE35 6EN',
         'Lord Rogers', # Subject: in confirmation email wraps, so just check without "of Riverside"
@@ -513,13 +517,13 @@ sub do_send_lords_message {
     check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square');
 
     # 2 days to get over bounce_wait
-    spin_queue('1992-01-%02d', 2, 4);
+    spin_queue('1992-01-%02d', 2, 4, $wth);
     # 13 days after sending, no questionnaire
-    spin_queue('1992-01-%02d', 4, 15);
+    spin_queue('1992-01-%02d', 4, 15, $wth);
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
     set_fyr_date('1992-01-15');
-    call_fyrqd();
+    call_fyrqd($wth);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your Lord reply to your letter?'.
         '%To: "'.name_n(50).'" <'.email_n(50).'>'.
@@ -557,7 +561,7 @@ sub send_fax($$$$$$;$$){
         $body = $body . $body; 
     }
     $fields->{body} = $body;
-    send_message_to_rep($base_url, $email_num, $postcode, $repname, $fields, undef, $birthday);
+    send_message_to_rep($base_url, $wth, $email_num, $postcode, $repname, $fields, undef, $birthday);
     
     # Set a dummy fax number on the message and erase the recipient email
     dbh()->do("update message set recipient_fax = ?, recipient_email = null, no_questionnaire = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
@@ -591,7 +595,7 @@ sub do_send_fax_message {
     send_fax(14, $second_dummy_fax, 1, $postcode, $repname, $fields);
 
     # Run the queue in fax mode
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
 
     # Check that a one page fax is sent to each 
     $wth->fax_get_sent_to($first_dummy_fax, 1);
@@ -602,7 +606,7 @@ sub do_send_fax_message {
     send_fax(8, $dummy_fax, 1, $postcode, $repname, $fields, undef, 1);
 
     # Run the queue in fax mode
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
 
     # Check that a two page fax is sent (one page and one cover)
     $wth->fax_get_sent_to($dummy_fax, 2);
@@ -613,7 +617,7 @@ sub do_send_fax_message {
     send_fax(9, $dummy_fax, 3, $postcode, $repname, $fields);
 
     # Run the queue in fax mode
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
 
     # Check that a two page fax is sent
     $wth->fax_get_sent_to($dummy_fax, 2);
@@ -623,7 +627,7 @@ sub do_send_fax_message {
     send_fax(15, $dummy_fax, 1, $postcode, $repname, $fields);
     
     # Run the queue in fax mode
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
     $wth->fax_check_none_left();
     
     # Check that a fax to the Lords will be sent out of hours
@@ -631,13 +635,13 @@ sub do_send_fax_message {
     my $lords_dummy_fax = '0003';
     send_fax(16, $lords_dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
  
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
     # If a Lords message is being sent 'via', we don't add a cover page
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
     
     # next day time, other fax should get sent
     set_fyr_date('1995-01-02', '10:00:00');
-    call_fyrqd('--fax');
+    call_fyrqd($wth, '--fax');
     $wth->fax_get_sent_to($dummy_fax, 1);
     
     $wth->fax_check_none_left();
@@ -657,6 +661,7 @@ sub do_send_group_abuse {
     # All mails in a group should be checked for abuse
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     send_message_to_rep($base_url, 
+                        $wth,
                         10,
                         'CB23QJ', # The Guildhall, Cambridge
                         'all',
@@ -672,12 +677,12 @@ sub do_send_group_abuse {
         'MEPs',
         \@rep_names);
     # None of the messages in the group should be sent
-    call_fyrqd();
+    call_fyrqd($wth);
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their messages weren't sent
     set_fyr_date('1990-08-08');
-    call_fyrqd();
+    call_fyrqd($wth);
     my $rep_name;
     my $confirmation_email;
     foreach $rep_name (@rep_names){
@@ -733,6 +738,7 @@ sub do_send_group_abuse {
 
     # This message should get through
     send_message_to_rep($base_url, 
+        $wth, 
         11,
         'CB23QJ', # The Guildhall, Cambridge
         'Richard Howitt',
@@ -746,6 +752,7 @@ sub do_send_group_abuse {
                         );
         # All these messages should get through except the one to the same rep
     send_message_to_rep($base_url, 
+       $wth, 
        12,
        'CB23QJ', # The Guildhall, Cambridge
        'all',
@@ -761,13 +768,13 @@ sub do_send_group_abuse {
         'MEPs',
         \@rep_names);
 
-    call_fyrqd();
+    call_fyrqd($wth);
     # First mail sent
     check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street');
 
     # Check for successes and for email telling group constituent that one message wasn't sent
     set_fyr_date('1990-08-17');
-    call_fyrqd();
+    call_fyrqd($wth);
     foreach $rep_name (@rep_names){
         if ($rep_name ne 'Richard Howitt'){
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street');
@@ -781,6 +788,7 @@ sub do_send_group_abuse {
     # None of these messages should get through
     my @new_rep_names = ('Sushila Devi Dhall', 'Stephen Brown');
     send_message_to_rep($base_url, 
+       $wth, 
        13,
        'OX 13d R', # Lincoln college, Oxford
        'all',
@@ -796,7 +804,7 @@ sub do_send_group_abuse {
                         \@new_rep_names);
 
     set_fyr_date('1990-08-26');
-    call_fyrqd();
+    call_fyrqd($wth);
     foreach $rep_name (@new_rep_names){
             $confirmation_email = $wth->email_get_containing(
             '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
@@ -819,6 +827,7 @@ sub do_send_group_message {
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     
     send_message_to_rep($base_url, 
+        $wth, 
         7,
         'CB23QJ', # The Guildhall, Cambridge 
         'all',
@@ -843,15 +852,15 @@ sub do_send_group_message {
 
     # Check that a questionnaire is never sent for a group mail
     # 2 days to get over bounce_wait
-    spin_queue('1994-01-%02d', 2, 4);
+    spin_queue('1994-01-%02d', 2, 4, $wth);
     # 13th day after sending, no questionnaire
-    spin_queue('1994-01-%02d', 4, 15);
+    spin_queue('1994-01-%02d', 4, 15, $wth);
     $wth->email_check_none_left();
     # 14th day after sending, still no questionnaire
     set_fyr_date('1994-01-15');
     $wth->email_check_none_left();
     # 6 days more, no reminder
-    spin_queue('1994-01-%02d', 16, 22);
+    spin_queue('1994-01-%02d', 16, 22, $wth);
     $wth->email_check_none_left();
     # 7th day, still no reminder
     set_fyr_date('1994-01-22');
@@ -880,6 +889,7 @@ sub do_run_unit_tests {
 sub do_send_bouncing_message() {
     set_base_url("");
     send_message_to_rep($base_url, 
+       $wth, 
         0, 
         'CB23QJ', # The Guildhall, Cambridge 
         'David Howarth', 
