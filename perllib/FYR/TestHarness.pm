@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.4 2009-09-30 14:56:34 louise Exp $
+# $Id: TestHarness.pm,v 1.5 2009-09-30 15:02:45 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -45,8 +45,7 @@ sub call_fyrqd {
 # Change the date that all parts of WriteToThem think is today.  Call with no
 # parameters to reset it to the actual today.
 sub set_fyr_date {
-    my $new_date = shift;
-    my $new_time = shift;
+    my ($new_date, $new_time, $verbose) = @_;
 
     if (defined($new_date)) {
         dbh()->do('delete from debugdate');
@@ -67,9 +66,9 @@ sub set_fyr_date {
 # [note the this is a half-open interval - the first date is the first one
 # used, but the last date is one after the last date which is used)
 sub spin_queue {
-    my ($format_string, $from, $to, $wth) = @_;
+    my ($format_string, $from, $to, $wth, $verbose, $multispawn) = @_;
     for (my $i = $from; $i < $to; $i ++) {
-        set_fyr_date(sprintf($format_string, $i));
+        set_fyr_date(sprintf($format_string, $i), $verbose);
         call_fyrqd($wth, $verbose, $multispawn);
         call_fyrqd($wth, $verbose, $multispawn);
         call_fyrqd($wth, $verbose, $multispawn);

@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.80 2009-09-30 14:56:35 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.81 2009-09-30 15:02:48 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -213,7 +213,7 @@ print "Everything completed successfully\n";
 
 sub do_send_example_message {
     set_base_url("");
-    set_fyr_date('1990-01-01');
+    set_fyr_date('1990-01-01', undef, $verbose);
     send_message_to_rep($base_url, 
         $wth,
         0, 
@@ -230,22 +230,22 @@ sub do_send_example_message {
     check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street');
 
     # 2 days to get over bounce_wait
-    spin_queue('1990-01-%02d', 2, 4, $wth);
+    spin_queue('1990-01-%02d', 2, 4, $wth, $verbose, $multispawn);
     # 13th day after sending, no questionnaire
-    spin_queue('1990-01-%02d', 4, 15, $wth);
+    spin_queue('1990-01-%02d', 4, 15, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
     # 14th day after sending provokes sending of questionnaire
-    set_fyr_date('1990-01-15');
+    set_fyr_date('1990-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
         '%Two weeks ago we sent your letter to David Howarth MP%');
     # 6 days more, no reminder
-    spin_queue('1990-01-%02d', 16, 22, $wth);
+    spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
     # 7th day, provokes sending of questionnaire reminder
-    set_fyr_date('1990-01-22');
+    set_fyr_date('1990-01-22', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
@@ -278,7 +278,7 @@ sub do_send_example_message {
 
 sub do_send_blocked_message {
     set_base_url("");
-    set_fyr_date('1990-06-30');
+    set_fyr_date('1990-06-30', undef, $verbose);
 
     # Go to abuse rules page
     $wth->browser_get($admin_url);    
@@ -321,7 +321,7 @@ sub do_send_blocked_message {
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their message wasn't sent
-    set_fyr_date('1990-07-08');
+    set_fyr_date('1990-07-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
         '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
@@ -333,7 +333,7 @@ sub do_send_blocked_message {
 
 sub do_test_bounce_stuff {
     set_base_url("");
-    set_fyr_date('1990-08-30');
+    set_fyr_date('1990-08-30', undef, $verbose);
 
     # TODO: This doesn't work yet. It is meant to test failing bad contacts.
     # Really we need to turn off the test mode, and have a real representative
@@ -460,7 +460,7 @@ END
 
 sub do_send_cobrand_message {
     set_base_url("animalaid.");
-    set_fyr_date('1991-02-03');
+    set_fyr_date('1991-02-03', undef, $verbose);
     send_message_to_rep($base_url, 
        $wth, 
        2, 
@@ -498,7 +498,7 @@ sub do_send_cobrand_message {
 
 sub do_send_lords_message {
     set_base_url("");
-    set_fyr_date('1992-01-01');
+    set_fyr_date('1992-01-01', undef, $verbose);
     send_message_to_rep($base_url, 
         $wth,  
         50, 
@@ -517,12 +517,12 @@ sub do_send_lords_message {
     check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square');
 
     # 2 days to get over bounce_wait
-    spin_queue('1992-01-%02d', 2, 4, $wth);
+    spin_queue('1992-01-%02d', 2, 4, $wth, $verbose, $multispawn);
     # 13 days after sending, no questionnaire
-    spin_queue('1992-01-%02d', 4, 15, $wth);
+    spin_queue('1992-01-%02d', 4, 15, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
     # 14th day provokes sending of questionnaire
-    set_fyr_date('1992-01-15');
+    set_fyr_date('1992-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your Lord reply to your letter?'.
@@ -579,7 +579,7 @@ sub do_send_fax_message {
     set_base_url("");
 
     # Make sure we're in working hours
-    set_fyr_date('1995-01-01', '12:00:00');
+    set_fyr_date('1995-01-01', '12:00:00', $verbose);
     
     my $postcode = 'CB23QJ';
     my $repname = 'David Howarth';
@@ -623,7 +623,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 2);
     
     # Check that a fax won't be sent out of hours
-    set_fyr_date('1995-01-01', '21:00:00');
+    set_fyr_date('1995-01-01', '21:00:00', $verbose);
     send_fax(15, $dummy_fax, 1, $postcode, $repname, $fields);
     
     # Run the queue in fax mode
@@ -640,7 +640,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($lords_dummy_fax, 1);
     
     # next day time, other fax should get sent
-    set_fyr_date('1995-01-02', '10:00:00');
+    set_fyr_date('1995-01-02', '10:00:00',  $verbose);
     call_fyrqd($wth, $verbose, $multispawn, '--fax');
     $wth->fax_get_sent_to($dummy_fax, 1);
     
@@ -651,7 +651,7 @@ sub do_send_fax_message {
 #############################################################################
 sub do_send_group_abuse {
     set_base_url("");
-    set_fyr_date('1990-07-30');
+    set_fyr_date('1990-07-30', undef, $verbose);
     # Go to abuse rules page
     $wth->browser_get($admin_url);
     $wth->browser_follow_link(text_regex => qr/Message Abuse Rules/);
@@ -681,7 +681,7 @@ sub do_send_group_abuse {
     $wth->email_check_none_left();
 
     # Check for email telling the constituent that their messages weren't sent
-    set_fyr_date('1990-08-08');
+    set_fyr_date('1990-08-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $rep_name;
     my $confirmation_email;
@@ -773,7 +773,7 @@ sub do_send_group_abuse {
     check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street');
 
     # Check for successes and for email telling group constituent that one message wasn't sent
-    set_fyr_date('1990-08-17');
+    set_fyr_date('1990-08-17', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@rep_names){
         if ($rep_name ne 'Richard Howitt'){
@@ -803,7 +803,7 @@ sub do_send_group_abuse {
         'District Councillors',
                         \@new_rep_names);
 
-    set_fyr_date('1990-08-26');
+    set_fyr_date('1990-08-26', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
             $confirmation_email = $wth->email_get_containing(
@@ -823,7 +823,7 @@ sub do_send_group_abuse {
 
 sub do_send_group_message {
     set_base_url("");
-    set_fyr_date('1994-01-01');
+    set_fyr_date('1994-01-01', undef, $verbose);
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
     
     send_message_to_rep($base_url, 
@@ -852,18 +852,18 @@ sub do_send_group_message {
 
     # Check that a questionnaire is never sent for a group mail
     # 2 days to get over bounce_wait
-    spin_queue('1994-01-%02d', 2, 4, $wth);
+    spin_queue('1994-01-%02d', 2, 4, $wth, $verbose, $multispawn);
     # 13th day after sending, no questionnaire
-    spin_queue('1994-01-%02d', 4, 15, $wth);
+    spin_queue('1994-01-%02d', 4, 15, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
     # 14th day after sending, still no questionnaire
-    set_fyr_date('1994-01-15');
+    set_fyr_date('1994-01-15', undef, $verbose);
     $wth->email_check_none_left();
     # 6 days more, no reminder
-    spin_queue('1994-01-%02d', 16, 22, $wth);
+    spin_queue('1994-01-%02d', 16, 22, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
     # 7th day, still no reminder
-    set_fyr_date('1994-01-22');
+    set_fyr_date('1994-01-22', undef, $verbose);
     $wth->email_check_none_left();
 }
 
