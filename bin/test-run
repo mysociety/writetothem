@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.73 2009-08-11 17:14:52 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.74 2009-09-30 13:35:48 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -38,6 +38,7 @@ use Storable;
 use FindBin;
 use Getopt::Long;
 use IO::Handle;
+use Test::Harness;
 
 use mySociety::EmailUtil;
 use mySociety::TempFiles;
@@ -59,6 +60,7 @@ Actions are a list of tests, run if present in this order:
     lords   - send example message to a Lord
     fax     - send example fax message successfully (no faxes sent 8pm-8am - tests will fail)
     group   - send example message to a group of reps
+    unit    - run the unit tests
 If you specify no actions, it will run all of them.
 
 Options are
@@ -98,6 +100,8 @@ foreach (@ARGV) {
         $action{'fax'} = 1;
     } elsif ($_ eq "group"){
         $action{'group'} = 1;
+    } elsif ($_ eq "unit"){
+        $action{'unit'} = 1;
     } else {
         help();
         print "Action '$_' not known\n";
@@ -111,6 +115,7 @@ if (scalar(@ARGV) == 0) {
     $action{'lords'} = 1;
     $action{'fax'} = 1;
     $action{'group'} = 1;
+    $action{'unit'} = 1;
 }
 
 
@@ -183,7 +188,10 @@ if ($action{'group'}) {
     print "Sending group messages...\n" if $verbose > 0;
     do_send_group_message();
 }
-
+if ($action{'unit'}) { 
+    print "Running unit tests...\n" if $verbose > 0;
+    do_run_unit_tests();
+}
 
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
@@ -989,6 +997,22 @@ sub do_send_group_message {
     set_fyr_date('1994-01-22');
     $wth->email_check_none_left();
 }
+
+#############################################################################
+
+sub do_run_unit_tests {
+    my $testdir = '../t';
+    opendir(DIR, $testdir);
+    my @testfiles = grep(/\.t$/,readdir(DIR));
+    closedir(DIR);
+    @testfiles = map {$testdir . '/' . $_} @testfiles;
+    foreach my $file (@testfiles) {
+       print "$file\n";
+    }
+
+    runtests( @testfiles ); 
+}
+
 
 #############################################################################
 
