@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.10 2009-09-30 16:22:12 louise Exp $
+# $Id: TestHarness.pm,v 1.11 2009-10-01 09:39:18 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -15,7 +15,7 @@ package FYR::TestHarness;
 BEGIN {
     use Exporter ();
     our @ISA = qw(Exporter);
-    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_handlemail &call_allow_new_survey);
+    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_allow_new_survey &call_handlemail);
 }
 
 use strict;
@@ -184,16 +184,17 @@ sub check_delivered_to_rep {
 }
 
 
-# Send one mail to bounce handling script
-sub call_handlemail {
-    my ($content) = @_;
-    my $p = mySociety::TempFiles::pipe_via("./handlemail") or die "failed to call handlemail";
-    $p->print($content);
-    $p->close();
-}
-
 # Clear survey result, so can take survey again
 sub call_allow_new_survey {
     my ($email, $wth, $verbose) = @_;
     $wth->multi_spawn(1, "./allow-new-survey $email", $verbose) ;
+}
+
+# Send one mail to bounce handling script
+sub call_handlemail {
+    my ($content) = @_;
+    print "calling handlemail";
+    my $p = mySociety::TempFiles::pipe_via("./handlemail") or die "failed to call handlemail";
+    $p->print($content);     
+    $p->close();
 }
