@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.283 2009-10-01 09:55:43 louise Exp $
+# $Id: Queue.pm,v 1.284 2009-10-01 14:57:06 louise Exp $
 #
 
 package FYR::Queue;
@@ -1239,7 +1239,7 @@ sub make_questionnaire_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
 
-    my $base_url = Cobrand::base_url_for_emails($msg->{cobrand});
+    my $base_url = FYR::Cobrand::base_url_for_emails($msg->{cobrand});
     my $token = make_token("questionnaire", $msg->{id});
     my $yes_url = $base_url . '/Y/' . $token;
     my $no_url = $base_url . '/N/' . $token;
