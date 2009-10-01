@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.86 2009-10-01 09:39:18 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.87 2009-10-01 14:58:50 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -49,7 +49,7 @@ use mySociety::WebTestHarness;
 use mySociety::Ratty;
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail);
+use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
 use FYR::Cobrand;
 
 sub help {
@@ -159,6 +159,10 @@ print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../fyr/");
 $wth->php_check_syntax("../../fyr/templates/emails/", qr//);
 
+our $options = { wth        => $wth,
+                 verbose    => $verbose,
+                 multispawn => $multispawn };
+
 if ($action{'example'}) {
     print "Sending example message...\n" if $verbose > 0;
     do_send_example_message();
@@ -215,22 +219,25 @@ print "Everything completed successfully\n";
 sub do_send_example_message {
     set_base_url("");
     set_fyr_date('1990-01-01', undef, $verbose);
-    send_message_to_rep($base_url, 
-        $wth,
-        $verbose, 
-        $multispawn,     
-        0, 
+
+    $options->{base_url} = $base_url;
+    my $repinfo = {repname => 'David Howarth'};
+
+    send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridge 
-        'David Howarth', 
         { 
             writer_address1 => '23 Something Street',
             writer_town => 'Someplace',
             state => 'Someshire',
             writer_phone => undef,
             body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
-        } 
+        }, 
+	$repinfo,         
+        $options
     );
-    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street', $wth, $verbose, $multispawn);
+    confirm_message(0, $repinfo, $options);
+
+    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street', $options);
 
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 4, $wth, $verbose, $multispawn);
@@ -306,22 +313,26 @@ sub do_send_blocked_message {
         button => 'done');
     $wth->browser_check_contents('Block quicker than you can imagine');
 
+
+    $options->{base_url} = $base_url;
+    my $repinfo = {repname => 'David Howarth'};
+
     # The message shouldn't be delivered, as it should be frozen
-    send_message_to_rep($base_url, 
-        $wth, 
-        $verbose, 
-        $multispawn,
-        1, 
+    send_message_to_rep(1, 
         'CB23QJ', # The Guildhall, Cambridge 
-        'David Howarth', 
         { 
             writer_address1 => '23 Something Street',
             writer_town => 'Someplace',
             state => 'Someshire',
             writer_phone => undef,
             body => "V. short"
-        } 
+        }, 
+        $repinfo, 
+        $options 
     );
+
+    confirm_message(1, $repinfo, $options);
+
     call_fyrqd($wth, $verbose, $multispawn);
     $wth->email_check_none_left();
 
@@ -340,23 +351,29 @@ sub do_test_bounce_stuff {
     set_base_url("");
     set_fyr_date('1990-08-30', undef, $verbose);
 
+    $options->{base_url} = $base_url; 
+    my $repinfo = {repname => 'David Howarth'};
+
     # TODO: This doesn't work yet. It is meant to test failing bad contacts.
     # Really we need to turn off the test mode, and have a real representative
     # in DaDem that can be failed. That's pretty complicated to set up - need
     # a test DaDem database as well, really.
-    #send_message_to_rep($base_url, $wth, $verbose, $multispawn, 666, # invalid email address, for reflected email 
+    #send_message_to_rep(666, # invalid email address, for reflected email 
     #                         # (send_message_to_rep has a hack to do confirm)
     #    'CB23QJ', # The Guildhall, Cambridege 
-    #    'David Howarth', 
     #    { 
     #        writer_address1 => '82 Mouse Road',
     #        writer_town => 'Cheeseland',
     #        state => 'Emmentalshire',
     #        writer_phone => undef,
     #        body => "I think that more cheese should be sent to more mice. How are the mignon little souris meant to be happy when they aren't fully fed with the freshest, creamiest, tastiest coagulated, separated milk curd?"
-    #    } 
+    #    }, 
+    #    $repinfo, 
+    #    $options 
     #);
-    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road', $wth, $verbose, $multispawn);
+
+    #confirm_message(0, $repinfo, $options);
+    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road', $options);
 
     # Pretend to be somebody replying to a questionnaire message
     # - the message is just hard wired here as that is easiest.
@@ -466,13 +483,13 @@ END
 sub do_send_cobrand_message {
     set_base_url("animalaid.");
     set_fyr_date('1991-02-03', undef, $verbose);
-    send_message_to_rep($base_url, 
-       $wth, 
-       $verbose, 
-       $multispawn, 
-       2, 
+
+    $options->{base_url} = $base_url; 
+    $options->{cobrand} = 'animalaid';
+    my $repinfo = {repname => 'Stephen Brown'};
+
+    send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
-       'Stephen Brown', 
         { 
             writer_address1 => '32 Wheresome Wroad',
             writer_town => 'Whereville',
@@ -480,9 +497,13 @@ sub do_send_cobrand_message {
             writer_phone => undef,
             body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example.",
         },
-        'animalaid'
+        $repinfo,
+        $options
     );
-    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad', $wth, $verbose, $multispawn);
+
+    confirm_message(2, $repinfo, $options);
+    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad', $options);
+    $options->{cobrand} = undef;
 
     # Run tests in any TestHarness.pm files in for Cobrands
     my $allowed_cobrands = FYR::Cobrand::get_allowed_cobrands();
@@ -507,13 +528,12 @@ sub do_send_cobrand_message {
 sub do_send_lords_message {
     set_base_url("");
     set_fyr_date('1992-01-01', undef, $verbose);
-    send_message_to_rep($base_url, 
-        $wth,  
-        $verbose, 
-        $multispawn, 
-        50, 
+    $options->{base_url} = $base_url; 
+    $options->{birthday} = '23 July';
+    my $repinfo = {repname => 'Lord Rogers'}; # Subject: in confirmation email wraps, so just check without "of Riverside"
+
+    send_message_to_rep(50, 
         'PE35 6EN',
-        'Lord Rogers', # Subject: in confirmation email wraps, so just check without "of Riverside"
         { 
             writer_address1 => '99 Subject\'s Square',
             writer_town => 'Plebsville',
@@ -521,10 +541,12 @@ sub do_send_lords_message {
             writer_phone => undef,
             body => "I know it is odd for somebody to write to a Lord, as they are not officially representative. However, they ought to respond to the needs and wants of the country, because that's the right thing to do. So I'm writing to you anyway, so altering reality to be as I want, by assuming that it already is."
         },
-        undef,
-        '23 July', 
+        $repinfo, 
+        $options
     );
-    check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square', $wth, $verbose, $multispawn);
+
+    confirm_message(50, $repinfo, $options);
+    check_delivered_to_rep(50, 'Lord Rogers of Riverside', '99 Subject\\\'s Square', $options);
 
     # 2 days to get over bounce_wait
     spin_queue('1992-01-%02d', 2, 4, $wth, $verbose, $multispawn);
@@ -560,18 +582,23 @@ sub do_send_lords_message {
         $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
     }
     $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
+    $options->{birthday} = undef;
 }
 
 #############################################################################
 sub send_fax($$$$$$;$$){
     my ($email_num, $dummy_fax, $repeat_text, $postcode, $repname, $fields, $birthday, $recipient_via) = @_;
-    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
 
+    $options->{base_url} = $base_url;
+    $options->{birthday} = $birthday;
+    my $repinfo = {repname => $repname};
+    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
     for (my $i=1; $i<=$repeat_text; ++$i) {
         $body = $body . $body; 
     }
     $fields->{body} = $body;
-    send_message_to_rep($base_url, $wth, $verbose, $multispawn, $email_num, $postcode, $repname, $fields, undef, $birthday);
+    send_message_to_rep($email_num, $postcode, $fields, $repinfo, $options);
+    confirm_message($email_num, $repinfo, $options);
     
     # Set a dummy fax number on the message and erase the recipient email
     dbh()->do("update message set recipient_fax = ?, recipient_email = null, no_questionnaire = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
@@ -581,6 +608,7 @@ sub send_fax($$$$$$;$$){
         dbh()->do("update message set recipient_via = 't' where sender_email = ?", {},  email_n($email_num));
         dbh()->commit();  
     }
+    $options->{birthday} = undef;
     
 }
 #############################################################################
@@ -655,6 +683,7 @@ sub do_send_fax_message {
     $wth->fax_get_sent_to($dummy_fax, 1);
     
     $wth->fax_check_none_left();
+    $options->{birthday} = undef;
     
 }
 
@@ -668,26 +697,25 @@ sub do_send_group_abuse {
     # Test that the abuse rule is there
     $wth->browser_check_contents('Block quicker than you can imagine');
 
-    # All mails in a group should be checked for abuse
+    $options->{base_url} = $base_url;
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
-    send_message_to_rep($base_url, 
-                        $wth,
-                        $verbose, 
-                        $multispawn, 
-                        10,
+    my $repinfo = {repname => 'all', 
+                   repnames => \@rep_names, 
+                   reptype => 'MEPs'};
+
+    # All mails in a group should be checked for abuse
+    send_message_to_rep(10,
                         'CB23QJ', # The Guildhall, Cambridge
-                        'all',
                         {
-            writer_address1 => '44 Multiple Street',
-            writer_town => 'Batchcester',
-            state => 'Groupshire',
-            writer_phone => undef,
-            body => "V. short"
-            },
-        undef,
-        undef,
-        'MEPs',
-        \@rep_names);
+                           writer_address1 => '44 Multiple Street',
+                           writer_town => 'Batchcester',
+                           state => 'Groupshire',
+                           writer_phone => undef,
+                           body => "V. short"
+                        },
+                        $repinfo, 
+                        $options);
+    confirm_message(10, $repinfo, $options);
     # None of the messages in the group should be sent
     call_fyrqd($wth, $verbose, $multispawn);
     $wth->email_check_none_left();
@@ -747,53 +775,48 @@ sub do_send_group_abuse {
         },
         button => 'done');
     $wth->browser_check_contents('Similar body, same rep');
-
+   
+    $repinfo = {repname => 'Richard Howitt'};
     # This message should get through
-    send_message_to_rep($base_url, 
-        $wth, 
-        $verbose, 
-        $multispawn, 
-        11,
-        'CB23QJ', # The Guildhall, Cambridge
-        'Richard Howitt',
+    send_message_to_rep(11,
+                        'CB23QJ', # The Guildhall, Cambridge
                         {
-            writer_address1 => '23 Something Street',
-            writer_town => 'Someplace',
-            state => 'Someshire',
-            writer_phone => undef,
-            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
-}
-                        );
-        # All these messages should get through except the one to the same rep
-    send_message_to_rep($base_url, 
-       $wth, 
-       $verbose, 
-       $multispawn,     
-       12,
-       'CB23QJ', # The Guildhall, Cambridge
-       'all',
-                        {
-            writer_address1 => '44 Multiple Street',
-            writer_town => 'Batchcester',
-            state => 'Groupshire',
-            writer_phone => undef,
-            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
-},
-        undef,
-        undef,
-        'MEPs',
-        \@rep_names);
+                          writer_address1 => '23 Something Street',
+                          writer_town => 'Someplace',
+                          state => 'Someshire',
+                          writer_phone => undef,
+                          body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
+                        },
+                        $repinfo, 
+                        $options);
+    confirm_message(11, $repinfo, $options);
 
+    # All these messages should get through except the one to the same rep
+    $repinfo = {repname => 'all',
+                reptype => 'MEPs', 
+                repnames => \@rep_names};
+    send_message_to_rep(12,
+                        'CB23QJ', # The Guildhall, Cambridge
+                        {
+                         writer_address1 => '44 Multiple Street',
+                         writer_town => 'Batchcester',
+                         state => 'Groupshire',
+                         writer_phone => undef,
+                         body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "
+                        },
+                        $repinfo, 
+                        $options);
+    confirm_message(12, $repinfo, $options);
     call_fyrqd($wth, $verbose, $multispawn);
     # First mail sent
-    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street', $wth, $verbose, $multispawn);
+    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street', $options);
 
     # Check for successes and for email telling group constituent that one message wasn't sent
     set_fyr_date('1990-08-17', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@rep_names){
         if ($rep_name ne 'Richard Howitt'){
-            check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $wth, $verbose, $multispawn);
+            check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $options);
         }else{
             $confirmation_email = $wth->email_get_containing(
             '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
@@ -803,24 +826,20 @@ sub do_send_group_abuse {
     }
     # None of these messages should get through
     my @new_rep_names = ('Sushila Devi Dhall', 'Stephen Brown');
-    send_message_to_rep($base_url, 
-       $wth, 
-       $verbose, 
-       $multispawn,     
-       13,
-       'OX 13d R', # Lincoln college, Oxford
-       'all',
+    $repinfo = {repname => 'all', 
+                reptype => 'District Councillors', 
+                repnames => \@new_rep_names};
+    send_message_to_rep(13,
+                        'OX 13d R', # Lincoln college, Oxford
                         {
-            writer_address1 => '32 Wheresome Wroad',
-            writer_town => 'Whereville',
-            state => 'Whereex',
-            writer_phone => undef,
-            body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "},
-        undef,
-        undef,
-        'District Councillors',
-                        \@new_rep_names);
-
+                         writer_address1 => '32 Wheresome Wroad',
+                         writer_town => 'Whereville',
+                         state => 'Whereex',
+                         writer_phone => undef,
+                         body => "This is a duplicate of another mail. It is identical in every respect. Even close friends could not tell the two apart. Every thought and phrasing is identical, so that a naive observer might conclude that there is some cut-and-pasting going on. Of course, appearances can be deceiving, so perhaps it is just a coincidence. "},
+                        $repinfo, 
+                        $options);
+    confirm_message(13, $repinfo, $options);
     set_fyr_date('1990-08-26', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
@@ -842,32 +861,30 @@ sub do_send_group_abuse {
 sub do_send_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01', undef, $verbose);
+    $options->{base_url} = $base_url;
     my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
-    
-    send_message_to_rep($base_url, 
-        $wth, 
-        $verbose, 
-        $multispawn,     
-        7,
-        'CB23QJ', # The Guildhall, Cambridge 
-        'all',
+    my $repinfo = {repname => 'all',
+                   repnames => \@rep_names,
+                   reptype => 'MEPs'};
+                   
+    send_message_to_rep(7,
+                        'CB23QJ', # The Guildhall, Cambridge 
                         {
-            writer_address1 => '44 Multiple Street',
-            writer_town => 'Batchcester',
-            state => 'Groupshire',
-            writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
-},
-        undef,
-        undef,
-        'MEPs',
-        \@rep_names);
+                         writer_address1 => '44 Multiple Street', 
+                         writer_town => 'Batchcester',
+                         state => 'Groupshire',
+                         writer_phone => undef,
+                         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+                        },
+                        $repinfo, 
+                        $options);
     
+    confirm_message(7, $repinfo, $options);
     # check that all the reps got the message and that it lets 
     # them know the message was sent to others 
     my $rep_name;
     foreach $rep_name (@rep_names){
-        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $wth, $verbose, $multispawn);
+        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $options);
     }
 
     # Check that a questionnaire is never sent for a group mail
@@ -898,7 +915,6 @@ sub do_run_unit_tests {
     foreach my $file (@testfiles) {
        print "$file\n";
     }
-
     runtests( @testfiles ); 
 }
 
@@ -908,22 +924,23 @@ sub do_run_unit_tests {
 =comment
 sub do_send_bouncing_message() {
     set_base_url("");
-    send_message_to_rep($base_url, 
-       $wth, 
-       $verbose, 
-       $multispawn,     
-       0, 
-        'CB23QJ', # The Guildhall, Cambridge 
-        'David Howarth', 
-        { 
-            writer_address1 => '10 Boing Boing Land',
-            writer_town => 'Springy Street',
-            state => 'Thumpshire',
-            writer_phone => '01234 567890',
-            body => "Bouncing message this is.  A test."
-        } 
-    );
-    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land', $wth, $verbose, $multispawn);
+    $options->{base_url} = $base_url;
+    my $repinfo = {repname => 'David Howarth'};
+                   
+    send_message_to_rep(0, 
+                        'CB23QJ', # The Guildhall, Cambridge 
+                        { 
+                         writer_address1 => '10 Boing Boing Land',
+                         writer_town => 'Springy Street',
+                         state => 'Thumpshire',
+                         writer_phone => '01234 567890',
+                         body => "Bouncing message this is.  A test."
+                        }, 
+                        $repinfo, 
+                        $options 
+                        );
+    confirm_message(0, $repinfo, $options);
+    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land', $options);
 
     # Now fake that it bounced
     call_handlemail($content);

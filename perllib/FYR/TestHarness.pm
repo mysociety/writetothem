@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.11 2009-10-01 09:39:18 louise Exp $
+# $Id: TestHarness.pm,v 1.12 2009-10-01 14:58:50 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -15,7 +15,7 @@ package FYR::TestHarness;
 BEGIN {
     use Exporter ();
     our @ISA = qw(Exporter);
-    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_allow_new_survey &call_handlemail);
+    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_allow_new_survey &call_handlemail &confirm_message);
 }
 
 use strict;
@@ -84,7 +84,18 @@ sub spin_queue {
 
 
 sub send_message_to_rep {
-    my ($base_url, $wth, $verbose, $multispawn, $who, $postcode, $repname, $fields, $cobrand, $birthday, $reptype, $repnames) = @_;
+    my ($who, $postcode, $fields, $repinfo, $options) = @_;
+    my $verbose = $options->{verbose};
+    my $multispawn = $options->{multispawn};
+    my $base_url = $options->{base_url};
+    my $wth = $options->{wth};    
+    my $cobrand = $options->{cobrand};
+    my $birthday = $options->{birthday};
+
+    my $reptype = $repinfo->{reptype};
+    my $repname = $repinfo->{repname};
+    my $repnames = $repinfo->{repnames};
+    
     $fields->{name} = name_n($who);
     $fields->{writer_email} = email_n($who);
     $fields->{writer_email2} = email_n($who);
@@ -136,6 +147,20 @@ sub send_message_to_rep {
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents('Nearly Done! Now check your email');
 
+} 
+
+sub confirm_message {
+    my ($who, $repinfo, $options) = @_;
+
+    my $verbose = $options->{verbose};
+    my $multispawn = $options->{multispawn};
+    my $cobrand = $options->{cobrand}; 
+    my $wth = $options->{wth};
+    my $base_url = $options->{base_url};
+
+    my $reptype = $repinfo->{reptype};
+    my $repname = $repinfo->{repname};
+
     # TODO: Check message isn't sent early
     # Wait for confirmation email to arrive
     call_fyrqd($wth, $verbose, $multispawn);
@@ -166,12 +191,15 @@ sub send_message_to_rep {
             $wth->browser_check_contents("Thank you! You've completed the action for \"Let's stop veal farming for good\".");
         } else {
             $wth->browser_check_contents("All done&hellip; We&rsquo;ll send your message now");
-        }   
+        }
     }
-} 
+}
 
 sub check_delivered_to_rep {
-    my ($who, $repname, $extra_check, $wth, $verbose, $multispawn) = @_;
+    my ($who, $repname, $extra_check, $options) = @_;
+    my $wth = $options->{wth};
+    my $verbose = $options->{verbose};
+    my $multispawn = $options->{multispawn};
 
     call_fyrqd($wth, $verbose, $multispawn);
     my $content = $wth->email_get_containing(
