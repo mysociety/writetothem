@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.282 2009-05-20 08:53:27 louise Exp $
+# $Id: Queue.pm,v 1.283 2009-10-01 09:55:43 louise Exp $
 #
 
 package FYR::Queue;
@@ -55,6 +55,7 @@ use FYR;
 use FYR::AbuseChecks;
 use FYR::EmailTemplate;
 use FYR::Fax;
+use FYR::Cobrand;
 
 our $message_calculated_values = "
     length(message) as message_length,
@@ -1108,10 +1109,8 @@ sub make_confirmation_email ($;$) {
     $reminder ||= 0;
     
     my $token = make_token("confirm", $msg->{id});
-    my $url_start = mySociety::Config::get('BASE_URL');
-    if ($msg->{cobrand}) {
-        $url_start = "http://" . $msg->{cobrand} . "." . mySociety::Config::get('WEB_DOMAIN');
-    }
+    my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand});
+
     my $confirm_url = $url_start . '/C/' . $token;
     
     my $bodytext;
@@ -1240,9 +1239,10 @@ sub make_questionnaire_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
 
+    my $base_url = Cobrand::base_url_for_emails($msg->{cobrand});
     my $token = make_token("questionnaire", $msg->{id});
-    my $yes_url = mySociety::Config::get('BASE_URL') . '/Y/' . $token;
-    my $no_url = mySociety::Config::get('BASE_URL') . '/N/' . $token;
+    my $yes_url = $base_url . '/Y/' . $token;
+    my $no_url = $base_url . '/N/' . $token;
 
     my $params;
     try {
