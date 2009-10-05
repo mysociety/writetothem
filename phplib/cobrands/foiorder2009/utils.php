@@ -6,26 +6,33 @@
  * Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
  * Email: louise@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: utils.php,v 1.1 2009-08-11 13:39:43 louise Exp $
+ * $Id: utils.php,v 1.2 2009-10-05 15:33:34 louise Exp $
  * 
  */
-function get_letter_help($fyr_values) {
-  $letter_help = file_get_contents("http://www.theyworkforyou.com/foiorder2009/wtt.html");
-  return $letter_help;
-}
 
-function force_default_cocode($cocode) {
-    if (!$cocode) {
-      $cocode = "email1";
-    }
-    return $cocode;
-}
+Class Foiorder2009 {
 
-function force_representative_type($cocode, $type) {
-    if ($cocode && $cocode == 'email1') {
-        $type = 'westminstermp';
-    }
-    return $type;
-}
+  function factory() {
+    return new Foiorder2009();
+  }
 
+  function get_letter_help($fyr_values) {
+    $letter_help = file_get_contents("http://www.theyworkforyou.com/foiorder2009/wtt.html");
+    return $letter_help;
+  }
+
+  function force_default_cocode($cocode) {
+      if (!$cocode) {
+        $cocode = "email1";
+      }
+      return $cocode;
+  }
+
+  function force_representative_type($cocode, $type) {
+      if ($cocode && $cocode == 'email1') {
+          $type = 'westminstermp';
+      }
+      return $type;
+  }
+}
 ?>

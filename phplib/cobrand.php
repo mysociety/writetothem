@@ -5,9 +5,11 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.10 2009-09-29 15:34:12 louise Exp $
+ * $Id: cobrand.php,v 1.11 2009-10-05 15:33:34 louise Exp $
  * 
  */
+
+$handles = array();
 
 // List of subdomains of WriteToThem which are cobrands.
 function cobrand_allowed() {
@@ -26,18 +28,28 @@ function cobrand_allowed() {
 // and add a hook function with default behaviour here. 
 
 // Include any cobrand-specific code
-function include_cobrand($cobrand){
+function cobrand_handle($cobrand){
+  global $handles;
   $dir = dirname(__FILE__);
+  if (array_key_exists($cobrand, $handles)){
+    return $handles[$cobrand];
+  }
   if (file_exists("$dir/cobrands/$cobrand/utils.php")){
       include_once("$dir/cobrands/$cobrand/utils.php");
+      $classname = ucwords($cobrand);
+      $handle = call_user_func( array($classname, 'factory'));      
+      $handles[$cobrand] = $handle;
+  }else{
+      $handles[$cobrand] = undef; 
   }
+  return $handles[$cobrand];
 }
 
 // Bullet points / tips to put at the top of a letter.
 function cobrand_get_letter_help($cobrand, $fyr_values) {
-    include_cobrand($cobrand);
-    if (function_exists('get_letter_help')){
-        return get_letter_help($fyr_values);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'get_letter_help')){
+        return $cobrand_handle->get_letter_help($fyr_values);
     }
     return false;
 }
@@ -48,9 +60,9 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
 // Return false for default behaviour.
 function cobrand_post_letter_send($values) {
     $cobrand = $values['cobrand']; 
-    include_cobrand($cobrand);
-    if (function_exists('post_letter_send')){
-        return post_letter_send($values);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'post_letter_send')){
+        return $cobrand_handle->post_letter_send($values);
     }
     return false;
 }
@@ -58,9 +70,9 @@ function cobrand_post_letter_send($values) {
 // On front page, force a particular campaign code as default for site (either
 // forced value, or if another code isn't set).
 function cobrand_force_default_cocode($cobrand, $cocode) {
-    include_cobrand($cobrand);
-    if (function_exists('force_default_cocode')){
-        return force_default_cocode($cocode);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'force_default_cocode')){
+        return $cobrand_handle->force_default_cocode($cocode);
     }
     return $cocode;
 }
@@ -71,9 +83,9 @@ function cobrand_force_default_cocode($cobrand, $cocode) {
 // parameter in http://www.writetothem.com/about-linktous
 // $type input is the value set with the 'a' URL parameter, if there is one.
 function cobrand_force_representative_type($cobrand, $cocode, $type) {
-    include_cobrand($cobrand);
-    if (function_exists('force_representative_type')){
-        return force_representative_type($cocode, $type);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'force_representative_type')){
+        return $cobrand_handle->force_representative_type($cocode, $type);
     }
     return $type;
 }
@@ -81,20 +93,32 @@ function cobrand_force_representative_type($cobrand, $cocode, $type) {
 // Return any HTML headers to be used in the cobranded site
 function cobrand_headers($cobrand, $template) {
   if ($cobrand) {
-    include_cobrand($cobrand);
-    if (function_exists('headers')) {
-      return headers($template);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'headers')) {
+      return $cobrand_handle->headers($template);
     }
     return '';
   }
 }
 
+// Return a boolean indicating whether the link allowing users to submit
+// councillor corrections should be displayed
+function cobrand_display_councillor_correction_link($cobrand) {
+  if ($cobrand) {
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'display_councillor_correction_link')) {
+      return $cobrand_handle->display_councillor_correction_link();
+    }
+  }
+  return true;
+}
+
 // Generate a url for writing to all reps of a given type for a postcode
 function cobrand_write_all_url($cobrand, $va_type, $fyr_postcode){
   if ($cobrand){
-    include_cobrand($cobrand);
-    if (function_exists('write_all_url')){
-        return write_all_url($va_type, $fyr_postcode);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'write_all_url')){
+        return $cobrand_handle->write_all_url($va_type, $fyr_postcode);
     }
   }
  return general_write_all_url($va_type, $fyr_postcode);
@@ -103,9 +127,9 @@ function cobrand_write_all_url($cobrand, $va_type, $fyr_postcode){
 // Generate a url for writing to a specific rep 
 function cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcode){
   if ($cobrand){
-    include_cobrand($cobrand);
-    if (function_exists('write_rep_url')){
-        return write_rep_url($va_type, $rep_specificid, $fyr_postcode);
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'write_rep_url')){
+        return $cobrand_handle->write_rep_url($va_type, $rep_specificid, $fyr_postcode);
     }
   }
  return general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
