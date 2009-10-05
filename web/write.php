@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.139 2009-09-29 16:59:10 louise Exp $
+ * $Id: write.php,v 1.140 2009-10-05 16:18:01 louise Exp $
  *
  */
 
@@ -211,7 +211,7 @@ function buildWriteForm() {
     global $fyr_values, $fyr_postcode, $fyr_who, $fyr_type;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
     global $fyr_postcode_editable, $fyr_group_msg, $fyr_valid_reps;
-    global $rep_text;
+    global $rep_text, $cobrand;
 
     if ($fyr_voting_area['name']=='United Kingdom')
         $fyr_voting_area['name'] = 'House of Lords';
@@ -284,9 +284,9 @@ END;
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
 
     add_all_variables_hidden($form, $fyr_values);
-
-    $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
-
+    if (cobrand_display_spellchecker($cobrand)) {
+      $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
+    }
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
             "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
     $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message');
@@ -308,7 +308,7 @@ function buildPreviewForm() {
 function renderForm($form, $pageName)
 {
     global $fyr_form, $fyr_values, $warning_text;
-    global $rep_text, $fyr_group_msg, $fyr_valid_reps;
+    global $rep_text, $fyr_group_msg, $fyr_valid_reps, $cobrand;
     debug("FRONTEND", "Form values:", $fyr_values);
 
     // $renderer =& $page->defaultRenderer();
@@ -379,8 +379,9 @@ function renderForm($form, $pageName)
             $fyr_representative['name'] . " " . $fyr_voting_area['rep_suffix']) . ", " .
             $fyr_voting_area['name'];
     }
-    $our_values['spell'] = "true";
-
+    if (cobrand_display_spellchecker($cobrand)) {
+        $our_values['spell'] = "true";
+    }
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);
     } elseif ($pageName == 'previewForm') {

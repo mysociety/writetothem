@@ -1,12 +1,12 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.4 2009-10-05 15:33:35 louise Exp $
+ * $Id: cobrand_test.php,v 1.5 2009-10-05 16:18:01 louise Exp $
  */
 error_reporting (E_ALL ^ E_NOTICE);
 ini_set("display_errors", 1);
 include_once dirname(__FILE__) . '/../../conf/general'; 
-include_once dirname(__FILE__) . '/../cobrand.new.php';
+include_once dirname(__FILE__) . '/../cobrand.php';
 include_once 'simpletest/unit_tester.php';
 include_once 'simpletest/reporter.php';
 
@@ -28,11 +28,23 @@ class CobrandTest extends UnitTestCase{
     $this->assertEqual(false, $display_link, 'Should return the value of the cobrand display_councillor_correction_link function if one exists');
 
     $display_link = cobrand_display_councillor_correction_link('nosite');
-    print "display_link is $display_link";
     $this->assertEqual(true, $display_link, 'Should return true if the cobrand does not define a display_councillor_correction_link function');
   
   }
  
+  function test_display_spellchecker() {
+
+    $display_spell = cobrand_display_spellchecker('');
+    $this->assertEqual(true, $display_spell, 'Should return true if no cobrand is set');
+
+    $display_spell = cobrand_display_spellchecker('mysite');
+    $this->assertEqual(false, $display_spell, 'Should return the value of the cobrand display_spellchecker function if one exists');
+
+    $display_spell = cobrand_display_spellchecker('nosite');
+    $this->assertEqual(true, $display_spell, 'Should return true if the cobrand does not define a display_spellcheck function');
+
+  }
+
 } 
 
 $test = new CobrandTest;

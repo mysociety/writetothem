@@ -1,7 +1,7 @@
 <?php
 /*
  * Example cobrand for the functions in cobrand.php
- * $Id: utils.php,v 1.2 2009-10-05 15:33:35 louise Exp $
+ * $Id: utils.php,v 1.3 2009-10-05 16:18:01 louise Exp $
  */
 
 class Mysite {
@@ -18,6 +18,10 @@ class Mysite {
     return false;  
   }
 
+  function display_spellchecker() {
+    return false;
+  }
+   
 }
 
 ?>
