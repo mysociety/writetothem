@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.106 2009-09-29 15:49:46 louise Exp $
+ * $Id: who.php,v 1.107 2009-10-05 15:34:51 louise Exp $
  *
  */
 
@@ -271,7 +271,7 @@ for your region have informed us that they have divided it into areas, with ';
             $text .= display_reps($va_type, $meps_hidden, true);
         }
         global $va_council_child_types;
-        if (in_array($va_type, $va_council_child_types)) {
+        if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
             $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_specificid.'">Have you spotted a mistake in the above list?</a></p>';
         }
     }
