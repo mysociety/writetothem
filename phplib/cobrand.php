@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.12 2009-10-05 16:18:00 louise Exp $
+ * $Id: cobrand.php,v 1.13 2009-10-05 16:57:47 louise Exp $
  * 
  */
 
@@ -99,6 +99,17 @@ function cobrand_headers($cobrand, $template) {
     }
     return '';
   }
+}
+
+// Return a boolean indicating whether the survey should be displayed
+function cobrand_display_survey($cobrand) {
+  if ($cobrand) {
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'display_survey')) {
+      return $cobrand_handle->display_survey();
+    }
+  }
+  return true;
 }
 
 // Return a boolean indicating whether the spell checker should be displayed

@@ -1,7 +1,7 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.5 2009-10-05 16:18:01 louise Exp $
+ * $Id: cobrand_test.php,v 1.6 2009-10-05 16:57:48 louise Exp $
  */
 error_reporting (E_ALL ^ E_NOTICE);
 ini_set("display_errors", 1);
@@ -43,6 +43,18 @@ class CobrandTest extends UnitTestCase{
     $display_spell = cobrand_display_spellchecker('nosite');
     $this->assertEqual(true, $display_spell, 'Should return true if the cobrand does not define a display_spellcheck function');
 
+  }
+
+  function test_display_survey() {
+
+    $display_survey = cobrand_display_survey('');
+    $this->assertEqual(1, $display_survey, 'Should return true if no cobrand is set');
+
+    $display_survey = cobrand_display_survey('mysite');
+    $this->assertEqual(false, $display_survey, 'Should return the value of the cobrand display_survey function if one exists');
+
+    $display_survey = cobrand_display_survey('nosite');
+    $this->assertEqual(true, $display_survey, 'Should return true if the cobrand does not define a display_survey function');
   }
 
 } 
