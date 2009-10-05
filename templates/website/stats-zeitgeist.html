@@ -1,31 +1,4 @@
 <? $values['body_id'] = 'zeitgeist'; template_draw('header', $values); 
-
-# $display_type can be:
-# 0 - display as +- if possible (i.e. symmeterical enough), otherwise range
-# 1  - force displaying as range
-function display_range($mean, $low=null, $high=null, $display_type = 0) {
-    $r = 0;
-    $mean_p = round(100 * $mean, $r);
-    if (!$low || !$high) {
-        return $mean_p."%";
-    }
-    $low_p = round(100 * $low, $r);
-    $high_p = round(100 * $high, $r);
-    $range = round((100 * ($high - $low) / 2), $r);
-    $midpoint = round((100 * ($low + ($high - $low) / 2)), $r);
-
-    #print "mid: $midpoint mean: $mean_p\n";
-
-    if ($midpoint == $mean_p && $display_type != 1) {
-        if ($range == 0)
-            return $mean_p."%";
-        else
-            return $mean_p."% &plusmn;".$range."%";
-    }
-    else
-        return $mean_p . "% <small>[".$low_p."%&ndash;".$high_p."%]</small>";
-}
-
 ?>
 
 <p id="year_nav"><?=$values['year_bar']?></p>
@@ -241,21 +214,20 @@ foreach ($values['types_by_responsiveness'] as $type) {
     print "<td><strong>".$type_map[$type]."</strong></td>";
     print "<td>";
     if ($type == 'total') {
-        #print display_range($value['responded'] / $value['responded_outof']);
         print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
         print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     } else {
-        #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high']);
         print round(100 * $value['responded_mean'], 0) . "%";
         print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     } 
     print "</td>";
     print "<td>";
     if ($type == 'total') {
-        print display_range($value['firsttime'] / $value['firsttime_outof']);
+        print round(100 * $value['firsttime'] / $value['firsttime_outof']) . "%";
     } else {
-        print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high']);
+        print round(100 * $value['firsttime_mean'], 0) . "%";
     }
+    print " (" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")";
     print "</td>";
     print "<td align=\"right\">".number_format($value['dispatched_success'])."</td>";
     #print "<td align=\"right\">".number_format($value['dispatched_success'] * $value['firsttime'] / $value['firsttime_outof'])."</td>";
@@ -290,7 +262,6 @@ foreach ($values['parties_by_responsiveness'] as $party) {
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>";
-    #print display_range($value['responded_mean'], $value['responded_95_low'], $value['responded_95_high'], 1);
     print fuzzy_response_description($value['responded_mean']);
     print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
     print "</td>";
@@ -314,7 +285,6 @@ foreach ($values['parties_by_firsttime'] as $party) {
     print '<tr class="'; if ($c++%2) { print ' a'; } print '">';
     print "<td>$party</td>";
     print "<td>";
-    #print display_range($value['firsttime_mean'], $value['firsttime_95_low'], $value['firsttime_95_high'], 1);
     print fuzzy_response_description($value['responded_mean']);
     print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
     print "</td>";
