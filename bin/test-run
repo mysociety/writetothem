@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.88 2009-10-06 08:41:39 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.89 2009-10-06 08:43:35 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -159,7 +159,7 @@ print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../fyr/");
 $wth->php_check_syntax("../../fyr/templates/emails/", qr//);
 my $expected_messages = { enter_postcode => 'First, type your UK postcode:',
-                          select_rep     => 'Now select the representative you'd like to contact',
+                          select_rep     => "Now select the representative you'd like to contact",
                           select_lord    => 'Which Lord would you like to write to?',
                           write_message  => 'Now Write Your Message',
                           preview        => 'Now Preview The Message',
