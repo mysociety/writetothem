@@ -6,7 +6,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: TestHarness.pm,v 1.12 2009-10-01 14:58:50 louise Exp $
+# $Id: TestHarness.pm,v 1.13 2009-10-06 08:41:39 louise Exp $
 #
 
 package FYR::TestHarness;
@@ -91,6 +91,7 @@ sub send_message_to_rep {
     my $wth = $options->{wth};    
     my $cobrand = $options->{cobrand};
     my $birthday = $options->{birthday};
+    my $expected_messages = $options->{expected_messages};
 
     my $reptype = $repinfo->{reptype};
     my $repname = $repinfo->{repname};
@@ -105,11 +106,11 @@ sub send_message_to_rep {
         my $start_url = $base_url;
         $start_url .= "?cocode=9" if ($cobrand && $cobrand eq "animalaid");
         $wth->browser_get($start_url);
-        $wth->browser_check_contents("First, type your UK postcode:");
+        $wth->browser_check_contents($expected_messages->{enter_postcode});
         $wth->browser_submit_form(form_name => 'postcodeForm',
             fields => { pc => $postcode},
             );
-        $wth->browser_check_contents("Now select the representative you'd like to contact");
+        $wth->browser_check_contents($expected_messages->{select_rep});
 
         if ($repname eq 'all'){
             my $alllink = "Write to all your $reptype";
@@ -120,7 +121,7 @@ sub send_message_to_rep {
     } else {
         # House of Lords selection by birthday
         $wth->browser_get($base_url . "/lords");
-        $wth->browser_check_contents("Which Lord would you like to write to?");
+        $wth->browser_check_contents($expected_messages->{select_lord});
         $wth->browser_submit_form(form_name => 'dateLordForm',
             fields => { d => $birthday},
             );
@@ -129,7 +130,7 @@ sub send_message_to_rep {
     }
 
     # Fill in a test letter
-    $wth->browser_check_contents("Now Write Your Message");
+    $wth->browser_check_contents($expected_messages->{write_message});
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
     if ($repname eq 'all'){
         my $one_rep;
@@ -142,10 +143,10 @@ sub send_message_to_rep {
     $wth->browser_submit_form(form_name => 'writeForm',
         fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
-    $wth->browser_check_contents('Now Preview The Message');
+    $wth->browser_check_contents($expected_messages->{preview});
     $wth->browser_check_contents($fields->{body});
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
-    $wth->browser_check_contents('Nearly Done! Now check your email');
+    $wth->browser_check_contents($expected_messages->{check_email});
 
 } 
 

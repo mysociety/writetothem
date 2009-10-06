@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.87 2009-10-01 14:58:50 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.88 2009-10-06 08:41:39 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -158,10 +158,16 @@ $wth->fax_setup();
 print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../fyr/");
 $wth->php_check_syntax("../../fyr/templates/emails/", qr//);
-
-our $options = { wth        => $wth,
-                 verbose    => $verbose,
-                 multispawn => $multispawn };
+my $expected_messages = { enter_postcode => 'First, type your UK postcode:',
+                          select_rep     => 'Now select the representative you'd like to contact',
+                          select_lord    => 'Which Lord would you like to write to?',
+                          write_message  => 'Now Write Your Message',
+                          preview        => 'Now Preview The Message',
+                          check_email    => 'Nearly Done! Now check your email');
+our $options = { wth               => $wth,
+                 verbose           => $verbose,
+                 multispawn        => $multispawn, 
+                 expected_messages => $expected_messages };
 
 if ($action{'example'}) {
     print "Sending example message...\n" if $verbose > 0;
@@ -213,7 +219,6 @@ $wth->fax_check_none_left();
 print "Checking no log file errors at end...\n" if $verbose > 1;
 $wth->log_watcher_check();
 print "Everything completed successfully\n";
-
 #############################################################################
 
 sub do_send_example_message {
