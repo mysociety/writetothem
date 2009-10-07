@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.90 2009-10-06 08:44:28 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.91 2009-10-07 16:02:31 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -515,7 +515,6 @@ sub do_send_cobrand_message {
     foreach my $cobrand (@{$allowed_cobrands}){
         my $cobrand_class = ucfirst($cobrand);
         my $class = "Cobrands::" . $cobrand_class . "::TestHarness";
-        print "$class\n";
         print "Looking for tests for $cobrand_class\n" if $verbose > 0;
         eval "use $class";
         my $test_handle;
