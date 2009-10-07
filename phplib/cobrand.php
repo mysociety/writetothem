@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.13 2009-10-05 16:57:47 louise Exp $
+ * $Id: cobrand.php,v 1.14 2009-10-07 09:06:25 louise Exp $
  * 
  */
 
@@ -40,7 +40,7 @@ function cobrand_handle($cobrand){
       $handle = call_user_func( array($classname, 'factory'));      
       $handles[$cobrand] = $handle;
   }else{
-      $handles[$cobrand] = undef; 
+      $handles[$cobrand] = null;
   }
   return $handles[$cobrand];
 }
