@@ -1,7 +1,7 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.6 2009-10-05 16:57:48 louise Exp $
+ * $Id: cobrand_test.php,v 1.7 2009-10-07 13:28:27 louise Exp $
  */
 error_reporting (E_ALL ^ E_NOTICE);
 ini_set("display_errors", 1);
@@ -56,6 +56,20 @@ class CobrandTest extends UnitTestCase{
     $display_survey = cobrand_display_survey('nosite');
     $this->assertEqual(true, $display_survey, 'Should return true if the cobrand does not define a display_survey function');
   }
+
+  function test_cobrand_page() {
+   
+    $text = cobrand_page('mysite', 'existing_page');
+    $this->assertEqual('page content', $text, 'Should return the content of the cobrand page for pages that exist');
+
+    $text = cobrand_page('mysite', 'non_existing_page');
+    $this->assertEqual('', $text, 'Should return an empty string for pages that do not exist');
+
+    $text = cobrand_page('nosite', 'existing_page');
+    $this->assertEqual('', $text, 'Should return an empty string for cobrands that do not define a page function');
+
+  }
+
 
 } 
 

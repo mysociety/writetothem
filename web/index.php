@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.64 2009-10-05 09:27:21 louise Exp $
+ * $Id: index.php,v 1.65 2009-10-07 13:28:27 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -14,6 +14,16 @@ require_once "../../phplib/utility.php";
 require_once "../../phplib/mapit.php";
 require_once '../../phplib/dadem.php';
 require_once "../../phplib/votingarea.php";
+
+$cobrand_page = get_http_var("cobrand_page");
+if ($cobrand && $cobrand_page) {
+    $text = cobrand_page($cobrand, $cobrand_page);
+    if ($text) {
+	print $text; 
+        exit;   
+    }
+}
+
 
 $pc = canonicalise_postcode(get_http_var('pc'));
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
