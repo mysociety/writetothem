@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.284 2009-10-01 14:57:06 louise Exp $
+# $Id: Queue.pm,v 1.285 2009-10-08 15:09:08 louise Exp $
 #
 
 package FYR::Queue;
@@ -912,7 +912,7 @@ sub make_representative_email ($) {
     if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
         $subject = "Letter from constituent $msg->{sender_name} to $msg->{recipient_name}";
         $bodytext = FYR::EmailTemplate::format(
-                email_template('via-coversheet'),
+                email_template('via-coversheet', $msg->{cobrand}),
                 email_template_params($msg, representative_url => '')
             );
     }
@@ -922,7 +922,7 @@ sub make_representative_email ($) {
     if ($msg->{group_id}){
         $bodytext .= "\n\n"
             . FYR::EmailTemplate::format(
-               email_template('group'),
+               email_template('group', $msg->{cobrand}),
                email_template_params($msg, other_recipient_list => other_recipient_list($msg->{group_id},$msg->{id}))
             );
     }
@@ -934,7 +934,7 @@ sub make_representative_email ($) {
             . format_email_body($msg)
             . "\n\n\n"
             . FYR::EmailTemplate::format(
-                email_template($footer_template),
+                email_template($footer_template, $msg->{cobrand}),
                 email_template_params($msg, representative_url => '') # XXX
             );
 
@@ -1073,9 +1073,14 @@ sub email_message_id ($) {
 # email_template NAME
 # Find the email template with the given NAME. We look for the templates
 # directory in ../ and ../../. Nasty.
-sub email_template ($) {
-    my ($name) = @_;
-    my $fn = "$FindBin::Bin/../templates/emails/$name";
+sub email_template ($;$) {
+    my ($name, $cobrand) = @_;
+    my $fn;
+    if ($cobrand) {
+        $fn = "$FindBin::Bin/../templates/$cobrand/emails/$name"; 
+        $fn = "$FindBin::Bin/../../templates/$cobrand/emails/$name" if (!-e $fn);
+    }
+    $fn = "$FindBin::Bin/../templates/emails/$name" if (!$fn || !-e $fn);
     $fn = "$FindBin::Bin/../../templates/emails/$name" if (!-e $fn);
     die "unable to locate email template '$name', tried from '$FindBin::Bin'" if (!-e $fn);
     return $fn;
@@ -1116,13 +1121,13 @@ sub make_confirmation_email ($;$) {
     my $bodytext;
     if ($msg->{group_id}){
         $bodytext = FYR::EmailTemplate::format(
-                    email_template($reminder ? 'confirm-reminder-group' : 'confirm-group'),
+                    email_template($reminder ? 'confirm-reminder-group' : 'confirm-group', $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
         
     }else{
         $bodytext = FYR::EmailTemplate::format(
-                    email_template($reminder ? 'confirm-reminder' : 'confirm'),
+                    email_template($reminder ? 'confirm-reminder' : 'confirm', $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
     }
@@ -1205,7 +1210,7 @@ sub make_failure_email ($) {
     my $template = $bounced ? 'failure-mailbox-full' : 'failure';
 
     my $text = FYR::EmailTemplate::format(
-                    email_template($template),
+                    email_template($template, $msg->{cobrand}),
                     email_template_params($msg)
                 )
                 . "\n\n\n"
@@ -1262,7 +1267,7 @@ sub make_questionnaire_email ($;$) {
     };
 
     my $text = FYR::EmailTemplate::format(
-                    email_template('questionnaire'),
+                    email_template('questionnaire', $msg->{cobrand}),
                     $params
                 )
                 . "\n\n\n"

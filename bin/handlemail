@@ -11,7 +11,7 @@
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.43 2009-08-10 12:48:58 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.44 2009-10-08 15:09:07 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -123,7 +123,7 @@ if (!$data{is_bounce_message}) {
     }
 
     my $text = FYR::EmailTemplate::format(
-                    FYR::Queue::email_template($template),
+                    FYR::Queue::email_template($template, ''),
                     $vv
                 );
 
