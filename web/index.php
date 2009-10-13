@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.66 2009-10-13 13:31:26 louise Exp $
+ * $Id: index.php,v 1.67 2009-10-13 15:01:03 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -240,6 +240,10 @@ if ($a_forward) {
 $blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
 
 header('Cache-Control: max-age=3600');
+$host = '';
+if (array_key_exists('HTTP_HOST', $_SERVER)) {
+    $host = $_SERVER['HTTP_HOST'];
+}
 
 // Display page
 template_draw($template, array(
@@ -248,7 +252,8 @@ template_draw($template, array(
         "form" => $form, 
         "error" => $error_message,
         "all_url" => $fyr_all_url,
-        "cobrand" => $cobrand
+        "cobrand" => $cobrand, 
+        "host" => $host
     ));
 
 ?>
