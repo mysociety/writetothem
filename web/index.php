@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.65 2009-10-07 13:28:27 louise Exp $
+ * $Id: index.php,v 1.66 2009-10-13 13:31:26 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -40,7 +40,6 @@ if ($person) {
     exit;
 }
 
-// Main part of the form
 $form = '<form action="" method="get" name="postcodeForm" id="postcodeForm"><div id="postcodebox">' . "\n";
 $form .= '<label for="pc"><b>First, type your UK postcode:</b></label>&nbsp;' . "\n";
 $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
@@ -198,7 +197,14 @@ if ($pc) {
 }
 
 // Work out what representative types to show
-$title = "Email or fax your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
+
+$title = '';
+if ($cobrand){
+    $title = cobrand_step_title($cobrand, 1);
+}
+if ($title == ''){
+    $title = "Email or fax your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
+}
 $blurb_top = <<<END
     <h2>Contact your
 Councillors,
