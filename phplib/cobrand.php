@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.15 2009-10-07 13:28:26 louise Exp $
+ * $Id: cobrand.php,v 1.16 2009-10-13 13:23:04 louise Exp $
  * 
  */
 
@@ -52,6 +52,15 @@ function cobrand_get_letter_help($cobrand, $fyr_values) {
         return $cobrand_handle->get_letter_help($fyr_values);
     }
     return false;
+}
+
+// Title for the (1-based) step of the process
+function cobrand_step_title($cobrand, $step) {
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'step_title')){
+        return $cobrand_handle->step_title($step);
+    }
+    return '';
 }
 
 // Action to perform after the letter has been sent.
