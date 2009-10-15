@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.108 2009-10-15 12:34:09 louise Exp $
+ * $Id: who.php,v 1.109 2009-10-15 15:59:15 louise Exp $
  *
  */
 
@@ -51,12 +51,16 @@ if ($area_types) {
             $a[$va_inside[$t]] = $voting_areas[$va_inside[$t]];
     }
     $voting_areas = $a;
-
-    $fyr_all_url = htmlspecialchars(url_new('who', false,
-                    'pc', $fyr_postcode,
-                    'fyr_extref', fyr_external_referrer(),
-                    'cocode', get_http_var('cocode')));
-
+    $fyr_all_url = '';
+    $cobrand_all_url = cobrand_main_write_url($cobrand, $fyr_postcode, get_http_var('cocode'), fyr_external_referrer());
+    if ($cobrand_all_url != '') {
+        $fyr_all_url = $cobrand_all_url;
+    } else {
+        $fyr_all_url = htmlspecialchars(url_new('who', false,
+                        'pc', $fyr_postcode,
+                        'fyr_extref', fyr_external_referrer(),
+                        'cocode', get_http_var('cocode')));
+    }
 }
 
 // If in a county, but not a county electoral division, display explanation
