@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.16 2009-10-13 13:23:04 louise Exp $
+ * $Id: cobrand.php,v 1.17 2009-10-15 11:39:08 louise Exp $
  * 
  */
 
@@ -166,6 +166,58 @@ function cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcod
  return general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
 }
 
+// Return the rendering options for the postcode entry form
+function cobrand_postcode_form_options($cobrand) {
+  if ($cobrand){
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'postcode_form_options')){
+        return $cobrand_handle->postcode_form_options();
+    }
+  }
+  return array('xhtml'       => false, 
+               'inner_div'   => true, 
+               'extra_space' => true, 
+               'bold_labels' => true, 
+               'show_errors' => false);
+}
+
+// Return the rendering options for lists of representatives
+function cobrand_rep_list_options($cobrand) { 
+  if ($cobrand){
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'rep_list_options')){
+        return $cobrand_handle->rep_list_options();
+    }
+  }
+  return array('extra_space'       => true, 
+               'include_write_all' => false);
+}
+
+// Return the rendering options for message-writing form
+function cobrand_write_form_options($cobrand) {
+  if ($cobrand){
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'write_form_options')){
+        return $cobrand_handle->write_form_options();
+    }
+  }
+  return array('table_layout'         => true, 
+               'include_write_header' => true,
+               'include_fao'          => false,  
+               'renderer'             => new HTML_QuickForm_Renderer_mySociety());
+}
+
+// Return the rendering options for the message preview form
+function cobrand_preview_form_options($cobrand) {
+  if ($cobrand){
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'preview_form_options')){
+        return $cobrand_handle->preview_form_options();
+    }
+  }
+  return array('inner_div' => true);
+
+}
 
 // Return the HTML for a cobrand page
 function cobrand_page($cobrand, $page) {
