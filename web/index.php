@@ -1,12 +1,11 @@
 <?
 /*
  * index.php:
- * Main page of FaxYourRepresentative, where you enter your postcode
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.67 2009-10-13 15:01:03 louise Exp $
+ * $Id: index.php,v 1.68 2009-10-15 11:49:44 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -14,6 +13,67 @@ require_once "../../phplib/utility.php";
 require_once "../../phplib/mapit.php";
 require_once '../../phplib/dadem.php';
 require_once "../../phplib/votingarea.php";
+
+/* Return the form for entering a postcode.  
+ * Valid options are:
+ * inner_div   - boolean - include a div tag inside the form
+ * xhtml       - boolean - close input tags for XHTML compatibility
+ * extra_space - use non-breaking space for laying out inputs
+ * bold_labels - use bold for label texts
+ * show_errors - display error message if there is one
+ */
+function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options) {
+
+    $input_close = '';
+    if ($options['xhtml']){
+        $input_close = '/';    
+    }
+    $form = '<form action="" method="get" name="postcodeForm" id="postcodeForm">';
+    if ($options['inner_div']){
+        $form .= '<div id="postcodebox">';
+    }
+    $form .= "\n";
+    $form .= '<label for="pc">';
+    if ($options['bold_labels']){
+        $form .= '<b>';
+    }
+    $form .= 'First, type your UK postcode:';
+    if ($options['show_errors'] && $error_message){ 
+        $form .= '<span class="error">' . $error_message . '</span>';
+    }
+    if ($options['bold_labels']){
+        $form .= '</b>';
+    }
+    $form .= '</label>';
+    if ($options['extra_space']){
+        $form .= '&nbsp;' . "\n";
+    }
+    $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255" ' . $input_close . '>' . "\n";
+    if ($options['extra_space']){
+        $form .= '&nbsp;';
+    }
+    $form .= '<input type="submit" value="Go" ' . $input_close . '>' . "\n";
+    
+    /* Record referer. We want to pass this onto the queue later, as an anti-abuse
+     * measure, so it should be propagated through all the later pages. Obviously
+     * this only has value against a naive attacker; also, there is no point in
+     * trying to obscure this data. */
+    $ref = fyr_external_referrer();
+    if (isset($ref))
+        $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'"' . $input_close . '>';
+    if ($cocode)
+        $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'"' . $input_close . '>';
+    
+    if ($a_forward)
+        $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'"' . $input_close . '>';
+
+    // End the form
+    if ($options['inner_div']){
+      $form .= '</div>';
+    }
+    $form .= '</form>';
+    return $form;
+}
 
 $cobrand_page = get_http_var("cobrand_page");
 if ($cobrand && $cobrand_page) {
@@ -24,7 +84,10 @@ if ($cobrand && $cobrand_page) {
     }
 }
 
-
+$cocode = get_http_var('cocode');
+if ($cobrand) {   
+    $cocode = cobrand_force_default_cocode($cobrand, $cocode);
+}
 $pc = canonicalise_postcode(get_http_var('pc'));
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
@@ -40,28 +103,9 @@ if ($person) {
     exit;
 }
 
-$form = '<form action="" method="get" name="postcodeForm" id="postcodeForm"><div id="postcodebox">' . "\n";
-$form .= '<label for="pc"><b>First, type your UK postcode:</b></label>&nbsp;' . "\n";
-$form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
-$form .= '&nbsp;<input type="submit" value="Go">' . "\n";
-
-/* Record referer. We want to pass this onto the queue later, as an anti-abuse
- * measure, so it should be propagated through all the later pages. Obviously
- * this only has value against a naive attacker; also, there is no point in
- * trying to obscure this data. */
-$ref = fyr_external_referrer();
-if (isset($ref))
-    $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
-$cocode = get_http_var('cocode');
-if ($cobrand) {
-    $cocode = cobrand_force_default_cocode($cobrand, $cocode);
-}
-if ($cocode)
-    $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
-
 // Pass on any representative type selection
 $a_forward = get_http_var("a");
-$forced_rep_type = false;
+$forced_rep_type = false;   
 if ($cobrand) {
     $old_a_forward = $a_forward;
     $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
@@ -69,11 +113,6 @@ if ($cobrand) {
         $forced_rep_type = true;
     }
 }
-if ($a_forward) 
-    $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
-
-// End the form
-$form .= '</div></form>';
  
 // Validate postcode, and prepare appropriate page
 if (isset($_GET['t'])) 
@@ -244,6 +283,9 @@ $host = '';
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
     $host = $_SERVER['HTTP_HOST'];
 }
+
+$options = cobrand_postcode_form_options($cobrand);
+$form = postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options);
 
 // Display page
 template_draw($template, array(
