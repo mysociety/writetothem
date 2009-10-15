@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: forms.php,v 1.14 2007-11-28 15:51:51 matthew Exp $
+ * $Id: forms.php,v 1.15 2009-10-15 13:03:10 louise Exp $
  * 
  */
 
@@ -37,14 +37,18 @@ function get_all_variables() {
 }
 
 // Saves all variables in one simple form variable.
-function add_all_variables_hidden(&$form, $variables) {
+function add_all_variables_hidden(&$form, $variables, $options) {
     debug("SERIALIZE", "Writing hidden vars:", $variables);
     $ser_vars = base64_encode(serialize($variables));
     $html_hidden = "<input name=\"mysociety_serialized_variables\" type=\"hidden\" value=\"$ser_vars\">";
     // I tried using a 'hidden' element here, but it refuses to change
     // the value of the contents, just uses the one in _POST rather
     // than the new one.
-    $form->addElement('html', "<tr><td>$html_hidden</td></tr>");
+    $element = $html_hidden;
+    if ($options['table_layout']) {  
+        $element = "<tr><td>$element</td></tr>";
+    }
+    $form->addElement('html', $element);
 }
 
 # Matthew's non HTML_QuickForm version of the above
@@ -56,6 +60,10 @@ function add_all_variables_hidden_nonQF($variables) {
 }
 
 class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default {
+
+    function factory() {
+        return new HTML_QuickFormRenderer_mySociety();
+    }
 
     function HTML_QuickForm_Renderer_mySociety() {
         // TODO: Properly CSS this
@@ -80,6 +88,7 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
                 <td>{element}</td>
                 </tr>
         ');
+
         $this->setRequiredNoteTemplate("");
         // Not sure what this is for - just set to default for now:
         $this->setHeaderTemplate('

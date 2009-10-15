@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.140 2009-10-05 16:18:01 louise Exp $
+ * $Id: write.php,v 1.141 2009-10-15 13:03:10 louise Exp $
  *
  */
 
@@ -205,8 +205,16 @@ function compare_email_addrs($F) {
     return true;
 }
 
+function get_host(){
+    $host = '';
+    if (array_key_exists('HTTP_HOST', $_SERVER)) {
+        $host = $_SERVER['HTTP_HOST'];
+    }
+    return $host;
+}
+
 // Class representing form they enter message of letter in
-function buildWriteForm() {
+function buildWriteForm($options) {
     $form = new HTML_QuickForm('writeForm', 'post', 'write');
     global $fyr_values, $fyr_postcode, $fyr_who, $fyr_type;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
@@ -216,16 +224,29 @@ function buildWriteForm() {
     if ($fyr_voting_area['name']=='United Kingdom')
         $fyr_voting_area['name'] = 'House of Lords';
  
-    // TODO: CSS this:
-    $stuff_on_left = <<<END
-            <strong>Now Write Your Message:</strong> <small>(* means required)</small><br><br>
-            ${rep_text}
-            <br>${fyr_voting_area['name']}
-            <br><br>$fyr_date
-END;
+    $write_header = '';
+    if ($options['include_write_header']){
+        $write_header = "<strong>Now Write Your Message:</strong> <small>(* means required)</small><br><br>";
+    }
 
+    if ($options['include_fao']){
+        $write_header = '<strong>FOR THE ATTENTION OF:</strong>';
+    }
+
+    $stuff_on_left = <<<END
+            <div class="letter-header">
+            ${write_header}
+            ${rep_text}
+            <span>${fyr_voting_area['name']}</span>
+            <span>$fyr_date</span>
+            </div>
+END;
     // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
-    $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
+    if ($options['table_layout']){
+        $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
+    } else {
+        $form->addElement("html", "<div class=\"highlight\">$stuff_on_left<ul class=\"data-input\">");
+    }  
 
     $form->addElement('text', 'name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('name', 'Please enter your name', 'required', null, null);
@@ -239,7 +260,7 @@ END;
     $form->applyFilter('writer_address2', 'trim');
 
     $form->addElement('text', 'writer_town', "Town/City:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_town', 'Please enter your town', 'required', null, null);
+    $form->addRule('writer_town', 'Please enter your town/city', 'required', null, null);
     $form->applyFilter('writer_town', 'trim');
 
     # Call it state so that Google Toolbar (and presumably others) can auto-fill.
@@ -275,61 +296,85 @@ END;
     $form->applyFilter('writer_phone', 'trim');
 
     // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
-    $form->addElement("html", "</table>\n</td></tr>");
+    if ($options['table_layout']){
+        $form->addElement("html", "</table>\n</td></tr>");
+    } else {
+        $form->addElement("html", "</ul>");
+    }
 
     $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
     $form->addRule('body', 'Please enter your message', 'required', null, null);
     $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
     $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
+    if (!$options['table_layout']){
+        $form->addElement("html", "</div>");
+    }
 
-    add_all_variables_hidden($form, $fyr_values);
+    add_all_variables_hidden($form, $fyr_values, $options);
     if (cobrand_display_spellchecker($cobrand)) {
       $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
     }
     $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
-            "<b>Ready? Press the \"Preview\" button to continue</b><br>"); // TODO: remove <b>  from here
+            "<p class=\"action\">Ready? Press the \"Preview\" button to continue:"); 
     $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message');
-    $form->addGroup($buttons, 'previewStuff', '', '&nbsp;', false);
+    $buttons[3] =& HTML_QuickForm::createElement('static', 'staticpreview', null, "</p>");     
+    $form->addGroup($buttons, 'previewStuff', '', '', false);
 
     return $form;
 }
 
-function buildPreviewForm() {
+function buildPreviewForm($options) {
     global $fyr_values;
-    $form = '<form method="post" action="write" id="previewForm" name="previewForm"><div id="buttonbox">';
+    $form = '<form method="post" action="write" id="previewForm" name="previewForm">';
+    if ($options['inner_div']){
+        $form .= '<div id="buttonbox">';
+    }
     $form .= add_all_variables_hidden_nonQF($fyr_values);
     $form .= '<input type="submit" name="submitWrite" value="Re-edit this message">
-<input type="submit" name="submitSendFax" value="Send Message">
-</div></form>';
+<input type="submit" name="submitSendFax" value="Send Message">';
+    if ($options['inner_div']){
+        $form .= '</div>';
+    }
+    $form .= '</form>';
     return $form;
 }
 
-function renderForm($form, $pageName)
+function renderForm($form, $pageName, $options)
 {
     global $fyr_form, $fyr_values, $warning_text;
     global $rep_text, $fyr_group_msg, $fyr_valid_reps, $cobrand;
+    global $general_error;
     debug("FRONTEND", "Form values:", $fyr_values);
-
+    
     // $renderer =& $page->defaultRenderer();
     if (is_object($form)) {
-        $renderer =& new HTML_QuickForm_Renderer_mySociety();
-        $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
+        $renderer =& $options['renderer'];
+        if ($options['table_layout']){
+            $renderer->setGroupTemplate('<TR><TD ALIGN=right colspan=2> {content} </TD></TR>', 'previewStuff'); // TODO CSS this
+            $renderer->setElementTemplate('
+            <!-- BEGIN error -->
+            <TR><TD colspan=2>
+            <span class="error">{error}:</span>
+            </TD></TR>                                                   
+            <!-- END error -->
+            <TR><TD colspan=2>
+            {element}
+            </TD></TR>', 'body');
+        } else {
+            $renderer->setElementTemplate('
+            <!-- BEGIN error -->
+            <p class="error">{error}:</p>
+            <!-- END error -->
+            {element}', 'body');
+        }
         $renderer->setElementTemplate('{element}', 'previewStuff');
-        $renderer->setElementTemplate('
-        <!-- BEGIN error -->
-        <TR><TD colspan=2>
-        <span class="error">{error}:</span>
-        </TD></TR>
-        <!-- END error -->
-        <TR><TD colspan=2>
-        {element}
-        </TD></TR>', 'body');
         $form->accept($renderer);
-
     // Make HTML
         $fyr_form = $renderer->toHtml();
-        $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
+        if ($options['table_layout']){     
+            $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
+        }
     } else {
         $fyr_form = $form;
     }
@@ -355,13 +400,14 @@ function renderForm($form, $pageName)
         $cobrand_letter_help = cobrand_get_letter_help($cobrand, $fyr_values);
 
    }
-    
     $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'form' => $fyr_form,
             'date' => $fyr_date, 'prime_minister' => $prime_minister,
             'cobrand_letter_help' => $cobrand_letter_help, 
             'cobrand' => $cobrand,
-            'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text));
+            'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text, 
+            'general_error' => $general_error, 
+            'host' => get_host()));
 
     if ($fyr_group_msg) {
         # check if there are any reps whose message will be sent via somewhere 
@@ -574,7 +620,7 @@ function show_check_email($error_msg) {
      global $fyr_values, $fyr_date, $fyr_group_msg, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'date' => $fyr_date, 'group_msg' => $fyr_group_msg,
-            'error_msg' => $error_msg, 'cobrand' => $cobrand));
+            'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => get_host()));
      template_draw("write-checkemail", $our_values); 
 }
 
@@ -805,10 +851,12 @@ if ($fyr_group_msg) {
     }
 
     // Assemble the name string 
-    $rep_text = "";
+    $rep_text = "<ul>";
     foreach ($fyr_valid_reps as $rep) {
-        $rep_text .= $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . '<br>';
+        
+       $rep_text .= "<li>" . $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "</li>";
     }
+    $rep_text .= "</ul>";
 
     debug("FRONTEND", "Valid reps $fyr_valid_reps");
     // Set a msgid for each rep in the list
@@ -913,15 +961,18 @@ EOF;
 // Work out which page we are on, using which submit button was pushed
 // to get here
 $on_page = "write";
+$general_error = false;
 if (isset($fyr_values['submitWrite'])) {
     $on_page = "write";
     unset($fyr_values['submitWrite']);
 } elseif (isset($fyr_values['submitPreview'])) {
     unset($fyr_values['submitPreview']);
-    $writeForm = buildWriteForm();
+    $options = cobrand_write_form_options($cobrand);
+    $writeForm = buildWriteForm($options);
     if ($writeForm->validate()) {
         $on_page = "preview";
     } else {
+        $general_error = true;
         $on_page = "write";
     }
 } elseif (isset($fyr_values['submitSendFax'])) {
@@ -931,14 +982,17 @@ if (isset($fyr_values['submitWrite'])) {
 
 // Display it
 if ($on_page == "write") {
-    if (!isset($writeForm))
-        $writeForm = buildWriteForm();
+    $options = cobrand_write_form_options($cobrand);
+    if (!isset($writeForm)){
+        $writeForm = buildWriteForm($options);
+    }
     $writeForm->setDefaults(array('body' => default_body_text()));
     $writeForm->setConstants($fyr_values);
-    renderForm($writeForm, "writeForm");
+    renderForm($writeForm, "writeForm", $options);
 } elseif ($on_page == "preview") {
-    $previewForm = buildPreviewForm();
-    renderForm($previewForm, "previewForm");
+    $options = cobrand_preview_form_options($cobrand);
+    $previewForm = buildPreviewForm($options);
+    renderForm($previewForm, "previewForm", $options);
 } elseif ($on_page == "sendfax") {
          submitFaxes();
 } else {
