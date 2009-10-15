@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.107 2009-10-05 15:34:51 louise Exp $
+ * $Id: who.php,v 1.108 2009-10-15 12:34:09 louise Exp $
  *
  */
 
@@ -90,6 +90,8 @@ $meps_hidden = euro_check($area_representatives, $wmc);
 // render.
 $fyr_representatives = array();
 $fyr_headings = array();
+$fyr_rep_descs = array(); 
+$fyr_rep_lists = array();
 $fyr_error = null;
 foreach ($va_display_order as $va_type) {
     // Search for whether display type is fully present
@@ -166,6 +168,12 @@ foreach ($va_display_order as $va_type) {
     $col_blurb = '';
     $text = '';
     $col_after = '';
+    // Already putting 'write all' link in list? 
+    $options = cobrand_rep_list_options($cobrand);
+    $skip_write_all = false;
+    if (array_key_exists('include_write_all', $options) && $options['include_write_all']) {
+         $skip_write_all = true;
+    }
     // Create HTML
     global $disabled_child_types;
     if (is_array($va_type)) {
@@ -182,11 +190,11 @@ foreach ($va_display_order as $va_type) {
             $col_blurb .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
         $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}</p>";
-        if ($rep_count && $rep_counts[0]>1) {
+        if ($rep_count && $rep_counts[0]>1 && ! $skip_write_all) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
 	if ($rep_count)
-            $text .= display_reps($va_type[0], $representatives[0]);
+            $text .= display_reps($va_type[0], $representatives[0], $va_info[0], array());
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
             $text .= "$rep_counts[1] London Assembly list members also represent you";
@@ -201,14 +209,14 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
 }
         $text .= '.</p>';
         
-        if ($rep_count && $rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE') {
+        if ($rep_count && $rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE' && ! $skip_write_all) {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
         if ($rep_count)
-            $text .= display_reps($va_type[1], $representatives[1]);
+            $text .= display_reps($va_type[1], $representatives[1], $va_info[1], array());
 
-        if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE')) {
+        if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE') && ! $skip_write_all) {
             $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
         }
 
@@ -230,14 +238,14 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
             $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
         $col_blurb .= "</p>";
         
-        if ($rep_count > 1) {
+        if ($rep_count > 1 && ! $skip_write_all) {
             $text .= write_all_link($va_type, $va_info['rep_name_plural']);
         }
 
         if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
             $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
         }
-        $text .= display_reps($va_type, $representatives);
+        $text .= display_reps($va_type, $representatives, $va_info, array());
 
         if ($va_type == 'WMC') {
 	    if ($rep_count)
@@ -268,7 +276,7 @@ for your region have informed us that they have divided it into areas, with ';
             else
                 $text .= 'others';
             $text .= ' here:</small></p>';
-            $text .= display_reps($va_type, $meps_hidden, true);
+            $text .= display_reps($va_type, $meps_hidden, $va_info, array('small' => true));
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
@@ -290,15 +298,19 @@ for your region have informed us that they have divided it into areas, with ';
         } else {
             $text = "Representative details are not available for an unknown reason.";
         }
-        array_push($fyr_representatives, "$col_blurb$text$col_after");
-        array_push($fyr_headings, "<h3><strike>$heading</strike></h3>");
-    } else {
-        array_push($fyr_representatives, "$col_blurb$text$col_after");
-        array_push($fyr_headings, "<h3>$heading</h3>");
+        $heading = "<strike>$heading</strike>";
     }
+    array_push($fyr_rep_descs, $col_blurb);
+    array_push($fyr_rep_lists, $text);
+    array_push($fyr_representatives, "$col_blurb$text$col_after");
+    array_push($fyr_headings, "<h3>$heading</h3>");
     debug_timestamp();
 }
 
+$host = '';
+if (array_key_exists('HTTP_HOST', $_SERVER)) {
+    $host = $_SERVER['HTTP_HOST'];
+}
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
     "reps" => $fyr_representatives,
@@ -306,7 +318,10 @@ template_draw("who", array(
     "error" => $fyr_error,
     "county_note" => $fyr_county_note,
     "all_url" => $fyr_all_url,
-    "cobrand" => $cobrand
+    "cobrand" => $cobrand, 
+    "host" => $host, 
+    "rep_lists" => $fyr_rep_lists, 
+    "rep_descs" => $fyr_rep_descs
     ));
 
 debug_timestamp();
@@ -342,9 +357,11 @@ function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
                                     'cocode', get_http_var('cocode')));
 }
 
-function display_reps($va_type, $representatives, $small = false) {
+function display_reps($va_type, $representatives, $va_info, $options) {
     global $representatives_info, $fyr_postcode, $cobrand;
     $rep_list = ''; $photo = 0;
+    $default_options = cobrand_rep_list_options($cobrand);
+    $options = array_merge($default_options, $options);
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
@@ -358,12 +375,23 @@ function display_reps($va_type, $representatives, $small = false) {
         }
         if ($photo == 0) $rep_list .= $a;
         $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
-        if (array_key_exists('party', $rep_info))
-                       $rep_list .= '<br>' . htmlspecialchars($rep_info['party']);
+        if (array_key_exists('party', $rep_info)) {
+            if ($options['extra_space']) {
+                 $rep_list .= '<br>';
+            }
+            $rep_list .=  htmlspecialchars($rep_info['party']);
+        }
     }
-    $out = '<ul';
+
+    if (array_key_exists('include_write_all', $options) && $options['include_write_all'] && count($representatives) > 1){
+        $rep_list .= '<li class="all">';
+        $rep_list .= write_all_link($va_type, $va_info['rep_name_plural']);
+        $rep_list .= '</li>';
+    }
+    $rep_type =  str_replace(' ', '-', strtolower($va_info['rep_name_plural']));
+    $out = '<ul class="' . $rep_type . '" ';
     if ($photo==1) $out .= ' id="photo"';
-    if ($small) $out .= ' style="font-size:83%"';
+    if (array_key_exists('small', $options) && $options['small']) $out .= ' style="font-size:83%"';
     $out .= '>';
     $out .= $rep_list . '</ul>';
     return $out;
