@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.71 2009-09-29 13:12:15 louise Exp $
+ * $Id: fyr.php,v 1.72 2009-10-19 15:00:25 louise Exp $
  * 
  */
 
@@ -78,6 +78,18 @@ function fyr_display_error($num, $message, $file, $line, $context) {
 }
 
 err_set_handler_display('fyr_display_error');
+
+/* fyr_get_host 
+ * Return the host from which a page was requested, or an
+ * empty string if the host is not available
+ */
+function fyr_get_host() {
+    $host = '';
+    if (array_key_exists('HTTP_HOST', $_SERVER)) {
+         $host = $_SERVER['HTTP_HOST'];
+     }
+     return $host;
+}
 
 /* fyr_rate_limit IMPORTANT
  * Invoke the rate limiter with the given IMPORTANT variables (e.g. postcode,

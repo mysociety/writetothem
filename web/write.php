@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.141 2009-10-15 13:03:10 louise Exp $
+ * $Id: write.php,v 1.142 2009-10-19 15:00:25 louise Exp $
  *
  */
 
@@ -205,13 +205,6 @@ function compare_email_addrs($F) {
     return true;
 }
 
-function get_host(){
-    $host = '';
-    if (array_key_exists('HTTP_HOST', $_SERVER)) {
-        $host = $_SERVER['HTTP_HOST'];
-    }
-    return $host;
-}
 
 // Class representing form they enter message of letter in
 function buildWriteForm($options) {
@@ -407,7 +400,7 @@ function renderForm($form, $pageName, $options)
             'cobrand' => $cobrand,
             'group_msg' => $fyr_group_msg, 'warning_text' => $warning_text, 
             'general_error' => $general_error, 
-            'host' => get_host()));
+            'host' => fyr_get_host()));
 
     if ($fyr_group_msg) {
         # check if there are any reps whose message will be sent via somewhere 
@@ -620,7 +613,7 @@ function show_check_email($error_msg) {
      global $fyr_values, $fyr_date, $fyr_group_msg, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'date' => $fyr_date, 'group_msg' => $fyr_group_msg,
-            'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => get_host()));
+            'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => fyr_get_host()));
      template_draw("write-checkemail", $our_values); 
 }
 
