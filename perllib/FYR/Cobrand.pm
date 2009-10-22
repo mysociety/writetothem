@@ -7,7 +7,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.4 2009-10-21 16:03:36 louise Exp $
+# $Id: Cobrand.pm,v 1.5 2009-10-22 09:18:05 louise Exp $
 
 package FYR::Cobrand;
 use strict;
@@ -73,23 +73,6 @@ sub get_allowed_cobrands {
     return \@allowed_cobrands;
 }
 
-=item url
-
-Given a URL, return a URL with any extra params needed appended to it.
-
-=cut
-sub url {
-    my ($cobrand, $url, $q, $extra_data) = @_;
-    my $handle;
-    if ($cobrand){
-        $handle = cobrand_handle($cobrand);
-    }
-    if ( !$cobrand || !$handle || !$handle->can('url')){
-        return $url;
-    } else{
-        return $handle->url($url, $q, $extra_data);
-    }
-}
 
 =item base_url_for_emails COBRAND
 

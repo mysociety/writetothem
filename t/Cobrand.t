@@ -6,7 +6,7 @@
 #  Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Cobrand.t,v 1.2 2009-10-21 16:03:36 louise Exp $
+# $Id: Cobrand.t,v 1.3 2009-10-22 09:18:05 louise Exp $
 #
 
 use strict;
@@ -43,16 +43,4 @@ sub test_base_url_for_emails {
 
 }
 
-sub test_url {
-    my $cobrand = 'mysite';
-    my $q = new MockQuery('mysite');
-    my $url = FYR::Cobrand::url($cobrand, '/xyz', $q);
-    is($url, '/transformed_url', 'url returns output from cobrand module');
-    
-    $cobrand = 'nosite';
-    $url = FYR::Cobrand::url($cobrand, '/xyz', $q);
-    is($url, '/xyz', 'url returns passed url if there is no url function defined by the cobrand');
-} 
-
 ok(test_base_url_for_emails() == 1, 'Ran all tests for base_url_for_emails');
-ok(test_url() == 1, 'Ran all tests for url');
