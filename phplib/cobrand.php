@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.19 2009-10-22 09:38:24 louise Exp $
+ * $Id: cobrand.php,v 1.20 2009-10-22 09:50:20 louise Exp $
  * 
  */
 
@@ -164,28 +164,6 @@ function cobrand_url($cobrand, $url) {
     }
   }
   return $url;
-}
-
-// Generate a url for writing to all reps of a given type for a postcode
-function cobrand_write_all_url($cobrand, $va_type, $fyr_postcode){
-  if ($cobrand){
-    $cobrand_handle = cobrand_handle($cobrand);
-    if ($cobrand_handle && method_exists($cobrand_handle, 'write_all_url')){
-        return $cobrand_handle->write_all_url($va_type, $fyr_postcode);
-    }
-  }
- return general_write_all_url($va_type, $fyr_postcode);
-}
-
-// Generate a url for writing to a specific rep 
-function cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcode){
-  if ($cobrand){
-    $cobrand_handle = cobrand_handle($cobrand);
-    if ($cobrand_handle && method_exists($cobrand_handle, 'write_rep_url')){
-        return $cobrand_handle->write_rep_url($va_type, $rep_specificid, $fyr_postcode);
-    }
-  }
- return general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
 }
 
 // Return the rendering options for the postcode entry form
