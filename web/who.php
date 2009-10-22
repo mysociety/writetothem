@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.110 2009-10-19 15:00:25 louise Exp $
+ * $Id: who.php,v 1.111 2009-10-22 09:48:36 louise Exp $
  *
  */
 
@@ -333,15 +333,14 @@ function write_all_link($va_type, $rep_desc_plural) {
         $rep_desc_plural = 'London Assembly list members';
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
-    $a = '<a href="' .
-               cobrand_write_all_url($cobrand, $va_type, $fyr_postcode)
-                . '">Write to all your ' . $rep_desc_plural . '</a>';  
+    $url = general_write_all_url($va_type, $fyr_postcode);
+    $a = '<a href="' . cobrand_url($cobrand, $url) . '">Write to all your ' . $rep_desc_plural . '</a>';  
     return $a;
 
 }
 
 function general_write_all_url($va_type, $fyr_postcode){
-    return htmlspecialchars(url_new('write', true,
+    return htmlspecialchars(url_new('/write', true,
                                     'who', 'all',
                                     'type', $va_type,
                                     'pc', $fyr_postcode,
@@ -350,7 +349,7 @@ function general_write_all_url($va_type, $fyr_postcode){
 }
 
 function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
-    return htmlspecialchars(url_new('write', true,
+    return htmlspecialchars(url_new('/write', true,
                                     'who', $rep_specificid,
                                     'pc', $fyr_postcode,
                                     'fyr_extref', fyr_external_referrer(),
@@ -365,7 +364,8 @@ function display_reps($va_type, $representatives, $va_info, $options) {
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
-        $a = '<a href="' . cobrand_write_rep_url($cobrand, $va_type, $rep_specificid, $fyr_postcode) . '">';
+        $url = general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
+        $a = '<a href="' .  cobrand_url($cobrand, $url) . '">';
         if ($rep_specificid == '2000005') {
             $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0">';
             $photo = 1;
