@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.285 2009-10-08 15:09:08 louise Exp $
+# $Id: Queue.pm,v 1.286 2009-10-26 18:36:00 louise Exp $
 #
 
 package FYR::Queue;
@@ -1114,8 +1114,7 @@ sub make_confirmation_email ($;$) {
     $reminder ||= 0;
     
     my $token = make_token("confirm", $msg->{id});
-    my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand});
-
+    my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand}, $msg->{cocode});
     my $confirm_url = $url_start . '/C/' . $token;
     
     my $bodytext;
