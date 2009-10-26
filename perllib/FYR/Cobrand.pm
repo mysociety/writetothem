@@ -7,7 +7,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.5 2009-10-22 09:18:05 louise Exp $
+# $Id: Cobrand.pm,v 1.6 2009-10-26 18:36:00 louise Exp $
 
 package FYR::Cobrand;
 use strict;
@@ -82,7 +82,7 @@ version of the site
 =cut
 
 sub base_url_for_emails {
-    my ($cobrand) = @_;
+    my ($cobrand, $cocode) = @_;
     my $handle;
     if ($cobrand){
         $handle = cobrand_handle($cobrand);
@@ -93,7 +93,7 @@ sub base_url_for_emails {
     if ( !$handle || ! $handle->can('base_url_for_emails')){
         return "http://" . $cobrand . "." . mySociety::Config::get('WEB_DOMAIN');
     } else {
-        return $handle->base_url_for_emails();
+        return $handle->base_url_for_emails($cocode);
     }
 }
 
