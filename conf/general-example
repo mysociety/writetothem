@@ -14,7 +14,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: general-example,v 1.40 2009-08-11 15:48:45 louise Exp $
+ * $Id: general-example,v 1.41 2009-10-26 18:46:23 louise Exp $
  * 
  */
 
@@ -33,11 +33,11 @@ define('OPTION_FYR_QUEUE_USERPWD', null);
 define('OPTION_SMTP_SMARTHOST', 'localhost');
 
 // PostgreSQL database for FYR queue
-define('OPTION_FYR_QUEUE_DB_HOST', 'localhost');
-define('OPTION_FYR_QUEUE_DB_PORT', '5432');
-define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
-define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
-define('OPTION_FYR_QUEUE_DB_PASS', '');
+define('OPTION_FYR_DB_HOST', 'localhost');
+define('OPTION_FYR_DB_PORT', '5432');
+define('OPTION_FYR_DB_NAME', 'fyr');
+define('OPTION_FYR_DB_USER', 'fyr');
+define('OPTION_FYR_DB_PASS', '');
 
 // Puts in a testing mode where emails are reflected back to
 // sender, rather than sent to their representative.
