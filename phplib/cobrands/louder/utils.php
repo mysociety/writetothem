@@ -6,7 +6,7 @@
  * Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: utils.php,v 1.1 2009-10-26 11:28:00 matthew Exp $
+ * $Id: utils.php,v 1.2 2009-10-26 17:17:44 matthew Exp $
  * 
  */
 
@@ -17,8 +17,7 @@ Class Louder {
     }
 
     function post_letter_send($values) {
-        return false; # Currently unknown but will be here
-        header("Location: http://example.org/foobar?id=" . $values['cocode']);
+        header("Location: http://www.louder.org.uk/wttsuccess.php?id=" . $values['cocode']);
         exit;
     }
 
