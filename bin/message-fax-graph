@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
 # 
-# $Id: message-fax-graph,v 1.1 2007-03-19 10:28:08 francis Exp $
+# $Id: message-fax-graph,v 1.2 2009-10-27 10:59:46 louise Exp $
 
 GPLOT_OUTPUT="set terminal png font 'Vera.ttf' 9 size 1200,600"
 EXTENSION=".png"
@@ -31,7 +31,7 @@ echo "select
     date('1970-1-1 00:00:00'::timestamp + (created||' seconds')::interval)
     order by 
     date('1970-1-1 00:00:00'::timestamp + (created||' seconds')::interval)
-    ;" | psql --host $OPTION_FYR_QUEUE_DB_HOST --port $OPTION_FYR_QUEUE_DB_PORT -A -F " " $OPTION_FYR_QUEUE_DB_NAME $OPTION_FYR_QUEUE_DB_USER | egrep -v "date|rows" >$SOURCEO
+    ;" | psql --host $OPTION_FYR_DB_HOST --port $OPTION_FYR_DB_PORT -A -F " " $OPTION_FYR_DB_NAME $OPTION_FYR_DB_USER | egrep -v "date|rows" >$SOURCEO
 #echo "source $SOURCEO"
 
 cat >$GPSCRIPT <<END 
