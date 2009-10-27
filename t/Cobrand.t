@@ -6,12 +6,12 @@
 #  Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Cobrand.t,v 1.3 2009-10-22 09:18:05 louise Exp $
+# $Id: Cobrand.t,v 1.4 2009-10-27 17:05:16 louise Exp $
 #
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More tests => 4;
 use Test::Exception;
 
 use FindBin;
