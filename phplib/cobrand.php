@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.21 2009-10-28 17:51:29 louise Exp $
+ * $Id: cobrand.php,v 1.22 2009-10-28 18:00:30 louise Exp $
  * 
  */
 
@@ -131,6 +131,10 @@ function cobrand_force_representative_type($cobrand, $cocode, $type) {
 // Return true if you've rendered a template so another doesn't need rendering.
 // Exit if you've done a redirect with header().
 function cobrand_check_areas($cobrand, $cocode, $voting_areas, $pc, $a) {
+    if (! $cobrand) {
+         return false;
+    }
+
     $cobrand_handle = cobrand_handle($cobrand);
     if ($cobrand_handle && method_exists($cobrand_handle, 'check_areas')){
         return $cobrand_handle->check_areas($cocode, $voting_areas, $pc, $a);
