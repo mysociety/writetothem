@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.20 2009-10-22 09:50:20 louise Exp $
+ * $Id: cobrand.php,v 1.21 2009-10-28 17:51:29 louise Exp $
  * 
  */
 
@@ -21,6 +21,7 @@ function cobrand_allowed() {
     }
     return $allowed_cobrands;
 }
+
 
 // To change look and feel, make new files in templates/. Look at cheltenham
 // for examples. Also need to make file like web/cobrands/cheltenham/cheltenham.css. To change the 
@@ -43,6 +44,32 @@ function cobrand_handle($cobrand){
       $handles[$cobrand] = null;
   }
   return $handles[$cobrand];
+}
+
+// Return the message that asks the user to enter their postcod
+function cobrand_enter_postcode_message($cobrand, $cocode) {
+    if (!$cobrand) {
+        return false;
+    } 
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'enter_postcode_message')){
+        return $cobrand_handle->enter_postcode_message($cocode);
+    }
+    return false;
+
+} 
+
+// Return a boolean indicating whether the cocode is allowed
+function cobrand_cocode_allowed($cobrand, $cocode) {
+    if (!$cobrand) {
+        return true;
+    }
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'cocode_allowed')){
+        return $cobrand_handle->cocode_allowed($cocode);
+    }
+    return true;
+
 }
 
 // Bullet points / tips to put at the top of a letter.
@@ -97,6 +124,18 @@ function cobrand_force_representative_type($cobrand, $cocode, $type) {
         return $cobrand_handle->force_representative_type($cocode, $type);
     }
     return $type;
+}
+
+// Perform any additional checks on the voting areas returned
+// for a postcode.
+// Return true if you've rendered a template so another doesn't need rendering.
+// Exit if you've done a redirect with header().
+function cobrand_check_areas($cobrand, $cocode, $voting_areas, $pc, $a) {
+    $cobrand_handle = cobrand_handle($cobrand);
+    if ($cobrand_handle && method_exists($cobrand_handle, 'check_areas')){
+        return $cobrand_handle->check_areas($cocode, $voting_areas, $pc, $a);
+    }
+    return false;
 }
 
 // Return any HTML headers to be used in the cobranded site

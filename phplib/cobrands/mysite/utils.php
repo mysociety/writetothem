@@ -1,7 +1,7 @@
 <?php
 /*
  * Example cobrand for the functions in cobrand.php
- * $Id: utils.php,v 1.6 2009-10-22 09:38:24 louise Exp $
+ * $Id: utils.php,v 1.7 2009-10-28 17:51:28 louise Exp $
  */
 
 class Mysite {
@@ -13,7 +13,15 @@ class Mysite {
     function headers($template) {
          return 'My-Header: hello';
     }
+ 
+    function enter_postcode_message() {
+         return 'My message';
+    }
 
+    function cocode_allowed() {
+         return false;
+    }
+    
     function display_councillor_correction_link() {
          return false;  
     }

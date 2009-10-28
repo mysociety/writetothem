@@ -1,7 +1,7 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.9 2009-10-22 09:42:28 louise Exp $
+ * $Id: cobrand_test.php,v 1.10 2009-10-28 17:51:28 louise Exp $
  */
 error_reporting (E_ALL ^ E_NOTICE);
 ini_set("display_errors", 1);
@@ -80,6 +80,28 @@ class CobrandTest extends UnitTestCase{
         $this->assertEqual('url', $url, 'Should return the url passed if there is no cobrand url function');
 
     }
+
+    function test_enter_postcode_message() {
+
+        $message = cobrand_enter_postcode_message('mysite', 'cocode');
+        $this->assertEqual('My message', $message, 'Should return the message returned by the cobrand if the cobrand defines an enter_postcode_message function');
+        
+        $message = cobrand_enter_postcode_message('nosite', 'cocode');
+        $this->assertEqual(false, $message, 'Should return false if there is no cobrand enter_postcode_message function');
+
+    }
+
+
+    function test_cocode_allowed() {
+
+        $allowed = cobrand_cocode_allowed('mysite', 'cocode');
+        $this->assertEqual(false, $allowed, 'Should return the value returned by the cobrand if the cobrand defines a cocode_allowed function');
+
+        $allowed = cobrand_cocode_allowed('nosite', 'cocode');
+        $this->assertEqual(true, $allowed, 'Should return true if there is no cobrand cocode_allowed function');
+
+    }
+
 
 } 
 
