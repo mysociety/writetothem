@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.69 2009-10-19 15:00:25 louise Exp $
+ * $Id: index.php,v 1.70 2009-10-28 17:56:33 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -37,7 +37,11 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     if ($options['bold_labels']){
         $form .= '<b>';
     }
-    $form .= 'First, type your UK postcode:';
+    $message = cobrand_enter_postcode_message($cobrand, $cocode);
+    if (!$message) {
+        $message = 'First, type your UK postcode:';
+    }
+    $form .= $message;
     if ($options['show_errors'] && $error_message){ 
         $form .= '<span class="error">' . $error_message . '</span>';
     }
@@ -87,7 +91,11 @@ if ($cobrand && $cobrand_page) {
 $cocode = get_http_var('cocode');
 if ($cobrand) {   
     $cocode = cobrand_force_default_cocode($cobrand, $cocode);
+    if (! cobrand_cocode_allowed($cobrand, $cocode)) {
+        $cocode = '';
+    }
 }
+
 $pc = canonicalise_postcode(get_http_var('pc'));
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
 
@@ -183,6 +191,12 @@ if ($pc) {
     $voting_areas = mapit_get_voting_areas($pc);
 
     if (!rabx_is_error($voting_areas)) {
+        /*
+         * Hook for cobrand to perform any extra checks */
+        if (cobrand_check_areas($cobrand, get_http_var('cocode'), $voting_areas, $pc, $a_forward)){
+            exit;
+        }
+        
         /* Possibly a deep link (from another site which knows its users'
          * postcodes) specifying one or more particular area types. */
         if ($area_types = fyr_parse_area_type_list($a_forward)) {
