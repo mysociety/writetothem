@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.92 2009-10-27 12:23:45 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.93 2009-10-28 16:02:49 louise Exp $';
 
 use strict;
 require 5.8.0;
@@ -150,7 +150,7 @@ $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_t
 $base_url =~ m#^http://(.+)/?$#;
 $wth->browser_credentials("$1:80", "$1 admin pages", $admin_auth_user, $admin_auth_password);
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
-$wth->database_connect('FYR_');
+$wth->database_connect('FYR_QUEUE_');
 $wth->database_drop_reload('../db/schema.sql');
 $wth->database_cycle_sequences(200);
 $wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin/eveld",

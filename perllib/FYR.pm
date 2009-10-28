@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.23 2009-10-27 10:57:12 louise Exp $
+# $Id: FYR.pm,v 1.24 2009-10-28 16:00:09 louise Exp $
 #
 
 use strict;
@@ -57,11 +57,11 @@ use DBI;
 
 BEGIN {
     mySociety::DBHandle::configure(
-            Name => mySociety::Config::get('FYR_DB_NAME'),
-            User => mySociety::Config::get('FYR_DB_USER'),
-            Password => mySociety::Config::get('FYR_DB_PASS'),
-            Host => mySociety::Config::get('FYR_DB_HOST', undef),
-            Port => mySociety::Config::get('FYR_DB_PORT', undef),
+            Name => mySociety::Config::get('FYR_QUEUE_DB_NAME'),
+            User => mySociety::Config::get('FYR_QUEUE_DB_USER'),
+            Password => mySociety::Config::get('FYR_QUEUE_DB_PASS'),
+            Host => mySociety::Config::get('FYR_QUEUE_DB_HOST', undef),
+            Port => mySociety::Config::get('FYR_QUEUE_DB_PORT', undef),
             OnFirstUse => sub {
                 if (!dbh()->selectrow_array('select secret from secret')) {
                     local dbh()->{HandleError};

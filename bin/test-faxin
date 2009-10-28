@@ -31,6 +31,6 @@ GetOptions(
 
 
 our $wth = new mySociety::WebTestHarness();
-$wth->database_connect('FYR_');
+$wth->database_connect('FYR_QUEUE_');
 $wth->fax_incoming($sent_to, scalar(@ARGV), \@ARGV, "sent_faxes");
 
