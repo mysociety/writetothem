@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.22 2009-10-28 18:00:30 louise Exp $
+ * $Id: cobrand.php,v 1.23 2009-10-29 10:44:52 louise Exp $
  * 
  */
 
@@ -102,6 +102,36 @@ function cobrand_post_letter_send($values) {
     }
     return false;
 }
+
+// Action to perform if someone enters a special (mostly fictional) postcode
+// Return true if you've rendered a template so another template doesn't need rendering
+// Exit if you've done a redirect with header()
+// Return false for default behaviour
+function cobrand_special_postcodes($cobrand, $cocode, $pc, $a) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'special_postcodes')){
+             return $cobrand_handle->special_postcodes($cocode, $pc, $a);
+        }
+
+    }
+    return false; 
+}
+
+// Action to perform if someone enters one of the outside UK special postcodes
+// Return true if you've rendered a template so another template doesn't need rendering
+// Exit if you've done a redirect with header()
+// Return false for default behaviour
+function cobrand_other_postcodes($cobrand, $cocode, $pc, $a) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'other_postcodes')){
+             return $cobrand_handle->other_postcodes($cocode, $pc, $a);
+        }
+
+    }
+    return false; 
+} 
 
 // On front page, force a particular campaign code as default for site (either
 // forced value, or if another code isn't set).

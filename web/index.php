@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.70 2009-10-28 17:56:33 louise Exp $
+ * $Id: index.php,v 1.71 2009-10-29 10:44:53 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -160,6 +160,9 @@ if ($pc) {
     }
 
     if (isset($ot)) {
+        if (cobrand_other_postcodes($cobrand, $cocode, $pc, $a_forward)) {
+            exit;
+        }
         header("Location: about-elsewhere#$ot");
         exit;
     }
@@ -184,6 +187,9 @@ if ($pc) {
     }
 
     if (isset($ft)) {
+        if (cobrand_special_postcodes($cobrand, $cocode, $pc, $a_forward)){
+            exit;
+        }
         header("Location: about-special#$ft");
         exit;
     }
