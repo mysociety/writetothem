@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.23 2009-10-29 10:44:52 louise Exp $
+ * $Id: cobrand.php,v 1.24 2009-10-29 18:10:07 louise Exp $
  * 
  */
 
@@ -46,7 +46,7 @@ function cobrand_handle($cobrand){
   return $handles[$cobrand];
 }
 
-// Return the message that asks the user to enter their postcod
+// Return the message that asks the user to enter their postcode
 function cobrand_enter_postcode_message($cobrand, $cocode) {
     if (!$cobrand) {
         return false;
@@ -59,16 +59,149 @@ function cobrand_enter_postcode_message($cobrand, $cocode) {
 
 } 
 
+// Return the message for when a bad postcode is entered
+function cobrand_bad_postcode_message($cobrand, $cocode) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'bad_postcode_message')){
+            return $cobrand_handle->bad_postcode_message($cocode);
+        }
+    }
+    return false;
+}
+
+// Return the message for when a postcode can't be found
+function cobrand_postcode_not_found_message($cobrand, $cocode) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'postcode_not_found_message')){
+            return $cobrand_handle->postcode_not_found_message($cocode);
+        }
+    }
+    return false;
+}
+
+// Return the message to be used for bad contact information
+function cobrand_bad_contact_error_msg($cobrand, $eb_area_info) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'bad_contact_error_msg')){
+            return $cobrand_handle->bad_contact_error_msg($eb_area_info);
+        }
+    }
+    return false;
+} 
+
+// Return the message to be used for people who don't want to be contacted
+// through the service
+function cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'shame_error_msg')){
+            return $cobrand_handle->shame_error_msg($fyr_voting_area, $fyr_representative);
+        }
+    }
+    return false;
+}
+
+// Return the short error strings to be used when errors are returned writing to multiple reps
+function cobrand_message_sending_errors($cobrand) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'message_sending_errors')){
+            return $cobrand_handle->message_sending_errors();
+        }
+    }
+    return false;
+}
+
+// Return the link to write to all representatives of a given type
+function cobrand_write_all_link($cobrand, $url, $rep_desc_plural) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'write_all_link')){
+            return $cobrand_handle->write_all_link($url, $rep_desc_plural);
+        }
+    }
+    return false;
+}
+
+// Return the text for the preview button
+function cobrand_preview_button_text($cobrand) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'preview_button_text')){
+            return $cobrand_handle->preview_button_text();
+        }
+    }
+    return false;
+}
+
+// Return the text for previewing your message
+function cobrand_preview_text($cobrand) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'preview_text')){
+            return $cobrand_handle->preview_text();
+        }
+    }
+    return false;
+}
+
 // Return a boolean indicating whether the cocode is allowed
 function cobrand_cocode_allowed($cobrand, $cocode) {
-    if (!$cobrand) {
-        return true;
-    }
-    $cobrand_handle = cobrand_handle($cobrand);
-    if ($cobrand_handle && method_exists($cobrand_handle, 'cocode_allowed')){
-        return $cobrand_handle->cocode_allowed($cocode);
+    if ($cobrand) {
+         $cobrand_handle = cobrand_handle($cobrand);
+         if ($cobrand_handle && method_exists($cobrand_handle, 'cocode_allowed')){
+             return $cobrand_handle->cocode_allowed($cocode);
+         } 
     }
     return true;
+}
+
+// Return the column blurb for a set of representatives
+function cobrand_col_blurb($cobrand, $va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried){
+    if ($cobrand) {
+         $cobrand_handle = cobrand_handle($cobrand);
+         if ($cobrand_handle && method_exists($cobrand_handle, 'col_blurb')){
+             return $cobrand_handle->col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried);
+         }
+    }
+    return false;
+
+}
+
+// Message to show when there's an election
+function cobrand_election_error_message($cobrand) {
+    if ($cobrand) {
+         $cobrand_handle = cobrand_handle($cobrand);
+         if ($cobrand_handle && method_exists($cobrand_handle, 'election_error_message')){
+             return $cobrand_handle->election_error_message();
+         }
+    }
+    return false;
+}
+
+// Message to show when the user enters an invalid email address
+function cobrand_invalid_email_message($cobrand) {
+    if ($cobrand) {
+         $cobrand_handle = cobrand_handle($cobrand);
+         if ($cobrand_handle && method_exists($cobrand_handle, 'invalid_email_message')){
+             return $cobrand_handle->invalid_email_message();
+         }
+    }
+    return false;
+}
+
+// Message for mismatched email addresses
+function cobrand_mismatched_emails_message($cobrand) {
+    if ($cobrand) {
+         $cobrand_handle = cobrand_handle($cobrand);
+         if ($cobrand_handle && method_exists($cobrand_handle, 'mismatched_emails_message')){
+             return $cobrand_handle->mismatched_emails_message();
+         }
+    }
+    return false;
 
 }
 
