@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.22 2009-10-19 15:29:13 louise Exp $
+ * $Id: confirm.php,v 1.23 2009-11-02 11:40:20 louise Exp $
  * 
  */
 
@@ -33,8 +33,12 @@ if ($ad) {
 $template_params = array('host' => fyr_get_host(), 'cobrand' => $cobrand);
 $token = get_http_var('token');
 if (!$token) {
-    template_show_error("Please make sure you copy the URL from your
-        email properly. The token was missing.");
+
+    $missing_token_message = cobrand_missing_token_message($cobrand);
+    if (!$missing_token_message) {
+         $missing_token_message = "Please make sure you copy the URL from your email properly. The token was missing.";
+    }
+    template_show_error($missing_token_message);
 }
 
 $result = msg_confirm_email($token);

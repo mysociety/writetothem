@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.24 2009-10-29 18:10:07 louise Exp $
+ * $Id: cobrand.php,v 1.25 2009-11-02 11:40:20 louise Exp $
  * 
  */
 
@@ -132,6 +132,17 @@ function cobrand_preview_button_text($cobrand) {
         $cobrand_handle = cobrand_handle($cobrand);
         if ($cobrand_handle && method_exists($cobrand_handle, 'preview_button_text')){
             return $cobrand_handle->preview_button_text();
+        }
+    }
+    return false;
+}
+
+// Return the text to display when a user accesses a token-based URL without a token
+function cobrand_missing_token_message($cobrand) {
+    if ($cobrand) {   
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'missing_token_message')){
+            return $cobrand_handle->missing_token_message();
         }
     }
     return false;
