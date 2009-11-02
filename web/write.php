@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.142 2009-10-19 15:00:25 louise Exp $
+ * $Id: write.php,v 1.143 2009-11-02 11:17:00 louise Exp $
  *
  */
 
@@ -200,8 +200,14 @@ class RulePostcode extends HTML_QuickForm_Rule {
 }
 
 function compare_email_addrs($F) {
-    if (!isset($F['writer_email2']) || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2'])
-        return array('writer_email' => "The two email addresses you've entered differ;<br>please check them carefully for mistakes");
+    global $cobrand;
+    if (!isset($F['writer_email2']) || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2']) {
+        $error_message = cobrand_mismatched_emails_message($cobrand);
+        if (!$error_message) {
+             $error_message = "The two email addresses you've entered differ;<br>please check them carefully for mistakes";
+        }
+        return array('writer_email' => $error_message);
+    }
     return true;
 }
 
@@ -223,7 +229,7 @@ function buildWriteForm($options) {
     }
 
     if ($options['include_fao']){
-        $write_header = '<strong>FOR THE ATTENTION OF:</strong>';
+        $write_header = '<strong>For the attention of:</strong>';
     }
 
     $stuff_on_left = <<<END
@@ -262,18 +268,22 @@ END;
 
     if ($fyr_postcode_editable) {
         // House of Lords
-        $form->addElement('text', 'pc', "UK Postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+        $form->addElement('text', 'pc', "UK postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
         $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
         $form->addRule('pc', 'Choose a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', new RulePostcode(), null, null);
         $form->applyFilter('pc', 'trim');
     } else {
         // All other representatives (postcode fixed as must be in constituency)
-        $form->addElement('static', 'staticpc', 'UK Postcode:', htmlentities($fyr_postcode));
+        $form->addElement('static', 'staticpc', 'UK postcode:', htmlentities($fyr_postcode));
     }
 
     $form->addElement('text', 'writer_email', "Your email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
-    $form->addRule('writer_email', 'Choose a valid email address', 'email', null, null);
+    $invalid_email_message = cobrand_invalid_email_message($cobrand);
+    if (!$invalid_email_message) {
+         $invalid_email_message = 'Choose a valid email address';
+    }
+    $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
     $form->applyFilter('writer_email', 'trim');
 
     $form->addElement('text', 'writer_email2', "Confirm email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
@@ -308,9 +318,16 @@ END;
     if (cobrand_display_spellchecker($cobrand)) {
       $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
     }
-    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,
-            "<p class=\"action\">Ready? Press the \"Preview\" button to continue:"); 
-    $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', 'preview your Message');
+    $preview_text = cobrand_preview_text($cobrand);
+    if (!$preview_text) {
+        $preview_text = 'Ready? Press the "Preview" button to continue:';
+    }
+    $preview_button_text = cobrand_preview_button_text($cobrand);
+    if (!$preview_button_text) {   
+        $preview_button_text = 'preview your Message';
+    }
+    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,"<p class=\"action\">$preview_text"); 
+    $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', $preview_button_text);
     $buttons[3] =& HTML_QuickForm::createElement('static', 'staticpreview', null, "</p>");     
     $form->addGroup($buttons, 'previewStuff', '', '', false);
 
@@ -471,12 +488,14 @@ function submitFaxes() {
     global $fyr_values, $cobrand;
     
     // Set up some brief error descriptions
-    $errors = array("problem-generic" => "Message Rejected", 
-                    "problem-lords" => "You have sent too many messages to Lords", 
-                    "problem-lords-similar" => "Too many similar messages have been sent",
-                    "problem-postcodes" => "You seem to be sending messages with several different postcodes", 
-                    "problem-similar" => "Your message is near-identical with others sent previously");
-
+    $errors = cobrand_message_sending_errors($cobrand);
+    if (!$errors) { 
+        $errors = array("problem-generic" => "Message Rejected", 
+                        "problem-lords" => "You have sent too many messages to Lords", 
+                        "problem-lords-similar" => "Too many similar messages have been sent",
+                        "problem-postcodes" => "You seem to be sending messages with several different postcodes", 
+                        "problem-similar" => "Your message is near-identical with others sent previously");
+    }
  
     // send the message to each representative
     $any_success = false;
@@ -790,9 +809,13 @@ if ($fyr_group_msg) {
     dadem_check_error($parent_status);
     $status = dadem_get_area_status($va_id);
     dadem_check_error($status);
-    if ($parent_status != 'none' || $status != 'none')
-        template_show_error('Sorry, an election is forthcoming or has recently happened here.');
-
+    if ($parent_status != 'none' || $status != 'none'){
+        $election_error = cobrand_election_error_message($cobrand);
+        if (!$election_error) {
+             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
+        }
+        template_show_error($election_error);
+    }
     // Get the representative info
     $area_representatives = dadem_get_representatives($va_id);
     dadem_check_error($area_representatives);  
@@ -822,9 +845,17 @@ if ($fyr_group_msg) {
         if (rabx_is_error($success)) {    
 
             if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-                $error_msg .= "<p>" . $rep_name . ": " . bad_contact_error_msg($eb_area_info) . "</p>"; 
+                $rep_error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area_info);
+                if (!$rep_error_msg) {
+                     $rep_error_msg = bad_contact_error_msg($eb_area_info); 
+                }                  
+                $error_msg .= "<p>" . $rep_name . ": " .  $rep_error_msg . "</p>"; 
             } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
-                $error_msg .= "<p>" . shame_error_msg($fyr_voting_area, $representatives_info[$rep_specificid]) . "</p>";
+                $rep_error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $representatives_info[$rep_specificid]);
+                if (!$rep_error_msg) {
+                    $rep_error_msg = shame_error_msg($fyr_voting_area, $representatives_info[$rep_specificid]);
+                }
+                $error_msg .= "<p>" . $rep_error_msg . "</p>";
             } else {
                 $error_msg .= "<p>" . $rep_name . ": " . $success->text . "</p>";
             }
@@ -915,17 +946,28 @@ if ($fyr_group_msg) {
     dadem_check_error($parent_status);
     $status = dadem_get_area_status($fyr_representative['voting_area']);
     dadem_check_error($status);
-    if ($parent_status != 'none' || $status != 'none')
-        template_show_error('Sorry, an election is forthcoming or has recently happened here.');
+    if ($parent_status != 'none' || $status != 'none'){
+        $election_error = cobrand_election_error_message($cobrand);
+        if (!$election_error) {
+             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
+        }
+        template_show_error($election_error);
+    }
 
     //Check the contact method exists
     $success = msg_recipient_test($fyr_values['who']);
 
     if (rabx_is_error($success)) {
-        if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-            $error_msg = bad_contact_error_msg($eb_area_info);
+        if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) { 
+            $error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area_info);
+            if (!$error_msg) {
+                 $error_msg = bad_contact_error_msg($eb_area_info);
+            }
         } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
-            $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
+            $error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative);
+            if (!$error_msg) { 
+                 $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
+            }
         } else {
             $error_msg= $success->text;
         } 
