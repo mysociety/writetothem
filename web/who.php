@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.111 2009-10-22 09:48:36 louise Exp $
+ * $Id: who.php,v 1.112 2009-11-02 11:03:39 louise Exp $
  *
  */
 
@@ -169,7 +169,10 @@ foreach ($va_display_order as $va_type) {
         $disabled = true;
     }
 
-    $col_blurb = '';
+    $col_blurb = cobrand_col_blurb($cobrand, $va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried);
+    if (!$col_blurb) {
+         $col_blurb = col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried);
+    }
     $text = '';
     $col_after = '';
     // Already putting 'write all' link in list? 
@@ -187,13 +190,6 @@ foreach ($va_display_order as $va_type) {
         } else {
             $heading = "Your {$va_info[0]['rep_name_long']}";
         }
-        $col_blurb = "<p>";
-        if ($rep_count && $rep_counts[0]>1) {
-            $col_blurb .= "Your $rep_counts[0] {$va_info[0]['name']} {$va_info[0]['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
-        } else {
-            $col_blurb .= "Your {$va_info[0]['name']} {$va_info[0]['rep_name']} represents you ${eb_info['attend_prep']} ";
-        }
-        $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}</p>";
         if ($rep_count && $rep_counts[0]>1 && ! $skip_write_all) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
@@ -230,17 +226,9 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
             if ($va_type == 'EUR' && count($meps_hidden))
                 $rep_count += count($meps_hidden);
             $heading = "Your ${va_info['rep_name_long_plural']}";
-            $col_blurb = "<p>Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
         } else {
             $heading = "Your ${va_info['rep_name_long']}";
-            $col_blurb = "<p>Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
         }
-        $col_blurb .= "${eb_info['name']}.  ${eb_info['description']}";
-        /* Note categories of representatives who typically aren't paid for
-         * their work.... */
-        if (!$va_salaried[$va_type])
-            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
-        $col_blurb .= "</p>";
         
         if ($rep_count > 1 && ! $skip_write_all) {
             $text .= write_all_link($va_type, $va_info['rep_name_plural']);
@@ -334,7 +322,10 @@ function write_all_link($va_type, $rep_desc_plural) {
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
     $url = general_write_all_url($va_type, $fyr_postcode);
-    $a = '<a href="' . cobrand_url($cobrand, $url) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+    $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural);
+    if (!$a) {
+        $a = '<a href="' . cobrand_url($cobrand, $url) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+    }
     return $a;
 
 }
@@ -354,6 +345,33 @@ function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
                                     'pc', $fyr_postcode,
                                     'fyr_extref', fyr_external_referrer(),
                                     'cocode', get_http_var('cocode')));
+}
+
+function col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried){
+  
+    $col_blurb = "<p>";
+     
+    if (is_array($va_type)) {
+        $col_blurb .= rep_text($rep_count, $rep_counts[0], $va_info[0], $eb_info);
+    } else {
+        $col_blurb .= rep_text($rep_count, $rep_count, $va_info, $eb_info);
+        if (!$va_salaried[$va_type])
+            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
+    }
+    $col_blurb .= "</p>";
+    return $col_blurb;
+}
+     
+
+function rep_text($main_rep_count, $rep_count, $va_info, $eb_info) {
+    $text = '';
+    if ($main_rep_count && $rep_count > 1) {
+        $text = "Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
+    } else {
+        $text = "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
+    }
+    $text .= "${eb_info['name']}.  ${eb_info['description']}";
+    return $text;
 }
 
 function display_reps($va_type, $representatives, $va_info, $options) {
