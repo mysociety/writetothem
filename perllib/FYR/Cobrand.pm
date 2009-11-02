@@ -7,7 +7,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.7 2009-11-02 15:02:27 louise Exp $
+# $Id: Cobrand.pm,v 1.8 2009-11-02 17:47:06 louise Exp $
 
 package FYR::Cobrand;
 use strict;
@@ -127,7 +127,7 @@ sub recipient_position_plural {
     if ($cobrand){
         $handle = cobrand_handle($cobrand);
         if ( $handle && $handle->can('recipient_position_plural')){
-             return $handle->recipient_position($recipient_position_plural);
+              return $handle->recipient_position_plural($recipient_position_plural);
         }
     }
     return $recipient_position_plural;
