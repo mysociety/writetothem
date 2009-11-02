@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.112 2009-11-02 11:03:39 louise Exp $
+ * $Id: who.php,v 1.113 2009-11-02 15:23:44 louise Exp $
  *
  */
 
@@ -52,14 +52,14 @@ if ($area_types) {
     }
     $voting_areas = $a;
     $fyr_all_url = '';
-    $cobrand_all_url = cobrand_main_write_url($cobrand, $fyr_postcode, get_http_var('cocode'), fyr_external_referrer());
+    $cobrand_all_url = cobrand_main_write_url($cobrand, $fyr_postcode, $cocode, fyr_external_referrer());
     if ($cobrand_all_url != '') {
         $fyr_all_url = $cobrand_all_url;
     } else {
         $fyr_all_url = htmlspecialchars(url_new('who', false,
                         'pc', $fyr_postcode,
                         'fyr_extref', fyr_external_referrer(),
-                        'cocode', get_http_var('cocode')));
+                        'cocode', $cocode));
     }
 }
 
@@ -336,7 +336,7 @@ function general_write_all_url($va_type, $fyr_postcode){
                                     'type', $va_type,
                                     'pc', $fyr_postcode,
                                     'fyr_extref', fyr_external_referrer(),
-                                    'cocode', get_http_var('cocode')));
+                                    'cocode', $cocode));
 }
 
 function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
@@ -344,7 +344,7 @@ function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
                                     'who', $rep_specificid,
                                     'pc', $fyr_postcode,
                                     'fyr_extref', fyr_external_referrer(),
-                                    'cocode', get_http_var('cocode')));
+                                    'cocode', $cocode));
 }
 
 function col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried){

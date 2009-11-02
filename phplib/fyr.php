@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.73 2009-10-26 16:50:43 matthew Exp $
+ * $Id: fyr.php,v 1.74 2009-11-02 15:23:43 louise Exp $
  * 
  */
 
@@ -21,7 +21,7 @@ require_once $dir . "/../../phplib/utility.php";
 require_once $dir . "/../../phplib/auth.php";
 require_once $dir . "/../../phplib/crosssell.php";
 require_once $dir . "/../../phplib/tracking.php";
-
+require_once $dir . "/../../phplib/votingarea.php";
 require_once $dir . "/../phplib/cobrand.php";
 
 // Disable these types (due to elections / pending elections etc.)
@@ -62,7 +62,16 @@ if (array_key_exists($syn, $cobrand_allowed)) {
         template_set_style("../templates/$syn", true);
     }
     $cobrand = $syn;
-} 
+}
+
+global $cocode;
+$cocode = false; 
+$cocode = get_http_var('cocode');
+if ($cobrand) {
+    if (! cobrand_cocode_allowed($cobrand, $cocode)) {
+        $cocode = false;
+    }
+}
 
 /* fyr_display_error NUMBER MESSAGE
  * Display an error message to the user. */
