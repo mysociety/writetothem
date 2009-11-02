@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.73 2009-11-02 15:23:44 louise Exp $
+ * $Id: index.php,v 1.74 2009-11-02 16:00:15 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -195,7 +195,7 @@ if ($pc) {
     if (!rabx_is_error($voting_areas)) {
         /*
          * Hook for cobrand to perform any extra checks */
-        if (cobrand_check_areas($cobrand, get_http_var('cocode'), $voting_areas, $pc, $a_forward)){
+        if (cobrand_check_areas($cobrand, $cocode, $voting_areas, $pc, $a_forward)){
             exit;
         }
         
