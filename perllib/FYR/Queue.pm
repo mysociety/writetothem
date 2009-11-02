@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.287 2009-10-26 18:37:39 louise Exp $
+# $Id: Queue.pm,v 1.288 2009-11-02 15:02:26 louise Exp $
 #
 
 package FYR::Queue;
@@ -726,8 +726,12 @@ sub message ($;$$) {
         $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait_str", {}, $id); 
 	if ($msg) {
             # Add some convenience fields.
-            $msg->{recipient_position} = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
-            $msg->{recipient_position_plural} = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
+            my $recipient_position = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
+            my $recipient_position_plural = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
+            $recipient_position = FYR::Cobrand::recipient_position($msg->{$cobrand}, $recipient_position);
+            $recipient_position_plural = FYR::Cobrand::recipient_position_plural($msg->{$cobrand}, $recipient_position_plural); 
+            $msg->{recipient_position} = $recipient_position;
+            $msg->{recipient_position_plural} = $recipient_position_plural;
             return $msg;
         } else {
             throw FYR::Error("No message '$id'.", FYR::Error::BAD_DATA_PROVIDED);

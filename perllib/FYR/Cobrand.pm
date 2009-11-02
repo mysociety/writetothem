@@ -7,7 +7,7 @@
 # Copyright (c) 2009 UK Citizens Online Democracy. All rights reserved.
 # Email: louise@mysociety.org. WWW: http://www.mysociety.org
 #
-# $Id: Cobrand.pm,v 1.6 2009-10-26 18:36:00 louise Exp $
+# $Id: Cobrand.pm,v 1.7 2009-11-02 15:02:27 louise Exp $
 
 package FYR::Cobrand;
 use strict;
@@ -95,6 +95,42 @@ sub base_url_for_emails {
     } else {
         return $handle->base_url_for_emails($cocode);
     }
+}
+
+=item recipient_position COBRAND RECIPIENT_POSITION
+
+Return a string for the recipient position
+
+=cut
+
+sub recipient_position { 
+    my ($cobrand, $recipient_position) = @_;
+    my $handle;
+    if ($cobrand){
+        $handle = cobrand_handle($cobrand);
+        if ( $handle && $handle->can('recipient_position')){
+             return $handle->recipient_position($recipient_position);
+        }
+    }
+    return $recipient_position;
+}
+
+=item recipient_position_plural COBRAND RECIPIENT_POSITION_PLURAL
+
+Return a string for the recipient position plural
+
+=cut
+
+sub recipient_position_plural {
+    my ($cobrand, $recipient_position_plural) = @_;
+    my $handle;
+    if ($cobrand){
+        $handle = cobrand_handle($cobrand);
+        if ( $handle && $handle->can('recipient_position_plural')){
+             return $handle->recipient_position($recipient_position_plural);
+        }
+    }
+    return $recipient_position_plural;
 }
 
 1;
