@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: response.php,v 1.7 2009-11-02 11:40:20 louise Exp $
+ * $Id: response.php,v 1.8 2009-11-02 15:17:25 louise Exp $
  * 
  */
 
@@ -27,8 +27,11 @@ if (!$token) {
 }
 $answer = get_http_var('answer');
 if ($answer != "yes" && $answer != "no") {
-    template_show_error("Please make sure you copy the URL from your
-        email properly. The answer type was missing.");
+    $missing_answer_message = cobrand_missing_answer_message($cobrand);
+    if (!$missing_answer_message) {
+         $missing_answer_message = "Please make sure you copy the URL from your email properly. The answer type was missing.";
+    }
+    template_show_error($missing_answer_message);
 }
 
 $yes_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&answer=yes");
@@ -37,14 +40,19 @@ $no_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&ans
 $values = array(
     'first_time_yes' => "\"$yes_url\"",
     'first_time_no' => "\"$no_url\"",
-    'cobrand' => $cobrand
+    'cobrand' => $cobrand, 
+    'cocode' => $cocode
     );
 
 // Look up info about the message
 $msg_id = msg_get_questionnaire_message($token);
 msg_check_error($msg_id);
 if (!$msg_id) {
-    template_show_error("Failed to look up message id for token");
+    $unfound_token_message = cobrand_unfound_token_message($cobrand);
+    if (!$unfound_token_message) {
+        $unfound_token_message = "Failed to look up message id for token";
+    }
+    template_show_error($unfound_token_message);
 }
 $msg_info = msg_admin_get_message($msg_id);
 msg_check_error($msg_info);

@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.25 2009-11-02 11:40:20 louise Exp $
+ * $Id: cobrand.php,v 1.26 2009-11-02 15:17:25 louise Exp $
  * 
  */
 
@@ -146,6 +146,30 @@ function cobrand_missing_token_message($cobrand) {
         }
     }
     return false;
+}
+
+// Return the text to display when a user accesses an answer URL without an answer
+function cobrand_missing_answer_message($cobrand) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'missing_answer_message')){
+            return $cobrand_handle->missing_answer_message();
+        }
+    }
+    return false;
+
+}
+
+// Return the text to display when a message can't be found for a token
+function cobrand_unfound_token_message($cobrand) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'unfound_token_message')){
+            return $cobrand_handle->unfound_token_message();
+        }
+    }
+    return false;
+
 }
 
 // Return the text for previewing your message
