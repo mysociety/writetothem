@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.114 2009-11-02 15:58:46 louise Exp $
+ * $Id: who.php,v 1.115 2009-11-03 14:38:19 louise Exp $
  *
  */
 
@@ -315,16 +315,16 @@ template_draw("who", array(
 debug_timestamp();
 
 function write_all_link($va_type, $rep_desc_plural) {
-    global $cobrand;
+    global $cobrand, $cocode;
     global $fyr_postcode;
     if ($rep_desc_plural == 'London Assembly Members')
         $rep_desc_plural = 'London Assembly list members';
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
     $url = general_write_all_url($va_type, $fyr_postcode);
-    $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural);
+    $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
-        $a = '<a href="' . cobrand_url($cobrand, $url) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+        $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';  
     }
     return $a;
 
@@ -377,7 +377,7 @@ function rep_text($main_rep_count, $rep_count, $va_info, $eb_info) {
 }
 
 function display_reps($va_type, $representatives, $va_info, $options) {
-    global $representatives_info, $fyr_postcode, $cobrand;
+    global $representatives_info, $fyr_postcode, $cobrand, $cocode;
     $rep_list = ''; $photo = 0;
     $default_options = cobrand_rep_list_options($cobrand);
     $options = array_merge($default_options, $options);
@@ -385,7 +385,7 @@ function display_reps($va_type, $representatives, $va_info, $options) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
         $url = general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
-        $a = '<a href="' .  cobrand_url($cobrand, $url) . '">';
+        $a = '<a href="' .  cobrand_url($cobrand, $url, $cocode) . '">';
         if ($rep_specificid == '2000005') {
             $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0">';
             $photo = 1;
@@ -399,7 +399,7 @@ function display_reps($va_type, $representatives, $va_info, $options) {
             if ($options['extra_space']) {
                  $rep_list .= '<br>';
             }
-            $rep_list .=  htmlspecialchars($rep_info['party']);
+            $rep_list .= '<span class="party">' . htmlspecialchars($rep_info['party']) . '</span>';
         }
     }
 

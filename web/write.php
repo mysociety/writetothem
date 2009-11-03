@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.143 2009-11-02 11:17:00 louise Exp $
+ * $Id: write.php,v 1.144 2009-11-03 14:38:19 louise Exp $
  *
  */
 
@@ -354,7 +354,7 @@ function renderForm($form, $pageName, $options)
 {
     global $fyr_form, $fyr_values, $warning_text;
     global $rep_text, $fyr_group_msg, $fyr_valid_reps, $cobrand;
-    global $general_error;
+    global $general_error, $cocode;
     debug("FRONTEND", "Form values:", $fyr_values);
     
     // $renderer =& $page->defaultRenderer();
@@ -465,14 +465,16 @@ function renderForm($form, $pageName, $options)
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));
     } else {
-        template_show_error(
-                'Sorry. An error has occurred: pageName "'
+        $message = cobrand_generic_error_message($cobrand, $cocode, $pageName);
+        if (!$message) {
+             $message = 'Sorry. An error has occurred: pageName "'
                     . htmlspecialchars($pageName) .
                 '". Please get in touch with us at
                 <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
                 quoting this message. You can <a href="/">try again from the
-                beginning</a>.'
-            );
+                beginning</a>.';
+        }
+        template_show_error($message);
     }
 }
 
@@ -610,14 +612,17 @@ function submitFaxes() {
 }
 
 function rabx_mail_error_msg($code, $text) { 
+    global $cobrand, $cocode;
      /* Return an appropriate error message for a RABX error code. 
       * Log errors other than multiple send attempts */
      
     $error_msg = "";
+    $base_url = cobrand_url($cobrand, '/', $cocode);
     if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) {
-        $error_msg = "You've already sent this message.  To send a new message, please <a href=\"/\">start again</a>.";
+        
+        $error_msg = "You've already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.";
     } elseif ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED) {
-        $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"/\">start again</a>."; 
+        $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>."; 
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
         $error_msg = "Sorry, an error has occured. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";

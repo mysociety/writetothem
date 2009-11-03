@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.74 2009-11-02 16:00:15 louise Exp $
+ * $Id: index.php,v 1.75 2009-11-03 14:38:19 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -124,6 +124,11 @@ if (isset($_GET['t']))
 else 
     $template = "index-index";
 $error_message = null;
+
+if ($pc == '' && (array_key_exists('pc', $_GET) || array_key_exists('pc', $_POST))) {
+   $error_message = cobrand_empty_postcode_message($cobrand, $cocode);
+}
+
 if ($pc) {
     /* Test for various special-case postcodes which lie outside the UK. Many
      * of these aren't valid UK postcode formats, so do a special-case test

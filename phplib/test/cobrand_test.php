@@ -1,7 +1,7 @@
 <?php
 /*
  * SimpleTest tests for the functions in cobrand.php
- * $Id: cobrand_test.php,v 1.10 2009-10-28 17:51:28 louise Exp $
+ * $Id: cobrand_test.php,v 1.11 2009-11-03 14:38:19 louise Exp $
  */
 error_reporting (E_ALL ^ E_NOTICE);
 ini_set("display_errors", 1);
@@ -73,10 +73,10 @@ class CobrandTest extends UnitTestCase{
 
     function test_url() {
 
-        $url = cobrand_url('mysite', 'url');
+        $url = cobrand_url('mysite', 'url', 'cocode');
         $this->assertEqual('rewritten_url', $url, 'Should return the url as rewritten by the cobrand if the cobrand defines a url function');
 
-        $url = cobrand_url('nosite', 'url');
+        $url = cobrand_url('nosite', 'url', 'cocode');
         $this->assertEqual('url', $url, 'Should return the url passed if there is no cobrand url function');
 
     }

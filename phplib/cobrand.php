@@ -5,7 +5,7 @@
  * Copyright (c) 2008 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: cobrand.php,v 1.26 2009-11-02 15:17:25 louise Exp $
+ * $Id: cobrand.php,v 1.27 2009-11-03 14:38:19 louise Exp $
  * 
  */
 
@@ -59,6 +59,17 @@ function cobrand_enter_postcode_message($cobrand, $cocode) {
 
 } 
 
+//Return the message for when an empty postcode is entered
+function cobrand_empty_postcode_message($cobrand, $cocode) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'empty_postcode_message')){
+            return $cobrand_handle->empty_postcode_message($cocode);
+        }
+    }
+    return false;
+}
+
 // Return the message for when a bad postcode is entered
 function cobrand_bad_postcode_message($cobrand, $cocode) {
     if ($cobrand) {
@@ -104,6 +115,17 @@ function cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative
     return false;
 }
 
+// Return the message to be used for an unexpected error
+function cobrand_generic_error_message($cobrand, $cocode, $page_name) {
+    if ($cobrand) {
+        $cobrand_handle = cobrand_handle($cobrand);
+        if ($cobrand_handle && method_exists($cobrand_handle, 'generic_error_message')){
+            return $cobrand_handle->generic_error_message($cocode, $page_name);
+        }
+    }
+    return false;
+}
+
 // Return the short error strings to be used when errors are returned writing to multiple reps
 function cobrand_message_sending_errors($cobrand) {
     if ($cobrand) {
@@ -116,11 +138,11 @@ function cobrand_message_sending_errors($cobrand) {
 }
 
 // Return the link to write to all representatives of a given type
-function cobrand_write_all_link($cobrand, $url, $rep_desc_plural) {
+function cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode) {
     if ($cobrand) {
         $cobrand_handle = cobrand_handle($cobrand);
         if ($cobrand_handle && method_exists($cobrand_handle, 'write_all_link')){
-            return $cobrand_handle->write_all_link($url, $rep_desc_plural);
+            return $cobrand_handle->write_all_link($url, $rep_desc_plural, $cocode);
         }
     }
     return false;
@@ -397,11 +419,11 @@ function cobrand_main_write_url($cobrand, $fyr_postcode, $cocode, $fyr_extref) {
 }
 
 // Give cobrands a hook to rewrite URLs
-function cobrand_url($cobrand, $url) {
+function cobrand_url($cobrand, $url, $cocode) {
   if ($cobrand) {
     $cobrand_handle = cobrand_handle($cobrand);
     if ($cobrand_handle && method_exists($cobrand_handle, 'url')) {
-      return $cobrand_handle->url($url);
+      return $cobrand_handle->url($url, $cocode);
     }
   }
   return $url;
