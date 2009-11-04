@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Fax.pm,v 1.36 2007-09-25 12:05:07 matthew Exp $
+# $Id: Fax.pm,v 1.37 2009-11-04 10:29:41 louise Exp $
 #
 
 # In this context soft errors are those which occur locally (out of disk space,
@@ -114,12 +114,16 @@ Create fax bitmaps; send same.
 
 =cut
 
-# fax_template NAME
+# fax_template NAME COBRAND
 # Find the fax template with the given NAME. We look for the templates
 # directory in ../ and ../../. Nasty.
-sub fax_template ($) {
-    my ($name) = @_;
-    my $fn = "$FindBin::Bin/../templates/faxes/$name";
+sub fax_template ($$) {
+    my ($name, $cobrand) = @_;
+    my $fn;
+    if ($cobrand) {
+        $fn = "$FindBin::Bin/../templates/$cobrand/faxes/$name"; 
+    }   
+    $fn = "$FindBin::Bin/../templates/faxes/$name" if (!$fn || !-e $fn);
     die "unable to locate fax template for '$name'" if (!-e $fn);
     return $fn;
 }
@@ -263,25 +267,31 @@ sub format_postal_address ($$$$;$) {
      }
 }
 
-# group_text GROUP_ID MESSAGE_ID
+# group_text GROUP_ID MESSAGE_ID COBRAND
 # Return text for the fax listing the other recipients of the same message
-sub group_text($$){
-    my ($group_id, $id) = @_;
-    my $text = FYR::EmailTemplate::format(fax_template('group'),{other_recipient_list => FYR::Queue::other_recipient_list($group_id, $id)}, 1);
+sub group_text($$$){
+    my ($group_id, $id, $cobrand) = @_;
+    my $text = FYR::EmailTemplate::format(fax_template('group', $cobrand),{other_recipient_list => FYR::Queue::other_recipient_list($group_id, $id)}, 1);
     return $text;
 }
 
-# footer_text PAGE TOTAL URL FAX TYPE
+# footer_text PAGE TOTAL URL FAX TYPE COBRAND
 # Return footer text for the fax; PAGE is the current page number (from 1);
 # TOTAL is the total number of pages; URL is the URL a representative may visit
 # to forward the message to others; and FAX is the fax number to which the fax
 # is being delivered.
-sub footer_text ($$$$$) {
-    my ($page, $total, $url, $number, $rep_type) = @_;
+sub footer_text ($$$$$$) {
+    my ($page, $total, $url, $number, $rep_type, $cobrand) = @_;
     my $footer_template = 'footer-first';
     my %council_child_type  = map { $_ => 1 } @$mySociety::VotingArea::council_child_types;
     $footer_template .= '-cllr' if $council_child_type{$rep_type};
-    my $text = FYR::EmailTemplate::format(fax_template($page == 1 ? $footer_template : 'footer'), {
+    my $template;
+    if ($page == 1) {
+        $template = $footer_template;
+    } else {
+        $template = 'footer';
+    }
+    my $text = FYR::EmailTemplate::format(fax_template($template, $cobrand), {
                         this_page => $page,
                         total_pages => $total,
                         representative_url => $url,
@@ -292,12 +302,12 @@ sub footer_text ($$$$$) {
     return $text;
 }
 
-# cover_text MESSAGE
+# cover_text MESSAGE COBRAND
 # Format the cover-page text for a "via" MESSAGE.
-sub cover_text ($) {
-    my ($msg) = @_;
+sub cover_text ($$) {
+    my ($msg, $cobrand) = @_;
     my $coversheet = 'via-coversheet';
-    return FYR::EmailTemplate::format(fax_template($coversheet), FYR::Queue::email_template_params($msg), 1);
+    return FYR::EmailTemplate::format(fax_template($coversheet, $cobrand), FYR::Queue::email_template_params($msg), 1);
 }
 
 # make_pbm_file IMAGE
@@ -391,9 +401,9 @@ sub make_representative_fax ($) {
         # First thing to do is to format the fax footers. The purpose of this
         # is just to figure out how much space it takes up, so that we can
         # subtract that from the space available for the text.
-        my $text = footer_text(1, 99, $url, $msg->{recipient_fax}, $msg->{recipient_type});
+        my $text = footer_text(1, 99, $url, $msg->{recipient_fax}, $msg->{recipient_type}, $msg->{cobrand});
         my $firstfooterheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_FOOTER))[0];
-        $text = footer_text(2, 99, $url, $msg->{recipient_fax}, $msg->{recipient_type});
+        $text = footer_text(2, 99, $url, $msg->{recipient_fax}, $msg->{recipient_type}, $msg->{cobrand});
         my $footerheight = (format_text($im, $text, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_FOOTER))[0];
 
         my $pagenum = 1;
@@ -404,7 +414,7 @@ sub make_representative_fax ($) {
         # add text letting the recipient know who else this
         # message has been sent to.
         if ($msg->{group_id}){
-            $text = group_text($msg->{group_id}, $msg->{id}) . "\n";
+            $text = group_text($msg->{group_id}, $msg->{id}, $msg->{cobrand}) . "\n";
             while(length($text) > 0){
                 ($y, $remainder) = format_text($im, $text, $x + LMARGIN_CX, TMARGIN_CY, TEXT_CX, (TEXT_CY - $f - FMARGIN_CY));   
                 if (length($remainder) > 0){
@@ -472,7 +482,7 @@ sub make_representative_fax ($) {
         # a normal letter, above.
         if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
             ($im, $x, $y) = new_fax_page();
-            my $cover = cover_text($msg);
+            my $cover = cover_text($msg, $msg->{cobrand});
             my $coverheight = (format_text($im, $cover, LMARGIN_CX, TMARGIN_CY, TEXT_CX, TEXT_CY, 1, FONT_SIZE_COVER))[0];
             format_text($im, $cover, LMARGIN_CX, TMARGIN_CY + int((TEXT_CY - $coverheight) / 2), TEXT_CX, $coverheight + 100, 0, FONT_SIZE_COVER);
             push(@imgfiles, make_pbm_file($im));
@@ -481,7 +491,7 @@ sub make_representative_fax ($) {
         # Now go back over each page and write the appropriate footer, and save
         # the pages to temporary PBM files whose names we return.
         for (my $i = 0; $i < @pages; ++$i) {
-            $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax}, $msg->{recipient_type});
+            $text = footer_text($i + 1, scalar(@pages), $url, $msg->{recipient_fax}, $msg->{recipient_type}, $msg->{cobrand});
             $f = ($i > 0 ? $footerheight : $firstfooterheight);
             format_text($pages[$i], $text, $x + LMARGIN_CX, TMARGIN_CY + TEXT_CY - $f, TEXT_CX, $f, 0, FONT_SIZE_FOOTER);
             $pages[$i]->setThickness(2);
