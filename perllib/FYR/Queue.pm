@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.289 2009-11-02 15:06:22 louise Exp $
+# $Id: Queue.pm,v 1.290 2009-11-04 11:42:04 louise Exp $
 #
 
 package FYR::Queue;
@@ -1050,7 +1050,7 @@ sub check_token ($$) {
 sub send_user_email ($$$) {
     my ($id, $descr, $mail) = @_;
     my $msg = message($id);
-    my $result = mySociety::EmailUtil::send_email($mail, do_not_reply_sender(), $msg->{sender_email});
+    my $result = mySociety::EmailUtil::send_email($mail, do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), $msg->{sender_email});
     if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
         logmsg($id, 1, "sent $descr mail to $msg->{sender_email}");
     } elsif ($result == mySociety::EmailUtil::EMAIL_SOFT_ERROR) {
@@ -1162,7 +1162,7 @@ sub make_confirmation_email ($;$) {
     }
         
     return mySociety::Email::construct_email({
-            From => [do_not_reply_sender(), 'WriteToThem'],
+            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Please confirm that you want to send a message to $subject_text",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
@@ -1173,12 +1173,42 @@ sub make_confirmation_email ($;$) {
 
 # do_not_reply_sender
 # Return a do-not-reply sender address.
-sub do_not_reply_sender () {
+sub do_not_reply_sender ($cobrand, $cocode) {
     our $s;
-    $s ||= sprintf('%sDO-NOT-REPLY@%s',
+    $s ||= create_do_not_reply_sender($cobrand, $cocode);
+    return $s;
+}
+
+# create_do_not_reply_sender
+# Generate a do-not-reply sender address.
+sub create_do_not_reply_sender($cobrand, $cocode) {
+
+    my $sender = FYR::Cobrand::do_not_reply_sender($cobrand, $cocode);
+    if (!$sender) {
+         $sender = sprintf('%sDO-NOT-REPLY@%s',
                         mySociety::Config::get('EMAIL_PREFIX'),
                         mySociety::Config::get('EMAIL_DOMAIN'));
-    return $s;
+    }
+
+    return $sender;
+}
+
+# email_sender_name
+# Return a sender name for emails.
+sub email_sender_name ($cobrand, $cocode) {
+    our $s_name;
+    $s_name ||= create_email_sender_name($cobrand, $cocode);
+    return $s_name;
+}
+
+# create_email_sender_name
+# Generate a sender name for emails.
+sub create_email_sender_name ($cobrand, $cocode) {
+    my $sender_name = FYR::Cobrand::email_sender_name($cobrand, $cocode);
+    if (!$sender_name) {
+        $sender_name = 'WriteToThem';
+    }
+    return $sender_name;
 }
 
 # send_confirmation_email ID [REMINDER]
@@ -1220,7 +1250,7 @@ sub make_failure_email ($) {
                 . format_email_body($msg);
 
     return ($bounced, mySociety::Email::construct_email({
-            From => [do_not_reply_sender(), 'WriteToThem'],
+            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
@@ -1286,7 +1316,7 @@ sub make_questionnaire_email ($;$) {
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
     return mySociety::Email::construct_email({
-            From => [do_not_reply_sender(), 'WriteToThem'],
+            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
             To => [[$msg->{sender_email}, $msg->{sender_name}]],
             Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
