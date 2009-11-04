@@ -6,14 +6,14 @@
     <?=$values['date']?></b>
   </div>
   <div id="preview_from">
-    <?=$values['name']?><br>
-    <?=$values['writer_address1']?><br>
-    <?=$values['writer_address2']?><? if ($values['writer_address2']) print "<br>";?>
-    <?=$values['writer_town']?><br>
-    <?=$values['state']?><? if ($values['state']) print "<br>";?>
-    <?=$values['pc']?><br><br>
-    <?=$values['writer_email']?><br>
-    <?=$values['writer_phone']?>
+    <?=htmlspecialchars($values['name'])?><br>
+    <?=htmlspecialchars($values['writer_address1'])?><br>
+    <?=htmlspecialchars($values['writer_address2'])?><? if ($values['writer_address2']) print "<br>";?>
+    <?=htmlspecialchars($values['writer_town'])?><br>
+    <?=htmlspecialchars($values['state'])?><? if ($values['state']) print "<br>";?>
+    <?=htmlspecialchars($values['pc'])?><br><br>
+    <?=htmlspecialchars($values['writer_email'])?><br>
+    <?=htmlspecialchars($values['writer_phone'])?>
   </div>
   <p><?=str_replace("\n", "<br>\n", htmlspecialchars($values['body_indented']))?></p>
 </div>
