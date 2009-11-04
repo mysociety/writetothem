@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.290 2009-11-04 11:42:04 louise Exp $
+# $Id: Queue.pm,v 1.291 2009-11-04 12:17:23 louise Exp $
 #
 
 package FYR::Queue;
@@ -1173,7 +1173,8 @@ sub make_confirmation_email ($;$) {
 
 # do_not_reply_sender
 # Return a do-not-reply sender address.
-sub do_not_reply_sender ($cobrand, $cocode) {
+sub do_not_reply_sender {
+    my ($cobrand, $cocode) = @_;
     our $s;
     $s ||= create_do_not_reply_sender($cobrand, $cocode);
     return $s;
@@ -1181,8 +1182,8 @@ sub do_not_reply_sender ($cobrand, $cocode) {
 
 # create_do_not_reply_sender
 # Generate a do-not-reply sender address.
-sub create_do_not_reply_sender($cobrand, $cocode) {
-
+sub create_do_not_reply_sender {
+    my ($cobrand, $cocode) = @_;
     my $sender = FYR::Cobrand::do_not_reply_sender($cobrand, $cocode);
     if (!$sender) {
          $sender = sprintf('%sDO-NOT-REPLY@%s',
@@ -1195,7 +1196,8 @@ sub create_do_not_reply_sender($cobrand, $cocode) {
 
 # email_sender_name
 # Return a sender name for emails.
-sub email_sender_name ($cobrand, $cocode) {
+sub email_sender_name {
+    my ($cobrand, $cocode) = @_;
     our $s_name;
     $s_name ||= create_email_sender_name($cobrand, $cocode);
     return $s_name;
@@ -1203,7 +1205,8 @@ sub email_sender_name ($cobrand, $cocode) {
 
 # create_email_sender_name
 # Generate a sender name for emails.
-sub create_email_sender_name ($cobrand, $cocode) {
+sub create_email_sender_name {
+    my ($cobrand, $cocode) = @_;
     my $sender_name = FYR::Cobrand::email_sender_name($cobrand, $cocode);
     if (!$sender_name) {
         $sender_name = 'WriteToThem';
