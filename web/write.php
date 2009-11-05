@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.145 2009-11-05 11:19:22 louise Exp $
+ * $Id: write.php,v 1.146 2009-11-05 11:58:33 louise Exp $
  *
  */
 
@@ -71,6 +71,7 @@ function verify_rep_postcode($postcode, $rep_info) {
     /* Verify that representative represents this postcode */
     global $fyr_postcode_editable;
     global $verify_voting_area_map;   
+    global $cobrand, $cocode;
 
     $verify_voting_area_map = mapit_get_voting_areas($postcode);
     if (is_array($verify_voting_area_map))
@@ -80,8 +81,9 @@ function verify_rep_postcode($postcode, $rep_info) {
 
     if (!$fyr_postcode_editable) {
         if (!in_array($rep_info['voting_area'], $verify_voting_areas)) {
+           $url = cobrand_url($cobrand, "/", $cocode);
            template_show_error("There's been a mismatch error.  Sorry about
-               this, <a href=\"/\">please start again</a>.");
+               this, <a href=\"$url\">please start again</a>.");
         }
     }
 
@@ -795,8 +797,9 @@ if ($fyr_group_msg) {
         $eb_area_info = mapit_get_voting_area_info($eb_id);
         mapit_check_error($eb_area_info);
     } else {
+        $url = cobrand_url($cobrand, '/', $cocode);
         template_show_error("There's been a mismatch error.  Sorry about
-               this, <a href=\"/\">please start again</a>.");
+               this, <a href=\"$url\">please start again</a>.");
     }
 
      if (array_key_exists($fyr_type, $voting_areas)) {
