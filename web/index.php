@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.75 2009-11-03 14:38:19 louise Exp $
+ * $Id: index.php,v 1.76 2009-11-05 12:36:26 louise Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -79,14 +79,6 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     return $form;
 }
 
-$cobrand_page = get_http_var("cobrand_page");
-if ($cobrand && $cobrand_page) {
-    $text = cobrand_page($cobrand, $cobrand_page);
-    if ($text) {
-	print $text; 
-        exit;   
-    }
-}
 
 if ($cobrand) {   
     $cocode = cobrand_force_default_cocode($cobrand, $cocode);
