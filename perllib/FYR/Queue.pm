@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.292 2009-11-05 09:34:51 louise Exp $
+# $Id: Queue.pm,v 1.293 2009-11-05 10:56:27 louise Exp $
 #
 
 package FYR::Queue;
@@ -1020,8 +1020,10 @@ sub check_token ($$) {
     return undef if ($token !~ m#^[2-7a-z]{20,}$#);
     
     $word = $token_wordmap{$word} if (exists($token_wordmap{$word}));
-
-    my ($rand, $enc) = unpack('na*', Convert::Base32::decode_base32($token));
+    my $rand;
+    my $enc;
+    eval { ($rand, $enc) = unpack('na*', Convert::Base32::decode_base32($token));};
+    return undef if $@;
 
     my $c = Crypt::CBC->new({
                     key => $word . FYR::DB::secret(),
