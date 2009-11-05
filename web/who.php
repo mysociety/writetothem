@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.115 2009-11-03 14:38:19 louise Exp $
+ * $Id: who.php,v 1.116 2009-11-05 12:09:26 louise Exp $
  *
  */
 
@@ -26,7 +26,12 @@ if ($fyr_postcode == '') {
     exit();
 }
 
-$area_types = fyr_parse_area_type_list(get_http_var('a'));
+$a_forward = get_http_var('a');
+if ($cobrand) {
+    $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
+}
+
+$area_types = fyr_parse_area_type_list($a_forward);
 
 debug("FRONTEND", "postcode is $fyr_postcode");
 debug_timestamp();
