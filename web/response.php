@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: response.php,v 1.9 2009-11-03 14:38:19 louise Exp $
+ * $Id: response.php,v 1.10 2009-11-05 10:46:15 louise Exp $
  * 
  */
 
@@ -41,7 +41,8 @@ $values = array(
     'first_time_yes' => "\"$yes_url\"",
     'first_time_no' => "\"$no_url\"",
     'cobrand' => $cobrand, 
-    'cocode' => $cocode
+    'cocode' => $cocode,
+    'host' => fyr_get_host()
     );
 
 // Look up info about the message
