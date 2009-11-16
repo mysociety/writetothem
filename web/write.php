@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.146 2009-11-05 11:58:33 louise Exp $
+ * $Id: write.php,v 1.147 2009-11-16 11:37:58 louise Exp $
  *
  */
 
@@ -216,12 +216,14 @@ function compare_email_addrs($F) {
 
 // Class representing form they enter message of letter in
 function buildWriteForm($options) {
-    $form = new HTML_QuickForm('writeForm', 'post', 'write');
     global $fyr_values, $fyr_postcode, $fyr_who, $fyr_type;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
     global $fyr_postcode_editable, $fyr_group_msg, $fyr_valid_reps;
-    global $rep_text, $cobrand;
+    global $rep_text, $cobrand, $cocode;
 
+    $form_action = cobrand_url($cobrand, '/write', $cocode);
+    $form = new HTML_QuickForm('writeForm', 'post', $form_action);
+    
     if ($fyr_voting_area['name']=='United Kingdom')
         $fyr_voting_area['name'] = 'House of Lords';
  
@@ -337,8 +339,10 @@ END;
 }
 
 function buildPreviewForm($options) {
-    global $fyr_values;
-    $form = '<form method="post" action="write" id="previewForm" name="previewForm">';
+    global $fyr_values, $cobrand, $cocode;
+
+    $form_action = cobrand_url($cobrand, '/write', $cocode);
+    $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
     if ($options['inner_div']){
         $form .= '<div id="buttonbox">';
     }
