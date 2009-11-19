@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.94 2009-11-19 11:12:44 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.95 2009-11-19 11:18:28 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -64,15 +64,15 @@ my %actions_desc = (
     'unit' => 'run the unit tests',
 );
 
-# Configure test harness class
-print "Set up web test harness...\n" if $verbose > 0;
-
 my ($wth, $action, $verbose, $pause, $multispawn) = mySociety::WebTestHarness::Setup({
     actions => \@actions,
     actions_desc => \%actions_desc,
     dbname => 'FYR_QUEUE',
 });
 $multispawn = 2;
+
+# Configure test harness class
+print "Set up web test harness...\n" if $verbose > 0;
 
 # Set up options
 our $base_url;
@@ -113,45 +113,25 @@ our $options = { wth               => $wth,
                  multispawn        => $multispawn, 
                  expected_messages => $expected_messages };
 
-if ($action{'example'}) {
-    print "Sending example message...\n" if $verbose > 0;
-    do_send_example_message();
-    print "Testing ratty blocking message...\n" if $verbose > 0;
-    # do_send_blocked_message depends on do_send_example_message having
-    # been already called, to populate the Ratty example fields table
-    do_send_blocked_message(); 
-    # do_send_group_abuse is also dependent on do_send_example_message
-    do_send_group_abuse();
-
-}
-if ($action{'mistype'}) {
-    print "Testing mistyped postcode...\n" if $verbose > 0;
-    do_test_mistyped_postcode();
-}
-
-if ($action{'bounce'}) {
-    print "Testing bouncing stuff...\n" if $verbose > 0;
-    do_test_bounce_stuff();
-}
-if ($action{'cobrand'}) {
-    print "Sending cobrand message...\n" if $verbose > 0;
-    do_send_cobrand_message();
-}
-if ($action{'lords'}) {
-    print "Sending Lords message...\n" if $verbose > 0;
-    do_send_lords_message();
-}
-if ($action{'fax'}) {
-    print "Sending fax message...\n" if $verbose > 0;
-    do_send_fax_message();
-}
-if ($action{'group'}) {
-    print "Sending group messages...\n" if $verbose > 0;
-    do_send_group_message();
-}
-if ($action{'unit'}) { 
-    print "Running unit tests...\n" if $verbose > 0;
-    do_run_unit_tests();
+foreach (@actions) {
+    next unless $action->{$_};
+    print "\u$actions_desc{$_}\n" if $verbose > 0 && $actions_desc{$_};
+    if ($_ eq 'example') {
+        do_send_example_message();
+        print "Testing ratty blocking message...\n" if $verbose > 0;
+        # do_send_blocked_message depends on do_send_example_message having
+        # been already called, to populate the Ratty example fields table
+        do_send_blocked_message(); 
+        # do_send_group_abuse is also dependent on do_send_example_message
+        do_send_group_abuse();
+    }
+    do_test_mistyped_postcode() if $_ eq 'mistype';
+    do_test_bounce_stuff() if $_ eq 'bounce';
+    do_send_cobrand_message() if $_ eq 'cobrand';
+    do_send_lords_message() if $_ eq 'lords';
+    do_send_fax_message() if $_ eq 'fax';
+    do_send_group_message() if $_ eq 'group';
+    do_run_unit_tests() if $_ eq 'unit';
 }
 
 #print "Sending bouncing message...\n" if $verbose > 0;
