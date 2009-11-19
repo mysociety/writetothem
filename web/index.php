@@ -5,7 +5,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: index.php,v 1.76 2009-11-05 12:36:26 louise Exp $
+ * $Id: index.php,v 1.77 2009-11-19 10:55:19 matthew Exp $
  * 
  */
 require_once "../phplib/fyr.php";
@@ -86,6 +86,10 @@ if ($cobrand) {
 
 $pc = canonicalise_postcode(get_http_var('pc'));
 fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
+if ($new_pc = validate_easily_mistyped_postcode($pc)) {
+    header('Location: ' . url_new('', true, 'pc', $new_pc);
+    exit;
+}
 
 // Redirect from parlparse person identifier
 $person = get_http_var("person");
