@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.95 2009-11-19 11:18:28 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.96 2009-11-19 11:21:08 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -64,7 +64,7 @@ my %actions_desc = (
     'unit' => 'run the unit tests',
 );
 
-my ($wth, $action, $verbose, $pause, $multispawn) = mySociety::WebTestHarness::Setup({
+my ($wth, $action, $verbose, $pause, $multispawn) = mySociety::WebTestHarness::setup({
     actions => \@actions,
     actions_desc => \%actions_desc,
     dbname => 'FYR_QUEUE',
