@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: response.php,v 1.10 2009-11-05 10:46:15 louise Exp $
+ * $Id: response.php,v 1.11 2009-11-19 11:38:18 matthew Exp $
  * 
  */
 
@@ -34,8 +34,8 @@ if ($answer != "yes" && $answer != "no") {
     template_show_error($missing_answer_message);
 }
 
-$yes_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&answer=yes", $cocode);
-$no_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&answer=no", $cocode);
+$yes_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&amp;answer=yes", $cocode);
+$no_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&amp;answer=no", $cocode);
 
 $values = array(
     'first_time_yes' => "\"$yes_url\"",
