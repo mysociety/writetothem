@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.93 2009-10-28 16:02:49 louise Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.94 2009-11-19 11:12:44 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -52,76 +52,27 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
 use FYR::Cobrand;
 
-sub help {
-print <<END
+my @actions = ('example', 'mistype', 'bounce', 'cobrand', 'lords', 'fax', 'group', 'unit');
+my %actions_desc = (
+    'example' => 'send example message successfully, and some example messages blocked by ratty',
+    'mistype' => 'check mistyped postcodes work',
+    'bounce' => 'test autoresponder (TODO: doesn\'t test rep email failure bounces)',
+    'cobrand' => 'send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files',
+    'lords' => 'send example message to a Lord',
+    'fax' => 'send example fax message successfully (no faxes sent 8pm-8am - tests will fail)',
+    'group' => 'send example message to a group of reps',
+    'unit' => 'run the unit tests',
+);
 
-Usage: test-run [OPTION] [ACTION]...
+# Configure test harness class
+print "Set up web test harness...\n" if $verbose > 0;
 
-Actions are a list of tests, run if present in this order:
-    example - send example message successfully, and some example messages blocked by ratty
-    bounce  - test autoresponder (TODO: doesn't test rep email failure bounces)
-    cobrand - send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files
-    lords   - send example message to a Lord
-    fax     - send example fax message successfully (no faxes sent 8pm-8am - tests will fail)
-    group   - send example message to a group of reps
-    unit    - run the unit tests
-If you specify no actions, it will run all of them.
-
-Options are
-    --verbose=n   Choose 0 (no progress), 1 (basic actions), 2 (full debug)
-    --multispawn=n Test concurrency by calling scripts this many times at once (default 2)
-
-END
-}
-
-# Parse command line
-our $verbose = 0; # currently 3 levels: 0, 1 and 2
-our $multispawn = 2;
-our $help;
-if (!GetOptions(
-        'verbose=i' =>  \$verbose,
-        'multispawn=i' => \$multispawn,
-        'help' =>               \$help
-    )) {
-    help();
-    exit(1);
-}
-if ($help) {
-    help();
-    exit(0);
-}
-our %action;
-foreach (@ARGV) {
-    if ($_ eq "example") {
-        $action{'example'} = 1;
-    } elsif ($_ eq "bounce") {
-        $action{'bounce'} = 1;
-    } elsif ($_ eq "cobrand") {
-        $action{'cobrand'} = 1;
-    } elsif ($_ eq "lords") {
-        $action{'lords'} = 1;
-    } elsif ($_ eq "fax"){
-        $action{'fax'} = 1;
-    } elsif ($_ eq "group"){
-        $action{'group'} = 1;
-    } elsif ($_ eq "unit"){
-        $action{'unit'} = 1;
-    } else {
-        help();
-        print "Action '$_' not known\n";
-        exit(0);
-    }
-}
-if (scalar(@ARGV) == 0) {
-    $action{'example'} = 1;
-    $action{'bounce'} = 1;
-    $action{'cobrand'} = 1;
-    $action{'lords'} = 1;
-    $action{'fax'} = 1;
-    $action{'group'} = 1;
-    $action{'unit'} = 1;
-}
-
+my ($wth, $action, $verbose, $pause, $multispawn) = mySociety::WebTestHarness::Setup({
+    actions => \@actions,
+    actions_desc => \%actions_desc,
+    dbname => 'FYR_QUEUE',
+});
+$multispawn = 2;
 
 # Set up options
 our $base_url;
@@ -131,30 +82,21 @@ sub set_base_url($) {
 }
 set_base_url('');
 die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
+
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
-our $httpd_error_log = mySociety::Config::get('HTTPD_ERROR_LOG');
 our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
 our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 #############################################################################
 # Main code
 
-# Configure test harness class
-print "Set up web test harness...\n" if $verbose > 0;
-
-our $wth = new mySociety::WebTestHarness();
-$wth->log_watcher_setup($httpd_error_log);
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
 
 $base_url =~ m#^http://(.+)/?$#;
 $wth->browser_credentials("$1:80", "$1 admin pages", $admin_auth_user, $admin_auth_password);
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
-$wth->database_connect('FYR_QUEUE_');
-$wth->database_drop_reload('../db/schema.sql');
-$wth->database_cycle_sequences(200);
-$wth->email_setup({ eveld_bin => undef, # "$FindBin::Bin/../../services/EvEl/bin/eveld",
-                    log_mailbox => "log_mailbox" });
+
 $wth->fax_setup();
 # Syntax check all .php files
 print "Syntax check all PHP files...\n" if $verbose > 0;
@@ -182,6 +124,11 @@ if ($action{'example'}) {
     do_send_group_abuse();
 
 }
+if ($action{'mistype'}) {
+    print "Testing mistyped postcode...\n" if $verbose > 0;
+    do_test_mistyped_postcode();
+}
+
 if ($action{'bounce'}) {
     print "Testing bouncing stuff...\n" if $verbose > 0;
     do_test_bounce_stuff();
@@ -221,6 +168,7 @@ $wth->fax_check_none_left();
 print "Checking no log file errors at end...\n" if $verbose > 1;
 $wth->log_watcher_check();
 print "Everything completed successfully\n";
+
 #############################################################################
 
 sub do_send_example_message {
@@ -924,6 +872,16 @@ sub do_run_unit_tests {
     runtests( @testfiles ); 
 }
 
+#############################################################################
+
+sub do_test_mistyped_postcode {
+    $wth->browser_get($base_url);
+    $wth->browser_check_contents($expected_messages->{enter_postcode});
+    $wth->browser_submit_form(
+        with_fields => { pc => 'SWIA IAA' },
+    );
+    $wth->browser_check_contents($expected_messages->{select_rep});
+}
 
 #############################################################################
 
