@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.147 2009-11-16 11:37:58 louise Exp $
+ * $Id: write.php,v 1.148 2009-11-19 11:35:14 matthew Exp $
  *
  */
 
@@ -320,7 +320,7 @@ END;
 
     add_all_variables_hidden($form, $fyr_values, $options);
     if (cobrand_display_spellchecker($cobrand)) {
-      $form->addElement("html", '<script type="text/javascript">document.write(\'<tr><td><input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)</td></tr>\')</script>');
+      $form->addElement("html", '<tr><td><script type="text/javascript">document.write(\'<input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)\')</script></td></tr>');
     }
     $preview_text = cobrand_preview_text($cobrand);
     if (!$preview_text) {
