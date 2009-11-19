@@ -27,7 +27,7 @@
 # Via democratic services
 # User correction
 
-my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.96 2009-11-19 11:21:08 matthew Exp $';
+my $rcsid = ''; $rcsid .= '$Id: test-run,v 1.97 2009-11-19 12:36:03 matthew Exp $';
 
 use strict;
 require 5.8.0;
@@ -68,6 +68,7 @@ my ($wth, $action, $verbose, $pause, $multispawn) = mySociety::WebTestHarness::s
     actions => \@actions,
     actions_desc => \%actions_desc,
     dbname => 'FYR_QUEUE',
+    no_validate_html => 1,
 });
 $multispawn = 2;
 
