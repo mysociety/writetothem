@@ -19,16 +19,16 @@ template_draw('header', $values);
 			<strong>make the site better</strong> and help us tell more people about it.
 		</p>
 	</div>
-	<hr />
+	<hr>
 	<form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>">
 		<!--- Tobias, begin replacing here -->
-		<input type="hidden" name="version" value="1.9"  />
-		<input type="hidden" name="sourceidentifier" value="wtt"  />
-		<input type="hidden" name="subgroup" value="0"  />
+		<input type="hidden" name="version" value="1.9">
+		<input type="hidden" name="sourceidentifier" value="wtt">
+		<input type="hidden" name="subgroup" value="0">
 		<table>
 			<colgroup>
-			<col id="col_label" />
-			<col id="col_formelelemt" />
+			<col id="col_label">
+			<col id="col_formelelemt">
 			</colgroup>
 			<tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
 				<td class="us_label">
@@ -43,7 +43,7 @@ template_draw('header', $values);
 					</label>
 					<label>
 						<input type="radio" name="satisfaction" value="95"  id="id_satisfaction_NA"/> don't want to answer
-					</label><br /><br />
+					</label><br><br>
 <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
 			</tr>
 			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
@@ -69,44 +69,44 @@ template_draw('header', $values);
 					<div align="center" id="id_netpromoter">
 						<i> not at all likely</i>
 						<label>
-							<input type="radio" name="netpromoter" value="0" />
+							<input type="radio" name="netpromoter" value="0">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="1" />
+							<input type="radio" name="netpromoter" value="1">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="2" />
+							<input type="radio" name="netpromoter" value="2">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="3" />
+							<input type="radio" name="netpromoter" value="3">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="4" />
+							<input type="radio" name="netpromoter" value="4">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="5" />
+							<input type="radio" name="netpromoter" value="5">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="6" />
+							<input type="radio" name="netpromoter" value="6">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="7" />
+							<input type="radio" name="netpromoter" value="7">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="8" />
+							<input type="radio" name="netpromoter" value="8">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="9" />
+							<input type="radio" name="netpromoter" value="9">
 						</label>
 						<label>
-							<input type="radio" name="netpromoter" value="10" />
+							<input type="radio" name="netpromoter" value="10">
 						</label>
-						<i> extremely likely</i><br />
+						<i> extremely likely</i><br>
 						<i> neutral</i>
-					</div><br />
-<textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea><br />
+					</div><br>
+<textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea><br>
 					<label>
-						<input type="radio" name="netpromoter" value="95" />
+						<input type="radio" name="netpromoter" value="95">
 						don't want to answer
 					</label></td>
 			</tr>
@@ -116,36 +116,36 @@ template_draw('header', $values);
 					</div></td>
 				<td class="us_formelement">
 					<label>
-						<input type="radio" name="referrer" value="1" /> from another mySociety site
-					</label><br />
+						<input type="radio" name="referrer" value="1"> from another mySociety site
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="2" /> from media such as newspapers, etc
-					</label><br />
+						<input type="radio" name="referrer" value="2"> from media such as newspapers, etc
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="3" /> from a search engine (e.g. Google or Yahoo)
-					</label><br />
+						<input type="radio" name="referrer" value="3"> from a search engine (e.g. Google or Yahoo)
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="4" /> recommendation by friends or colleagues
-					</label><br />
+						<input type="radio" name="referrer" value="4"> recommendation by friends or colleagues
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="5" /> from a campaigning website
-					</label><br />
+						<input type="radio" name="referrer" value="5"> from a campaigning website
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="6" /> used this site before
-					</label><br />
+						<input type="radio" name="referrer" value="6"> used this site before
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="9" />
+						<input type="radio" name="referrer" value="9">
 						other 
 					</label>
 					<label>
-						<input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[6].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other" />
-					</label><br />
+						<input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[6].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other">
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="98" /> can't remember
-					</label><br />
+						<input type="radio" name="referrer" value="98"> can't remember
+					</label><br>
 					<label>
-						<input type="radio" name="referrer" value="95" /> don't want to answer
-					</label><br /></td>
+						<input type="radio" name="referrer" value="95"> don't want to answer
+					</label><br></td>
 			</tr>
 			<tr>
 				<td class="us_label">
@@ -156,44 +156,44 @@ template_draw('header', $values);
 						<input type="radio" name="groups" value="2"  id="id_groups_yes_political"/>
 						a political group 
 						<small>(e.g. a party, an union, a civic organisation e.g. for human rights)</small>
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="groups" value="1"  id="id_groups_yes_community"/>
 						a community group 
 						<small>(e.g.a charity, an initiative, a church, a sports club, a volunteer organisation)</small>
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="groups" value="3"  id="id_groups_yes_both"/> both community as well as political group(s)
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="groups" value="0"  id="id_groups_no"/> none of the above
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="groups" value="95"  id="id_groups_NA"/> don't want to answer
-					</label><br /></td>
+					</label><br></td>
 			</tr>
 			<tr>
 				<td class="us_label">
 					<div class="us_label">
-						Apart from your use of this website: Within the last twelve months have you taken part in any broadly political activity? <br />
+						Apart from your use of this website: Within the last twelve months have you taken part in any broadly political activity? <br>
 						<small> (This includes for example demonstrations, signing a petition, contacting a politician, boycotting a product, donating money or displaying a campaign badge)</small>
 					</div></td>
 				<td class="us_formelement">
 					<label>
 						<input type="radio" name="activity" value="2"  id="id_activity_yes_online"/> yes, online
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="activity" value="1"  id="id_activity_yes_offline"/> yes, offline
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="activity" value="3"  id="id_activity_yes_both"/> yes both online as well as offline
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="activity" value="0"  id="id_community_no"/> none of the above
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="activity" value="95"  id="id_community_NA"/> don't want to answer
-					</label><br /></td>
+					</label><br></td>
 			</tr>
 			<tr>
 				<td class="us_label">
@@ -266,7 +266,7 @@ template_draw('header', $values);
 			<tr>
 				<td class="us_label">
 					<div class="us_label">
-						Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br />
+						Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br>
 						<small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
 					</div></td>
 				<td class="us_formelement">
@@ -283,42 +283,42 @@ template_draw('header', $values);
 			<tr id="id_edu_highest" style="display:''">
 				<td class="us_label">
 					<div class="us_label">
-						<i> If you have answered yes to the previous question:</i><br /> Was your highest qualification...
+						<i> If you have answered yes to the previous question:</i><br> Was your highest qualification...
 					</div></td>
 				<td class="us_formelement">
 					<label>
 						<input type="radio" name="education_highest" value="1"  id="id_education_highest_abovedegree"/>
-						at degree level or above<br />
+						at degree level or above<br>
 						<span style="position:relative; left:50px">
 							<small>
 								<span style="position:relative; left:-20px">
 									<i> such as:</i>
-								</span><br />
-								higher degree and postgraduate qualifications <br />
-								first degree (e.g. BA) <br />
-								postgraduate diplomas and certificates (including PGCE) <br />
-								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br /> NVQ or SVQ level 4 or 5</small>
+								</span><br>
+								higher degree and postgraduate qualifications <br>
+								first degree (e.g. BA) <br>
+								postgraduate diplomas and certificates (including PGCE) <br>
+								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br> NVQ or SVQ level 4 or 5</small>
 						</span>
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="education_highest" value="0"  id="id_education_highest_belowdegree"/>
-						below degree level<br />
+						below degree level<br>
 						<span style="position:relative; left:50px">
 							<small>
 								<span style="position:relative; left:-20px">
 									<i> all other qualifications not mentioned above such as:</i>
-								</span><br />
-								diplomas in higher education &amp; other higher education qualifications <br />
-								HNC, HND, Higher level BTEC <br />
-								teaching qualifications for schools or further education (below Degree level standard) <br />
-								nursing, or other medical qualifications not covered above (below Degree level standard) <br />
-								RSA higher diploma <br />
-								NVQ/SVQ level 1, 2 and 3 <br /> A-levels, GCSE</small>
+								</span><br>
+								diplomas in higher education &amp; other higher education qualifications <br>
+								HNC, HND, Higher level BTEC <br>
+								teaching qualifications for schools or further education (below Degree level standard) <br>
+								nursing, or other medical qualifications not covered above (below Degree level standard) <br>
+								RSA higher diploma <br>
+								NVQ/SVQ level 1, 2 and 3 <br> A-levels, GCSE</small>
 						</span>
-					</label><br />
+					</label><br>
 					<label>
 						<input type="radio" name="education_highest" value="95"  id="id_education_highest_NA"/> don't want to answer
-					</label><br /></td>
+					</label><br></td>
 			</tr>
 			<tr>
 				<td class="us_label">
@@ -520,15 +520,15 @@ template_draw('header', $values);
 		<p> Thank you very much! (And I promise, that's the
 			<strong>last question</strong> !)
 		</p>
-		<input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>"  />
-		<input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>"  />
-		<input type="hidden" name="questionnaire_0_yes" value="<?=$values['questionnaire_0_yes']?>"  />
-		<input type="hidden" name="questionnaire_1_no" value="<?=$values['questionnaire_1_no']?>"  />
-		<input type="hidden" name="questionnaire_1_yes" value="<?=$values['questionnaire_1_yes']?>"  />
-		<input type="hidden" name="user_code" value="<?=$values['user_code']?>"  />
-		<input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>"  />
-		<input type="hidden" name="return_url" value="<?=$values['return_url']?>"  />
-		<input type="submit" name="submit_usersurvey" value="Submit survey -- thank you!" />
+		<input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>">
+		<input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>">
+		<input type="hidden" name="questionnaire_0_yes" value="<?=$values['questionnaire_0_yes']?>">
+		<input type="hidden" name="questionnaire_1_no" value="<?=$values['questionnaire_1_no']?>">
+		<input type="hidden" name="questionnaire_1_yes" value="<?=$values['questionnaire_1_yes']?>">
+		<input type="hidden" name="user_code" value="<?=$values['user_code']?>">
+		<input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>">
+		<input type="hidden" name="return_url" value="<?=$values['return_url']?>">
+		<input type="submit" name="submit_usersurvey" value="Submit survey -- thank you!">
 		<div>
 		</div>
 	</form>
