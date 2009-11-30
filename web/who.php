@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: who.php,v 1.116 2009-11-05 12:09:26 louise Exp $
+ * $Id: who.php,v 1.117 2009-11-30 09:26:16 louise Exp $
  *
  */
 
@@ -307,6 +307,7 @@ for your region have informed us that they have divided it into areas, with ';
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
     "reps" => $fyr_representatives,
+    "template" => "who", 
     "headings" => $fyr_headings,
     "error" => $fyr_error,
     "county_note" => $fyr_county_note,
