@@ -7,7 +7,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: confirm.php,v 1.23 2009-11-02 11:40:20 louise Exp $
+ * $Id: confirm.php,v 1.24 2009-12-07 11:20:57 louise Exp $
  * 
  */
 
@@ -43,7 +43,19 @@ if (!$token) {
 
 $result = msg_confirm_email($token);
 if (rabx_is_error($result)) {
-    template_show_error($result->text);
+
+    if ($result->code == FYR_QUEUE_MESSAGE_EXPIRED) {
+        $url = cobrand_url($cobrand, "/", $cocode);
+        $text = <<<EOF
+You took so long to confirm your message that under our privacy policy 
+your message has already been removed from our database. 
+If you'd still like to write a message, you can <a href="$url">try again from the
+beginning
+EOF;
+        template_show_error($text);
+    } else {
+        template_show_error($result->text);
+    }
 }
 if (!$result) {
     template_draw("confirm-trouble", $template_params);

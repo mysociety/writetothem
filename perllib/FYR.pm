@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: FYR.pm,v 1.24 2009-10-28 16:00:09 louise Exp $
+# $Id: FYR.pm,v 1.25 2009-12-07 11:20:54 louise Exp $
 #
 
 use strict;
@@ -47,6 +47,7 @@ use constant MESSAGE_SUSPECTED_ABUSE => 4005;
 use constant GROUP_ALREADY_QUEUED => 4006;
 use constant BAD_DATA_PROVIDED => 4007; # Currently both from client and from server
 use constant REPRESENTATIVE_DELETED => 4008;
+use constant MESSAGE_EXPIRED => 4009;
 
 package FYR::DB;
 

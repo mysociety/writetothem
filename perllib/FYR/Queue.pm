@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.293 2009-11-05 10:56:27 louise Exp $
+# $Id: Queue.pm,v 1.294 2009-12-07 11:20:56 louise Exp $
 #
 
 package FYR::Queue;
@@ -1404,6 +1404,11 @@ again.
 sub confirm_email ($) {
     my ($token) = @_;
     if (my $id = check_token("confirm", $token)) {
+        # Has it been so long that the message has in fact timed out?
+        # If so, return an error message
+        if (grep {$_ eq state($id)} ('failed', 'failed_closed')) {
+            throw FYR::Error("This message has expired", FYR::Error::MESSAGE_EXPIRED);
+        }
         return $id if (state($id) ne 'pending');
         # Check to see if this message belongs to a group - if it does,
         # all the emails in the group can be confirmed
