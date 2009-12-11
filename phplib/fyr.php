@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
- * $Id: fyr.php,v 1.76 2009-12-11 16:33:39 matthew Exp $
+ * $Id: fyr.php,v 1.77 2009-12-11 16:52:30 matthew Exp $
  * 
  */
 
@@ -306,7 +306,7 @@ function fyr_display_advert($values) {
                 #array('gny1', '<h2>Are you a member of a local group&hellip;</h2> &hellip;which uses the internet to coordinate itself, such as a neighbourhood watch? If so, please help the charity that runs WriteToThem by <a href="http://www.groupsnearyou.com/add/about/">adding some information about it</a> to our new site, GroupsNearYou.'),
                 #array('fms0', 'Got a local problem like potholes or flytipping in your street?<br><a href="http://www.fixmystreet.com/">Report it at FixMyStreet</a>'),
                 #array('fms1', '<a href="http://www.fixmystreet.com/">Find out what problems people are reporting in your local area</a>'),
-                array('demclub0', '<h2 style="margin-bottom:0">Help make the next election the most accountable ever</h2> <p style="font-size:120%;margin-top:0.5em;text-align:center;"><a href="http://www.democracyclub.org.uk/">Join Democracy Club</a> and have fun keeping an eye on your election candidates. <a href="http://www.democracyclub.org.uk/">Join now!</a>'),
+                array('demclub0', '<h2 style="margin-bottom:0">Help make the next election the most accountable ever</h2> <p style="font-size:120%;margin-top:0.5em;text-align:center;"><a href="http://www.democracyclub.org.uk/">Join Democracy Club</a> and have fun keeping an eye on your election candidates. <a href="http://www.democracyclub.org.uk/">Sign me up</a>!'),
         );
         if (isset($values['advert'])) {
             $newads = array();
