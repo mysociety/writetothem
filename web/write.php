@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.148 2009-11-19 11:35:14 matthew Exp $
+ * $Id: write.php,v 1.149 2009-12-15 09:36:47 louise Exp $
  *
  */
 
@@ -330,7 +330,7 @@ END;
     if (!$preview_button_text) {   
         $preview_button_text = 'preview your Message';
     }
-    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,"<p class=\"action\">$preview_text"); 
+    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,"<p class=\"action\" id=\"preview-submit\">$preview_text"); 
     $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', $preview_button_text);
     $buttons[3] =& HTML_QuickForm::createElement('static', 'staticpreview', null, "</p>");     
     $form->addGroup($buttons, 'previewStuff', '', '', false);
