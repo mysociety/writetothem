@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.123 2008-06-24 11:50:22 francis Exp $
+ * $Id: admin-fyrqueue.php,v 1.124 2009-12-17 10:25:58 louise Exp $
  * 
  */
 
@@ -31,6 +31,12 @@ function make_mailto_link($email, $subject, $body, $link) {
         "?subject=" . rawurlencode($subject) .
         "&amp;body=" . rawurlencode($body) .
     "\">$link</a> ";
+}
+
+function get_token() {
+    $secret = msg_secret();
+    $token = sha1((http_auth_user() . $secret));
+    return $token;
 }
 
 class ADMIN_PAGE_FYR_QUEUE {
@@ -290,6 +296,7 @@ class ADMIN_PAGE_FYR_QUEUE {
             }
             if (count($messages) > 1) {
 ?><tr><td colspan=9><b>Ticked items:</b>
+        <input name="token" value="<? print get_token(); ?>" type="hidden" />
         <input size="20" name="notebody" type="text" /> 
         <input name="note" value="Note" type="submit" />
         &nbsp; <b>Action:</b>
@@ -339,6 +346,9 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
     function do_actions($id) {
         // Freeze or thaw messages
         $redirect = false;
+        if (get_http_var('token') != get_token()) {
+            return $redirect;
+        }
         if (get_http_var('freeze')) {
             $result = msg_admin_freeze_message($id, http_auth_user());
             msg_check_error($result);
@@ -533,6 +543,7 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
             else
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_wire_emails', 'Hide Emails');
             $form->addElement('hidden', 'id', $id);
+            $form->addElement('hidden', 'token', get_token());
             $form->addGroup($actiongroup, "actiongroup", "",' ', false);
 
             admin_render_form($form);
