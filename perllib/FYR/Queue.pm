@@ -6,7 +6,7 @@
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
 #
-# $Id: Queue.pm,v 1.294 2009-12-07 11:20:56 louise Exp $
+# $Id: Queue.pm,v 1.295 2009-12-17 12:55:37 louise Exp $
 #
 
 package FYR::Queue;
@@ -123,8 +123,10 @@ sub create () {
 }
 
 =item logmsg_handler ID TIME STATE MESSAGE IMPORTANT
-# Default callback for logmsg, so that we can log fyrqd messages to the system log or
-# standard error for easier debugging.
+
+Default callback for logmsg, so that we can log fyrqd messages to the system log or
+standard error for easier debugging.
+
 =cut
 sub logmsg_handler ($$$$$) {
     mySociety::SystemMisc::log_to_stderr(0);
