@@ -1,5 +1,15 @@
 #!/bin/bash
 #
+### BEGIN INIT INFO
+# Provides: fyrqd
+# Required-Start: $local_fs $syslog
+# Required-Stop: $local_fs $syslog
+# Default-Start: 2 3 4 5 
+# Default-Stop: 0 1 6
+# Short-Description: fyrqd is a daemon running the WriteToThem queue
+# Description: fyrqd run the WriteToThem queue to send emails and faxes to representatives
+### END INIT INFO
+#
 # !!(*= $daemon_name *)!! Start the WriteToThem queue daemon
 
 NAME=!!(*= $daemon_name *)!!
