@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: write.php,v 1.149 2009-12-15 09:36:47 louise Exp $
+ * $Id: write.php,v 1.150 2010-01-05 16:05:55 matthew Exp $
  *
  */
 
@@ -631,7 +631,7 @@ function rabx_mail_error_msg($code, $text) {
         $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>."; 
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
-        $error_msg = "Sorry, an error has occured. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";
+        $error_msg = "Sorry, an error has occurred. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";
     }  
     return $error_msg;
 }

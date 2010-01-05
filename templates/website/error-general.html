@@ -5,4 +5,20 @@
 
 <p align="center"><?=$values['error_message'] ?></p>
 
+<?
+
+if (isset($_POST['mysociety_serialized_variables'])) {
+    include_once '../phplib/forms.php';
+    $saved_values = get_all_variables();
+    if (isset($saved_values['body'])) {
+        print '<p><strong>Here is the contents of your message</strong> &ndash;
+please copy and paste into a different application such as Word or Notepad
+to be sure you do not lose your message:</p> <p style="margin-left: 2em;">';
+        print str_replace("\n", "<br>\n", htmlspecialchars($saved_values['body']));
+        print '</p>';
+    }
+}
+
+?>
+
 <? template_draw('footer', $values); ?>
