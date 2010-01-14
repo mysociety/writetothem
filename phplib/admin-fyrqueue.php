@@ -6,7 +6,7 @@
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
- * $Id: admin-fyrqueue.php,v 1.124 2009-12-17 10:25:58 louise Exp $
+ * $Id: admin-fyrqueue.php,v 1.125 2010-01-14 14:38:36 matthew Exp $
  * 
  */
 
@@ -658,6 +658,7 @@ There's a copy of your message below, so you can send it another way, if you lik
                     $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Fatal Delivery Error, but should retry with same details');
                     $form->addGroup($bouncegroup, "bouncegroup", "Which kind of bounce message is this?",' ', false);
                     $form->addElement('hidden', 'id', $id);
+                    $form->addElement('hidden', 'token', get_token());
                     admin_render_form($form);
                 }
             }
