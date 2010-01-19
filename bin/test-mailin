@@ -5,7 +5,7 @@
 # for the test harness to access.
 # 
 # Hook this up with something like this in /etc/aliases...
-#   fyrharness: "| /home/francis/devel/mysociety/fyr/bin/test-mailin"
+#   fyrharness: "| /home/francis/devel/writetothem/bin/test-mailin"
 # ... or some other appropriate way.
 #
 # Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.

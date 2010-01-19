@@ -13,7 +13,7 @@
 # !!(*= $daemon_name *)!! Start the WriteToThem queue daemon
 
 NAME=!!(*= $daemon_name *)!!
-DAEMON=/data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/fyrqd
+DAEMON=/data/vhost/!!(*= $vhost *)!!/writetothem/bin/fyrqd
 PIDFILE=/data/vhost/!!(*= $vhost *)!!/fyrqd.pid
 DUSER=!!(*= $user *)!!
 

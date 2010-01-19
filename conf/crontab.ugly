@@ -9,13 +9,13 @@
 MAILTO=team@writetothem.com
 
 # Once an hour
-44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/warn-long-queue
+44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/warn-long-queue
 
 # Once a day
-33 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/message-send-graph
-35 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/message-fax-graph
+33 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/message-send-graph
+35 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/message-fax-graph
 
 # Once a week, on Sunday, on one machine
-21 3 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/find-bad-old-messages
-21 4 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/mysociety/fyr/bin/find-long-logs
+21 3 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-bad-old-messages
+21 4 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-long-logs
 

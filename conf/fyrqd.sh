@@ -18,7 +18,7 @@
 name="fyrqd"
 rcvar=`set_rcvar`
 
-command="/home/fyr/mysociety/fyr/bin/fyrqd"
+command="/home/fyr/writetothem/bin/fyrqd"
 command_args="--fax"
 pidfile="/home/fyr/$name.pid"
 
@@ -26,6 +26,6 @@ pidfile="/home/fyr/$name.pid"
 load_rc_config "$name"
 
 : ${fyrqd_user="fyr"}
-: ${fyrqd_chdir="/home/fyr/mysociety/fyr/bin"}
+: ${fyrqd_chdir="/home/fyr/writetothem/bin"}
 : ${command_interpreter="/usr/bin/perl"}
 run_rc_command "$1"
