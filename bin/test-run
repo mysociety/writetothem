@@ -48,7 +48,7 @@ use mySociety::DBHandle qw(dbh);
 use mySociety::WebTestHarness;
 use mySociety::Ratty;
 use FindBin;
-use lib "$FindBin::Bin/../commonlib/perllib";
+use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
 use FYR::Cobrand;
 
