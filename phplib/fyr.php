@@ -14,14 +14,14 @@
 $dir = dirname(__FILE__);
 require_once $dir . "/../conf/general";
 
-require_once $dir . "/../../phplib/error.php";
-require_once $dir . "/../../phplib/ratty.php";
-require_once $dir . "/../../phplib/template.php";
-require_once $dir . "/../../phplib/utility.php";
-require_once $dir . "/../../phplib/auth.php";
-require_once $dir . "/../../phplib/crosssell.php";
-require_once $dir . "/../../phplib/tracking.php";
-require_once $dir . "/../../phplib/votingarea.php";
+require_once $dir . "/../commonlib/phplib/error.php";
+require_once $dir . "/../commonlib/phplib/ratty.php";
+require_once $dir . "/../commonlib/phplib/template.php";
+require_once $dir . "/../commonlib/phplib/utility.php";
+require_once $dir . "/../commonlib/phplib/auth.php";
+require_once $dir . "/../commonlib/phplib/crosssell.php";
+require_once $dir . "/../commonlib/phplib/tracking.php";
+require_once $dir . "/../commonlib/phplib/votingarea.php";
 require_once $dir . "/../phplib/cobrand.php";
 
 // Disable these types (due to elections / pending elections etc.)

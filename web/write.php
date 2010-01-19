@@ -13,10 +13,10 @@
 require_once "../phplib/fyr.php";
 require_once "../phplib/forms.php";
 require_once "../phplib/queue.php";
-require_once "../../phplib/mapit.php";
-require_once "../../phplib/dadem.php";
-require_once "../../phplib/votingarea.php";
-require_once "../../phplib/utility.php";
+require_once "../commonlib/phplib/mapit.php";
+require_once "../commonlib/phplib/dadem.php";
+require_once "../commonlib/phplib/votingarea.php";
+require_once "../commonlib/phplib/utility.php";
 
 
 function fix_dear_lord_address($name) {

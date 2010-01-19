@@ -15,9 +15,9 @@
 
 require_once "../conf/general";
 require_once "../phplib/queue.php";
-require_once "../../phplib/dadem.php";
-require_once "../../phplib/votingarea.php";
-require_once "../../phplib/utility.php";
+require_once "../commonlib/phplib/dadem.php";
+require_once "../commonlib/phplib/votingarea.php";
+require_once "../commonlib/phplib/utility.php";
 
 function error($str) {
     fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");
@@ -31,7 +31,7 @@ function verbose($str) {
 
 $short_opts = '';
 $long_opts = array('help', 'verbose');
-require_once '../../phplib/phpcli.php';
+require_once '../commonlib/phplib/phpcli.php';
 
 $switches = $options[0];
 $args = $options[1];

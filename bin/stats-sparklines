@@ -11,7 +11,7 @@
  * 
  */
 
-require_once '../../phplib/sparkline/lib/Sparkline_Box.php';
+require_once '../commonlib/phplib/sparkline/lib/Sparkline_Box.php';
 require_once '../phplib/questionnaire_report_2005_WMC.php';
 $data = array();
 foreach ($questionnaire_report_2005_WMC as $key => $row) {

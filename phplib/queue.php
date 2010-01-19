@@ -12,7 +12,7 @@
  *
  */
 
-require_once('../../phplib/rabx.php');
+require_once('../commonlib/phplib/rabx.php');
 
 /* msg_get_error R
  * Return FALSE if R indicates success, or an error string otherwise. */

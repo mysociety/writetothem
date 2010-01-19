@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -I../../perllib -I../perllib
+#!/usr/bin/perl -w -I../commonlib/perllib -I../perllib
 #
 # fyrqd:
 # FYR queue daemon.
@@ -15,7 +15,7 @@ require 5.8.0;
 # Horrible boilerplate to set up appropriate library paths.
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use lib "$FindBin::Bin/../../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
 
 use Error qw(:try);
 use Fcntl;

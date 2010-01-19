@@ -6,7 +6,7 @@ use Statistics::Distributions qw(fdistr);
 # Horrible boilerplate to set up appropriate library paths.
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use lib "$FindBin::Bin/../../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
 
 use mySociety::Sundries;
 

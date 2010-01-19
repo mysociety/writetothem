@@ -16,9 +16,8 @@ EXTENSION=".png"
 
 cd `dirname $0`
 cd ../../
-source shlib/deployfns
-
-read_conf fyr/conf/general
+source writeotthem/commonlib/shlib/deployfns
+read_conf writetothem/conf/general
 
 SOURCEO=/tmp/fyr-signup-rate-graph-data-nonwmc-$RANDOM$RANDOM
 SOURCED=/tmp/fyr-signup-rate-graph-data-dispatched-$RANDOM$RANDOM
@@ -87,5 +86,5 @@ END
 #echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
-gnuplot < $GPSCRIPT > fyr/web/fyr-live-signups$EXTENSION
+gnuplot < $GPSCRIPT > writetothem/web/fyr-live-signups$EXTENSION
 

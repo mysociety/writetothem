@@ -11,7 +11,7 @@
  */
 
 require_once "queue.php";
-require_once "../../phplib/utility.php";
+require_once "../commonlib/phplib/utility.php";
 
 $state_help_notes_map = array(
     'new' => 'About to send confirmation email to constituent',

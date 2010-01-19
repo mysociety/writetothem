@@ -15,7 +15,7 @@
 require_once "../conf/general";
 require_once "../phplib/queue.php";
 $long_opts = array('help', 'verbose');
-require_once '../../phplib/phpcli.php';
+require_once '../commonlib/phplib/phpcli.php';
 
 $switches = $options[0];
 $args = $options[1];

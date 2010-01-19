@@ -14,12 +14,12 @@
  */
 
 require_once "../conf/general";
-require_once "../../phplib/survey.php";
-require_once "../../phplib/auth.php";
+require_once "../commonlib/phplib/survey.php";
+require_once "../commonlib/phplib/auth.php";
 
 $short_opts = '';
 $long_opts = array();
-require_once '../../phplib/phpcli.php';
+require_once '../commonlib/phplib/phpcli.php';
 
 if (count($args) != 2) {
     print "Specify email as only argument\n";

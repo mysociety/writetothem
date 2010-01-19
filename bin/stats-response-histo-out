@@ -13,7 +13,7 @@
 
 $bars = 10;
 
-include "fyr/phplib/questionnaire_report_$argv[1]_WMC.php";
+include "writetothem/phplib/questionnaire_report_$argv[1]_WMC.php";
 
 $histvals = array();
 $total_mps = 0;

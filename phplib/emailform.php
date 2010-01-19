@@ -10,7 +10,7 @@
  * 
  */
 
-require_once '../../phplib/evel.php';
+require_once '../commonlib/phplib/evel.php';
 
 /* setup the fields that are wanted on the contact form, 
  *    this will be dynamically built using emailform_entry_output,

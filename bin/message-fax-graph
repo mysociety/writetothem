@@ -15,9 +15,9 @@ EXTENSION=".png"
 
 cd `dirname $0`
 cd ../../
-source shlib/deployfns
+source writeotthem/commonlib/shlib/deployfns
 
-read_conf fyr/conf/general
+read_conf writetothem/conf/general
 
 SOURCEO=/tmp/fyr-fax-rate-graph-data-$RANDOM$RANDOM
 GPSCRIPT=/tmp/fyr-fax-rate-graph-script-$RANDOM$RANDOM
@@ -54,5 +54,5 @@ END
 #echo "gpscript $GPSCRIPT"
 
 export GDFONTPATH=/usr/share/fonts/truetype/ttf-bitstream-vera
-gnuplot < $GPSCRIPT > fyr/web/fyr-live-faxes$EXTENSION
+gnuplot < $GPSCRIPT > writetothem/web/fyr-live-faxes$EXTENSION
 

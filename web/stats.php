@@ -10,8 +10,8 @@
  * 
  */
 require_once '../phplib/fyr.php';
-require_once '../../phplib/mapit.php';
-require_once '../../phplib/dadem.php';
+require_once '../commonlib/phplib/mapit.php';
+require_once '../commonlib/phplib/dadem.php';
 
 # Read parameters
 $type = get_http_var('type');

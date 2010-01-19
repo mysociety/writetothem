@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -I../../perllib -I../../../perllib
+#!/usr/bin/perl -w -I../../perllib -I../../commonlib/perllib
 #
 # queue.cgi:
 # RABX server for FYR queue.

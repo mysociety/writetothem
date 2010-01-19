@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -I../../perllib -I../../../perllib
+#!/usr/bin/perl -w -I../../perllib -I../../commonlib/perllib
 #
 # problemreport:
 # Simple problem report, passing data on to CVSTrac.

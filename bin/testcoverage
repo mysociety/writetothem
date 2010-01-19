@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I../perllib -I../../perllib
+#!/usr/bin/perl -I../perllib -I../commonlib/perllib
 
 # Takes postcodes, one per line, on stdin
 

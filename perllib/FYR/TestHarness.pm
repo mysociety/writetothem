@@ -23,7 +23,7 @@ require 5.8.0;
 
 use FindBin;
 use lib "$FindBin::Bin/../../perllib";
-use lib "$FindBin::Bin/../../../perllib";
+use lib "$FindBin::Bin/../../commonlib/perllib";
 use mySociety::DBHandle qw(dbh);
 use mySociety::Config;  
 mySociety::Config::set_file('../../conf/general');

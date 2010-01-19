@@ -10,8 +10,8 @@
  * 
  */
 require_once '../phplib/fyr.php';
-require_once '../../phplib/mapit.php';
-require_once '../../phplib/dadem.php';
+require_once '../commonlib/phplib/mapit.php';
+require_once '../commonlib/phplib/dadem.php';
 
 $dates = array(
 	'2008-05-10' => array(2596, 2468),

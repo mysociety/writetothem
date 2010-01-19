@@ -29,7 +29,7 @@ my $low = 1000;
 # Horrible boilerplate to set up appropriate library paths.
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use lib "$FindBin::Bin/../../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
 
 use Data::Dumper;
 use POSIX qw(strftime);
