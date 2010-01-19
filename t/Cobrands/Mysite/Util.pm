@@ -25,4 +25,5 @@ sub base_url_for_emails {
 sub url {
     return "/transformed_url";
 }
+
 1;
