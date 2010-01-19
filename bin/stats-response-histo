@@ -16,7 +16,7 @@ EXTENSION=".svg"
 
 cd `dirname $0`
 cd ../../
-source writeotthem/commonlib/shlib/deployfns
+source writetothem/commonlib/shlib/deployfns
 
 read_conf writetothem/conf/general
 
