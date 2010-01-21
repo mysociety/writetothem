@@ -1,0 +1,2 @@
+Add any cobrand-specific Perl modules here as [name of cobrand]/Util.pm
+Tests go in [name of cobrand]/TestHarness.pm
