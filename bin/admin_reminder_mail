@@ -30,7 +30,7 @@ function verbose($str) {
 }
 
 $short_opts = '';
-$long_opts = array('help', 'verbose');
+$long_opts = array('help', 'verbose', 'nobadmps');
 require_once '../commonlib/phplib/phpcli.php';
 
 $switches = $options[0];
@@ -45,8 +45,10 @@ if (count($args) == 1) {
     $email_to = $args[0];
 }
 $verbose = 0;
+$dobadmps = 1;
 foreach ($switches as $switch) {
     if ($switch[0]=='--verbose') $verbose = 1;
+    if ($switch[0]=='--nobadmps') $dobadmps = 0;
     if ($switch[0]=='--help') {
 ?>
 
@@ -58,7 +60,7 @@ to stdout.
 
 --help      Display this help message
 --verbose   Display more information while working
-
+--nobadmps  Don't check for bad MPs
 <?
         exit;
     }
@@ -166,11 +168,13 @@ if ($mail) {
 }
 
 // Find MPs with no responsiveness
-verbose("finding MPs with no positive responses to questionnaires");
-$badmps = `./badmps`;
-if ($badmps) {
-    $mail .= "\n";
-    $mail .= $badmps;
+if ($dobadmps) {
+    verbose("finding MPs with no positive responses to questionnaires");
+    $badmps = `./badmps`;
+    if ($badmps) {
+        $mail .= "\n";
+        $mail .= $badmps;
+    }
 }
 
 // Diligency league tables...
