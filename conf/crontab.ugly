@@ -19,3 +19,7 @@ MAILTO=team@writetothem.com
 21 3 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-bad-old-messages
 21 4 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-long-logs
 
+!!(* if ($hostname eq 'tea' && !$staging) { *)!!
+# Send the admin reminder mail
+30 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/admin_reminder_mail --nobadmps louise@mysociety.org
+!!(* } *)!!
