@@ -91,13 +91,14 @@ Return time, offset to debug time.
 =cut
 my $time_offset;
 sub Time () {
-    if (!defined($time_offset)) {
+    if (mySociety::Config::get('FYR_REFLECT_EMAILS')) {
         $time_offset =
             FYR::DB::dbh()->selectrow_array('
                         select extract(epoch from fyr_current_timestamp()) -
                         extract(epoch from current_timestamp)');
+    } else {
+       $time_offset = 0;
     }
     return time() + int($time_offset);
 }
-
 1;
