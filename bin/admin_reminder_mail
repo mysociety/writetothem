@@ -4,7 +4,7 @@
  * admin_reminder_mail:
  * Works out administrative tasks which need doing on WriteToThem, and 
  * sends email.  By default just a test, specify --realrun to really
- * send to team@writetothem.com
+ * send to the contact address for the site
  *
  * Copyright (c) 2005 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org/
@@ -12,13 +12,11 @@
  * $Id: admin_reminder_mail,v 1.20 2008-09-11 14:08:32 matthew Exp $
  *
  */
-
 require_once "../conf/general";
 require_once "../phplib/queue.php";
 require_once "../commonlib/phplib/dadem.php";
 require_once "../commonlib/phplib/votingarea.php";
 require_once "../commonlib/phplib/utility.php";
-
 function error($str) {
     fwrite(STDERR, "admin_reminder_mail: ERROR: $str\n");
 }
@@ -30,37 +28,31 @@ function verbose($str) {
 }
 
 $short_opts = '';
-$long_opts = array('help', 'verbose', 'nobadmps');
+$long_opts = array('help', 'verbose', 'nobadmps', 'realrun');
 require_once '../commonlib/phplib/phpcli.php';
 
 $switches = $options[0];
 $args = $options[1];
 $realrun = 0;
-if (count($args) > 1) {
-    print "Specify at most one argument.\n";
+if (count($args) > 0) {
+    print "This program does not take arguments, only flags. It sends email to the site contact address.\n";
     exit;
-}
-if (count($args) == 1) {
-    $realrun = 1;
-    $email_to = $args[0];
 }
 $verbose = 0;
 $dobadmps = 1;
 foreach ($switches as $switch) {
     if ($switch[0]=='--verbose') $verbose = 1;
     if ($switch[0]=='--nobadmps') $dobadmps = 0;
+    if ($switch[0]=='--realrun') $realrun = 1;
     if ($switch[0]=='--help') {
 ?>
 
-Usage: admin_reminder_mail [--verbose] [TO_ADDRESS]
-
-TO_ADDRESS is the (comma separated) list of email addresses to send to.
-If no TO_ADDRESS is specified command runs in test mode, and outputs
-to stdout.
+Usage: admin_reminder_mail [--verbose] [--nobadmps] [--realrun]
 
 --help      Display this help message
 --verbose   Display more information while working
 --nobadmps  Don't check for bad MPs
+--realrun   Really send email (when not set, prints to standard out)
 <?
         exit;
     }
@@ -268,14 +260,15 @@ if ($mail) {
 That's all for this week!
 
 -- The Quality Deity";
+$dest = OPTION_CONTACT_EMAIL;
     if ($realrun) {
-        $dest = $email_to;
         verbose("sending email to $dest");
         mail($dest, $subject, $mail,
             "From: The Quality Deity <team@writetothem.com>\n".
             "X-Mailer: PHP/" . phpversion());
     } else {
         verbose("printing email");
+        print "To: $dest\n\n"; 
         print "Subject: $subject\n\n";
         print $mail;
     }
