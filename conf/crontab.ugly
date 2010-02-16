@@ -21,5 +21,6 @@ MAILTO=team@writetothem.com
 
 !!(* if ($hostname eq 'tea' && !$staging) { *)!!
 # Send the admin reminder mail
-30 9 * * 4 !!(*= $user *)!! cd /data/vhost/!!(*= $vhost *)!!/writetothem/bin && ./admin_reminder_mail --nobadmps louise@mysociety.org
+30 9 * * 4 !!(*= $user *)!! cd /data/vhost/!!(*= $vhost *)!!/writetothem/bin && ./admin_reminder_mail --nobadmps 
+local@guardian.co.uk
 !!(* } *)!!
