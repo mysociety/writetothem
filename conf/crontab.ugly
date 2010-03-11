@@ -6,7 +6,11 @@
 #
 # $Id: crontab.ugly,v 1.8 2009-04-30 11:43:52 louise Exp $
 
+!!(* if ($hostname eq 'tea' && !$staging) { *)!!
+MAILTO=cities@writetothem.com
+!!(* } else { *)!!
 MAILTO=team@writetothem.com
+!!(* } *)!!
 
 # Once an hour
 44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/warn-long-queue
