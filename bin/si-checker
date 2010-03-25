@@ -1,0 +1,23 @@
+#!/usr/bin/python
+#
+# si-checker:
+#  Just grab a lot of SIs from OPSI and list the ones that look boundary-ish
+#  Yes, this does appear to be the best way to check you have everything,
+#  and still might miss something. Hooray.
+
+import urllib
+import urlparse
+import re
+import sys
+
+for y in range(2005, 2011):
+    index_url = 'http://opsi.gov.uk/si/si-%d-index' % y
+    index = urllib.urlopen(index_url).read()
+    pages = re.findall('/si/si%d\d\d' % y, index)
+    for p in pages:
+        page_url = urlparse.urljoin(index_url, p)
+        page = urllib.urlopen(page_url).read()
+        sis = re.findall('<span class="siNumber">No\. (\d+).*?<\/span>\s*<span class="siTitle">(.*?)<\/span>(?s)', page)
+        for si in sis:
+            if re.search('Electoral (Change|Amendment)|Related Alteration|Structural Change|(Years|Scheme) (of|for) Elections|Parliamentary Constituenc', si[1]):
+                print si
