@@ -32,12 +32,14 @@ my $country = '';
 my $exceptions = '';
 my $only = '';
 my $status = '';
+my $commit = 0;
 unless (GetOptions(
-        'type=s' => \$type,
-	'country:s' => \$country,
-	'exceptions:s' => \$exceptions,
-	'only:s' => \$only,
-	'status=s' => \$status)
+    'type=s' => \$type,
+    'country:s' => \$country,
+    'exceptions:s' => \$exceptions,
+    'only:s' => \$only,
+    'commit' => \$commit,
+    'status=s' => \$status)
     && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
     && $status =~ /^(pending|recent|none)$/) {
     print <<EOF;
@@ -45,8 +47,8 @@ unless (GetOptions(
      checks both the area and its parent, so often you could do either e.g.
      COI or COP, but for clarity use the ones in this list)
 	 COI - Isles of Scilly
-	 CTY - 34 county councils
-	 DIS - 238 district councils
+	 CTY - 27 county councils
+	 DIS - 201 district councils
 	 EUR - 12 European regions
 	 LAC - 14 London Assembly areas
 	 LBO - 33 London boroughs (32 + City)
@@ -54,12 +56,13 @@ unless (GetOptions(
 	 MTD - 36 Metropolitan Districts
 	 NIE - 18 Northern Ireland Assembly
 	 SPC - 73 Scottish Parliament
-	 UTA - 100 Unitary Authorities (46 E, 32 S, 22 W)
+	 UTA - 109 Unitary Authorities (55 E, 32 S, 22 W)
 	 WAC - 40 Welsh Assembly
-	 WMC - 646 MPs
+	 WMC - 650 MPs
 --country - one letter if type is UTA, to turn off only Scotland or Wales.
 --exceptions - names or area IDs, comma separated, to exempt.
 --status should be pending, recent, or none to turn them back on.
+--commit - Actually update the live database.
 EOF
     exit 1;
 }
@@ -70,6 +73,8 @@ my %only = map { $_ => 1 } split /,/, $only;
 $only =~ s/,/|/g;
 
 $status .= '_election' unless $status eq 'none';
+
+print "DRY RUN\n" unless $commit;
 
 my $ids = mySociety::MaPit::get_areas_by_type($type);
 my $areas_info = mySociety::MaPit::get_voting_areas_info($ids);
@@ -83,7 +88,7 @@ foreach (@$ids) {
     my $curr_status = mySociety::DaDem::get_area_status($_);
     next if $curr_status eq $status;
     print "Setting $_ ($name) to $status\n";
-    mySociety::DaDem::admin_set_area_status($_, $status);
+    mySociety::DaDem::admin_set_area_status($_, $status) if $commit;
     $count++;
 }
 print "\nMade $count changes\n";
