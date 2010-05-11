@@ -198,7 +198,7 @@ foreach ($va_display_order as $va_type) {
         if ($rep_count && $rep_counts[0]>1 && ! $skip_write_all) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
-	if ($rep_count)
+        if ($rep_count)
             $text .= display_reps($va_type[0], $representatives[0], $va_info[0], array());
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
@@ -245,7 +245,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
         $text .= display_reps($va_type, $representatives, $va_info, array());
 
         if ($va_type == 'WMC') {
-	    if ($rep_count)
+            if ($rep_count)
                 $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
             # .maincol / .firstcol have margin-bottom set to none, override
             $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
