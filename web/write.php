@@ -406,7 +406,7 @@ function renderForm($form, $pageName, $options)
 
     $prime_minister = false;
     global $fyr_preview, $fyr_representative, $fyr_voting_area, $fyr_date;
-    if ($fyr_values['who'] == 26413) { # Hardcoded Gordon Brown
+    if ($fyr_values['who'] == 47292) { # Hardcoded
         $prime_minister = true;
     }
 
