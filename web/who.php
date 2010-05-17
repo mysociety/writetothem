@@ -209,8 +209,9 @@ foreach ($va_display_order as $va_type) {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
         }
         if ($va_type[1] == 'SPE') {
-            $text .= '; if you are writing on a <strong>constituency matter</strong>, ideally
-write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs';
+            $text .= '; if you are writing on a constituency matter or similar <strong>local or personal problem</strong>, please
+write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs.
+Only <strong>one</strong> MSP is allowed to help you at a time';
 }
         $text .= '.</p>';
         
@@ -331,6 +332,13 @@ function write_all_link($va_type, $rep_desc_plural) {
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
         $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+        if ($va_type == 'SPE') {
+            $a .= ' <small>(only use this option if you are writing to your
+MSPs about <strong>voting issues or other issues concerning matters in the
+Scottish Parliament</strong>. If you have a constituency matter or similar
+local or personal problem, please write to your constituency MSP above, or
+pick just one of your regional MSPs.)</small>';
+        }
     }
     return $a;
 
