@@ -103,20 +103,20 @@ if (isset($values['representative']['parlparse_person_id'])) {
 }
 
 if ($values['group_msg'] && $values['any_via']) {
-    echo '<li>We do not have direct contact details for some of your ',
+    echo '<li><strong>We do not have direct contact details for some of your ',
         $values['voting_area']['rep_name_plural'], ' so your message to them
 will be sent via the internal mail systems of the body to which they
-were elected.';
+were elected.</strong>';
 }
 
 if ($values['representative']['method'] == 'via') {
-    echo '<li>We do not have direct contact details for ', $values['representative']['name'], ', ';
+    echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
     if ($values['representative']['type'] == 'HOC') {
         echo 'so we will send your message via the central House of Lords fax machine.';
     } else {
         echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
     }
-    echo '</li>';
+    echo '</strong></li>';
 }
 
 echo '</ul>';
