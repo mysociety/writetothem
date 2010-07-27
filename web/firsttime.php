@@ -38,7 +38,8 @@ $values['cobrand'] = $cobrand;
 // Demographic survey
 list($values['user_code'], $values['auth_signature']) = survey_sign_email_address($values['sender_email']);
 $done_survey = survey_check_if_already_done($values['user_code'], $values['auth_signature']);
-$rand = rand(0, 4);
+//$rand = rand(0, 4); // high rate when want lots of data
+$rand = rand(0, 99); // low rate when not actively doing research
 if (!$done_survey && $rand == 0 && cobrand_display_survey($cobrand)) {
     $values['return_url'] = OPTION_BASE_URL . htmlspecialchars($_SERVER['REQUEST_URI']);
     template_draw("survey-questions", $values);
