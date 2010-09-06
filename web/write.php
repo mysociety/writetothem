@@ -833,7 +833,7 @@ if ($fyr_group_msg) {
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
     $area_representatives = array($va_id => $area_representatives);
-    euro_check($area_representatives, $voting_areas['WMC']);
+    euro_check($area_representatives, $voting_areas);
     $all_representatives = array_values($area_representatives[$va_id]);
     $representatives_info = dadem_get_representatives_info($all_representatives);
     dadem_check_error($representatives_info);
