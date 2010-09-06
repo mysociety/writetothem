@@ -371,7 +371,7 @@ function euro_check(&$area_reps, $vas) {
         $area_id = 11814;
         $meps = array(
             1085 => array( # Chichester
-                2249, 2250, 2658, 2617 # Devon, Cornwall, Plymouth, Torbay
+                2249, 2250, 2658, 2617, 2251 # Devon, Cornwall, Plymouth, Torbay, Isles of Scilly
             ),
             45630 => array( # Girling
                 2226, 2239, 2608, 2642, 2551 # Gloucestershire, Somerset, S Gloucestershire, N Somerset, B&NES
