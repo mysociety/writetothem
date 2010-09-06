@@ -381,7 +381,7 @@ function euro_check(&$area_reps, $vas) {
             ),
         );
     } elseif (isset($area_reps[11804])) { # Eastern Conservative MEPs
-        $area_id = 11809;
+        $area_id = 11804;
         $meps = array(
             45619 => array( # Ford
                 2233, 2228 # Norfolk, Hertfordshire
@@ -429,9 +429,10 @@ function euro_check(&$area_reps, $vas) {
     $keep = array();
     foreach ($meps as $id => $areas) {
         foreach ($vas as $va) {
-            if (in_array($va, $areas))
+            if (in_array($va, $areas)) {
                 $keep[$id] = 1;
-                break 2;
+                break;
+            }
         }
     }
 
