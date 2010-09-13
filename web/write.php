@@ -987,6 +987,7 @@ if ($fyr_group_msg) {
                  $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
             }
             template_draw("error-shame", array("error_message" => $error_msg));
+            exit(1);
         } else {
             template_show_error($success->text);
         } 
