@@ -980,15 +980,16 @@ if ($fyr_group_msg) {
             if (!$error_msg) {
                  $error_msg = bad_contact_error_msg($eb_area_info);
             }
+            template_show_error($error_msg);
         } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
             $error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative);
             if (!$error_msg) { 
                  $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
             }
+            template_draw("error-shame", array("error_message" => $error_msg));
         } else {
-            $error_msg= $success->text;
+            template_show_error($success->text);
         } 
-        template_show_error($error_msg);
     }
 
     //Assemble the name string

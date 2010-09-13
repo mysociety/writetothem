@@ -1,0 +1,8 @@
+<? $values['title'] = "Sorry! Something's gone wrong.";
+    template_draw('header', $values); ?>
+
+<h2>Oh no! What a shame!</h2>
+
+<p align="center"><?=$values['error_message'] ?></p>
+
+<? template_draw('footer', $values); ?>
