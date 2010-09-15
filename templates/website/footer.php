@@ -7,6 +7,7 @@ mySociety</a>.
 <a href="/about-copyright">Data by GovEval</a>.
 <a href="http://www.easynet.net/publicsector/">Powered by Easynet</a>
 <br>
+
 <? $links = array(
     '/about-qa'=>'Help',
     '/about-contact' => 'Contact WriteToThem.com',
@@ -42,6 +43,14 @@ document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/ja
 </script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 2);
+<? 
+if ($values['title'] && preg_match('/Now write your message to/', $values['title'])){
+  $values['tracking_title'] = 'Now write your message';
+}else{
+  $values['tracking_title'] = $values['title'];
+}
+?>
+piwikTracker.setDocumentTitle("<?php echo $values['tracking_title'] ?>");
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
