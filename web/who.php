@@ -42,7 +42,6 @@ fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been ty
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
-$wmc = $voting_areas['WMC'];
 
 // Limit to specific types of representatives
 $fyr_all_url = null;
@@ -92,7 +91,7 @@ $representatives_info = dadem_get_representatives_info($all_representatives);
 dadem_check_error($representatives_info);
 debug_timestamp();
 
-$meps_hidden = euro_check($area_representatives, $wmc);
+$meps_hidden = euro_check($area_representatives, $voting_areas);
 
 // For each voting area in order, find all the representatives.  Put
 // descriptive text and form text in an array for the template to

@@ -136,7 +136,7 @@ function shame_error_msg($fyr_voting_area, $fyr_representative) {
      * requested not to be contacted */
     global $fyr_postcode;
     if ($fyr_voting_area['type'] == 'WMC') {
-        $url = 'http://findyourmp.parliament.uk/hcoi/hcoiSearch.php?postcode=' . urlencode($fyr_postcode);
+        $url = 'http://findyourmp.parliament.uk/postcodes/' . urlencode(str_replace(' ', '', $fyr_postcode));
         $error_msg = <<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
@@ -833,7 +833,7 @@ if ($fyr_group_msg) {
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
     $area_representatives = array($va_id => $area_representatives);
-    euro_check($area_representatives, $voting_areas['WMC']);
+    euro_check($area_representatives, $voting_areas);
     $all_representatives = array_values($area_representatives[$va_id]);
     $representatives_info = dadem_get_representatives_info($all_representatives);
     dadem_check_error($representatives_info);
@@ -980,15 +980,17 @@ if ($fyr_group_msg) {
             if (!$error_msg) {
                  $error_msg = bad_contact_error_msg($eb_area_info);
             }
+            template_show_error($error_msg);
         } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
             $error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative);
             if (!$error_msg) { 
                  $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
             }
+            template_draw("error-shame", array("error_message" => $error_msg));
+            exit(1);
         } else {
-            $error_msg= $success->text;
+            template_show_error($success->text);
         } 
-        template_show_error($error_msg);
     }
 
     //Assemble the name string

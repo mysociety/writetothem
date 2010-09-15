@@ -363,63 +363,37 @@ function parse_date($date) {
 }
 
 # Special case where MEPs of a party have divided up the region between them
-function euro_check(&$area_reps, $wmc) {
-    #if (!isset($area_reps[11809]) && !isset($area_reps[11814]) && !isset($area_reps[11811])) 
-    if (!isset($area_reps[11811])) 
+function euro_check(&$area_reps, $vas) {
+    if (!isset($area_reps[11811]) && !isset($area_reps[11814]) && !isset($area_reps[11804])) 
         return array();
 
-/*
-    if (isset($area_reps[11814])) {
-        # South West Conservative MEPs
+    if (isset($area_reps[11814])) { # South West Conservative MEPs
         $area_id = 11814;
         $meps = array(
-            1048 => array( # Parish
-                13414,                                            # Devon, Tiverton & Hontion
-                12946,12947,13230,13258,13363,13458,13003,13303, # Dorset
-                12960,13356,13408,13449,13485,                   # Somerset
-                12908,13491,13476,                               # Somerset (were in Avon - Bath, Weston, Woodspring)
-                12964,12965,12966,12967,                         # Bristol - but Bristol NW includes bits of S.Glos, e.g. Filton
-                13178,                                           # Kingswood - S.Glos + part of Bristol
-                13256,                                           # Northavon - S.Glos but includes outskirts of Bristol
-                13438                                            # Wansdyke - most in B&NES, but a bit in S.Glos
-            ),
-            1064 => array( # Jackson
-                13041,13270,13371,13280,13336,13452, # Wiltshire
-                12996,13020,13096,13112,13394,13411, # Gloucestershire
-                12964,12965,12966,12967,             # Bristol
-                13178,                               # Kingswood
-                13256,                               # Northavon
-                13438                                # Wansdyke
-            ),
             1085 => array( # Chichester
-                13062,13257,13300,13499,13493,13087,13501,13409,13417,13419, # Devon, except Tiverton & Honiton
-                13090,13494,13498,13503,13500                                # Cornwall
-            )
+                2249, 2250, 2658, 2617, 2251 # Devon, Cornwall, Plymouth, Torbay, Isles of Scilly
+            ),
+            45630 => array( # Girling
+                2226, 2239, 2608, 2642, 2551 # Gloucestershire, Somerset, S Gloucestershire, N Somerset, B&NES
+            ),
+            45632 => array( # Fox
+                2561, 2245, 2222, 2612, 2555, 2594 # Bristol, Wiltshire, Dorset, Swindon, Bournemouth, Poole
+            ),
         );
-    } elseif (isset($area_reps[11809])) {
-        # West Midland Conservative MEPs
-        $area_id = 11809;
+    } elseif (isset($area_reps[11804])) { # Eastern Conservative MEPs
+        $area_id = 11804;
         $meps = array(
-            1071 => array( # Harbour
-                # Birmingham
-                12920,12921,12922,12923,12924,12925,12926,12927,12928,12929,
-                # Hereford, Leominster, Ludlow, Meriden, Newcastle, Solihull, Stoke, Sutton Coldfield
-                13147,13191,13209,13224,13245,13355,13386,13387,13388,13403
+            45619 => array( # Ford
+                2233, 2228 # Norfolk, Hertfordshire
             ),
-            1088 => array( # Bushill-Matthews
-                # Aldridge, Bromsgrove, Coventry, Nuneaton, Redditch, Rugby, Stratford, Walsall
-                12889,12969,13021,13022,13023,13285,13313,13328,13391,13434,13435,
-                # Warley, Warwick, Warwichshire, West Bromwich, Worcester, Worcestershire, Wyre Forest
-                13440,13443,13274,13454,13455,13477,13233,13463,13483
+            1044 => array( # Sturdy
+                2253, 21070, 2218, 2566, 2583 # Bedford, Central Bedfordshire, Cambridgeshire, Peterborough, Luton
             ),
-            1089 => array( # Bradbourn
-                # Burton, Cannock Chase, Dudley, Halesowen, Lichfield, Shrewsbury, Shropshire, Staffs
-                12974,12982,13047,13048,13124,13197,13350,13268,13369,13379,13378,
-                # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
-                13389,13390,13406,13410,13473,13474,13475,13412
-            )
+            45617 => array( # Van Orden
+                2225, 2241, 2615, 2607 # Essex, Suffolk, Thurrock, Southend-on-Sea
+            ),
         );
-    } else */ if (isset($area_reps[11811])) {
+    } elseif (isset($area_reps[11811])) { # South East Conservative MEPs
         $area_id = 11811;
         $meps = array(
             1072 => array( # Hannan
@@ -453,9 +427,13 @@ function euro_check(&$area_reps, $wmc) {
         );
     }
     $keep = array();
-    foreach ($meps as $id => $wmcs) {
-        if (in_array($wmc, $wmcs))
-            $keep[$id] = 1;
+    foreach ($meps as $id => $areas) {
+        foreach ($vas as $va) {
+            if (in_array($va, $areas)) {
+                $keep[$id] = 1;
+                break;
+            }
+        }
     }
 
     $hidden = array();
@@ -467,4 +445,4 @@ function euro_check(&$area_reps, $wmc) {
     }
     return $hidden;
 }
-?>
+

@@ -17,12 +17,10 @@ questionnaire.
 
 Your feedback will allow us to publish performance tables of the responsiveness
 of all the politicians in the UK. The majority of
-<?=$values['recipient_position_plural']?> respond promptly and diligently to the
-needs and views of <?=$values['their_constituents']?>. They deserve credit and
-respect for their conscientiousness.
-
-Likewise, we're keen to expose the minority of
-<?=$values['recipient_position_plural']?> who don't seem to give a damn.
+<?=$values['recipient_position_plural']?> deserve credit and respect for their
+conscientiousness as they respond promptly and diligently to the needs and
+views of <?=$values['their_constituents']?>. Likewise, we're keen to expose the
+minority of <?=$values['recipient_position_plural']?> who don't.
 
 The letter you sent to your <?=$values['recipient_position']?> will be deleted
 from our database within the next two weeks. Our full privacy policy can be read here:
