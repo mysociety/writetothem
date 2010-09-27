@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WriteToThem.com - Now Check Your Email</title>
 <link rel="stylesheet" type="text/css" href="wtt.css">
-<style type="text/css">@import "animalaid.css";</style>
+<style type="text/css">@import "cobrands/animalaid/animalaid.css";</style>
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <a title="Back to Animal Aid website" href="http://www.animalaid.org.uk/"><img id="cobrand_logo" alt="Return to www.animalaid.org.uk" src="http://www.animalaiduk.com/templates/aa/images/logo.gif"></a>
@@ -19,5 +19,25 @@ print $values['error_msg'];
 <p>You must now click on the link within the email we've just sent you -<br>if you do not, your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> will not be sent.</p>
 <p>(Don't worry - we'll hang on to your message while you're checking your email.)</p>
 </div>
+<?
+if (OPTION_WEB_DOMAIN == 'writetothem.com') {
+?>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.mysociety.org/" :
+"http://piwik.mysociety.org/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 2);
+piwikTracker.setDocumentTitle("Now Check Your Email");
+piwikTracker.trackPageView();
+} catch( err ) {}
+</script><noscript><p><img src="http://piwik.mysociety.org/piwik.php?idsite=2" style="border:0"
+alt=""/></p></noscript>
+<!-- End Piwik Tag -->
+<?
+}
+?>
 </body>
 </html>

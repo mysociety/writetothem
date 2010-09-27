@@ -42,7 +42,6 @@ fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been ty
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 mapit_check_error($voting_areas);
 debug_timestamp();
-$wmc = $voting_areas['WMC'];
 
 // Limit to specific types of representatives
 $fyr_all_url = null;
@@ -92,7 +91,7 @@ $representatives_info = dadem_get_representatives_info($all_representatives);
 dadem_check_error($representatives_info);
 debug_timestamp();
 
-$meps_hidden = euro_check($area_representatives, $wmc);
+$meps_hidden = euro_check($area_representatives, $voting_areas);
 
 // For each voting area in order, find all the representatives.  Put
 // descriptive text and form text in an array for the template to
@@ -198,7 +197,7 @@ foreach ($va_display_order as $va_type) {
         if ($rep_count && $rep_counts[0]>1 && ! $skip_write_all) {
             $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
         }
-	if ($rep_count)
+        if ($rep_count)
             $text .= display_reps($va_type[0], $representatives[0], $va_info[0], array());
         $text .= '<p>';
         if ($va_type[1] == 'LAE') {
@@ -209,8 +208,9 @@ foreach ($va_display_order as $va_type) {
             $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
         }
         if ($va_type[1] == 'SPE') {
-            $text .= '; if you are writing on a <strong>constituency matter</strong>, ideally
-write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs';
+            $text .= '; if you are writing on a constituency matter or similar <strong>local or personal problem</strong>, please
+write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs.
+Only <strong>one</strong> MSP is allowed to help you at a time';
 }
         $text .= '.</p>';
         
@@ -245,7 +245,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
         $text .= display_reps($va_type, $representatives, $va_info, array());
 
         if ($va_type == 'WMC') {
-	    if ($rep_count)
+            if ($rep_count)
                 $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
             # .maincol / .firstcol have margin-bottom set to none, override
             $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
@@ -331,6 +331,13 @@ function write_all_link($va_type, $rep_desc_plural) {
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
         $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+        if ($va_type == 'SPE') {
+            $a .= ' <small>(only use this option if you are writing to your
+MSPs about <strong>voting issues or other issues concerning matters in the
+Scottish Parliament</strong>. If you have a constituency matter or similar
+local or personal problem, please write to your constituency MSP above, or
+pick just one of your regional MSPs.)</small>';
+        }
     }
     return $a;
 
@@ -363,7 +370,7 @@ function col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $repre
         $col_blurb .= rep_text($rep_count, $rep_counts[0], $va_info[0], $eb_info);
     } else {
         $col_blurb .= rep_text($rep_count, $rep_count, $va_info, $eb_info);
-        if (!$va_salaried[$va_type])
+        if (!$va_salaried[$va_type] && $va_info['country']!='S')
             $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
     }
     $col_blurb .= "</p>";

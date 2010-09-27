@@ -4,16 +4,21 @@ template_draw('header', $values);
 ?>
 <div id="survey">
 	<div id="disclaimer">
-		<h1>Thanks again! ... just a few more questions</h1> We (ie. the people from mySociety, the independent non-profit who runs this site) hate to bother you with this but we need to know whether our site is used by a representative share of the population (we would not want to only serve one particular group exclusively). We know we ask some personal stuff but be assured:
-		<ul>
+        <h1>Thanks again! ... just a few more questions</h1> We (ie. the people
+        from mySociety, the independent non-profit which runs this site) hate to
+        bother you with this, but we need to know whether our site is used by a
+        representative share of the population (we would not want to only serve
+        one particular group exclusively). We know we ask some personal stuff
+        but be assured:
+        <ul>
 			<li> The questions from here on are
 			<strong>completely anonymous.</strong>
 			We only record whether you've answered or not. So nobody (not even we) can know how YOU answered.</li>
 			<li>This also means that we cannot connect your answers to whatever you do on our sites.</li>
-			<li>Of course we would like you to answer all questions but you don't have to if you feel its none of our business.</li>
+			<li>Of course we would like you to answer all questions but you don't have to if you feel it's none of our business.</li>
 			<li> These are all the questions.
 			<strong>We won't ask more.</strong>
-			So it should take only 5 minutes.</li>
+			So it should take only 5 or so minutes.</li>
 		</ul>
 		<p> Your feedback will help us
 			<strong>make the site better</strong> and help us tell more people about it.
@@ -22,7 +27,7 @@ template_draw('header', $values);
 	<hr>
 	<form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>">
 		<!--- Tobias, begin replacing here -->
-		<input type="hidden" name="version" value="1.9">
+		<input type="hidden" name="version" value="2.26">
 		<input type="hidden" name="sourceidentifier" value="wtt">
 		<input type="hidden" name="subgroup" value="0">
 		<table>
@@ -30,86 +35,6 @@ template_draw('header', $values);
 			<col id="col_label">
 			<col id="col_formelelemt">
 			</colgroup>
-			<tr id="id_satisfaction_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
-				<td class="us_label">
-					<div class="us_label"> Were you satisfied with the response you got from your representative?
-					</div></td>
-				<td class="us_formelement">
-					<label>
-						<input type="radio" name="satisfaction" value="1"  id="id_satisfaction_yes"/> yes
-					</label>
-					<label>
-						<input type="radio" name="satisfaction" value="0"  id="id_satisfaction_no"/> no
-					</label>
-					<label>
-						<input type="radio" name="satisfaction" value="95"  id="id_satisfaction_NA"/> don't want to answer
-					</label><br><br>
-<textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
-			</tr>
-			<tr id="id_dialogue_line" style="display:<? if(!$values['questionnaire_0_yes']){ echo "none"; } ?>">
-				<td class="us_label">
-					<div class="us_label"> Will you reply to the answer you got from your representative?
-					</div></td>
-				<td class="us_formelement">
-					<label>
-						<input type="radio" name="dialogue" value="1"  id="id_dialogue_yes"/> yes
-					</label>
-					<label>
-						<input type="radio" name="dialogue" value="0"  id="id_dialogue_no"/> no
-					</label>
-					<label>
-						<input type="radio" name="dialogue" value="95"  id="id_dialogue_NA"/> don't want to answer
-					</label></td>
-			</tr>
-			<tr>
-				<td class="us_label">
-					<div class="us_label"> How likely is it that you would recommend this site to a friend or colleague? (assuming they would be interested in such a service)
-					</div></td>
-				<td class="us_formelement">
-					<div align="center" id="id_netpromoter">
-						<i> not at all likely</i>
-						<label>
-							<input type="radio" name="netpromoter" value="0">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="1">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="2">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="3">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="4">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="5">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="6">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="7">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="8">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="9">
-						</label>
-						<label>
-							<input type="radio" name="netpromoter" value="10">
-						</label>
-						<i> extremely likely</i><br>
-						<i> neutral</i>
-					</div><br>
-<textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea><br>
-					<label>
-						<input type="radio" name="netpromoter" value="95">
-						don't want to answer
-					</label></td>
-			</tr>
 			<tr>
 				<td class="us_label">
 					<div class="us_label"> How did you find out about this site?
@@ -147,6 +72,246 @@ template_draw('header', $values);
 						<input type="radio" name="referrer" value="95"> don't want to answer
 					</label><br></td>
 			</tr>
+			<tr>
+				<td class="us_label">
+					<div class="us_label"> How likely is it that you would recommend this site to a friend or colleague? (assuming they would be interested in such a service)
+					</div></td>
+				<td class="us_formelement">
+	<select name="netpromoter" >
+	<option selected="selected" value="please select what applies to you">please select what applies to you</option>
+	<option value="0">0 - not at all likely</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5 - neutral</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10 - extremely likely</option>
+	<option value="95">don't want to answer</option>
+	</select><br />
+	<br />
+	<textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea></td>
+			</tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          We're thinking of adding a new feature so that in the future you could
+          choose whether you wanted your correspondence with your politician to
+          be private, as it is now, or public. Would you ever use this option?
+          </div>
+      </td>
+
+      <td class="us_formelement"><label><input type="radio" name="publication" value="2" id="id_publication_yes">yes</label><br>
+      <label><input type="radio" name="publication" value="1" id="id_publication_yes_private">yes, but only if my name and email address would not be public</label><br>
+      <label><input type="radio" name="publication" value="0" id="id_publication_no">no</label><br>
+      <label><input type="radio" name="publication" value="95" id="id_publication_NA">don't want to answer</label><br></td>
+    </tr>
+
+<? if ($values['questionnaire_0_yes']){ ?>
+    <tr id="id_responsetype_line">
+      <td class="us_label">
+        <div class="us_label">
+          You've said that your representative replied to your message. In what form did your representative reply? <small>If you've got several replies to your message just indicate the format of the first real reply ie. not just an acknowledgement that they got your message.</small>
+        </div>
+      </td>
+
+      <td class="us_formelement"><label><input type="radio" name="responsetype" value="1" id="id_responsetype_email">email</label><br>
+      <label><input type="radio" name="responsetype" value="2" id="id_responsetype_letter">letter</label><br>
+      <label><input type="radio" name="responsetype" value="3" id="id_responsetype_phonecall">phone call</label><br>
+      <label><input type="radio" name="responsetype" value="4" id="id_responsetype_visit">personal visit</label><br>
+      <label><input type="radio" name="responsetype" value="95" id="id_responsetype_NA">don't want to answer</label><br></td>
+    </tr>
+
+			<tr id="id_satisfaction_line">
+				<td class="us_label">
+					<div class="us_label"> Were you satisfied with the response you got from your representative?
+					</div></td>
+				<td class="us_formelement">
+					<label> <input type="radio" name="satisfaction" value="1"  id="id_satisfaction_yes"/> yes </label>
+					<label> <input type="radio" name="satisfaction" value="0"  id="id_satisfaction_no"/> no </label>
+					<label> <input type="radio" name="satisfaction" value="95"  id="id_satisfaction_NA"/> don't want to answer </label><br><br>
+<textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
+			</tr>
+			<tr id="id_dialogue_line">
+				<td class="us_label">
+					<div class="us_label"> Will you reply to the answer you got from your representative?
+					</div></td>
+				<td class="us_formelement">
+					<label> <input type="radio" name="dialogue" value="1"  id="id_dialogue_yes"/> yes </label>
+					<label> <input type="radio" name="dialogue" value="0"  id="id_dialogue_no"/> no </label>
+					<label> <input type="radio" name="dialogue" value="95"  id="id_dialogue_NA"/> don't want to answer </label>
+                </td>
+			</tr>
+<? } ?>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          Why did you contact your representative?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="messagefunction">
+        <option selected="selected" value="please select"> please select </option> 
+        <option value="1"> to express an opinion </option> 
+        <option value="2"> to seek information </option> 
+        <option value="3"> to seek help on a problem you have </option> 
+        <option value="4"> for some other reason </option> 
+        <option value="94"> don't know </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          Which of these general topics best describes what your message to your representative was about?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="messagecontent">
+        <option selected="selected" value="please select"> please select </option> 
+        <option value="10"> defence and foreign affairs </option> 
+        <option value="15"> democracy &amp; civil rights </option> 
+        <option value="20"> environment </option> 
+        <option value="25"> economic &amp; finance </option> 
+        <option value="30"> education </option> 
+        <option value="35"> (un)employment </option> 
+        <option value="40"> health </option> 
+        <option value="45"> family </option> 
+        <option value="50"> housing </option> 
+        <option value="55"> law and order </option> 
+        <option value="60"> planning </option> 
+        <option value="65"> transport </option> 
+        <option value="70"> welfare </option> 
+        <option value="75"> youth </option> 
+        <option value="85"> other </option> 
+        <option value="94"> don't know </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          Which of these categories best describes who was affected by the issue you raised in your message to your representative?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="messageconcern">
+        <option selected="selected" value="please select"> please select </option> 
+        <option value="1"> only yourself or your family </option> 
+        <option value="2"> only other people, but not yourself or your family </option> 
+        <option value="3"> yourself or your family, as well as others like you </option> 
+        <option value="4"> all people in the community </option> 
+        <option value="5"> all people in the nation or all people in the world </option> 
+        <option value="94"> don't know </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          Which party does your representative belong to?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="repparty">
+        <option selected="selected" value="please select"> please select </option> 
+        <option value="10"> Conservative </option> 
+        <option value="15"> Democratic Unionist Party (DUP) </option> 
+        <option value="17"> Green Party </option> 
+        <option value="20"> Independent </option> 
+        <option value="25"> Labour </option> 
+        <option value="30"> Liberal Democrat </option> 
+        <option value="35"> Plaid Cymru - the Party of Wales </option> 
+        <option value="40"> Respect </option> 
+        <option value="45"> Scottish National Party (SNP) </option> 
+        <option value="50"> Sinn F&eacute;in </option> 
+        <option value="55"> Social Democratic and Labour Party </option> 
+        <option value="60"> Ulster Unionist Party (UUP) </option> 
+        <option value="65"> UK Independence Party (UKIP) </option> 
+        <option value="90"> Other </option> 
+        <option value="94"> don't know </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          Is your representative male or female?
+        </div>
+      </td>
+
+      <td class="us_formelement">
+        <label><input type="radio" name="repgender" value="1" id="id_gender_female">female</label>
+        <label><input type="radio" name="repgender" value="0" id="id_gender_male">male</label>
+        <label><input type="radio" name="repgender" value="97" id="id_gender_dontknow">don't know</label>
+        <label><input type="radio" name="repgender" value="95" id="id_gender_NA">don't want to answer</label>
+      </td>
+    </tr>
+
+<? if ($values['questionnaire_1_yes']) { ?>
+    <tr id="id_previouscontact_line">
+      <td class="us_label">
+        <div class="us_label">
+          You've said that this is not the first time you've contacted your representative. The last time you've contacted your representative, how did you approach him or her?
+        </div>
+      </td>
+
+      <td class="us_formelement"><label><input type="radio" name="previouscontact" value="0" id="id_previouscontact_wtt">WriteToThem website</label><br>
+      <label><input type="radio" name="previouscontact" value="1" id="id_previouscontact_email">email</label><br>
+      <label><input type="radio" name="previouscontact" value="2" id="id_previouscontact_letter">letter</label><br>
+      <label><input type="radio" name="previouscontact" value="3" id="id_previouscontact_phonecall">phone call</label><br>
+      <label><input type="radio" name="previouscontact" value="4" id="id_previouscontact_visit">in person</label><br>
+      <label><input type="radio" name="previouscontact" value="9">other</label> <label><input type="text" name="previouscontact_other" value="please specify" size="50" maxlength="500" onclick="this.form.previouscontact[5].checked = true;if (this.value=='please specify') this.value=''" id="id_previouscontact_other"></label><br>
+      <label><input type="radio" name="previouscontact" value="95" id="id_previouscontact_NA">don't want to answer</label><br></td>
+    </tr>
+
+    <tr id="id_usefrequency_line">
+      <td class="us_label">
+        <div class="us_label">
+          Within the last twelve months: How often have you used WriteToThem.com to send a message to your representative(s)?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="usefrequency">
+        <option selected="selected" value="please select what applies to you"> please select what applies to you </option> 
+        <option id="id_usefrequency_0" value="0"> this is the first time in the last 12 months </option> 
+        <option id="id_usefrequency_1" value="1"> about once within the last 12 months </option> 
+        <option id="id_usefrequency_5" value="2"> 2 - 5 times within the last 12 months </option> 
+        <option id="id_usefrequency_9" value="3"> 6 - 10 times within the last 12 months </option> 
+        <option id="id_usefrequency_10" value="4"> more than 10 times within the last 12 months </option> 
+        <option id="id_usefrequency_NA" value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+<? } ?>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          How would you rate your ability to use the Internet?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="internetability">
+        <option selected="selected" value="please select"> please select </option> 
+        <option value="5"> Excellent </option> 
+        <option value="4"> Good </option> 
+        <option value="3"> Fair </option> 
+        <option value="2"> Poor </option> 
+        <option value="1"> Bad </option> 
+        <option value="97"> don't know/can't say </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
 			<tr>
 				<td class="us_label">
 					<div class="us_label"> In the last twelve months have you been involved with a political or a community group, e.g. by being a formal member or by volunteering?
@@ -204,48 +369,15 @@ template_draw('header', $values);
 						<option selected="selected" value="please select what applies to you">
 						please select what applies to you
 						</option>
-						<option value="1">
-						less than 18 years old
-						</option>
-						<option value="2">
-						18-24 years old
-						</option>
-						<option value="3">
-						25-29 years old
-						</option>
-						<option value="4">
-						30-34 years old
-						</option>
-						<option value="5">
-						35-39 years old
-						</option>
-						<option value="6">
-						40-44 years old
-						</option>
-						<option value="7">
-						45-49 years old
-						</option>
-						<option value="8">
-						50-54 years old
-						</option>
-						<option value="9">
-						55-59 years old
-						</option>
-						<option value="10">
-						60-64 years old
-						</option>
-						<option value="11">
-						65-69 years old
-						</option>
-						<option value="12">
-						70-74 years old
-						</option>
-						<option value="13">
-						75 years and older
-						</option>
-						<option value="95">
-						don't want to answer
-						</option>
+						<option value="1"> less than 18 years old </option>
+						<option value="2"> 18-24 years old </option>
+						<option value="3"> 25-34 years old </option>
+						<option value="5"> 35-44 years old </option>
+						<option value="7"> 45-54 years old </option>
+						<option value="9"> 55-64 years old </option>
+						<option value="11"> 65-74 years old </option>
+						<option value="13"> 75 years and older </option>
+						<option value="95"> don't want to answer </option>
 					</select></td>
 			</tr>
 			<tr>
@@ -253,121 +385,54 @@ template_draw('header', $values);
 					<div class="us_label"> Could you please indicate your gender?
 					</div></td>
 				<td class="us_formelement">
-					<label>
-						<input type="radio" name="gender" value="1"  id="id_gender_female"/> female
-					</label>
-					<label>
-						<input type="radio" name="gender" value="0"  id="id_gender_male"/> male
-					</label>
+					<label> <input type="radio" name="gender" value="1"  id="id_gender_female"/> female </label>
+					<label> <input type="radio" name="gender" value="0"  id="id_gender_male"/> male </label>
 					<label>
 						<input type="radio" name="gender" value="95"  id="id_gender_NA"/> don't want to answer
 					</label></td>
 			</tr>
-			<tr>
-				<td class="us_label">
-					<div class="us_label">
-						Do you have any educational, professional, vocational or other work-related qualifications for which you received a certificate?<br>
-						<small> (This includes certificates such as GCSE, A-levels, BA and MA degrees, NVQ/SVQ, BTEC, RSA diplomas, being a chartered accountant or surveyor, nursing or another medical qualification, etc)</small>
-					</div></td>
-				<td class="us_formelement">
-					<label>
-						<input type="radio" name="education_any" value="1"  id="id_education_any_yes"/> yes
-					</label>
-					<label>
-						<input type="radio" name="education_any" value="0"  id="id_education_any_no"/> no
-					</label>
-					<label>
-						<input type="radio" name="education_any" value="95"  id="id_education_any_NA"/> don't want to answer
-					</label></td>
-			</tr>
-			<tr id="id_edu_highest" style="display:''">
-				<td class="us_label">
-					<div class="us_label">
-						<i> If you have answered yes to the previous question:</i><br> Was your highest qualification...
-					</div></td>
-				<td class="us_formelement">
-					<label>
-						<input type="radio" name="education_highest" value="1"  id="id_education_highest_abovedegree"/>
-						at degree level or above<br>
-						<span style="position:relative; left:50px">
-							<small>
-								<span style="position:relative; left:-20px">
-									<i> such as:</i>
-								</span><br>
-								higher degree and postgraduate qualifications <br>
-								first degree (e.g. BA) <br>
-								postgraduate diplomas and certificates (including PGCE) <br>
-								professional qualifications at degree level e.g. graduate member of professional institute, chartered accountant <br> NVQ or SVQ level 4 or 5</small>
-						</span>
-					</label><br>
-					<label>
-						<input type="radio" name="education_highest" value="0"  id="id_education_highest_belowdegree"/>
-						below degree level<br>
-						<span style="position:relative; left:50px">
-							<small>
-								<span style="position:relative; left:-20px">
-									<i> all other qualifications not mentioned above such as:</i>
-								</span><br>
-								diplomas in higher education &amp; other higher education qualifications <br>
-								HNC, HND, Higher level BTEC <br>
-								teaching qualifications for schools or further education (below Degree level standard) <br>
-								nursing, or other medical qualifications not covered above (below Degree level standard) <br>
-								RSA higher diploma <br>
-								NVQ/SVQ level 1, 2 and 3 <br> A-levels, GCSE</small>
-						</span>
-					</label><br>
-					<label>
-						<input type="radio" name="education_highest" value="95"  id="id_education_highest_NA"/> don't want to answer
-					</label><br></td>
-			</tr>
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          What is the last type of educational institution (e.g. school, college or university) that you have attended or which type of educational institution are you attending now?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="education_any">
+        <option selected="selected" value="please select what applies to you"> please select what applies to you </option> 
+        <option value="0"> Primary school or equivalent </option> 
+        <option value="1"> Secondary school or equivalent </option> 
+        <option value="2"> Special school or equivalent </option> 
+        <option value="3"> Sixth form college or equivalent </option> 
+        <option value="4"> Technical college or equivalent </option> 
+        <option value="5"> Further Education College </option> 
+        <option value="6"> Adult Community College </option> 
+        <option value="7"> University or equivalent </option> 
+        <option value="9"> other </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
 			<tr>
 				<td class="us_label">
 					<div class="us_label"> Which of these descriptions best describes your current situation?
 					</div></td>
 				<td class="us_formelement">
 					<select name="lifestage" >
-						<option selected="selected" value="please select what applies to you">
-						please select what applies to you
-						</option>
-						<option value="1">
-						working full time (30 hours a week or more)
-						</option>
-						<option value="2">
-						working part time (8-29 hours a week)
-						</option>
-						<option value="3">
-						retired
-						</option>
-						<option value="4">
-						unemployed
-						</option>
-						<option value="5">
-						permanently sick or disabled
-						</option>
-						<option value="6">
-						in community or military service
-						</option>
-						<option value="7">
-						undergraduate student
-						</option>
-						<option value="8">
-						postgraduate student
-						</option>
-						<option value="9">
-						in full time education (not degree or higher)
-						</option>
-						<option value="10">
-						in part time education (not degree or higher)
-						</option>
-						<option value="11">
-						doing housework, looking after children or other persons
-						</option>
-						<option value="98">
-						none of the above
-						</option>
-						<option value="95">
-						don't want to answer
-						</option>
+						<option selected="selected" value="please select what applies to you"> please select what applies to you </option>
+						<option value="1"> working full time (30 hours a week or more) </option>
+						<option value="2"> working part time (8-29 hours a week) </option>
+						<option value="3"> retired </option>
+						<option value="4"> unemployed </option>
+						<option value="5"> permanently sick or disabled </option>
+						<option value="6"> in community or military service </option>
+						<option value="7"> undergraduate student </option>
+						<option value="8"> postgraduate student </option>
+						<option value="9"> in full time education (not degree or higher) </option>
+						<option value="10"> in part time education (not degree or higher) </option>
+						<option value="11"> doing housework, looking after children or other persons </option>
+						<option value="98"> none of the above </option>
+						<option value="95"> don't want to answer </option>
 					</select></td>
 			</tr>
 			<tr>
@@ -508,6 +573,42 @@ template_draw('header', $values);
 						<input type="radio" name="disability" value="95"  id="id_disability_NA"/> don't want to answer
 					</label></td>
 			</tr>
+
+    <tr>
+      <td class="us_label">
+        <div class="us_label">
+          How would you describe the place where you live?
+        </div>
+      </td>
+
+      <td class="us_formelement"><select name="location">
+        <option selected="selected" value="please select what applies to you"> please select what applies to you </option> 
+        <option value="1"> a big city </option> 
+        <option value="2"> suburbs or outskirts of a big city </option> 
+        <option value="3"> a small city or town </option> 
+        <option value="4"> a country village </option> 
+        <option value="5"> a farm or home in the country </option> 
+        <option value="6"> other </option> 
+        <option value="97"> don't know </option> 
+        <option value="95"> don't want to answer </option>
+      </select></td>
+    </tr>
+
+    <tr>
+      <td class="us_label" colspan="2">
+          <em>Just before we let you go: we are interested in talking to some
+          of you about your experiences in contacting your representative and
+          using this website. Would you be up for this? This could be either by
+          phone, email or in person but we would let you know the details in
+          time and you could say no at any point. If so, would you please send a
+          short email to Tobias Escher who is responsible for this survey? His
+          email address is <a
+          href="mailto:tobias&#64;mysociety.org?subject=WriteToThem%20survey">tobias&#64;mysociety.org</a>.
+          Your help is really appreciated! We don't ask for your email address
+          here so as to be clear that your survey results are completely anonymous.</em>
+      </td>
+    </tr>
+
 			<tr>
 				<td class="us_label">
 					<div class="us_label"> Do you have any other comments (e.g. on the survey, on your usage, etc)?
@@ -517,8 +618,8 @@ template_draw('header', $values);
 			</tr>
 		</table>
 		<!--- Tobias, end replacing here -->
-		<p> Thank you very much! (And I promise, that's the
-			<strong>last question</strong> !)
+		<p> Thank you very much! (And we promise, that was the
+			<strong>last question</strong>!)
 		</p>
 		<input type="hidden" name="recipient_type" value="<?=$values['recipient_type']?>">
 		<input type="hidden" name="questionnaire_0_no" value="<?=$values['questionnaire_0_no']?>">

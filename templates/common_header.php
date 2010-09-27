@@ -24,7 +24,6 @@ if (isset($values['cobrand'])) {
       if (isset($values['spell'])) { ?>
 <script type="text/javascript" src="/jslib/spell/spellChecker.js"></script>
 <?php } ?>
-<script type="text/javascript" src="/js.js"></script>
 </head>
 <body<? if (isset($values['body_id'])) print ' id="' . $values['body_id'] . '"'; ?>><a name="top" id="top"></a>
 <?php if (array_key_exists('header', $values)) {

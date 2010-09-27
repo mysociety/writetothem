@@ -301,12 +301,12 @@ function fyr_display_advert($values) {
                 #array('twfy_alerts0', '<h2>Get emailed every time your MP says something in Parliament</h2> <p style="font-size:150%">Keep an eye on them for free</p> [form]Sign me up![/form]'),
                 #array('twfy_alerts2', '<h2>Wonder what your MP says in Parliament?</h2> <p>Sign up to get emailed when they speak &ndash; find out what they&rsquo;re saying on your behalf!</p> [form]Sign me up![/form]'),
                 #array('hfymp1', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [button]Sign up to HearFromYourMP[/button]'),
-                #array('hfymp2', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [form]Sign up to HearFromYourMP[/form]'),
+                array('hfymp2', '<h2 style="margin-bottom:0">Get email from your MP in the future</h2> <p style="font-size:120%;margin-top:0;">and have a chance to discuss what they say in a public forum [form]Sign up to HearFromYourMP[/form]'),
                 #array('gny0', '<h2>Help us build a map of the world&rsquo;s local communities &ndash;<br><a href="http://www.groupsnearyou.com/add/about/">Add one to GroupsNearYou</a></h2>'),
                 #array('gny1', '<h2>Are you a member of a local group&hellip;</h2> &hellip;which uses the internet to coordinate itself, such as a neighbourhood watch? If so, please help the charity that runs WriteToThem by <a href="http://www.groupsnearyou.com/add/about/">adding some information about it</a> to our new site, GroupsNearYou.'),
                 #array('fms0', 'Got a local problem like potholes or flytipping in your street?<br><a href="http://www.fixmystreet.com/">Report it at FixMyStreet</a>'),
                 #array('fms1', '<a href="http://www.fixmystreet.com/">Find out what problems people are reporting in your local area</a>'),
-                array('demclub0', '<h2 style="margin-bottom:0">Help make the next election the most accountable ever</h2> <p style="font-size:120%;margin-top:0.5em;text-align:center;"><a href="http://www.democracyclub.org.uk/">Join Democracy Club</a> and have fun keeping an eye on your election candidates. <a href="http://www.democracyclub.org.uk/">Sign me up</a>!'),
+                #array('demclub0', '<h2 style="margin-bottom:0">Help make the next election the most accountable ever</h2> <p style="font-size:120%;margin-top:0.5em;text-align:center;"><a href="http://www.democracyclub.org.uk/">Join Democracy Club</a> and have fun keeping an eye on your election candidates. <a href="http://www.democracyclub.org.uk/">Sign me up</a>!'),
         );
         if (isset($values['advert'])) {
             $newads = array();
@@ -363,95 +363,77 @@ function parse_date($date) {
 }
 
 # Special case where MEPs of a party have divided up the region between them
-function euro_check(&$area_reps, $wmc) {
-    #if (!isset($area_reps[11809]) && !isset($area_reps[11814]) && !isset($area_reps[11811])) 
-    if (!isset($area_reps[11811])) 
+function euro_check(&$area_reps, $vas) {
+    if (!isset($area_reps[11811]) && !isset($area_reps[11814]) && !isset($area_reps[11804])) 
         return array();
 
-/*
-    if (isset($area_reps[11814])) {
-        # South West Conservative MEPs
+    if (isset($area_reps[11814])) { # South West Conservative MEPs
         $area_id = 11814;
         $meps = array(
-            1048 => array( # Parish
-                13414,                                            # Devon, Tiverton & Hontion
-                12946,12947,13230,13258,13363,13458,13003,13303, # Dorset
-                12960,13356,13408,13449,13485,                   # Somerset
-                12908,13491,13476,                               # Somerset (were in Avon - Bath, Weston, Woodspring)
-                12964,12965,12966,12967,                         # Bristol - but Bristol NW includes bits of S.Glos, e.g. Filton
-                13178,                                           # Kingswood - S.Glos + part of Bristol
-                13256,                                           # Northavon - S.Glos but includes outskirts of Bristol
-                13438                                            # Wansdyke - most in B&NES, but a bit in S.Glos
-            ),
-            1064 => array( # Jackson
-                13041,13270,13371,13280,13336,13452, # Wiltshire
-                12996,13020,13096,13112,13394,13411, # Gloucestershire
-                12964,12965,12966,12967,             # Bristol
-                13178,                               # Kingswood
-                13256,                               # Northavon
-                13438                                # Wansdyke
-            ),
             1085 => array( # Chichester
-                13062,13257,13300,13499,13493,13087,13501,13409,13417,13419, # Devon, except Tiverton & Honiton
-                13090,13494,13498,13503,13500                                # Cornwall
-            )
+                2249, 2250, 2658, 2617, 2251 # Devon, Cornwall, Plymouth, Torbay, Isles of Scilly
+            ),
+            45630 => array( # Girling
+                2226, 2239, 2608, 2642, 2551 # Gloucestershire, Somerset, S Gloucestershire, N Somerset, B&NES
+            ),
+            45632 => array( # Fox
+                2561, 2245, 2222, 2612, 2555, 2594 # Bristol, Wiltshire, Dorset, Swindon, Bournemouth, Poole
+            ),
         );
-    } elseif (isset($area_reps[11809])) {
-        # West Midland Conservative MEPs
-        $area_id = 11809;
+    } elseif (isset($area_reps[11804])) { # Eastern Conservative MEPs
+        $area_id = 11804;
         $meps = array(
-            1071 => array( # Harbour
-                # Birmingham
-                12920,12921,12922,12923,12924,12925,12926,12927,12928,12929,
-                # Hereford, Leominster, Ludlow, Meriden, Newcastle, Solihull, Stoke, Sutton Coldfield
-                13147,13191,13209,13224,13245,13355,13386,13387,13388,13403
+            45619 => array( # Ford
+                2233, 2228 # Norfolk, Hertfordshire
             ),
-            1088 => array( # Bushill-Matthews
-                # Aldridge, Bromsgrove, Coventry, Nuneaton, Redditch, Rugby, Stratford, Walsall
-                12889,12969,13021,13022,13023,13285,13313,13328,13391,13434,13435,
-                # Warley, Warwick, Warwichshire, West Bromwich, Worcester, Worcestershire, Wyre Forest
-                13440,13443,13274,13454,13455,13477,13233,13463,13483
+            1044 => array( # Sturdy
+                2253, 21070, 2218, 2566, 2583 # Bedford, Central Bedfordshire, Cambridgeshire, Peterborough, Luton
             ),
-            1089 => array( # Bradbourn
-                # Burton, Cannock Chase, Dudley, Halesowen, Lichfield, Shrewsbury, Shropshire, Staffs
-                12974,12982,13047,13048,13124,13197,13350,13268,13369,13379,13378,
-                # Stone, Stourbridge, Tamworth, Telford, Wolverhampton, Wrekin
-                13389,13390,13406,13410,13473,13474,13475,13412
-            )
+            45617 => array( # Van Orden
+                2225, 2241, 2615, 2607 # Essex, Suffolk, Thurrock, Southend-on-Sea
+            ),
         );
-    } else */ if (isset($area_reps[11811])) {
+    } elseif (isset($area_reps[11811])) { # South East Conservative MEPs
         $area_id = 11811;
         $meps = array(
             1072 => array( # Hannan
-                # Arundel & South Downs, Bognor Regis & Littlehampton, Brighton Kemptown, Brighton Pavilion, Hove, Chichester, Eastbourne, Lewes, Mid-Sussex, E Worthing & Shoreham, W Worthing Gosport, E Hants, NE Hants, NW Hants, Havant, New Forest E, New Forest W, Portsmouth N, Portsmouth S, Romsey, Winchester, Isle of Wight (23)
-                12894, 12938, 12962, 12963, 12999, 13059, 13159,
-                13192, 13232, 13067, 13480, 13113, 13063, 13263,
-                13277, 13140, 13251, 13252, 13305, 13495, 13323, 13466, 13496
+                # East Sussex: Brighton Kemptown, Brighton Pavilion, Eastbourne, Hove, Lewes (5)
+                # West Sussex: Arundel & South Downs, Bognor Regis & Littlehampton, Chichester, E Worthing & Shoreham, Mid Sussex, Worthing West (6)
+                # Hampshire: Gosport, E Hants, NE Hants, NW Hants, Havant, New Forest E, New Forest W, Portsmouth N, Portsmouth S, Romsey and Southampton North, Winchester, Isle of Wight (12)
+                65844, 65787, 65714, 65691, 66020,
+                65784, 65841, 65558, 65780, 65999, 65562,
+                65569, 65928, 65556, 65815, 65699, 65729, 65894, 65566, 66014, 65884, 65921, 65791
             ),
             1079 => array( # Elles
-                # Bucks, Berks, Oxon (21)
-                12898, 12899, 12911, 12948, 12972, 12997, 13146,
-                13213, 13234, 13265, 13292, 13293, 13244, 13310,
-                13311, 13354, 13439, 13467, 13470, 13471, 13482
+                # Bucks, Berks, Oxon (7, 8, 6)
+                65739, 65687, 65909, 65801, 65953, 66076, 66010,
+                65697, 65901, 65862, 65973, 65982, 65680, 65552, 65774,
+                66008, 65786, 66060, 65564, 65638, 65622
             ),
             1082 => array( # Deva
-                # Surrey, Horsham, Crawley, Aldershot, Basingstoke, Eastleigh, Fareham, Southampton Itchen, Southampton Test (19)
-                12888, 12906, 13024, 13060, 13066, 13083, 13086,
-                13091, 13121, 13157, 13236, 13315, 13330, 13357,
-                13358, 13376, 13377, 13401, 13472
+                # Surrey (11)
+                # West Sussex: Horsham, Crawley (2)
+                # Hampshire: Aldershot, Basingstoke, Eastleigh, Fareham, Southampton Itchen, Southampton Test (6)
+                65856, 65803, 66062, 65838, 65693, 66005, 65589, 65678, 65942, 65747, 66039,
+                65781, 65717,
+                65730, 65623, 65881, 65857, 66016, 65580
             ),
             1101 => array( # Ashworth
-                # Kent, Bexhill & Battle, Wealden, Hastings & Rye. (20)
-                12896, 12916, 12983, 12994, 13035, 13046, 13092,
-                13095, 13101, 13116, 13139, 13214, 13222, 13272,
-                13341, 13351, 13372, 13415, 13421, 13446
+                # Kent (17)
+                # East Sussex: Bexhill & Battle, Wealden, Hastings & Rye (3)
+                65811, 65878, 66075, 66011, 65555, 65764, 65779, 65864, 65944, 65936, 65605, 66043, 65698, 65610, 65829, 65744, 65660,
+                65845, 65640, 65961,
             ),
         );
     }
     $keep = array();
-    foreach ($meps as $id => $wmcs) {
-        if (in_array($wmc, $wmcs))
-            $keep[$id] = 1;
+    foreach ($meps as $id => $areas) {
+        foreach ($vas as $va) {
+            if (in_array($va, $areas)) {
+                $keep[$id] = 1;
+                break;
+            }
+        }
     }
 
     $hidden = array();
@@ -463,4 +445,4 @@ function euro_check(&$area_reps, $wmc) {
     }
     return $hidden;
 }
-?>
+

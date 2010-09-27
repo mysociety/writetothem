@@ -10,22 +10,22 @@ if ($values['prime_minister']) {
 
 <h2 class="warning"><strong>VIP.... VIP... VIP.... VIP... READ THIS BIT
 PLEASE...</strong></h2> 
-<p>Please <strong>*ONLY*</strong> use this service to contact Gordon Brown if you are one of his
-<strong>constituents</strong> in Kirkcaldy &amp; Cowdenbeath.
+<p>Please <strong>*ONLY*</strong> use this service to contact David Cameron if you are one of his
+<strong>constituents</strong> in Witney.
 
 <p><a href="/about-qa#onlyrep">Click here to understand why doing otherwise is A Bad Thing</a>.
 
-<p>If you NOT a constituent and wish to contact Gordon Brown, you
+<p>If you NOT a constituent and wish to contact David Cameron, you
 may write to him at the address below:<p>
 <address>
-The Rt Hon Gordon Brown<br>
+The Rt Hon David Cameron<br>
 Prime Minister<br>
 10 Downing Street<br>
 London<br>
 SW1A 2AS
 </address>
 
-<p>If you are a constituent of Kirkcaldy &amp; Cowdenbeath, read on...</p>
+<p>If you are a constituent of Witney, read on...</p>
 <hr>
 
 <?
@@ -103,20 +103,20 @@ if (isset($values['representative']['parlparse_person_id'])) {
 }
 
 if ($values['group_msg'] && $values['any_via']) {
-    echo '<li>We do not have direct contact details for some of your ',
+    echo '<li><strong>We do not have direct contact details for some of your ',
         $values['voting_area']['rep_name_plural'], ' so your message to them
 will be sent via the internal mail systems of the body to which they
-were elected.';
+were elected.</strong>';
 }
 
 if ($values['representative']['method'] == 'via') {
-    echo '<li>We do not have direct contact details for ', $values['representative']['name'], ', ';
+    echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
     if ($values['representative']['type'] == 'HOC') {
         echo 'so we will send your message via the central House of Lords fax machine.';
     } else {
         echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
     }
-    echo '</li>';
+    echo '</strong></li>';
 }
 
 echo '</ul>';

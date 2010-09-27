@@ -7,6 +7,7 @@ mySociety</a>.
 <a href="/about-copyright">Data by GovEval</a>.
 <a href="http://www.easynet.net/publicsector/">Powered by Easynet</a>
 <br>
+
 <? $links = array(
     '/about-qa'=>'Help',
     '/about-contact' => 'Contact WriteToThem.com',
@@ -39,17 +40,22 @@ if (OPTION_WEB_DOMAIN == 'writetothem.com') {
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.mysociety.org/" : "http://piwik.mysociety.org/");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-<!--
-piwik_action_name = '';
-piwik_idsite = 2;
-piwik_url = pkBaseURL + "piwik.php";
-piwik_log(piwik_action_name, piwik_idsite, piwik_url);
-//-->
-</script>
-<noscript><img src="http://piwik.mysociety.org/piwik.php?idsite=2" style="border:0" alt=""></noscript>
-<!-- /Piwik --> 
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 2);
+<? 
+if ($values['title'] && preg_match('/Now write your message to/', $values['title'])){
+  $values['tracking_title'] = 'Now write your message';
+}else{
+  $values['tracking_title'] = $values['title'];
+}
+?>
+piwikTracker.setDocumentTitle("<?php echo $values['tracking_title'] ?>");
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://piwik.mysociety.org/piwik.php?idsite=2" style="border:0" alt=""/></p></noscript>
+<!-- End Piwik Tag -->
 <?
 }
 
