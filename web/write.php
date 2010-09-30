@@ -936,7 +936,10 @@ if ($fyr_group_msg) {
 
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
     $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
-    mapit_check_error($fyr_voting_area);
+    if (mapit_get_error($fyr_voting_area)) {
+        header("Location: /who?pc=" . urlencode($fyr_postcode));
+        exit;
+    }
     debug("FRONTEND", "FYR voting area $fyr_voting_area");
     
     redirect_if_disabled($fyr_representative['type'], $fyr_group_msg);
