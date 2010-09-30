@@ -40,7 +40,10 @@ fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been ty
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
-mapit_check_error($voting_areas);
+if (rabx_is_error($voting_areas)) {
+    header('Location: ' . url_new('', true, 'pc', $fyr_postcode));
+    exit;
+}
 debug_timestamp();
 
 // Limit to specific types of representatives
