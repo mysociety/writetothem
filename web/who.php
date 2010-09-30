@@ -41,7 +41,7 @@ fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been ty
 // areas") for the postcode
 $voting_areas = mapit_get_voting_areas($fyr_postcode);
 if (rabx_is_error($voting_areas)) {
-    header('Location: ' . url_new('', true, 'pc', $fyr_postcode));
+    header('Location: ' . url_new('/', true, 'pc', $fyr_postcode));
     exit;
 }
 debug_timestamp();
