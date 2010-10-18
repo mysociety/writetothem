@@ -157,7 +157,7 @@ sub do_send_example_message {
     set_fyr_date('1990-01-01', undef, $verbose);
 
     $options->{base_url} = $base_url;
-    my $repinfo = {repname => 'David Howarth'};
+    my $repinfo = {repname => 'Julian Huppert'};
 
     send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridge 
@@ -173,7 +173,7 @@ sub do_send_example_message {
     );
     confirm_message(0, $repinfo, $options);
 
-    check_delivered_to_rep(0, 'David Howarth MP', '23 Something Street', $options);
+    check_delivered_to_rep(0, 'Julian Huppert MP', '23 Something Street', $options);
 
     # 2 days to get over bounce_wait
     spin_queue('1990-01-%02d', 2, 4, $wth, $verbose, $multispawn);
@@ -186,7 +186,7 @@ sub do_send_example_message {
     my $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
-        '%Two weeks ago we sent your letter to David Howarth MP%');
+        '%Two weeks ago we sent your letter to Julian Huppert MP%');
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
@@ -196,7 +196,7 @@ sub do_send_example_message {
     $questionnaire_email = $wth->email_get_containing(
         '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
-        '%Three weeks ago we sent your letter to David Howarth MP%');
+        '%Three weeks ago we sent your letter to Julian Huppert MP%');
 
     # Get links from questionnaire email
     die "Questionnaire yes link not found" if ($questionnaire_email !~ m#^\s*($base_url/Y/.*$)#m);
@@ -251,7 +251,7 @@ sub do_send_blocked_message {
 
 
     $options->{base_url} = $base_url;
-    my $repinfo = {repname => 'David Howarth'};
+    my $repinfo = {repname => 'Julian Huppert'};
 
     # The message shouldn't be delivered, as it should be frozen
     send_message_to_rep(1, 
@@ -276,7 +276,7 @@ sub do_send_blocked_message {
     set_fyr_date('1990-07-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
-        '%Subject: Unfortunately, we couldn\'t send your message to David Howarth MP'.
+        '%Subject: Unfortunately, we couldn\'t send your message to Julian Huppert MP'.
         '%To: "'.name_n(1).'" <'.email_n(1).'>'.
         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
 }
@@ -288,7 +288,7 @@ sub do_test_bounce_stuff {
     set_fyr_date('1990-08-30', undef, $verbose);
 
     $options->{base_url} = $base_url; 
-    my $repinfo = {repname => 'David Howarth'};
+    my $repinfo = {repname => 'Julian Huppert'};
 
     # TODO: This doesn't work yet. It is meant to test failing bad contacts.
     # Really we need to turn off the test mode, and have a real representative
@@ -309,7 +309,7 @@ sub do_test_bounce_stuff {
     #);
 
     #confirm_message(0, $repinfo, $options);
-    #check_delivered_to_rep(0, 'David Howarth MP', '82 Mouse Road', $options);
+    #check_delivered_to_rep(0, 'Julian Huppert MP', '82 Mouse Road', $options);
 
     # Pretend to be somebody replying to a questionnaire message
     # - the message is just hard wired here as that is easiest.
@@ -396,7 +396,7 @@ I don't like this questionnaire, I am instead going to tell you much
 more about my MP's responsiveness in free text.
 
 On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
-> Two weeks ago we sent your letter to David Howarth MP.
+> Two weeks ago we sent your letter to Julian Huppert MP.
 >
 > - If you HAVE had a reply, please click on the link below:
 >
@@ -555,7 +555,7 @@ sub do_send_fax_message {
     set_fyr_date('1995-01-01', '12:00:00', $verbose);
     
     my $postcode = 'CB23QJ';
-    my $repname = 'David Howarth';
+    my $repname = 'Julian Huppert';
     my $fields = { writer_address1 => '75 Toner Place',
                    writer_town => 'Paper Lane',
                    state => 'Facsimileshire',
@@ -870,7 +870,7 @@ sub do_test_mistyped_postcode {
 sub do_send_bouncing_message() {
     set_base_url("");
     $options->{base_url} = $base_url;
-    my $repinfo = {repname => 'David Howarth'};
+    my $repinfo = {repname => 'Julian Huppert'};
                    
     send_message_to_rep(0, 
                         'CB23QJ', # The Guildhall, Cambridge 
@@ -885,7 +885,7 @@ sub do_send_bouncing_message() {
                         $options 
                         );
     confirm_message(0, $repinfo, $options);
-    my $content = check_delivered_to_rep(0, 'David Howarth', 'Boing Boing Land', $options);
+    my $content = check_delivered_to_rep(0, 'Julian Huppert', 'Boing Boing Land', $options);
 
     # Now fake that it bounced
     call_handlemail($content);
