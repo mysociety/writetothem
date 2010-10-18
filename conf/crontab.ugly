@@ -6,7 +6,7 @@
 #
 # $Id: crontab.ugly,v 1.8 2009-04-30 11:43:52 louise Exp $
 
-MAILTO=team@writetothem.com
+MAILTO=cron-!!(*= $site *)!!@mysociety.org
 
 # Once an hour
 44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/warn-long-queue

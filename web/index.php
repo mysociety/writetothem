@@ -279,17 +279,21 @@ for free</h2>
 END;
 
 $fyr_all_url = null;
+$area_types = null;
 if ($a_forward) {
     # Subset of representatives
     $area_types = fyr_parse_area_type_list($a_forward);
-    $area_type_desc = fyr_describe_area_type_list($area_types);
-    if (!$forced_rep_type) {
-        $fyr_all_url = htmlspecialchars(url_new('', false,
+    if ($area_types) {
+        $area_type_desc = fyr_describe_area_type_list($area_types);
+        if (!$forced_rep_type) {
+            $fyr_all_url = htmlspecialchars(url_new('', false,
                         'pc', get_http_var('pc'),
                         'fyr_extref', fyr_external_referrer(),
                         'cocode', get_http_var('cocode')));
+        }
     }
-} else {
+}
+if (!$area_types) {
     # All representatives
     global $va_child_types;
     $area_types = array();
