@@ -633,7 +633,7 @@ sub do_send_group_abuse {
     $wth->browser_check_contents('Block quicker than you can imagine');
 
     $options->{base_url} = $base_url;
-    my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
+    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew');
     my $repinfo = {repname => 'all', 
                    repnames => \@rep_names, 
                    reptype => 'MEPs'};
@@ -797,7 +797,7 @@ sub do_send_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01', undef, $verbose);
     $options->{base_url} = $base_url;
-    my @rep_names = ('Richard Howitt', 'Robert Sturdy', 'David Campbell Bannerman', 'Geoffrey Van Orden', 'Andrew Duff', 'Vicky Ford', 'Stuart Agnew');
+    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew');
     my $repinfo = {repname => 'all',
                    repnames => \@rep_names,
                    reptype => 'MEPs'};
