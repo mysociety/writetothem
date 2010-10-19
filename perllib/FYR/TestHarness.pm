@@ -118,6 +118,7 @@ sub send_message_to_rep {
         }else{
             $wth->browser_follow_link(text_regex => qr/$repname/);
         }
+        $wth->browser_reload();
     } else {
         # House of Lords selection by birthday
         $wth->browser_get($base_url . "/lords");
