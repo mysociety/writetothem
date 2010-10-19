@@ -52,7 +52,7 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('example', 'mistype', 'bounce', 'cobrand', 'lords', 'fax', 'group', 'unit');
+my @actions = ('example', 'mistype', 'bounce', 'lords', 'fax', 'group', 'unit', 'cobrand');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'mistype' => 'check mistyped postcodes work',
