@@ -57,10 +57,10 @@ my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'mistype' => 'check mistyped postcodes work',
     'bounce' => 'test autoresponder (TODO: doesn\'t test rep email failure bounces)',
-    'cobrand' => 'send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files',
     'lords' => 'send example message to a Lord',
     'fax' => 'send example fax message successfully (no faxes sent 8pm-8am - tests will fail)',
     'group' => 'send example message to a group of reps',
+    'cobrand' => 'send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files',
     'unit' => 'run the unit tests',
 );
 
