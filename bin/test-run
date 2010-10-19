@@ -128,9 +128,9 @@ foreach (@actions) {
     }
     do_test_mistyped_postcode() if $_ eq 'mistype';
     do_test_bounce_stuff() if $_ eq 'bounce';
+    do_send_fax_message() if $_ eq 'fax';
     do_send_cobrand_message() if $_ eq 'cobrand';
     do_send_lords_message() if $_ eq 'lords';
-    do_send_fax_message() if $_ eq 'fax';
     do_send_group_message() if $_ eq 'group';
     do_run_unit_tests() if $_ eq 'unit';
 }
