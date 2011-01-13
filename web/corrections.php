@@ -21,6 +21,8 @@ require_once "../commonlib/phplib/utility.php";
 
 // Get all fyr_values
 $fyr_values = get_all_variables();
+template_show_error("Corrections are temporarily disabled. Please try again later.");
+exit;
 debug("FRONTEND", "All variables:", $fyr_values);
 if (!array_key_exists('id', $fyr_values) || $fyr_values['id'] == '' || !ctype_digit($fyr_values['id'])) {
     template_show_error('Please <a href="/">start from the beginning</a>.');

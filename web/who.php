@@ -280,7 +280,7 @@ for your region have informed us that they have divided it into areas, with ';
         }
         global $va_council_child_types;
         if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
-            $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_specificid.'">Have you spotted a mistake in the above list?</a></p>';
+            // $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_specificid.'">Have you spotted a mistake in the above list?</a></p>';
         }
     }
 
