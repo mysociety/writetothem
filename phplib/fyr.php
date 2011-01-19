@@ -20,7 +20,6 @@ require_once $dir . "/../commonlib/phplib/template.php";
 require_once $dir . "/../commonlib/phplib/utility.php";
 require_once $dir . "/../commonlib/phplib/auth.php";
 require_once $dir . "/../commonlib/phplib/crosssell.php";
-require_once $dir . "/../commonlib/phplib/tracking.php";
 require_once $dir . "/../commonlib/phplib/votingarea.php";
 require_once $dir . "/../phplib/cobrand.php";
 
@@ -294,7 +293,6 @@ function fyr_breadcrumbs($num, $type = 'default') {
 
 
 function fyr_display_advert($values) {
-    global $track;
     $advert_shown = 'none';
     if (array_key_exists('sender_email', $values)) {
         $adverts = array(

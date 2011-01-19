@@ -6,11 +6,7 @@
 #
 # $Id: crontab.ugly,v 1.8 2009-04-30 11:43:52 louise Exp $
 
-!!(* if ($hostname eq 'tea' && !$staging) { *)!!
-MAILTO=cities@writetothem.com
-!!(* } else { *)!!
-MAILTO=team@writetothem.com
-!!(* } *)!!
+MAILTO=cron-!!(*= $site *)!!@mysociety.org
 
 # Once an hour
 44 * * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/warn-long-queue
@@ -23,7 +19,7 @@ MAILTO=team@writetothem.com
 21 3 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-bad-old-messages
 21 4 * * 7 !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/find-long-logs
 
-!!(* if ($hostname eq 'tea' && !$staging) { *)!!
+!!(* if ($vhost eq 'cities.writetothem.com') { *)!!
 # Send the admin reminder mail
 30 9 * * 4 !!(*= $user *)!! cd /data/vhost/!!(*= $vhost *)!!/writetothem/bin && ./admin_reminder_mail --nobadmps --realrun
 !!(* } *)!!
