@@ -276,6 +276,9 @@ Councillors,
 <br>Northern Ireland, Welsh and London
 <acronym title="Assembly Members">AMs</acronym>
 for free</h2>
+<div style="width:50%; border: solid 2px #990000; margin: 0 auto; padding: 5px; text-align: center; background-color: #ffcccc;">
+WriteToThem will be unavailable from midnight tonight for maintenance. Back shortly!
+</div>
 END;
 
 $fyr_all_url = null;
@@ -304,7 +307,7 @@ if (!$area_types) {
     $area_type_desc = str_replace("or Northern Ireland", "or <br>Northern Ireland", $area_type_desc);
 }
 $blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
-
+$blurb_top = $blurb_top . "<div style=\"width:50%; border: solid 2px #990000; margin: 0 auto; padding: 5px; text-align: center; background-color: #ffcccc;\">WriteToThem will be unavailable from midnight tonight for maintenance. Back shortly!</div>";
 header('Cache-Control: max-age=3600');
 
 $options = cobrand_postcode_form_options($cobrand);
