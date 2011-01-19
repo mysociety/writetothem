@@ -29,11 +29,6 @@ foreach ($links as $uri => $text) {
 print join(' | ', $footer);
 echo '</div>';
 
-global $track;
-if (isset($track) && $track) {
-    track_event($track);
-}
-
 if (OPTION_WEB_DOMAIN == 'writetothem.com') {
 ?>
 <!-- Piwik -->
