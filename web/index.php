@@ -304,7 +304,6 @@ if (!$area_types) {
     $area_type_desc = str_replace("or Northern Ireland", "or <br>Northern Ireland", $area_type_desc);
 }
 $blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
-
 header('Cache-Control: max-age=3600');
 
 $options = cobrand_postcode_form_options($cobrand);

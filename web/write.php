@@ -319,9 +319,6 @@ END;
     }
 
     add_all_variables_hidden($form, $fyr_values, $options);
-    if (cobrand_display_spellchecker($cobrand)) {
-      $form->addElement("html", '<tr><td><script type="text/javascript">document.write(\'<input name="doSpell" type="button" value="Check spelling" onClick="openSpellChecker(document.writeForm.body);"/> (optional)\')</script></td></tr>');
-    }
     $preview_text = cobrand_preview_text($cobrand);
     if (!$preview_text) {
         $preview_text = 'Ready? Press the "Preview" button to continue:';
@@ -440,9 +437,6 @@ function renderForm($form, $pageName, $options)
         $our_values['title_text'] = trim($fyr_voting_area['rep_prefix'] . " " .
             $fyr_representative['name'] . " " . $fyr_voting_area['rep_suffix']) . ", " .
             $fyr_voting_area['name'];
-    }
-    if (cobrand_display_spellchecker($cobrand)) {
-        $our_values['spell'] = "true";
     }
     if ($pageName == "writeForm") {
         template_draw("write-write", $our_values);
