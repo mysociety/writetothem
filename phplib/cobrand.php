@@ -383,17 +383,6 @@ function cobrand_display_survey($cobrand) {
   return true;
 }
 
-// Return a boolean indicating whether the spell checker should be displayed
-function cobrand_display_spellchecker($cobrand) {
-  if ($cobrand) {
-    $cobrand_handle = cobrand_handle($cobrand);
-    if ($cobrand_handle && method_exists($cobrand_handle, 'display_spellchecker')) {
-      return $cobrand_handle->display_spellchecker();
-    }
-  }
-  return true;
-}
-
 // Return a boolean indicating whether the link allowing users to submit
 // councillor corrections should be displayed
 function cobrand_display_councillor_correction_link($cobrand) {

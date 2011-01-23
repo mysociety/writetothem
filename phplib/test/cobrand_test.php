@@ -32,19 +32,6 @@ class CobrandTest extends UnitTestCase{
 
     }
 
-    function test_display_spellchecker() {
-
-        $display_spell = cobrand_display_spellchecker('');
-        $this->assertEqual(true, $display_spell, 'Should return true if no cobrand is set');
-
-        $display_spell = cobrand_display_spellchecker('mysite');
-        $this->assertEqual(false, $display_spell, 'Should return the value of the cobrand display_spellchecker function if one exists');
-
-        $display_spell = cobrand_display_spellchecker('nosite');
-        $this->assertEqual(true, $display_spell, 'Should return true if the cobrand does not define a display_spellcheck function');
-
-    }
-
     function test_display_survey() {
 
         $display_survey = cobrand_display_survey('');

@@ -26,10 +26,6 @@ class Mysite {
          return false;  
     }
 
-    function display_spellchecker() {
-         return false;
-    }
-
     function display_survey() { 
          return false;
     }   

@@ -20,9 +20,6 @@ if (isset($values['cobrand'])) {
 <?php }
       if (array_key_exists('robots', $values)) { ?>
 <meta name="robots" content="<?=$values['robots'] ?>">
-<?php }
-      if (isset($values['spell'])) { ?>
-<script type="text/javascript" src="/jslib/spell/spellChecker.js"></script>
 <?php } ?>
 </head>
 <body<? if (isset($values['body_id'])) print ' id="' . $values['body_id'] . '"'; ?>><a name="top" id="top"></a>
