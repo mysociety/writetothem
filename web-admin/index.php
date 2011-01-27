@@ -64,14 +64,14 @@ if (OPTION_ADMIN_SERVICES_CGI)
 if (OPTION_ALLOWED_COBRANDS != 'cities')
     array_push($pages,
         new ADMIN_PAGE_EMBED('fyrsignupgraph', 'Sent messages graph', OPTION_BASE_URL . '/fyr-live-signups.png'),
-        new ADMIN_PAGE_EMBED('fyrfaxgraph', 'Faxes created graph', OPTION_BASE_URL . '/fyr-live-faxes.png'),
+        new ADMIN_PAGE_EMBED('fyrfaxgraph', 'Faxes created graph', OPTION_BASE_URL . '/fyr-live-faxes.png')
     );
 
 array_push($pages,
     null, // space separator on menu
     new ADMIN_PAGE_SERVERINFO,
     new ADMIN_PAGE_CONFIGINFO,
-    new ADMIN_PAGE_PHPINFO,
+    new ADMIN_PAGE_PHPINFO
 );
 
 admin_page_display(str_replace("http://", "", OPTION_BASE_URL), $pages);
