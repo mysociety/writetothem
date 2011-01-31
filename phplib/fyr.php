@@ -378,19 +378,6 @@ function euro_check(&$area_reps, $vas) {
                 2561, 2245, 2222, 2612, 2555, 2594 # Bristol, Wiltshire, Dorset, Swindon, Bournemouth, Poole
             ),
         );
-    } elseif (isset($area_reps[11804])) { # Eastern Conservative MEPs
-        $area_id = 11804;
-        $meps = array(
-            45619 => array( # Ford
-                2233, 2228 # Norfolk, Hertfordshire
-            ),
-            1044 => array( # Sturdy
-                2253, 21070, 2218, 2566, 2583 # Bedford, Central Bedfordshire, Cambridgeshire, Peterborough, Luton
-            ),
-            45617 => array( # Van Orden
-                2225, 2241, 2615, 2607 # Essex, Suffolk, Thurrock, Southend-on-Sea
-            ),
-        );
     } elseif (isset($area_reps[11811])) { # South East Conservative MEPs
         $area_id = 11811;
         $meps = array(
