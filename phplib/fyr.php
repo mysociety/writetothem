@@ -362,7 +362,7 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $vas) {
-    if (!isset($area_reps[11811]) && !isset($area_reps[11814]) && !isset($area_reps[11804])) 
+    if (!isset($area_reps[11811]) && !isset($area_reps[11814])) 
         return array();
 
     if (isset($area_reps[11814])) { # South West Conservative MEPs
