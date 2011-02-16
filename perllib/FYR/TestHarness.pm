@@ -119,7 +119,7 @@ sub send_message_to_rep {
             $link = $wth->browser_find_link(text_regex => qr/$repname/);
         }
         
-        $wth->browser_get($link . "&rand=" . int(rand(5000)));
+        $wth->browser_get($link->url() . "&rand=" . int(rand(5000)));
     } else {
         # House of Lords selection by birthday
         $wth->browser_get($base_url . "/lords");
