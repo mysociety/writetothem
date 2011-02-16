@@ -442,25 +442,8 @@ function renderForm($form, $pageName, $options)
         template_draw("write-write", $our_values);
     } elseif ($pageName == 'previewForm') {
         // Generate preview
-        /* Horrid. We need to turn leading spaces into non-breaking spaces, so
-         * that indentation appears roughly the same in the preview as it will
-         * in the final fax. So we need to delve into the exciting world of
-         * PHP's preg_replace. Because the text will get escaped for HTML
-         * entities later, present those leading spaces as U+0000A0 NO-BREAK
-         * SPACE. But we can't use the obvious combination of preg_replace, the
-         * "e modifier" and str_repeat, because preg_replace with the "e
-         * modifier" is not safe, since the subexpressions are injected into
-         * the expression by textual substitution(!). So instead we perform
-         * repeated substitutions until there are no further changes. This is
-         * a complete pain, but then that's what you get for using a language
-         * with a rubbish API and no functional features. */
-        $t1 = $our_values['body'];
-        $t2 = null;
-        do {
-            $t2 = $t1;
-            $t1 = preg_replace('/^((?: )*)( )/m', '\1 ', $t2);
-        } while ($t1 != $t2);
-        $our_values['body_indented'] = $t1;
+        $formatted_body = fyr_format_message_body_for_preview($our_values['body']);
+        $our_values['body_indented'] = $formatted_body;
         $our_values['rep_text'] = $rep_text;
         $fyr_preview = template_string("fax-content", $our_values);
         template_draw("write-preview", array_merge($our_values, array('preview' => $fyr_preview)));

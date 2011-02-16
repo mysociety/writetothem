@@ -466,7 +466,8 @@ table.zeitgeist th .nostrong {
     margin: 0px 1em 0px 0px;
 }
     
-#sendmess label {
+#sendmess label,
+#sendmess .intro-text {
     text-align: right; 
     vertical-align: top;
     display: block;
@@ -474,6 +475,19 @@ table.zeitgeist th .nostrong {
     float: left;
     margin-right: 0.25em;
     font-weight: normal;
+}
+
+#sendmess label.inline-label {
+    float: none;
+    display: inline;
+}
+
+#sendmess .intro-text {
+    height: 3em;
+}
+
+#sendmess .wrong-contact {
+    width: 35em;
 }
 
 #sendmess p.alert {color: #B1181C}
