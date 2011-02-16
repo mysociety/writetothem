@@ -103,22 +103,23 @@ sub send_message_to_rep {
 
     if (!$birthday) {
         # Postcode selection of representative
-        my $start_url = $base_url . "?rand=" . int(rand(5000));
-        $start_url .= "&cocode=9" if ($cobrand && $cobrand eq "animalaid");
+        my $start_url = $base_url;
+        $start_url .= "?cocode=9" if ($cobrand && $cobrand eq "animalaid");
         $wth->browser_get($start_url);
         $wth->browser_check_contents($expected_messages->{enter_postcode});
         $wth->browser_submit_form(form_name => 'postcodeForm',
             fields => { pc => $postcode},
             );
         $wth->browser_check_contents($expected_messages->{select_rep});
-
+        my $link;
         if ($repname eq 'all'){
             my $alllink = "Write to all your $reptype";
-            $wth->browser_follow_link(text_regex => qr/$alllink/);
+            $link = $wth->browser_find_link(text_regex => qr/$alllink/);
         }else{
-            $wth->browser_follow_link(text_regex => qr/$repname/);
+            $link = $wth->browser_find_link(text_regex => qr/$repname/);
         }
-        $wth->browser_reload();
+        
+        $wth->browser_get($link . "&rand=" . int(rand(5000)));
     } else {
         # House of Lords selection by birthday
         $wth->browser_get($base_url . "/lords");
