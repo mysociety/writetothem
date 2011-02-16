@@ -103,7 +103,7 @@ sub send_message_to_rep {
 
     if (!$birthday) {
         # Postcode selection of representative
-        my $start_url = $base_url . "?rand=" . str(int(rand(5000)));
+        my $start_url = $base_url . "?rand=" . int(rand(5000));
         $start_url .= "&cocode=9" if ($cobrand && $cobrand eq "animalaid");
         $wth->browser_get($start_url);
         $wth->browser_check_contents($expected_messages->{enter_postcode});
