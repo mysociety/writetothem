@@ -89,7 +89,7 @@ our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
 our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
-our $rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
+our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
 #############################################################################
 # Main code
 
