@@ -89,6 +89,7 @@ our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
 our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
+our $rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
 #############################################################################
 # Main code
 
@@ -633,7 +634,6 @@ sub do_send_group_abuse {
     $wth->browser_check_contents('Block quicker than you can imagine');
 
     $options->{base_url} = $base_url;
-    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
     my $repinfo = {repname => 'all', 
                    repnames => \@rep_names, 
                    reptype => 'MEPs'};
@@ -797,7 +797,6 @@ sub do_send_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01', undef, $verbose);
     $options->{base_url} = $base_url;
-    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew');
     my $repinfo = {repname => 'all',
                    repnames => \@rep_names,
                    reptype => 'MEPs'};
