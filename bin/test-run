@@ -633,7 +633,7 @@ sub do_send_group_abuse {
     $wth->browser_check_contents('Block quicker than you can imagine');
 
     $options->{base_url} = $base_url;
-    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew');
+    my @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
     my $repinfo = {repname => 'all', 
                    repnames => \@rep_names, 
                    reptype => 'MEPs'};
