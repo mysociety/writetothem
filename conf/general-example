@@ -20,7 +20,7 @@
 
 // Where the DaDem, MaPit and Ratty services are.
 define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
-define('OPTION_MAPIT_URL', 'http://services.mysociety.org/mapit');
+define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org/');
 define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
 define('OPTION_EVEL_URL', 'http://services.mysociety.org/evel.cgi');
 
