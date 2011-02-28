@@ -2,17 +2,17 @@
 /*
  * emailform.php:
  * Email Form for contacting site administrators.
- * 
+ *
  * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
  * Email: angie@mysociety.org; WWW: http://www.mysociety.org
  *
  * $Id: emailform.php,v 1.10 2008-02-29 11:22:56 matthew Exp $
- * 
+ *
  */
 require_once "../phplib/fyr.php";
 require_once '../commonlib/phplib/evel.php';
 
-/* setup the fields that are wanted on the contact form, 
+/* setup the fields that are wanted on the contact form,
  *    this will be dynamically built using emailform_display,
  * it will also be checked by emailform_test_message, if you want to add another field stick it in here.
  */
@@ -54,7 +54,7 @@ $emailformfields = array (
            'inputtype'    => 'textarea',
            'size'         => '10,29',
            'spamcheck'    => "1",
-           'errormessage' => 'Please enter your message', 
+           'errormessage' => 'Please enter your message',
            'required'     => 1),
     array ('label'     => '',
            'inputname' => 'send',
@@ -73,7 +73,7 @@ function fyr_display_emailform () {
             $dest = get_http_var('dest');
             $contact_message = get_http_var('notjunk');
             if ($dest == 'rep') {
-              $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit www.writetothem.com and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
+              $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit <a href="/">www.writetothem.com</a> and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
               wrongcontact_display($problem, $contact_message);
             } elseif ($dest == 'other') {
               $problem = 'You can only contact the team behind WriteToThem using our contact form. Your message is printed below so you can copy and paste it to wherever you want to send it.';
@@ -146,35 +146,40 @@ function render_formfield ($defs, $messages) {
 }
 
 function wrongcontact_display($problem, $contact_message) {
+  print '<div id ="sendmess">';
   print '<div class="wrong-contact">';
   print $problem;
   print '<hr>';
   print fyr_format_message_body_for_preview($contact_message);
   print '</div>';
+  print '</div>';
 }
 
 function emailform_display ($messages) {
     global $emailformfields;
+    if ($messages && isset($messages['messagesent'])){
+      print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
+      return;
+    }
+    print '<div id ="sendmess">';
     print '<h3>Tell us what you think</h3>';
     if ($messages) {
-        if (isset($messages['messagesent'])) {
-            print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
-        } else {
-            print '<ul class="repwarning">';
-            foreach ($messages as $inp => $mess) {
-                print '<li>' . $mess;
-            }
-            print '</ul>';
-        }
+
+      print '<ul class="repwarning">';
+      foreach ($messages as $inp => $mess) {
+          print '<li>' . $mess;
+      }
+      print '</ul>';
+
     }
-    
     print '<form action="about-contactresponse" accept-charset="utf8" method="post">';
     print '<input name="action" type="hidden" value="testmess">';
-    
+
     foreach ($emailformfields as $defs) {
         print render_formfield($defs, $messages);
     }
     print '</form>';
+    print '</div>';
 }
 
 function emailform_test_message () {
@@ -193,7 +198,7 @@ function emailform_test_message () {
             if ($ermess) {
                 $errors[$defs['inputname']] = $defs['label'] . $ermess;
             }
-            
+
         }
         if (isset($defs['validate']) && $defs['validate'] == 'emailaddress') {
             if (! validate_email($_POST[$defs['inputname']]) ) {
@@ -203,8 +208,8 @@ function emailform_test_message () {
                 }
             }
         }
-        
-        
+
+
     }
     return $errors;
 }
@@ -229,7 +234,7 @@ function emailform_send_message () {
     // loop through emailformfields and fill in the mail body
         if (isset($defs['nomail']) && $defs['nomail']) continue;
         if (isset($defs['emailoutput']) && isset($_POST[$defs['inputname']])) {
-            // this value goes into the subject or sender    
+            // this value goes into the subject or sender
             if ($defs['emailoutput'] == 'subject') {
                 $subject = 'Message from ' . OPTION_WEB_DOMAIN . ': '. $_POST[$defs['inputname']];
             }
@@ -251,13 +256,13 @@ function emailform_send_message () {
             'From' =>$from,
             'To' => array(array($sendto, 'WriteToThem')),
         );
-        
+
         $result = evel_send($spec, $sendto);
         $error = evel_get_error($result);
-        if ($error) 
+        if ($error)
             error_log("fyr_send_email_internal: " . $error);
         $success = $error ? FALSE : TRUE;
-    
+
     }
     return $success;
 }

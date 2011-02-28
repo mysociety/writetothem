@@ -1,13 +1,13 @@
 /*
  * wtt.css
  * Top-level style sheet for WriteToThem.com.
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
 
  *
  * $Id: wtt.css,v 1.61 2009-10-15 13:03:10 louise Exp $
- * 
+ *
  */
 
 body {
@@ -204,14 +204,14 @@ ol#breadcrumbs li.hilight em {
     margin: 0;
     padding: 0;
     margin-bottom: 20px;
-} 
+}
 
-#writebox li { 
+#writebox li {
     list-style-type: none;
     background-repeat: no-repeat;
     margin: 0;
     padding: 0;
-} 
+}
 
 #writebox span {
     margin-bottom: 20px;
@@ -378,8 +378,8 @@ p.toplink {
 /* Link to us page */
 
 pre.sourcecode {
-    clear: both; 
-    border: solid 1px #006666; 
+    clear: both;
+    border: solid 1px #006666;
     padding: 1px;
 }
 
@@ -462,13 +462,13 @@ table.zeitgeist th .nostrong {
 /* Contact Us form */
 
 #sendmess {
-    float: left; 
+    float: left;
     margin: 0px 1em 0px 0px;
 }
-    
+
 #sendmess label,
 #sendmess .intro-text {
-    text-align: right; 
+    text-align: right;
     vertical-align: top;
     display: block;
     width: 15em;
@@ -491,7 +491,11 @@ table.zeitgeist th .nostrong {
 }
 
 #sendmess p.alert {color: #B1181C}
-#sendmess p.alertsuccess { color: #00B040; }
+p.alertsuccess {
+  color: #527B10;
+  font-size: 120%;
+  text-align: center;
+}
 
 /* For surveys */
 
@@ -499,7 +503,7 @@ table.zeitgeist th .nostrong {
 
 #survey table { border-collapse:collapse;
         table-layout:auto;
-        
+
  }
 
 #survey td {    border-bottom: solid 2px;
@@ -507,14 +511,14 @@ table.zeitgeist th .nostrong {
         padding: 10px;
        }
 
-   
+
 #survey td.us_label { vertical-align: top;
               }
 
 #survey td.us_formelement { vertical-align: middle;
                     text-align: left; }
 
-#survey div.us_label {max-width:25em;}   
+#survey div.us_label {max-width:25em;}
 
 #survey col#col_label { max-width:20em;
                 width:33%}
