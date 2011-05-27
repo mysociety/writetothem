@@ -16,10 +16,10 @@ Class Louder {
         return new Louder();
     }
 
-    #function post_letter_send($values) {
-    #    header("Location: http://www.louder.org.uk/wttsuccess.php?id=" . $values['cocode']);
-    #    exit;
-    #}
+    function post_letter_send($values) {
+        header("Location: http://www.louder.org.uk/wttsuccess.php?id=" . $values['cocode']);
+        exit;
+    }
 
 }
 
