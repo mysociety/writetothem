@@ -5,7 +5,7 @@ The new FaxYourMP.
 <!--<img src="/images/mysociety_sm.gif" border="0" alt="mySociety" />-->
 mySociety</a>.  
 <a href="/about-copyright">Data by GovEval</a>.
-<a href="http://www.easynet.net/publicsector/">Powered by Easynet</a>
+<a href="http://www.m247.com/">Powered by M247</a>
 <br>
 
 <? $links = array(
