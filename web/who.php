@@ -374,7 +374,7 @@ function col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $repre
     } else {
         $col_blurb .= rep_text($rep_count, $rep_count, $va_info, $eb_info);
         if (!$va_salaried[$va_type] && $va_info['country']!='S')
-            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a small basic allowance for the work they do.";
+            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a basic allowance for the work they do.";
     }
     $col_blurb .= "</p>";
     return $col_blurb;
