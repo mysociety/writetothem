@@ -1,6 +1,8 @@
 Please click on the link below to confirm that you wish WriteToThem.com to send
-the letter copied at the bottom of this email to
-<?=$values['recipient_name']?>, your <?=$values['recipient_position']?>:
+your letter to
+<?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
+
+A copy of your letter is at the end of this email.
 
     <?=$values['confirm_url']?>
 
