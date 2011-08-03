@@ -417,7 +417,7 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
         global $state_help_notes_map;
         foreach ($stats as $k=>$v) {
             if (stristr($k, $prefix)) {
-                list($type, $state) = split(" ", str_replace($prefix, "", $k));
+                list($type, $state) = explode(" ", str_replace($prefix, "", $k));
                 $t[$state][$type] = $v;
                 if (!array_key_exists($state, $state_totals)) $state_totals[$state] = 0;
                 if (!array_key_exists($type, $type_totals)) $type_totals[$type] = 0;
