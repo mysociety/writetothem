@@ -8,6 +8,8 @@
 -- $Id: schema.sql,v 1.59 2009-05-13 11:51:37 louise Exp $
 --
 
+begin;
+
 set client_min_messages to error;
 
 -- secret
@@ -225,3 +227,4 @@ create table confirmation_mail_autoreply (
     whenreceived integer not null
 );
 
+commit;

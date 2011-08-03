@@ -9,9 +9,9 @@
  * 
  */
 
-require_once "HTML/QuickForm.php";
-require_once "HTML/QuickForm/Rule.php";
-require_once "HTML/QuickForm/Renderer/Default.php";
+require_once "../commonlib/phplib/HTML/QuickForm.php";
+require_once "../commonlib/phplib/HTML/QuickForm/Rule.php";
+require_once "../commonlib/phplib/HTML/QuickForm/Renderer/Default.php";
 
 // Returns an array with all POST and GET variables, and any hidden form
 // variables which were saved with function add_all_variables_hidden
