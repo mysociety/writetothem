@@ -80,7 +80,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
 }
 
 
-if ($cobrand) {   
+if ($cobrand) {
     $cocode = cobrand_force_default_cocode($cobrand, $cocode);
 }
 
@@ -134,16 +134,16 @@ if ($pc) {
     $pc22 = substr($pc2, 0, 2); $pc23 = substr($pc2, 0, 3);
     $otmap = array(
             /* For our purposes, St Helena, Ascension, and Tristan da Cunha
-	       are all the same, though they are thousands of miles apart.... */
+               are all the same, though they are thousands of miles apart.... */
             'ASCN1ZZ' => 'sthelena',
-	    'BBND1ZZ' => 'biot',
+            'BBND1ZZ' => 'biot',
             'BIQQ1ZZ' => 'antarctica',
             'FIQQ1ZZ' => 'falklands',
-	    'PCRN1ZZ' => 'pitcairn',
+            'PCRN1ZZ' => 'pitcairn',
             'SIQQ1ZZ' => 'southgeorgia',
             'STHL1ZZ' => 'sthelena',
-	    'TDCU1ZZ' => 'sthelena',
-	    'TKCA1ZZ' => 'turksandcaicos',
+            'TDCU1ZZ' => 'sthelena',
+            'TKCA1ZZ' => 'turksandcaicos',
         );
     $ot = null;
     if (array_key_exists($pc2, $otmap)) {
