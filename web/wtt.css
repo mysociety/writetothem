@@ -352,6 +352,13 @@ p.toplink {
     text-align: right;
 }
 
+/* Elsewhere page */
+
+h4:target {
+    background-color: #ffe88c;
+    padding: 0.5em;
+}
+
 /* Confirm page stuff - #advert is just for correction thanks page at present */
 
 #advert_thin {
