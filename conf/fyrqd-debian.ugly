@@ -2,8 +2,8 @@
 #
 ### BEGIN INIT INFO
 # Provides: fyrqd
-# Required-Start: $local_fs $syslog
-# Required-Stop: $local_fs $syslog
+# Required-Start: $local_fs $syslog postgresql
+# Required-Stop: $local_fs $syslog postgresql
 # Default-Start: 2 3 4 5 
 # Default-Stop: 0 1 6
 # Short-Description: fyrqd is a daemon running the WriteToThem queue
