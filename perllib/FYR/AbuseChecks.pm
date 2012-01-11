@@ -22,7 +22,6 @@ use Data::Dumper;
 use DBD::Pg; # for BLOB (bytea) support
 use Error qw(:try);
 use Geo::IP;
-use Net::Google::Search;
 use POSIX;  # strftime
 use Storable;
 use Time::HiRes;
@@ -36,43 +35,6 @@ use mySociety::Ratty;
 use FYR;
 use FYR::Queue;
 use FYR::SubstringHash;
-
-# google_for_postcode POSTCODE
-# Return the number of pages found on Google in which the POSTCODE occurs with
-# the terms "faxyourmp" or "writetothem".
-sub google_for_postcode ($) {
-    # Disabled, due to repeatedly getting this error:
-    # 502 Bad Gateway at /usr/share/perl5/SOAP/Lite.pm line 3006
-    # This seems to be a problem at Google's end, which they haven't fixed.
-    return 0;
-
-    my ($pc) = @_;
-    our ($G, $nogoogle);
-    if (!$G) {
-        my $key = mySociety::Config::get('GOOGLE_API_KEY', "");
-        if ($key ne "") {
-            $G = new Net::Google::Search({key => $key});
-        }
-        $nogoogle = 1 unless ($G);
-    }
-    return 0 if ($nogoogle);
-
-    $pc =~ s#\s##g;
-    $pc = uc($pc);
-
-    # We need to put the space back in in the right place now.
-    # http://www.govtalk.gov.uk/gdsc/html/noframes/PostCode-2-1-Release.htm
-    my $pc2 = $pc;
-    $pc2 =~ s#(\d[A-Z]{2})# $1#;
-    
-    # ("-site:mysociety.org" is a hack to stop it finding (e.g.) my postcode in
-    # checked-in code in CVSTrac.... --chris 20041215)
-    my $googlesearch = sprintf('%s OR "%s" writetothem OR faxyourmp -site:mysociety.org', $pc, $pc2);
-    $G->query('', $googlesearch);
-    my $results = $G->results();
-
-    return scalar(@$results);
-}
 
 # get_country_from_ip ADDRESS
 # Return the country code for the given IP address, or undef if none could be
@@ -291,16 +253,6 @@ my @group_tests = (
                     message_length_words => [$l2, 'Number of words in the message, where words are separated by whitespace']
                 );
         },
-
-        # Postcodes advertised in Google
-        sub ($) {
-            my ($msg) = @_;
-            my $hits = google_for_postcode($msg->{sender_postcode});
-            FYR::Queue::logmsg($msg->{id}, 0, sprintf('postcode "%s" appears on Google with term "faxyourmp" or "writetothem" (%d hits)',
-                $msg->{sender_postcode}, $hits)) if ($hits > 0);
-            return ( postcode_google_hits => [$hits, "Number of results on Google mentioning the postcode and faxyourmp/writetothem"] );
-        },
-
 
         # Body of message similar to other messages in queue to different recipients
         sub ($) {

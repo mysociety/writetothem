@@ -2,7 +2,6 @@ libconvert-base32-perl
 libcrypt-cbc-perl
 libmail-rfc822-address-perl
 libstring-ediff-perl
-libnet-google-perl
 libgd-gd2-perl
 php-html-common
 php-pear

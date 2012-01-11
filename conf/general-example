@@ -67,9 +67,6 @@ define('OPTION_CONTACT_EMAIL', 'team@'.OPTION_EMAIL_DOMAIN);
 // must be delivered to the bounce processing scripts.
 define('OPTION_EMAIL_PREFIX', 'fyr-');
 
-// Google API key, if available (used for one of the anti-abuse measures).
-define('OPTION_GOOGLE_API_KEY', '');
-
 // Maximum similarity between a new message and existing messages before a
 // message is noted as being similar to another. Numbers nearer to unity
 // indicate greater similarity.
