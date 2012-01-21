@@ -145,7 +145,7 @@ class ADMIN_PAGE_FYR_QUEUE {
     </tr>
     <form action="<?=htmlspecialchars(url_new("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
 <?
-	$c = 1;
+            $c = 1;
             foreach ($messages as $message) {
                 print '<tr' . ($c==1 ? ' class="v"' : '') . '>';
                 print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
@@ -531,7 +531,7 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
             if ($message['state'] == 'pending')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
-	    elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed')
+            elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed')
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Retry');
 
             if (!get_http_var('body'))

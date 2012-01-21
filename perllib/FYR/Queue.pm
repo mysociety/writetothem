@@ -2210,11 +2210,11 @@ sub admin_get_queue ($$) {
             $where = "where id = ?";
             push @params, $token_found_id;
         } elsif (mySociety::EmailUtil::is_valid_email($params->{query})) {
-            $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
+            $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?) ORDER BY created DESC";
             push @params, $params->{query};
             push @params, $params->{query};
         } elsif ($params->{query} =~ /^(ready) (CED|COP|DIW|EUR|HOC|LAC|LAE|LBW|LGE|MTW|NIE|SPC|SPE|UTE|UTW|WAC|WAE|WMC)$/) {
-            $where = "where state = ? and recipient_type = ?";
+            $where = "where state = ? and recipient_type = ? ORDER BY created DESC";
             push @params, $1;
             push @params, $2;
         } else {
