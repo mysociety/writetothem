@@ -2258,7 +2258,7 @@ sub admin_get_queue ($$) {
         $where = "where recipient_type = ? order by created desc";
     } elsif ($filter eq 'rep_id') {
         push @params, $params->{rep_id};
-        $where = "where recipient_id = ? order by created desc";
+        $where = "where recipient_id = ? order by created asc";
     }
     my $sth = dbh()->prepare("
             select *, $message_calculated_values
