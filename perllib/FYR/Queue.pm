@@ -2210,11 +2210,11 @@ sub admin_get_queue ($$) {
             $where = "where id = ?";
             push @params, $token_found_id;
         } elsif (mySociety::EmailUtil::is_valid_email($params->{query})) {
-            $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?) ORDER BY created DESC";
+            $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
             push @params, $params->{query};
             push @params, $params->{query};
         } elsif ($params->{query} =~ /^(ready) (CED|COP|DIW|EUR|HOC|LAC|LAE|LBW|LGE|MTW|NIE|SPC|SPE|UTE|UTW|WAC|WAE|WMC)$/) {
-            $where = "where state = ? and recipient_type = ? ORDER BY created DESC";
+            $where = "where state = ? and recipient_type = ?";
             push @params, $1;
             push @params, $2;
         } else {
@@ -2255,10 +2255,10 @@ sub admin_get_queue ($$) {
         $where = q#where 1 = 0# if (scalar(@$logmatches) == 0);
     } elsif ($filter eq 'type') {
         push @params, $params->{query};
-        $where = "where recipient_type = ?";
+        $where = "where recipient_type = ? order by created desc";
     } elsif ($filter eq 'rep_id') {
         push @params, $params->{rep_id};
-        $where = "where recipient_id = ?";
+        $where = "where recipient_id = ? order by created desc";
     }
     my $sth = dbh()->prepare("
             select *, $message_calculated_values
