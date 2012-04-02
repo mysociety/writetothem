@@ -535,3 +535,11 @@ p.alertsuccess {
 
 #survey div#disclaimer { max-width:45em;}
 
+.party {
+    color: #666666;
+    font-size: 90%;
+}
+
+#front-help {
+    text-align: center;
+}

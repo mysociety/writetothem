@@ -210,7 +210,7 @@ function lords_form($error = array()) {
 	global $form_extra;
 ?>
 <style type="text/css">
-li {
+ul#lordChoice li {
 	padding-top: 2em;
 }
 </style>
@@ -231,7 +231,7 @@ different ways for you to find a Lord to contact. We hope you
 like the methods we have come up with. </p>
 
 
-<ul>
+<ul id="lordChoice">
 
 <li>
 <form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">

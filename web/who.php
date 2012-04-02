@@ -218,14 +218,14 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
         $text .= '.</p>';
         
         if ($rep_count && $rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE' && ! $skip_write_all) {
-            $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
+            $text .= '<p>' . write_all_link($va_type[1], $va_info[1]['rep_name_plural']) . '</p>';
         }
 
         if ($rep_count)
             $text .= display_reps($va_type[1], $representatives[1], $va_info[1], array());
 
         if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE') && ! $skip_write_all) {
-            $text .= write_all_link($va_type[1], $va_info[1]['rep_name_plural']);
+            $text .= '<p>' . write_all_link($va_type[1], $va_info[1]['rep_name_plural']) . '</p>';
         }
 
     } else {
@@ -239,7 +239,7 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
         }
         
         if ($rep_count > 1 && ! $skip_write_all) {
-            $text .= write_all_link($va_type, $va_info['rep_name_plural']);
+            $text .= '<p>' . write_all_link($va_type, $va_info['rep_name_plural']) . '</p>';
         }
 
         if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
@@ -249,7 +249,7 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
 
         if ($va_type == 'WMC') {
             if ($rep_count)
-                $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou.com</a></p>';
+                $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou</a></p>';
             # .maincol / .firstcol have margin-bottom set to none, override
             $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
             $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
@@ -412,10 +412,7 @@ function display_reps($va_type, $representatives, $va_info, $options) {
         if ($photo == 0) $rep_list .= $a;
         $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
         if (array_key_exists('party', $rep_info)) {
-            if ($options['extra_space']) {
-                 $rep_list .= '<br>';
-            }
-            $rep_list .= '<span class="party">' . htmlspecialchars($rep_info['party']) . '</span>';
+            $rep_list .= ' <span class="party">(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</span>';
         }
     }
 

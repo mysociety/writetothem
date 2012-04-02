@@ -1,4 +1,4 @@
-<? $values['title'] = "Now select the representative you'd like to contact";
+<? $values['title'] = "Now select the representative you&rsquo;d like to contact";
 $values['robots'] = 'index, nofollow';
 template_draw('header', $values);
 ?>
@@ -55,10 +55,11 @@ representatives? Their job is to help you too!
 One level is shown here, or you can 
 <a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
 <? } else { ?>
-<p>You have several elected representatives at different levels of government. <b>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</b></p>
+<p>You have several elected representatives at different levels of government.
+<br><strong>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</strong></p>
 <? } ?>
 
-<table id="repstable" cellpadding="5" cellspacing="0" border="0">
+<table id="repstable" cellpadding="8" cellspacing="0" border="0">
     <tr valign="middle">
 <?
 $c = 0;

@@ -15,6 +15,20 @@ if (isset($values['cobrand'])) {
 <!--[if LT IE 7]>
 <style type="text/css">@import url("/ie6.css");</style>
 <![endif]-->
+<link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css">
+<script src="/jslib/jquery-1.6.2.min.js"></script>
+<script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script>
+$(function(){
+    $('.fancybox').find('small').hide()
+      .end().each(function(){
+        $(this).fancybox({
+            href: $(this).prop('href').replace('#', '-')
+        });
+    });
+});
+</script>
+
 <?php if (array_key_exists('stylesheet', $values)) { ?>
 <style type="text/css">@import "<?=$values['stylesheet'] ?>";</style>
 <?php }

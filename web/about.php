@@ -36,7 +36,16 @@ if ($page == 'about-pledgebank') {
     header("Location: http://www.pledgebank.com");
     exit;
 }
-    
+
+$t = 'about-qa-';
+if (substr($page, 0, strlen($t)) == $t) {
+    $page = substr_replace($page, 'qa/', 0, strlen($t));
+}
+$t = 'about-yourrep-';
+if (substr($page, 0, strlen($t)) == $t) {
+    $page = substr_replace($page, 'yourrep/', 0, strlen($t));
+}
+
 $values = array('cobrand' => $cobrand);
 
 if ($page == 'write-checkemail')

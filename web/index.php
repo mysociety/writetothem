@@ -311,6 +311,7 @@ $form = postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $optio
 
 // Display page
 template_draw($template, array(
+        'body_id' => 'home',
         "title" => $title,
         "blurb-top" => $blurb_top,
         "form" => $form, 

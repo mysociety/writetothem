@@ -440,8 +440,7 @@ function cobrand_rep_list_options($cobrand) {
         return $cobrand_handle->rep_list_options();
     }
   }
-  return array('extra_space'       => true, 
-               'include_write_all' => false);
+  return array('include_write_all' => false);
 }
 
 // Return the rendering options for message-writing form
