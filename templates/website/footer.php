@@ -1,11 +1,9 @@
 </div>
 <div id="footer">
 The new FaxYourMP.  
-<a href="/about-us">Built by 
-<!--<img src="/images/mysociety_sm.gif" border="0" alt="mySociety" />-->
-mySociety</a>.  
+<a href="/about-us">Built by mySociety</a>.  
 <a href="/about-copyright">Data by GovEval</a>.
-<a href="http://www.m247.com/">Powered by M247</a>
+<a href="http://www.m247.com/">Hosted by M247</a>.
 <br>
 
 <? $links = array(
@@ -16,6 +14,7 @@ mySociety</a>.
     '/stats' => 'Statistics',
     '/about-linktous' => 'Link to us',
     '/about-copyright' => 'Copyright', /* for GNU Affero GPL */
+    '/about-privacy' => 'Privacy and Cookies',
 );
 foreach ($links as $uri => $text) {
     $f = '';
