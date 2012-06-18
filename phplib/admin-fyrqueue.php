@@ -210,11 +210,11 @@ class ADMIN_PAGE_FYR_QUEUE {
                 if ($message['recipient_via']) {
                     $repinfo = dadem_get_representative_info($message['recipient_id']);
                     if (!dadem_get_error($repinfo)) {
-                        $vainfo = mapit_get_voting_area_info($repinfo['voting_area']);
-                        $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
+                        $vainfo = mapit_call('area', $repinfo['voting_area']);
+                        $parentinfo = mapit_call('area', $vainfo['parent_area']);
                         mapit_check_error($parentinfo);
                         print '<a href="' .
-                           htmlspecialchars(url_new('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area_id'], 'pc', $message['sender_postcode']))  . '">' . 
+                           htmlspecialchars(url_new('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area'], 'pc', $message['sender_postcode']))  . '">' . 
                             htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
                     } else {
                         print 'recipient_via contact, but rep id not found ';

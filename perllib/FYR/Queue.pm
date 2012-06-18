@@ -167,8 +167,8 @@ sub check_group_unused($){
 # representatives of that area.
 sub get_via_representative ($) {
     my ($aid) = @_;
-    my $ainfo = mySociety::MaPit::get_voting_area_info($aid);
-    my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area_id});
+    my $ainfo = mySociety::MaPit::call('area', $aid);
+    my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area});
 
     throw FYR::Error("Bad return from DaDem looking up contact via info", FYR::Error::BAD_DATA_PROVIDED)
         unless (ref($vainfo) eq 'ARRAY');
@@ -1106,7 +1106,7 @@ sub email_template_params ($%) {
 
     # Also obtain the voting area name -- needed for the via template.
     my $r = mySociety::DaDem::get_representative_info($msg->{recipient_id});
-    my $A = mySociety::MaPit::get_voting_area_info($r->{voting_area});
+    my $A = mySociety::MaPit::call('area', $r->{voting_area});
     $params{recipient_area_name} = $A->{name};
     
     return \%params;
