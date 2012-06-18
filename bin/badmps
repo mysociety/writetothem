@@ -39,11 +39,8 @@ my $verbose = 0;
 
 # Need to obtain a list of MP/constituency names and then pick out messages
 # by those.
-print STDERR "get constituency IDs... " if $verbose > 0;
-my $areaids = mySociety::MaPit::get_areas_by_type('WMC');
-print STDERR "done\n" if $verbose > 0;
-print STDERR "get constituency info... " if $verbose > 0;
-my %wmc = %{mySociety::MaPit::get_voting_areas_info($areaids)};
+print STDERR "get constituencies... " if $verbose > 0;
+my %wmc = %{ mySociety::MaPit::call('areas', 'WMC') };
 print STDERR "done\n" if $verbose > 0;
 
 print STDERR "get MP IDs... " if $verbose > 0;
