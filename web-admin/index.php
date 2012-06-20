@@ -12,8 +12,8 @@
 
 require_once "../conf/general";
 require_once "../phplib/admin-fyrqueue.php";
+require_once "../phplib/admin-reps.php";
 require_once "../commonlib/phplib/admin-ratty.php";
-require_once "../commonlib/phplib/admin-reps.php";
 require_once "../commonlib/phplib/admin-phpinfo.php";
 require_once "../commonlib/phplib/admin-serverinfo.php";
 require_once "../commonlib/phplib/admin-configinfo.php";
