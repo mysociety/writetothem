@@ -762,7 +762,7 @@ sub do_send_group_abuse {
     # None of these messages should get through
     my @new_rep_names = ('Tony Brett', 'Anne Marie Canning');
     $repinfo = {repname => 'all', 
-                reptype => 'district councillors',
+                reptype => 'District Councillors',
                 repnames => \@new_rep_names};
     send_message_to_rep(13,
                         'OX 13d R', # Lincoln college, Oxford

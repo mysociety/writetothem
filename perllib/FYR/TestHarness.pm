@@ -114,7 +114,7 @@ sub send_message_to_rep {
         my $link;
         if ($repname eq 'all'){
             my $alllink = "Write to all your $reptype";
-            $link = $wth->browser_find_link(text_regex => qr/$alllink/);
+            $link = $wth->browser_find_link(text_regex => qr/$alllink/i);
         }else{
             $link = $wth->browser_find_link(text_regex => qr/$repname/);
         }
