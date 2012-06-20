@@ -105,7 +105,7 @@ print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../writetothem/");
 $wth->php_check_syntax("../../writetothem/templates/emails/", qr//);
 my $expected_messages = { enter_postcode => 'First, type your UK postcode:',
-                          select_rep     => "Now select the representative you'd like to contact",
+                          select_rep     => "Now select the representative you&rsquo;d like to contact",
                           select_lord    => 'Which Lord would you like to write to?',
                           write_message  => 'Now Write Your Message',
                           preview        => 'Now Preview The Message',
@@ -423,7 +423,7 @@ sub do_send_cobrand_message {
 
     $options->{base_url} = $base_url; 
     $options->{cobrand} = 'animalaid';
-    my $repinfo = {repname => 'Stephen Brown'};
+    my $repinfo = {repname => 'Anne Marie Canning'};
 
     send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
@@ -439,7 +439,7 @@ sub do_send_cobrand_message {
     );
 
     confirm_message(2, $repinfo, $options);
-    check_delivered_to_rep(2, 'Stephen Brown', '32 Wheresome Wroad', $options);
+    check_delivered_to_rep(2, 'Anne Marie Canning', '32 Wheresome Wroad', $options);
     $options->{cobrand} = undef;
 
     # Run tests in any TestHarness.pm files in for Cobrands
@@ -760,7 +760,7 @@ sub do_send_group_abuse {
         }
     }
     # None of these messages should get through
-    my @new_rep_names = ('Tony Brett', 'Stephen Brown');
+    my @new_rep_names = ('Tony Brett', 'Anne Marie Canning');
     $repinfo = {repname => 'all', 
                 reptype => 'District Councillors', 
                 repnames => \@new_rep_names};
