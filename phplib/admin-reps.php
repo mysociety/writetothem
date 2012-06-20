@@ -44,7 +44,7 @@ class ADMIN_PAGE_REPS {
         mapit_check_error($area_info);
 
         $generation = 0;
-        $generations = mapit_call('generations');
+        $generations = mapit_call('generations', '');
         foreach ($generations as $g) {
             if ($g['active'] && $g['id'] > $generation) {
                 $generation = $g['id'];
@@ -290,8 +290,9 @@ class ADMIN_PAGE_REPS {
                 }
             }
 
+            $rep_name = isset($va_rep_name[$vainfo['type']]) ? $va_rep_name[$vainfo['type']] : '';
             $form->addElement('static', 'office', 'Office:',
-                htmlspecialchars($va_rep_name[$vainfo['type']]) . " for " .
+                htmlspecialchars($rep_name) . " for " .
                 htmlspecialchars($vainfo['name']) . " " . htmlspecialchars($va_type_name[$vainfo['type']]) .
                 ($parentinfo ? " in " . 
                 htmlspecialchars($parentinfo['name']) . " " . htmlspecialchars($va_type_name[$parentinfo['type']]) : "" ));
@@ -352,8 +353,8 @@ class ADMIN_PAGE_REPS {
                 foreach (array(
                     "tel ". $repinfo['name'],
                     "fax ". $repinfo['name'],
-                    "tel ". $repinfo['name'] . " " . $va_rep_name[$vainfo['type']],
-                    "fax ". $repinfo['name'] . " " . $va_rep_name[$vainfo['type']]
+                    "tel ". $repinfo['name'] . " " . $rep_name,
+                    "fax ". $repinfo['name'] . " " . $rep_name
                     ) as $searchq) 
                     $search_links .= "<a href=\"http://search.yahoo.com/search?p=".htmlspecialchars($searchq)."\"> ".htmlspecialchars($searchq)."</a> | ";
                 $form->addElement('static', 'newlink', null, $search_links);
