@@ -44,7 +44,7 @@ class ADMIN_PAGE_REPS {
         mapit_check_error($area_info);
 
         $generation = 0;
-        $generations = mapit_call('generations'));
+        $generations = mapit_call('generations');
         foreach ($generations as $g) {
             if ($g['active'] && $g['id'] > $generation) {
                 $generation = $g['id'];
