@@ -113,7 +113,7 @@ function get_postcode() {
 }
 
 function get_area_types() {
-    global $cobrand;
+    global $cobrand, $cocode;
     $a_forward = get_http_var('a');
     if ($cobrand) {
         $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
