@@ -1,6 +1,13 @@
-<? $va_info = $values['va_info'];
+<?
 
-$values['title'] = $va_info['name'] . " " . $va_info['type_name'] ." Corrections";
+global $va_type_name, $va_rep_name, $va_rep_name_plural;
+$va_info = $values['va_info'];
+$name = $va_info['name'];
+$type_name = $va_type_name[$va_info['type']];
+$rep_name = $va_rep_name[$va_info['type']];
+$rep_name_plural = $va_rep_name_plural[$va_info['type']];
+
+$values['title'] = $name . " " . $type_name ." Corrections";
 $values['robots'] = 'noindex, nofollow';
 template_draw('header', $values);
 
@@ -11,12 +18,12 @@ template_draw('header', $values);
 <p>Thank you for helping us keep up to date.</p>
 
 <? if (count($values['reps_info']) != 1) { ?>
-<p>Below are the <?=$va_info['rep_name_plural'] ?> from <strong><?=$va_info['name'] ?> 
-<?=$va_info['type_name']?></strong>
+<p>Below are the <?=$rep_name_plural ?> from <strong><?=$name ?>
+ <?=$type_name?></strong>
 in <?=$values['parent_info']['name']?>.
-Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$va_info['rep_name'] ?> in this <?=$va_info['type_name'] ?> at all.</p>
+Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$rep_name ?> in this <?=$type_name ?> at all.</p>
 <? } else { ?>
-<p>Below is the <?=$va_info['rep_name'] ?> from <strong><?=$va_info['name'] ?></strong>.
+<p>Below is the <?=$rep_name ?> from <strong><?=$name ?></strong>.
 Please edit their details if they are incorrect.</p>
 <? } ?>
 <form action="corrections" method="post">
@@ -38,9 +45,9 @@ if (count($values['reps_info'])) {
 }
 ?>
 
-<p>Alternatively, if this <?=$va_info['type_name'] ?> is missing a <?=$va_info['rep_name'] ?>, please fill in their details below:</p>
+<p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
 
-<label for="newname">Missing <?=$va_info['rep_name'] ?>'s name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
+<label for="newname">Missing <?=$rep_name ?>'s name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
 
 <p>If you looked up this information on the web, please tell us the address of the page where you found it:
 <input type="text" name="url" id="url" value="http://" size="50"></p>
@@ -57,5 +64,5 @@ if (count($values['reps_info'])) {
 </p>
 </form>
 
-<? 
+<?
 template_draw('footer', $values); ?>

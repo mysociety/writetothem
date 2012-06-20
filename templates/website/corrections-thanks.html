@@ -1,6 +1,9 @@
-<? $va_info = $values['va_info'];
+<?
 
-$values['title'] = "Thanks for your corrections to " . $va_info['name'] . " " . $va_info['type_name'] . "!";
+global $va_type_name;
+$va_info = $values['va_info'];
+
+$values['title'] = "Thanks for your corrections to " . $va_info['name'] . " " . $va_type_name[$va_info['type']] . "!";
 $values['robots'] = 'noindex, nofollow';
 template_draw('header', $values);
 

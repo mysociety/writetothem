@@ -2,8 +2,8 @@
 /*
  * index.php:
  * 
- * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: francis@mysociety.org. WWW: http://www.mysociety.org
+ * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
  * $Id: index.php,v 1.79 2009-11-30 09:26:16 louise Exp $
  * 
@@ -191,9 +191,19 @@ if ($pc) {
         exit;
     }
 
-    $voting_areas = mapit_get_voting_areas($pc);
+    $voting_areas = mapit_call('postcode', $pc, array(), array(
+        400 => MAPIT_BAD_POSTCODE,
+        404 => MAPIT_POSTCODE_NOT_FOUND,
+    ));
 
     if (!rabx_is_error($voting_areas)) {
+
+        $va = array();
+        foreach ($voting_areas['areas'] as $id => $arr) {
+            $va[$arr['type']] = $id;
+        }
+        $voting_areas = $va;
+
         /*
          * Hook for cobrand to perform any extra checks */
         if (cobrand_check_areas($cobrand, $cocode, $voting_areas, $pc, $a_forward)){
@@ -239,6 +249,7 @@ if ($pc) {
         }
         exit;
     }
+
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
         $error_message = cobrand_bad_postcode_message($cobrand, $cocode);
         if (!$error_message) {

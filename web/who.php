@@ -3,98 +3,42 @@
  * who.php:
  * Page to ask which representative they would like to contact
  *
- * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: francis@mysociety.org. WWW: http://www.mysociety.org
- *
- * $Id: who.php,v 1.117 2009-11-30 09:26:16 louise Exp $
+ * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
  */
 
-require_once "../phplib/fyr.php";
+$attend_prep = array(
+    'LBO' => "on the",
+    'LAS' => "on the",
+    'CTY' => "on",
+    'DIS' => "on",
+    'UTA' => "on",
+    'MTD' => "on",
+    'COI' => "on",
+    'LGD' => "on",
+    'SPA' => "in the",
+    'WAS' => "on the",
+    'NIA' => "on the",
+    'WMP' => "in the",
+    'HOL' => "in the",
+    'EUP' => "in the",
+);
 
+require_once "../phplib/fyr.php";
 require_once "../commonlib/phplib/utility.php";
 require_once "../commonlib/phplib/dadem.php";
 require_once "../commonlib/phplib/mapit.php";
 require_once "../commonlib/phplib/votingarea.php";
 
-// Input data
-
-// Postcode
-$fyr_postcode = canonicalise_postcode(get_http_var('pc'));
-if ($fyr_postcode == '') {
-    header('Location: /');
-    exit();
-}
-
-$a_forward = get_http_var('a');
-if ($cobrand) {
-    $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
-}
-
-$area_types = fyr_parse_area_type_list($a_forward);
-
-debug("FRONTEND", "postcode is $fyr_postcode");
-debug_timestamp();
-fyr_rate_limit(array('postcode' => array($fyr_postcode, "Postcode that's been typed in ")));
-
-// Find all the districts/constituencies and so on (we call them "voting
-// areas") for the postcode
-$voting_areas = mapit_get_voting_areas($fyr_postcode);
-if (rabx_is_error($voting_areas)) {
-    header('Location: ' . url_new('/', true, 'pc', $fyr_postcode));
-    exit;
-}
-debug_timestamp();
-
-// Limit to specific types of representatives
-$fyr_all_url = null;
-if ($area_types) {
-    $a = array();
-    foreach (array_keys($area_types) as $t) {
-        if (array_key_exists($t, $voting_areas))
-            $a[$t] = $voting_areas[$t];
-        if (array_key_exists($t, $va_inside)
-            && array_key_exists($va_inside[$t], $voting_areas))
-            $a[$va_inside[$t]] = $voting_areas[$va_inside[$t]];
-    }
-    $voting_areas = $a;
-    $fyr_all_url = '';
-    $cobrand_all_url = cobrand_main_write_url($cobrand, $fyr_postcode, $cocode, fyr_external_referrer());
-    if ($cobrand_all_url != '') {
-        $fyr_all_url = $cobrand_all_url;
-    } else {
-        $fyr_all_url = htmlspecialchars(url_new('who', false,
-                        'pc', $fyr_postcode,
-                        'fyr_extref', fyr_external_referrer(),
-                        'cocode', $cocode));
-    }
-}
-
-// If in a county, but not a county electoral division, display explanation
-// (which is lack of data from Ordnance Survey)
-$fyr_county_note = false;
-if (array_key_exists('CTY', $voting_areas) && !array_key_exists('CED', $voting_areas)) {
-    $fyr_county_note = true; 
-}
-
-$voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
-mapit_check_error($voting_areas_info);
-debug_timestamp();
-
-$area_representatives = dadem_get_representatives(array_values($voting_areas));
-$error = dadem_get_error($area_representatives);
-dadem_check_error($area_representatives);
-debug_timestamp();
-
-$all_representatives = array();
-foreach (array_values($area_representatives) as $rr) {
-    $all_representatives = array_merge($all_representatives, $rr);
-}
-$representatives_info = dadem_get_representatives_info($all_representatives);
-dadem_check_error($representatives_info);
-debug_timestamp();
-
-$meps_hidden = euro_check($area_representatives, $voting_areas);
+$fyr_postcode = get_postcode();
+$area_types = get_area_types();
+$voting_areas = postcode_to_areas($fyr_postcode);
+$fyr_all_url = limit_areas($area_types, $voting_areas); # Might alter voting_areas
+$va_ids = area_ids($voting_areas);
+$area_representatives = get_reps($va_ids);
+$representatives_info = get_reps_info($area_representatives);
+$meps_hidden = euro_check($area_representatives, $va_ids);
 
 // For each voting area in order, find all the representatives.  Put
 // descriptive text and form text in an array for the template to
@@ -103,203 +47,37 @@ $fyr_representatives = array();
 $fyr_headings = array();
 $fyr_rep_descs = array(); 
 $fyr_rep_lists = array();
-$fyr_error = null;
-foreach ($va_display_order as $va_type) {
-    // Search for whether display type is fully present
-    if (is_array($va_type)) {
-        $ok = false;
-        foreach ($va_type as $vat) {
-            if (array_key_exists($vat, $voting_areas))
-                $ok = true;
-        }
-        if (!$ok) 
-            continue;
+
+foreach ($va_display_order as $va_types) {
+    $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
+    if (!is_array($va_types)) $va_types = array($va_types);
+    if (!type_present($voting_areas, $va_types)) continue;
+
+    $va_areas = type_area($voting_areas, $va_types);
+    $eb_area = elected_body_area($voting_areas, $va_types);
+
+    list($representatives, $rep_counts) = get_rep_counts($va_areas, $area_representatives);
+    $rep_count = array_sum($rep_counts);
+
+    $col_blurb = col_blurb($va_types, $va_areas[0], $eb_area, $rep_count, $rep_counts[0]);
+    if ($has_list_reps) {
+        list($text, $col_after) = display_reps_two_types($va_types, $va_areas, $representatives, $rep_count, $rep_counts);
     } else {
-        if (!array_key_exists($va_type, $voting_areas))
-            continue;
+        list($text, $col_after) = display_reps_one_type($va_types[0], $va_areas[0], $representatives[0], $rep_count, $meps_hidden);
     }
 
-    // If it is, display it
-    unset($va_specificid); unset($va_info);
-    if (is_array($va_type)) {
-        foreach ($va_type as $vat) $va_specificid[] = $voting_areas[$vat];
-        foreach ($va_specificid as $vasid) $va_info[] = $voting_areas_info[$vasid];
+    if ($rep_count > 1) {
+        $heading = "Your {$va_areas[0]['rep_name_long_plural']}";
     } else {
-        $va_specificid = $voting_areas[$va_type];
-        // The voting area is the ward/division. e.g. West Chesterton Electoral Division
-        debug("FRONTEND", "voting area is type $va_type id $va_specificid");
-        $va_info = $voting_areas_info[$va_specificid];
-    }
-
-    // The elected body is the overall entity. e.g. Cambridgeshire County
-    // Council.
-    if (is_array($va_type)) {
-        $eb_type = $va_inside[$va_type[0]];
-    } else {
-        $eb_type = $va_inside[$va_type];
-    }
-    $eb_specificid = $voting_areas[$eb_type];
-    debug("FRONTEND", "electoral body is type $eb_type id $eb_specificid");
-    $eb_info = $voting_areas_info[$eb_specificid];
-
-    // Description of areas of responsibility
-    $eb_info['description'] = $va_responsibility_description[$eb_type];
-
-    // Count representatives
-    unset($representatives);
-    $rep_counts = array();
-    if (is_array($va_type)) {
-        foreach ($va_specificid as $vasid) $representatives[] = $area_representatives[$vasid];
-        $rep_count = 0;
-        foreach ($representatives as $key => $rep) {
-            $rep_counts[] = count($rep);
-            $rep_count += count($rep);
-            shuffle($representatives[$key]);
-        }
-    } else {
-        $representatives = $area_representatives[$va_specificid];
-        $rep_count = count($representatives);
-        shuffle($representatives);
+        $heading = "Your {$va_areas[0]['rep_name_long']}";
     }
 
     // Data bad due to election etc?
-    $disabled = false;
-    if (is_array($va_type))
-        $va_alone = $va_info[0];
-    else 
-        $va_alone = $va_info;
-    $parent_status = dadem_get_area_status($va_alone['parent_area_id']);
-    dadem_check_error($parent_status);
-    $status = dadem_get_area_status($va_alone['area_id']);
-    dadem_check_error($status);
-    if ($parent_status != 'none' || $status != 'none') {
-        $disabled = true;
-    }
-
-    $col_blurb = cobrand_col_blurb($cobrand, $va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried);
-    if (!$col_blurb) {
-         $col_blurb = col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried);
-    }
-    $text = '';
-    $col_after = '';
-    // Already putting 'write all' link in list? 
-    $options = cobrand_rep_list_options($cobrand);
-    $skip_write_all = false;
-    if (array_key_exists('include_write_all', $options) && $options['include_write_all']) {
-         $skip_write_all = true;
-    }
-    // Create HTML
-    global $disabled_child_types;
-    if (is_array($va_type)) {
-        // Plural
-        if ($rep_count > 1) {
-            $heading = "Your {$va_info[0]['rep_name_long_plural']}";
-        } else {
-            $heading = "Your {$va_info[0]['rep_name_long']}";
-        }
-        if ($rep_count && $rep_counts[0]>1 && ! $skip_write_all) {
-            $text .= write_all_link($va_type[0], $va_info[0]['rep_name_plural']);
-        }
-        if ($rep_count)
-            $text .= display_reps($va_type[0], $representatives[0], $va_info[0], array());
-        $text .= '<p>';
-        if ($va_type[1] == 'LAE') {
-            $text .= "$rep_counts[1] London Assembly list members also represent you";
-        } elseif ($rep_count && $rep_counts[1] > 1) {
-            $text .= "$rep_counts[1] {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name_plural']} also represent you";
-        } else {
-            $text .= "One {$va_info[1]['name']} {$va_info[1]['type_name']} {$va_info[1]['rep_name']} also represents you";
-        }
-        if ($va_type[1] == 'SPE') {
-            $text .= '; if you are writing on a constituency matter or similar <strong>local or personal problem</strong>, please
-write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs.
-Only <strong>one</strong> MSP is allowed to help you at a time';
-}
-        $text .= '.</p>';
-        
-        if ($rep_count && $rep_counts[1]>1 && $va_type[1] != 'SPE' && $va_type[1] != 'LAE' && ! $skip_write_all) {
-            $text .= '<p>' . write_all_link($va_type[1], $va_info[1]['rep_name_plural']) . '</p>';
-        }
-
-        if ($rep_count)
-            $text .= display_reps($va_type[1], $representatives[1], $va_info[1], array());
-
-        if ($rep_count && $rep_counts[1]>1 && ($va_type[1] == 'SPE' || $va_type[1] == 'LAE') && ! $skip_write_all) {
-            $text .= '<p>' . write_all_link($va_type[1], $va_info[1]['rep_name_plural']) . '</p>';
-        }
-
-    } else {
-        // Singular
-        if ($rep_count > 1) {
-            if ($va_type == 'EUR' && count($meps_hidden))
-                $rep_count += count($meps_hidden);
-            $heading = "Your ${va_info['rep_name_long_plural']}";
-        } else {
-            $heading = "Your ${va_info['rep_name_long']}";
-        }
-        
-        if ($rep_count > 1 && ! $skip_write_all) {
-            $text .= '<p>' . write_all_link($va_type, $va_info['rep_name_plural']) . '</p>';
-        }
-
-        if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
-            $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
-        }
-        $text .= display_reps($va_type, $representatives, $va_info, array());
-
-        if ($va_type == 'WMC') {
-            if ($rep_count)
-                $text .= '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_info['name'])) . '">Find out more about ' . $representatives_info[$representatives[0]]['name'] . ' at TheyWorkForYou</a></p>';
-            # .maincol / .firstcol have margin-bottom set to none, override
-            $col_after .= '<h3 class="houseoflords">House of Lords</h3>';
-            $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
-            $col_after .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
-#            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
-# yellow flash advert
-#            $text .= '</div>';
-        } elseif ($va_type == 'EUR' && count($meps_hidden)) {
-            # XXX Specific to what euro_check currently does!
-            $text .= '<p style="margin-top:2em"><small>The Conservative MEPs
-for your region have informed us that they have divided it into areas, with ';
-            if (count($meps_hidden)==1)
-                $text .= 'one or two MEPs';
-            else
-                $text .= 'one MEP';
-            $text .= ' dealing with constituent correspondence per area, so we only show ';
-            if (count($meps_hidden)==1)
-                $text .= 'them';
-            else
-                $text .= 'that MEP';
-            $text .= ' above; you can contact the ';
-            if (count($meps_hidden)==1)
-                $text .= 'other';
-            else
-                $text .= 'others';
-            $text .= ' here:</small></p>';
-            $text .= display_reps($va_type, $meps_hidden, $va_info, array('small' => true));
-        }
-        global $va_council_child_types;
-        if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
-            $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_specificid.'">Have you spotted a mistake in the above list?</a></p>';
-        }
-    }
-
-    if ($disabled) {
-        if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
-            $text = "<p>There have been boundary changes at the last election that
-            means we can't yet say who your representative is. We hope to get our
-            boundary database updated as soon as we can.</p>";
-        } elseif ($status == "recent_election" || $parent_status == "recent_election") {
-            $text = "<p>Due to the recent election, we don't yet have details for this
-                representative.  We'll be adding them as soon as we can.</p>";
-        } elseif ($status == "pending_election" || $parent_status == "pending_election") {
-            $text = "<p>There's an upcoming election.  We'll be adding your new
-                    representative as soon as we can after the election.</p>";
-        } else {
-            $text = "Representative details are not available for an unknown reason.";
-        }
+    if ( $disabled = check_area_status($va_areas[0]) ) {
+        $text = $disabled;
         $heading = "<strike>$heading</strike>";
     }
+
     array_push($fyr_rep_descs, $col_blurb);
     array_push($fyr_rep_lists, $text);
     array_push($fyr_representatives, "$col_blurb$text$col_after");
@@ -312,8 +90,6 @@ template_draw("who", array(
     "reps" => $fyr_representatives,
     "template" => "who", 
     "headings" => $fyr_headings,
-    "error" => $fyr_error,
-    "county_note" => $fyr_county_note,
     "all_url" => $fyr_all_url,
     "cobrand" => $cobrand, 
     "host" => fyr_get_host(), 
@@ -322,6 +98,150 @@ template_draw("who", array(
     ));
 
 debug_timestamp();
+
+# ---
+
+function get_postcode() {
+    $postcode = canonicalise_postcode(get_http_var('pc'));
+    if (!$postcode) {
+        header('Location: /');
+        exit;
+    }
+    debug("FRONTEND", "postcode is $postcode");
+    fyr_rate_limit(array('postcode' => array($postcode, "Postcode that's been typed in ")));
+    return $postcode;
+}
+
+function get_area_types() {
+    global $cobrand;
+    $a_forward = get_http_var('a');
+    if ($cobrand) {
+        $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
+    }
+    $area_types = fyr_parse_area_type_list($a_forward);
+    debug_timestamp();
+    return $area_types;
+}
+
+// Find all the districts/constituencies and so on (we call them "voting
+// areas") for the postcode provided
+function postcode_to_areas($postcode) {
+    $voting_areas = mapit_call('postcode', $postcode);
+    if (rabx_is_error($voting_areas)) {
+        header('Location: ' . url_new('/', true, 'pc', $postcode));
+        exit;
+    }
+    debug_timestamp();
+
+    # Switch the voting_area array to be TYPE => AREA, instead of ID => AREA.
+    $a = array();
+    foreach ($voting_areas['areas'] as $id => $area) {
+        $a[$area['type']] = $area;
+    }
+    return $a;
+}
+
+function limit_areas($area_types, &$voting_areas) {
+    global $va_inside;
+    if (!$area_types) return null;
+
+    $a = array();
+    foreach (array_keys($area_types) as $t) {
+        if (array_key_exists($t, $voting_areas)) {
+            $a[$t] = $voting_areas[$t];
+        }
+        if (array_key_exists($t, $va_inside)
+            && array_key_exists($va_inside[$t], $voting_areas)) {
+            $a[$va_inside[$t]] = $voting_areas[$va_inside[$t]];
+        }
+    }
+    $voting_areas = $a;
+
+    global $cobrand, $fyr_postcode, $cocode;
+    if ($cobrand_all_url = cobrand_main_write_url($cobrand, $fyr_postcode, $cocode, fyr_external_referrer())) {
+        return $cobrand_all_url;
+    }
+    return htmlspecialchars(url_new('who', false,
+        'pc', $fyr_postcode,
+        'fyr_extref', fyr_external_referrer(),
+        'cocode', $cocode
+    ));
+}
+
+function area_ids($voting_areas) {
+    $va_ids = array();
+    foreach ($voting_areas as $type => $area) {
+        $va_ids[] = $area['id'];
+    }
+    return $va_ids;
+}
+
+function get_reps($va_ids) {
+    $area_representatives = dadem_get_representatives($va_ids);
+    dadem_check_error($area_representatives);
+    debug_timestamp();
+    return $area_representatives;
+}
+
+function get_reps_info($area_representatives) {
+    $all_representatives = array_reduce(array_values($area_representatives), 'array_merge', array());
+    $representatives_info = dadem_get_representatives_info($all_representatives);
+    dadem_check_error($representatives_info);
+    debug_timestamp();
+    return $representatives_info;
+}
+
+function type_present($voting_areas, $va_types) {
+    $ok = false;
+    foreach ($va_types as $vat) {
+        if (array_key_exists($vat, $voting_areas))
+            $ok = true;
+    }
+    if ($ok) return true;
+    return false;
+}
+
+# Return the one or two areas for the current type we're looping through,
+# and add on rep name related variables
+function type_area($voting_areas, $va_types) {
+    global $va_rep_name, $va_rep_name_long, $va_rep_name_plural, $va_rep_name_long_plural;
+    $va_area = array();
+    foreach ($va_types as $vat) {
+        $v = $voting_areas[$vat];
+        $v['rep_name'] = $va_rep_name[$vat];
+        $v['rep_name_long'] = $va_rep_name_long[$vat];
+        $v['rep_name_plural'] = $va_rep_name_plural[$vat];
+        $v['rep_name_long_plural'] = $va_rep_name_long_plural[$vat];
+        $va_area[] = $v;
+        // The voting area is the ward/division. e.g. West Chesterton Electoral Division
+        debug("FRONTEND", "voting area is type $vat id $v[id]");
+    }
+    return $va_area;
+}
+
+# The elected body is the overall entity. e.g. Cambridgeshire County
+# Council.
+function elected_body_area($voting_areas, $va_types) {
+    global $va_inside, $va_responsibility_description;
+    $eb_type = $va_inside[$va_types[0]];
+    $eb_area = $voting_areas[$eb_type];
+    debug("FRONTEND", "electoral body is type $eb_type id $eb_area[id]");
+    $eb_area['description'] = $va_responsibility_description[$eb_type];
+    return $eb_area;
+}
+
+function get_rep_counts($va_areas, $area_representatives) {
+    $representatives = array();
+    foreach ($va_areas as $vas) {
+        $representatives[] = $area_representatives[$vas['id']];
+    }
+    $rep_counts = array();
+    foreach ($representatives as $key => $rep) {
+        $rep_counts[] = count($rep);
+        shuffle($representatives[$key]);
+    }
+    return array($representatives, $rep_counts);
+}
 
 function write_all_link($va_type, $rep_desc_plural) {
     global $cobrand, $cocode;
@@ -356,7 +276,7 @@ function general_write_all_url($va_type, $fyr_postcode){
                                     'cocode', $cocode));
 }
 
-function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
+function general_write_rep_url($rep_specificid, $fyr_postcode){
     global $cocode;
     return htmlspecialchars(url_new('/write', true,
                                     'who', $rep_specificid,
@@ -365,34 +285,25 @@ function general_write_rep_url($va_type, $rep_specificid, $fyr_postcode){
                                     'cocode', $cocode));
 }
 
-function col_blurb($va_type, $va_info, $eb_info, $rep_count, $rep_counts, $representatives, $va_salaried){
-  
+function col_blurb($va_types, $va_area, $eb_area, $main_rep_count, $rep_count) {
+    global $va_salaried, $attend_prep;
     $col_blurb = "<p>";
-     
-    if (is_array($va_type)) {
-        $col_blurb .= rep_text($rep_count, $rep_counts[0], $va_info[0], $eb_info);
+    if ($main_rep_count && $rep_count > 1) {
+        $col_blurb .= "Your $rep_count ${va_area['name']} ${va_area['rep_name_plural']} represent you";
     } else {
-        $col_blurb .= rep_text($rep_count, $rep_count, $va_info, $eb_info);
-        if (!$va_salaried[$va_type] && $va_info['country']!='S')
-            $col_blurb .= " Most ${va_info['rep_name_long_plural']} are not paid a salary, but get a basic allowance for the work they do.";
+        $col_blurb .= "Your ${va_area['name']} ${va_area['rep_name']} represents you";
+    }
+    $col_blurb .= ' ' . $attend_prep[$eb_area['type']] . ' ';
+    $col_blurb .= "${eb_area['name']}.  ${eb_area['description']}";
+    if (count($va_types)==1) {
+        if (!$va_salaried[$va_types[0]] && $va_area['country']!='S')
+            $col_blurb .= " Most ${va_area['rep_name_long_plural']} are not paid a salary, but get a basic allowance for the work they do.";
     }
     $col_blurb .= "</p>";
     return $col_blurb;
 }
-     
 
-function rep_text($main_rep_count, $rep_count, $va_info, $eb_info) {
-    $text = '';
-    if ($main_rep_count && $rep_count > 1) {
-        $text = "Your $rep_count ${va_info['name']} ${va_info['rep_name_plural']} represent you ${eb_info['attend_prep']} ";
-    } else {
-        $text = "Your ${va_info['name']} ${va_info['rep_name']} represents you ${eb_info['attend_prep']} ";
-    }
-    $text .= "${eb_info['name']}.  ${eb_info['description']}";
-    return $text;
-}
-
-function display_reps($va_type, $representatives, $va_info, $options) {
+function display_reps($va_type, $representatives, $va_area, $options) {
     global $representatives_info, $fyr_postcode, $cobrand, $cocode;
     $rep_list = ''; $photo = 0;
     $default_options = cobrand_rep_list_options($cobrand);
@@ -400,7 +311,7 @@ function display_reps($va_type, $representatives, $va_info, $options) {
     foreach ($representatives as $rep_specificid) {
         $rep_info = $representatives_info[$rep_specificid];
         $rep_list .= '<li>';
-        $url = general_write_rep_url($va_type, $rep_specificid, $fyr_postcode);
+        $url = general_write_rep_url($rep_specificid, $fyr_postcode);
         $a = '<a href="' .  cobrand_url($cobrand, $url, $cocode) . '">';
         if ($rep_specificid == '2000005') {
             $rep_list .= $a . '<img alt="" title="Portrait of Stom Teinberg MP" src="images/zz99zz.jpeg" align="left" border="0">';
@@ -418,10 +329,10 @@ function display_reps($va_type, $representatives, $va_info, $options) {
 
     if (array_key_exists('include_write_all', $options) && $options['include_write_all'] && count($representatives) > 1){
         $rep_list .= '<li class="all">';
-        $rep_list .= write_all_link($va_type, $va_info['rep_name_plural']);
+        $rep_list .= write_all_link($va_type, $va_area['rep_name_plural']);
         $rep_list .= '</li>';
     }
-    $rep_type =  str_replace(' ', '-', strtolower($va_info['rep_name_plural']));
+    $rep_type =  str_replace(' ', '-', strtolower($va_area['rep_name_plural']));
     $out = '<ul class="' . $rep_type . '" ';
     if ($photo==1) $out .= ' id="photo"';
     if (array_key_exists('small', $options) && $options['small']) $out .= ' style="font-size:83%"';
@@ -429,4 +340,145 @@ function display_reps($va_type, $representatives, $va_info, $options) {
     $out .= $rep_list . '</ul>';
     return $out;
 }
-?>
+
+function display_reps_one_type($va_type, $va_area, $representatives, $rep_count, $meps_hidden) {
+    global $representatives_info, $cobrand;
+
+    if ($rep_count > 1) {
+        if ($va_type == 'EUR' && count($meps_hidden))
+            $rep_count += count($meps_hidden);
+    }
+
+    $text = '';
+    if ($rep_count > 1 && !skip_write_all()) {
+        $text .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
+    }
+
+    if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
+        $representatives_info[$representatives[0]]['image'] = "/mpphotos/" . $representatives[0] . ".jpg";
+    }
+    $text .= display_reps($va_type, $representatives, $va_area, array());
+
+    $col_after = '';
+    if ($va_type == 'WMC') {
+        list($twfy, $col_after) = extra_mp_text($rep_count, $va_area, $representatives_info[$representatives[0]]['name']);
+        $text .= $twfy;
+    } elseif ($va_type == 'EUR' && count($meps_hidden)) {
+        $text .= hidden_meps_list($meps_hidden, $va_type, $va_area);
+    }
+    global $va_council_child_types;
+    if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
+        $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_area['id'].'">Have you spotted a mistake in the above list?</a></p>';
+    }
+    return array($text, $col_after);
+}
+
+function display_reps_two_types($va_types, $va_area, $representatives, $rep_count, $rep_counts) {
+    $text = '';
+    $skip_write_all = skip_write_all();
+    if ($rep_count && $rep_counts[0]>1 && !$skip_write_all) {
+        $text .= write_all_link($va_types[0], $va_area[0]['rep_name_plural']);
+    }
+    if ($rep_count) {
+        $text .= display_reps($va_types[0], $representatives[0], $va_area[0], array());
+    }
+    $text .= '<p>';
+    if ($va_types[1] == 'LAE') {
+        $text .= "$rep_counts[1] London Assembly list members also represent you";
+    } elseif ($rep_count && $rep_counts[1] > 1) {
+        $text .= "$rep_counts[1] {$va_area[1]['name']} {$va_area[1]['type_name']} {$va_area[1]['rep_name_plural']} also represent you";
+    } else {
+        $text .= "One {$va_area[1]['name']} {$va_area[1]['type_name']} {$va_area[1]['rep_name']} also represents you";
+    }
+    if ($va_types[1] == 'SPE') {
+        $text .= '; if you are writing on a constituency matter or similar <strong>local or personal problem</strong>, please
+write to your <strong>constituency MSP</strong> above, or pick just <strong>one</strong> of your regional MSPs.
+Only <strong>one</strong> MSP is allowed to help you at a time';
+    }
+    $text .= '.</p>';
+        
+    if ($rep_count && $rep_counts[1]>1 && $va_types[1] != 'SPE' && $va_types[1] != 'LAE' && !$skip_write_all) {
+        $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+    }
+
+    if ($rep_count) {
+        $text .= display_reps($va_types[1], $representatives[1], $va_area[1], array());
+    }
+
+    if ($rep_count && $rep_counts[1]>1 && ($va_types[1] == 'SPE' || $va_types[1] == 'LAE') && !$skip_write_all) {
+        $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+    }
+    return array($text, '');
+}
+
+function skip_write_all() {
+    global $cobrand;
+    $options = cobrand_rep_list_options($cobrand);
+    if (array_key_exists('include_write_all', $options) && $options['include_write_all']) {
+         return true;
+    }
+    return false;
+}
+
+function extra_mp_text($rep_count, $va_area, $name) {
+    $text = '';
+    if ($rep_count)
+        $text = '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a></p>';
+    # .maincol / .firstcol have margin-bottom set to none, override
+    $col_after = '<h3 class="houseoflords">House of Lords</h3>';
+    $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
+    $col_after .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
+#            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
+# yellow flash advert
+#            $text .= '</div>';
+    return array($text, $col_after);
+}
+
+function hidden_meps_list($meps_hidden, $va_type, $va_area) {
+    # XXX Specific to what euro_check currently does!
+    $text = '<p style="margin-top:2em"><small>The Conservative MEPs
+for your region have informed us that they have divided it into areas, with ';
+    if (count($meps_hidden)==1)
+        $text .= 'one or two MEPs';
+    else
+        $text .= 'one MEP';
+    $text .= ' dealing with constituent correspondence per area, so we only show ';
+    if (count($meps_hidden)==1)
+        $text .= 'them';
+    else
+        $text .= 'that MEP';
+    $text .= ' above; you can contact the ';
+    if (count($meps_hidden)==1)
+        $text .= 'other';
+    else
+        $text .= 'others';
+    $text .= ' here:</small></p>';
+    $text .= display_reps($va_type, $meps_hidden, $va_area, array('small' => true));
+    return $text;
+}
+
+function check_area_status( $va_alone ) {
+    $parent_status = dadem_get_area_status($va_alone['parent_area']);
+    dadem_check_error($parent_status);
+    $status = dadem_get_area_status($va_alone['id']);
+    dadem_check_error($status);
+    if ($parent_status == 'none' && $status == 'none') {
+        return false;
+    }
+    if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
+        $text = "<p>There have been boundary changes at the last election that
+        means we can't yet say who your representative is. We hope to get our
+        boundary database updated as soon as we can.</p>";
+    } elseif ($status == "recent_election" || $parent_status == "recent_election") {
+        $text = "<p>Due to the recent election, we don't yet have details for this
+            representative.  We'll be adding them as soon as we can.</p>";
+    } elseif ($status == "pending_election" || $parent_status == "pending_election") {
+        $text = "<p>There's an upcoming election.  We'll be adding your new
+                representative as soon as we can after the election.</p>";
+    } else {
+        $text = "Representative details are not available for an unknown reason.";
+    }
+    return $text;
+}
+
+

@@ -150,7 +150,7 @@ foreach ($statuses as $status_arr) {
 	$status = $status_arr[1];
 	$lookup[$area_id] = $status;
 }
-$areas_info = mapit_get_voting_areas_info(array_keys($lookup));
+$areas_info = mapit_call('areas', array_keys($lookup));
 mapit_check_error($areas_info);
 
 function by_name($a, $b) {

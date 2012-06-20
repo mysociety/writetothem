@@ -29,9 +29,9 @@ if (!array_key_exists('id', $fyr_values) || $fyr_values['id'] == '' || !ctype_di
 
 $fyr_vatype = $fyr_values['id'];
 
-$va_info = mapit_get_voting_area_info($fyr_vatype);
+$va_info = mapit_call('area', $fyr_vatype);
 mapit_check_error($va_info);
-$parent_info = mapit_get_voting_area_info($va_info['parent_area_id']);
+$parent_info = mapit_call('area', $va_info['parent_area']);
 mapit_check_error($parent_info);
 debug_timestamp();
 $area_reps = dadem_get_representatives(array($fyr_vatype));

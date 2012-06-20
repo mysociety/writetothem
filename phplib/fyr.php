@@ -23,11 +23,6 @@ require_once $dir . "/../commonlib/phplib/crosssell.php";
 require_once $dir . "/../commonlib/phplib/votingarea.php";
 require_once $dir . "/../phplib/cobrand.php";
 
-// Disable these types (due to elections / pending elections etc.)
-$disabled_child_types = array();
-#$disabled_child_types = array('CED', 'WMC');
-#$disabled_child_types = array();
-
 // Types which require no postcode authentication (e.g. House of Lords)
 $postcodeless_child_types = array('HOC'); 
 
