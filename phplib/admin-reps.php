@@ -54,8 +54,8 @@ class ADMIN_PAGE_REPS {
         for ($i = 0; $i < count($reps); $i++) {
             $rep = $reps[$i];
             $repinfo = $info[$rep];
-            $ainfo = $area_info[$repinfo['voting_area']];
-            if ($ainfo) {
+            if (isset($area_info[$repinfo['voting_area']])) {
+                $ainfo = $area_info[$repinfo['voting_area']];
                 $html .= "<!-- gen ".$ainfo['generation_low']."-".$ainfo['generation_high']." -->";
                 if ($generation < $ainfo['generation_low'] || $generation > $ainfo['generation_high'])
                     $html .= "<i>out of generation</i> ";
