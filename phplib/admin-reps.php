@@ -291,7 +291,7 @@ class ADMIN_PAGE_REPS {
             }
 
             $form->addElement('static', 'office', 'Office:',
-                htmlspecialchars($va_rep_name[$vainfo['type']] . " for " .
+                htmlspecialchars($va_rep_name[$vainfo['type']]) . " for " .
                 htmlspecialchars($vainfo['name']) . " " . htmlspecialchars($va_type_name[$vainfo['type']]) .
                 ($parentinfo ? " in " . 
                 htmlspecialchars($parentinfo['name']) . " " . htmlspecialchars($va_type_name[$parentinfo['type']]) : "" ));
