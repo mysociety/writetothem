@@ -21,7 +21,7 @@ while(<>) {
     print $_ . "\n";
 
     # Find the voting areas for that postcode
-    my $voting_areas = mySociety::MaPit::get_voting_areas($_);
+    my $voting_areas = mySociety::MaPit::call('postcode', $_);
     if (ref($voting_areas) eq "") {
         print "failed lookup\n";
         $postcode_failed++;
@@ -32,9 +32,9 @@ while(<>) {
     # Loop through voting areas
     my $rep_count = 0;
     my $rep_ok = 0;
-    while(($key, $value) = each(%$voting_areas)) {
+    while(($id, $area) = each(%{$voting_areas->{areas}})) {
         # Get representatives for each voting area
-        my $reps = mySociety::DaDem::get_representatives($value);
+        my $reps = mySociety::DaDem::get_representatives($id);
          
         foreach $rep (@$reps) {
             #print $rep . "\n";

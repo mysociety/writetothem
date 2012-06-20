@@ -65,11 +65,8 @@ print $C->string(), "\n";
 
 # Need to obtain a list of MP/constituency names and then pick out messages
 # by those.
-print STDERR "get $type IDs... ";
-my $areaids = mySociety::MaPit::get_areas_by_type($type);
-print STDERR "done\n";
 print STDERR "get $type info... ";
-my $areas = mySociety::MaPit::get_voting_areas_info($areaids);
+my $areas = mySociety::MaPit::call('areas', $type);
 print STDERR "done\n";
 
 print STDERR "get rep IDs... ";

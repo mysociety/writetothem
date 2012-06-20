@@ -120,11 +120,8 @@ my $period_length = $end_epoch - $start_epoch;
 print STDERR "year: $year epochs of calculation: $start_epoch => $end_epoch\n";
 
 # Need to obtain a list of MP/constituency names and then pick out messages by those.
-print STDERR "get constituency IDs... ";
-my $areaids = mySociety::MaPit::get_areas_by_type($area_type, 1); # array of ids of ALL areas (not just current generation)
-print STDERR "done\n";
 print STDERR "get constituency info... ";
-my %areainfo = %{mySociety::MaPit::get_voting_areas_info($areaids)}; # hash from area id to hash of info about area
+my $areainfo = %{mySociety::MaPit::call('areas', $area_type, min_generation => 1)}; # array of ids of ALL areas (not just current generation)
 print STDERR "done\n";
 print STDERR "get representatives IDs... ";
 my $repids = mySociety::DaDem::get_representatives([keys %areainfo], 1); # hash from area to reps for that area

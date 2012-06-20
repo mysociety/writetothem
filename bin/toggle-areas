@@ -76,10 +76,9 @@ $status .= '_election' unless $status eq 'none';
 
 print "DRY RUN\n" unless $commit;
 
-my $ids = mySociety::MaPit::get_areas_by_type($type);
-my $areas_info = mySociety::MaPit::get_voting_areas_info($ids);
+my $areas_info = mySociety::MaPit::call('areas', $type);
 my $count = 0;
-foreach (@$ids) {
+foreach (keys %$areas_info) {
     next if $exceptions{$_};
     my $name = $areas_info->{$_}->{name};
     next if $exceptions && ($exceptions{$name} || $name =~ /$exceptions/);

@@ -32,7 +32,7 @@ my @pcs = map { s/\s+//g; uc($_) }
 my %p = map { $_ => 1 } @pcs;
 my %loc;
 foreach (keys(%p)) {
-    $loc{$_} = mySociety::MaPit::get_location($_);
+    $loc{$_} = mySociety::MaPit::call('postcode', $_);
     print "$_ -> $loc{$_}->{easting}, $loc{$_}->{northing}\n";
 }
 
