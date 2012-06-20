@@ -40,16 +40,24 @@ class ADMIN_PAGE_REPS {
         $areas = array();
         foreach ($reps as $rep)
             $areas[] = $info[$rep]['voting_area'];
-        $area_info = mapit_get_voting_areas_info($areas);
+        $area_info = mapit_call('areas', $areas);
         mapit_check_error($area_info);
+
+        $generation = 0;
+        $generations = mapit_call('generations'));
+        foreach ($generations as $g) {
+            if ($g['active'] && $g['id'] > $generation) {
+                $generation = $g['id'];
+            }
+        }
 
         for ($i = 0; $i < count($reps); $i++) {
             $rep = $reps[$i];
             $repinfo = $info[$rep];
             $ainfo = $area_info[$repinfo['voting_area']];
             if ($ainfo) {
-                $html .= "<!-- gen ".$ainfo['generation_low']."-".$ainfo['generation_high']." cur ".$ainfo['generation']." -->";
-                if ($ainfo['generation'] < $ainfo['generation_low'] || $ainfo['generation'] > $ainfo['generation_high'])
+                $html .= "<!-- gen ".$ainfo['generation_low']."-".$ainfo['generation_high']." -->";
+                if ($generation < $ainfo['generation_low'] || $generation > $ainfo['generation_high'])
                     $html .= "<i>out of generation</i> ";
             } else {
                 $html .= '<i>area no longer exists</i> ';
@@ -78,9 +86,10 @@ class ADMIN_PAGE_REPS {
     }
 
     function render_area($self_link, $area_id, $area_info, $pc, $add_link=false) {
+        global $va_type_name;
         $url = $self_link . '&pc=' . urlencode($pc);
         $html = "<p><strong><a href='$url&va_id=$area_id'>$area_info[name]</a>";
-        $html .= " (" .  $area_info['type_name'] . ")</strong>";
+        $html .= " (" .  $va_type_name[$area_info['type']] . ")</strong>";
         if ($add_link) $html .= " &ndash; <a href='$url&new_in_va_id=$area_id'>Add new representative</a>";
         $html .= '</p>';
         return $html;
@@ -148,7 +157,7 @@ class ADMIN_PAGE_REPS {
                 if (!$rep_id) {
                     // Making a new representative, put in type and id
                     $newdata['area_id'] = $new_in_va_id;
-                    $vainfo = mapit_get_voting_area_info($new_in_va_id);
+                    $vainfo = mapit_call('area', $new_in_va_id);
                     mapit_check_error($vainfo);
                     $newdata['area_type'] = $vainfo['type'];
                 }
@@ -218,10 +227,10 @@ class ADMIN_PAGE_REPS {
                 }
             }
             $va_id = $rep_id ? $repinfo['voting_area'] : $new_in_va_id;
-            $vainfo = mapit_get_voting_area_info($va_id);
+            $vainfo = mapit_call('area', $va_id);
             mapit_check_error($vainfo);
-            if ($vainfo['parent_area_id']) {
-                $parentinfo = mapit_get_voting_area_info($vainfo['parent_area_id']);
+            if ($vainfo['parent_area']) {
+                $parentinfo = mapit_call('area', $vainfo['parent_area']);
                 mapit_check_error($parentinfo);
             } else 
                 $parentinfo = null;
@@ -229,7 +238,7 @@ class ADMIN_PAGE_REPS {
             dadem_check_error($rephistory);
             // Reverse postcode lookup
             if (!$pc) {
-                $pc = mapit_get_example_postcode($va_id);
+                $pc = mapit_call('area/example_postcode', $va_id);
                 if (!mapit_get_error($pc)) {
                     $form->addElement('static', 'note1', null, "Example postcode for testing: " .
                         "<a href='" . OPTION_BASE_URL . '/who?pc=' . urlencode($pc) . "'>"
@@ -249,7 +258,7 @@ class ADMIN_PAGE_REPS {
             }
     
             // Councillor types are not edited here, but in match.cgi interface
-            global $va_council_child_types;
+            global $va_council_child_types, $va_type_name, $va_rep_name;
             $editable_here = true;
             if (OPTION_ADMIN_SERVICES_CGI && in_array($vainfo['type'], $va_council_child_types)) {
                 $editable_here = false;
@@ -282,10 +291,10 @@ class ADMIN_PAGE_REPS {
             }
 
             $form->addElement('static', 'office', 'Office:',
-                htmlspecialchars($vainfo['rep_name']) . " for " . 
-                htmlspecialchars($vainfo['name']) . " " . htmlspecialchars($vainfo['type_name']) . 
+                htmlspecialchars($va_rep_name[$vainfo['type']] . " for " .
+                htmlspecialchars($vainfo['name']) . " " . htmlspecialchars($va_type_name[$vainfo['type']]) .
                 ($parentinfo ? " in " . 
-                htmlspecialchars($parentinfo['name']) . " " . htmlspecialchars($parentinfo['type_name']) : "" ));
+                htmlspecialchars($parentinfo['name']) . " " . htmlspecialchars($va_type_name[$parentinfo['type']]) : "" ));
             $form->addElement('text', 'name', "Full name:", array('size' => 60, $readonly => 1));
             $form->addElement('text', 'party', "Party:", array('size' => 60, $readonly => 1));
             $form->addElement('static', 'note2', null, "Make sure you update contact method when you change email or fax numbers.");
@@ -330,9 +339,9 @@ class ADMIN_PAGE_REPS {
             } else {
                 $form->addElement('static', 'note3', null, 
                     '<a href="'.OPTION_ADMIN_SERVICES_CGI.'match.cgi?page=councilinfo;area_id='
-                    . $vainfo['parent_area_id'] . '">To edit Councillors please use the match.cgi interface</a>'.
+                    . $vainfo['parent_area'] . '">To edit Councillors please use the match.cgi interface</a>'.
                     '<br><a href="'.$self_link.'&ds_va_id='
-                    . $vainfo['parent_area_id'] . '">... or edit Democratic Services for this council</a>');
+                    . $vainfo['parent_area'] . '">... or edit Democratic Services for this council</a>');
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'done', 'Done');
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'cancel', 'Cancel');
                 $form->addGroup($finalgroup, "finalgroup", "",' ', false);
@@ -343,8 +352,8 @@ class ADMIN_PAGE_REPS {
                 foreach (array(
                     "tel ". $repinfo['name'],
                     "fax ". $repinfo['name'],
-                    "tel ". $repinfo['name'] . " " . $vainfo['rep_name'],
-                    "fax ". $repinfo['name'] . " " . $vainfo['rep_name']
+                    "tel ". $repinfo['name'] . " " . $va_rep_name[$vainfo['type']],
+                    "fax ". $repinfo['name'] . " " . $va_rep_name[$vainfo['type']]
                     ) as $searchq) 
                     $search_links .= "<a href=\"http://search.yahoo.com/search?p=".htmlspecialchars($searchq)."\"> ".htmlspecialchars($searchq)."</a> | ";
                 $form->addElement('static', 'newlink', null, $search_links);
@@ -402,7 +411,7 @@ class ADMIN_PAGE_REPS {
         } elseif ($va_id) {
             // One voting area
             $form = new HTML_QuickForm('adminVotingArea', 'get', $self_link);
-            $area_info = mapit_get_voting_area_info($va_id);
+            $area_info = mapit_call('area', $va_id);
             mapit_check_error($area_info);
             $reps = dadem_get_representatives($va_id);
             dadem_check_error($reps);
@@ -431,11 +440,11 @@ class ADMIN_PAGE_REPS {
             $form = new HTML_QuickForm('adminRepsSearchResults', 'get', $self_link);
 
             $html = '';
-            $areas = mapit_get_voting_area_by_name($search);
+            $areas = mapit_call('areas', $search);
             mapit_check_error($areas);
             global $va_inside;
             foreach (array_keys($areas) as $va_id) {
-                $area_info = mapit_get_voting_area_info($va_id);
+                $area_info = mapit_call('area', $va_id);
                 mapit_check_error($area_info);
                 $reps = dadem_get_representatives($va_id);
                 dadem_check_error($reps);
@@ -454,11 +463,9 @@ class ADMIN_PAGE_REPS {
             $form = new HTML_QuickForm('adminRepsSearchResults', 'get', $self_link);
             
             // Postcode search
-            $voting_areas = mapit_get_voting_areas($pc);
+            $voting_areas = mapit_call('postcode', $pc);
             mapit_check_error($voting_areas);
-            $areas = array_values($voting_areas);
-            $areas_info = mapit_get_voting_areas_info($areas);
-            mapit_check_error($areas_info);
+            $areas_info = $voting_areas['areas'];
             $html = "";
             // Display in order council, ward, council, ward...
             global $va_display_order, $va_inside;
@@ -513,13 +520,13 @@ class ADMIN_PAGE_REPS {
             foreach ($corrections as $correction) {
                 array_push($vaids, $correction['voting_area_id']);
             }
-            $info1 = mapit_get_voting_areas_info($vaids);
+            $info1 = mapit_call('areas', $vaids);
             mapit_check_error($info1);
             $vaids = array();
             foreach ($info1 as $key=>$value) {
-                array_push($vaids, $value['parent_area_id']);
+                array_push($vaids, $value['parent_area']);
             }
-            $info2 = mapit_get_voting_areas_info($vaids);
+            $info2 = mapit_call('areas', $vaids);
             
             foreach ($corrections as $correction) {
                 $form = new HTML_QuickForm('adminRepsCorrections', 'post', $self_link);
@@ -533,7 +540,7 @@ class ADMIN_PAGE_REPS {
                 $html .= "<br>";
                 if ($correction['voting_area_id']) {
                     $wardinfo = $info1[$correction['voting_area_id']];
-                    $vaid = $wardinfo['parent_area_id'];
+                    $vaid = $wardinfo['parent_area'];
                     $vainfo = $info2[$vaid];
                     // TODO: Make this councilinfo, and give a valid r= return URL
                     $html .= '<a href="'.OPTION_ADMIN_SERVICES_CGI.'match.cgi?page=councilinfo;area_id='
