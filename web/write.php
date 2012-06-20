@@ -95,10 +95,9 @@ function redirect_if_disabled($type, $group_msg) {
      * a group mail to all reps. for an area and the rep. type
      * does not represent an area */
     global $fyr_postcode;
-    global $disabled_child_types;
     global $postcodeless_child_types;
     // For URLs like http://writetothem.com/?a=WMC;pc=XXXXX    
-    if (in_array($type, $disabled_child_types) || ($group_msg && in_array($type, $postcodeless_child_types))) {
+    if ($group_msg && in_array($type, $postcodeless_child_types)) {
         header("Location: who?pc=" . urlencode($fyr_postcode));
         exit;
     }
