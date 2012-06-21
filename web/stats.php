@@ -53,11 +53,12 @@ require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
 
 $rep_info = array();
-$voting_areas = mapit_get_voting_areas($postcode);
+$voting_areas = mapit_call('postcode', $postcode, array(), array(
+    400 => MAPIT_BAD_POSTCODE,
+    404 => MAPIT_POSTCODE_NOT_FOUND,
+));
 if (!rabx_is_error($voting_areas)) {
-    $voting_areas_info = mapit_get_voting_areas_info(array_values($voting_areas));
-    mapit_check_error($voting_areas_info);
-    $area_representatives = dadem_get_representatives($voting_areas['WMC']);
+    $area_representatives = dadem_get_representatives($voting_areas['shortcuts']['WMC']);
     dadem_check_error($area_representatives);
     $rep_info = dadem_get_representative_info($area_representatives[0]);
     dadem_check_error($rep_info);
