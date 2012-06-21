@@ -3,10 +3,8 @@
  * write.php:
  * Page where they enter details, write their message, and preview it
  *
- * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: francis@mysociety.org. WWW: http://www.mysociety.org
- *
- * $Id: write.php,v 1.150 2010-01-05 16:05:55 matthew Exp $
+ * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
+ * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
  */
 
@@ -17,7 +15,6 @@ require_once "../commonlib/phplib/mapit.php";
 require_once "../commonlib/phplib/dadem.php";
 require_once "../commonlib/phplib/votingarea.php";
 require_once "../commonlib/phplib/utility.php";
-
 
 function fix_dear_lord_address($name) {
     /* Lords are addressed specially at the start of letters:
@@ -44,7 +41,6 @@ function fix_dear_lord_address($name) {
 function group_address() {
     /* Generate a comma-separated list of correct address forms
      * for a list of representatives */
-
     global $fyr_valid_reps;
     $i = 0;
     $names = array();
@@ -57,36 +53,40 @@ function group_address() {
 }
 
 function is_postcode_editable($rep_type) {
-    /* Is the postcode editable for a rep. type? */
     global $postcodeless_child_types;
-    $postcode_editable = false;
     if (in_array($rep_type, $postcodeless_child_types)) {
-        $postcode_editable = true;
+        return true;
     }
-    return $postcode_editable;
+    return false;
 }
 
 function verify_rep_postcode($postcode, $rep_info) {
-
     /* Verify that representative represents this postcode */
-    global $fyr_postcode_editable;
-    global $verify_voting_area_map;   
     global $cobrand, $cocode;
 
-    $verify_voting_area_map = mapit_get_voting_areas($postcode);
-    if (is_array($verify_voting_area_map))
-        $verify_voting_areas = array_values($verify_voting_area_map);
-    else
-        $verify_voting_areas = array();
+    $area_ids = array();
+    if ($postcode) {
+        $postcode_areas = mapit_call('postcode', $postcode);
+        if (is_array($postcode_areas)) {
+            $area_ids = array_keys($postcode_areas['areas']);
+        }
+    }
 
-    if (!$fyr_postcode_editable) {
-        if (!in_array($rep_info['voting_area'], $verify_voting_areas)) {
+    if (!is_postcode_editable($rep_info['type'])) {
+        if (!in_array($rep_info['voting_area'], $area_ids)) {
            $url = cobrand_url($cobrand, "/", $cocode);
            template_show_error("There's been a mismatch error.  Sorry about
                this, <a href=\"$url\">please start again</a>.");
         }
     }
 
+    $va = array();
+    if ($area_ids) {
+        foreach ($postcode_areas['areas'] as $id => $arr) {
+            $va[$arr['type']] = $arr;
+        }
+    }
+    return $va;
 }
 
 function redirect_if_disabled($type, $group_msg) {
@@ -105,13 +105,29 @@ function redirect_if_disabled($type, $group_msg) {
 
 /* Generate an error string for when contact details for
  * a representative are not available */
-function bad_contact_error_msg($eb_area_info) {
+function bad_contact_error_msg($eb_area) {
     global $va_council_parent_types;
     $via_error = '';
-    if (in_array($eb_area_info['type'], $va_council_parent_types))
+    if (in_array($eb_area['type'], $va_council_parent_types))
         $via_error = '; or we might only have a central contact for the council, which similarly might not be working';
 
-    $type_display_name = $eb_area_info['general_prep'] . " " . $eb_area_info['name'];
+    $general_prep = array(
+        'LBO' => "",
+        'LAS' => "the",
+        'CTY' => "",
+        'DIS' => "",
+        'UTA' => "",
+        'MTD' => "",
+        'COI' => "",
+        'LGD' => "",
+        'SPA' => "the",
+        'WAS' => "the",
+        'NIA' => "the",
+        'WMP' => "the",
+        'HOL' => "the",
+        'EUP' => "the",
+    );
+    $type_display_name = $general_prep[$eb_area['type']] . " " . $eb_area['name'];
     $type_display_phone = '';
     if ($type_display_name == "the House of Commons") {
         $type_display_name = ' the MP, the House of Commons';
@@ -215,9 +231,9 @@ function compare_email_addrs($F) {
 
 // Class representing form they enter message of letter in
 function buildWriteForm($options) {
-    global $fyr_values, $fyr_postcode, $fyr_who, $fyr_type;
+    global $fyr_values, $fyr_postcode, $fyr_type;
     global $fyr_representative, $fyr_voting_area, $fyr_date;
-    global $fyr_postcode_editable, $fyr_group_msg, $fyr_valid_reps;
+    global $fyr_valid_reps;
     global $rep_text, $cobrand, $cocode;
 
     $form_action = cobrand_url($cobrand, '/write', $cocode);
@@ -269,7 +285,7 @@ END;
     $form->addElement('text', 'state', 'County:', array('size' => 20, 'maxlength' => 255));
     $form->applyFilter('state', 'trim');
 
-    if ($fyr_postcode_editable) {
+    if (is_postcode_editable($fyr_voting_area['type'])) {
         // House of Lords
         $form->addElement('text', 'pc', "UK postcode:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
         $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
@@ -674,35 +690,12 @@ function check_message_id($msgid) {
 
 }
 
-// Get all fyr_values
+# ---
+
 $fyr_values = get_all_variables();
+set_up_variables($fyr_values);
 
-# Form field name changes
-if (array_key_exists('writer_name', $fyr_values)) {
-    $fyr_values['name'] = $fyr_values['writer_name'];
-    unset($fyr_values['writer_name']);
-}
-if (array_key_exists('writer_county', $fyr_values)) {
-    $fyr_values['state'] = $fyr_values['writer_county'];
-    unset($fyr_values['writer_county']);
-}
-
-// Normalise text part of message here, before we modify it.
-if (array_key_exists('body', $fyr_values))
-    $fyr_values['body'] = convert_to_unix_newlines($fyr_values['body']);
-
-if (!array_key_exists('pc', $fyr_values)) {
-    $fyr_values['pc'] = '';
-}
-
-debug("FRONTEND", "All variables:", $fyr_values);
-$fyr_values['pc'] = canonicalise_postcode($fyr_values['pc']);
-if (!isset($fyr_values['fyr_extref']))
-    $fyr_values['fyr_extref'] = fyr_external_referrer();
-if (!isset($fyr_values['cocode']))
-    $fyr_values['cocode'] = get_http_var('cocode');
-
-// Various display and used fields
+// Various display and used fields, global variables
 $fyr_postcode = $fyr_values['pc'];
 if (array_key_exists('who', $fyr_values))
     $fyr_who = $fyr_values['who'];
@@ -722,23 +715,14 @@ $fyr_group_msg = false;
 if ($fyr_who == 'all')
     $fyr_group_msg = true;
 
-// Rate limiter
-$limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"));
-if ($fyr_who != 'all') {
-    $limit_values['who'] = array($fyr_who, "Representative id from DaDem");
-}
-if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
-    $limit_values['body'] = array($fyr_values['body'], "Body text of message");
-}
-fyr_rate_limit($limit_values);
+rate_limit($fyr_postcode, $fyr_who, $fyr_values);
 
 // For a group mail, get a group_id for transaction with the fax queue now
 // and generate message ids later
 if ($fyr_group_msg) {
-    
-    if (array_key_exists('fyr_grpid', $fyr_values))
+    if (array_key_exists('fyr_grpid', $fyr_values)) {
         $grpid = $fyr_values['fyr_grpid'];
-    else {
+    } else {
         $grpid = msg_create_group();
         msg_check_error($grpid);
         $fyr_values['fyr_grpid'] = $grpid;
@@ -761,41 +745,38 @@ $warning_text = "";
 if ($fyr_group_msg) {
 
     //Message intended for group of representatives
-    redirect_if_disabled($fyr_type, $fyr_group_msg);
-
-    //Check if the postcode is editable
-    $fyr_postcode_editable = is_postcode_editable($fyr_type);
+    redirect_if_disabled($fyr_type, true);
 
     //Get the electoral body information
-    $voting_areas = mapit_get_voting_areas($fyr_postcode);
+    $voting_areas = mapit_call('postcode', $fyr_postcode);
     mapit_check_error($voting_areas);
+    $va = array();
+    foreach ($voting_areas['areas'] as $id => $arr) {
+        $va[$arr['type']] = $arr;
+    }
+    $voting_areas = $va;
     $eb_type = array_key_exists($fyr_type, $va_inside)
         ? $va_inside[$fyr_type] : '';
 
     if (array_key_exists($eb_type, $voting_areas)) {
-        $eb_id = $voting_areas[$eb_type];
-        $eb_area_info = mapit_get_voting_area_info($eb_id);
-        mapit_check_error($eb_area_info);
+        $eb_area = $voting_areas[$eb_type];
     } else {
         $url = cobrand_url($cobrand, '/', $cocode);
         template_show_error("There's been a mismatch error.  Sorry about
                this, <a href=\"$url\">please start again</a>.");
     }
 
-     if (array_key_exists($fyr_type, $voting_areas)) {
-         $va_id = $voting_areas[$fyr_type]; 
-         $fyr_voting_area =  mapit_get_voting_area_info($va_id);
-         mapit_check_error($fyr_voting_area);
-     } else {
-         template_show_error("There's been a mismatch error.  Sorry about
+    if (array_key_exists($fyr_type, $voting_areas)) {
+        $fyr_voting_area = add_area_vars($voting_areas[$fyr_type]);
+    } else {
+        template_show_error("There's been a mismatch error.  Sorry about
                 this, <a href=\"/\">please start again</a>.");
-     }
-
+    }
 
     // Data bad due to election etc?
-    $parent_status = dadem_get_area_status($eb_id);
+    $parent_status = dadem_get_area_status($eb_area['id']);
     dadem_check_error($parent_status);
-    $status = dadem_get_area_status($va_id);
+    $status = dadem_get_area_status($fyr_voting_area['id']);
     dadem_check_error($status);
     if ($parent_status != 'none' || $status != 'none'){
         $election_error = cobrand_election_error_message($cobrand);
@@ -804,13 +785,14 @@ if ($fyr_group_msg) {
         }
         template_show_error($election_error);
     }
+
     // Get the representative info
-    $area_representatives = dadem_get_representatives($va_id);
+    $area_representatives = dadem_get_representatives($fyr_voting_area['id']);
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
-    $area_representatives = array($va_id => $area_representatives);
+    $area_representatives = array($fyr_voting_area['id'] => $area_representatives);
     euro_check($area_representatives, $voting_areas);
-    $all_representatives = array_values($area_representatives[$va_id]);
+    $all_representatives = array_values($area_representatives[$fyr_voting_area['id']]);
     $representatives_info = dadem_get_representatives_info($all_representatives);
     dadem_check_error($representatives_info);
     debug_timestamp();
@@ -833,10 +815,10 @@ if ($fyr_group_msg) {
         if (rabx_is_error($success)) {    
 
             if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-                $rep_error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area_info);
+                $rep_error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area);
                 if (!$rep_error_msg) {
-                     $rep_error_msg = bad_contact_error_msg($eb_area_info); 
-                }                  
+                    $rep_error_msg = bad_contact_error_msg($eb_area);
+                }
                 $error_msg .= "<p>" . $rep_name . ": " .  $rep_error_msg . "</p>"; 
             } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
                 $rep_error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $representatives_info[$rep_specificid]);
@@ -865,8 +847,7 @@ if ($fyr_group_msg) {
     // Assemble the name string 
     $rep_text = "<ul>";
     foreach ($fyr_valid_reps as $rep) {
-        
-       $rep_text .= "<li>" . $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "</li>";
+        $rep_text .= "<li>" . $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "</li>";
     }
     $rep_text .= "</ul>";
 
@@ -911,34 +892,29 @@ if ($fyr_group_msg) {
     }
 
     // The voting area is the ward/division. e.g. West Chesterton Electoral Division
-    $fyr_voting_area = mapit_get_voting_area_info($fyr_representative['voting_area']);
+    $fyr_voting_area = mapit_call('area', $fyr_representative['voting_area']);
     if (mapit_get_error($fyr_voting_area)) {
         header("Location: /who?pc=" . urlencode($fyr_postcode));
         exit;
     }
     debug("FRONTEND", "FYR voting area $fyr_voting_area");
+    $fyr_voting_area = add_area_vars($fyr_voting_area);
     
-    redirect_if_disabled($fyr_representative['type'], $fyr_group_msg);
+    redirect_if_disabled($fyr_representative['type'], false);
    
-    //Check if the postcode is editable
-    $fyr_postcode_editable = is_postcode_editable($fyr_representative['type']);
-
     //Check that the representative represents this postcode
-    verify_rep_postcode($fyr_postcode, $fyr_representative);
+    $postcode_areas = verify_rep_postcode($fyr_postcode, $fyr_representative);
 
     // Get the electoral body information
     $eb_type = $va_inside[$fyr_voting_area['type']];
-    if (array_key_exists($eb_type, $verify_voting_area_map)) {
-        $eb_id = $verify_voting_area_map[$eb_type];
+    if (array_key_exists($eb_type, $postcode_areas)) {
+        $eb_area = $postcode_areas[$eb_type];
     } else {
-        $eb_id = $fyr_voting_area['parent_area_id'];
+        $eb_area = mapit_call('area', $fyr_voting_area['parent_area']);
     }
     
-    $eb_area_info = mapit_get_voting_area_info($eb_id);
-    mapit_check_error($eb_area_info);
-
     // Data bad due to election etc?
-    $parent_status = dadem_get_area_status($eb_id);
+    $parent_status = dadem_get_area_status($eb_area['id']);
     dadem_check_error($parent_status);
     $status = dadem_get_area_status($fyr_representative['voting_area']);
     dadem_check_error($status);
@@ -951,13 +927,13 @@ if ($fyr_group_msg) {
     }
 
     //Check the contact method exists
-    $success = msg_recipient_test($fyr_values['who']);
+    $success = msg_recipient_test($fyr_who);
 
     if (rabx_is_error($success)) {
         if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) { 
-            $error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area_info);
+            $error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area);
             if (!$error_msg) {
-                 $error_msg = bad_contact_error_msg($eb_area_info);
+                $error_msg = bad_contact_error_msg($eb_area);
             }
             template_show_error($error_msg);
         } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
@@ -973,23 +949,11 @@ if ($fyr_group_msg) {
     }
 
     //Assemble the name string
-   $rep_text = $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " . $fyr_voting_area['rep_suffix'];
-
+    $rep_text = $fyr_voting_area['rep_prefix'] . " " . $fyr_representative['name'] . " " . $fyr_voting_area['rep_suffix'];
 }
 
 
-// Generate signature
-if (array_key_exists('writer_email', $fyr_values) && array_key_exists('body', $fyr_values)) {
-    $fyr_values['signature'] = sha1($fyr_values['writer_email']);
-    $fyr_values['signature'] = substr_replace($fyr_values['signature'], '/', 20, 0);
-    $fyr_values['signedbody'] = <<<EOF
-$fyr_values[body]
-
-$fyr_values[signature]
-(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)
-EOF;
-} elseif (array_key_exists('body', $fyr_values))
-    $fyr_values['signedbody'] = $fyr_values['body'];
+generate_signature($fyr_values);
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
@@ -1027,7 +991,7 @@ if ($on_page == "write") {
     $previewForm = buildPreviewForm($options);
     renderForm($previewForm, "previewForm", $options);
 } elseif ($on_page == "sendfax") {
-         submitFaxes();
+    submitFaxes();
 } else {
     template_show_error(
             'Sorry. An error has occurred: on_page "'
@@ -1039,4 +1003,67 @@ if ($on_page == "write") {
         );
 }
 
-?>
+# ---
+
+function set_up_variables(&$fyr_values) {
+    # Form field name changes
+    if (array_key_exists('writer_name', $fyr_values)) {
+        $fyr_values['name'] = $fyr_values['writer_name'];
+        unset($fyr_values['writer_name']);
+    }
+    if (array_key_exists('writer_county', $fyr_values)) {
+        $fyr_values['state'] = $fyr_values['writer_county'];
+        unset($fyr_values['writer_county']);
+    }
+
+    // Normalise text part of message here, before we modify it.
+    if (array_key_exists('body', $fyr_values))
+        $fyr_values['body'] = convert_to_unix_newlines($fyr_values['body']);
+
+    if (!array_key_exists('pc', $fyr_values)) {
+        $fyr_values['pc'] = '';
+    }
+
+    debug("FRONTEND", "All variables:", $fyr_values);
+    $fyr_values['pc'] = canonicalise_postcode($fyr_values['pc']);
+    if (!isset($fyr_values['fyr_extref']))
+        $fyr_values['fyr_extref'] = fyr_external_referrer();
+    if (!isset($fyr_values['cocode']))
+        $fyr_values['cocode'] = get_http_var('cocode');
+}
+
+function rate_limit($fyr_postcode, $fyr_who, $fyr_values) {
+    $limit_values = array('postcode' => array($fyr_postcode, "Postcode that's been typed in"));
+    if ($fyr_who != 'all') {
+        $limit_values['who'] = array($fyr_who, "Representative id from DaDem");
+    }
+    if (array_key_exists('body', $fyr_values) and strlen($fyr_values['body']) > 0) {
+        $limit_values['body'] = array($fyr_values['body'], "Body text of message");
+    }
+    fyr_rate_limit($limit_values);
+}
+
+function add_area_vars($area) {
+    global $va_rep_prefix, $va_rep_suffix, $va_rep_name, $va_rep_name_long_plural, $va_rep_name_plural;
+    $area['rep_prefix'] = isset($va_rep_prefix[$area['type']]) ? $va_rep_prefix[$area['type']] : '';
+    $area['rep_suffix'] = isset($va_rep_suffix[$area['type']]) ? $va_rep_suffix[$area['type']] : '';
+    $area['rep_name'] = $va_rep_name[$area['type']];
+    $area['rep_name_plural'] = $va_rep_name_plural[$area['type']];
+    $area['rep_name_long_plural'] = $va_rep_name_long_plural[$area['type']];
+    return $area;
+}
+
+function generate_signature(&$fyr_values) {
+    if (array_key_exists('writer_email', $fyr_values) && array_key_exists('body', $fyr_values)) {
+        $fyr_values['signature'] = sha1($fyr_values['writer_email']);
+        $fyr_values['signature'] = substr_replace($fyr_values['signature'], '/', 20, 0);
+        $fyr_values['signedbody'] = <<<EOF
+$fyr_values[body]
+
+$fyr_values[signature]
+(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)
+EOF;
+    } elseif (array_key_exists('body', $fyr_values)) {
+        $fyr_values['signedbody'] = $fyr_values['body'];
+    }
+}
