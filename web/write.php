@@ -915,30 +915,20 @@ generate_signature($fyr_values);
 
 // Work out which page we are on, using which submit button was pushed
 // to get here
-$on_page = "write";
-if (isset($fyr_values['submitWrite'])) {
-    $on_page = "write";
-    unset($fyr_values['submitWrite']);
-} elseif (isset($fyr_values['submitPreview'])) {
-    unset($fyr_values['submitPreview']);
+$on_page = on_page($fyr_values);
+
+if ($on_page == 'preview' || $on_page == 'write') {
     $options = cobrand_write_form_options($cobrand);
     $writeForm = buildWriteForm($options);
-    if ($writeForm->validate()) {
-        $on_page = "preview";
-    } else {
-        $on_page = "write";
-    }
-} elseif (isset($fyr_values['submitSendFax'])) {
-    $on_page = "sendfax";
-    unset($fyr_values['submitSendFax']);
+}
+
+// Error in form when trying to submit for preview
+if ($on_page == 'preview' && !$writeForm->validate()) {
+    $on_page = "write";
 }
 
 // Display it
 if ($on_page == "write") {
-    $options = cobrand_write_form_options($cobrand);
-    if (!isset($writeForm)){
-        $writeForm = buildWriteForm($options);
-    }
     $writeForm->setDefaults(array('body' => default_body_text()));
     $writeForm->setConstants($fyr_values);
     renderForm($writeForm, "writeForm", $options);
@@ -1022,6 +1012,16 @@ EOF;
     } elseif (array_key_exists('body', $fyr_values)) {
         $fyr_values['signedbody'] = $fyr_values['body'];
     }
+}
+
+function on_page(&$fyr_values) {
+    foreach(array('Write', 'Preview', 'SendFax') as $page) {
+        if (isset($fyr_values['submit' . $page])) {
+            unset($fyr_values['submit' . $page]);
+            return strtolower($page);
+        }
+    }
+    return 'write';
 }
 
 function back_to_who() {
