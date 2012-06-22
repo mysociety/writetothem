@@ -218,7 +218,7 @@ function compare_email_addrs($F) {
 // Class representing form they enter message of letter in
 function buildWriteForm($options) {
     global $fyr_values, $stash;
-    global $fyr_representative, $fyr_voting_area, $fyr_date;
+    global $fyr_representative, $fyr_voting_area;
     global $fyr_valid_reps;
     global $cobrand, $cocode;
 
@@ -242,7 +242,7 @@ function buildWriteForm($options) {
             ${write_header}
             ${stash['rep_text']}
             <span>${fyr_voting_area['name']}</span>
-            <span>$fyr_date</span>
+            <span>${stash['date']}</span>
             </div>
 END;
     // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
@@ -358,7 +358,7 @@ function renderForm($form, $pageName, $options)
 {
     global $fyr_form, $fyr_values, $stash;
     global $fyr_group_msg, $fyr_valid_reps;
-    global $fyr_representative, $fyr_voting_area, $fyr_date;
+    global $fyr_representative, $fyr_voting_area;
     global $cobrand, $cocode;
     debug("FRONTEND", "Form values:", $fyr_values);
     
@@ -396,8 +396,7 @@ function renderForm($form, $pageName, $options)
 
     // Add time-shift warning if in debug mode
     if (OPTION_FYR_REFLECT_EMAILS) {
-        $fyr_today = msg_get_date();
-        msg_check_error($fyr_today);
+        $fyr_today = strftime('%Y-%m-%d', $stash['time']);
         if ($fyr_today != date('Y-m-d')) {
             $fyr_form = "<p style=\"text-align: center; color: #ff0000; \">Note: On this test site, the date is faked to be $fyr_today</p>" . $fyr_form;
         }
@@ -417,7 +416,6 @@ function renderForm($form, $pageName, $options)
             'representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area,
             'form' => $fyr_form,
-            'date' => $fyr_date,
             'prime_minister' => $prime_minister,
             'cobrand_letter_help' => $cobrand_letter_help, 
             'cobrand' => $cobrand,
@@ -613,9 +611,9 @@ function show_check_email($error_msg) {
      
     /* Show them the "check your email and click the link" template. */
      global $fyr_representative, $fyr_voting_area; 
-     global $fyr_values, $fyr_date, $fyr_group_msg, $cobrand;
+     global $fyr_values, $stash, $fyr_group_msg, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
-            'voting_area' => $fyr_voting_area, 'date' => $fyr_date, 'group_msg' => $fyr_group_msg,
+            'voting_area' => $fyr_voting_area, 'date' => $stash['date'], 'group_msg' => $fyr_group_msg,
             'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => fyr_get_host()));
      template_draw("write-checkemail", $our_values); 
 }
@@ -677,9 +675,10 @@ $fyr_values = get_all_variables();
 set_up_variables($fyr_values);
 
 // Various display and used fields, global variables
-$fyr_time = msg_get_time();
-msg_check_error($fyr_time);
-$fyr_date = strftime('%A %e %B %Y', $fyr_time);
+$stash = array();
+$stash['time'] = msg_get_time();
+msg_check_error($stash['time']);
+$stash['date'] = strftime('%A %e %B %Y', $stash['time']);
 
 if (!isset($fyr_values['who']) || ($fyr_values['who'] == "all" && !isset($fyr_values['type']))) {
     back_to_who();
