@@ -60,35 +60,6 @@ function is_postcode_editable($rep_type) {
     return false;
 }
 
-function verify_rep_postcode($postcode, $rep_info) {
-    /* Verify that representative represents this postcode */
-    global $cobrand, $cocode;
-
-    $area_ids = array();
-    if ($postcode) {
-        $postcode_areas = mapit_call('postcode', $postcode);
-        if (is_array($postcode_areas)) {
-            $area_ids = array_keys($postcode_areas['areas']);
-        }
-    }
-
-    if (!is_postcode_editable($rep_info['type'])) {
-        if (!in_array($rep_info['voting_area'], $area_ids)) {
-           $url = cobrand_url($cobrand, "/", $cocode);
-           template_show_error("There's been a mismatch error.  Sorry about
-               this, <a href=\"$url\">please start again</a>.");
-        }
-    }
-
-    $va = array();
-    if ($area_ids) {
-        foreach ($postcode_areas['areas'] as $id => $arr) {
-            $va[$arr['type']] = $arr;
-        }
-    }
-    return $va;
-}
-
 /* Generate an error string for when contact details for
  * a representative are not available */
 function bad_contact_error_msg($eb_area) {
@@ -754,17 +725,7 @@ if ($fyr_group_msg) {
     }
 
     // Data bad due to election etc?
-    $parent_status = dadem_get_area_status($eb_area['id']);
-    dadem_check_error($parent_status);
-    $status = dadem_get_area_status($fyr_voting_area['id']);
-    dadem_check_error($status);
-    if ($parent_status != 'none' || $status != 'none'){
-        $election_error = cobrand_election_error_message($cobrand);
-        if (!$election_error) {
-             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
-        }
-        template_show_error($election_error);
-    }
+    check_area_status($eb_area, $fyr_voting_area);
 
     // Get the representative info
     $area_representatives = dadem_get_representatives($fyr_voting_area['id']);
@@ -793,22 +754,8 @@ if ($fyr_group_msg) {
 
 
         if (rabx_is_error($success)) {    
-
-            if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
-                $rep_error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area);
-                if (!$rep_error_msg) {
-                    $rep_error_msg = bad_contact_error_msg($eb_area);
-                }
-                $error_msg .= "<p>" . $rep_name . ": " .  $rep_error_msg . "</p>"; 
-            } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
-                $rep_error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $representatives_info[$rep_specificid]);
-                if (!$rep_error_msg) {
-                    $rep_error_msg = shame_error_msg($fyr_voting_area, $representatives_info[$rep_specificid]);
-                }
-                $error_msg .= "<p>" . $rep_error_msg . "</p>";
-            } else {
-                $error_msg .= "<p>" . $rep_name . ": " . $success->text . "</p>";
-            }
+            list($rep_error_type, $rep_error_msg) = recipient_test_error($success, $eb_area, $fyr_voting_area, $representatives_info[$rep_specificid]);
+            $error_msg .= "<p>$rep_name: $rep_error_msg</p>";
         } else {
             $any_contacts = true;
             $fyr_valid_reps[$rep_specificid] = $representatives_info[$rep_specificid];
@@ -861,49 +808,38 @@ if ($fyr_group_msg) {
     $fyr_representative = get_rep($fyr_values['who']);
     $fyr_voting_area = get_area($fyr_representative['voting_area']);
 
-    //Check that the representative represents this postcode
-    $postcode_areas = verify_rep_postcode($fyr_values['postcode'], $fyr_representative);
-
-    // Get the electoral body information
-    $eb_type = $va_inside[$fyr_voting_area['type']];
-    if (array_key_exists($eb_type, $postcode_areas)) {
-        $eb_area = $postcode_areas[$eb_type];
-    } else {
+    if (is_postcode_editable($fyr_representative['type'])) {
         $eb_area = mapit_call('area', $fyr_voting_area['parent_area']);
-    }
-    
-    // Data bad due to election etc?
-    $parent_status = dadem_get_area_status($eb_area['id']);
-    dadem_check_error($parent_status);
-    $status = dadem_get_area_status($fyr_representative['voting_area']);
-    dadem_check_error($status);
-    if ($parent_status != 'none' || $status != 'none'){
-        $election_error = cobrand_election_error_message($cobrand);
-        if (!$election_error) {
-             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
+    } else {
+        // Check that the representative represents this postcode
+        if (!$fyr_values['pc']) mismatch_error();
+        $postcode_areas = mapit_call('postcode', $fyr_values['pc']);
+        $area_ids = array_keys($postcode_areas['areas']);
+        if (!in_array($fyr_representative['voting_area'], $area_ids)) {
+            mismatch_error();
         }
-        template_show_error($election_error);
+        $eb_type = $va_inside[$fyr_voting_area['type']];
+        foreach ($postcode_areas['areas'] as $id => $arr) {
+            if ($arr['type'] == $eb_type) {
+                $eb_area = $arr;
+                break;
+            }
+        }
     }
+
+    // Data bad due to election etc?
+    check_area_status($eb_area, $fyr_voting_area);
 
     //Check the contact method exists
     $success = msg_recipient_test($fyr_values['who']);
     if (rabx_is_error($success)) {
-        if ($success->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) { 
-            $error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area);
-            if (!$error_msg) {
-                $error_msg = bad_contact_error_msg($eb_area);
-            }
-            template_show_error($error_msg);
-        } elseif ($success->code == FYR_QUEUE_MESSAGE_SHAME) {
-            $error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative);
-            if (!$error_msg) { 
-                 $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
-            }
-            template_draw("error-shame", array("error_message" => $error_msg));
-            exit(1);
-        } else {
-            template_show_error($success->text);
-        } 
+        list($error_type, $error_msg) = recipient_test_error($success, $eb_area, $fyr_voting_area, $fyr_representative);
+        $values = array('error_message' => $error_msg);
+        if ($error_type == 'shame') {
+            $values['title'] = 'Oh no! What a shame!';
+        }
+        template_draw("error-general", $values);
+        exit(1);
     }
 
     //Assemble the name string
@@ -1034,6 +970,28 @@ function back_to_who() {
     exit;
 }
 
+function mismatch_error() {
+    global $cobrand, $cocode;
+    $url = cobrand_url($cobrand, "/", $cocode);
+    template_show_error("There's been a mismatch error.  Sorry about
+        this, <a href=\"$url\">please start again</a>.");
+}
+
+function check_area_status($eb_area, $fyr_voting_area) {
+    global $cobrand;
+    $parent_status = dadem_get_area_status($eb_area['id']);
+    dadem_check_error($parent_status);
+    $status = dadem_get_area_status($fyr_voting_area['id']);
+    dadem_check_error($status);
+    if ($parent_status != 'none' || $status != 'none'){
+        $election_error = cobrand_election_error_message($cobrand);
+        if (!$election_error) {
+             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
+        }
+        template_show_error($election_error);
+    }
+}
+
 function get_rep($id) {
     debug("FRONTEND", "Single representative $id");
     $rep = dadem_get_representative_info($id);
@@ -1052,4 +1010,23 @@ function get_area($id) {
     debug("FRONTEND", "FYR voting area $area");
     $area = add_area_vars($area);
     return $area;
+}
+
+function recipient_test_error($error, $eb_area, $fyr_voting_area, $fyr_representative) {
+    global $cobrand;
+    if ($error->code == FYR_QUEUE_MESSAGE_BAD_ADDRESS_DATA) {
+        $error_msg = cobrand_bad_contact_error_msg($cobrand, $eb_area);
+        if (!$error_msg) {
+            $error_msg = bad_contact_error_msg($eb_area);
+        }
+        return array('bad', $error_msg);
+    } elseif ($error->code == FYR_QUEUE_MESSAGE_SHAME) {
+        $error_msg = cobrand_shame_error_msg($cobrand, $fyr_voting_area, $fyr_representative);
+        if (!$error_msg) {
+            $error_msg = shame_error_msg($fyr_voting_area, $fyr_representative);
+        }
+        return array('shame', $error_msg);
+    } else {
+        return array('unknown', $error->text);
+    }
 }

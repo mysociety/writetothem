@@ -1,7 +1,11 @@
-<? $values['title'] = "Sorry! Something's gone wrong.";
-    template_draw('header', $values); ?>
+<?
 
-<h2>Sorry!  Something's gone wrong.</h2>
+if (!isset($values['title'])) {
+    $values['title'] = "Sorry! Something's gone wrong.";
+}
+template_draw('header', $values); ?>
+
+<h2><?=$values['title']?></h2>
 
 <p align="center"><?=$values['error_message'] ?></p>
 
@@ -19,6 +23,5 @@ to be sure you do not lose your message:</p> <p style="margin-left: 2em;">';
     }
 }
 
-?>
+template_draw('footer', $values);
 
-<? template_draw('footer', $values); ?>
