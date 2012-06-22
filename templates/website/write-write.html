@@ -43,7 +43,7 @@ if (OPTION_FYR_REFLECT_EMAILS) { ?>
 <?
 }
 
-if ($values['warning_text']) {
+if (isset($values['warning_text'])) {
     echo '<div id="bad_contact_warning">', $values['warning_text'], '</div>';
 }
 
