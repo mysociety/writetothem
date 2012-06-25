@@ -41,10 +41,10 @@ function fix_dear_lord_address($name) {
 function group_address() {
     /* Generate a comma-separated list of correct address forms
      * for a list of representatives */
-    global $fyr_valid_reps;
+    global $stash;
     $i = 0;
     $names = array();
-    foreach ($fyr_valid_reps as $rep) {
+    foreach ($stash['valid_reps'] as $rep) {
         $names[$i] = $rep['name'];
         $i++;
     }
@@ -132,9 +132,9 @@ function correct_address() {
     /* Generate a correct form of address for a representative
      * or group of reprsentatives */
 
-    global $fyr_representative, $fyr_group_msg;    
+    global $fyr_representative, $stash;
     $address = "";
-    if ($fyr_group_msg) {
+    if ($stash['group_msg']) {
         $address = group_address();
     } else {
         $address = fix_dear_lord_address($fyr_representative['name']);
@@ -189,8 +189,7 @@ function compare_email_addrs($F) {
 // Class representing form they enter message of letter in
 function buildWriteForm($options) {
     global $fyr_values, $stash;
-    global $fyr_representative, $fyr_voting_area;
-    global $fyr_valid_reps;
+    global $fyr_voting_area;
     global $cobrand, $cocode;
 
     $form_action = cobrand_url($cobrand, '/write', $cocode);
@@ -328,7 +327,6 @@ function buildPreviewForm($options) {
 function renderForm($form, $pageName, $options)
 {
     global $fyr_form, $fyr_values, $stash;
-    global $fyr_group_msg, $fyr_valid_reps;
     global $fyr_representative, $fyr_voting_area;
     global $cobrand, $cocode;
     debug("FRONTEND", "Form values:", $fyr_values);
@@ -390,15 +388,14 @@ function renderForm($form, $pageName, $options)
             'prime_minister' => $prime_minister,
             'cobrand_letter_help' => $cobrand_letter_help, 
             'cobrand' => $cobrand,
-            'group_msg' => $fyr_group_msg,
             'host' => fyr_get_host()
     ));
 
-    if ($fyr_group_msg) {
+    if ($stash['group_msg']) {
         # check if there are any reps whose message will be sent via somewhere 
         # else
         $any_via = false;
-        foreach ($fyr_valid_reps as $rep) {
+        foreach ($stash['valid_reps'] as $rep) {
             if ($rep['method'] == 'via') {
                 $any_via = true;
             }
@@ -582,9 +579,9 @@ function show_check_email($error_msg) {
      
     /* Show them the "check your email and click the link" template. */
      global $fyr_representative, $fyr_voting_area; 
-     global $fyr_values, $stash, $fyr_group_msg, $cobrand;
+     global $fyr_values, $stash, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
-            'voting_area' => $fyr_voting_area, 'date' => $stash['date'], 'group_msg' => $fyr_group_msg,
+            'voting_area' => $fyr_voting_area, 'date' => $stash['date'], 'group_msg' => $stash['group_msg'],
             'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => fyr_get_host()));
      template_draw("write-checkemail", $our_values); 
 }
@@ -656,15 +653,15 @@ if (!isset($fyr_values['who']) || ($fyr_values['who'] == "all" && !isset($fyr_va
 }
 
 # Determine if this is a message to be sent to a group of representatives
-$fyr_group_msg = false;
+$stash['group_msg'] = false;
 if ($fyr_values['who'] == 'all')
-    $fyr_group_msg = true;
+    $stash['group_msg'] = true;
 
 rate_limit($fyr_values);
 
 // For a group mail, get a group_id for transaction with the fax queue now
 // and generate message ids later
-if ($fyr_group_msg) {
+if ($stash['group_msg']) {
     if (array_key_exists('fyr_grpid', $fyr_values)) {
         $grpid = $fyr_values['fyr_grpid'];
     } else {
@@ -686,7 +683,7 @@ if ($fyr_group_msg) {
     }
 }
 
-if ($fyr_group_msg) {
+if ($stash['group_msg']) {
     //Message intended for group of representatives
 
     /* Go back to the 'choose your rep' stage if the request is to send a group
@@ -699,30 +696,20 @@ if ($fyr_group_msg) {
     //Get the electoral body information
     $voting_areas = mapit_call('postcode', $fyr_values['pc']);
     mapit_check_error($voting_areas);
-    $va = array();
+    $area_ids = array_keys($voting_areas['areas']);
+
+    if (!array_key_exists($fyr_values['type'], $va_inside)) mismatch_error();
+    $eb_type = $va_inside[$fyr_values['type']];
+    $eb_area = null; $fyr_voting_area = null;
     foreach ($voting_areas['areas'] as $id => $arr) {
-        $va[$arr['type']] = $arr;
+        if ($arr['type'] == $fyr_values['type']) {
+            $fyr_voting_area = add_area_vars($arr);
+        }
+        if ($arr['type'] == $eb_type) {
+            $eb_area = $arr;
+        }
     }
-    $va_ids = array_keys($voting_areas['areas']);
-    $voting_areas = $va;
-
-    $eb_type = array_key_exists($fyr_values['type'], $va_inside)
-        ? $va_inside[$fyr_values['type']] : '';
-
-    if (array_key_exists($eb_type, $voting_areas)) {
-        $eb_area = $voting_areas[$eb_type];
-    } else {
-        $url = cobrand_url($cobrand, '/', $cocode);
-        template_show_error("There's been a mismatch error.  Sorry about
-               this, <a href=\"$url\">please start again</a>.");
-    }
-
-    if (array_key_exists($fyr_values['type'], $voting_areas)) {
-        $fyr_voting_area = add_area_vars($voting_areas[$fyr_values['type']]);
-    } else {
-        template_show_error("There's been a mismatch error.  Sorry about
-                this, <a href=\"/\">please start again</a>.");
-    }
+    if (!$eb_area || !$fyr_voting_area) mismatch_error();
 
     // Data bad due to election etc?
     check_area_status($eb_area, $fyr_voting_area);
@@ -732,7 +719,7 @@ if ($fyr_group_msg) {
     dadem_check_error($area_representatives);  
     debug("FRONTEND", "area representatives $area_representatives");
     $area_representatives = array($fyr_voting_area['id'] => $area_representatives);
-    euro_check($area_representatives, $va_ids);
+    euro_check($area_representatives, $area_ids);
     $all_representatives = array_values($area_representatives[$fyr_voting_area['id']]);
     $representatives_info = dadem_get_representatives_info($all_representatives);
     dadem_check_error($representatives_info);
@@ -743,64 +730,44 @@ if ($fyr_group_msg) {
     //Check the contact method exists for each representative
     $any_contacts = false;
     $error_msg = "";
-    $fyr_valid_reps = array();
+    $stash['valid_reps'] = array();
     # randomize the order that representatives will be displayed in
     shuffle($all_representatives);
     foreach ($all_representatives as $rep_specificid) {
        
         $success = msg_recipient_test($rep_specificid);
         $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .  
-        $representatives_info[$rep_specificid]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
-
+            $representatives_info[$rep_specificid]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
 
         if (rabx_is_error($success)) {    
             list($rep_error_type, $rep_error_msg) = recipient_test_error($success, $eb_area, $fyr_voting_area, $representatives_info[$rep_specificid]);
             $error_msg .= "<p>$rep_name: $rep_error_msg</p>";
         } else {
             $any_contacts = true;
-            $fyr_valid_reps[$rep_specificid] = $representatives_info[$rep_specificid];
+            $stash['valid_reps'][$rep_specificid] = $representatives_info[$rep_specificid];
         }
 
     }
  
-    // None of the group of representatives can be contacted
     if (!$any_contacts) {
+        // None of the group of representatives can be contacted
         template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br> " . $error_msg);
-        // Some problems, but some reps can be contacted, proceed with a note
     } elseif ($error_msg) {
+        // Some problems, but some reps can be contacted, proceed with a note
         $stash['warning_text'] = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br> " . $error_msg;
     }
 
     // Assemble the name string 
     $stash['rep_text'] = "<ul>";
-    foreach ($fyr_valid_reps as $rep) {
+    foreach ($stash['valid_reps'] as $rep) {
         $stash['rep_text'] .= "<li>" . $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "</li>";
     }
     $stash['rep_text'] .= "</ul>";
 
-    debug("FRONTEND", "Valid reps $fyr_valid_reps");
-    // Set a msgid for each rep in the list
- 
-    if (array_key_exists('fyr_msgid_list', $fyr_values) && array_key_exists('fyr_repid_list', $fyr_values)) {
- 
-        $msgid_list = explode('_', $fyr_values['fyr_msgid_list']);
-        $repid_list = explode('_', $fyr_values['fyr_repid_list']);
- 
-    } else {
-         
-        $repid_list = array();
-        $msgid_list = array();
-         
-        foreach (array_keys($fyr_valid_reps) as $repid) {
-            $msgid = msg_create();
-            msg_check_error($msgid);
-            array_push($msgid_list, $msgid);
-            array_push($repid_list, $repid);
-        }
+    debug("FRONTEND", "Valid reps $stash[valid_reps]");
 
-        $fyr_values['fyr_msgid_list'] = implode('_', $msgid_list);
-        $fyr_values['fyr_repid_list'] = implode('_', $repid_list);
-    }
+    // Set a msgid for each rep in the list
+    assign_message_ids();
 
 } else {
 
@@ -1028,5 +995,26 @@ function recipient_test_error($error, $eb_area, $fyr_voting_area, $fyr_represent
         return array('shame', $error_msg);
     } else {
         return array('unknown', $error->text);
+    }
+}
+
+function assign_message_ids() {
+    global $fyr_values, $stash, $msgid_list, $repid_list;
+    if (array_key_exists('fyr_msgid_list', $fyr_values) && array_key_exists('fyr_repid_list', $fyr_values)) {
+        $msgid_list = explode('_', $fyr_values['fyr_msgid_list']);
+        $repid_list = explode('_', $fyr_values['fyr_repid_list']);
+    } else {
+        $repid_list = array();
+        $msgid_list = array();
+
+        foreach (array_keys($stash['valid_reps']) as $repid) {
+            $msgid = msg_create();
+            msg_check_error($msgid);
+            array_push($msgid_list, $msgid);
+            array_push($repid_list, $repid);
+        }
+
+        $fyr_values['fyr_msgid_list'] = implode('_', $msgid_list);
+        $fyr_values['fyr_repid_list'] = implode('_', $repid_list);
     }
 }
