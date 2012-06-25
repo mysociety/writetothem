@@ -87,6 +87,7 @@ class ADMIN_PAGE_REPS {
 
     function render_area($self_link, $area_id, $area_info, $pc, $add_link=false) {
         global $va_type_name;
+        if (!isset($va_type_name[$area_info['type']])) continue;
         $url = $self_link . '&pc=' . urlencode($pc);
         $html = "<p><strong><a href='$url&va_id=$area_id'>$area_info[name]</a>";
         $html .= " (" .  $va_type_name[$area_info['type']] . ")</strong>";
