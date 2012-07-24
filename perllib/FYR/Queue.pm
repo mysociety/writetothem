@@ -3,11 +3,8 @@
 # FYR/Queue.pm:
 # Fax/email queue management for FYR.
 #
-# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
-# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
-#
-# $Id: Queue.pm,v 1.295 2009-12-17 12:55:37 louise Exp $
-#
+# Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
 
 package FYR::Queue;
 
@@ -1008,7 +1005,7 @@ sub make_token ($$) {
     my $token = Convert::Base32::encode_base32(pack('na*', $rand, $c->encrypt($string)));
     # The separator is there to get around certain spam filter rules which find
     # long random strings supicious.
-    $token =~ s#^(.{10})(.+)$#$1/$2#;
+    $token =~ s#^(.{10})(.+)$#$1_$2#;
     return $token;
 }
 
@@ -1018,7 +1015,7 @@ sub check_token ($$) {
     my ($word, $token) = @_;
 
     $token = lc($token);
-    $token =~ s#[./]##g;
+    $token =~ s#[./_]##g;
     return undef if ($token !~ m#^[2-7a-z]{20,}$#);
     
     $word = $token_wordmap{$word} if (exists($token_wordmap{$word}));
