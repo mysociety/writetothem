@@ -178,9 +178,6 @@ if ($pc) {
         $ft = 'training';
     } elseif ($pc23 == 'RE1') {
         $ft = 'reddwarf';
-    } elseif (preg_match('/^E20[0-9]/', $pc2)) {
-        /* NOT /^E20/, as there are valid and non-fictional E2 0.. postcodes. */
-        $ft = 'eastenders';
     }
 
     if (isset($ft)) {
