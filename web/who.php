@@ -361,7 +361,7 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count,
 
     $col_after = '';
     if ($va_type == 'WMC') {
-        list($twfy, $col_after) = extra_mp_text($rep_count, $va_area, $representatives_info[$representatives[0]]['name']);
+        list($twfy, $col_after) = extra_mp_text($rep_count, $va_area, $representatives);
         $text .= $twfy;
     } elseif ($va_type == 'EUR' && count($meps_hidden)) {
         $text .= hidden_meps_list($meps_hidden, $va_type, $va_area);
@@ -420,10 +420,13 @@ function skip_write_all() {
     return false;
 }
 
-function extra_mp_text($rep_count, $va_area, $name) {
+function extra_mp_text($rep_count, $va_area, $representatives) {
+    global $representatives_info;
     $text = '';
-    if ($rep_count)
+    if ($rep_count) {
+        $name = $representatives_info[$representatives[0]]['name'];
         $text = '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a></p>';
+    }
     # .maincol / .firstcol have margin-bottom set to none, override
     $col_after = '<h3 class="houseoflords">House of Lords</h3>';
     $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
