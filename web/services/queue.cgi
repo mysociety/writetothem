@@ -124,6 +124,9 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.admin_get_wire_email' => sub {
                 return FYR::Queue::admin_get_wire_email($_[0], $_[1]);
             },
+            'FYR.Queue.admin_update_recipient' => sub {
+                return FYR::Queue::admin_update_recipient($_[0], $_[1], $_[2]);
+            },
           );
     $W->exit_if_changed();
     last if $exit_requested;

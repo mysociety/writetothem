@@ -134,6 +134,7 @@ sub logmsg_handler ($$$$$) {
             "last message delayed by " . (time() - $time) . " seconds")
                 if ($time > time() + 5);
 }
+
 =item create_group
 
 Return an ID for a new group of messages. Group IDs, like messages IDs, are 20
@@ -2581,6 +2582,26 @@ sub admin_get_diligency_queue($) {
     return $admin_activity;
 }
 
+=item admin_update_recipient ID NEW-CONTACT VIA
 
+Updates any pending messages in the queue for recipient ID to now go to
+NEW-CONTACT (which could be a VIA). This is for cases where someone edits a
+representative with the admin interface and there is a current message waiting
+to be sent.
+
+=cut
+
+sub admin_update_recipient($$$) {
+    my ($id, $contact, $via) = @_;
+    if ( $contact =~ /@/ ) {
+        dbh()->do("update message set recipient_email=?, recipient_fax=null, recipient_via=?
+         where recipient_id = ? and state in ('new','pending','ready','bounce_confirm')",
+         {}, $contact, $via ? 't' : 'f', $id);
+    } else {
+        dbh()->do("update message set recipient_email=null, recipient_fax=?, recipient_via=?
+         where recipient_id = ? and state in ('new','pending','ready','bounce_confirm')",
+         {}, $contact, $via ? 't' : 'f', $id);
+    }
+}
 
 1;
