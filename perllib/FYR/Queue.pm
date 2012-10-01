@@ -2602,6 +2602,7 @@ sub admin_update_recipient($$$) {
          where recipient_id = ? and state in ('new','pending','ready','bounce_confirm')",
          {}, $contact, $via ? 't' : 'f', $id);
     }
+    dbh()->commit();
 }
 
 1;
