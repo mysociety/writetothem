@@ -3,7 +3,7 @@
 The new FaxYourMP.  
 <a href="/about-us">Built by mySociety</a>.  
 <a href="/about-copyright">Data by GovEval</a>.
-<a href="http://www.m247.com/">Hosted by M247</a>.
+<a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a>.
 <br>
 
 <? $links = array(

@@ -1,5 +1,5 @@
 [ This message was sent by WriteToThem.com.  If you have had any problems
-receiving this message, please email team@writetothem.com and we'll get
+receiving this message, please email <?=$values['contact_email']?> and we'll get
 back to you. See www.writetothem.com for more details about the service.
 We have sent this email to <?=$values['recipient_email']?>; if this
 address is out of date please email us so that we can update our records. ]

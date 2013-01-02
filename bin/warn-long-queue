@@ -76,7 +76,7 @@ if ($mail) {
         $dest = $email_to;
         verbose("sending email to $dest");
         mail($dest, $subject, $mail,
-             "From: The Quality Deity <team@writetothem.com>\n".
+             "From: The Quality Deity <" . OPTION_CONTACT_EMAIL . ">\n".
              "X-Mailer: PHP/" . phpversion());
     } else {
         verbose("printing email");

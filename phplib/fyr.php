@@ -78,7 +78,7 @@ function fyr_display_error($num, $message, $file, $line, $context) {
     } else {
         /* Message will be in log file, don't display it for cleanliness */
         template_show_error("Please try again later, or <a
-            href=\"mailto:team&#64;writetothem.com\">email us</a> to let us know.");
+            href='/about-contact'>contact us</a> to let us know.");
     }
 }
 

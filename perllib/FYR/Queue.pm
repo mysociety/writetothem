@@ -1106,7 +1106,9 @@ sub email_template_params ($%) {
     my $r = mySociety::DaDem::get_representative_info($msg->{recipient_id});
     my $A = mySociety::MaPit::call('area', $r->{voting_area});
     $params{recipient_area_name} = $A->{name};
-    
+
+    $params{contact_email} = mySociety::Config::get('CONTACT_EMAIL');
+
     return \%params;
 }
 

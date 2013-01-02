@@ -1,4 +1,5 @@
 <? $values['title'] = "Emailing WriteToThem";
+$contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
 template_draw('header', $values); ?>
 
 <h2>Emailing WriteToThem</h3>
@@ -32,7 +33,7 @@ bar on the right first.
 
 We earnestly seek responses to all these questions.
 <strong>We're not your MP or councillor, see above for how to contact them</strong>.
-Our email address is <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
+Our email address is <a href="mailto:<?=$contact_email?>"><?=$contact_email?></a>,
 or read <a href="/about-qa">frequently asked questions</a>.
 
 </ul>
@@ -43,7 +44,7 @@ or read <a href="/about-qa">frequently asked questions</a>.
 
 <p>If you are an elected representative wishing to report an abusive message or
 change in contact details, please email <a
-href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a> for prompt
+href="mailto:<?=$contact_email?>"><?=$contact_email?></a> for prompt
 action.
 </p>
 

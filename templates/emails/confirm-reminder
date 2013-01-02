@@ -17,12 +17,12 @@ less fun, means.
 
 If you did not request that a message be sent to
 <?=$values['recipient_name']?>, please let us know by sending an email to
-team@writetothem.com
+<?=$values['contact_email']?>
 
 Don't worry; nothing will be sent without your permission.
 
 Please do not reply to this mail. Feel free to email us on
-team@writetothem.com with any comments, problems or suggestions.
+<?=$values['contact_email']?> with any comments, problems or suggestions.
 
 -- the WriteToThem.com team
 

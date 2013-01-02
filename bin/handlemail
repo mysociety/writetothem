@@ -59,9 +59,8 @@ my %data = mySociety::HandleMail::get_message();
 my @lines = @{$data{lines}};
 
 if (!$data{is_bounce_message}) {
-    # This is not a bounce message. We pass it on to contact email address
-    # (e.g. team@writetothem.com), and also send a patronising response
-    # about clicking the link.
+    # This is not a bounce message. We pass it on to the contact email address
+    # and also send a patronising response about clicking the link.
     #print_log('info', "message was not a bounce message");
         
     # See whether the email contains one of our URLs.
@@ -97,7 +96,7 @@ if (!$data{is_bounce_message}) {
     }
 
     if ($forward) {
-        # Forward this on to team@writetothem.com
+        # Forward this on to CONTACT_EMAIL
         if (mySociety::EmailUtil::EMAIL_SUCCESS
                 != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $data{return_path}, mySociety::Config::get('CONTACT_EMAIL'))) {
             print_log('err', 'unable to forward non-bounce to contact email address; deferring');
@@ -112,7 +111,9 @@ if (!$data{is_bounce_message}) {
 
     # Now we need to construct some text to send to them.
     my $template = 'reply-autoresponse';
-    my $vv;
+    my $vv = {
+        contact_email => mySociety::Config::get('CONTACT_EMAIL')
+    };
     if ($confirm_url) {
         $template = 'reply-autoresponse-confirm';
         $vv->{'confirm_url'} = $confirm_url;

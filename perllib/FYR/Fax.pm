@@ -292,6 +292,7 @@ sub footer_text ($$$$$$) {
         $template = 'footer';
     }
     my $text = FYR::EmailTemplate::format(fax_template($template, $cobrand), {
+                        contact_email => mySociety::Config::get('CONTACT_EMAIL'),
                         this_page => $page,
                         total_pages => $total,
                         representative_url => $url,

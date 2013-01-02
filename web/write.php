@@ -97,7 +97,7 @@ function bad_contact_error_msg($eb_area) {
 
     We'd be <em>really</em> grateful if you could <strong>spend five minutes on the website of
     $type_display_name</strong> (or even the phone$type_display_phone), finding out the contact details.
-    Then <a href=\"mailto:team&#64;writetothem.com\">email us</a> with the email address or fax number of
+    Then <a href='/about-contact'>contact us</a> with the email address or fax number of
     your representative.
     ";
     return $error_msg;
@@ -420,8 +420,7 @@ function renderForm($form, $pageName, $options)
         if (!$message) {
              $message = 'Sorry. An error has occurred: pageName "'
                     . htmlspecialchars($pageName) .
-                '". Please get in touch with us at
-                <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
+                '". Please <a href="/about-contact">get in touch with us</a>,
                 quoting this message. You can <a href="/">try again from the
                 beginning</a>.';
         }
@@ -461,8 +460,7 @@ function submitFaxes() {
         // check the group id  
         if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
             template_show_error('Sorry, but your browser seems to be transmitting
-            erroneous data to us. Please try again, or contact us at
-            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.');
+            erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.');
         }
         // double check that the group_id isn't already being used
         // This could mean that these messages have already been
@@ -570,7 +568,7 @@ function rabx_mail_error_msg($code, $text) {
         $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>."; 
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
-        $error_msg = "Sorry, an error has occurred. Please contact <a href=\"mailto:team&#64;writetothem.com\">team&#64;writetothem.com</a>.";
+        $error_msg = "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>.";
     }  
     return $error_msg;
 }
@@ -631,8 +629,7 @@ function check_message_id($msgid) {
      * hash, but in this case it doesn't matter. */
     if (!preg_match("/^[0-9a-f]{20}$/i", $msgid)) {
         template_show_error('Sorry, but your browser seems to be transmitting
-            erroneous data to us. Please try again, or contact us at
-            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>.');
+            erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.');
     }
 
 }
@@ -844,8 +841,7 @@ if ($on_page == "write") {
     template_show_error(
             'Sorry. An error has occurred: on_page "'
                 . htmlspecialchars($on_page) .
-            '". Please get in touch with us at
-            <a href="mailto:team&#64;writetothem.com">team&#64;writetothem.com</a>,
+            '". Please <a href="/about-contact">get in touch with us</a>,
             quoting this message. You can <a href="/">try again from the
             beginning</a>.'
         );

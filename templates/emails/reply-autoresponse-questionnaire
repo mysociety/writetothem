@@ -18,6 +18,6 @@ click on the link below:
 
 If you feel that neither link is suitable, then please do not answer the
 questionnaire. If you have a question or comment about the site, please send an
-email to team@writetothem.com
+email to <?=$values['contact_email']?>
 
 -- the WriteToThem.com team

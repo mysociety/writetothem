@@ -7,6 +7,6 @@ below, or copy-and-paste it into your web browser.
 <?=$values['confirm_url']?>
 
 If you have a question or comment about the site, please send an email to
-team@writetothem.com
+<?=$values['contact_email']?>
 
 -- the WriteToThem.com team

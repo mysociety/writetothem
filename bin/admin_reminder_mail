@@ -154,7 +154,7 @@ $rt_messages = trim($rt_messages);
 if ($rt_messages > 0) {
     $mail .= "
 * $rt_messages people are waiting for replies to support mails
-  Resolve some team@writetothem.com tickets now:   
+  Resolve some tickets now:   
   https://secure.mysociety.org/rt/
 ";
 }
@@ -260,22 +260,23 @@ foreach ($freq_referrers_week as $row) {
 }
 $mail .= "\n";
 
-// Send mail to team@
+// Send mail
 if ($mail) {
     $subject ="WriteToThem needs some tender loving care";
     $mail .="
 That's all for this week!
 
 -- The Quality Deity";
-$dest = OPTION_CONTACT_EMAIL;
-if ($email_to){
+$from = OPTION_CONTACT_EMAIL;
+$dest = $from;
+if ($email_to) {
     $dest = $email_to;
 }
 
     if ($realrun) {
         verbose("sending email to $dest");
         mail($dest, $subject, $mail,
-            "From: The Quality Deity <team@writetothem.com>\n".
+            "From: The Quality Deity <$from>\n".
             "X-Mailer: PHP/" . phpversion());
     } else {
         verbose("printing email");

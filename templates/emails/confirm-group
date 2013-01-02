@@ -19,10 +19,10 @@ by more traditional, albeit less fun, means.
 
 If you did not request that a message be sent to your
 <?=$values['recipient_position_plural']?>, please let us know by sending an
-email to team@writetothem.com
+email to <?=$values['contact_email']?>
 
 Please do not reply to this mail. Feel free to email us on
-team@writetothem.com with any comments, problems or suggestions.
+<?=$values['contact_email']?> with any comments, problems or suggestions.
 
 -- the WriteToThem.com team
 
