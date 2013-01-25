@@ -67,7 +67,7 @@ if (!$data{is_bounce_message}) {
     my ($first_url, $confirm_url, $yes_url, $no_url);
     foreach (@lines) {
         my $base_url = mySociety::Config::get('BASE_URL');
-        if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./]?[2-7A-Za-z]{10,})#) {
+        if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./_]?[2-7A-Za-z]{10,})#) {
             my $url = $1;
             $first_url = $url if !$first_url;
             $confirm_url = $url if ($url =~ m#/C/#);
