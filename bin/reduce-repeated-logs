@@ -8,16 +8,10 @@
 # unexpected error (type RABX::Error::User) while processing message: Representative ID '13531' not found (repeated 16138 times)
 #
 # By default, scans all messages with more log file entries than $low below.
-# Or specify a message id to do just that message.
+# Specify a message id to do just that message.
 #
-# Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
-# Email: francis@mysociety.org; WWW: http://www.mysociety.org/
-#
-
-# TODO:
-# Cope with messages which have alternating lines repeated many times.
-
-my $rcsid = ''; $rcsid .= '$Id: reduce-repeated-logs,v 1.5 2007-02-02 12:16:35 dademcron Exp $';
+# Copyright (c) 2013 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
 
 use strict;
 require 5.8.0;
@@ -32,7 +26,6 @@ use lib "$FindBin::Bin/../perllib";
 use lib "$FindBin::Bin/../commonlib/perllib";
 
 use Data::Dumper;
-use POSIX qw(strftime);
 
 use mySociety::Config;
 BEGIN {
@@ -42,53 +35,28 @@ use mySociety::DBHandle qw(dbh);
 #DBI->trace(1);
 use FYR;
 
-# Takes an array of ids of duplicate message_log items, and an extra count to
-# add to this. Deletes all of the message except the last one, and appends
-# total count to that.
+# Takes an array of ids of duplicate message_log items (perhaps duplicating
+# every two or three rows), and an extra count to add to this. Deletes all of
+# the message except the last one, and appends total count to that.
 sub merge_messages {
-    my ($dups, $c_extra) = @_;
+    my ($dups, $c_extra, $num) = @_;
     my @dups = @$dups;
-    my $c = scalar(@dups) + $c_extra;
-    my $last = pop @dups;
+    my $c = int( (scalar(@dups) + $c_extra) / $num );
+    my @last = splice(@dups, -$num);
     #print Dumper(\@dups);
     #print "count: " . $c . "\n";
-    #print "last: " . $last . "\n";
+    #print "last: " . join(" ", @last) . "\n";
     while (scalar(@dups) > 5000) {
         my @start = @dups[0..5000];
         @dups = @dups[5001..$#dups];
         dbh()->do("delete from message_log where order_id in (". join(",", @start) . ")");
     }
     dbh()->do("delete from message_log where order_id in (". join(",", @dups) . ")");
-    dbh()->do("update message_log set message = 
+    foreach my $last (@last) {
+        dbh()->do("update message_log set message =
             (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
             || ' (repeated $c times)') where order_id = ?", {}, $last);
-    dbh()->commit();
-}
- 
-# Takes an array of ids of alternating duplicate message_log items, and
-# merges them together, much like merge_messages for non-alternating repeats.
-sub merge_messages_pairs {
-    my ($dups, $c_extra) = @_;
-    my @dups = @$dups;
-    my $c = (scalar(@dups) + $c_extra) / 2;
-    my $last1 = pop @dups;
-    my $last2 = pop @dups;
-#    print Dumper(\@dups);
-#    print "count: $c\n";
-#    print "last1: $last1 last2: $last2\n";
-#    exit;
-    while (scalar(@dups) > 5000) {
-        my @start = @dups[0..5000];
-        @dups = @dups[5001..$#dups];
-        dbh()->do("delete from message_log where order_id in (". join(",", @start) . ")");
     }
-    dbh()->do("delete from message_log where order_id in (". join(",", @dups) . ")");
-    dbh()->do("update message_log set message = 
-            (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
-            || ' (repeated in pair about $c times)') where order_id = ?", {}, $last1);
-    dbh()->do("update message_log set message = 
-            (replace(message, coalesce(substring(message from ' \\\\(repeated .+ times\\\\)\$'), ''),'')
-            || ' (repeated in pair about $c times)') where order_id = ?", {}, $last2);
     dbh()->commit();
 }
 
@@ -100,10 +68,11 @@ sub reduce_log($) {
         from message_log where message_id = ? order by order_id");
     $stm->execute($message_id);
     my ($p_exceptional, $p_whenlogged, $p_state, $p_message, $p_editor);
-    my $p_p_message;
+    my ($p_p_message, $p_p_p_message);
     my @dups;
     my $c_extra = 0;
     my $matching_pairs = 0;
+    my $matching_threes = 0;
     while (my ($order_id, $exceptional, $whenlogged, $state, $message, $editor) = $stm->fetchrow_array()) {
         $editor = '' if (!$editor);
         if ($message =~ m/^(.+) \(repeated (?:in pair about )?(\d+) times\)$/) {
@@ -134,20 +103,33 @@ sub reduce_log($) {
                     # Message same as one two ago
                     push @dups, $order_id;
                     $got = 1;
+                } elsif (!$matching_threes && scalar(@dups) == 2) {
+                    # Start looking for three matches
+                    $matching_threes = 1;
+                    push @dups, $order_id;
+                    $got = 1;
+                } elsif ($matching_threes && $p_p_p_message eq $message) {
+                    # Message same as one three ago
+                    push @dups, $order_id;
+                    $got = 1;
                 }
         } 
         if (!$got) {
             # If we got more than one row, then merge in 
-            if (!$matching_pairs && scalar(@dups) >= 2) {
-                merge_messages(\@dups, $c_extra);
+            if ($matching_threes && scalar(@dups) >= 8) {
+                merge_messages(\@dups, $c_extra, 3);
             } elsif ($matching_pairs && scalar(@dups) >= 8) { # higher tolerance for pairs
-                merge_messages_pairs(\@dups, $c_extra);
+                merge_messages(\@dups, $c_extra, 2);
+            } elsif (!$matching_pairs && scalar(@dups) >= 2) {
+                merge_messages(\@dups, $c_extra, 1);
             }
             # Reset
             @dups = ($order_id);
             $c_extra = 0;
             $matching_pairs = 0;
+            $matching_threes = 0;
         }
+        $p_p_p_message = $p_p_message;
         $p_p_message = $p_message;
         $p_exceptional = $exceptional;
         $p_whenlogged = $whenlogged;
@@ -155,10 +137,12 @@ sub reduce_log($) {
         $p_message = $message;
         $p_editor = $editor;
     }
-    if (!$matching_pairs && scalar(@dups) >= 2) {
-        merge_messages(\@dups, $c_extra);
+    if ($matching_threes && scalar(@dups) >= 8) {
+        merge_messages(\@dups, $c_extra, 3);
     } elsif ($matching_pairs && scalar(@dups) >= 8) { # higher tolerance for pairs
-        merge_messages_pairs(\@dups, $c_extra);
+        merge_messages(\@dups, $c_extra, 2);
+    } elsif (!$matching_pairs && scalar(@dups) >= 2) {
+        merge_messages(\@dups, $c_extra, 1);
     }
 }
 
