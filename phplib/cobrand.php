@@ -413,7 +413,7 @@ function cobrand_postcode_form_options($cobrand) {
         return $cobrand_handle->postcode_form_options();
     }
   }
-  return array('xhtml'       => false, 
+  return array(
                'inner_div'   => true, 
                'extra_space' => true, 
                'bold_labels' => true, 

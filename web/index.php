@@ -4,10 +4,9 @@
  * 
  * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
- *
- * $Id: index.php,v 1.79 2009-11-30 09:26:16 louise Exp $
  * 
  */
+
 require_once "../phplib/fyr.php";
 require_once "../commonlib/phplib/utility.php";
 require_once "../commonlib/phplib/mapit.php";
@@ -17,17 +16,12 @@ require_once "../commonlib/phplib/votingarea.php";
 /* Return the form for entering a postcode.  
  * Valid options are:
  * inner_div   - boolean - include a div tag inside the form
- * xhtml       - boolean - close input tags for XHTML compatibility
  * extra_space - use non-breaking space for laying out inputs
  * bold_labels - use bold for label texts
  * show_errors - display error message if there is one
  */
 function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options) {
 
-    $input_close = '';
-    if ($options['xhtml']){
-        $input_close = '/';    
-    }
     $form = '<form action="" method="get" name="postcodeForm" id="postcodeForm">';
     if ($options['inner_div']){
         $form .= '<div id="postcodebox">';
@@ -52,11 +46,11 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     if ($options['extra_space']){
         $form .= '&nbsp;' . "\n";
     }
-    $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255" ' . $input_close . '>' . "\n";
+    $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
     if ($options['extra_space']){
         $form .= '&nbsp;';
     }
-    $form .= '<input type="submit" value="Go" ' . $input_close . '>' . "\n";
+    $form .= '<input type="submit" value="Go">' . "\n";
     
     /* Record referer. We want to pass this onto the queue later, as an anti-abuse
      * measure, so it should be propagated through all the later pages. Obviously
@@ -64,12 +58,12 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
      * trying to obscure this data. */
     $ref = fyr_external_referrer();
     if (isset($ref))
-        $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'"' . $input_close . '>';
+        $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
     if ($cocode)
-        $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'"' . $input_close . '>';
+        $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
     
     if ($a_forward)
-        $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'"' . $input_close . '>';
+        $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
 
     // End the form
     if ($options['inner_div']){
@@ -334,6 +328,4 @@ template_draw($template, array(
         "template" => $template, 
         "host" => fyr_get_host()
     ));
-
-?>
 
