@@ -41,7 +41,7 @@ global $cobrand;
 $cobrand = null;
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
     $host_parts = explode('.', $_SERVER['HTTP_HOST'], 2);
-    if ($host_parts[1] == OPTION_WEB_DOMAIN) {
+    if ($host_parts[1] == OPTION_WEB_DOMAIN && $host_parts[0] != 'www') {
         $cobrand = $host_parts[0];
     }
 }
