@@ -441,22 +441,6 @@ sub do_send_cobrand_message {
     confirm_message(2, $repinfo, $options);
     check_delivered_to_rep(2, 'Anne Marie Canning', '32 Wheresome Wroad', $options);
     $options->{cobrand} = undef;
-
-    # Run tests in any TestHarness.pm files in for Cobrands
-    my $allowed_cobrands = FYR::Cobrand::get_allowed_cobrands();
-    foreach my $cobrand (@{$allowed_cobrands}){
-        my $cobrand_class = ucfirst($cobrand);
-        my $class = "Cobrands::" . $cobrand_class . "::TestHarness";
-        print "Looking for tests for $cobrand_class\n" if $verbose > 0;
-        eval "use $class";
-        my $test_handle;
-        eval{ $test_handle = $class->new($wth, $verbose, $multispawn); };
-        next if $@;
-        print "Running tests for $cobrand_class\n" if $verbose > 0;
-        foreach my $test_function ($test_handle->test_functions()){
-            $test_handle->$test_function();    
-	    }
-    }
 }
 
 #############################################################################

@@ -62,18 +62,6 @@ sub get_cobrand_conf {
     return $value;
 }
 
-=item get_allowed_cobrands
-
-Return an array reference of allowed cobrand subdomains
-
-=cut
-sub get_allowed_cobrands {
-    my $allowed_cobrand_string = mySociety::Config::get('ALLOWED_COBRANDS');
-    my @allowed_cobrands = split(/\|/, $allowed_cobrand_string);
-    return \@allowed_cobrands;
-}
-
-
 =item base_url_for_emails COBRAND
 
 Return the base url to use in links in emails for the cobranded 

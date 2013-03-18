@@ -11,18 +11,6 @@
 
 $handles = array();
 
-// List of subdomains of WriteToThem which are cobrands.
-function cobrand_allowed() {
-    $allowed_cobrands_string = OPTION_ALLOWED_COBRANDS;
-    $allowed_cobrands_list = explode('|', $allowed_cobrands_string);
-    $allowed_cobrands = array();
-    foreach ($allowed_cobrands_list as $i => $cobrand) {
-       $allowed_cobrands[$cobrand] = 1;
-    }
-    return $allowed_cobrands;
-}
-
-
 // To change look and feel, make new files in templates/. Look at cheltenham
 // for examples. Also need to make file like web/cobrands/cheltenham/cheltenham.css. To change the 
 // behaviour of a cobranded site, add a function to phplib/cobrands/[cobrand name]/utils.php

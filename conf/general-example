@@ -131,9 +131,6 @@ define('OPTION_TRACKING_SECRET', 'really-secret-value');
 define('OPTION_SURVEY_SECRET', 'your-secret-value-here');
 define('OPTION_SURVEY_URL', 'http://survey.mysociety.org');
 
-// Cobrands
-define('OPTION_ALLOWED_COBRANDS', 'animalaid|foiorder2009|freeourbills|cheltenham');
-
 // Analytics
 define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
 

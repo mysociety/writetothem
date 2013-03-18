@@ -61,11 +61,10 @@ EOF
 if (OPTION_ADMIN_SERVICES_CGI)
     $pages[] = new ADMIN_PAGE_EMBED('fyrmatch', 'Councillor Data', OPTION_ADMIN_SERVICES_CGI . 'match.cgi');
 
-if (OPTION_ALLOWED_COBRANDS != 'cities')
-    array_push($pages,
-        new ADMIN_PAGE_EMBED('fyrsignupgraph', 'Sent messages graph', OPTION_BASE_URL . '/fyr-live-signups.png'),
-        new ADMIN_PAGE_EMBED('fyrfaxgraph', 'Faxes created graph', OPTION_BASE_URL . '/fyr-live-faxes.png')
-    );
+array_push($pages,
+    new ADMIN_PAGE_EMBED('fyrsignupgraph', 'Sent messages graph', OPTION_BASE_URL . '/fyr-live-signups.png'),
+    new ADMIN_PAGE_EMBED('fyrfaxgraph', 'Faxes created graph', OPTION_BASE_URL . '/fyr-live-faxes.png')
+);
 
 array_push($pages,
     null, // space separator on menu

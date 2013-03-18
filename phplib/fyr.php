@@ -37,33 +37,24 @@ ob_start();
 template_set_style($dir . "/../templates/website");
 
 # syndication type, read from domain name
+global $cobrand;
+$cobrand = null;
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
-    $host_parts = explode('.', $_SERVER['HTTP_HOST']);
-    $syn = $host_parts[0];
-} else {
-    $syn = 'www';
+    $host_parts = explode('.', $_SERVER['HTTP_HOST'], 2);
+    if ($host_parts[1] == OPTION_WEB_DOMAIN) {
+        $cobrand = $host_parts[0];
+    }
 }
 
-# or override for debugging
-if (array_key_exists('syn', $_GET)) {
-    $syn = $_GET['syn'];
-}
-$cobrand_allowed = cobrand_allowed();
-global $cobrand;
-$cobrand = false;
-if (array_key_exists($syn, $cobrand_allowed)) {
-    if (is_dir("../templates/$syn")) {
-        template_set_style("../templates/$syn", true);
-    }
-    $cobrand = $syn;
+if (is_dir("../templates/$cobrand")) {
+    template_set_style("../templates/$cobrand", true);
 }
 
 global $cocode;
-$cocode = false; 
 $cocode = get_http_var('cocode');
 if ($cobrand) {
-    if (! cobrand_cocode_allowed($cobrand, $cocode)) {
-        $cocode = false;
+    if (!cobrand_cocode_allowed($cobrand, $cocode)) {
+        $cocode = '';
     }
 }
 
