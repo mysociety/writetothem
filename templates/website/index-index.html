@@ -36,7 +36,9 @@ Due to the General Election, new MPs and County Councillors are not yet availabl
         catacombs</a>? &mdash; Nope, just your politicians.  Use them.  Help
     them. Write to them!</small></p>
 
-<?=$values['num_messages'] ?>
+<? if ($values['num_messages']) {
+    echo "* $values[cobrand] messages: $values[num_messages]";
+} ?>
 
 -->
 

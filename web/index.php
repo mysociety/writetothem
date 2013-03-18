@@ -313,7 +313,18 @@ if ($template != 'index-advice') {
 $options = cobrand_postcode_form_options($cobrand);
 $form = postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options);
 
-$num_messages = 0;
+$num_messages = null;
+if ($cobrand && file_exists("../../cobrand.csv")) {
+    if (($handle = fopen("../../cobrand.csv", "r")) !== false) {
+        while (($row = fgetcsv($handle)) !== false) {
+            if ($row[0] === $cobrand) {
+                $num_messages = $row[1];
+                break;
+            }
+        }
+        fclose($handle);
+    }
+}
 
 // Display page
 template_draw($template, array(

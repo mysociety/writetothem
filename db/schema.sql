@@ -161,6 +161,7 @@ create index message_recipient_email on message(recipient_email);
 create index message_lower_recipient_email on message(lower(recipient_email));
 -- Group actions look up messages by group
 create index message_group_id on message(group_id);
+create index message_cobrand_idx on message(cobrand);
 alter table message cluster on message_pkey;
 
 -- message_extradata

@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+#
+# update-cobrand-stats
+# Copyright (c) 2013 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org; WWW: http://www.mysociety.org/
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use FYR; # DB setup
+
+my $st = dbh()->prepare("
+    SELECT cobrand, count(*) as c
+    FROM message
+    WHERE dispatched IS NOT NULL
+    GROUP BY cobrand
+    ORDER BY cobrand
+");
+$st->execute();
+
+open(FP, ">$FindBin::Bin/../../cobrand.csv");
+while (my ($cobrand, $count) = $st->fetchrow_array()) {
+    $cobrand = 'www' unless $cobrand;
+    print FP "$cobrand,$count\n";
+}
+close FP;
