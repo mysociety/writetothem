@@ -319,6 +319,8 @@ if ($template != 'index-advice') {
 $options = cobrand_postcode_form_options($cobrand);
 $form = postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options);
 
+$num_messages = 0;
+
 // Display page
 template_draw($template, array(
         'body_id' => 'home',
@@ -328,6 +330,7 @@ template_draw($template, array(
         "error" => $error_message,
         "all_url" => $fyr_all_url,
         "cobrand" => $cobrand, 
+        "num_messages" => $num_messages,
         "template" => $template, 
         "host" => fyr_get_host()
     ));
