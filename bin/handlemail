@@ -255,7 +255,7 @@ sub is_ignorable {
     $body = join("\n", @$body);
     return 0 unless $from && $subject && $body;
 
-    open my $fp, "$FindBin::Bin/../../data/ignored-emails.csv" or exit 75;
+    open my $fp, "$FindBin::Bin/../../data/ignored-emails.csv" or return 0;
     while (<$fp>) {
         chomp;
         my ($f, $s, $b) = split /,/;
