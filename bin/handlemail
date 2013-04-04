@@ -62,7 +62,9 @@ if (!$data{is_bounce_message}) {
     # This is not a bounce message. We pass it on to the contact email address
     # and also send a patronising response about clicking the link.
     #print_log('info', "message was not a bounce message");
-        
+
+    exit 0 if is_ignorable($data{message});
+
     # See whether the email contains one of our URLs.
     my ($first_url, $confirm_url, $yes_url, $no_url);
     foreach (@lines) {
@@ -242,3 +244,23 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
 }
 
 exit(0);
+
+# ---
+
+sub is_ignorable {
+    my $m = shift;
+    my $head = $m->head();
+    return 0 unless $head;
+    my ($from, $subject, $body) = ($head->get('From'), $head->get('Subject'), $m->body);
+    $body = join("\n", @$body);
+    return 0 unless $from && $subject && $body;
+
+    open my $fp, "$FindBin::Bin/../../data/ignored-emails.csv" or exit 75;
+    while (<$fp>) {
+        chomp;
+        my ($f, $s, $b) = split /,/;
+        next unless $f || $s || $b;
+        return 1 unless ( $f && $from !~ /$f/ ) || ( $s && $subject !~ /$s/ ) || ( $b && $body !~ /$b/ );
+    }
+    return 0;
+}

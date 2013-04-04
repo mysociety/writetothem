@@ -27,7 +27,7 @@ my $st = dbh()->prepare("
 ");
 $st->execute();
 
-open(FP, ">$FindBin::Bin/../../cobrand.csv");
+open(FP, ">$FindBin::Bin/../../data/cobrand.csv");
 while (my ($cobrand, $count) = $st->fetchrow_array()) {
     $cobrand = 'www' unless $cobrand;
     print FP "$cobrand,$count\n";
