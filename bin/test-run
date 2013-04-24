@@ -132,7 +132,10 @@ foreach (@actions) {
     do_send_fax_message() if $_ eq 'fax';
     do_send_cobrand_message() if $_ eq 'cobrand';
     do_send_lords_message() if $_ eq 'lords';
-    do_send_group_message() if $_ eq 'group';
+    if ($_ eq 'group') {
+        do_send_group_message();
+        do_admin_confirm_group_message();
+    }
     do_run_unit_tests() if $_ eq 'unit';
 }
 
@@ -819,6 +822,40 @@ sub do_send_group_message {
     $wth->email_check_none_left();
     # 7th day, still no reminder
     set_fyr_date('1994-01-22', undef, $verbose);
+    $wth->email_check_none_left();
+}
+
+sub do_admin_confirm_group_message {
+    # Check admin can group confirm them all.
+    # Also handily tests admin search, admin Confirm button, etc.
+    set_base_url("");
+    set_fyr_date('1994-01-01', undef, $verbose);
+    $options->{base_url} = $base_url;
+    my $repinfo = { repname => 'all', repnames => \@rep_names, reptype => 'MEPs' };
+
+    send_message_to_rep(7, 'CB23QJ', {
+         writer_address1 => '44 Multiple Street',
+         writer_town => 'Batchcester',
+         state => 'Groupshire',
+         writer_phone => undef,
+         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+    }, $repinfo, $options);
+
+    call_fyrqd($wth, $verbose, $multispawn);
+    my $confirmation_email = $wth->email_get_containing('%');
+
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link( text_regex => qr/Message Queue/ );
+    $wth->browser_submit_form( with_fields => { query => email_n(7) }, button => 'search' );
+
+    $wth->browser_follow_link( url_regex => qr/page=fyrqueue&id=/ );
+    $wth->browser_submit_form( form_name => 'messageForm', fields => {}, button => 'ready' );
+
+    # check that all the reps got the message and that it lets
+    # them know the message was sent to others
+    foreach my $rep_name (@rep_names) {
+        check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $options);
+    }
     $wth->email_check_none_left();
 }
 

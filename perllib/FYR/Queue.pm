@@ -2559,10 +2559,33 @@ administrator making the change.
 =cut
 sub admin_set_message_to_ready ($$) {
     my ($id, $user) = @_;
-    state($id, 'ready');
-    dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
+
+    my $group_id;
+    my $group_states = [];
+
+    my $msg = message($id);
+    if (defined($msg->{group_id})) {
+        $group_id = $msg->{group_id};
+        $group_states = group_state(undef, undef, $group_id);
+    }
+
+    if ($group_id && @$group_states == 1 && $group_states->[0] eq 'pending') {
+        # *All* messages in this group are in pending, confirm them all
+        lock_group($group_id);
+        group_state($id, 'ready', $group_id);
+        dbh()->do('update message set confirmed = ? where group_id = ?', {}, time(), $group_id);
+        logmsg($id, 1, "$user put message in state 'ready'", $user);
+        my $msgs = group_messages($group_id);
+        foreach my $memberid (@$msgs) {
+            next if $memberid eq $id;
+            logmsg($memberid, 1, "$user put message in state 'ready' (via group confirmation from message $id)", $user);
+        }
+    } else {
+        state($id, 'ready');
+        dbh()->do('update message set confirmed = ? where id = ?', {}, time(), $id);
+        logmsg($id, 1, "$user put message in state 'ready'", $user);
+    }
     dbh()->commit();
-    logmsg($id, 1, "$user put message in state 'ready'", $user);
     notify_daemon();
     return 0;
 }
