@@ -9,11 +9,7 @@ template_draw('header', $values);
 <? if ($values['recipient_via']) { ?>
 <p>Your message may be slow to deliver, because we do not have a direct contact
 address for <?=$values['recipient_name']?>. 
-    <? if ($values['recipient_type'] == 'HOC') { ?>
-        Instead we are sending the message via the House of Lords fax machine.
-    <? } else { ?>
-        Instead we are sending the message via the body to which they were elected.
-    <? } ?>
+Instead we are sending the message via the body to which they were elected.
 </p>
 <? } ?>
 <p>If, for some reason, we couldn&rsquo;t send your message

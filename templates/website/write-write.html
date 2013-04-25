@@ -116,11 +116,7 @@ were elected.</strong>';
 
 if ($values['representative']['method'] == 'via') {
     echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
-    if ($values['representative']['type'] == 'HOC') {
-        echo 'so we will send your message via the central House of Lords fax machine.';
-    } else {
-        echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
-    }
+    echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
     echo '</strong></li>';
 }
 
