@@ -192,6 +192,11 @@ function buildWriteForm($options) {
     global $fyr_voting_area;
     global $cobrand, $cocode;
 
+    // UCL A/B Testing
+    global $UCLTest;
+    $UCLTest->record_compose_visit();
+    $UCLTest->set_postcode($fyr_values['pc']);
+
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = new HTML_QuickForm('writeForm', 'post', $form_action);
     
@@ -308,6 +313,11 @@ END;
 
 function buildPreviewForm($options) {
     global $fyr_values, $cobrand, $cocode;
+
+    // UCL A/B Testing
+    global $UCLTest;
+    $UCLTest->record_preview_visit();
+    $UCLTest->set_postcode($fyr_values['pc']);
 
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
@@ -430,7 +440,10 @@ function renderForm($form, $pageName, $options)
 
 function submitFaxes() {
 
-    /* Submit a group of messages or an individual message 
+    // UCL A/B Testing
+    global $UCLTest;
+
+    /* Submit a group of messages or an individual message
      * and show the results to the user */
 
     global $grpid, $msgid_list, $msgid;
@@ -470,14 +483,21 @@ function submitFaxes() {
         if (isset($result)) {
             $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br>";        
             template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
-        }   
+        }
+
+        // UCL A/B Testing
+        $UCLTest->set_group_id($grpid);
+
     } else {
         $no_questionnaire = false;
         $msgid_list = array($msgid);
         $repid_list = array($fyr_values['who']);
-    }      
-        
-    # set up the address      
+
+        // UCL A/B Testing
+        $UCLTest->set_message_id($msgid);
+    }
+
+    # set up the address
     $address = prepare_address();
     check_message_length();
     # check the msgids
@@ -550,8 +570,11 @@ function submitFaxes() {
     } else {
         //no problems
         show_check_email($error_msg);
-    } 
- 
+
+        // UCL A/B Testing
+        $UCLTest->record_message_send();
+    }
+
 }
 
 function rabx_mail_error_msg($code, $text) { 
@@ -638,6 +661,10 @@ function check_message_id($msgid) {
 
 $fyr_values = get_all_variables();
 set_up_variables($fyr_values);
+
+// UCL A/B Testing
+require_once "ucl_ab_test.php";
+$UCLTest = new UCLTest;
 
 // Various display and used fields, global variables
 $stash = array();

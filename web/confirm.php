@@ -69,6 +69,12 @@ if (!$result) {
         $values['cobrand'] = $cobrand;
         $values['host'] = fyr_get_host();
         template_draw("confirm-accept", $values);
+
+        // UCL A/B Testing
+        require_once "ucl_ab_test.php";
+        $UCLTest = new UCLTest($result);
+        $UCLTest->record_message_confirm();
+
     }
 }
 

@@ -48,6 +48,11 @@ $fyr_headings = array();
 $fyr_rep_descs = array(); 
 $fyr_rep_lists = array();
 
+// UCL A/B Testing
+require_once "ucl_ab_test.php";
+$UCLTest = new UCLTest;
+$UCLTest->set_postcode($fyr_postcode);
+
 foreach ($va_display_order as $va_types) {
     $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
     if (!is_array($va_types)) $va_types = array($va_types);
