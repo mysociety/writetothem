@@ -1,10 +1,10 @@
 #!/bin/bash
 #
 ### BEGIN INIT INFO
-# Provides: fyrqd
+# Provides: !!(*= $daemon_name *)!!
 # Required-Start: $local_fs $syslog postgresql
 # Required-Stop: $local_fs $syslog postgresql
-# Default-Start: 2 3 4 5 
+# Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
 # Short-Description: fyrqd is a daemon running the WriteToThem queue
 # Description: fyrqd run the WriteToThem queue to send emails and faxes to representatives
