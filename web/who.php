@@ -330,6 +330,27 @@ function display_reps($va_type, $representatives, $va_area, $options) {
         if (array_key_exists('party', $rep_info)) {
             $rep_list .= ' <span class="party">(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</span>';
         }
+
+        // UCL A/B Testing
+        global $UCLTest;
+        if ($va_type == 'WMC')
+        {
+            if ($UCLTest->show_numbers)
+            {
+                $rep_message_count = $UCLTest->get_rep_message_count($rep_specificid);
+                $UCLTest->set_message_count($rep_message_count);
+                $rep_list .= '<br>' . $rep_message_count . ' ';
+                if ($rep_message_count == 1)
+                {
+                    $rep_list .= 'person has';
+                }
+                else
+                {
+                    $rep_list .= 'people have';
+                }
+                $rep_list .= ' already written to ' . htmlspecialchars($rep_info['name']) . ' using WriteToThem.';
+            }
+        }
     }
 
     if (array_key_exists('include_write_all', $options) && $options['include_write_all'] && count($representatives) > 1){
