@@ -1,29 +1,13 @@
-<? 
-$values['title'] = "Thanks for your feedback... and one *last* question";
+<?
+$values['title'] = "Thanks for your feedback... and a few more questions";
 template_draw('header', $values);
 ?>
 
-<h1>Thanks for your feedback... and another question</h1>
+<h1>Thanks for your feedback!</h1>
 
 <p>Great! Many, many thanks for your feedback. We're delighted that your
 representative got back to you.</p>
 
-<p>One more question ...</p>
-
-<ul>
-<li><b>Is this the first time you've ever contacted one of your
-political representatives, by any means? &nbsp; 
-<a href=<?=$values['first_time_yes']?>>YES</a> / <a
-href=<?=$values['first_time_no']?>>NO</a></b>
-</ul>
-
-<p>Why are we being so nosey? Well, one of our aims is to convince
-politicians that, used wisely, the Web can encourage much greater
-participation in the democratic process.
-</p>
-
-<p>Thanks again for your feedback.</p>
-
-<p>&mdash; The WriteToThem.com team</p>
+<? template_draw('ucl-survey', $values); ?>
 
 <? template_draw('footer', $values); ?>

@@ -1,0 +1,164 @@
+<?php
+
+if ( ! $values['done_survey']):
+
+$UCLTest->record_survey_view();
+
+?>
+
+<p>A few more questions...</p>
+
+<p>As part of our work to improve WriteToThem we'd like to ask you a few more questions about your political activity. It should only take a couple of minutes, and all your answers are completely anonymous.</p>
+
+<form name="survey" method="post" action="<?=OPTION_SURVEY_URL?>">
+	<input type="hidden" name="version" value="1">
+	<input type="hidden" name="sourceidentifier" value="wtt-ucl">
+	<input type="hidden" name="test_token" value="<?=$values['test_token']?>">
+	<table>
+		<colgroup>
+		<col id="col_label">
+		<col id="col_formelelemt">
+		</colgroup>
+		<tr>
+			<td class="us_label">
+				<div class="us_label">Have you ever written to a politician before?
+				</div></td>
+			<td class="us_formelement">
+				<label>
+					<input type="radio" name="written_politician" value="0"> No
+				</label><br>
+				<label>
+					<input type="radio" name="written_politician" value="1"> Yes, offline
+				</label><br>
+				<label>
+					<input type="radio" name="written_politician" value="2"> Yes, online
+				</label><br>
+				<label>
+					<input type="radio" name="written_politician" value="3"> Yes, both online and offline
+				</label>
+            </td>
+		</tr>
+
+		<tr>
+			<td class="us_label">
+				<div class="us_label">Which of these activities have you performed in the last six months?
+				</div></td>
+			<td class="us_formelement">
+
+                Signed a petition: <label><input type="radio" name="activity_petition" value="0"> No</label> <label><input type="radio" name="activity_petition" value="1"> Yes</label><br>
+
+                Written to a politician: <label><input type="radio" name="activity_written" value="0"> No</label> <label><input type="radio" name="activity_written" value="1"> Yes</label><br>
+
+                Donated to a charity: <label><input type="radio" name="activity_donated" value="0"> No</label> <label><input type="radio" name="activity_donated" value="1"> Yes</label><br>
+
+                Taken part in a protest: <label><input type="radio" name="activity_protest" value="0"> No</label> <label><input type="radio" name="activity_protest" value="1"> Yes</label><br>
+
+                Expressed a political opinion on Twitter or Facebook: <label><input type="radio" name="activity_social_opinion" value="0"> No</label> <label><input type="radio" name="activity_social_opinion" value="1"> Yes</label>
+
+            </td>
+		</tr>
+
+        <tr>
+			<td class="us_label">
+				<div class="us_label">How much do you agree or disagree with these statements?
+				</div></td>
+			<td class="us_formelement">
+
+                Generally, those elected into government soon lose touch with the people: <label><input type="radio" name="statement_lose_touch" value="0"> Disagree</label> <label><input type="radio" name="statement_lose_touch" value="1"> Agree</label> <label><input type="radio" name="statement_lose_touch" value="2"> Don't Know</label><br>
+
+                I don't think the government cares much about what people like me think: <label><input type="radio" name="statement_doesnt_care" value="0"> Disagree</label> <label><input type="radio" name="statement_doesnt_care" value="1"> Agree</label> <label><input type="radio" name="statement_doesnt_care" value="2"> Don't Know</label><br>
+
+                Political parties are only interested in people's votes, but not their opinions: <label><input type="radio" name="statement_only_votes" value="0"> Disagree</label> <label><input type="radio" name="statement_only_votes" value="1"> Agree</label> <label><input type="radio" name="statement_only_votes" value="2"> Don't Know</label><br>
+
+                People like me do not have any say about what the government does: <label><input type="radio" name="statement_no_say" value="0"> Disagree</label> <label><input type="radio" name="statement_no_say" value="1"> Agree</label> <label><input type="radio" name="statement_no_say" value="2"> Don't Know</label><br>
+
+                Sometimes politics and government seem so complicated that a person like me can't really understand what is going on: <label><input type="radio" name="statement_complex" value="0"> Disagree</label> <label><input type="radio" name="statement_complex" value="1"> Agree</label> <label><input type="radio" name="statement_complex" value="2"> Don't Know</label>
+
+            </td>
+		</tr>
+
+        <tr>
+			<td class="us_label">
+				<div class="us_label">When you think about your life, how important is it to you personally to do something to improve your community or society?
+				</div></td>
+			<td class="us_formelement">
+				<label>
+					<input type="radio" name="importance_of_action" value="0"> Very Unimportant
+				</label><br>
+				<label>
+					<input type="radio" name="importance_of_action" value="1"> Unimportant
+				</label><br>
+				<label>
+					<input type="radio" name="importance_of_action" value="2"> Neither
+				</label><br>
+				<label>
+					<input type="radio" name="importance_of_action" value="3"> Important
+				</label><br>
+				<label>
+					<input type="radio" name="importance_of_action" value="4"> Very Important
+				</label>
+            </td>
+		</tr>
+
+        <tr>
+			<td class="us_label">
+				<div class="us_label">What is your gender?
+				</div></td>
+			<td class="us_formelement">
+				<label>
+					<input type="radio" name="gender" value="0"> Male
+				</label><br>
+				<label>
+					<input type="radio" name="gender" value="1"> Female
+				</label><br>
+				<label>
+					<input type="radio" name="gender" value="2"> Other
+				</label>
+            </td>
+		</tr>
+
+        <tr>
+			<td class="us_label">
+				<div class="us_label">What is the highest level of academic qualification you achieved?
+				</div></td>
+			<td class="us_formelement">
+				<label>
+					<input type="radio" name="academic_qualification" value="0"> None
+				</label><br>
+				<label>
+					<input type="radio" name="academic_qualification" value="1"> GCSE
+				</label><br>
+				<label>
+					<input type="radio" name="academic_qualification" value="2"> A Level/Highers
+				</label><br>
+				<label>
+					<input type="radio" name="academic_qualification" value="3"> Undergraduate Degree
+				</label><br>
+				<label>
+					<input type="radio" name="academic_qualification" value="4"> Masters Degree
+				</label><br>
+				<label>
+					<input type="radio" name="academic_qualification" value="5"> PhD or Equivalent
+				</label><br>
+				<label>
+				    <input type="radio" name="academic_qualification" value="6">Other</label> <label><input type="text" name="previouscontact_other" value="please specify" size="50" maxlength="500" onclick="this.form.academic_qualification[6].checked = true;if (this.value=='please specify') this.value=''" id="id_previouscontact_other"></label><br>
+            </td>
+		</tr>
+
+	</table>
+
+	<p>Thank you for taking the time to answer these questions!</p>
+
+	<input type="hidden" name="user_code" value="<?=$values['user_code']?>">
+	<input type="hidden" name="auth_signature" value="<?=$values['auth_signature']?>">
+	<input type="hidden" name="return_url" value="<?=$values['return_url']?>">
+	<input type="submit" name="submit_usersurvey" value="Submit answers">
+	<div>
+	</div>
+</form>
+
+<?php endif; ?>
+
+<p>&mdash; The WriteToThem.com team</p>
+
+<? template_draw('footer', $values); ?>

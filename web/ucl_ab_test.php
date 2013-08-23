@@ -89,6 +89,11 @@ class UCLTest
         pg_query($this->pg_connection, "UPDATE ucl_testing_log SET message_confirmed = TRUE WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
     }
 
+    public function record_survey_view()
+    {
+        pg_query($this->pg_connection, "UPDATE ucl_testing_log SET survey_visited = TRUE WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
+    }
+
     private function new_test()
     {
         // Generate the testing token and mode
