@@ -45,7 +45,9 @@ $meps_hidden = euro_check($area_representatives, $va_ids);
 // render.
 $fyr_representatives = array();
 $fyr_headings = array();
-$fyr_rep_descs = array(); 
+$fyr_blurbs = array();
+$fyr_more = array();
+$fyr_rep_descs = array();
 $fyr_rep_lists = array();
 
 foreach ($va_display_order as $va_types) {
@@ -80,20 +82,31 @@ foreach ($va_display_order as $va_types) {
 
     array_push($fyr_rep_descs, $col_blurb);
     array_push($fyr_rep_lists, $text);
-    array_push($fyr_representatives, "$col_blurb$text$col_after");
-    array_push($fyr_headings, "<h3>$heading</h3>");
+    array_push($fyr_representatives, $text);
+    array_push($fyr_blurbs, $col_blurb);
+    array_push($fyr_more, $col_after);
+    array_push($fyr_headings, $heading);
     debug_timestamp();
 }
+
+// Inject extra content for Lords!
+
+array_push($fyr_headings, 'House of Lords');
+array_push($fyr_blurbs, '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>');
+array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul>');
+array_push($fyr_more, '');
 
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
     "reps" => $fyr_representatives,
-    "template" => "who", 
+    "template" => "who",
     "headings" => $fyr_headings,
+    "blurbs" => $fyr_blurbs,
+    "more" => $fyr_more,
     "all_url" => $fyr_all_url,
-    "cobrand" => $cobrand, 
-    "host" => fyr_get_host(), 
-    "rep_lists" => $fyr_rep_lists, 
+    "cobrand" => $cobrand,
+    "host" => fyr_get_host(),
+    "rep_lists" => $fyr_rep_lists,
     "rep_descs" => $fyr_rep_descs
     ));
 
@@ -253,7 +266,7 @@ function write_all_link($va_type, $rep_desc_plural) {
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
-        $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+        $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';
         if ($va_type == 'SPE') {
             $a .= ' <small>(only use this option if you are writing to your
 MSPs about <strong>voting issues or other issues concerning matters in the
@@ -323,17 +336,17 @@ function display_reps($va_type, $representatives, $va_area, $options) {
         if ($photo == 0) $rep_list .= $a;
         $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
         if (array_key_exists('party', $rep_info)) {
-            $rep_list .= ' <span class="party">(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</span>';
+            $rep_list .= ' <small>(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</small>';
         }
     }
 
     if (array_key_exists('include_write_all', $options) && $options['include_write_all'] && count($representatives) > 1){
-        $rep_list .= '<li class="all">';
+        $rep_list .= '<li>';
         $rep_list .= write_all_link($va_type, $va_area['rep_name_plural']);
         $rep_list .= '</li>';
     }
     $rep_type =  str_replace(' ', '-', strtolower($va_area['rep_name_plural']));
-    $out = '<ul class="' . $rep_type . '" ';
+    $out = '<ul class="rep-list ' . $rep_type . '" ';
     if ($photo==1) $out .= ' id="photo"';
     if (array_key_exists('small', $options) && $options['small']) $out .= ' style="font-size:83%"';
     $out .= '>';
@@ -361,14 +374,13 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count,
 
     $col_after = '';
     if ($va_type == 'WMC') {
-        list($twfy, $col_after) = extra_mp_text($rep_count, $va_area, $representatives);
-        $text .= $twfy;
+        $col_after = extra_mp_text($rep_count, $va_area, $representatives);
     } elseif ($va_type == 'EUR' && count($meps_hidden)) {
-        $text .= hidden_meps_list($meps_hidden, $va_type, $va_area);
+        $col_after = hidden_meps_list($meps_hidden, $va_type, $va_area);
     }
     global $va_council_child_types;
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
-        $text .= '<p style="font-size: 80%"><a href="corrections?id='.$va_area['id'].'">Have you spotted a mistake in the above list?</a></p>';
+        $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Have you spotted a mistake in the above list?</a></small></p>';
     }
     return array($text, $col_after);
 }
@@ -396,7 +408,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
 Only <strong>one</strong> MSP is allowed to help you at a time';
     }
     $text .= '.</p>';
-        
+
     if ($rep_count && $rep_counts[1]>1 && $va_types[1] != 'SPE' && $va_types[1] != 'LAE' && !$skip_write_all) {
         $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
     }
@@ -425,16 +437,9 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
     $text = '';
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
-        $text = '<p id="twfy"><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a></p>';
+        $text = '<a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a>';
     }
-    # .maincol / .firstcol have margin-bottom set to none, override
-    $col_after = '<h3 class="houseoflords">House of Lords</h3>';
-    $col_after .= '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>';
-    $col_after .= '<ul><li><a href="/lords">Write to a Lord</a></li></ul>';
-#            $text .= '<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">';
-# yellow flash advert
-#            $text .= '</div>';
-    return array($text, $col_after);
+    return $text;
 }
 
 function hidden_meps_list($meps_hidden, $va_type, $va_area) {

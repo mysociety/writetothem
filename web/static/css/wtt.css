@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:600|Merriweather:400,700);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Merriweather:400,700);
 /*! normalize.css v2.1.1 | MIT License | git.io/normalize */
 /* ==========================================================================
    HTML5 display definitions
@@ -2050,7 +2050,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* line 191, ../../../../../../../var/lib/gems/1.8/gems/zurb-foundation-4.3.1/scss/foundation/components/_type.scss */
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
-  font-size: 60%;
+  font-size: 70%;
   color: #6f6f6f;
   line-height: 0;
 }
@@ -2111,7 +2111,7 @@ b {
 
 /* line 228, ../../../../../../../var/lib/gems/1.8/gems/zurb-foundation-4.3.1/scss/foundation/components/_type.scss */
 small {
-  font-size: 60%;
+  font-size: 70%;
   line-height: inherit;
 }
 
@@ -2130,7 +2130,7 @@ dl {
   font-size: 1em;
   line-height: 1.6;
   margin-bottom: 1.25em;
-  list-style-position: outside;
+  list-style-position: inside;
   font-family: inherit;
 }
 
@@ -7274,11 +7274,114 @@ a.th {
 }
 
 /* line 63, ../sass/wtt.scss */
+.flow-breadcrumbs {
+  text-align: center;
+}
+
+/* line 67, ../sass/wtt.scss */
+.flow-breadcrumbs li {
+  text-transform: uppercase;
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.8em;
+  padding-top: 22px;
+  margin: 12px 0;
+  color: #666666;
+}
+
+/* line 77, ../sass/wtt.scss */
+.flow-breadcrumbs li.done:first-child {
+  background: url(../img/flow-start-complete.png) no-repeat center top;
+}
+
+/* line 81, ../sass/wtt.scss */
+.flow-breadcrumbs li.done {
+  background: url(../img/flow-mid-complete.png) no-repeat center top;
+}
+
+/* line 85, ../sass/wtt.scss */
+.flow-breadcrumbs li.done:last-child {
+  background: url(../img/flow-end-complete.png) no-repeat center top;
+}
+
+/* line 89, ../sass/wtt.scss */
+.flow-breadcrumbs li.current:first-child {
+  background: url(../img/flow-start-current.png) no-repeat center top;
+}
+
+/* line 93, ../sass/wtt.scss */
+.flow-breadcrumbs li.current {
+  background: url(../img/flow-mid-current.png) no-repeat center top;
+}
+
+/* line 97, ../sass/wtt.scss */
+.flow-breadcrumbs li.current:last-child {
+  background: url(../img/flow-end-current.png) no-repeat center top;
+}
+
+/* line 101, ../sass/wtt.scss */
+.flow-breadcrumbs li:first-child {
+  background: url(../img/flow-mid-incomplete.png) no-repeat center top;
+}
+
+/* line 105, ../sass/wtt.scss */
+.flow-breadcrumbs li {
+  background: url(../img/flow-mid-incomplete.png) no-repeat center top;
+}
+
+/* line 109, ../sass/wtt.scss */
+.flow-breadcrumbs li:last-child {
+  background: url(../img/flow-end-incomplete.png) no-repeat center top;
+}
+
+/* line 113, ../sass/wtt.scss */
+.write-header {
+  text-align: center;
+}
+
+/* line 117, ../sass/wtt.scss */
+.write-header h2 {
+  font-family: "Merriweather", serif;
+}
+
+/* line 121, ../sass/wtt.scss */
+.write-content {
+  background: #FFFFFF;
+}
+
+/* line 125, ../sass/wtt.scss */
+.write-content h3 {
+  text-transform: uppercase;
+  font-size: 1em;
+  font-weight: 400;
+  padding: 6px 0;
+  margin: 10px 0;
+  border-bottom: 1px solid #E9E9E9;
+}
+
+/* line 134, ../sass/wtt.scss */
+.rep-blurb {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  color: #666666;
+}
+
+/* line 140, ../sass/wtt.scss */
+.rep-list {
+  list-style: none;
+}
+
+/* line 144, ../sass/wtt.scss */
+.rep-list li {
+  margin: 3px 0;
+}
+
+/* line 148, ../sass/wtt.scss */
 .sidebar {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
 
-/* line 67, ../sass/wtt.scss */
+/* line 152, ../sass/wtt.scss */
 .sidebar h5 {
   font-size: 0.9em;
   color: #666666;
@@ -7286,19 +7389,19 @@ a.th {
   text-transform: uppercase;
 }
 
-/* line 74, ../sass/wtt.scss */
+/* line 159, ../sass/wtt.scss */
 .sidebar .side-nav {
   padding: 4px;
 }
 
-/* line 78, ../sass/wtt.scss */
+/* line 163, ../sass/wtt.scss */
 .footer {
   padding: 10px 0;
   border-top: 1px solid #E9E9E9;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 84, ../sass/wtt.scss */
+  /* line 169, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }

@@ -269,33 +269,30 @@ function fyr_breadcrumbs($num, $type = 'default') {
     if ($type == 'default') {
         $steps = array(
                     'Enter postcode',
-                    'Pick representative',
+                    'Choose representative',
                     'Write message',
-                    'Check message',
-                    'Confirm email'
+                    'Send message'
                 );
     } elseif ($type == 'lords') {
         $steps = array(
                     'Choose a Lord',
                     'Write message',
-                    'Check message',
-                    'Confirm email'
+                    'Send message'
                 );
     }
     /* Ideally we'd like the numbers to appear as a result of this being a
      * list, but that's beyond CSS's tiny capabilities, so put them in
      * explicitly. That means that two numbers will appear in non-CSS
      * browsers. */
-    $str = '<ol id="breadcrumbs">';
+    $str = '<ol class="small-block-grid-' . count($steps) . '">';
     for ($i = 0; $i < sizeof($steps); ++$i) {
-        if ($i == $num - 1)
-            $str .= "<li class=\"hilight\"><em>";
+        if ($i < $num - 1)
+            $str .= "<li class=\"done\">";
+        else if ($i == $num - 1)
+            $str .= "<li class=\"current\">";
         else
             $str .= "<li>";
-        $str .= '<!--[if lte IE 6]>' . ($i+1) . '. <![endif]-->';
         $str .= htmlspecialchars($steps[$i]);
-        if ($i == $num - 1)
-            $str .= "</em>";
         $str .= "</li>";
     }
     $str .= "</ol>";

@@ -11,7 +11,7 @@
 @import "compass/css3";
 
 // Google Fonts
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:600|Merriweather:400,700);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Merriweather:400,700);
 
 // Custom Styles
 
@@ -58,6 +58,91 @@
 
 .content {
     background: #f4f3ef;
+}
+
+.flow-breadcrumbs {
+	text-align: center;
+}
+
+.flow-breadcrumbs li {
+	text-transform: uppercase;
+	font-family: $header-font-family;
+	font-weight: 400;
+	font-size: 0.8em;
+	padding-top: 22px;
+	margin: 12px 0;
+	color: #666666;
+}
+
+.flow-breadcrumbs li.done:first-child {
+	background: url(../img/flow-start-complete.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li.done {
+	background: url(../img/flow-mid-complete.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li.done:last-child {
+	background: url(../img/flow-end-complete.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li.current:first-child {
+	background: url(../img/flow-start-current.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li.current {
+	background: url(../img/flow-mid-current.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li.current:last-child {
+	background: url(../img/flow-end-current.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li:first-child {
+	background: url(../img/flow-mid-incomplete.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li {
+	background: url(../img/flow-mid-incomplete.png) no-repeat center top;
+}
+
+.flow-breadcrumbs li:last-child {
+	background: url(../img/flow-end-incomplete.png) no-repeat center top;
+}
+
+.write-header {
+    text-align: center;
+}
+
+.write-header h2 {
+    font-family: $body-font-family;
+}
+
+.write-content {
+    background: #FFFFFF;
+}
+
+.write-content h3 {
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 400;
+    padding: 6px 0;
+    margin: 10px 0;
+    border-bottom: 1px solid #E9E9E9;
+}
+
+.rep-blurb {
+	font-family: $header-font-family;
+	font-size: 0.9em;
+	color: #666666;
+}
+
+.rep-list {
+    list-style: none;
+}
+
+.rep-list li {
+    margin: 3px 0;
 }
 
 .sidebar {
