@@ -1,12 +1,11 @@
-</div>
-
 <div class="footer">
 
     <div class="row">
+    <small>
 
-        <div class="large-6 columns">
+        <div class="large-7 columns">
 
-            <ul class="inline-list">
+            <ul class="inline-list footer-links-main">
                 <li><a href="/about-qa">Help</a></li>
                 <li><a href="/about-contact">Contact Us</a></li>
                 <li><a href="/about-copyright">Copyright</a></li>
@@ -17,9 +16,9 @@
 
         </div>
 
-        <div class="large-6 columns">
+        <div class="large-5 columns">
 
-            <ul class="inline-list">
+            <ul class="inline-list footer-links-credits">
                 <li><a href="/about-us">Built by mySociety</a></li>
                 <li><a href="/about-copyright">Data by GovEval</a></li>
                 <li><a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a></li>
@@ -27,6 +26,7 @@
 
         </div>
 
+    </small>
     </div>
 
 </div>

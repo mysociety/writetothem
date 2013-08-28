@@ -1,10 +1,10 @@
 <?
 /*
  * index.php:
- * 
+ *
  * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
- * 
+ *
  */
 
 require_once "../phplib/fyr.php";
@@ -13,7 +13,7 @@ require_once "../commonlib/phplib/mapit.php";
 require_once '../commonlib/phplib/dadem.php';
 require_once "../commonlib/phplib/votingarea.php";
 
-/* Return the form for entering a postcode.  
+/* Return the form for entering a postcode.
  * Valid options are:
  * inner_div   - boolean - include a div tag inside the form
  * extra_space - use non-breaking space for laying out inputs
@@ -22,36 +22,53 @@ require_once "../commonlib/phplib/votingarea.php";
  */
 function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options) {
 
-    $form = '<form action="" method="get" name="postcodeForm" id="postcodeForm">';
+    $form = '<form action="/" method="get" name="postcodeForm" id="postcodeForm">';
+
     if ($options['inner_div']){
         $form .= '<div id="postcodebox">';
     }
-    $form .= "\n";
+
     $form .= '<label for="pc">';
+
     if ($options['bold_labels']){
         $form .= '<b>';
     }
+
     $message = cobrand_enter_postcode_message($cobrand, $cocode);
+
     if (!$message) {
         $message = 'First, type your UK postcode:';
     }
+
     $form .= $message;
-    if ($options['show_errors'] && $error_message){ 
-        $form .= '<span class="error">' . $error_message . '</span>';
-    }
+
     if ($options['bold_labels']){
         $form .= '</b>';
     }
+
     $form .= '</label>';
-    if ($options['extra_space']){
-        $form .= '&nbsp;' . "\n";
-    }
-    $form .= '<input type="text" name="pc" value="'.htmlspecialchars($pc).'" id="pc" size="10" maxlength="255">' . "\n";
+
     if ($options['extra_space']){
         $form .= '&nbsp;';
     }
-    $form .= '<input type="submit" value="Go">' . "\n";
-    
+
+    if ($options['show_errors'] && $error_message){
+        $form .= '<div class="alert-box alert">' . $error_message . '</div>';
+    }
+
+    if ($options['extra_space']){
+        $form .= '&nbsp;';
+    }
+
+    $form .= '<div class="row collapse">
+        <div class="small-10 columns">
+          <input type="text" id="pc" name="pc" value="'.htmlspecialchars($pc).'" placeholder="SW1H 9NB">
+        </div>
+        <div class="small-2 columns">
+          <input type="submit" class="button success prefix" value="Go">
+        </div>
+      </div>';
+
     /* Record referer. We want to pass this onto the queue later, as an anti-abuse
      * measure, so it should be propagated through all the later pages. Obviously
      * this only has value against a naive attacker; also, there is no point in
@@ -61,15 +78,22 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
         $form .= '<input type="hidden" name="fyr_extref" value="'.htmlentities($ref).'">';
     if ($cocode)
         $form .= '<input type="hidden" name="cocode" value="'.htmlentities($cocode).'">';
-    
+
     if ($a_forward)
         $form .= '<input type="hidden" name="a" value="'.htmlentities($a_forward).'">';
+
+    if ($options['extra_space']){
+        $form .= '&nbsp;';
+    }
+
+    $form .= '<small><a href="/about-constituency">What postcode should I use?</a></small>';
 
     // End the form
     if ($options['inner_div']){
       $form .= '</div>';
     }
     $form .= '</form>';
+
     return $form;
 }
 
@@ -99,7 +123,7 @@ if ($person) {
 
 // Pass on any representative type selection
 $a_forward = get_http_var("a");
-$forced_rep_type = false;   
+$forced_rep_type = false;
 if ($cobrand) {
     $old_a_forward = $a_forward;
     $a_forward = cobrand_force_representative_type($cobrand, $cocode, $a_forward);
@@ -107,11 +131,11 @@ if ($cobrand) {
         $forced_rep_type = true;
     }
 }
- 
+
 // Validate postcode, and prepare appropriate page
-if (isset($_GET['t'])) 
+if (isset($_GET['t']))
     $template = 'index-'.$_GET['t'];
-else 
+else
     $template = "index-index";
 $error_message = null;
 
@@ -200,7 +224,7 @@ if ($pc) {
         if (cobrand_check_areas($cobrand, $cocode, $voting_areas, $pc, $a_forward)){
             exit;
         }
-        
+
         /* Possibly a deep link (from another site which knows its users'
          * postcodes) specifying one or more particular area types. */
         if ($area_types = fyr_parse_area_type_list($a_forward)) {
@@ -250,7 +274,7 @@ if ($pc) {
     }
     else if ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
         $error_message = cobrand_postcode_not_found_message($cobrand, $cocode);
-        if (!$error_message) { 
+        if (!$error_message) {
             $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
         }
         $template = "index-advice";
@@ -267,18 +291,9 @@ if ($cobrand){
     $title = cobrand_step_title($cobrand, 1);
 }
 if ($title == ''){
-    $title = "Email or fax your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
+    $title = "Email your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
 }
-$blurb_top = <<<END
-    <h2>Contact your
-Councillors,
-<acronym title="Member of Parliament">MP</acronym>, 
-<acronym title="Members of the European Parliament">MEPs</acronym>,
-<acronym title="Members of the Scottish Parliament">MSPs</acronym>, or
-<br>Northern Ireland, Welsh and London
-<acronym title="Assembly Members">AMs</acronym>
-for free</h2>
-END;
+$blurb_top = '<p>Councillors, <abbr title="Member of Parliament">MP</abbr>, <abbr title="Members of the European Parliament">MEPs</abbr>, <abbr title="Members of the Scottish Parliament">MSPs</abbr>, or <br>Northern Ireland, Welsh and London <abbr title="Assembly Members">AMs</abbr>.</p>';
 
 $fyr_all_url = null;
 $area_types = null;
@@ -299,13 +314,12 @@ if (!$area_types) {
     # All representatives
     global $va_child_types;
     $area_types = array();
-    foreach ($va_child_types as $child) 
+    foreach ($va_child_types as $child)
         if ($child != 'HOC')
             $area_types[$child] = 1;
     $area_type_desc = fyr_describe_area_type_list($area_types);
-    $area_type_desc = str_replace("or Northern Ireland", "or <br>Northern Ireland", $area_type_desc);
 }
-$blurb_top = "<h2>Contact your $area_type_desc for free</h2>";
+$blurb_top = "<p>$area_type_desc</p>";
 if ($template != 'index-advice') {
     header('Cache-Control: max-age=3600');
 }
@@ -330,13 +344,13 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 template_draw($template, array(
         'body_id' => 'home',
         "title" => $title,
-        "blurb-top" => $blurb_top,
-        "form" => $form, 
+        "blurb-top" => '<h2>The simple way to contact your representative</h2>' . $blurb_top,
+        "form" => $form,
         "error" => $error_message,
         "all_url" => $fyr_all_url,
-        "cobrand" => $cobrand, 
+        "cobrand" => $cobrand,
         "num_messages" => $num_messages,
-        "template" => $template, 
+        "template" => $template,
         "host" => fyr_get_host()
     ));
 

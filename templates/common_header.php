@@ -61,7 +61,13 @@ if (isset($values['cobrand']))
     </div>
 </div>
 
-<?php endif; ?>
+<?php
+
+endif;
+
+if (! isset($values['template']) OR $values['template'] !== 'index-index'):
+
+?>
 
 <div class="banner-top">
     <div class="row">
@@ -71,14 +77,11 @@ if (isset($values['cobrand']))
     </div>
 </div>
 
-<a name="top" id="top"></a>
-<?php if (array_key_exists('header', $values)) {
-          print $values['header'];
-      } ?>
+<?php endif; ?>
 
-<div id="content">
-<?
-	if (substr($real_template_name, 0, 5)=='about' && !isset($values['nobox'])) {
-		template_draw('about-sidebar');
-	}
+<?php
+if (array_key_exists('header', $values)) {
+    print $values['header'];
+}
 ?>
+

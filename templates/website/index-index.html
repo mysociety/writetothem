@@ -2,61 +2,76 @@
 template_draw('header', $values);
 ?>
 
-<?= fyr_breadcrumbs(1) ?>
-
-
-<?=$values['blurb-top'] ?>
-
-<!--<p align="center">
-Due to the General Election, new MPs and County Councillors are not yet available.
-<br>We'll get the details up as soon as we can.
-</p>-->
-
-<? if ($values['error']) { ?>
-<p class="warning">
-<strong>Please try again.</strong>
-<?=$values['error']?>
-</p>
-<? } ?>
-
-<?=$values['form']?>
-
-<? if ($values['all_url']) { ?>
-    <p align="center">You may also have representatives at other levels of government.
-    <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
-<? } ?>
-
-<div id="front-help">
-<p>Do you need <a href="/about-constituency">help with your postcode</a>?</p>
-<p>Are you <a href="/about-campaigns">running a campaign</a>?</p>
+<div class="hero">
+    <div class="row">
+        <div class="large-12 columns">
+            <a href="/"><img src="/static/img/logo.png" alt="WriteToThem"></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <?=$values['blurb-top'] ?>
+        </div>
+    </div>
 </div>
 
-<!--<p><small><a href="http://uk.imdb.com/title/tt0047573/">A horror horde of
-        crawl-and-crush giants clawing out of the earth from mile-deep
-        catacombs</a>? &mdash; Nope, just your politicians.  Use them.  Help
-    them. Write to them!</small></p>
+<?php if ($values['error']): ?>
+<div class="row">
+    <div class="large-12 columns">
+        <div class="alert-box alert">
+            <?=$values['error']?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
-<? if ($values['num_messages']) {
-    echo "* $values[cobrand] messages: $values[num_messages]";
-} ?>
+<div class="row index-input">
+    <div class="large-6 large-centered columns">
 
--->
+        <h3>Get started</h3>
+        <?=$values['form']?>
 
-<script type="text/javascript"><!--
+    </div>
+</div>
+
+<?php if ($values['all_url']): ?>
+<div class="row">
+    <div class="large-12 columns">
+        <div class="alert-box">
+            <p align="center">You may also have representatives at other levels of government.
+            <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
+        </div>
+    </div>
+</div>
+<? endif; ?>
+
+<div class="content index-content">
+
+    <div class="row">
+        <div class="large-4 columns">
+            <h4>As simple as</h4>
+        </div>
+
+        <div class="large-8 columns">
+            <h4>About</h4>
+            <div class="row">
+                <div class="large-6 columns">
+                    <p>Bacon ipsum dolor sit amet adipisicing ullamco sed swine ad velit rump et bacon ham hock corned beef voluptate. Jowl hamburger incididunt, eiusmod magna ullamco et rump drumstick andouille ex ground round est bresaola ribeye. Spare ribs pork loin nostrud, chicken fugiat cupidatat aute turkey andouille shoulder jowl eiusmod.</p>
+                </div>
+                <div class="large-6 columns">
+                    <p>Do you need <a href="/about-constituency">help with your postcode</a>?</p>
+                    <p>Are you <a href="/about-campaigns">running a campaign</a>?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
 <?=javascript_focus_set('postcodeForm', 'pc'); ?>
-
-// -->
 </script>
+
 <?
-/* The above focuses on the postcode box. Must come after the box is created, obviously. */
-
-/* Disable advert for now ?>
-<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">
-<!--<p>Have a <a href="<?=OPTION_HEARFROMYOURMP_BASE_URL?>">long term relationship</a> with your MP!</p>-->
-<!--Did your MP respond quickly? See our <a href="stats/2005/zeitgeist">2005 league table</a>.-->
-New! <a href="/lords">Write to your Lord</a>
-</div>
-<? */
-
 template_draw('footer', $values);
 ?>

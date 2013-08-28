@@ -7,28 +7,66 @@
 // Comment out this import if you are customizing you imports below
 @import "foundation";
 
+// CSS3 Mixin for useful styling
+@import "compass/css3";
+
 // Google Fonts
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:600|Merriweather:400,700);
 
 // Custom Styles
+
+.staging {
+    background: $alert-color;
+    color: #FFFFFF;
+    border-bottom: 1px solid #723f3f;
+    padding: 10px 0;
+}
 
 .banner-top {
     background: $primary-color;
     padding: 11px 0;
 }
 
-.footer {
-    border-top: 1px solid #E9E9E9;
-    font-size: $small-font-size;
-}
-
-.staging {
-    background: #9c3131;
+.hero {
+    background: url(../img/parliament.jpg) center center;
     color: #FFFFFF;
-    border-bottom: 1px solid #723f3f;
-    padding: 8px 0;
+    @include text-shadow(rgba(0, 0, 0, 0.7) 0 0 5px);
+    padding: 11px 0;
 }
 
-.staging p {
-    text-align: center;
+.hero h2 {
+    color: #FFFFFF;
+    font-family: $body-font-family;
+}
+
+.hero abbr {
+    color: #FFFFFF;
+}
+
+.hero .panel {
+    @include text-shadow(none);
+}
+
+.index-input {
+    padding: 30px 0;
+    background: #FFFFFF;
+}
+
+.index-content {
+    padding-top: 20px;
+}
+
+.content {
+    background: #f4f3ef;
+}
+
+.footer {
+    padding: 10px 0;
+    border-top: 1px solid #E9E9E9;
+}
+
+@media #{$small} {
+    .footer-links-credits li {
+        float: right;
+    }
 }
