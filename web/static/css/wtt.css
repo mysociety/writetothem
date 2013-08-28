@@ -7274,13 +7274,31 @@ a.th {
 }
 
 /* line 63, ../sass/wtt.scss */
+.sidebar {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+
+/* line 67, ../sass/wtt.scss */
+.sidebar h5 {
+  font-size: 0.9em;
+  color: #666666;
+  padding: 4px;
+  text-transform: uppercase;
+}
+
+/* line 74, ../sass/wtt.scss */
+.sidebar .side-nav {
+  padding: 4px;
+}
+
+/* line 78, ../sass/wtt.scss */
 .footer {
   padding: 10px 0;
   border-top: 1px solid #E9E9E9;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 69, ../sass/wtt.scss */
+  /* line 84, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }

@@ -60,6 +60,21 @@
     background: #f4f3ef;
 }
 
+.sidebar {
+    font-family: $header-font-family;
+}
+
+.sidebar h5 {
+    font-size: 0.9em;
+    color: #666666;
+    padding: 4px;
+    text-transform: uppercase;
+}
+
+.sidebar .side-nav {
+    padding: 4px;
+}
+
 .footer {
     padding: 10px 0;
     border-top: 1px solid #E9E9E9;
