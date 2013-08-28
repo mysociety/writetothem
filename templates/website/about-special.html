@@ -1,7 +1,21 @@
-<? $values['title'] = "Special and fictional postcodes";
-    template_draw('header', $values); ?>
+<?php
 
-<h2>Special Postcodes</h2>
+$values['title'] = "Special Postcodes";
+template_draw('header', $values);
+
+?>
+
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>Special Postcodes</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
 
 <dl>
 	<dt><b><a name="giro"></a>GIR 0AA</b></dt>
@@ -26,4 +40,15 @@ representatives of fictional locations. Hopefully, the links below will help.</p
 <dd>FX - Fairfax. Used by the <a href="http://www.royalmail.com/">Royal Mail</a> for training purposes.</dd>
 </dl>
 
-<? template_draw('footer', $values); ?>
+        </div>
+
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

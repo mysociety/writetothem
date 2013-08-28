@@ -1,5 +1,21 @@
-<? $values['title'] = "House of Lords"; template_draw('header', $values);
-?> <h2><?=$values['title']?></h2>
+<?php
+
+$values['title'] = "House of Lords";
+template_draw('header', $values);
+
+?>
+
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>House of Lords</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
 
 <dl>
 
@@ -119,4 +135,15 @@ volunteer</a>!</p></dd>
 
 </dl>
 
-<? template_draw('footer', $values); ?>
+        </div>
+
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

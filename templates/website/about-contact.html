@@ -1,19 +1,33 @@
-<? $values['title'] = "Emailing WriteToThem";
-$contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
-template_draw('header', $values); ?>
+<?php
 
-<h2>Emailing WriteToThem</h3>
+$values['title'] = "Emailing WriteToThem";
+$contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
+template_draw('header', $values);
+
+?>
+
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>Emailing WriteToThem</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
 
 <p>WriteToThem is an independent, <a href="about-us">charitable project</a>
 to help the public contact their elected representatives.</p>
 
-<div style="padding: 1em; border-radius: 1em; background-color: #ffcccc; width: 50%;">
+<div class="panel radius">
+
 <h3>Contact your Councillors, MP, MEPs, MSPs, or
 NI, Welsh and London Assembly Members</h3>
 
-<ul>
-<li><a href="/">Click here</a>, enter your postcode, then click on the name of the representative you would like to contact.</li>
-</ul>
+<p><a href="/">Click here</a>, enter your postcode, then click on the name of the representative you would like to contact.</p>
+
 </div>
 
 <h3>Contact the WriteToThem website</h3>
@@ -38,7 +52,7 @@ or read <a href="/about-qa">frequently asked questions</a>.
 
 </ul>
 
-<? fyr_display_emailform($values); ?>
+<?php fyr_display_emailform($values); ?>
 
 <h3>If you are an elected representative</h3>
 
@@ -48,4 +62,15 @@ href="mailto:<?=$contact_email?>"><?=$contact_email?></a> for prompt
 action.
 </p>
 
-<? template_draw('footer', $values); ?>
+        </div>
+
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

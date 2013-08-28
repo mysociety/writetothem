@@ -1,21 +1,34 @@
-<? $values['title'] = "Who should I write to?";
-    template_draw('header', $values); ?>
+<?php
 
-<h2><?=$values['title'] ?></h2>
+$values['title'] = "Who should I write to?";
+template_draw('header', $values);
 
-<UL>
-<LI><A HREF="#mp">When should I contact my MP?</A>
-<LI><A HREF="#councillor">When should I contact one of my councillors?</A>
-<LI><A HREF="#mep">When should I contact an MEP?</A>
-<LI><A HREF="#msp">When should I contact my MSP?</A>
-<LI><A HREF="#mla">When should I contact my MLA?</A>
-<LI><A HREF="#welsh">When should I contact one of my Welsh Assembly Members?</A>
-<LI><A HREF="#gla">When should I contact one of my Greater London Assembly Members?</A>
+?>
 
-</UL>
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>Who should I write to?</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
+
+<ul class="side-nav">
+<li><a href="#mp">When should I contact my MP?</a></li>
+<li><a href="#councillor">When should I contact one of my councillors?</a></li>
+<li><a href="#mep">When should I contact an MEP?</a></li>
+<li><a href="#msp">When should I contact my MSP?</a></li>
+<li><a href="#mla">When should I contact my MLA?</a></li>
+<li><a href="#welsh">When should I contact one of my Welsh Assembly Members?</a></li>
+<li><a href="#gla">When should I contact one of my Greater London Assembly Members?</a></li>
+</ul>
 
 <A NAME="mp"></A>
-<? include('yourrep/mp.html') ?>
+<?php include('yourrep/mp.html') ?>
 
 <A NAME="councillor"></A>
 <h3>When should I contact one of my councillors?</h3>
@@ -63,15 +76,26 @@ The Convention is incorporated into UK law, so any challenge must start in the U
 system.</p>
 
 <A NAME="msp"></A>
-<? include('yourrep/msp.html') ?>
+<?php include('yourrep/msp.html') ?>
 
 <A NAME="mla"></A>
-<? include('yourrep/mla.html') ?>
+<?php include('yourrep/mla.html') ?>
 
 <A NAME="welsh"></A>
-<? include('yourrep/am.html') ?>
+<?php include('yourrep/am.html') ?>
 
 <A NAME="gla"></A>
-<? include('yourrep/lam.html') ?>
+<?php include('yourrep/lam.html') ?>
 
-<? template_draw('footer', $values); ?>
+        </div>
+
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

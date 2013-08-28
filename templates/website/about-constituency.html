@@ -1,13 +1,27 @@
-<? $values['title'] = "Who are my Representatives?";
-template_draw('header', $values); ?>
+<?php
 
-<h2>What postcode should I use?</h2>
+$values['title'] = "What postcode should I use?";
+template_draw('header', $values);
+
+?>
+
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>What postcode should I use?</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
 
 <p>If you're not sure what postcode to use, or you don't know your
 postcode, this page will help.
 
 <a name="top"></a>
-<ul>
+<ul class="side-nav">
 <li><a href="#lookup">Look up my postcode from my address</a></li>
 <li><a href="#services">Armed Forces</a></li>
 <li><a href="#expat">Expatriates</a></li>
@@ -115,5 +129,15 @@ that in Northern Ireland electoral registration is the responsibility of the
 <a href="http://www.electoralofficeni.gov.uk/">Electoral Office for Northern
 Ireland</a> who can give more specific advice.)</p>
 
+        </div>
 
-<? template_draw('footer', $values); ?>
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

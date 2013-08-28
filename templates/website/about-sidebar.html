@@ -1,5 +1,4 @@
-<div id="sidebar">
-<ul>
+<div class="sidebar">
 <?php
 
 $links = array(
@@ -23,8 +22,9 @@ $links = array(
 ) );
 
 foreach ($links as $title => $arr) {
-    print '<li>' . $title . "\n";
-    print "<ul>\n";
+
+    print '<h5>' . $title . "</h5>\n";
+    print "<ul class=\"side-nav\">\n";
     foreach ($arr as $uri=>$text) {
         print '<li>';
         if ($_SERVER['REQUEST_URI'] != $uri)
@@ -35,9 +35,7 @@ foreach ($links as $title => $arr) {
         print "</li>\n";
     }
     print "</ul>\n";
-    print "</li>\n";
 }
 
 ?>
-</ul>
 </div>

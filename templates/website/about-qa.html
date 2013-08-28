@@ -1,9 +1,24 @@
-<? $values['title'] = "Questions and answers";
-    template_draw('header', $values); ?>
-<h2>Questions and answers</h2>
+<?php
+
+$values['title'] = "Questions and answers";
+template_draw('header', $values);
+
+?>
+
+<div class="content">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h2>Questions and answers</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="large-8 columns">
 
 <a name="top"></a>
-<ul>
+<ul class="side-nav">
 <li><a href="#how">How do I send a message?</a></li>
 <li><a href="#address">Why do you want my address, name, email address and phone number?</a></li>
 <li><a href="#onlyrep">Why can&rsquo;t I write to any representative I like?</a></li>
@@ -380,4 +395,15 @@ in life generally), or you see any error messages.
 
 </dl>
 
-<? template_draw('footer', $values); ?>
+        </div>
+
+        <div class="large-4 columns">
+
+            <?php template_draw('about-sidebar'); ?>
+
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>
