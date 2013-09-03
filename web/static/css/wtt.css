@@ -7253,103 +7253,99 @@ a.th {
 }
 
 /* line 46, ../sass/wtt.scss */
-.hero .panel {
-  text-shadow: none;
-}
-
-/* line 50, ../sass/wtt.scss */
 .index-input {
   padding: 30px 0;
   background: #FFFFFF;
 }
 
-/* line 55, ../sass/wtt.scss */
+/* line 51, ../sass/wtt.scss */
 .index-content {
   padding-top: 20px;
 }
 
-/* line 59, ../sass/wtt.scss */
+/* line 55, ../sass/wtt.scss */
 .content {
   background: #f4f3ef;
 }
 
-/* line 63, ../sass/wtt.scss */
+/* line 59, ../sass/wtt.scss */
 .flow-breadcrumbs {
   text-align: center;
+  margin-top: 12px;
 }
 
-/* line 67, ../sass/wtt.scss */
+/* line 64, ../sass/wtt.scss */
 .flow-breadcrumbs li {
   text-transform: uppercase;
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.8em;
   padding-top: 22px;
-  margin: 12px 0;
   color: #666666;
 }
 
-/* line 77, ../sass/wtt.scss */
+/* line 73, ../sass/wtt.scss */
 .flow-breadcrumbs li.done:first-child {
   background: url(../img/flow-start-complete.png) no-repeat center top;
 }
 
-/* line 81, ../sass/wtt.scss */
+/* line 77, ../sass/wtt.scss */
 .flow-breadcrumbs li.done {
   background: url(../img/flow-mid-complete.png) no-repeat center top;
 }
 
-/* line 85, ../sass/wtt.scss */
+/* line 81, ../sass/wtt.scss */
 .flow-breadcrumbs li.done:last-child {
   background: url(../img/flow-end-complete.png) no-repeat center top;
 }
 
-/* line 89, ../sass/wtt.scss */
+/* line 85, ../sass/wtt.scss */
 .flow-breadcrumbs li.current:first-child {
   background: url(../img/flow-start-current.png) no-repeat center top;
 }
 
-/* line 93, ../sass/wtt.scss */
+/* line 89, ../sass/wtt.scss */
 .flow-breadcrumbs li.current {
   background: url(../img/flow-mid-current.png) no-repeat center top;
 }
 
-/* line 97, ../sass/wtt.scss */
+/* line 93, ../sass/wtt.scss */
 .flow-breadcrumbs li.current:last-child {
   background: url(../img/flow-end-current.png) no-repeat center top;
 }
 
-/* line 101, ../sass/wtt.scss */
+/* line 97, ../sass/wtt.scss */
 .flow-breadcrumbs li:first-child {
   background: url(../img/flow-mid-incomplete.png) no-repeat center top;
 }
 
-/* line 105, ../sass/wtt.scss */
+/* line 101, ../sass/wtt.scss */
 .flow-breadcrumbs li {
   background: url(../img/flow-mid-incomplete.png) no-repeat center top;
 }
 
-/* line 109, ../sass/wtt.scss */
+/* line 105, ../sass/wtt.scss */
 .flow-breadcrumbs li:last-child {
   background: url(../img/flow-end-incomplete.png) no-repeat center top;
 }
 
-/* line 113, ../sass/wtt.scss */
+/* line 109, ../sass/wtt.scss */
 .write-header {
   text-align: center;
+  padding-top: 12px;
 }
 
-/* line 117, ../sass/wtt.scss */
+/* line 114, ../sass/wtt.scss */
 .write-header h2 {
   font-family: "Merriweather", serif;
 }
 
-/* line 121, ../sass/wtt.scss */
+/* line 118, ../sass/wtt.scss */
 .write-content {
   background: #FFFFFF;
 }
 
-/* line 125, ../sass/wtt.scss */
+/* line 122, ../sass/wtt.scss */
 .write-content h3 {
   text-transform: uppercase;
   font-size: 1em;
@@ -7359,29 +7355,86 @@ a.th {
   border-bottom: 1px solid #E9E9E9;
 }
 
-/* line 134, ../sass/wtt.scss */
+/* line 131, ../sass/wtt.scss */
+.write-instructions {
+  background: #424242;
+}
+
+/* line 135, ../sass/wtt.scss */
+.write-instructions h3 {
+  color: #FFFFFF;
+}
+
+/* line 139, ../sass/wtt.scss */
+.write-instructions ul {
+  list-style: none;
+}
+
+/* line 143, ../sass/wtt.scss */
+.write-instructions li {
+  display: block;
+  color: #FFFFFF;
+  border-bottom: 1px solid #666666;
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-size: 0.8em;
+  padding: 8px 0;
+}
+
+/* line 152, ../sass/wtt.scss */
+.write-instructions li:last-child {
+  border-bottom: none;
+}
+
+/* line 156, ../sass/wtt.scss */
+.write-instructions a {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* line 161, ../sass/wtt.scss */
+.write-content.preview {
+  padding: 2em;
+}
+
+/* line 165, ../sass/wtt.scss */
+.preview .preview-to {
+  float: left;
+}
+
+/* line 169, ../sass/wtt.scss */
+.preview .preview-from {
+  float: right;
+}
+
+/* line 173, ../sass/wtt.scss */
+.preview .preview-message {
+  padding-top: 2em;
+  clear: both;
+}
+
+/* line 178, ../sass/wtt.scss */
 .rep-blurb {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   font-size: 0.9em;
   color: #666666;
 }
 
-/* line 140, ../sass/wtt.scss */
+/* line 184, ../sass/wtt.scss */
 .rep-list {
   list-style: none;
 }
 
-/* line 144, ../sass/wtt.scss */
+/* line 188, ../sass/wtt.scss */
 .rep-list li {
   margin: 3px 0;
 }
 
-/* line 148, ../sass/wtt.scss */
+/* line 192, ../sass/wtt.scss */
 .sidebar {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
 
-/* line 152, ../sass/wtt.scss */
+/* line 196, ../sass/wtt.scss */
 .sidebar h5 {
   font-size: 0.9em;
   color: #666666;
@@ -7389,19 +7442,24 @@ a.th {
   text-transform: uppercase;
 }
 
-/* line 159, ../sass/wtt.scss */
+/* line 203, ../sass/wtt.scss */
 .sidebar .side-nav {
   padding: 4px;
 }
 
-/* line 163, ../sass/wtt.scss */
+/* line 207, ../sass/wtt.scss */
+.advert.panel {
+  background: #FFFFFF;
+}
+
+/* line 211, ../sass/wtt.scss */
 .footer {
   padding: 10px 0;
   border-top: 1px solid #E9E9E9;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 169, ../sass/wtt.scss */
+  /* line 217, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }

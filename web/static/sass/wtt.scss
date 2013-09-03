@@ -43,10 +43,6 @@
     color: #FFFFFF;
 }
 
-.hero .panel {
-    @include text-shadow(none);
-}
-
 .index-input {
     padding: 30px 0;
     background: #FFFFFF;
@@ -62,6 +58,7 @@
 
 .flow-breadcrumbs {
 	text-align: center;
+	margin-top: 12px;
 }
 
 .flow-breadcrumbs li {
@@ -70,7 +67,6 @@
 	font-weight: 400;
 	font-size: 0.8em;
 	padding-top: 22px;
-	margin: 12px 0;
 	color: #666666;
 }
 
@@ -112,6 +108,7 @@
 
 .write-header {
     text-align: center;
+    padding-top: 12px;
 }
 
 .write-header h2 {
@@ -129,6 +126,53 @@
     padding: 6px 0;
     margin: 10px 0;
     border-bottom: 1px solid #E9E9E9;
+}
+
+.write-instructions {
+    background: #424242;
+}
+
+.write-instructions h3 {
+    color: #FFFFFF;
+}
+
+.write-instructions ul {
+    list-style: none;
+}
+
+.write-instructions li {
+    display: block;
+    color: #FFFFFF;
+    border-bottom: 1px solid #666666;
+    font-family: $header-font-family;
+    font-size: 0.8em;
+    padding: 8px 0;
+}
+
+.write-instructions li:last-child {
+    border-bottom: none;
+}
+
+.write-instructions a {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.write-content.preview {
+    padding: 2em;
+}
+
+.preview .preview-to {
+    float: left;
+}
+
+.preview .preview-from {
+    float: right;
+}
+
+.preview .preview-message {
+    padding-top: 2em;
+    clear: both;
 }
 
 .rep-blurb {
@@ -158,6 +202,10 @@
 
 .sidebar .side-nav {
     padding: 4px;
+}
+
+.advert.panel {
+	background: #FFFFFF;
 }
 
 .footer {
