@@ -192,20 +192,16 @@ function buildWriteForm($options) {
     global $fyr_voting_area;
     global $cobrand, $cocode;
 
+    // Overwrite table layout
+    $options['table_layout'] = FALSE;
+
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = new HTML_QuickForm('writeForm', 'post', $form_action);
-    
+
     if ($fyr_voting_area['name']=='United Kingdom')
         $fyr_voting_area['name'] = 'House of Lords';
- 
-    $write_header = '';
-    if ($options['include_write_header']){
-        $write_header = "<strong>Now Write Your Message:</strong> <small>(* means required)</small><br><br>";
-    }
 
-    if ($options['include_fao']){
-        $write_header = '<strong>For the attention of:</strong>';
-    }
+    $write_header = '';
 
     $stuff_on_left = <<<END
             <div class="letter-header">
@@ -215,16 +211,44 @@ function buildWriteForm($options) {
             <span>${stash['date']}</span>
             </div>
 END;
-    // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
-    if ($options['table_layout']){
-        $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
-    } else {
-        $form->addElement("html", "<div class=\"highlight\">$stuff_on_left<ul class=\"data-input\">");
-    }  
+
+
+    $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
+    $form->addRule('body', 'Please enter your message', 'required', null, null);
+    $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
+    $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
+    $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
+
+
+
+    $form->addElement("html", "<fieldset><legend>About You</legend>");
 
     $form->addElement('text', 'name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('name', 'Please enter your name', 'required', null, null);
     $form->applyFilter('name', 'trim');
+
+    $form->addElement('text', 'writer_email', "Your email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+    $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
+    $invalid_email_message = cobrand_invalid_email_message($cobrand);
+    if (!$invalid_email_message) {
+         $invalid_email_message = 'Choose a valid email address';
+    }
+    $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
+    $form->applyFilter('writer_email', 'trim');
+
+    $form->addElement('text', 'writer_email2', "Confirm email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
+    $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
+    $form->applyFilter('writer_email2', 'trim');
+    $form->addFormRule('compare_email_addrs');
+
+    $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
+    $form->applyFilter('writer_phone', 'trim');
+
+    $form->addElement("html", "</fieldset>");
+
+
+
+    $form->addElement("html", "<fieldset><legend>Your Address</legend>");
 
     $form->addElement('text', 'writer_address1', "Address 1:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
@@ -252,42 +276,8 @@ END;
         $form->addElement('static', 'staticpc', 'UK postcode:', htmlentities($fyr_values['pc']));
     }
 
-    $form->addElement('text', 'writer_email', "Your email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
-    $invalid_email_message = cobrand_invalid_email_message($cobrand);
-    if (!$invalid_email_message) {
-         $invalid_email_message = 'Choose a valid email address';
-    }
-    $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
-    $form->applyFilter('writer_email', 'trim');
+    $form->addElement("html", "</fieldset>");
 
-    $form->addElement('text', 'writer_email2', "Confirm email:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
-    $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
-    $form->applyFilter('writer_email2', 'trim');
-    $form->addFormRule('compare_email_addrs');
-
-    /* add additional text explaining why we ask for email address twice? */
-
-    #    $form->addElement("html", "</td><td colspan=2><p style=\"margin-top: 0em; margin-bottom: -0.2em\"><em style=\"font-size: 75%\">Optional, to let your {$fyr_voting_area['rep_name']} contact you more easily:</em>"); // CSSify
-
-    $form->addElement('text', 'writer_phone', "Phone:", array('size' => 20, 'maxlength' => 255));
-    $form->applyFilter('writer_phone', 'trim');
-
-    // special formatting for letter-like code, TODO: how do this properly with QuickHtml?
-    if ($options['table_layout']){
-        $form->addElement("html", "</table>\n</td></tr>");
-    } else {
-        $form->addElement("html", "</ul>");
-    }
-
-    $form->addElement('textarea', 'body', null, array('rows' => 15, 'cols' => 62));
-    $form->addRule('body', 'Please enter your message', 'required', null, null);
-    $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
-    $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
-    $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
-    if (!$options['table_layout']){
-        $form->addElement("html", "</div>");
-    }
 
     add_all_variables_hidden($form, $fyr_values, $options);
     $preview_text = cobrand_preview_text($cobrand);
@@ -311,15 +301,9 @@ function buildPreviewForm($options) {
 
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
-    if ($options['inner_div']){
-        $form .= '<div id="buttonbox">';
-    }
     $form .= add_all_variables_hidden_nonQF($fyr_values);
-    $form .= '<input type="submit" name="submitWrite" value="Re-edit this message">
-<input type="submit" name="submitSendFax" value="Send Message">';
-    if ($options['inner_div']){
-        $form .= '</div>';
-    }
+    $form .= '<input type="submit" name="submitWrite" class="button" value="Re-edit this message">
+<input type="submit" name="submitSendFax" class="button success" value="Send Message">';
     $form .= '</form>';
     return $form;
 }

@@ -1,17 +1,56 @@
-<? 
-$values['title'] = "Check your message is right";
+<?php
+
+$values['title'] = "Preview your message to " . $values['title_text'];
+$values['robots'] = 'noindex, nofollow';
+
 template_draw('header', $values);
-print $values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4);
+
 ?>
 
-<h2>Now Preview The Message You've Written</h2>
+<div class="content">
+    <div class="row">
+        <div class="large-10 large-centered columns flow-breadcrumbs">
 
-<?=$values['preview']?> <!-- see fax-content.html-->
+            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
 
-<?=$values['form']?>
+        </div>
+    </div>
 
-<p align="center">(We will email you asking for confirmation before we send the message to
-your  <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>)
-</p>
+    <div class="row write-header">
+        <div class="large-8 large-centered columns">
 
-<? template_draw('footer', $values); ?>
+            <h2>Preview your message</h2>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="panel radius write-content preview">
+
+                <?php
+
+                // From fax-content.html
+                echo $values['preview'];
+
+                ?>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+
+            <?=$values['form']?>
+
+            <p>(We will email you asking for confirmation before we send the message to
+                your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>)
+                </p>
+
+        </div>
+    </div>
+
+</div>
+
+<?php template_draw('footer', $values); ?>
