@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $va_type_name;
 $va_info = $values['va_info'];
@@ -9,16 +9,24 @@ template_draw('header', $values);
 
 ?>
 
-<h2><?=$values['title'] ?></h2>
+<div class="content">
 
-<p>We'll use them on the site as soon as we can.  Contributions like yours help
-volunteer maintained sites like this keep up to date. </p>
+    <div class="row">
+        <div class="large-12 columns">
 
-<h2 id="advert" align="center">
-<a href="http://www.mysociety.org/volunteertasks">Non geeks and geeks required</a>.
-<br>
-Help us build sites, and publicise them.
-</h2>
+            <h2><?=$values['title'] ?></h2>
 
-<? 
-template_draw('footer', $values); ?>
+			<p>We'll use them on the site as soon as we can.  Contributions like yours help
+			volunteer maintained sites like this keep up to date. </p>
+			
+			<div class="panel advert">
+				<h3><a href="http://www.mysociety.org/volunteertasks">Non geeks and geeks required</a></h3>
+				<p>Help us build sites, and publicise them.</p>
+			</div>
+			
+        </div>
+    </div>
+    
+</div>
+
+<?php template_draw('footer', $values); ?>
