@@ -1,13 +1,43 @@
-<? 
-$values['title'] = "Oops... That ain't good...";
+<?php
+
+$values['title'] = "Oops... Something didn't quite work.";
+$values['robots'] = 'noindex, nofollow';
+$values['skip_header'] = TRUE;
+
 template_draw('header', $values);
+
 ?>
 
-<h3>Oops... Something didn't quite work...</h3>
+<div class="content">
+    <div class="row">
+        <div class="large-10 large-centered columns flow-breadcrumbs">
 
-<p>Thank you for trying to confirm your fax/email. We seem to have a
-problem though, so please let us know what went on and send a copy of
-the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
-it.</p>
+            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4)?>
 
-<? template_draw('footer', $values); ?>
+        </div>
+    </div>
+
+    <div class="row write-header">
+        <div class="large-8 large-centered columns">
+
+            <h2>Oops&hellip; Something didn't quite work.</h2>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+
+            <hr>
+
+            <p>Thank you for trying to confirm your fax/email. We seem to have a
+            problem though, so please let us know what went on and send a copy of
+            the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
+            it.</p>
+
+        </div>
+    </div>
+
+</div>
+
+<?php template_draw('footer', $values); ?>
