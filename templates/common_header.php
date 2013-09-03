@@ -16,6 +16,10 @@ if (isset($values['cobrand']))
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <?php if (array_key_exists('robots', $values)): ?>
+    <meta name="robots" content="<?=$values['robots']?>">
+    <?php endif; ?>
+
     <title>WriteToThem - <?=$values['title']?></title>
 
     <link rel="stylesheet" href="/static/css/wtt.css">
@@ -65,7 +69,7 @@ if (isset($values['cobrand']))
 
 endif;
 
-if (! isset($values['template']) OR $values['template'] !== 'index-index'):
+if ( ( ! isset($values['template']) OR $values['template'] !== 'index-index') AND ! isset($values['skip_header']) ):
 
 ?>
 
