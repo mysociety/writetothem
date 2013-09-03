@@ -1,22 +1,39 @@
-<? 
- if (!isset($values['skip_header'])){
-     $values['title'] = "Problem with your message";
-     template_draw('header', $values);
+<?php
+
+if (!isset($values['skip_header'])) {
+	$values['title'] = "Problem with your message";
+	$values['robots'] = 'noindex, nofollow';
+	template_draw('header', $values);
 }
+
 ?>
 
-<h2>Message Rejected</h2>
+<div class="content">
 
-<p>Sorry, but we've had to reject your message. Please see if you have broken
-any of our <a href="about-guidelines">Guidelines for Campaigning</a>. If you
-don't think that you have, then <a href="/about-contact">contact us</a>.
+    <div class="row write-header">
+        <div class="large-8 large-centered columns">
 
-<? 
-if (!isset($values['skip_header'])){
+            <h2>Message Rejected</h2>
 
-?> <p>All the usuals<br>
--The WriteToThem.com Team</p>
-<?
-    template_draw('footer', $values); 
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+        
+        	<p>Sorry, but we've had to reject your message. Please see if you have broken
+				any of our <a href="about-guidelines">Guidelines for Campaigning</a>. If you
+				don't think that you have, then <a href="/about-contact">contact us</a>.
+        
+        </div>
+    </div>
+
+</div>
+
+<?php
+
+if (!isset($values['skip_header'])) {
+	template_draw('footer', $values);
 }
+
 ?>
