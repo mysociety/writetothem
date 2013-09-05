@@ -38,6 +38,7 @@
 </script>
 
 <script src="static/js/foundation/foundation.js"></script>
+<script src="static/js/foundation/foundation.interchange.js"></script>
 
 <script>
     $(document).foundation();

@@ -23,6 +23,18 @@ if (isset($values['cobrand']))
     <title>WriteToThem - <?=$values['title']?></title>
 
     <link rel="stylesheet" href="/static/css/wtt.css">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" href="/static/img/favicon-128.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/static/img/favicon-57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/img/favicon-72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/img/favicon-114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/img/favicon-144.png">
+    
+    <meta property="og:title" content="WriteToThem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?=OPTION_BASE_URL?>">
+    <meta property="og:image" content="<?=OPTION_BASE_URL?>/static/img/favicon-128.png">
 
     <script src="/static/js/vendor/custom.modernizr.js"></script>
 
@@ -76,7 +88,7 @@ if ( ( ! isset($values['template']) OR $values['template'] !== 'index-index') AN
 <div class="banner-top">
     <div class="row">
         <div class="large-12 columns">
-            <a href="/"><img src="/static/img/logo.png" alt="WriteToThem"></a>
+            <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
         </div>
     </div>
 </div>
