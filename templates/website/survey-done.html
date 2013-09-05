@@ -1,17 +1,34 @@
-<? 
+<?php
+
 $values['title'] = "Thanks, and we hope it's not the last";
 template_draw('header', $values);
+
 ?>
 
-<h1>Many thanks - We hope you enjoyed the experience</h1>
+<div class="content">
 
-<p>Thanks for that - the statistics should help us convince politicians that
-they could do more on the Web to encourage greater participation in the
-democratic process.
-</p>
+    <div class="row write-header">
+        <div class="large-8 large-centered columns">
 
-<p>If you've got any questions, feel free to <a href="/about-contact">contact us</a>.</p>
+            <h2>Many thanks - We hope you enjoyed the experience</h2>
 
-<?=fyr_display_advert($values)?>
+        </div>
+    </div>
 
-<? template_draw('footer', $values); ?>
+    <div class="row">
+        <div class="large-12 columns">
+
+			<p>Thanks for that - the statistics should help us convince politicians that
+				they could do more on the Web to encourage greater participation in the
+				democratic process.</p>
+			
+			<p>If you've got any questions, feel free to <a href="/about-contact">contact us</a>.</p>
+
+			<?=fyr_display_advert($values)?>
+			
+        </div>
+    </div>
+    
+</div>
+
+<?php template_draw('footer', $values);
