@@ -34,7 +34,8 @@ if (isset($values['cobrand']))
     <meta property="og:title" content="WriteToThem">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?=OPTION_BASE_URL?>">
-    <meta property="og:image" content="<?=OPTION_BASE_URL?>/static/img/favicon-128.png">
+    <meta property="og:image" content="<?=OPTION_BASE_URL?>/static/img/favicon-256.png">
+    <meta property="og:description" content="Write To Them is a website which provides an easy way to contact MPs, councillors and other elected representatives.">
 
     <script src="/static/js/vendor/custom.modernizr.js"></script>
 
