@@ -7453,13 +7453,24 @@ a.th {
 }
 
 /* line 211, ../sass/wtt.scss */
+.zg-year-bar {
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+
+/* line 216, ../sass/wtt.scss */
+.zg-year-bar p {
+  margin: 0.25em 0;
+}
+
+/* line 220, ../sass/wtt.scss */
 .footer {
   padding: 10px 0;
   border-top: 1px solid #E9E9E9;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 217, ../sass/wtt.scss */
+  /* line 226, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }
