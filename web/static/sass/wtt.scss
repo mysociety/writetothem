@@ -25,6 +25,9 @@
 
 // Custom Styles
 
+$content-background-colour: #F4F3EF;
+$instruction-list-number-size: 2.5em;
+
 .staging {
     background: $alert-color;
     color: #FFFFFF;
@@ -40,7 +43,7 @@
 .hero {
     background: url(../img/parliament.jpg) center center;
     color: #FFFFFF;
-    @include text-shadow(rgba(0, 0, 0, 0.9) 0 0 4px);
+    @include text-shadow(rgba(0, 0, 0, 0.9) 0 0 6px);
     padding: 11px 0;
 }
 
@@ -62,8 +65,35 @@
     padding-top: 20px;
 }
 
+.instruction-list p {
+    line-height: $instruction-list-number-size;
+}
+
+.instruction-list p .number {
+    background: $success-color;
+    color: #FFFFFF;
+    height: $instruction-list-number-size;
+    width: $instruction-list-number-size;
+    display: inline-block;
+    text-align: center;
+    @include border-radius($instruction-list-number-size);
+}
+
+.index-about-links {
+    list-style: none;
+    font: $header-font-family;
+}
+
+.index-about-links a {
+    display: block;
+    padding: 0.8em;
+    margin-bottom: 0.5em;
+    border: 1px solid #DBDAD7;
+    color: lighten($body-font-color, 30%);
+}
+
 .content {
-    background: #f4f3ef;
+    background: $content-background-colour;
 }
 
 .flow-breadcrumbs {

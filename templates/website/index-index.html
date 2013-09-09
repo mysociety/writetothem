@@ -5,7 +5,7 @@ template_draw('header', $values);
 <div class="hero">
     <div class="row">
         <div class="large-12 columns">
-            <a href="/"><img src="/static/img/logo.png" alt="WriteToThem"></a>
+            <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
         </div>
     </div>
     <div class="row">
@@ -49,18 +49,31 @@ template_draw('header', $values);
 
     <div class="row">
         <div class="large-4 columns">
+
             <h4>As simple as</h4>
+
+            <div class="instruction-list">
+                <p><span class="number">1.</span> Enter your postcode.</p>
+                <p><span class="number">2.</span> Choose your representative.</p>
+                <p><span class="number">3.</span> Write your message.</p>
+            </div>
+
         </div>
 
         <div class="large-8 columns">
             <h4>About</h4>
             <div class="row">
                 <div class="large-6 columns">
-                    <p>Bacon ipsum dolor sit amet adipisicing ullamco sed swine ad velit rump et bacon ham hock corned beef voluptate. Jowl hamburger incididunt, eiusmod magna ullamco et rump drumstick andouille ex ground round est bresaola ribeye. Spare ribs pork loin nostrud, chicken fugiat cupidatat aute turkey andouille shoulder jowl eiusmod.</p>
+                    <p>WriteToThem is a website which lets you quickly, easily and freely find and contact your elected representatives from different levels of government.</p>
                 </div>
                 <div class="large-6 columns">
-                    <p>Do you need <a href="/about-constituency">help with your postcode</a>?</p>
-                    <p>Are you <a href="/about-campaigns">running a campaign</a>?</p>
+
+                    <ul class="index-about-links">
+                        <li><a href="/about-feedback">Does it work?</a></li>
+                        <li><a href="/about-constituency">Help &amp; FAQs</a></li>
+                        <li><a href="/about-campaigns">Are you running a campaign?</a></li>
+                    </ul>
+
                 </div>
             </div>
         </div>
