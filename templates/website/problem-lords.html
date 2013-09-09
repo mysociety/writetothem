@@ -1,9 +1,9 @@
 <?php
 
 if (!isset($values['skip_header'])) {
-	$values['title'] = "Problem with your message";
-	$values['robots'] = 'noindex, nofollow';
-	template_draw('header', $values);
+    $values['title'] = "Problem with your message";
+    $values['robots'] = 'noindex, nofollow';
+    template_draw('header', $values);
 }
 
 ?>
@@ -17,20 +17,20 @@ if (!isset($values['skip_header'])) {
 
         </div>
     </div>
-    
+
     <div class="row">
         <div class="large-12 columns">
 
-			<p>Sorry, but we have to limit the number of messages sent to members
-				of the House of Lords, as they have told us they simply disregard
-				more than a handful of messages from one person within a couple of days.
-				The Parliament website gives <a
-				href="http://www.parliament.uk/about/how/members/lords_contact.cfm">
-				details of how to send mailshots to all Lords by post</a>.</p>
-			
-			<p>Please read our <a
-				href="/about-lords">Frequently Asked Questions</a> for more information about
-				WriteToThem Lords.</p>
+            <p>Sorry, but we have to limit the number of messages sent to members
+                of the House of Lords, as they have told us they simply disregard
+                more than a handful of messages from one person within a couple of days.
+                The Parliament website gives <a
+                href="http://www.parliament.uk/about/how/members/lords_contact.cfm">
+                details of how to send mailshots to all Lords by post</a>.</p>
+
+            <p>Please read our <a
+                href="/about-lords">Frequently Asked Questions</a> for more information about
+                WriteToThem Lords.</p>
 
         </div>
     </div>
@@ -40,5 +40,5 @@ if (!isset($values['skip_header'])) {
 <?php
 
 if (!isset($values['skip_header'])) {
-	template_draw('footer', $values);
+    template_draw('footer', $values);
 }

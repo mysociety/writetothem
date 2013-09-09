@@ -1,15 +1,11 @@
-<?
+<?php
 template_draw('header', $values);
 ?>
 
 <div class="hero">
     <div class="row">
-        <div class="large-12 columns">
-            <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="large-12 columns">
+        <div class="large-12 columns hero-content">
+            <p><a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a></p>
             <?=$values['blurb-top'] ?>
         </div>
     </div>

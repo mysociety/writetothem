@@ -52,30 +52,30 @@ template_draw('header', $values);
                 ?>
 
             <p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
-            
+
             <div class="panel radius">
 
-	            <p><label for="newname">Missing <?=$rep_name ?>'s name:</label>
-	            <input type="text" id="newname" name="new[name]"></p>
-	
-	            <p><label for="newparty">Missing <?=$rep_name ?>'s party:</label>
-	            <input type="text" id="newparty" name="new[party]"></p>
-	
-	            <p><label for="url">If you looked up this information on the web, please tell us the address of the page where you found it:</label>
-	            <input type="text" name="url" id="url" value="http://" size="50"></p>
-	
-	            <p><label for="notes">Do you have any other information that would be useful to us? (Optional):</label>
-	            <textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
-	
-	            <p><label name="email">Lastly, you may (optionally) give us your email address, so we can contact you if we have any questions about your submission:</label>
-	            <input type="text" name="email" id="email" value="" size="50"></p>
-	
-	            <input type="hidden" name="id" value="<?=$values['id'] ?>">
-	
-	            <p><input type="submit" class="button success" value="Submit my changes"></p>
-            
+                <p><label for="newname">Missing <?=$rep_name ?>'s name:</label>
+                <input type="text" id="newname" name="new[name]"></p>
+
+                <p><label for="newparty">Missing <?=$rep_name ?>'s party:</label>
+                <input type="text" id="newparty" name="new[party]"></p>
+
+                <p><label for="url">If you looked up this information on the web, please tell us the address of the page where you found it:</label>
+                <input type="text" name="url" id="url" value="http://" size="50"></p>
+
+                <p><label for="notes">Do you have any other information that would be useful to us? (Optional):</label>
+                <textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
+
+                <p><label name="email">Lastly, you may (optionally) give us your email address, so we can contact you if we have any questions about your submission:</label>
+                <input type="text" name="email" id="email" value="" size="50"></p>
+
+                <input type="hidden" name="id" value="<?=$values['id'] ?>">
+
+                <p><input type="submit" class="button success" value="Submit my changes"></p>
+
             </div>
-            
+
         </form>
 
     </div>
