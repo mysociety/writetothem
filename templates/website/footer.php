@@ -1,7 +1,5 @@
-<div class="footer">
-
-    <div class="row">
-    <small>
+<div class="row footer">
+    <div class="footer-content">
 
         <div class="large-7 columns">
 
@@ -26,9 +24,7 @@
 
         </div>
 
-    </small>
     </div>
-
 </div>
 
 <script>

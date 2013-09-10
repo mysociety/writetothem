@@ -4,7 +4,7 @@
 
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with browser-based text zoom or user-set defaults.
-$base-font-size: 100% !default;
+$base-font-size: 14px !default;
 
 // $base-line-height is 24px while $base-font-size is 16px
 // $base-line-height: 150%;
@@ -14,7 +14,7 @@ $base-font-size: 100% !default;
 // Since the typical default browser font-size is 16px, that makes the calculation for grid size.
 // If you want your base font-size to be a different size and not have it effect grid size too,
 // set the value of $em-base to $base-font-size ($em-base: $base-font-size;)
-$em-base: 16 !default;
+$em-base: $base-font-size !default;
 
 // It strips the unit of measure and returns it
 @function strip-unit($num) {
@@ -171,12 +171,12 @@ $header-font-weight: bold;
 
 // Control header font sizes
 
-// $h1-font-size: emCalc(44);
-// $h2-font-size: emCalc(37);
-// $h3-font-size: emCalc(27);
-// $h4-font-size: emCalc(23);
-// $h5-font-size: emCalc(18);
-// $h6-font-size: 1em;
+$h1-font-size: emCalc(30);
+$h2-font-size: emCalc(24);
+$h3-font-size: emCalc(16);
+$h4-font-size: emCalc(15);
+$h5-font-size: emCalc(14);
+$h6-font-size: 1em;
 
 // Control how subheaders are styled.
 
@@ -188,7 +188,7 @@ $header-font-weight: bold;
 
 // A general <small> styling
 
-$small-font-size: 70%;
+$small-font-size: emCalc(13);
 // $small-font-color: lighten($header-font-color, 30%);
 
 // Style paragraphs

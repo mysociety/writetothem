@@ -50,6 +50,7 @@ $instruction-list-number-size: 2.5em;
 .hero h2 {
     color: #FFFFFF;
     font-family: $body-font-family;
+    font-size: emCalc(48);
 }
 
 .hero abbr {
@@ -105,7 +106,7 @@ $instruction-list-number-size: 2.5em;
 	text-transform: uppercase;
 	font-family: $header-font-family;
 	font-weight: 400;
-	font-size: 0.8em;
+	font-size: emCalc(11);
 	padding-top: 22px;
 	color: #666666;
 }
@@ -168,15 +169,6 @@ $instruction-list-number-size: 2.5em;
     background: #FFFFFF;
 }
 
-.write-content h3 {
-    text-transform: uppercase;
-    font-size: 1em;
-    font-weight: 400;
-    padding: 6px 0;
-    margin: 10px 0;
-    border-bottom: 1px solid #E9E9E9;
-}
-
 .write-instructions {
     background: #424242;
 }
@@ -224,9 +216,19 @@ $instruction-list-number-size: 2.5em;
     clear: both;
 }
 
+h3.rep-heading {
+    text-transform: uppercase;
+    font-size: emcalc(14px);
+    font-weight: 400;
+    padding: 6px 0;
+    margin: 10px 0;
+    border-bottom: 1px solid #E9E9E9;
+}
+
 .rep-blurb {
 	font-family: $header-font-family;
-	font-size: 0.9em;
+	font-size: emCalc(13);
+	line-height: emCalc(19);
 	color: #666666;
 }
 
@@ -236,6 +238,26 @@ $instruction-list-number-size: 2.5em;
 
 .rep-list li {
     margin: 3px 0;
+}
+
+.rep-list li a {
+    font-size: emCalc(18);
+    color: #333333;
+}
+
+.rep-list li small {
+    font-size: emCalc(14);
+    color: #666666;
+}
+
+.rep-more {
+    font-size: emCalc(13);
+    line-height: emCalc(19);
+    font-family: $header-font-family;
+}
+
+.rep-more a {
+    color: #666666;
 }
 
 pre {
@@ -271,8 +293,12 @@ pre {
 }
 
 .footer {
-    padding: 10px 0;
     border-top: 1px solid #E9E9E9;
+}
+
+.footer-content {
+    padding: 10px 0;
+    font-size: emCalc(11);
 }
 
 @media #{$small} {
