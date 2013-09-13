@@ -29,7 +29,7 @@
 // Custom Styles
 
 $content-background-colour: #F4F3EF;
-$instruction-list-number-size: 2.5em;
+$instruction-list-number-size: 1.5em;
 
 html {
     height: 100%;
@@ -42,10 +42,7 @@ body {
 .button {
     font-family: $header-font-family;
     text-transform: uppercase;
-    -webkit-box-shadow: none;
-       -moz-box-shadow: none;
-         -o-box-shadow: none;
-            box-shadow: none;
+    @include box-shadow(none);
     border: none;
 }
 
@@ -70,6 +67,8 @@ body {
 
 }
 
+
+
 .hero {
     background: url(../img/hero.jpg) center center;
     background-size: cover;
@@ -77,11 +76,12 @@ body {
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
     padding-top: 0;
     padding-bottom: emCalc(11);
-
+    position: relative;
     h2 {
         color: #FFFFFF;
         font-family: $body-font-family;
         font-size: emCalc(26);
+        margin-top: 2em;
     }
 
     @media #{$small} {
@@ -96,6 +96,21 @@ body {
 
     abbr {
         color: #FFFFFF;
+    }
+
+    .wtt-logo {
+        position: absolute;
+        top: 2px;
+        img {
+            height: 35px;
+            width: 125px;
+        }
+        @media #{$small} {
+            img {
+                height: 70px;
+                width: 250px;
+            }
+        }
     }
 
 }
@@ -117,26 +132,34 @@ body {
     .button {
         font-size: emCalc(18);
         letter-spacing: 1px;
+        @include border-radius(0 3px 3px 0);
     }
     input[type=text] {
         font-size: emCalc(18);
         font-family: $header-font-family;
         border-right: none;
+        @include border-radius(3px 0 0 3px);
     }
 }
 
 .index-content {
-    padding-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid #E9E9E9;
+    h4 {
+        font-size: emCalc(24);
+    }
 }
 
 .instruction-list p {
-    line-height: $instruction-list-number-size;
-
+    line-height: 2.8em;
+    font-size: emCalc(16);
+    margin-bottom: 1em;
     .number {
         background: $success-color;
         color: #FFFFFF;
         font-weight: 700;
-        margin-right: .5em;
+        font-size: emCalc(28);
+        margin-right: .2em;
         height: $instruction-list-number-size;
         width: $instruction-list-number-size;
         display: inline-block;
@@ -146,16 +169,23 @@ body {
 
 }
 
+.index-about-blurb {
+    p {
+        line-height: 1.642857143em;
+    }
+}
+
 .index-about-links {
     list-style: none;
-    font: $header-font-family;
-
+    font-family: $header-font-family;
     a {
         display: block;
         padding: 0.8em;
         margin-bottom: 0.5em;
         border: 1px solid #DBDAD7;
         color: lighten($body-font-color, 30%);
+        @include border-radius(3px);
+        font-size: emCalc(18);
     }
 
 }
