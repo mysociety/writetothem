@@ -89,9 +89,10 @@ body {
             font-size: emCalc(48);
         }
     }
-
-    p {
-        font-size: emCalc(20);
+    @media #{$small} {
+        p {
+            font-size: emCalc(20);
+        }
     }
 
     abbr {
