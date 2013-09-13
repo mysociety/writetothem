@@ -89,15 +89,24 @@ foreach ($va_display_order as $va_types) {
     debug_timestamp();
 }
 
-// Inject extra content for Lords!
+// A/B Testing Hack!
+if (isset($_GET['t'])) {
+    $template = $_GET['t'];
+} else {
+    $template = 'who';
+}
 
-array_push($fyr_headings, 'House of Lords');
-array_push($fyr_blurbs, '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>');
-array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul>');
-array_push($fyr_more, '');
+// Inject extra content for Lords
+// A/B Testing Hack!
+if ($template == 'who') {
+    array_push($fyr_headings, 'House of Lords');
+    array_push($fyr_blurbs, '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>');
+    array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul>');
+    array_push($fyr_more, '');
+}
 
 // Display page, using all the fyr_* variables set above.
-template_draw("who", array(
+template_draw($template, array(
     "reps" => $fyr_representatives,
     "template" => "who",
     "headings" => $fyr_headings,
@@ -438,6 +447,16 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
         $text = '<a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a>';
+
+        // A/B Testing Hack!
+        if (isset($_GET['t']) AND $_GET['t'] == 'who-b') {
+
+            $text .= '</div>';
+            $text .= '<h3 class="rep-heading lords v-b">House of Lords</h3>';
+            $text .= '<div class="rep-blurb"><p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p></div>';
+            $text .= '<div class="rep-list v-b"><ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul></div>';
+            $text .= '<div class="rep-more">';
+        }
     }
     return $text;
 }

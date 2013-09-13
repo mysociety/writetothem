@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>How to link to us</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>How to link to us</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
 </p>
@@ -175,14 +176,15 @@ WordPress site as a standard WordPress widget.
 <p>There is also a much older <a href="/WriteToThem.com.zip">WordPress
 plugin</a>, written by Richard Pope, that needs you to alter your PHP template.
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

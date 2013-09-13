@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>What postcode should I use?</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>What postcode should I use?</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>If you're not sure what postcode to use, or you don't know your
 postcode, this page will help.
@@ -129,14 +130,15 @@ that in Northern Ireland electoral registration is the responsibility of the
 <a href="http://www.electoralofficeni.gov.uk/">Electoral Office for Northern
 Ireland</a> who can give more specific advice.)</p>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

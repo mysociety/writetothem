@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Who are you, and why are you doing this?</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Who are you, and why are you doing this?</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>The predecessor to this site, <b>FaxYourMP.com</b>, was built by a
 group of volunteers who thought that it would be a good thing if it were easier
@@ -80,14 +81,15 @@ maintain and support FaxYourMP or WriteToThem:</p>
 
 <p>Nowadays, WriteToThem mostly runs by itself, with user support by Deborah Kerr.</p>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

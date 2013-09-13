@@ -14,7 +14,7 @@ if (isset($values['cobrand']))
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <?php if (array_key_exists('robots', $values)): ?>
     <meta name="robots" content="<?=$values['robots']?>">
@@ -23,14 +23,14 @@ if (isset($values['cobrand']))
     <title>WriteToThem - <?=$values['title']?></title>
 
     <link rel="stylesheet" href="/static/css/wtt.css">
-    
+
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" href="/static/img/favicon-128.png">
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/static/img/favicon-57.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/img/favicon-72.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/img/favicon-114.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/img/favicon-144.png">
-    
+
     <meta property="og:title" content="WriteToThem">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?=OPTION_BASE_URL?>">
@@ -72,25 +72,37 @@ if (isset($values['cobrand']))
 
 <div class="staging">
     <div class="row">
-        <div class="large-12 columns">
+        <div class="large-10 large-centered columns">
             <strong>This is a staging site.</strong> Emails will not be sent to representatives, but will instead be sent to you.
         </div>
     </div>
 </div>
 
+<?php endif; ?>
+
+<div class="content-wrapper">
+<div class="row">
+    <div class="large-12 columns content">
+
 <?php
 
-endif;
-
-if ( ( ! isset($values['template']) OR $values['template'] !== 'index-index') AND ! isset($values['skip_header']) ):
+if ( ( ! isset($values['template']) OR ( $values['template'] !== 'index-index' AND $values['template'] !== 'index-index-b' ) ) AND ! isset($values['skip_header']) ):
 
 ?>
 
-<div class="banner-top">
-    <div class="row">
-        <div class="large-12 columns">
-            <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
+
+
+
+<div class="row banner-top">
+    <div class="large-10 large-centered columns">
+        <div class="ms_header_nav">
+            <nav>
+                <ul class="menu">
+                    <li id="ms_logo"><a class="ms_header_nav-logo" target="_blank" href="http://www.mysociety.org">&nbsp;</a></li>
+                </ul>
+            </nav>
         </div>
+        <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
     </div>
 </div>
 

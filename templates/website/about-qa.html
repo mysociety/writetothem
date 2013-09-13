@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Questions and answers</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Questions and answers</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <a name="top"></a>
 <ul class="side-nav">
@@ -395,14 +396,15 @@ in life generally), or you see any error messages.
 
 </dl>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

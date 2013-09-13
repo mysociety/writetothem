@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Running a campaign</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Running a campaign</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>We quite often get emails from campaign groups asking how they can use our site to mobilise support. Here&rsquo;s how.</p>
 
@@ -34,14 +35,15 @@ template_draw('header', $values);
 
 <p>For a more seamless experience you might want to <a href="/about-branded">create your own branded webpage for the campaign</a>, and there&rsquo;s code available to help you do that. Don&rsquo;t be daunted &ndash; you don&rsquo;t need to be a programmer to install it, and there are easy step-by-step instructions.</p>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

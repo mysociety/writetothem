@@ -37,7 +37,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     $message = cobrand_enter_postcode_message($cobrand, $cocode);
 
     if (!$message) {
-        $message = 'First, type your UK postcode:';
+        $message = 'First, enter your UK postcode:';
     }
 
     $form .= $message;
@@ -344,7 +344,7 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 template_draw($template, array(
         'body_id' => 'home',
         "title" => $title,
-        "blurb-top" => '<h2>The simple way to contact your representative</h2>' . $blurb_top,
+        "blurb-top" => '<h2>Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>',
         "form" => $form,
         "error" => $error_message,
         "all_url" => $fyr_all_url,

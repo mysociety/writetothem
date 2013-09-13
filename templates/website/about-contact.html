@@ -6,17 +6,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Emailing WriteToThem</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Emailing WriteToThem</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>WriteToThem is an independent, <a href="about-us">charitable project</a>
 to help the public contact their elected representatives.</p>
@@ -62,14 +63,15 @@ href="mailto:<?=$contact_email?>"><?=$contact_email?></a> for prompt
 action.
 </p>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

@@ -3,6 +3,9 @@
 @import "normalize";
 @import "foundation";
 
+// mySociety header
+@import "_ms_header";
+
 // CSS3 Mixin for useful styling
 @import "compass/css3";
 
@@ -28,38 +31,73 @@
 $content-background-colour: #F4F3EF;
 $instruction-list-number-size: 2.5em;
 
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
 .staging {
     background: $alert-color;
     color: #FFFFFF;
-    border-bottom: 1px solid #723f3f;
-    padding: 10px 0;
+    padding: emCalc(10);
+}
+
+.content-wrapper {
+    border-top: 5px solid #222222;
 }
 
 .banner-top {
     background: $primary-color;
-    padding: 11px 0;
+    padding-top: 0;
+    padding-bottom: emCalc(11);
+
+    &.row {
+        margin-bottom: emCalc(20);
+    }
+
 }
 
 .hero {
-    background: url(../img/parliament.jpg) center center;
+    background: url(../img/hero.jpg) center center;
+    background-size: cover;
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.9) 0 0 6px);
-    padding: 11px 0;
-}
+    padding-top: 0;
+    padding-bottom: emCalc(11);
 
-.hero h2 {
-    color: #FFFFFF;
-    font-family: $body-font-family;
-    font-size: emCalc(48);
-}
+    h2 {
+        color: #FFFFFF;
+        font-family: $body-font-family;
+        font-size: emCalc(26);
+    }
 
-.hero abbr {
-    color: #FFFFFF;
+    @media #{$small} {
+        h2 {
+            font-size: emCalc(48);
+        }
+    }
+
+    p {
+        font-size: emCalc(20);
+    }
+
+    abbr {
+        color: #FFFFFF;
+    }
+
 }
 
 .index-input {
-    padding: 30px 0;
+    padding-top: emCalc(30);
+    padding-bottom: emCalc(30);
     background: #FFFFFF;
+
+    h3 {
+        font-size: emCalc(30);
+    }
 }
 
 .index-content {
@@ -68,29 +106,33 @@ $instruction-list-number-size: 2.5em;
 
 .instruction-list p {
     line-height: $instruction-list-number-size;
-}
 
-.instruction-list p .number {
-    background: $success-color;
-    color: #FFFFFF;
-    height: $instruction-list-number-size;
-    width: $instruction-list-number-size;
-    display: inline-block;
-    text-align: center;
-    @include border-radius($instruction-list-number-size);
+    .number {
+        background: $success-color;
+        color: #FFFFFF;
+        font-weight: 700;
+        margin-right: .5em;
+        height: $instruction-list-number-size;
+        width: $instruction-list-number-size;
+        display: inline-block;
+        text-align: center;
+        @include border-radius($instruction-list-number-size);
+    }
+
 }
 
 .index-about-links {
     list-style: none;
     font: $header-font-family;
-}
 
-.index-about-links a {
-    display: block;
-    padding: 0.8em;
-    margin-bottom: 0.5em;
-    border: 1px solid #DBDAD7;
-    color: lighten($body-font-color, 30%);
+    a {
+        display: block;
+        padding: 0.8em;
+        margin-bottom: 0.5em;
+        border: 1px solid #DBDAD7;
+        color: lighten($body-font-color, 30%);
+    }
+
 }
 
 .content {
@@ -98,6 +140,7 @@ $instruction-list-number-size: 2.5em;
 }
 
 .flow-breadcrumbs {
+    @extend .hide-for-small;
 	text-align: center;
 	margin-top: 12px;
 }
@@ -159,10 +202,11 @@ $instruction-list-number-size: 2.5em;
 .write-header {
     text-align: center;
     padding-top: 12px;
-}
 
-.write-header h2 {
-    font-family: $body-font-family;
+    h2 {
+        font-family: $body-font-family;
+    }
+
 }
 
 .write-content {
@@ -171,58 +215,74 @@ $instruction-list-number-size: 2.5em;
 
 .write-instructions {
     background: #424242;
-}
 
-.write-instructions h3 {
-    color: #FFFFFF;
-}
+    h3 {
+        color: #FFFFFF;
+    }
 
-.write-instructions ul {
-    list-style: none;
-}
+    ul {
+        list-style: none;
 
-.write-instructions li {
-    display: block;
-    color: #FFFFFF;
-    border-bottom: 1px solid #666666;
-    font-family: $header-font-family;
-    font-size: 0.8em;
-    padding: 8px 0;
+        li {
+            display: block;
+            color: #FFFFFF;
+            border-bottom: 1px solid #666666;
+            font-family: $header-font-family;
+            font-size: 0.8em;
+            padding: 8px 0;
+        }
+
+    }
+
+    a {
+        color: #FFFFFF;
+        text-decoration: underline;
+    }
+
 }
 
 .write-instructions li:last-child {
     border-bottom: none;
 }
 
-.write-instructions a {
-    color: #FFFFFF;
-    text-decoration: underline;
-}
-
 .write-content.preview {
     padding: 2em;
-}
 
-.preview .preview-to {
-    float: left;
-}
+    .preview-to {
+        float: left;
+    }
 
-.preview .preview-from {
-    float: right;
-}
+    .preview-from {
+        float: right;
+    }
 
-.preview .preview-message {
-    padding-top: 2em;
-    clear: both;
+    .preview-message {
+        padding-top: 2em;
+        clear: both;
+    }
+
 }
 
 h3.rep-heading {
     text-transform: uppercase;
-    font-size: emcalc(14px);
+    font-size: emcalc(14);
     font-weight: 400;
-    padding: 6px 0;
-    margin: 10px 0;
+    padding-top: emCalc(6);
+    padding-bottom: emCalc(6);
+    margin-top: emCalc(10);
+    margin-bottom: emCalc(10);
     border-bottom: 1px solid #E9E9E9;
+
+    &.v-b {
+        min-height: emCalc(50);
+
+        &.lords {
+            min-height: 0;
+            margin-top: 3em;
+        }
+
+    }
+
 }
 
 .rep-blurb {
@@ -234,20 +294,40 @@ h3.rep-heading {
 
 .rep-list {
     list-style: none;
+    margin-left: 0;
+
+    li {
+        margin-top: 3px;
+        margin-bottom: 3px;
+
+        a {
+            font-size: emCalc(18);
+        }
+
+        small {
+            font-size: emCalc(14);
+            color: #666666;
+        }
+
+    }
+
 }
 
-.rep-list li {
-    margin: 3px 0;
-}
+.rep-list.v-b {
 
-.rep-list li a {
-    font-size: emCalc(18);
-    color: #333333;
-}
+    li {
 
-.rep-list li small {
-    font-size: emCalc(14);
-    color: #666666;
+        a {
+            font-size: emCalc(16);
+        }
+
+        small {
+            font-size: emCalc(13);
+            display: block;
+        }
+
+    }
+
 }
 
 .rep-more {
@@ -261,7 +341,8 @@ h3.rep-heading {
 }
 
 pre {
-    margin: 1em 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .sidebar {
@@ -294,10 +375,11 @@ pre {
 
 .footer {
     border-top: 1px solid #E9E9E9;
+    background: #FFFFFF;
 }
 
 .footer-content {
-    padding: 10px 0;
+    padding-top: 10px;
     font-size: emCalc(11);
 }
 

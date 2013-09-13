@@ -7,85 +7,88 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
-    <div class="row">
-        <div class="large-10 large-centered columns flow-breadcrumbs">
+<div class="row flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
 
-            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
+        <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
 
-        </div>
     </div>
+</div>
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-            <h2>Write your message</h2>
+        <h2>Write your message</h2>
 
-            <p>Writing to <?=$values['title_text']?>.</p>
+        <p>Writing to <?=$values['title_text']?>.</p>
 
-        </div>
     </div>
+</div>
 
-    <?php if ($values['prime_minister']): ?>
+<?php if ($values['prime_minister']): ?>
 
-    <div class="row">
-        <div class="large-12 columns">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-            <div class="alert-box alert radius">
-                Please only use this service to contact David Cameron if you are one of his
-                constituents in Witney.
-            </div>
-
-            <p><a href="/about-qa#onlyrep">Click here to understand why doing otherwise is A Bad Thing</a>.</p>
-
-            <p>If you are <em>not</em> a constituent and wish to contact David Cameron, you
-            may write to him at the address below:</p>
-
-            <ul class="vcard">
-              <li class="fn">The Rt Hon David Cameron</li>
-              <li class="title">Prime Minister</li>
-              <li class="street-address">10 Downing Street</li>
-              <li class="locality">London</li>
-              <li class="zip">SW1A 2AS</li>
-            </ul>
-
-            <p>If you are a constituent of Witney, read on...</p>
-
+        <div class="alert-box alert radius">
+            Please only use this service to contact David Cameron if you are one of his
+            constituents in Witney.
         </div>
-    </div>
 
-    <?php endif; ?>
+        <p><a href="/about-qa#onlyrep">Click here to understand why doing otherwise is A Bad Thing</a>.</p>
 
-    <?php if ($values['cobrand_letter_help']): ?>
-    <div class="row">
-        <div class="large-12 columns">
-            <div id="cobrand_letter_help">'<?=$values['cobrand_letter_help']?></div>
-        </div>
-    </div>
-    <?php endif; ?>
+        <p>If you are <em>not</em> a constituent and wish to contact David Cameron, you
+        may write to him at the address below:</p>
 
-    <?php if (OPTION_FYR_REFLECT_EMAILS): ?>
-    <div class="row">
-        <div class="large-12 columns">
-            <div class="alert-box alert radius">This is a test version of the
-            site.  Messages will <b>not</b> be delivered to representatives.
-            Instead a copy will be sent to you as if you were the
-            representative, so you can see what it looks like.</div>
-        </div>
+        <ul class="vcard">
+          <li class="fn">The Rt Hon David Cameron</li>
+          <li class="title">Prime Minister</li>
+          <li class="street-address">10 Downing Street</li>
+          <li class="locality">London</li>
+          <li class="zip">SW1A 2AS</li>
+        </ul>
+
+        <p>If you are a constituent of Witney, read on...</p>
+
+        <hr>
+
     </div>
-    <?php endif; ?>
+</div>
+
+<?php endif; ?>
+
+<?php if ($values['cobrand_letter_help']): ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div id="cobrand_letter_help">'<?=$values['cobrand_letter_help']?></div>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if (OPTION_FYR_REFLECT_EMAILS): ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="alert-box alert radius">This is a test version of the
+        site.  Messages will <b>not</b> be delivered to representatives.
+        Instead a copy will be sent to you as if you were the
+        representative, so you can see what it looks like.</div>
+    </div>
+</div>
+<?php endif; ?>
 
 <?php
 
 if (isset($values['warning_text'])) {
-    echo '<div id="bad_contact_warning">', $values['warning_text'], '</div>';
+echo '<div id="bad_contact_warning">', $values['warning_text'], '</div>';
 }
 
 ?>
 
-    <div class="row">
-        <div class="large-4 columns">
-            <div class="panel radius write-instructions">
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="row">
+            <div class="large-4 columns">
+                <div class="panel radius write-instructions">
 
 <?php
 
@@ -94,73 +97,73 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 <h3>Instructions</h3>
 
 <ul id="tips">
-    <li>Please be polite, concise and to the point; if you abuse your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
+<li>Please be polite, concise and to the point; if you abuse your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
 
-    <li><a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.</li>
+<li><a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.</li>
 
-    <?php if ($values['representative']['type'] != 'HOC'): ?>
+<?php if ($values['representative']['type'] != 'HOC'): ?>
 
-    <li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
+<li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
 your message will be ignored.</li>
 
-        <?php if (($values['who'] == 'all' && $values['type'] == 'EUR') || $values['representative']['type'] == 'EUR') { ?>
+    <?php if (($values['who'] == 'all' && $values['type'] == 'EUR') || $values['representative']['type'] == 'EUR') { ?>
 
-        <li>MEPs can help you on proposed European directives (laws), and questions on
-        the European Parliament, Commission, or Union.  However, once passed, EU laws
-        become the responsibility of the UK to implement, so you may wish to go back
-        and contact your MP about them in that case. Similarly if your letter is about
-        a local or national issue, please go back and contact a regional or national
-        representative, as your MEP will be unable to help you in that case.
+    <li>MEPs can help you on proposed European directives (laws), and questions on
+    the European Parliament, Commission, or Union.  However, once passed, EU laws
+    become the responsibility of the UK to implement, so you may wish to go back
+    and contact your MP about them in that case. Similarly if your letter is about
+    a local or national issue, please go back and contact a regional or national
+    representative, as your MEP will be unable to help you in that case.
 
-        <li>Note that MEPs cannot help raise an issue with the European Court of Human
-        Rights. The Convention is incorporated into UK law, so any challenge must start
-        in the UK legal system.
+    <li>Note that MEPs cannot help raise an issue with the European Court of Human
+    Rights. The Convention is incorporated into UK law, so any challenge must start
+    in the UK legal system.
 
-        <?  } else {
-                $hashref = strtolower($values['voting_area']['rep_name']);
-                if ($hashref == 'london assembly member') $hashref = 'lam';
-                if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
-                echo '<li><a class="fancybox" href="about-yourrep#' . $hashref . '" target="_blank">Read this<small> (new window)</small></a> to learn when a ',
-                    $values['voting_area']['rep_name'], ' can help you &ndash; and when they can&rsquo;t.</li>';
-            }
-            ?>
+    <?  } else {
+            $hashref = strtolower($values['voting_area']['rep_name']);
+            if ($hashref == 'london assembly member') $hashref = 'lam';
+            if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
+            echo '<li><a class="fancybox" href="about-yourrep#' . $hashref . '" target="_blank">Read this<small></small></a> to learn when a ',
+                $values['voting_area']['rep_name'], ' can help you &ndash; and when they can&rsquo;t.</li>';
+        }
+        ?>
 
-        <?php else: ?>
-        <li>Lords vote on and amend UK bills before they become law. By writing to a
-        Lord you might be able to tell them about something you think they should care
-        about, provide information to someone who you support, or provide counter
-        evidence to someone you disagree with. For other matters, it might be better
-        to contact your MP or a local representative.</li>
-        <? endif; ?>
+    <?php else: ?>
+    <li>Lords vote on and amend UK bills before they become law. By writing to a
+    Lord you might be able to tell them about something you think they should care
+    about, provide information to someone who you support, or provide counter
+    evidence to someone you disagree with. For other matters, it might be better
+    to contact your MP or a local representative.</li>
+    <? endif; ?>
 
 <?php
 
 if (isset($values['representative']['parlparse_person_id'])) {
-    $pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['parlparse_person_id']);
-    echo '<li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=', $pid,
-        '">Find out more about ', str_replace('The ', 'the ', $values['representative']['name']),
-        '<small> (new window)</small></a>';
-    if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) {
-        if ($values['representative']['party'] == 'Judge') {
-            echo ', a <strong>Law Lord</strong>,';
-        } elseif ($values['representative']['party'] != 'Bishop') {
-            echo ', a <strong>', $values['representative']['party'], '</strong> Lord,';
-        }
+$pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['parlparse_person_id']);
+echo '<li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=', $pid,
+    '">Find out more about ', str_replace('The ', 'the ', $values['representative']['name']),
+    '<small></small></a>';
+if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) {
+    if ($values['representative']['party'] == 'Judge') {
+        echo ', a <strong>Law Lord</strong>,';
+    } elseif ($values['representative']['party'] != 'Bishop') {
+        echo ', a <strong>', $values['representative']['party'], '</strong> Lord,';
     }
-    echo ' on TheyWorkForYou.';
+}
+echo ' on TheyWorkForYou.';
 }
 
 if ($values['group_msg'] && $values['any_via']) {
-    echo '<li><strong>We do not have direct contact details for some of your ',
-        $values['voting_area']['rep_name_plural'], ' so your message to them
+echo '<li><strong>We do not have direct contact details for some of your ',
+    $values['voting_area']['rep_name_plural'], ' so your message to them
 will be sent via the internal mail systems of the body to which they
 were elected.</strong>';
 }
 
 if ($values['representative']['method'] == 'via') {
-    echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
-    echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
-    echo '</strong></li>';
+echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
+echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
+echo '</strong></li>';
 }
 
 echo '</ul>';
@@ -169,12 +172,13 @@ echo '</ul>';
 
 ?>
 
+                </div>
             </div>
-        </div>
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
-            <?=$values['form'];?>
+                <?=$values['form'];?>
 
+            </div>
         </div>
     </div>
 </div>

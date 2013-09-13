@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Guidelines for campaigning</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Guidelines for campaigning</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>If you&rsquo;re encouraging people to use WriteToThem.com to talk to their representatives about
 a particular issue, there are some particularly important points to keep in
@@ -69,14 +70,15 @@ You can also use the WriteToMP tool described in
 <li><strong>If in doubt, <a href="/about-contact">ask us first</a>.</strong></li>
 </ol>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

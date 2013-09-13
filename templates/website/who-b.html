@@ -54,27 +54,31 @@ template_draw('header', $values);
 
             <?php else: ?>
 
+                <ul class="large-block-grid-<?=count($values['reps'])?>">
+
                 <?php foreach ($values['reps'] as $key => $rep): ?>
 
-                    <h3 class="rep-heading"><?=$values['headings'][$key]?></h3>
+                    <li>
 
-                    <div class="row">
+                        <h3 class="rep-heading v-b"><?=$values['headings'][$key]?></h3>
 
-                        <div class="large-3 columns rep-blurb">
+                        <div class="rep-blurb">
                             <?=$values['blurbs'][$key]?>
                         </div>
 
-                        <div class="large-4 large-offset-1 columns rep-list">
+                        <div class="rep-list v-b">
                             <?=$rep?>
                         </div>
 
-                        <div class="large-4 columns rep-more">
+                        <div class="rep-more">
                             <?=$values['more'][$key]?>
                         </div>
 
-                    </div>
+                    </li>
 
                 <?php endforeach; ?>
+
+                </ul>
 
             <?php endif; ?>
 

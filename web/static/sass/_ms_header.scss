@@ -1,0 +1,131 @@
+/*
+
+This is the header that runs across the very top of each mySociety page
+
+
+
+*/
+
+
+
+.ms_header_nav{
+
+    @include grid-row;
+    nav{
+        @include grid-column(12);
+        @media #{$small} {
+            @include grid-column(6, false, false, 6);
+        }
+    }
+    .menu{
+        @include block-grid(5, $block-grid-default-spacing, true);
+        //@include inline-list;
+    }
+    li{
+        //display: inline;
+        text-align:center;
+        font-size: 0.7em;
+        padding:0;
+
+        @media #{$small} {
+            font-size: 0.8em;
+        }
+        @media #{$medium}{
+            font-size: 1em;
+        }
+        @media #{$large} {
+            font-size: 1em;
+        }
+
+        a{
+            line-height:3;
+            padding: 0 0.5em;
+            display:block;
+            border-radius: 0 0 1.25em 1.25em;
+            color: rgba(255,255,255,0.3);
+            &:hover{
+                color: rgba(255,255,255,0.8);
+            }
+            &.ms_header_nav-contact:hover{
+                background-color: #eeeeee;
+                transition: background-color 0.5s ease-out;
+            }
+            &.ms_header_nav-contact.active{
+                background-color: #b1b1b1;
+                transition: background-color 0.5s ease-out;
+            }
+        }
+
+        &#ms_logo{
+            @extend .right;
+            padding:0;
+            a{
+                @extend .ir;
+                display:block;
+                background: #222 url('../img/mysociety-header_logo-mini.png') no-repeat scroll center center;
+                background-size: auto 100%;
+                line-height:2;
+                padding: 0.5em 0;
+
+
+                @media #{$small} {
+                    background-image: url('../img/mysociety-header_logo.png');
+                    background-size: 80% auto;
+                }
+            }
+        }
+
+        &#lang_switcher{
+            @extend .right;
+            &>a{
+                @include button;
+                //@include dropdown-button;
+                line-height: 1.4;
+                &:hover{
+                    background-color: lighten($primary-color, 5%);
+                }
+
+            }
+            .lang-dropdown{
+                @include dropdown-container;
+
+                li {
+                    @include dropdown-style;
+                    text-align: left;
+                    a{
+                        padding: 0.25em 1em;
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+}
+
+.ms_header_nav-aside{
+    @extend .no-bullet;
+    display: block;
+    background-color: #222;
+    margin:0;
+    line-height: 1;
+    min-height: 0.25em;
+    height: 80%;
+
+    .content{
+        @include grid-row;
+    }
+}
+.contact{
+    background-color: #b1b1b1;
+}
+
+.no-js.ms_header_nav-aside li
+{
+    display:none;
+    &:target{
+        display: block;
+    }
+}

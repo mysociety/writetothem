@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>Privacy and cookies</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Privacy and cookies</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p><strong>Our use of your data, cookies, and external services: what you
 should know, and how to opt out if you want to.</strong></p>
@@ -119,14 +120,15 @@ back from them.
 
 <p>Bits of wording taken from the <a href="http://gov.uk/help/cookies">gov.uk cookies page</a> (under the Open Government Licence).
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 

@@ -5,17 +5,18 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
-            <h2>WriteToThem for your website</h2>
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>WriteToThem for your website</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
+        <div class="row">
 
-        <div class="large-8 columns">
+            <div class="large-8 columns">
 
 <p>If you just want to link to WriteToThem to tell other people about it, that&rsquo;s <a href="http://www.writetothem.com/about-linktous">easy</a>. But maybe you want something shinier than that &ndash; you&rsquo;ve designed a brand new website for your campaign, you want people to write to their MPs to encourage them to support it, and you&rsquo;d absolutely love this to happen without people needing to leave your website at all.</p>
 
@@ -27,14 +28,15 @@ template_draw('header', $values);
 
 <p>If you have any problems installing the code, <a href="/about-contact">contact us</a> and we&rsquo;ll give you a hand.</p>
 
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
         </div>
-
-        <div class="large-4 columns">
-
-            <?php template_draw('about-sidebar'); ?>
-
-        </div>
-
     </div>
 </div>
 
