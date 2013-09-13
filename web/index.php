@@ -37,7 +37,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     $message = cobrand_enter_postcode_message($cobrand, $cocode);
 
     if (!$message) {
-        $message = 'First, enter your UK postcode:';
+        $message = 'First, enter your UK postcode';
     }
 
     $form .= $message;

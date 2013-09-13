@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Merriweather:400,700);
+@import url(http://fonts.googleapis.com/css?family=f+Sans+Pro:400,600|Merriweather:400,700);
 /*! normalize.css v2.1.1 | MIT License | git.io/normalize */
 /* ==========================================================================
    HTML5 display definitions
@@ -2900,8 +2900,8 @@ textarea {
   background-color: white;
   font-family: inherit;
   border: 1px solid #cccccc;
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: none;
+  box-shadow: none;
   color: rgba(0, 0, 0, 0.75);
   display: block;
   font-size: 1em;
@@ -7540,79 +7540,109 @@ body {
 }
 
 /* line 42, ../sass/wtt.scss */
+.button {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* line 52, ../sass/wtt.scss */
 .staging {
   background: #9c3131;
   color: #FFFFFF;
   padding: 0.71429em;
 }
 
-/* line 48, ../sass/wtt.scss */
+/* line 58, ../sass/wtt.scss */
 .content-wrapper {
   border-top: 5px solid #222222;
 }
 
-/* line 52, ../sass/wtt.scss */
+/* line 62, ../sass/wtt.scss */
 .banner-top {
   background: #4695b3;
   padding-top: 0;
   padding-bottom: 0.78571em;
 }
-/* line 57, ../sass/wtt.scss */
+/* line 67, ../sass/wtt.scss */
 .banner-top.row {
   margin-bottom: 1.42857em;
 }
 
-/* line 63, ../sass/wtt.scss */
+/* line 73, ../sass/wtt.scss */
 .hero {
   background: url(../img/hero.jpg) center center;
   background-size: cover;
   color: #FFFFFF;
-  text-shadow: rgba(0, 0, 0, 0.9) 0 0 6px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   padding-top: 0;
   padding-bottom: 0.78571em;
 }
-/* line 71, ../sass/wtt.scss */
+/* line 81, ../sass/wtt.scss */
 .hero h2 {
   color: #FFFFFF;
   font-family: "Merriweather", serif;
   font-size: 1.85714em;
 }
 @media only screen and (min-width: 768px) {
-  /* line 78, ../sass/wtt.scss */
+  /* line 88, ../sass/wtt.scss */
   .hero h2 {
     font-size: 3.42857em;
   }
 }
-/* line 83, ../sass/wtt.scss */
+/* line 93, ../sass/wtt.scss */
 .hero p {
   font-size: 1.42857em;
 }
-/* line 87, ../sass/wtt.scss */
+/* line 97, ../sass/wtt.scss */
 .hero abbr {
   color: #FFFFFF;
 }
 
-/* line 93, ../sass/wtt.scss */
+/* line 103, ../sass/wtt.scss */
 .index-input {
   padding-top: 2.14286em;
   padding-bottom: 2.14286em;
   background: #FFFFFF;
 }
-/* line 98, ../sass/wtt.scss */
+/* line 108, ../sass/wtt.scss */
 .index-input h3 {
   font-size: 2.14286em;
 }
+/* line 111, ../sass/wtt.scss */
+.index-input label {
+  font-size: 1.28571em;
+}
+/* line 113, ../sass/wtt.scss */
+.index-input label b {
+  font-weight: normal;
+}
+/* line 117, ../sass/wtt.scss */
+.index-input .button {
+  font-size: 1.28571em;
+  letter-spacing: 1px;
+}
+/* line 121, ../sass/wtt.scss */
+.index-input input[type=text] {
+  font-size: 1.28571em;
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  border-right: none;
+}
 
-/* line 103, ../sass/wtt.scss */
+/* line 128, ../sass/wtt.scss */
 .index-content {
   padding-top: 20px;
 }
 
-/* line 107, ../sass/wtt.scss */
+/* line 132, ../sass/wtt.scss */
 .instruction-list p {
   line-height: 2.5em;
 }
-/* line 110, ../sass/wtt.scss */
+/* line 135, ../sass/wtt.scss */
 .instruction-list p .number {
   background: #32b353;
   color: #FFFFFF;
@@ -7629,12 +7659,12 @@ body {
   border-radius: 2.5em;
 }
 
-/* line 124, ../sass/wtt.scss */
+/* line 149, ../sass/wtt.scss */
 .index-about-links {
   list-style: none;
   font: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
-/* line 128, ../sass/wtt.scss */
+/* line 153, ../sass/wtt.scss */
 .index-about-links a {
   display: block;
   padding: 0.8em;
@@ -7643,18 +7673,18 @@ body {
   color: #6f6f6f;
 }
 
-/* line 138, ../sass/wtt.scss */
+/* line 163, ../sass/wtt.scss */
 .content {
   background: #f4f3ef;
 }
 
-/* line 142, ../sass/wtt.scss */
+/* line 167, ../sass/wtt.scss */
 .flow-breadcrumbs {
   text-align: center;
   margin-top: 12px;
 }
 
-/* line 148, ../sass/wtt.scss */
+/* line 173, ../sass/wtt.scss */
 .flow-breadcrumbs li {
   text-transform: uppercase;
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
@@ -7664,151 +7694,151 @@ body {
   color: #666666;
 }
 
-/* line 157, ../sass/wtt.scss */
+/* line 182, ../sass/wtt.scss */
 .flow-breadcrumbs li.done:first-child {
   background: no-repeat center top;
   background-image: url("../img/flow-start-complete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 157, ../sass/wtt.scss */
+  /* line 182, ../sass/wtt.scss */
   .flow-breadcrumbs li.done:first-child {
     background-image: url("../img/flow-start-complete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 162, ../sass/wtt.scss */
+/* line 187, ../sass/wtt.scss */
 .flow-breadcrumbs li.done {
   background: no-repeat center top;
   background-image: url("../img/flow-mid-complete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 162, ../sass/wtt.scss */
+  /* line 187, ../sass/wtt.scss */
   .flow-breadcrumbs li.done {
     background-image: url("../img/flow-mid-complete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 167, ../sass/wtt.scss */
+/* line 192, ../sass/wtt.scss */
 .flow-breadcrumbs li.done:last-child {
   background: no-repeat center top;
   background-image: url("../img/flow-end-complete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 167, ../sass/wtt.scss */
+  /* line 192, ../sass/wtt.scss */
   .flow-breadcrumbs li.done:last-child {
     background-image: url("../img/flow-end-complete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 172, ../sass/wtt.scss */
+/* line 197, ../sass/wtt.scss */
 .flow-breadcrumbs li.current:first-child {
   background: no-repeat center top;
   background-image: url("../img/flow-start-current.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 172, ../sass/wtt.scss */
+  /* line 197, ../sass/wtt.scss */
   .flow-breadcrumbs li.current:first-child {
     background-image: url("../img/flow-start-current@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 177, ../sass/wtt.scss */
+/* line 202, ../sass/wtt.scss */
 .flow-breadcrumbs li.current {
   background: no-repeat center top;
   background-image: url("../img/flow-mid-current.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 177, ../sass/wtt.scss */
+  /* line 202, ../sass/wtt.scss */
   .flow-breadcrumbs li.current {
     background-image: url("../img/flow-mid-current@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 182, ../sass/wtt.scss */
+/* line 207, ../sass/wtt.scss */
 .flow-breadcrumbs li.current:last-child {
   background: no-repeat center top;
   background-image: url("../img/flow-end-current.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 182, ../sass/wtt.scss */
+  /* line 207, ../sass/wtt.scss */
   .flow-breadcrumbs li.current:last-child {
     background-image: url("../img/flow-end-current@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 187, ../sass/wtt.scss */
+/* line 212, ../sass/wtt.scss */
 .flow-breadcrumbs li:first-child {
   background: no-repeat center top;
   background-image: url("../img/flow-start-incomplete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 187, ../sass/wtt.scss */
+  /* line 212, ../sass/wtt.scss */
   .flow-breadcrumbs li:first-child {
     background-image: url("../img/flow-start-incomplete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 192, ../sass/wtt.scss */
+/* line 217, ../sass/wtt.scss */
 .flow-breadcrumbs li {
   background: no-repeat center top;
   background-image: url("../img/flow-mid-incomplete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 192, ../sass/wtt.scss */
+  /* line 217, ../sass/wtt.scss */
   .flow-breadcrumbs li {
     background-image: url("../img/flow-mid-incomplete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 197, ../sass/wtt.scss */
+/* line 222, ../sass/wtt.scss */
 .flow-breadcrumbs li:last-child {
   background: no-repeat center top;
   background-image: url("../img/flow-end-incomplete.png");
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 197, ../sass/wtt.scss */
+  /* line 222, ../sass/wtt.scss */
   .flow-breadcrumbs li:last-child {
     background-image: url("../img/flow-end-incomplete@2x.png");
     background-size: 50%;
   }
 }
 
-/* line 202, ../sass/wtt.scss */
+/* line 227, ../sass/wtt.scss */
 .write-header {
   text-align: center;
   padding-top: 12px;
 }
-/* line 206, ../sass/wtt.scss */
+/* line 231, ../sass/wtt.scss */
 .write-header h2 {
   font-family: "Merriweather", serif;
 }
 
-/* line 212, ../sass/wtt.scss */
+/* line 237, ../sass/wtt.scss */
 .write-content {
   background: #FFFFFF;
 }
 
-/* line 216, ../sass/wtt.scss */
+/* line 241, ../sass/wtt.scss */
 .write-instructions {
   background: #424242;
 }
-/* line 219, ../sass/wtt.scss */
+/* line 244, ../sass/wtt.scss */
 .write-instructions h3 {
   color: #FFFFFF;
 }
-/* line 223, ../sass/wtt.scss */
+/* line 248, ../sass/wtt.scss */
 .write-instructions ul {
   list-style: none;
 }
-/* line 226, ../sass/wtt.scss */
+/* line 251, ../sass/wtt.scss */
 .write-instructions ul li {
   display: block;
   color: #FFFFFF;
@@ -7817,36 +7847,36 @@ body {
   font-size: 0.8em;
   padding: 8px 0;
 }
-/* line 237, ../sass/wtt.scss */
+/* line 262, ../sass/wtt.scss */
 .write-instructions a {
   color: #FFFFFF;
   text-decoration: underline;
 }
 
-/* line 244, ../sass/wtt.scss */
+/* line 269, ../sass/wtt.scss */
 .write-instructions li:last-child {
   border-bottom: none;
 }
 
-/* line 248, ../sass/wtt.scss */
+/* line 273, ../sass/wtt.scss */
 .write-content.preview {
   padding: 2em;
 }
-/* line 251, ../sass/wtt.scss */
+/* line 276, ../sass/wtt.scss */
 .write-content.preview .preview-to {
   float: left;
 }
-/* line 255, ../sass/wtt.scss */
+/* line 280, ../sass/wtt.scss */
 .write-content.preview .preview-from {
   float: right;
 }
-/* line 259, ../sass/wtt.scss */
+/* line 284, ../sass/wtt.scss */
 .write-content.preview .preview-message {
   padding-top: 2em;
   clear: both;
 }
 
-/* line 266, ../sass/wtt.scss */
+/* line 291, ../sass/wtt.scss */
 h3.rep-heading {
   text-transform: uppercase;
   font-size: emcalc(14);
@@ -7857,17 +7887,17 @@ h3.rep-heading {
   margin-bottom: 0.71429em;
   border-bottom: 1px solid #E9E9E9;
 }
-/* line 276, ../sass/wtt.scss */
+/* line 301, ../sass/wtt.scss */
 h3.rep-heading.v-b {
   min-height: 3.57143em;
 }
-/* line 279, ../sass/wtt.scss */
+/* line 304, ../sass/wtt.scss */
 h3.rep-heading.v-b.lords {
   min-height: 0;
   margin-top: 3em;
 }
 
-/* line 288, ../sass/wtt.scss */
+/* line 313, ../sass/wtt.scss */
 .rep-blurb {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   font-size: 0.92857em;
@@ -7875,60 +7905,60 @@ h3.rep-heading.v-b.lords {
   color: #666666;
 }
 
-/* line 295, ../sass/wtt.scss */
+/* line 320, ../sass/wtt.scss */
 .rep-list {
   list-style: none;
   margin-left: 0;
 }
-/* line 299, ../sass/wtt.scss */
+/* line 324, ../sass/wtt.scss */
 .rep-list li {
   margin-top: 3px;
   margin-bottom: 3px;
 }
-/* line 303, ../sass/wtt.scss */
+/* line 328, ../sass/wtt.scss */
 .rep-list li a {
   font-size: 1.28571em;
 }
-/* line 307, ../sass/wtt.scss */
+/* line 332, ../sass/wtt.scss */
 .rep-list li small {
   font-size: 1em;
   color: #666666;
 }
 
-/* line 320, ../sass/wtt.scss */
+/* line 345, ../sass/wtt.scss */
 .rep-list.v-b li a {
   font-size: 1.14286em;
 }
-/* line 324, ../sass/wtt.scss */
+/* line 349, ../sass/wtt.scss */
 .rep-list.v-b li small {
   font-size: 0.92857em;
   display: block;
 }
 
-/* line 333, ../sass/wtt.scss */
+/* line 358, ../sass/wtt.scss */
 .rep-more {
   font-size: 0.92857em;
   line-height: 1.35714em;
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
 
-/* line 339, ../sass/wtt.scss */
+/* line 364, ../sass/wtt.scss */
 .rep-more a {
   color: #666666;
 }
 
-/* line 343, ../sass/wtt.scss */
+/* line 368, ../sass/wtt.scss */
 pre {
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
-/* line 348, ../sass/wtt.scss */
+/* line 373, ../sass/wtt.scss */
 .sidebar {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
 
-/* line 352, ../sass/wtt.scss */
+/* line 377, ../sass/wtt.scss */
 .sidebar h5 {
   font-size: 0.9em;
   color: #666666;
@@ -7936,41 +7966,51 @@ pre {
   text-transform: uppercase;
 }
 
-/* line 359, ../sass/wtt.scss */
+/* line 384, ../sass/wtt.scss */
 .sidebar .side-nav {
   padding: 4px;
 }
 
-/* line 363, ../sass/wtt.scss */
+/* line 388, ../sass/wtt.scss */
 .advert.panel {
   background: #FFFFFF;
 }
 
-/* line 367, ../sass/wtt.scss */
+/* line 392, ../sass/wtt.scss */
 .zg-year-bar {
   margin: 1em 0;
   font-size: 0.9em;
 }
 
-/* line 372, ../sass/wtt.scss */
+/* line 397, ../sass/wtt.scss */
 .zg-year-bar p {
   margin: 0.25em 0;
 }
 
-/* line 376, ../sass/wtt.scss */
+/* line 401, ../sass/wtt.scss */
 .footer {
   border-top: 1px solid #E9E9E9;
   background: #FFFFFF;
 }
 
-/* line 381, ../sass/wtt.scss */
+/* line 406, ../sass/wtt.scss */
 .footer-content {
-  padding-top: 10px;
-  font-size: 0.78571em;
+  padding-top: 24px;
+  font-size: 1em;
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+/* line 410, ../sass/wtt.scss */
+.footer-content a {
+  color: #666666;
+  text-decoration: underline;
+}
+/* line 413, ../sass/wtt.scss */
+.footer-content a:hover {
+  color: #4695b3;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 387, ../sass/wtt.scss */
+  /* line 420, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }
