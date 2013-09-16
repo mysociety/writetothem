@@ -39,17 +39,55 @@ body {
     min-height: 100%;
 }
 
-.button {
+h1, h2, h3, h4, h5, h6,
+strong,
+b {
+    font-weight: 600;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+a {
+    &:hover {
+        text-decoration: underline;
+        color: #333
+    }
+}
+
+small {
+    font-size: emCalc(13);
+    line-height: 1.461538462em;
+}
+
+input[type="submit"], input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"] {
     font-family: $header-font-family;
-    text-transform: uppercase;
+    font-size: emCalc(16);
+}
+
+.button {
     @include box-shadow(none);
     border: none;
+    font-weight: normal;
+    font-family: $header-font-family;
 }
 
 .staging {
     background: $alert-color;
     color: #FFFFFF;
     padding: emCalc(10);
+    font-weight: normal;
+    font-family: $header-font-family;
+    line-height: 1.5em;
+    font-size: emCalc(16);
+}
+
+.alert-box {
+    font-weight: normal;
+    font-family: $header-font-family;
+    line-height: 1.5em;
+    font-size: emCalc(16);
 }
 
 .content-wrapper {
@@ -152,11 +190,12 @@ body {
         font-size: emCalc(18);
         letter-spacing: 1px;
         @include border-radius(0 3px 3px 0);
+        text-transform: uppercase;
+        font-weight: 600;
     }
 
     input[type=text] {
         font-size: emCalc(18);
-        font-family: $header-font-family;
         border-right: none;
         @include border-radius(3px 0 0 3px);
     }
@@ -293,6 +332,7 @@ body {
 
     h3 {
         color: #FFFFFF;
+        font-size: emCalc(21);
     }
 
     ul {
@@ -303,7 +343,7 @@ body {
             color: #FFFFFF;
             border-bottom: 1px solid #666666;
             font-family: $header-font-family;
-            font-size: 0.8em;
+            font-size: emCalc(13);
             padding: 8px 0;
         }
 
@@ -456,7 +496,7 @@ p.toplink {
 
 .footer-content {
     padding-top: 24px;
-    font-size: emCalc(14);
+    font-size: emCalc(12);
     font-family: $header-font-family;
     a {
         color: #666666;
@@ -484,11 +524,15 @@ form#writeForm {
         border: none;
         padding-left: 0;
         padding-right: 0;
-
+        border-bottom: 1px solid #ccc;
         legend {
             background: none;
             font-family: $header-font-family;
             font-size: emCalc(20);
+            font-weight: 600;
+        }
+        &:last-child {
+            border-bottom: none;
         }
 
     }

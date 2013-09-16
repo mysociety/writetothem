@@ -53,7 +53,7 @@ $default-float: left;
 
 $body-bg: #E0DFDB;
 // $body-font-color: #222;
-$body-font-family: 'Merriweather', serif;
+$body-font-family: 'Merriweather', Georgia, Times, 'Times New Roman', serif;
 // $body-font-weight: normal;
 // $body-font-style: normal;
 
@@ -160,7 +160,7 @@ $row-width: emCalc(1280);
 
 // Control header font styles
 
-$header-font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+$header-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 $header-font-weight: bold;
 // $header-font-style: normal;
 // $header-font-color: #222;
