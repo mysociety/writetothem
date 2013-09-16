@@ -59,15 +59,18 @@ body {
 .banner-top {
     background: $primary-color;
     padding-top: 0;
-    padding-bottom: emCalc(11);
+    padding-bottom: 0;
+    min-height: 40px;
 
     &.row {
         margin-bottom: emCalc(20);
     }
 
+    @media #{$small} {
+        min-height: 75px;
+    }
+
 }
-
-
 
 .hero {
     background: url(../img/hero.jpg) center center;
@@ -77,6 +80,8 @@ body {
     padding-top: 0;
     padding-bottom: emCalc(11);
     position: relative;
+    min-height: 70px;
+
     h2 {
         color: #FFFFFF;
         font-family: $body-font-family;
@@ -85,11 +90,14 @@ body {
     }
 
     @media #{$small} {
+
         h2 {
             font-size: emCalc(48);
         }
     }
+
     @media #{$small} {
+
         p {
             font-size: emCalc(20);
         }
@@ -98,22 +106,24 @@ body {
     abbr {
         color: #FFFFFF;
     }
+}
 
-    .wtt-logo {
-        position: absolute;
-        top: 2px;
-        img {
-            height: 35px;
-            width: 125px;
-        }
-        @media #{$small} {
-            img {
-                height: 70px;
-                width: 250px;
-            }
-        }
+.wtt-logo {
+    position: absolute;
+    top: 2px;
+
+    img {
+        height: 35px;
+        width: 125px;
     }
 
+    @media #{$small} {
+
+        img {
+            height: 70px;
+            width: 250px;
+        }
+    }
 }
 
 .index-input {
@@ -124,17 +134,21 @@ body {
     h3 {
         font-size: emCalc(30);
     }
+
     label {
         font-size: emCalc(18);
+
         b {
             font-weight: normal;
         }
     }
+
     .button {
         font-size: emCalc(18);
         letter-spacing: 1px;
         @include border-radius(0 3px 3px 0);
     }
+
     input[type=text] {
         font-size: emCalc(18);
         font-family: $header-font-family;

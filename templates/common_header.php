@@ -102,7 +102,7 @@ if ( ( ! isset($values['template']) OR ( $values['template'] !== 'index-index' A
                 </ul>
             </nav>
         </div>
-        <a href="/"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
     </div>
 </div>
 
