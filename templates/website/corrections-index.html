@@ -13,72 +13,69 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
+        <h2><?=$name . " " . $type_name ." Corrections"?></h2>
 
-            <h2><?=$name . " " . $type_name ." Corrections"?></h2>
+        <p>Thank you for helping us keep up to date.</p>
 
-            <p>Thank you for helping us keep up to date.</p>
+        <?php if (count($values['reps_info']) != 1): ?>
+        <p>Below are the <?=$rep_name_plural ?> from <strong><?=$name ?>
+            <?=$type_name?></strong>
+            in <?=$values['parent_info']['name']?>.
+            Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$rep_name ?> in this <?=$type_name ?> at all.</p>
+        <?php else: ?>
+        <p>Below is the <?=$rep_name ?> from <strong><?=$name ?></strong>.
+            Please edit their details if they are incorrect.</p>
+        <?php endif; ?>
 
-            <?php if (count($values['reps_info']) != 1): ?>
-            <p>Below are the <?=$rep_name_plural ?> from <strong><?=$name ?>
-                <?=$type_name?></strong>
-                in <?=$values['parent_info']['name']?>.
-                Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$rep_name ?> in this <?=$type_name ?> at all.</p>
-            <?php else: ?>
-            <p>Below is the <?=$rep_name ?> from <strong><?=$name ?></strong>.
-                Please edit their details if they are incorrect.</p>
-            <?php endif; ?>
+        <form action="corrections" method="post">
+            <?php
 
-            <form action="corrections" method="post">
-                <?php
-
-                if (count($values['reps_info'])) {
-                    print '<table>
-                    <tr><th>Current details</th><th>Name</th><th>Party</th>';
-                    if (count($values['reps_info']) > 1) print '<th>Delete?</th>';
-                    print '</tr>';
-                    foreach ($values['reps_info'] as $id => $rep) {
-                        print '<tr><td>'.$rep['name'].', '.$rep['party'].'</td><td><input type="text" name="name['.$id.']" size="20" value="'.$rep['name'].'"></td><td><input type="text" name="party['.$id.']" size="20" value="'.$rep['party'].'"></td>';
-                        if (count($values['reps_info']) > 1) {
-                            print '<td align="center"><input type="checkbox" name="delete['.$id.']" value="1"></td>';
-                        }
-                        print '</tr>';
+            if (count($values['reps_info'])) {
+                print '<table>
+                <tr><th>Current details</th><th>Name</th><th>Party</th>';
+                if (count($values['reps_info']) > 1) print '<th>Delete?</th>';
+                print '</tr>';
+                foreach ($values['reps_info'] as $id => $rep) {
+                    print '<tr><td>'.$rep['name'].', '.$rep['party'].'</td><td><input type="text" name="name['.$id.']" size="20" value="'.$rep['name'].'"></td><td><input type="text" name="party['.$id.']" size="20" value="'.$rep['party'].'"></td>';
+                    if (count($values['reps_info']) > 1) {
+                        print '<td align="center"><input type="checkbox" name="delete['.$id.']" value="1"></td>';
                     }
-                    print '</table>';
+                    print '</tr>';
                 }
-                ?>
+                print '</table>';
+            }
+            ?>
 
-            <p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
+        <p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
 
-            <div class="panel radius">
+        <div class="panel radius">
 
-                <p><label for="newname">Missing <?=$rep_name ?>'s name:</label>
-                <input type="text" id="newname" name="new[name]"></p>
+            <p><label for="newname">Missing <?=$rep_name ?>'s name:</label>
+            <input type="text" id="newname" name="new[name]"></p>
 
-                <p><label for="newparty">Missing <?=$rep_name ?>'s party:</label>
-                <input type="text" id="newparty" name="new[party]"></p>
+            <p><label for="newparty">Missing <?=$rep_name ?>'s party:</label>
+            <input type="text" id="newparty" name="new[party]"></p>
 
-                <p><label for="url">If you looked up this information on the web, please tell us the address of the page where you found it:</label>
-                <input type="text" name="url" id="url" value="http://" size="50"></p>
+            <p><label for="url">If you looked up this information on the web, please tell us the address of the page where you found it:</label>
+            <input type="text" name="url" id="url" value="http://" size="50"></p>
 
-                <p><label for="notes">Do you have any other information that would be useful to us? (Optional):</label>
-                <textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
+            <p><label for="notes">Do you have any other information that would be useful to us? (Optional):</label>
+            <textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
 
-                <p><label name="email">Lastly, you may (optionally) give us your email address, so we can contact you if we have any questions about your submission:</label>
-                <input type="text" name="email" id="email" value="" size="50"></p>
+            <p><label name="email">Lastly, you may (optionally) give us your email address, so we can contact you if we have any questions about your submission:</label>
+            <input type="text" name="email" id="email" value="" size="50"></p>
 
-                <input type="hidden" name="id" value="<?=$values['id'] ?>">
+            <input type="hidden" name="id" value="<?=$values['id'] ?>">
 
-                <p><input type="submit" class="button success" value="Submit my changes"></p>
+            <p><input type="submit" class="button success" value="Submit my changes"></p>
 
-            </div>
+        </div>
 
-        </form>
+    </form>
 
-    </div>
 </div>
 
 <?php template_draw('footer', $values);

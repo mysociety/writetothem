@@ -7,36 +7,33 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
-    <div class="row">
-        <div class="large-10 large-centered columns flow-breadcrumbs">
+<div class="row">
+    <div class="large-8 large-centered columns flow-breadcrumbs">
 
-            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4)?>
+        <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4)?>
 
-        </div>
     </div>
+</div>
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-            <h2>Oops&hellip; Something didn't quite work.</h2>
+        <h2>Oops&hellip; Something didn't quite work.</h2>
 
-        </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="large-12 columns">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-            <hr>
+        <hr>
 
-            <p>Thank you for trying to confirm your fax/email. We seem to have a
-            problem though, so please let us know what went on and send a copy of
-            the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
-            it.</p>
+        <p>Thank you for trying to confirm your fax/email. We seem to have a
+        problem though, so please let us know what went on and send a copy of
+        the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
+        it.</p>
 
-        </div>
     </div>
-
 </div>
 
 <?php template_draw('footer', $values);

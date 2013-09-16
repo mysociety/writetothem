@@ -9,24 +9,20 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-    <div class="row">
-        <div class="large-12 columns">
+        <h2><?=$values['title'] ?></h2>
 
-            <h2><?=$values['title'] ?></h2>
+        <p>We'll use them on the site as soon as we can.  Contributions like yours help
+        volunteer maintained sites like this keep up to date. </p>
 
-            <p>We'll use them on the site as soon as we can.  Contributions like yours help
-            volunteer maintained sites like this keep up to date. </p>
-
-            <div class="panel advert">
-                <h3><a href="http://www.mysociety.org/volunteertasks">Non geeks and geeks required</a></h3>
-                <p>Help us build sites, and publicise them.</p>
-            </div>
-
+        <div class="panel advert">
+            <h3><a href="http://www.mysociety.org/volunteertasks">Non geeks and geeks required</a></h3>
+            <p>Help us build sites, and publicise them.</p>
         </div>
-    </div>
 
+    </div>
 </div>
 
 <?php template_draw('footer', $values);

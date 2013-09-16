@@ -6,52 +6,48 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+        <h2><?=$values['title']?></h2>
 
-            <h2><?=$values['title']?></h2>
+        <p><?=$values['error_message'] ?></p>
 
-            <p><?=$values['error_message'] ?></p>
-
-        </div>
     </div>
-
-    <?php
-
-    if (isset($_POST['mysociety_serialized_variables'])) {
-
-        include_once '../phplib/forms.php';
-        $saved_values = get_all_variables();
-
-        if (isset($saved_values['body'])):
-
-    ?>
-
-    <div class="row">
-        <div class="large-12 columns">
-
-            <hr>
-
-            <p><strong>Here are the contents of your message</strong> &ndash;
-    please copy and paste into a different application such as Word or Notepad
-    to be sure you do not lose your message.</p>
-
-            <div class="panel radius write-content">
-                <p><?=str_replace("\n", "<br>\n", htmlspecialchars($saved_values['body']))?></p>
-            </div>
-        </div>
-    </div>
-
-    <?php
-
-        endif;
-
-    }
-
-    ?>
-
 </div>
+
+<?php
+
+if (isset($_POST['mysociety_serialized_variables'])) {
+
+    include_once '../phplib/forms.php';
+    $saved_values = get_all_variables();
+
+    if (isset($saved_values['body'])):
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <hr>
+
+        <p><strong>Here are the contents of your message</strong> &ndash;
+please copy and paste into a different application such as Word or Notepad
+to be sure you do not lose your message.</p>
+
+        <div class="panel radius write-content">
+            <p><?=str_replace("\n", "<br>\n", htmlspecialchars($saved_values['body']))?></p>
+        </div>
+    </div>
+</div>
+
+<?php
+
+    endif;
+
+}
+
+?>
 
 <?php template_draw('footer', $values);

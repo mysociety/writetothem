@@ -7,30 +7,26 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+        <h2>Many thanks - We hope you enjoyed the experience</h2>
 
-            <h2>Many thanks - We hope you enjoyed the experience</h2>
-
-        </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="large-12 columns">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-            <p>Thanks for that - the statistics should help us convince politicians that
-                they could do more on the Web to encourage greater participation in the
-                democratic process.</p>
+        <p>Thanks for that - the statistics should help us convince politicians that
+            they could do more on the Web to encourage greater participation in the
+            democratic process.</p>
 
-            <p>If you've got any questions, feel free to <a href="/about-contact">contact us</a>.</p>
+        <p>If you've got any questions, feel free to <a href="/about-contact">contact us</a>.</p>
 
-            <?=fyr_display_advert($values)?>
+        <?=fyr_display_advert($values)?>
 
-        </div>
     </div>
-
 </div>
 
 <?php template_draw('footer', $values);
