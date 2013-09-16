@@ -446,7 +446,7 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
     $text = '';
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
-        $text = '<a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a>';
+        $text = '<p><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a></p>';
 
         // A/B Testing Hack!
         if (isset($_GET['t']) AND $_GET['t'] == 'who-b') {
