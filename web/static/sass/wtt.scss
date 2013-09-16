@@ -73,7 +73,8 @@ body {
 }
 
 .hero {
-    background: url(../img/hero.jpg) center center;
+    background-image: url(../img/hero.jpg);
+    background-position: center center;
     background-size: cover;
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
@@ -105,6 +106,10 @@ body {
 
     abbr {
         color: #FFFFFF;
+    }
+
+    &.hero-error {
+        background-image: url(../img/error.jpg);
     }
 }
 
@@ -367,7 +372,7 @@ h3.rep-heading {
     margin-left: 0;
 
     li {
-        margin-top: 3px;
+        margin-top: 0;
         margin-bottom: 3px;
 
         a {
@@ -394,6 +399,7 @@ h3.rep-heading {
         small {
             font-size: emCalc(13);
             display: block;
+            margin-bottom: 1em;
         }
 
     }
@@ -404,10 +410,6 @@ h3.rep-heading {
     font-size: emCalc(13);
     line-height: emCalc(19);
     font-family: $header-font-family;
-}
-
-.rep-more a {
-    color: #666666;
 }
 
 pre {
@@ -428,6 +430,10 @@ pre {
 
 .sidebar .side-nav {
     padding: 4px;
+}
+
+p.toplink {
+    font-size: 0.8em;
 }
 
 .advert.panel {
