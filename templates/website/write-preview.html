@@ -7,50 +7,46 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
-    <div class="row">
-        <div class="large-10 large-centered columns flow-breadcrumbs">
+<div class="row flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
 
             <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
 
-        </div>
     </div>
+</div>
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-            <h2>Preview your message</h2>
+        <h2>Preview your message</h2>
 
-        </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="large-12 columns">
-            <div class="panel radius write-content preview">
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="panel radius write-content preview">
 
-                <?php
+            <?php
 
-                // From fax-content.html
-                echo $values['preview'];
+            // From fax-content.html
+            echo $values['preview'];
 
-                ?>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-
-            <?=$values['form']?>
-
-            <p>(We will email you asking for confirmation before we send the message to
-                your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>)
-                </p>
+            ?>
 
         </div>
     </div>
+</div>
 
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <?=$values['form']?>
+
+        <p>We will email you to double check that your email address is correct before sending the message to
+            your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>.</p>
+
+    </div>
 </div>
 
 <?php template_draw('footer', $values); ?>
