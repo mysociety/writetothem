@@ -970,7 +970,7 @@ function get_area($id) {
     if (mapit_get_error($area)) {
         back_to_who();
     }
-    debug("FRONTEND", "FYR voting area $area");
+    debug("FRONTEND", "FYR voting area " . $area['id']);
     $area = add_area_vars($area);
     return $area;
 }
