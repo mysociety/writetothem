@@ -462,7 +462,8 @@ form#writeForm {
 
     fieldset {
         border: none;
-        padding: 2em 0;
+        padding-left: 0;
+        padding-right: 0;
 
         legend {
             background: none;
@@ -478,6 +479,7 @@ form#writeForm {
     }
 
     textarea.message {
+        font-size: emCalc(16);
         height: 20em;
         margin-bottom: 3em;
     }

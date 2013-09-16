@@ -8072,25 +8072,27 @@ form#writeForm h3 {
 /* line 463, ../sass/wtt.scss */
 form#writeForm fieldset {
   border: none;
-  padding: 2em 0;
+  padding-left: 0;
+  padding-right: 0;
 }
-/* line 467, ../sass/wtt.scss */
+/* line 468, ../sass/wtt.scss */
 form#writeForm fieldset legend {
   background: none;
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   font-size: 1.42857em;
 }
-/* line 475, ../sass/wtt.scss */
+/* line 476, ../sass/wtt.scss */
 form#writeForm .error-message {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #9c3131;
 }
-/* line 480, ../sass/wtt.scss */
+/* line 481, ../sass/wtt.scss */
 form#writeForm textarea.message {
+  font-size: 1.14286em;
   height: 20em;
   margin-bottom: 3em;
 }
-/* line 486, ../sass/wtt.scss */
+/* line 488, ../sass/wtt.scss */
 form#writeForm .optional-text {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   float: right;

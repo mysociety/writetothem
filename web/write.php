@@ -263,8 +263,6 @@ function buildWriteForm($options) {
 
     $form->addElement("html", "</fieldset>");
 
-    $form->addElement("html", '<hr>');
-
     $form->addElement("html", "<fieldset><legend>Your Address</legend>");
 
         $form->addElement("html", '<div class="row">');
@@ -326,8 +324,6 @@ function buildWriteForm($options) {
         $form->addElement("html", '</div>');
 
     $form->addElement("html", "</fieldset>");
-
-    $form->addElement("html", '<hr>');
 
     $form->addElement("html", "<fieldset><legend>Ready?</legend>");
 
