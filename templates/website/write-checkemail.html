@@ -8,46 +8,42 @@ template_draw('header', $values);
 
 ?>
 
-<div class="content">
-    <div class="row">
-        <div class="large-10 large-centered columns flow-breadcrumbs">
+<div class="row">
+    <div class="large-8 large-centered columns flow-breadcrumbs">
 
-            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4)?>
+        <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(3, 'lords') : fyr_breadcrumbs(4)?>
 
+    </div>
+</div>
+
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
+
+        <h2>Now check your email</h2>
+        <p>The confirmation email may take a few minutes to arrive &mdash; <em>please</em> be patient.</p>
+
+    </div>
+</div>
+
+<?php if (isset($values['error_msg']) AND $values['error_msg'] !== ''): ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="alert-box alert radius">
+            <?=$values['error_msg']?>
         </div>
     </div>
+</div>
+<?php endif; ?>
 
-    <div class="row write-header">
-        <div class="large-8 large-centered columns">
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-            <h2>Now check your email</h2>
-            <p>The confirmation email may take a few minutes to arrive &mdash; <em>please</em> be patient.</p>
+        <hr>
 
-        </div>
+        <p>If you use web-based email or have 'junk mail' filters, you may wish to check your bulk or spam mail folders: sometimes, our messages are marked that way.</p>
+    <p>You must now click on the link within the email we've just sent you &mdash; if you do not, your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> will not be sent.</p>
+    <p>(Don't worry - we'll hang on to your message while you're checking your email.)</p>
     </div>
-
-
-    <?php if (isset($values['error_msg'])): ?>
-    <div class="row">
-        <div class="large-12">
-            <div class="alert-box alert radius">
-                <?=$values['error_msg']?>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
-
-    <div class="row">
-        <div class="large-12">
-
-            <hr>
-
-            <p>If you use web-based email or have 'junk mail' filters, you may wish to check your bulk&#47;spam mail folders: sometimes, our messages are marked that way.</p>
-        <p>You must now click on the link within the email we've just sent you &mdash; if you do not, your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> will not be sent.</p>
-        <p>(Don't worry - we'll hang on to your message while you're checking your email.)</p>
-        </div>
-    </div>
-
 </div>
 
 <?php template_draw('footer', $values); ?>
