@@ -1,12 +1,12 @@
 <?php
 /*
  * HTML forms stuff.
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
  * $Id: forms.php,v 1.15 2009-10-15 13:03:10 louise Exp $
- * 
+ *
  */
 
 require_once "../commonlib/phplib/HTML/QuickForm.php";
@@ -31,7 +31,7 @@ function get_all_variables() {
         debug("SERIALIZE", "mysociety_serialized_variables", $set_vars);
         $variables = array_merge($set_vars, $variables);
     }
-    
+
     unset($variables['mysociety_serialized_variables']);
     return $variables;
 }
@@ -45,9 +45,6 @@ function add_all_variables_hidden(&$form, $variables, $options) {
     // the value of the contents, just uses the one in _POST rather
     // than the new one.
     $element = $html_hidden;
-    if ($options['table_layout']) {  
-        $element = "<tr><td>$element</td></tr>";
-    }
     $form->addElement('html', $element);
 }
 
@@ -66,35 +63,22 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
     }
 
     function HTML_QuickForm_Renderer_mySociety() {
-        // TODO: Properly CSS this
         $this->HTML_QuickForm_Renderer_Default();
         $this->setFormTemplate('
             <form{attributes}>
-            <table border="0">
             {content}
-            </table>
             </form>');
         $this->setElementTemplate('
                 <!-- BEGIN error -->
-                <tr>
-                <td colspan="2">
-                    <span class="error">{error}:</span>
-                </td>
-                </tr>
-                <!-- END error --> 
+                <div class="error-message">{error}</div>
+                <!-- END error -->
 
-                <tr valign="top">
-                <td>{label}</td>
-                <td>{element}</td>
-                </tr>
+                <p><label>{label} {element}</label></p>
         ');
 
         $this->setRequiredNoteTemplate("");
         // Not sure what this is for - just set to default for now:
-        $this->setHeaderTemplate('
-            <tr>
-                <td style="white-space: nowrap; background-color: #CCCCCC;" align="left" valign="top" colspan="2"><b>{header}</b></td>
-            </tr>');
+        $this->setHeaderTemplate('{header}');
     }
 }
 
