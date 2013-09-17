@@ -7990,14 +7990,21 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 /* line 370, ../sass/wtt.scss */
 .write-content.preview .preview-from {
   float: right;
+  display: none;
 }
-/* line 374, ../sass/wtt.scss */
+@media only screen and (min-width: 768px) {
+  /* line 370, ../sass/wtt.scss */
+  .write-content.preview .preview-from {
+    display: block;
+  }
+}
+/* line 379, ../sass/wtt.scss */
 .write-content.preview .preview-message {
   padding-top: 2em;
   clear: both;
 }
 
-/* line 381, ../sass/wtt.scss */
+/* line 386, ../sass/wtt.scss */
 h3.rep-heading {
   text-transform: uppercase;
   font-size: emcalc(14);
@@ -8008,17 +8015,17 @@ h3.rep-heading {
   margin-bottom: 0.71429em;
   border-bottom: 1px solid #E9E9E9;
 }
-/* line 391, ../sass/wtt.scss */
+/* line 396, ../sass/wtt.scss */
 h3.rep-heading.v-b {
   min-height: 3.57143em;
 }
-/* line 394, ../sass/wtt.scss */
+/* line 399, ../sass/wtt.scss */
 h3.rep-heading.v-b.lords {
   min-height: 0;
   margin-top: 3em;
 }
 
-/* line 403, ../sass/wtt.scss */
+/* line 408, ../sass/wtt.scss */
 .rep-blurb {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
   font-size: 0.92857em;
@@ -8026,56 +8033,56 @@ h3.rep-heading.v-b.lords {
   color: #666666;
 }
 
-/* line 410, ../sass/wtt.scss */
+/* line 415, ../sass/wtt.scss */
 .rep-list {
   list-style: none;
   margin-left: 0;
 }
-/* line 414, ../sass/wtt.scss */
+/* line 419, ../sass/wtt.scss */
 .rep-list li {
   margin-top: 0;
   margin-bottom: 3px;
 }
-/* line 418, ../sass/wtt.scss */
+/* line 423, ../sass/wtt.scss */
 .rep-list li a {
   font-size: 1.28571em;
 }
-/* line 422, ../sass/wtt.scss */
+/* line 427, ../sass/wtt.scss */
 .rep-list li small {
   font-size: 1em;
   color: #666666;
 }
 
-/* line 435, ../sass/wtt.scss */
+/* line 440, ../sass/wtt.scss */
 .rep-list.v-b li a {
   font-size: 1.14286em;
 }
-/* line 439, ../sass/wtt.scss */
+/* line 444, ../sass/wtt.scss */
 .rep-list.v-b li small {
   font-size: 0.92857em;
   display: block;
   margin-bottom: 1em;
 }
 
-/* line 449, ../sass/wtt.scss */
+/* line 454, ../sass/wtt.scss */
 .rep-more {
   font-size: 0.92857em;
   line-height: 1.35714em;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 }
 
-/* line 455, ../sass/wtt.scss */
+/* line 460, ../sass/wtt.scss */
 pre {
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
-/* line 460, ../sass/wtt.scss */
+/* line 465, ../sass/wtt.scss */
 .sidebar {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 }
 
-/* line 464, ../sass/wtt.scss */
+/* line 469, ../sass/wtt.scss */
 .sidebar h5 {
   font-size: 0.9em;
   color: #666666;
@@ -8083,95 +8090,95 @@ pre {
   text-transform: uppercase;
 }
 
-/* line 471, ../sass/wtt.scss */
+/* line 476, ../sass/wtt.scss */
 .sidebar .side-nav {
   padding: 4px;
 }
 
-/* line 475, ../sass/wtt.scss */
+/* line 480, ../sass/wtt.scss */
 p.toplink {
   font-size: 0.8em;
 }
 
-/* line 479, ../sass/wtt.scss */
+/* line 484, ../sass/wtt.scss */
 .advert.panel {
   background: #FFFFFF;
 }
 
-/* line 483, ../sass/wtt.scss */
+/* line 488, ../sass/wtt.scss */
 .zg-year-bar {
   margin: 1em 0;
   font-size: 0.9em;
 }
 
-/* line 488, ../sass/wtt.scss */
+/* line 493, ../sass/wtt.scss */
 .zg-year-bar p {
   margin: 0.25em 0;
 }
 
-/* line 492, ../sass/wtt.scss */
+/* line 497, ../sass/wtt.scss */
 .footer {
   border-top: 1px solid #E9E9E9;
   background: #FFFFFF;
 }
 
-/* line 497, ../sass/wtt.scss */
+/* line 502, ../sass/wtt.scss */
 .footer-content {
   padding-top: 24px;
   font-size: 0.85714em;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 }
-/* line 501, ../sass/wtt.scss */
+/* line 506, ../sass/wtt.scss */
 .footer-content a {
   color: #666666;
   text-decoration: underline;
 }
-/* line 504, ../sass/wtt.scss */
+/* line 509, ../sass/wtt.scss */
 .footer-content a:hover {
   color: #4695b3;
 }
 
 @media only screen and (min-width: 768px) {
-  /* line 511, ../sass/wtt.scss */
+  /* line 516, ../sass/wtt.scss */
   .footer-links-credits li {
     float: right;
   }
 }
-/* line 518, ../sass/wtt.scss */
+/* line 523, ../sass/wtt.scss */
 form#writeForm h3 {
   font-family: "Merriweather", Georgia, Times, "Times New Roman", serif;
   font-size: 1.57143em;
 }
-/* line 523, ../sass/wtt.scss */
+/* line 528, ../sass/wtt.scss */
 form#writeForm fieldset {
   border: none;
   padding-left: 0;
   padding-right: 0;
   border-bottom: 1px solid #ccc;
 }
-/* line 528, ../sass/wtt.scss */
+/* line 533, ../sass/wtt.scss */
 form#writeForm fieldset legend {
   background: none;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
   font-size: 1.42857em;
   font-weight: 600;
 }
-/* line 534, ../sass/wtt.scss */
+/* line 539, ../sass/wtt.scss */
 form#writeForm fieldset:last-child {
   border-bottom: none;
 }
-/* line 540, ../sass/wtt.scss */
+/* line 545, ../sass/wtt.scss */
 form#writeForm .error-message {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
   color: #9c3131;
 }
-/* line 545, ../sass/wtt.scss */
+/* line 550, ../sass/wtt.scss */
 form#writeForm textarea.message {
   font-size: 1.14286em;
   height: 20em;
   margin-bottom: 3em;
 }
-/* line 552, ../sass/wtt.scss */
+/* line 557, ../sass/wtt.scss */
 form#writeForm .optional-text {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
   float: right;

@@ -369,6 +369,11 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 
     .preview-from {
         float: right;
+        display: none;
+
+        @media #{$small} {
+            display: block;
+        }
     }
 
     .preview-message {
