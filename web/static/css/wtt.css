@@ -7359,6 +7359,13 @@ This is the header that runs across the very top of each mySociety page
   line-height: 2;
   padding: 0.5em 0;
 }
+@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+  /* line 62, ../sass/_ms_header.scss */
+  .ms_header_nav li#ms_logo a {
+    background-image: url("../img/mysociety-header_logo-mini@2x.png");
+    background-size: 50%;
+  }
+}
 @media only screen and (min-width: 768px) {
   /* line 62, ../sass/_ms_header.scss */
   .ms_header_nav li#ms_logo a {
@@ -7366,7 +7373,14 @@ This is the header that runs across the very top of each mySociety page
     background-size: 80% auto;
   }
 }
-/* line 80, ../sass/_ms_header.scss */
+@media only screen and (min-width: 768px) and (min--moz-device-pixel-ratio: 1.3), only screen and (min-width: 768px) and (-o-min-device-pixel-ratio: 2.6 / 2), only screen and (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-width: 768px) and (min-device-pixel-ratio: 1.3), only screen and (min-width: 768px) and (min-resolution: 1.3dppx) {
+  /* line 62, ../sass/_ms_header.scss */
+  .ms_header_nav li#ms_logo a {
+    background-image: url("../img/mysociety-header_logo@2x.png");
+    background-size: 40%;
+  }
+}
+/* line 98, ../sass/_ms_header.scss */
 .ms_header_nav li#lang_switcher > a {
   border-style: solid;
   border-width: 1px;
@@ -7397,11 +7411,11 @@ This is the header that runs across the very top of each mySociety page
 .ms_header_nav li#lang_switcher > a:hover, .ms_header_nav li#lang_switcher > a:focus {
   color: white;
 }
-/* line 84, ../sass/_ms_header.scss */
+/* line 102, ../sass/_ms_header.scss */
 .ms_header_nav li#lang_switcher > a:hover {
   background-color: #56a0bd;
 }
-/* line 89, ../sass/_ms_header.scss */
+/* line 107, ../sass/_ms_header.scss */
 .ms_header_nav li#lang_switcher .lang-dropdown {
   position: absolute;
   top: -9999px;
@@ -7463,7 +7477,7 @@ This is the header that runs across the very top of each mySociety page
   left: auto;
   right: 9px;
 }
-/* line 92, ../sass/_ms_header.scss */
+/* line 110, ../sass/_ms_header.scss */
 .ms_header_nav li#lang_switcher .lang-dropdown li {
   font-size: 1em;
   cursor: pointer;
@@ -7481,12 +7495,12 @@ This is the header that runs across the very top of each mySociety page
   padding: 0.35714em 0.71429em;
   color: #555555;
 }
-/* line 95, ../sass/_ms_header.scss */
+/* line 113, ../sass/_ms_header.scss */
 .ms_header_nav li#lang_switcher .lang-dropdown li a {
   padding: 0.25em 1em;
 }
 
-/* line 108, ../sass/_ms_header.scss */
+/* line 126, ../sass/_ms_header.scss */
 .ms_header_nav-aside {
   display: block;
   background-color: #222;
@@ -7495,7 +7509,7 @@ This is the header that runs across the very top of each mySociety page
   min-height: 0.25em;
   height: 80%;
 }
-/* line 117, ../sass/_ms_header.scss */
+/* line 135, ../sass/_ms_header.scss */
 .ms_header_nav-aside .content {
   width: 100%;
   margin-left: auto;
@@ -7515,16 +7529,16 @@ This is the header that runs across the very top of each mySociety page
   clear: both;
 }
 
-/* line 121, ../sass/_ms_header.scss */
+/* line 139, ../sass/_ms_header.scss */
 .contact {
   background-color: #b1b1b1;
 }
 
-/* line 126, ../sass/_ms_header.scss */
+/* line 144, ../sass/_ms_header.scss */
 .no-js.ms_header_nav-aside li {
   display: none;
 }
-/* line 128, ../sass/_ms_header.scss */
+/* line 146, ../sass/_ms_header.scss */
 .no-js.ms_header_nav-aside li:target {
   display: block;
 }
