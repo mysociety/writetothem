@@ -86,7 +86,7 @@ if (isset($values['cobrand']))
 
 <?php
 
-if ( ( ! isset($values['template']) OR ( $values['template'] !== 'index-index' AND $values['template'] !== 'index-index-b' ) ) AND ! isset($values['skip_header']) ):
+if ( ! isset($values['skip_header']) ):
 
 ?>
 

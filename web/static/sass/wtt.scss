@@ -111,7 +111,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-    background-image: url(../img/hero.jpg);
+    background-image: url(../img/heroes/index.jpg);
     background-position: center center;
     background-size: cover;
     color: #FFFFFF;
@@ -147,7 +147,11 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
     }
 
     &.hero-error {
-        background-image: url(../img/error.jpg);
+        background-image: url(../img/heroes/error.jpg);
+    }
+
+    &.hero-sent {
+        background-image: url(../img/heroes/sent.jpg);
     }
 }
 
@@ -361,7 +365,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-content.preview {
-    padding: 2em;
+    padding: 4em;
 
     .preview-to {
         float: left;
@@ -381,6 +385,14 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
         clear: both;
     }
 
+}
+
+.write-preview-form {
+    text-align: left;
+
+    @media #{$small} {
+        text-align: right;
+    }
 }
 
 h3.rep-heading {
