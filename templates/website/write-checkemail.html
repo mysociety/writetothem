@@ -2,7 +2,6 @@
 
 $values['title'] = "Now check your email";
 $values['robots'] = 'noindex, nofollow';
-$values['skip_header'] = TRUE;
 
 template_draw('header', $values);
 
@@ -19,8 +18,8 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Now check your email</h2>
-        <p>The confirmation email may take a few minutes to arrive &mdash; <em>please</em> be patient.</p>
+        <h2>Now check your email!</h2>
+        <p>The confirmation email may take a few minutes to arrive &mdash; please be patient.</p>
 
     </div>
 </div>
@@ -40,10 +39,11 @@ template_draw('header', $values);
 
         <hr>
 
-        <p>If you use web-based email or have 'junk mail' filters, you may wish to check your bulk or spam mail folders: sometimes, our messages are marked that way.</p>
-    <p>You must now click on the link within the email we've just sent you &mdash; if you do not, your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> will not be sent.</p>
-    <p>(Don't worry - we'll hang on to your message while you're checking your email.)</p>
+        <p>Before we can send your message to your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> we need to confirm your email address. We've sent you an email &mdash; when it arrives simply click the link in it and your message will be sent. If you don't click the link your message <em>will not</em> be sent.</p>
+
+        <p>If you use web-based email or have 'junk mail' filters, you may wish to check your bulk or spam mail folders. Sometimes our messages are marked that way.</p>
+
     </div>
 </div>
 
-<?php template_draw('footer', $values); ?>
+<?php template_draw('footer', $values);
