@@ -41,13 +41,18 @@ if (isset($values['cobrand']))
 
     <?php if (array_key_exists('stylesheet', $values)): ?>
     <style type="text/css">@import "<?=$values['stylesheet']?>";</style>
-    <?php
+    <?php endif; ?>
 
-    endif;
+    <!-- Google Content Experiments for redesign A/B testing -->
+    <script src="//www.google-analytics.com/cx/api.js"></script>
+    <script>
+        cxApi.setChosenVariation(
+            1,
+            'MZNGqCKiReu3srj_0L4q7A'
+        );
+    </script>
 
-    if (OPTION_WEB_DOMAIN == 'writetothem.com'):
-
-    ?>
+    <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>']);
