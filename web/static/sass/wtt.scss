@@ -128,7 +128,8 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-    background: url(../img/hero.jpg) center center;
+    background-image: url(../img/heroes/index.jpg);
+    background-position: center center;
     background-size: cover;
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
@@ -160,6 +161,14 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 
     abbr {
         color: #FFFFFF;
+    }
+
+    &.hero-error {
+        background-image: url(../img/heroes/error.jpg);
+    }
+
+    &.hero-sent {
+        background-image: url(../img/heroes/sent.jpg);
     }
 }
 
@@ -373,7 +382,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-content.preview {
-    padding: 2em;
+    padding: 4em;
 
     .preview-to {
         float: left;
@@ -381,6 +390,11 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 
     .preview-from {
         float: right;
+        display: none;
+
+        @media #{$small} {
+            display: block;
+        }
     }
 
     .preview-message {
@@ -470,10 +484,6 @@ h3.rep-heading {
     font-family: $header-font-family;
 }
 
-.rep-more a {
-    color: #666666;
-}
-
 pre {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -492,6 +502,10 @@ pre {
 
 .sidebar .side-nav {
     padding: 4px;
+}
+
+p.toplink {
+    font-size: 0.8em;
 }
 
 .advert.panel {
