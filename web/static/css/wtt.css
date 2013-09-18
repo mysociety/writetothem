@@ -6450,6 +6450,26 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
   border: none;
   font-weight: normal;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  background-color: transparent;
+  border: 1px solid #dbdad7;
+  color: #666;
+  -webkit-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  -moz-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  -o-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  transition: border 0.1s ease-in, background-color 0.1s ease-in;
+}
+.button:hover {
+  border-color: #999;
+  color: #333;
+  background-color: transparent;
+  -webkit-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  -moz-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  -o-transition: border 0.1s ease-in, background-color 0.1s ease-in;
+  transition: border 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+.button.success:hover {
+  border-color: #1c632e;
 }
 
 .staging {
@@ -6489,8 +6509,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-  background-image: url(../img/heroes/index.jpg);
-  background-position: center center;
+  background: url(../img/hero.jpg) center center;
   background-size: cover;
   color: #FFFFFF;
   text-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
@@ -6517,12 +6536,6 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 .hero abbr {
   color: #FFFFFF;
-}
-.hero.hero-error {
-  background-image: url(../img/heroes/error.jpg);
-}
-.hero.hero-sent {
-  background-image: url(../img/heroes/sent.jpg);
 }
 
 .wtt-logo {
@@ -6784,19 +6797,13 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-content.preview {
-  padding: 4em;
+  padding: 2em;
 }
 .write-content.preview .preview-to {
   float: left;
 }
 .write-content.preview .preview-from {
   float: right;
-  display: none;
-}
-@media only screen and (min-width: 768px) {
-  .write-content.preview .preview-from {
-    display: block;
-  }
 }
 .write-content.preview .preview-message {
   padding-top: 2em;
@@ -6804,12 +6811,10 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-preview-form {
-  text-align: left;
+  text-align: right;
 }
-@media only screen and (min-width: 768px) {
-  .write-preview-form {
-    text-align: right;
-  }
+.write-preview-form .success {
+  margin-left: 20px;
 }
 
 h3.rep-heading {
@@ -6842,7 +6847,7 @@ h3.rep-heading.v-b.lords {
   margin-left: 0;
 }
 .rep-list li {
-  margin-top: 0;
+  margin-top: 3px;
   margin-bottom: 3px;
 }
 .rep-list li a {
@@ -6859,13 +6864,16 @@ h3.rep-heading.v-b.lords {
 .rep-list.v-b li small {
   font-size: 0.92857em;
   display: block;
-  margin-bottom: 1em;
 }
 
 .rep-more {
   font-size: 0.92857em;
   line-height: 1.35714em;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+}
+
+.rep-more a {
+  color: #666666;
 }
 
 pre {
@@ -6886,10 +6894,6 @@ pre {
 
 .sidebar .side-nav {
   padding: 4px;
-}
-
-p.toplink {
-  font-size: 0.8em;
 }
 
 .advert.panel {

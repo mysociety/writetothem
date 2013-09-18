@@ -352,8 +352,8 @@ function buildPreviewForm($options) {
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
     $form .= add_all_variables_hidden_nonQF($fyr_values);
-    $form .= '<input type="submit" name="submitWrite" class="button radius" value="Re-edit this message">
-<input type="submit" name="submitSendFax" class="button radius success" value="Send message">';
+    $form .= '<input type="submit" name="submitWrite" class="button radius" value="Edit some more">
+<input type="submit" name="submitSendFax" class="button radius success" value="I&apos;m happy, send it">';
     $form .= '</form>';
     return $form;
 }
