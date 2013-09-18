@@ -6509,7 +6509,8 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-  background: url(../img/hero.jpg) center center;
+  background-image: url(../img/heroes/index.jpg);
+  background-position: center center;
   background-size: cover;
   color: #FFFFFF;
   text-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
@@ -6536,6 +6537,12 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 .hero abbr {
   color: #FFFFFF;
+}
+.hero.hero-error {
+  background-image: url(../img/heroes/error.jpg);
+}
+.hero.hero-sent {
+  background-image: url(../img/heroes/sent.jpg);
 }
 
 .wtt-logo {
@@ -6797,13 +6804,19 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-content.preview {
-  padding: 2em;
+  padding: 4em;
 }
 .write-content.preview .preview-to {
   float: left;
 }
 .write-content.preview .preview-from {
   float: right;
+  display: none;
+}
+@media only screen and (min-width: 768px) {
+  .write-content.preview .preview-from {
+    display: block;
+  }
 }
 .write-content.preview .preview-message {
   padding-top: 2em;
@@ -6884,10 +6897,6 @@ h3.rep-heading.v-b.lords {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 }
 
-.rep-more a {
-  color: #666666;
-}
-
 pre {
   margin-top: 1em;
   margin-bottom: 1em;
@@ -6906,6 +6915,10 @@ pre {
 
 .sidebar .side-nav {
   padding: 4px;
+}
+
+p.toplink {
+  font-size: 0.8em;
 }
 
 .advert.panel {
