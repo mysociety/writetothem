@@ -6808,13 +6808,25 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 .write-content.preview .preview-message {
   padding-top: 2em;
   clear: both;
+  font-size: 1.14286em;
 }
 
-.write-preview-form {
+.preview-send-controls {
   text-align: right;
 }
-.write-preview-form .success {
+.preview-send-controls .success {
   margin-left: 20px;
+}
+.preview-send-controls form {
+  margin-bottom: 0;
+}
+.preview-send-controls p {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  font-size: 1em;
+  border-top: 1px solid #dbdad7;
+  padding-top: 1.28571em;
+  float: right;
+  max-width: 26.57143em;
 }
 
 h3.rep-heading {
@@ -6959,6 +6971,7 @@ form#writeForm textarea.message {
   font-size: 1.14286em;
   height: 20em;
   margin-bottom: 3em;
+  padding: 2.14286em;
 }
 form#writeForm .optional-text {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;

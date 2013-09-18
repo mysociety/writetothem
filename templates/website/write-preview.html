@@ -24,26 +24,26 @@ template_draw('header', $values);
 </div>
 
 <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="large-8 large-centered columns">
         <div class="panel radius write-content preview">
-            <div class="row">
-                <div class="large-9 large-centered columns">
-                    <?php
 
-                    // From fax-content.html
-                    echo $values['preview'];
+            <?php
 
-                    ?>
-                </div>
-            </div>
+            // From fax-content.html
+            echo $values['preview'];
+
+            ?>
+
         </div>
+    </div>
+</div>
 
-        <div class="write-preview-form">
-            <?=$values['form']?>
-        </div>
+<div class="row">
+    <div class="large-8 large-centered columns preview-send-controls">
 
-        <p>We will email you to double check that your email address is correct before sending the message to
-            your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?>.</p>
+        <?=$values['form']?>
+
+        <p>We’ll email you for confirmation before we send your message</p>
 
     </div>
 </div>

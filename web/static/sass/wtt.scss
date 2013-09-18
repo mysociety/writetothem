@@ -386,14 +386,26 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
     .preview-message {
         padding-top: 2em;
         clear: both;
+        font-size: emCalc(16);
     }
 
 }
 
-.write-preview-form {
+.preview-send-controls {
     text-align: right;
     .success {
         margin-left: 20px;
+    }
+    form {
+        margin-bottom: 0;
+    }
+    p {
+        font-family: $header-font-family;
+        font-size: emCalc(14);
+        border-top: 1px solid #dbdad7;
+        padding-top: emCalc(18);
+        float: right;
+        max-width: emCalc(372);
     }
 }
 
@@ -564,6 +576,7 @@ form#writeForm {
         font-size: emCalc(16);
         height: 20em;
         margin-bottom: 3em;
+        padding: emCalc(30);
     }
 
     .optional-text
