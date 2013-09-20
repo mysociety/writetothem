@@ -239,6 +239,10 @@ textarea {
     }
 }
 
+.error-input {
+    background-color: transparent;
+}
+
 .index-content {
     padding: 20px 0;
     border-top: 1px solid #E9E9E9;
@@ -371,11 +375,12 @@ textarea {
     h3 {
         color: #FFFFFF;
         font-size: emCalc(21);
+        margin-bottom: 0;
     }
 
     ul {
         list-style: none;
-
+        padding: 0;
         li {
             display: block;
             color: #FFFFFF;
@@ -383,6 +388,8 @@ textarea {
             font-family: $header-font-family;
             font-size: emCalc(13);
             padding: 8px 0;
+            margin: 0;
+
         }
 
     }
@@ -489,6 +496,7 @@ h3.rep-heading {
 .rep-list {
     list-style: none;
     margin-left: 0;
+    padding: 0;
 
     li {
         margin-top: 3px;

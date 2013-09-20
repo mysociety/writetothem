@@ -45,44 +45,40 @@
         </div>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
         <div style="text-align:center;">
-            <h2>Something seems to have gone wrong.</h2><p>HTTP 500</p>
+            <h2>Whoops! Something seems to have gone wrong.</h2>
+            <p>Our developers have been notified about this error and they'll fix it as soon as they can.</p>
         </div>
     </div>
 </div>
 
 <div class="row index-content">
-    <div class="large-10 large-centered columns">
+    <div class="large-6 large-centered columns">
 
-        <p>For some reason, we can't show you this page at the moment. Perhaps
-        there are a lot of visitors to our site, or we've misconfigured something.
-        Our developers will be emailed automatically about this error, so if
-        there's a serious problem, they'll fix it as soon as they can. In the mean
-        time, here are some things you can try:</p>
+        <h3>In the the meantime, you can try:</h3>
+               <ul>
+               <li>Go to <a href="/">our front page</a></li>
+               <li><a href="/about-contact">Contact us</a> to tell us about
+                   the problem</li>
+               <li>Find out the names of your elected representatives, and write a letter
+                   to any of them
 
-        <ul>
-        <li><a href="javascript:reload()">Retry your previous request</a>, in case
-            it's just a passing problem</li>
-        <li>Go to <a href="/">our front page</a></li>
-        <li><a href="/about-contact">Contact us</a> to tell us about
-            the problem</li>
-        <li>Find out the names of your elected representatives, and write a letter
-            to any of them:
+                   <form action="/" method="get" name="postcodeform" id="postcodeForm" class="row index-input error-input">
+                   <div id="postcodebox" class="large-8 large-centered columns">
+                       <label for="pc">Your UK postcode</label>
+                       <div class="row collapse">
+                           <div class="small-9 columns">
+                             <input type="text" id="pc" name="pc" placeholder="SW1H 9NB">
+                           </div>
+                           <div class="small-3 columns">
+                             <input type="submit" class="button success prefix" value="Go">
+                           </div>
+                       </div>
+                   </div>
+                   </form>
 
-            <form action="/" method="get" name="postcodeForm" id="postcodeForm" class="row">
-            <div id="postcodebox" class="large-4 columns">
-                <div class="row collapse">
-                    <div class="small-9 columns">
-                      <input type="text" id="pc" name="pc" value="SDFDGJH" placeholder="SW1H 9NB">
-                    </div>
-                    <div class="small-3 columns">
-                      <input type="submit" class="button success prefix" value="Go">
-                    </div>
-                </div>
-            </div>
-            </form>
+               </li>
+               </ul>
 
-        </li>
-        </ul>
 
     </div>
 </div>

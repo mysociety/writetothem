@@ -6619,6 +6619,10 @@ textarea {
   border-radius: 3px 0 0 3px;
 }
 
+.error-input {
+  background-color: transparent;
+}
+
 .index-content {
   padding: 20px 0;
   border-top: 1px solid #E9E9E9;
@@ -6806,9 +6810,11 @@ textarea {
 .write-instructions h3 {
   color: #FFFFFF;
   font-size: 1.5em;
+  margin-bottom: 0;
 }
 .write-instructions ul {
   list-style: none;
+  padding: 0;
 }
 .write-instructions ul li {
   display: block;
@@ -6817,6 +6823,7 @@ textarea {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
   font-size: 0.92857em;
   padding: 8px 0;
+  margin: 0;
 }
 .write-instructions a {
   color: #FFFFFF;
@@ -6913,6 +6920,7 @@ h3.rep-heading.v-b.lords {
 .rep-list {
   list-style: none;
   margin-left: 0;
+  padding: 0;
 }
 .rep-list li {
   margin-top: 3px;

@@ -45,29 +45,31 @@
         </div>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
         <div style="text-align:center;">
-            <h2>We couldn't find that page.</h2><p>HTTP 404</p>
+            <h2>Sorry, we couldn't find that page.</h2>
+            <p>You've requested a page which doesn't exist, or which we have moved.
+        Perhaps you mistyped the address?</p>
         </div>
     </div>
 </div>
 
 <div class="row index-content">
-    <div class="large-10 large-centered columns">
+    <div class="large-6 large-centered columns">
 
-        <p>You've requested a page which doesn't exist, or which we have moved.
-        Perhaps you mistyped the address? Other things you can try:</p>
 
+        <h3>Other things you can try:</h3>
         <ul>
         <li>Go to <a href="/">our front page</a></li>
         <li><a href="/about-contact">Contact us</a> to tell us about
             the problem</li>
         <li>Find out the names of your elected representatives, and write a letter
-            to any of them:
+            to any of them
 
-            <form action="/" method="get" name="postcodeForm" id="postcodeForm" class="row">
-            <div id="postcodebox" class="large-4 columns">
+            <form action="/" method="get" name="postcodeform" id="postcodeForm" class="row index-input error-input">
+            <div id="postcodebox" class="large-8 large-centered columns">
+                <label for="pc">Your UK postcode</label>
                 <div class="row collapse">
                     <div class="small-9 columns">
-                      <input type="text" id="pc" name="pc" value="SDFDGJH" placeholder="SW1H 9NB">
+                      <input type="text" id="pc" name="pc" placeholder="SW1H 9NB">
                     </div>
                     <div class="small-3 columns">
                       <input type="submit" class="button success prefix" value="Go">
