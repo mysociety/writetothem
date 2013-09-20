@@ -67,12 +67,14 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
     font-size: emCalc(16);
     -webkit-appearance: none;
     @include border-radius(3px);
+    color: #333;
 }
 
 textarea {
     height: 30.142857143em;
     -webkit-appearance: none;
     @include border-radius(3px);
+    color: #333;
 }
 
 .button {
@@ -142,7 +144,7 @@ textarea {
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
     padding-top: 0;
-    padding-bottom: emCalc(11);
+    padding-bottom: emCalc(36);
     position: relative;
     min-height: 70px;
 
@@ -151,6 +153,12 @@ textarea {
         font-family: $body-font-family;
         font-size: emCalc(26);
         margin-top: 2em;
+        text-align: center;
+    }
+    p {
+        text-align: center;
+        max-width: 30em;
+        margin: 0 auto;
     }
 
     @media #{$small} {
@@ -178,6 +186,7 @@ textarea {
     &.hero-sent {
         background-image: url(../img/heroes/sent.jpg);
     }
+
 }
 
 .wtt-logo {
@@ -390,18 +399,22 @@ textarea {
 }
 
 .write-content.preview {
-    padding: 4em;
+    padding: 5%;
 
     .preview-to {
         float: left;
+        width: 100%;
+        @media #{$small} {
+            width: auto;
+        }
     }
 
     .preview-from {
-        float: right;
-        display: none;
-
+        float: left;
+        width: 100%;
         @media #{$small} {
-            display: block;
+            float: right;
+            width: auto;
         }
     }
 
@@ -416,8 +429,21 @@ textarea {
 .preview-send-controls {
     text-align: right;
     .success {
-        margin-left: 20px;
+        @media #{$small} {
+            margin-left: 20px;
+        }
+
     }
+
+    .button {
+        display: block;
+        width: 100%;
+        @media #{$small} {
+            display: inline-block;
+            width: auto;
+        }
+    }
+
     form {
         margin-bottom: 0;
     }
@@ -532,8 +558,28 @@ p.toplink {
     font-size: 0.8em;
 }
 
+.panel {
+    h3 {
+        line-height: 1.3em;
+    }
+}
+
 .advert.panel {
 	background: #FFFFFF;
+    @include border-radius(3px);
+}
+
+.sent-content {
+    h3 {
+       font-size: 1.71429em;
+    }
+
+    .side-nav {
+        font-size: emCalc(16);
+        padding-top: 0;
+
+    }
+
 }
 
 .zg-year-bar {
@@ -589,8 +635,33 @@ form#writeForm {
         }
         &:last-child {
             border-bottom: none;
+
         }
 
+    }
+
+    label {
+        input {
+            margin-top: 0.2em;
+        }
+    }
+
+    .optional-text {
+        font-size: emCalc(12);
+        color: #666;
+        float: right;
+        font-family: $header-font-family;
+    }
+
+    .error-message {
+        color: $alert-color;
+        font-family: $header-font-family;
+        width: 100%;
+        clear: both;
+        margin-bottom: 1em;
+        line-height: 1.5em;
+        font-weight: 600;
+        font-size: emCalc(16);
     }
 
     input[type="text"][disabled] {

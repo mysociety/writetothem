@@ -1794,7 +1794,7 @@ small {
 code {
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-weight: bold;
-  color: #621f1f;
+  color: #8b2828;
 }
 
 /* Lists */
@@ -2079,12 +2079,12 @@ button.success:hover, button.success:focus, .button.success:hover, .button.succe
   color: white;
 }
 button.alert, .button.alert {
-  background-color: #9c3131;
-  border-color: #752525;
+  background-color: #c63a3a;
+  border-color: #9f2e2e;
   color: white;
 }
 button.alert:hover, button.alert:focus, .button.alert:hover, .button.alert:focus {
-  background-color: #752525;
+  background-color: #9f2e2e;
 }
 button.alert:hover, button.alert:focus, .button.alert:hover, .button.alert:focus {
   color: white;
@@ -2178,8 +2178,8 @@ button.disabled.success:hover, button.disabled.success:focus, button[disabled].s
   background-color: #32b353;
 }
 button.disabled.alert, button[disabled].alert, .button.disabled.alert, .button[disabled].alert {
-  background-color: #9c3131;
-  border-color: #752525;
+  background-color: #c63a3a;
+  border-color: #9f2e2e;
   color: white;
   cursor: default;
   opacity: 0.6;
@@ -2187,13 +2187,13 @@ button.disabled.alert, button[disabled].alert, .button.disabled.alert, .button[d
   box-shadow: none;
 }
 button.disabled.alert:hover, button.disabled.alert:focus, button[disabled].alert:hover, button[disabled].alert:focus, .button.disabled.alert:hover, .button.disabled.alert:focus, .button[disabled].alert:hover, .button[disabled].alert:focus {
-  background-color: #752525;
+  background-color: #9f2e2e;
 }
 button.disabled.alert:hover, button.disabled.alert:focus, button[disabled].alert:hover, button[disabled].alert:focus, .button.disabled.alert:hover, .button.disabled.alert:focus, .button[disabled].alert:hover, .button[disabled].alert:focus {
   color: white;
 }
 button.disabled.alert:hover, button.disabled.alert:focus, button[disabled].alert:hover, button[disabled].alert:focus, .button.disabled.alert:hover, .button.disabled.alert:focus, .button[disabled].alert:hover, .button[disabled].alert:focus {
-  background-color: #9c3131;
+  background-color: #c63a3a;
 }
 
 button, .button {
@@ -2566,7 +2566,7 @@ fieldset legend {
   margin-bottom: 1.14286em;
   font-size: 0.85714em;
   font-weight: bold;
-  background: #9c3131;
+  background: #c63a3a;
   color: white;
   margin-top: 0;
 }
@@ -2581,15 +2581,15 @@ span.error, small.error {
   margin-bottom: 1.14286em;
   font-size: 0.85714em;
   font-weight: bold;
-  background: #9c3131;
+  background: #c63a3a;
   color: white;
 }
 
 .error input,
 .error textarea,
 .error select {
-  border-color: #9c3131;
-  background-color: rgba(156, 49, 49, 0.1);
+  border-color: #c63a3a;
+  background-color: rgba(198, 58, 58, 0.1);
   margin-bottom: 0;
 }
 .error input:focus,
@@ -2600,7 +2600,7 @@ span.error, small.error {
 }
 .error label,
 .error label.error {
-  color: #9c3131;
+  color: #c63a3a;
 }
 .error small.error {
   display: block;
@@ -2609,7 +2609,7 @@ span.error, small.error {
   margin-bottom: 1.14286em;
   font-size: 0.85714em;
   font-weight: bold;
-  background: #9c3131;
+  background: #c63a3a;
   color: white;
 }
 .error span.error-message {
@@ -2618,8 +2618,8 @@ span.error, small.error {
 
 input.error,
 textarea.error {
-  border-color: #9c3131;
-  background-color: rgba(156, 49, 49, 0.1);
+  border-color: #c63a3a;
+  background-color: rgba(198, 58, 58, 0.1);
 }
 input.error:focus,
 textarea.error:focus {
@@ -2628,8 +2628,8 @@ textarea.error:focus {
 }
 
 .error select {
-  border-color: #9c3131;
-  background-color: rgba(156, 49, 49, 0.1);
+  border-color: #c63a3a;
+  background-color: rgba(198, 58, 58, 0.1);
 }
 .error select:focus {
   background: #fafafa;
@@ -2637,7 +2637,7 @@ textarea.error:focus {
 }
 
 label.error {
-  color: #9c3131;
+  color: #c63a3a;
 }
 
 /* Button Groups */
@@ -2860,7 +2860,7 @@ label.error {
   border-color: white transparent transparent transparent;
 }
 .split.button.alert span {
-  border-left-color: #621f1f;
+  border-left-color: #8b2828;
 }
 .split.button.success span {
   border-left-color: #217737;
@@ -4016,10 +4016,10 @@ label.error {
   background: #278b41;
 }
 .top-bar-section ul li > a.button.alert {
-  background: #9c3131;
+  background: #c63a3a;
 }
 .top-bar-section ul li > a.button.alert.hover {
-  background: #752525;
+  background: #9f2e2e;
 }
 .top-bar-section ul li.hover > a {
   background: #090909;
@@ -5026,8 +5026,8 @@ label.error {
   color: white;
 }
 .alert-box.alert {
-  background-color: #9c3131;
-  border-color: #752525;
+  background-color: #c63a3a;
+  border-color: #9f2e2e;
   color: white;
 }
 .alert-box.secondary {
@@ -5271,9 +5271,9 @@ form.custom .custom.dropdown.open.large ul {
   box-sizing: border-box;
 }
 form.custom .error .custom.dropdown {
-  border-color: #9c3131;
-  background-color: rgba(156, 49, 49, 0.1);
-  background: rgba(156, 49, 49, 0.1);
+  border-color: #c63a3a;
+  background-color: rgba(198, 58, 58, 0.1);
+  background: rgba(198, 58, 58, 0.1);
   margin-bottom: 0;
 }
 form.custom .error .custom.dropdown:focus {
@@ -5371,7 +5371,7 @@ kbd {
   border-radius: 1000px;
 }
 .label.alert {
-  background-color: #9c3131;
+  background-color: #c63a3a;
   color: white;
 }
 .label.success {
@@ -5584,7 +5584,7 @@ ul.pagination li {
   display: block;
 }
 .progress.alert .meter {
-  background: #9c3131;
+  background: #c63a3a;
   height: 100%;
   display: block;
 }
@@ -6447,6 +6447,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
+  color: #333;
 }
 
 textarea {
@@ -6457,6 +6458,7 @@ textarea {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
+  color: #333;
 }
 
 .button {
@@ -6489,7 +6491,7 @@ textarea {
 }
 
 .staging {
-  background: #9c3131;
+  background: #c63a3a;
   color: #FFFFFF;
   padding: 0.71429em;
   font-weight: normal;
@@ -6531,7 +6533,7 @@ textarea {
   color: #FFFFFF;
   text-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   padding-top: 0;
-  padding-bottom: 0.78571em;
+  padding-bottom: 2.57143em;
   position: relative;
   min-height: 70px;
 }
@@ -6540,6 +6542,12 @@ textarea {
   font-family: "Merriweather", Georgia, Times, "Times New Roman", serif;
   font-size: 1.85714em;
   margin-top: 2em;
+  text-align: center;
+}
+.hero p {
+  text-align: center;
+  max-width: 30em;
+  margin: 0 auto;
 }
 @media only screen and (min-width: 768px) {
   .hero h2 {
@@ -6820,18 +6828,25 @@ textarea {
 }
 
 .write-content.preview {
-  padding: 4em;
+  padding: 5%;
 }
 .write-content.preview .preview-to {
   float: left;
+  width: 100%;
+}
+@media only screen and (min-width: 768px) {
+  .write-content.preview .preview-to {
+    width: auto;
+  }
 }
 .write-content.preview .preview-from {
-  float: right;
-  display: none;
+  float: left;
+  width: 100%;
 }
 @media only screen and (min-width: 768px) {
   .write-content.preview .preview-from {
-    display: block;
+    float: right;
+    width: auto;
   }
 }
 .write-content.preview .preview-message {
@@ -6843,8 +6858,20 @@ textarea {
 .preview-send-controls {
   text-align: right;
 }
-.preview-send-controls .success {
-  margin-left: 20px;
+@media only screen and (min-width: 768px) {
+  .preview-send-controls .success {
+    margin-left: 20px;
+  }
+}
+.preview-send-controls .button {
+  display: block;
+  width: 100%;
+}
+@media only screen and (min-width: 768px) {
+  .preview-send-controls .button {
+    display: inline-block;
+    width: auto;
+  }
 }
 .preview-send-controls form {
   margin-bottom: 0;
@@ -6940,8 +6967,25 @@ p.toplink {
   font-size: 0.8em;
 }
 
+.panel h3 {
+  line-height: 1.3em;
+}
+
 .advert.panel {
   background: #FFFFFF;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.sent-content h3 {
+  font-size: 1.71429em;
+}
+.sent-content .side-nav {
+  font-size: 1.14286em;
+  padding-top: 0;
 }
 
 .zg-year-bar {
@@ -6994,6 +7038,25 @@ form#writeForm fieldset legend {
 }
 form#writeForm fieldset:last-child {
   border-bottom: none;
+}
+form#writeForm label input {
+  margin-top: 0.2em;
+}
+form#writeForm .optional-text {
+  font-size: 0.85714em;
+  color: #666;
+  float: right;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+}
+form#writeForm .error-message {
+  color: #c63a3a;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  width: 100%;
+  clear: both;
+  margin-bottom: 1em;
+  line-height: 1.5em;
+  font-weight: 600;
+  font-size: 1.14286em;
 }
 form#writeForm input[type="text"][disabled] {
   background: #fff;
