@@ -539,20 +539,64 @@ pre {
     margin-bottom: 1em;
 }
 
+dl {
+    dt {
+        font-family: $header-font-family;
+        font-size: emCalc(18);
+        font-weight: 600;
+    }
+
+    dd {
+        border-bottom: 1px solid #DBDAD7;
+        margin-bottom: 1.75em;
+        padding-bottom: 0.75em;
+    }
+}
+
+ul,
+ol {
+    list-style-position: outside;
+    padding-left: 1.2em;
+    li {
+        margin-bottom: 1em;
+
+    }
+}
+
+a[href="#top"] {
+    font-family: $header-font-family;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.feedback {
+    blockquote {
+        background: #fff;
+        @include border-radius(3px);
+        border: 1px solid #DBDAD7;
+        padding: 1.5em;
+        font-size: emCalc(16);
+    }
+}
+
 .sidebar {
     font-family: $header-font-family;
+    li {
+        margin-bottom: 0;
+    }
+    ul {
+        padding: 0;
+        margin-bottom: 1em;
+    }
+    h5 {
+        font-size: 1em;
+        padding: 0;
+        text-transform: uppercase;
+        color: #666;
+        margin-bottom: 0;
+    }
 }
 
-.sidebar h5 {
-    font-size: 0.9em;
-    color: #666666;
-    padding: 4px;
-    text-transform: uppercase;
-}
-
-.sidebar .side-nav {
-    padding: 4px;
-}
 
 p.toplink {
     font-size: 0.8em;
@@ -571,13 +615,11 @@ p.toplink {
 
 .sent-content {
     h3 {
-       font-size: 1.71429em;
+       font-size: emCalc(18);
     }
 
     .side-nav {
-        font-size: emCalc(16);
         padding-top: 0;
-
     }
 
 }

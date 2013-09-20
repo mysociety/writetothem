@@ -6948,19 +6948,61 @@ pre {
   margin-bottom: 1em;
 }
 
+dl dt {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  font-size: 1.28571em;
+  font-weight: 600;
+}
+dl dd {
+  border-bottom: 1px solid #DBDAD7;
+  margin-bottom: 1.75em;
+  padding-bottom: 0.75em;
+}
+
+ul,
+ol {
+  list-style-position: outside;
+  padding-left: 1.2em;
+}
+ul li,
+ol li {
+  margin-bottom: 1em;
+}
+
+a[href="#top"] {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.feedback blockquote {
+  background: #fff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #DBDAD7;
+  padding: 1.5em;
+  font-size: 1.14286em;
+}
+
 .sidebar {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
 }
-
-.sidebar h5 {
-  font-size: 0.9em;
-  color: #666666;
-  padding: 4px;
-  text-transform: uppercase;
+.sidebar li {
+  margin-bottom: 0;
 }
-
-.sidebar .side-nav {
-  padding: 4px;
+.sidebar ul {
+  padding: 0;
+  margin-bottom: 1em;
+}
+.sidebar h5 {
+  font-size: 1em;
+  padding: 0;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 0;
 }
 
 p.toplink {
@@ -6981,10 +7023,9 @@ p.toplink {
 }
 
 .sent-content h3 {
-  font-size: 1.71429em;
+  font-size: 1.28571em;
 }
 .sent-content .side-nav {
-  font-size: 1.14286em;
   padding-top: 0;
 }
 
