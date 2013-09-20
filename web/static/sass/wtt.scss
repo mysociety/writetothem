@@ -65,6 +65,14 @@ small {
 input[type="submit"], input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"] {
     font-family: $header-font-family;
     font-size: emCalc(16);
+    -webkit-appearance: none;
+    @include border-radius(3px);
+}
+
+textarea {
+    height: 30.142857143em;
+    -webkit-appearance: none;
+    @include border-radius(3px);
 }
 
 .button {
@@ -128,7 +136,8 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-    background: url(../img/heroes/index.jpg) center center;
+    background-image: url(../img/heroes/index.jpg);
+    background-position: center center;
     background-size: cover;
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
@@ -160,6 +169,14 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 
     abbr {
         color: #FFFFFF;
+    }
+
+    &.hero-error {
+        background-image: url(../img/heroes/error.jpg);
+    }
+
+    &.hero-sent {
+        background-image: url(../img/heroes/sent.jpg);
     }
 }
 
@@ -373,7 +390,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .write-content.preview {
-    padding: 2em;
+    padding: 4em;
 
     .preview-to {
         float: left;
@@ -381,6 +398,11 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 
     .preview-from {
         float: right;
+        display: none;
+
+        @media #{$small} {
+            display: block;
+        }
     }
 
     .preview-message {
@@ -506,6 +528,10 @@ pre {
     padding: 4px;
 }
 
+p.toplink {
+    font-size: 0.8em;
+}
+
 .advert.panel {
 	background: #FFFFFF;
 }
@@ -571,24 +597,5 @@ form#writeForm {
         background: #fff;
         border-color: #e9e9e9;
         color: #666;
-    }
-
-    .error-message {
-        font-family: $header-font-family;
-        color: $alert-color;
-    }
-
-    textarea.message {
-        font-size: emCalc(16);
-        height: 20em;
-        margin-bottom: 3em;
-        padding: emCalc(30);
-    }
-
-    .optional-text
-    {
-        font-family: $header-font-family;
-        float: right;
-        color: lighten($form-label-font-color, 30%)
     }
 }
