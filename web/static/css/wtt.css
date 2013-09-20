@@ -6509,7 +6509,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-  background: url(../img/hero.jpg) center center;
+  background: url(../img/heroes/index.jpg) center center;
   background-size: cover;
   color: #FFFFFF;
   text-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
@@ -6965,7 +6965,7 @@ form#writeForm fieldset:last-child {
 form#writeForm input[type="text"][disabled] {
   background: #fff;
   border-color: #e9e9e9;
-  color: #666666;
+  color: #666;
 }
 form#writeForm .error-message {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;

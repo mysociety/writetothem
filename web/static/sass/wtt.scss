@@ -128,7 +128,7 @@ input[type="submit"], input[type="text"], input[type="password"], input[type="da
 }
 
 .hero {
-    background: url(../img/hero.jpg) center center;
+    background: url(../img/heroes/index.jpg) center center;
     background-size: cover;
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
