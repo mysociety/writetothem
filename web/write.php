@@ -178,7 +178,7 @@ function compare_email_addrs($F) {
     if (!isset($F['writer_email2']) || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2']) {
         $error_message = cobrand_mismatched_emails_message($cobrand);
         if (!$error_message) {
-             $error_message = "The two email addresses you've entered differ;<br>please check them carefully for mistakes";
+             $error_message = "The two email addresses you've entered differ; please check them carefully for mistakes";
         }
         return array('writer_email' => $error_message);
     }
@@ -254,7 +254,7 @@ function buildWriteForm($options) {
 
             $form->addElement("html", '<div class="large-6 columns">');
 
-                $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">(optional)</span>', array('maxlength' => 255));
+                $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">optional</span>', array('maxlength' => 255));
                 $form->applyFilter('writer_phone', 'trim');
 
             $form->addElement("html", '</div>');
@@ -277,7 +277,7 @@ function buildWriteForm($options) {
 
             $form->addElement("html", '<div class="large-6 columns">');
 
-                $form->addElement('text', 'writer_address2', 'Address Line 2 <span class="optional-text">(optional)</span>', array('maxlength' => 255));
+                $form->addElement('text', 'writer_address2', 'Address Line 2 <span class="optional-text">optional</span>', array('maxlength' => 255));
                 $form->applyFilter('writer_address2', 'trim');
 
             $form->addElement("html", '</div>');
@@ -297,7 +297,7 @@ function buildWriteForm($options) {
             $form->addElement("html", '<div class="large-6 columns">');
 
                 # Call it state so that Google Toolbar (and presumably others) can auto-fill.
-                $form->addElement('text', 'state', 'County <span class="optional-text">(optional)</span>', array('maxlength' => 255));
+                $form->addElement('text', 'state', 'County <span class="optional-text">optional</span>', array('maxlength' => 255));
                 $form->applyFilter('state', 'trim');
 
             $form->addElement("html", '</div>');
