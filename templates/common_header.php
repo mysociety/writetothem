@@ -48,7 +48,7 @@ if (isset($values['cobrand']))
     <script>
         cxApi.setChosenVariation(
             1,
-            'MZNGqCKiReu3srj_0L4q7A'
+            'XHF3VzPlR2i_39Q5ASqoCw'
         );
     </script>
 
