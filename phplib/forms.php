@@ -71,9 +71,14 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
         $this->setElementTemplate('
                 <!-- BEGIN error -->
                 <div class="error-message">{error}</div>
+                <div class="error-element">
                 <!-- END error -->
 
                 <p><label>{label} {element}</label></p>
+
+                <!-- BEGIN error -->
+                </div>
+                <!-- END error -->
         ');
 
         $this->setRequiredNoteTemplate("");
