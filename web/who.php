@@ -48,6 +48,11 @@ $fyr_headings = array();
 $fyr_rep_descs = array(); 
 $fyr_rep_lists = array();
 
+// UCL A/B Testing
+require_once "ucl_ab_test.php";
+$UCLTest = new UCLTest;
+$UCLTest->set_postcode($fyr_postcode);
+
 foreach ($va_display_order as $va_types) {
     $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
     if (!is_array($va_types)) $va_types = array($va_types);
@@ -324,6 +329,27 @@ function display_reps($va_type, $representatives, $va_area, $options) {
         $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
         if (array_key_exists('party', $rep_info)) {
             $rep_list .= ' <span class="party">(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</span>';
+        }
+
+        // UCL A/B Testing
+        global $UCLTest;
+        if ($va_type == 'WMC')
+        {
+            if ($UCLTest->show_numbers)
+            {
+                $rep_message_count = $UCLTest->get_rep_message_count($rep_specificid);
+                $UCLTest->set_message_count($rep_message_count);
+                $rep_list .= '<br>' . $rep_message_count . ' ';
+                if ($rep_message_count == 1)
+                {
+                    $rep_list .= 'person has';
+                }
+                else
+                {
+                    $rep_list .= 'people have';
+                }
+                $rep_list .= ' already written to ' . htmlspecialchars($rep_info['name']) . ' using WriteToThem.';
+            }
         }
     }
 

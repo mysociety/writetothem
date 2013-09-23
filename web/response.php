@@ -59,6 +59,15 @@ $msg_info = msg_admin_get_message($msg_id);
 msg_check_error($msg_info);
 $values = array_merge($msg_info, $values);
 
+// UCL A/B Testing
+require_once "ucl_ab_test.php";
+$UCLTest = new UCLTest($msg_id);
+require_once "../commonlib/phplib/survey.php";
+list($values['user_code'], $values['auth_signature']) = survey_sign_email_address($values['sender_email']);
+$values['done_survey'] = survey_check_if_already_done($values['user_code'], $values['auth_signature']);
+$values['test_token'] = $UCLTest->test_token;
+$values['return_url'] = OPTION_BASE_URL;
+
 // 0 is the responsiveness question
 $result = msg_record_questionnaire_answer($token, 0, $answer);
 msg_check_error($result);
