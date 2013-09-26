@@ -7112,3 +7112,11 @@ form#writeForm input[type="text"][disabled] {
   border-color: #e9e9e9;
   color: #666;
 }
+form#writeForm .error-element input,
+form#writeForm .error-element textarea {
+  border-color: #c63a3a;
+}
+form#writeForm .error-element label {
+  font-weight: 600;
+  color: #c63a3a;
+}

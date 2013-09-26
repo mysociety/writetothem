@@ -719,4 +719,16 @@ form#writeForm {
         border-color: #e9e9e9;
         color: #666;
     }
+
+    .error-element {
+        input,
+        textarea {
+            border-color: $alert-color;
+        }
+        label {
+            font-weight: 600;
+            color: $alert-color;
+
+        }
+    }
 }
