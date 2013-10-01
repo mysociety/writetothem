@@ -348,7 +348,7 @@ function display_reps($va_type, $representatives, $va_area, $options) {
                 {
                     $rep_list .= 'people have';
                 }
-                $rep_list .= ' already written to ' . htmlspecialchars($rep_info['name']) . ' using WriteToThem.';
+                $rep_list .= ' already written to ' . htmlspecialchars($rep_info['name']) . ' using WriteToThem in the last 12 months.';
             }
         }
     }

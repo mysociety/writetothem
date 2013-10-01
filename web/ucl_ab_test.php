@@ -41,12 +41,20 @@ class UCLTest
         }
     }
 
-    public function get_rep_message_count($recipient_id)
+    public function get_rep_live_message_count($recipient_id)
     {
         $pg_count = pg_query($this->pg_connection, "SELECT COUNT(*) FROM message WHERE dispatched*'1 second'::interval+'epoch'::timestamp >= now()-'1 year'::interval AND recipient_id=" . $recipient_id);
         $pg_count_object = pg_fetch_object($pg_count);
 
         return $pg_count_object->count;
+    }
+
+    public function get_rep_message_count($recipient_id)
+    {
+        $pg_count = pg_query($this->pg_connection, "SELECT message_count FROM ucl_message_counts WHERE representative_id=" . $recipient_id);
+        $pg_count_object = pg_fetch_object($pg_count);
+
+        return $pg_count_object->message_count;
     }
 
     public function set_postcode($postcode)

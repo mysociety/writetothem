@@ -229,6 +229,22 @@ create table confirmation_mail_autoreply (
 );
 
 --
+-- Name: ucl_message_counts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE ucl_message_counts (
+    representative_id integer,
+    message_count integer
+);
+
+--
+-- Name: ucl_message_counts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY ucl_message_counts
+    ADD CONSTRAINT ucl_message_counts_pkey PRIMARY KEY (representative_id);
+
+--
 -- Name: ucl_testing_log; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 

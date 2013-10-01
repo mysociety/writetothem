@@ -66,7 +66,7 @@ require_once "../commonlib/phplib/survey.php";
 list($values['user_code'], $values['auth_signature']) = survey_sign_email_address($values['sender_email']);
 $values['done_survey'] = survey_check_if_already_done($values['user_code'], $values['auth_signature']);
 $values['test_token'] = $UCLTest->test_token;
-$values['return_url'] = OPTION_BASE_URL;
+$values['return_url'] = OPTION_BASE_URL . '/ucl-thanks.php';
 
 // 0 is the responsiveness question
 $result = msg_record_questionnaire_answer($token, 0, $answer);
