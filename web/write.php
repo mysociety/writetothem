@@ -485,9 +485,6 @@ function submitFaxes() {
             template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
         }
 
-        // UCL A/B Testing
-        $UCLTest->set_group_id($grpid);
-
     } else {
         $no_questionnaire = false;
         $msgid_list = array($msgid);

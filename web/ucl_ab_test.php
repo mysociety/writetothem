@@ -72,11 +72,6 @@ class UCLTest
         pg_query($this->pg_connection, "UPDATE ucl_testing_log SET message_id = '" . pg_escape_string($id) . "' WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
     }
 
-    public function set_group_id($id)
-    {
-        pg_query($this->pg_connection, "UPDATE ucl_testing_log SET group_id = '" . pg_escape_string($id) . "' WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
-    }
-
     public function record_compose_visit()
     {
         pg_query($this->pg_connection, "UPDATE ucl_testing_log SET visited_compose_page = TRUE WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
