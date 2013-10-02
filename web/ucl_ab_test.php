@@ -54,7 +54,7 @@ class UCLTest
         $pg_count = pg_query($this->pg_connection, "SELECT message_count FROM ucl_message_counts WHERE representative_id=" . $recipient_id);
         $pg_count_object = pg_fetch_object($pg_count);
 
-        return $pg_count_object->message_count;
+        return $pg_count_object !== FALSE ? $pg_count_object->message_count : 0;
     }
 
     public function set_postcode($postcode)
