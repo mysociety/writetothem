@@ -1,8 +1,10 @@
 <?php
 
-if ( ! $values['done_survey']):
+global $UCLTest;
 
 $UCLTest->record_survey_view();
+
+if ( ! $values['done_survey']):
 
 ?>
 
@@ -160,5 +162,3 @@ $UCLTest->record_survey_view();
 <?php endif; ?>
 
 <p>&mdash; The WriteToThem.com team</p>
-
-<? template_draw('footer', $values); ?>
