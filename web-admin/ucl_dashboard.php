@@ -123,32 +123,32 @@ $b_submitted_object = pg_fetch_object($b_submitted);
     <tr>
         <th scope="row">Visits</th>
         <td><?=$total_visits_object->count?></td>
-        <td><?=$a_visits_object->count?></td>
-        <td><?=$b_visits_object->count?></td>
+        <td><?=$a_visits_object->count?> (<?=round($a_visits_object->count/$total_visits_object->count*100)?>%)</td>
+        <td><?=$b_visits_object->count?> (<?=round($b_visits_object->count/$total_visits_object->count*100)?>%)</td>
     </tr>
     <tr>
         <th scope="row">Visited Compose Page</th>
         <td><?=$total_composed_object->count?></td>
-        <td><?=$a_composed_object->count?></td>
-        <td><?=$b_composed_object->count?></td>
+        <td><?=$a_composed_object->count?> (<?=round($a_composed_object->count/$total_composed_object->count*100)?>%)</td>
+        <td><?=$b_composed_object->count?> (<?=round($b_composed_object->count/$total_composed_object->count*100)?>%)</td>
     </tr>
     <tr>
         <th scope="row">Previewed Message</th>
         <td><?=$total_preview_object->count?></td>
-        <td><?=$a_preview_object->count?></td>
-        <td><?=$b_preview_object->count?></td>
+        <td><?=$a_preview_object->count?> (<?=round($a_preview_object->count/$total_preview_object->count*100)?>%)</td>
+        <td><?=$b_preview_object->count?> (<?=round($b_preview_object->count/$total_preview_object->count*100)?>%)</td>
     </tr>
     <tr>
         <th scope="row">Sent Message</th>
         <td><?=$total_sent_object->count?></td>
-        <td><?=$a_sent_object->count?></td>
-        <td><?=$b_sent_object->count?></td>
+        <td><?=$a_sent_object->count?> (<?=round($a_sent_object->count/$total_sent_object->count*100)?>%)</td>
+        <td><?=$b_sent_object->count?> (<?=round($b_sent_object->count/$total_sent_object->count*100)?>%)</td>
     </tr>
     <tr>
         <th scope="row">Confirmed Message</th>
         <td><?=$total_confirmed_object->count?></td>
-        <td><?=$a_confirmed_object->count?></td>
-        <td><?=$b_confirmed_object->count?></td>
+        <td><?=$a_confirmed_object->count?> (<?=round($a_confirmed_object->count/$total_confirmed_object->count*100)?>%)</td>
+        <td><?=$b_confirmed_object->count?> (<?=round($b_confirmed_object->count/$total_confirmed_object->count*100)?>%)</td>
     </tr>
     <tr>
         <th scope="row">Shown Survey</th>
@@ -164,4 +164,4 @@ $b_submitted_object = pg_fetch_object($b_submitted);
     </tr>
 </table>
 
-<p><small>These numbers represent those users who (in the test log) have completed all steps to that point.</small></p>
+<p><small>These numbers represent those users who (in the test log) have completed all steps to that point. Numbers are rounded, and may not add exactly to 100%.</small></p>
