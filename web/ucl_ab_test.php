@@ -6,8 +6,6 @@
  * Functionality to run A/B testing on user behaviour as part of a UCL project.
  */
 
-ini_set('display_errors', 1);
-
 class UCLTest
 {
 
@@ -95,6 +93,11 @@ class UCLTest
     public function record_survey_view()
     {
         pg_query($this->pg_connection, "UPDATE ucl_testing_log SET survey_visited = TRUE WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
+    }
+
+    public function record_survey_submitted()
+    {
+        pg_query($this->pg_connection, "UPDATE ucl_testing_log SET survey_submitted = TRUE WHERE test_token = '" . pg_escape_string($this->test_token) . "'");
     }
 
     private function new_test()
