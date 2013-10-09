@@ -140,7 +140,7 @@ function fyr_rate_limit($important_vars) {
  * Is URL an internal HTTP URL? */
 function fyr_is_internal_url($url) {
     /* XXX nasty and approximate; should parse properly */
-    if (preg_match('#^http://([a-z0-9-]+\.)*\Q' . OPTION_WEB_DOMAIN .  '\E/#i', $url)) {
+    if (preg_match('#^https?://([a-z0-9-]+\.)*\Q' . OPTION_WEB_DOMAIN .  '\E/#i', $url)) {
         return true;
     } else {
         return false;
