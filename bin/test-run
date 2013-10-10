@@ -86,7 +86,7 @@ sub set_base_url($) {
     }
 }
 set_base_url('');
-die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
+die "domain conf not consistent. Expected " . $base_url . ', got ' . mySociety::Config::get('BASE_URL') if (mySociety::Config::get('BASE_URL') ne $base_url);
 
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
