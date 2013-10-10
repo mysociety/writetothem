@@ -79,7 +79,11 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $base_url;
 sub set_base_url($) {
     my $cobrand = shift;
-    $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    if (mySociety::Config::get('HTTPS_ONLY')) {
+        $base_url = "https://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    } else {
+        $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    }
 }
 set_base_url('');
 die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
