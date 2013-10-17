@@ -79,7 +79,11 @@ sub base_url_for_emails {
         return mySociety::Config::get('BASE_URL');
     }
     if ( !$handle || ! $handle->can('base_url_for_emails')){
-        return "http://" . $cobrand . "." . mySociety::Config::get('WEB_DOMAIN');
+        if ( mySociety::Config::get('HTTPS_ONLY') ) {
+            return "https://" . $cobrand . "." . mySociety::Config::get('WEB_DOMAIN');
+        } else {
+            return "http://" . $cobrand . "." . mySociety::Config::get('WEB_DOMAIN');
+        }
     } else {
         return $handle->base_url_for_emails($cocode);
     }
