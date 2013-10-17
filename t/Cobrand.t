@@ -35,7 +35,11 @@ sub test_base_url_for_emails {
 
     $cobrand = 'animalaid';
     $base_url = FYR::Cobrand::base_url_for_emails($cobrand);
-    is('http://animalaid.' . mySociety::Config::get('WEB_DOMAIN'), $base_url, "should return a cobrand subdomain if a cobrand exists but doesn't define its own function");
+    if ( mySociety::Config::get('HTTPS_ONLY') ) {
+        is('https://animalaid.' . mySociety::Config::get('WEB_DOMAIN'), $base_url, "should return a cobrand subdomain if a cobrand exists but doesn't define its own function");
+    } else {
+        is('http://animalaid.' . mySociety::Config::get('WEB_DOMAIN'), $base_url, "should return a cobrand subdomain if a cobrand exists but doesn't define its own function");
+    }
 
     $cobrand = undef;
     $base_url = FYR::Cobrand::base_url_for_emails($cobrand);
