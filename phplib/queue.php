@@ -30,9 +30,13 @@ function msg_check_error($data) {
         err($error_message);
 }
 
-if (defined('OPTION_FYR_QUEUE_URL'))
+if (defined('OPTION_FYR_QUEUE_URL')) {
     $msg_client = new RABX_Client(OPTION_FYR_QUEUE_URL, 
         defined('OPTION_FYR_QUEUE_USERPWD') ? OPTION_FYR_QUEUE_USERPWD : null);
+    if (OPTION_HTTPS_ONLY && OPTION_WEB_DOMAIN == 'writetothem.test.mysociety.org') { # If in test
+        curl_setopt($msg_client->ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    }
+}
 
 define('FYR_QUEUE_MESSAGE_ALREADY_QUEUED', 4001);        /*    Tried to send message which has already been sent.  */
 define('FYR_QUEUE_MESSAGE_ALREADY_CONFIRMED', 4002);        /*    Tried to confirm message which has already been confirmed.  */
