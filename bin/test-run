@@ -79,7 +79,7 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $base_url;
 sub set_base_url($) {
     my $cobrand = shift;
-    if (mySociety::Config::get('HTTPS_ONLY') eq 1) {
+    if (mySociety::Config::get('HTTPS_ONLY')) {
         $base_url = "https://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
     } else {
         $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
@@ -99,7 +99,7 @@ our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy',
 
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
 
-if (mySociety::Config::get('HTTPS_ONLY') eq 1) {
+if (mySociety::Config::get('HTTPS_ONLY')) {
     $base_url =~ m#^https://(.+)/?$#;
     $wth->browser_credentials("$1:443", "$1 admin pages", $admin_auth_user, $admin_auth_password);
 } else {
