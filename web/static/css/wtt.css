@@ -6893,9 +6893,7 @@ textarea {
 }
 
 h3.rep-heading {
-  text-transform: uppercase;
-  font-size: emcalc(14);
-  font-weight: 400;
+  font-size: 1.5em;
   padding-top: 0.42857em;
   padding-bottom: 0.42857em;
   margin-top: 0.71429em;
