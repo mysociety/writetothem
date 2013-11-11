@@ -107,7 +107,7 @@ if ( ! isset($values['skip_header']) ):
                 </ul>
             </nav>
         </div>
-        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="width:250px;height:70px;" alt="WriteToThem"></a>
     </div>
 </div>
 
