@@ -1,19 +1,18 @@
-<div id="preview">
-  <div id="preview_to">
-    <b>FOR THE ATTENTION OF:<br><br>
-    <?=$values['rep_text']?><br>
-    <?=$values['voting_area']['name']?><br><br>
-    <?=$values['date']?></b>
-  </div>
-  <div id="preview_from">
-    <?=htmlspecialchars($values['name'])?><br>
+<div class="preview-to">
+    <p>Attn: <?=$values['rep_text']?><br>
+    <?=$values['voting_area']['name']?></p>
+    <p><?=$values['date']?></p>
+</div>
+<div class="preview-from">
+    <p><?=htmlspecialchars($values['name'])?><br>
     <?=htmlspecialchars($values['writer_address1'])?><br>
     <?=htmlspecialchars($values['writer_address2'])?><? if ($values['writer_address2']) print "<br>";?>
     <?=htmlspecialchars($values['writer_town'])?><br>
     <?=htmlspecialchars($values['state'])?><? if ($values['state']) print "<br>";?>
-    <?=htmlspecialchars($values['pc'])?><br><br>
-    <?=htmlspecialchars($values['writer_email'])?><br>
-    <?=htmlspecialchars($values['writer_phone'])?>
-  </div>
-  <p><?= $values['body_indented']?></p>
+    <?=htmlspecialchars($values['pc'])?></p>
+    <p><?=htmlspecialchars($values['writer_email'])?><br>
+    <?=htmlspecialchars($values['writer_phone'])?></p>
+</div>
+<div class="preview-message">
+    <p><?= $values['body_indented']?></p>
 </div>

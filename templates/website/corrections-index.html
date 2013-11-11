@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $va_type_name, $va_rep_name, $va_rep_name_plural;
 $va_info = $values['va_info'];
@@ -13,56 +13,69 @@ template_draw('header', $values);
 
 ?>
 
-<h2><?=$values['title'] ?></h2>
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-<p>Thank you for helping us keep up to date.</p>
+        <h2><?=$name . " " . $type_name ." Corrections"?></h2>
 
-<? if (count($values['reps_info']) != 1) { ?>
-<p>Below are the <?=$rep_name_plural ?> from <strong><?=$name ?>
- <?=$type_name?></strong>
-in <?=$values['parent_info']['name']?>.
-Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$rep_name ?> in this <?=$type_name ?> at all.</p>
-<? } else { ?>
-<p>Below is the <?=$rep_name ?> from <strong><?=$name ?></strong>.
-Please edit their details if they are incorrect.</p>
-<? } ?>
-<form action="corrections" method="post">
-<?php
+        <p>Thank you for helping us keep up to date.</p>
 
-if (count($values['reps_info'])) {
-    print '<table style="margin: 0 auto" border="1" cellpadding="3" cellspacing="0">
-    <tr><th>Current details</th><th>Name</th><th>Party</th>';
-    if (count($values['reps_info']) > 1) print '<th>Delete?</th>';
-    print '</tr>';
-    foreach ($values['reps_info'] as $id => $rep) {
-        print '<tr><td align="right">'.$rep['name'].', '.$rep['party'].':</td><td><input type="text" name="name['.$id.']" size="20" value="'.$rep['name'].'"></td><td><input type="text" name="party['.$id.']" size="20" value="'.$rep['party'].'"></td>';
-        if (count($values['reps_info']) > 1) {
-            print '<td align="center"><input type="checkbox" name="delete['.$id.']" value="1"></td>';
-        }
-        print '</tr>';
-    }
-    print '</table>';
-}
-?>
+        <?php if (count($values['reps_info']) != 1): ?>
+        <p>Below are the <?=$rep_name_plural ?> from <strong><?=$name ?>
+            <?=$type_name?></strong>
+            in <?=$values['parent_info']['name']?>.
+            Please edit any that are incorrect, or select the checkbox for anyone who isn't a <?=$rep_name ?> in this <?=$type_name ?> at all.</p>
+        <?php else: ?>
+        <p>Below is the <?=$rep_name ?> from <strong><?=$name ?></strong>.
+            Please edit their details if they are incorrect.</p>
+        <?php endif; ?>
 
-<p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
+        <form action="corrections" method="post">
+            <?php
 
-<label for="newname">Missing <?=$rep_name ?>'s name:</label> <input type="text" id="newname" name="new[name]"> and <label for="newparty">party:</label> <input type="text" id="newparty" name="new[party]">
+            if (count($values['reps_info'])) {
+                print '<table>
+                <tr><th>Current details</th><th>Name</th><th>Party</th>';
+                if (count($values['reps_info']) > 1) print '<th>Delete?</th>';
+                print '</tr>';
+                foreach ($values['reps_info'] as $id => $rep) {
+                    print '<tr><td>'.$rep['name'].', '.$rep['party'].'</td><td><input type="text" name="name['.$id.']" size="20" value="'.$rep['name'].'"></td><td><input type="text" name="party['.$id.']" size="20" value="'.$rep['party'].'"></td>';
+                    if (count($values['reps_info']) > 1) {
+                        print '<td align="center"><input type="checkbox" name="delete['.$id.']" value="1"></td>';
+                    }
+                    print '</tr>';
+                }
+                print '</table>';
+            }
+            ?>
 
-<p>If you looked up this information on the web, please tell us the address of the page where you found it:
-<input type="text" name="url" id="url" value="http://" size="50"></p>
+        <p>Alternatively, if this <?=$type_name ?> is missing a <?=$rep_name ?>, please fill in their details below:</p>
 
-<p>Do you have any other information that would be useful to us? (Optional)<br>
-<textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
+        <div class="panel radius">
 
-<p>Lastly, you may optionally give us your email address, so we can contact you if we have any queries with your submission:
-<input type="text" name="email" id="email" value="" size="50"></p>
+            <p><label for="newname">Missing <?=$rep_name ?>'s name:</label>
+            <input type="text" id="newname" name="new[name]"></p>
 
-<p align="right">
-<input type="submit" value="Submit my changes">
-<input type="hidden" name="id" value="<?=$values['id'] ?>">
-</p>
-</form>
+            <p><label for="newparty">Missing <?=$rep_name ?>'s party:</label>
+            <input type="text" id="newparty" name="new[party]"></p>
 
-<?
-template_draw('footer', $values); ?>
+            <p><label for="url">If you looked up this information on the web, please tell us the address of the page where you found it:</label>
+            <input type="text" name="url" id="url" value="http://" size="50"></p>
+
+            <p><label for="notes">Do you have any other information that would be useful to us? (Optional):</label>
+            <textarea name="notes" id="notes" rows="8" cols="50"></textarea></p>
+
+            <p><label name="email">Lastly, you may (optionally) give us your email address, so we can contact you if we have any questions about your submission:</label>
+            <input type="text" name="email" id="email" value="" size="50"></p>
+
+            <input type="hidden" name="id" value="<?=$values['id'] ?>">
+
+            <p><input type="submit" class="button success" value="Submit my changes"></p>
+
+        </div>
+
+    </form>
+
+</div>
+
+<?php template_draw('footer', $values);

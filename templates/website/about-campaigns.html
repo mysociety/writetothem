@@ -1,12 +1,27 @@
-<? $values['title'] = "Running a campaign";
-template_draw('header', $values); ?>
+<?php
 
-<h2>Running a campaign</h2>
+$values['title'] = "Running a campaign";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Running a campaign</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
 
 <p>We quite often get emails from campaign groups asking how they can use our site to mobilise support. Here&rsquo;s how.</p>
- 
+
 <p>Firstly, here are the ways that WriteToThem <i>can&rsquo;t</i> help:</p>
-<ul> 
+<ul>
 <li> WriteToThem is <b>not a petitioning site</b>. If you want to collect signatures on a petition and then send it to an MP, we suggest you use one of the many free online petition websites. (We might develop this service in future, but at the moment it&rsquo;s not available.)</li>
 
 <li> WriteToThem <b>does not give out MPs&rsquo; contact details</b>, sorry. You can obtain direct email and postal addresses for most MPs from <a href="http://www.parliament.uk/">Parliament&rsquo;s website</a>.</li>
@@ -20,4 +35,16 @@ template_draw('header', $values); ?>
 
 <p>For a more seamless experience you might want to <a href="/about-branded">create your own branded webpage for the campaign</a>, and there&rsquo;s code available to help you do that. Don&rsquo;t be daunted &ndash; you don&rsquo;t need to be a programmer to install it, and there are easy step-by-step instructions.</p>
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

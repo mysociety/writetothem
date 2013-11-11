@@ -1,61 +1,85 @@
-<? $values['title'] = "Now select the representative you&rsquo;d like to contact";
+<?php
+
+$values['title'] = "Choose your representative";
 $values['robots'] = 'index, nofollow';
+
 template_draw('header', $values);
+
 ?>
 
-<?= fyr_breadcrumbs(2) ?>
+<div class="row flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
 
-<h2><?=$values['title'] ?></h2>
+        <?=fyr_breadcrumbs(2)?>
 
-<?  if (!sizeof($values['reps'])) { ?>
-    <?  if ($values['all_url']) { ?>
-<p><big><em>Sorry, but you don't have any representatives of this type.
-Instead, <a href="<?=$values['all_url']?>">show all your representatives</a>.
-</em></big></p>
-    <? } else { ?>
-<p><big><em>Sorry, but we've not got any data for your area. Please
-<a href="/about-contact">contact us</a> and let us know that this matters
-to you.</em></big></p>
-    <? } ?>
-<? } else {
-    $cols = sizeof($values['reps']);
-?>
+    </div>
+</div>
 
-<?  if ($values['all_url']) { ?>
-<p>You have several elected representatives at different levels of government.
-One level is shown here, or you can 
-<a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
-<? } else { ?>
-<p>You have several elected representatives at different levels of government.
-<br><strong>If you aren't sure who to contact, please read <a href="about-yourrep">this advice</a>.</strong></p>
-<? } ?>
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-<table id="repstable" cellpadding="8" cellspacing="0" border="0">
-    <tr valign="middle">
-<?
-$c = 0;
-$pc = round(100/$cols);
-foreach ($values['headings'] as $row) {
-    print '<th scope="col" class="';
-    print ($c) ? 'maincol' : 'firstcol';
-    print '" width="' . $pc . '%">' . $row . '</th>';
-    $c++;
-}
-?>
-    </tr>
-    <tr valign="top">
-<?
-$c = 0;
-foreach ($values['reps'] as $row) {
-    print '<td class="';
-    print ($c) ? 'maincol' : 'firstcol';
-    print '">' . $row . '</td>';
-    $c++;
-}
-?>
-</tr>
-</table>
+        <h2><?=$values['title'] ?></h2>
 
-<? }
+        <?php if (sizeof($values['reps']) > 0): ?>
 
-template_draw('footer', $values); ?>
+            <?php if ($values['all_url']): ?>
+                <p>You have several elected representatives at different levels of government.
+                One level is shown here, or you can
+                <a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
+            <?php else: ?>
+                <p>You have several elected representatives at different levels of government.<br>
+                <small><a href="about-yourrep">Not sure who to contact?</a></small></p>
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="panel radius write-content">
+
+            <?php if (sizeof($values['reps']) === 0): ?>
+
+                <?php if ($values['all_url']): ?>
+                    <p><big>Sorry, but you don't have any representatives of this type.
+                    Instead, <a href="<?=$values['all_url']?>">show all your representatives</a>.
+                    </big></p>
+                <?php else: ?>
+                    <p><big>Sorry, but we've not got any data for your area. Please
+                    <a href="/about-contact">contact us</a> and let us know that this matters
+                    to you.</big></p>
+                <? endif; ?>
+
+            <?php else: ?>
+
+                <?php foreach ($values['reps'] as $key => $rep): ?>
+
+                    <h3 class="rep-heading"><?=$values['headings'][$key]?></h3>
+
+                    <div class="row">
+
+                        <div class="large-3 columns rep-blurb">
+                            <?=$values['blurbs'][$key]?>
+                        </div>
+
+                        <div class="large-4 large-offset-1 columns rep-list">
+                            <?=$rep?>
+                        </div>
+
+                        <div class="large-4 columns rep-more">
+                            <?=$values['more'][$key]?>
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

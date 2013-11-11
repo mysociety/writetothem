@@ -2,12 +2,12 @@
 /*
  * fyr.php:
  * General purpose functions specific to FYR.
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org; WWW: http://www.mysociety.org
  *
  * $Id: fyr.php,v 1.77 2009-12-11 16:52:30 matthew Exp $
- * 
+ *
  */
 
 // Load configuration file
@@ -24,7 +24,7 @@ require_once $dir . "/../commonlib/phplib/votingarea.php";
 require_once $dir . "/../phplib/cobrand.php";
 
 // Types which require no postcode authentication (e.g. House of Lords)
-$postcodeless_child_types = array('HOC'); 
+$postcodeless_child_types = array('HOC');
 
 /* Output buffering: PHP's output buffering is broken, because it does not
  * affect headers. However, it's worth using it anyway, because in the common
@@ -75,7 +75,7 @@ function fyr_display_error($num, $message, $file, $line, $context) {
 
 err_set_handler_display('fyr_display_error');
 
-/* fyr_get_host 
+/* fyr_get_host
  * Return the host from which a page was requested, or an
  * empty string if the host is not available
  */
@@ -88,7 +88,7 @@ function fyr_get_host() {
 }
 
 /* fyr_format_message_body_for_preview MESSAGE_BODY
- * Format a message body for HTML preview - handle leading spaces, 
+ * Format a message body for HTML preview - handle leading spaces,
  * add HTML linebreaks and convert special characters to entities. */
 function fyr_format_message_body_for_preview($message_body) {
   /* Horrid. We need to turn leading spaces into non-breaking spaces, so
@@ -177,7 +177,7 @@ function fyr_parse_area_type_list($types) {
     global $va_aliases;
     if (array_key_exists($types, $va_aliases))
         $types = join(",",$va_aliases[$types]);
-   
+
     global $va_child_types, $va_inside;
     $a = array();
     $n = 0;
@@ -192,7 +192,7 @@ function fyr_parse_area_type_list($types) {
         // add sibling types
         $parent = $va_inside[$t];
         foreach ($va_inside as $k=>$v) {
-            if ($v == $parent) 
+            if ($v == $parent)
                 $a[$k] =1;
         }
     }
@@ -214,9 +214,9 @@ function fyr_describe_area_type_list($area_types) {
     // Most aggregate types
     $ordered_descs_array = array(
         'Councillors' => $va_aliases['council'],
-        '<acronym title="Member of Parliament">MP</acronym>' => array('WMC'),
-        '<acronym title="Members of the European Parliament">MEPs</acronym>' => array('EUR'),
-        '<acronym title="Members of the Scottish Parliament">MSPs</acronym>' => array('SPE', 'SPC'),
+        '<abbr title="Member of Parliament">MP</abbr>' => array('WMC'),
+        '<abbr title="Members of the European Parliament">MEPs</abbr>' => array('EUR'),
+        '<abbr title="Members of the Scottish Parliament">MSPs</abbr>' => array('SPE', 'SPC'),
     );
     foreach ($ordered_descs_array as $k => $v) {
         if (count(array_diff($v, $area_types)) == 0) {
@@ -243,7 +243,7 @@ function fyr_describe_area_type_list($area_types) {
         if (count($am) > 1)
             $am_str .= " and ";
         $am_str .= $am[count($am) - 1];
-        $am_str .= ' <acronym title="Assembly Members">AMs</acronym>';
+        $am_str .= ' <abbr title="Assembly Members">AMs</abbr>';
         $ret[] = $am_str;
     }
 
@@ -269,33 +269,30 @@ function fyr_breadcrumbs($num, $type = 'default') {
     if ($type == 'default') {
         $steps = array(
                     'Enter postcode',
-                    'Pick representative',
+                    'Choose representative',
                     'Write message',
-                    'Check message',
-                    'Confirm email'
+                    'Send message'
                 );
     } elseif ($type == 'lords') {
         $steps = array(
                     'Choose a Lord',
                     'Write message',
-                    'Check message',
-                    'Confirm email'
+                    'Send message'
                 );
     }
     /* Ideally we'd like the numbers to appear as a result of this being a
      * list, but that's beyond CSS's tiny capabilities, so put them in
      * explicitly. That means that two numbers will appear in non-CSS
      * browsers. */
-    $str = '<ol id="breadcrumbs">';
+    $str = '<ol class="small-block-grid-' . count($steps) . '">';
     for ($i = 0; $i < sizeof($steps); ++$i) {
-        if ($i == $num - 1)
-            $str .= "<li class=\"hilight\"><em>";
+        if ($i < $num - 1)
+            $str .= "<li class=\"done\">";
+        else if ($i == $num - 1)
+            $str .= "<li class=\"current\">";
         else
             $str .= "<li>";
-        $str .= '<!--[if lte IE 6]>' . ($i+1) . '. <![endif]-->';
         $str .= htmlspecialchars($steps[$i]);
-        if ($i == $num - 1)
-            $str .= "</em>";
         $str .= "</li>";
     }
     $str .= "</ol>";
@@ -373,7 +370,7 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $vas) {
-    if (!isset($area_reps[11811]) && !isset($area_reps[11814])) 
+    if (!isset($area_reps[11811]) && !isset($area_reps[11814]))
         return array();
 
     if (isset($area_reps[11814])) { # South West Conservative MEPs

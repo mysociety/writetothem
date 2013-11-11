@@ -1,7 +1,22 @@
-<? $values['title'] = "Privacy and cookies";
-    template_draw('header', $values); ?>
+<?php
 
-<h2>Privacy and cookies</h2>
+$values['title'] = "Privacy and cookies";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Privacy and cookies</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
 
 <p><strong>Our use of your data, cookies, and external services: what you
 should know, and how to opt out if you want to.</strong></p>
@@ -81,7 +96,7 @@ back from them.
 
 <h3>Measuring website usage (Google Analytics)</h3>
 
-We use Google Analytics to collect information about how people use this site. We do this to make sure it’s meeting its users’ needs and to understand how we could do it better. Google Analytics stores information such as what pages you visit, how long you are on the site, how you got here, what you click on, and information about your web browser. IP addresses are masked (only a portion is stored) and personal information is only reported in aggregate. We do not allow Google to use or share our analytics data for any purpose besides providing us with analytics information, and we recommend that any user of Google Analytics does the same.
+<p>We use Google Analytics to collect information about how people use this site. We do this to make sure it’s meeting its users’ needs and to understand how we could do it better. Google Analytics stores information such as what pages you visit, how long you are on the site, how you got here, what you click on, and information about your web browser. IP addresses are masked (only a portion is stored) and personal information is only reported in aggregate. We do not allow Google to use or share our analytics data for any purpose besides providing us with analytics information, and we recommend that any user of Google Analytics does the same.</p>
 
 <p>If you’re unhappy with data about your visit to be used in this way, you can install the <a href="http://tools.google.com/dlpage/gaoptout">official browser plugin for blocking Google Analytics</a>.
 
@@ -105,4 +120,16 @@ We use Google Analytics to collect information about how people use this site. W
 
 <p>Bits of wording taken from the <a href="http://gov.uk/help/cookies">gov.uk cookies page</a> (under the Open Government Licence).
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

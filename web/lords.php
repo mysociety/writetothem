@@ -44,9 +44,32 @@ if ($cocode)
 $values = array(
         "title" => "Email or fax a member of the House of Lords in the UK Parliament",
 );
+
 template_draw('header', $values);
 
-print fyr_breadcrumbs(1, 'lords');
+?>
+
+<div class="content">
+    <div class="row">
+        <div class="large-10 large-centered columns flow-breadcrumbs">
+
+			<?=fyr_breadcrumbs(1, 'lords')?>
+			
+		</div>
+    </div>
+    
+    <div class="row write-header">
+	    <div class="large-8 large-centered columns">
+	
+	        <h2>Which Lord would you like to write to?</h2>
+	
+	    </div>
+	</div>
+	
+	<div class="row">
+	    <div class="large-12 columns">
+		
+<?php
 
 // Date of birth
 if ($date = get_http_var('d')) {
@@ -199,9 +222,21 @@ if ($date = get_http_var('d')) {
 		}
 		print '</ul>';
 	}
+	
+	
 } else {
 	lords_form();
 }
+
+?>
+
+		</div>
+	</div>
+
+</div>
+
+<?php
+
 template_draw('footer', $values);
 
 # ---
@@ -209,102 +244,133 @@ template_draw('footer', $values);
 function lords_form($error = array()) {
 	global $form_extra;
 ?>
-<style type="text/css">
-ul#lordChoice li {
-	padding-top: 2em;
-}
-</style>
 
-<h2>Which Lord would you like to write to?</h2>
+	<p>WriteToThem <em>Lords edition</em> is an experiment. Lords do not have a duty to
+		reply to the public, and they are (obviously) not elected.
+		Nevertheless, they get to vote on things that affect all of us, so we
+		reckon they should at least be easy to contact.  It is best only to contact a
+		Lord about an issue they can help with or influence, which includes national
+		legislation and other issues Parliament deals with.
+		For more information, read our <a href="about-lords"><strong>Frequently Asked Questions</strong></a>.</p>
+	
+	<p>Lords do not have constituencies like MPs, so we need
+		different ways for you to find a Lord to contact. We hope you
+		like the methods we have come up with.</p>
+		
+    </div>
+</div>
 
-<p>WriteToThem <em>Lords edition</em> is an experiment. Lords do not have a duty to
-reply to the public, and they are (obviously) not elected.
-Nevertheless, they get to vote on things that affect all of us, so we
-reckon they should at least be easy to contact.  It is best only to contact a
-Lord about an issue they can help with or influence, which includes national
-legislation and other issues Parliament deals with.
-For more information, read our <a href="about-lords"><strong>Frequently Asked Questions</strong></a>.
-</p>
+<div class="row">
+    <div class="large-12 columns">
+    	<div class="panel radius write-content">
+    				
+			<form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
+			
+				<label for="s">Find a Lord interested in my <strong>topic</strong>:</label>
+				
+				<div class="row collapse">
+					<div class="small-10 columns">
+						<input type="text" name="s" id="s" value="<?=htmlentities(get_http_var('s')) ?>">
+					</div>
+					<div class="small-2 columns">
+						<input type="submit" class="button prefix success" value="Go">
+					</div>
+				</div>
+				
+				<input type="hidden" name="o" value="p">
+				<input type="hidden" name="house" value="2">
+				<input type="hidden" name="wtt" value="1">
+				
+				<?=$form_extra ?>
+				
+				<p><small><em>(uses <a href="http://www.theyworkforyou.com/">TheyWorkForYou</a>;
+				by words spoken in Parliament, nothing more)</em></small></p>
+			
+			</form>
+			
+			<hr>
+			
+			<?php if (isset($error['place'])): ?>
+			<div class="alert-box alert"><?=$error['place'] ?></div>
+			<? endif; ?>
+			
+			<form action="/lords" method="get" name="placeLordForm" id="placeLordForm">
+			
+				<label for="p">Find a Lord with some association with this <strong>place</strong>:</label>
+				
+				<div class="row collapse">
+					<div class="small-10 columns">
+						<input type="text" name="p" id="p" value="<?=htmlentities(get_http_var('p')) ?>">
+					</div>
+					<div class="small-2 columns">
+						<input type="submit" class="button prefix success" value="Go">
+					</div>
+				</div>
+				
+				<?=$form_extra ?>
+				
+				<p><small><em>e.g. they're Lord of there, or somewhere in that county, or they went to university there.</em></small></p>
+				
+			</form>
+			
+			<hr>
+			
+			<?php if (isset($error['date'])): ?>
+			<div class="alert-box alert"><?=$error['date'] ?></div>
+			<?php endif; ?>
+			
+			<form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
+			
+				<label for="d">Find a Lord who shares my <strong>birthday</strong>:</label>
+				
+				<div class="row collapse">
+					<div class="small-10 columns">
+						<input type="text" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>">
+					</div>
+					<div class="small-2 columns">
+						<input type="submit" class="button prefix success" value="Go">
+					</div>
+				</div>
 
-<p>Lords do not have constituencies like MPs, so we need
-different ways for you to find a Lord to contact. We hope you
-like the methods we have come up with. </p>
+				<?=$form_extra ?>
+			
+				<p><small><em>e.g. 19th September</em></small></p>
+				
+			</form>
 
 
-<ul id="lordChoice">
+			<? /*
+			<li>
+			<? if (isset($error['college'])) { ?>
+			<div id="error"><?=$error['college'] ?></div>
+			<?  } ?>
+			<form action="/lords" method="get" name="collegeLordForm" id="collegeLordForm">
+			Find a Lord who went to this Oxbridge <strong>college</strong>:
+			<input type="text" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
+			<select name="uni">
+			<option>Oxford
+			<option>Cambridge
+			</select>
+			<input type="submit" value="Go">
+			<?=$form_extra ?>
+			<br><small><em>e.g. Trinity College, Oxford</em></small>
+			</form>
+			*/ ?>
+			
+			<hr>
 
-<li>
-<form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
-Find a Lord interested in my <strong>topic</strong>:
-
-<input type="text" name="s" id="s" value="<?=htmlentities(get_http_var('s')) ?>" size="20">
-<input type="hidden" name="o" value="p">
-<input type="hidden" name="house" value="2">
-<input type="hidden" name="wtt" value="1">
-<input type="submit" value="Go">
-<?=$form_extra ?>
-<br><small><em>(uses <a href="http://www.theyworkforyou.com/">TheyWorkForYou</a>;
-by words spoken in Parliament, nothing more)</em></small>
-</form>
-</li>
-
-<li>
-<? if (isset($error['place'])) { ?>
-<div id="error"><?=$error['place'] ?></div>
-<?  } ?>
-<form action="/lords" method="get" name="placeLordForm" id="placeLordForm">
-
-Find a Lord with some association with this <strong>place</strong>:
-
-<input type="text" name="p" id="p" value="<?=htmlentities(get_http_var('p')) ?>" size="20">
-<input type="submit" value="Go">
-<?=$form_extra ?>
-<br><small><em>e.g. they're Lord of there, or somewhere in that county, or they went to university there.</em></small>
-</form>
-
-<li>
-<? if (isset($error['date'])) { ?>
-<div id="error"><?=$error['date'] ?></div>
-<?  } ?>
-<form action="/lords" method="get" name="dateLordForm" id="dateLordForm">
-Find a Lord who shares my <strong>birthday</strong>:
-
-<input type="text" name="d" id="d" value="<?=htmlentities(get_http_var('d')) ?>" size="20">
-<input type="submit" value="Go">
-<?=$form_extra ?>
-<br><small><em>e.g. 19th September</em></small>
-</form>
-
-
-<? /*
-<li>
-<? if (isset($error['college'])) { ?>
-<div id="error"><?=$error['college'] ?></div>
-<?  } ?>
-<form action="/lords" method="get" name="collegeLordForm" id="collegeLordForm">
-Find a Lord who went to this Oxbridge <strong>college</strong>:
-<input type="text" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
-<select name="uni">
-<option>Oxford
-<option>Cambridge
-</select>
-<input type="submit" value="Go">
-<?=$form_extra ?>
-<br><small><em>e.g. Trinity College, Oxford</em></small>
-</form>
-*/ ?>
-
-<li>
-<form action="/lords" method="get" name="randomLordForm" id="randomLordForm">
-I've <strong>no idea!</strong>
-Give me a
-<input type="hidden" name="random_lord" value="1">
-<input type="submit" value="Random Lord">
-<?=$form_extra ?>
-</form>
-</li>
-
-</ul>
+			<form action="/lords" method="get" name="randomLordForm" id="randomLordForm">
+			
+				<label>I've <strong>no idea!</strong></label>
+				
+				<input type="hidden" name="random_lord" value="1">
+				<input type="submit" class="button small success" value="Get a Random Lord">
+				
+				<?=$form_extra ?>
+				
+			</form>
+			
+		</div>
 
 <?
 }

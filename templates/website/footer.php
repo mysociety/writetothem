@@ -1,31 +1,53 @@
+<div class="row footer">
+    <div class="large-10 large-centered columns">
+        <div class="row">
+            <div class="footer-content">
+
+                <div class="large-6 columns">
+
+                    <ul class="inline-list footer-links-main">
+                        <li><a href="/about-qa">Help</a></li>
+                        <li><a href="/about-contact">Contact Us</a></li>
+                        <li><a href="/about-copyright">Copyright</a></li>
+                        <li><a href="/about-privacy">Privacy &amp; Cookies</a></li>
+                        <li><a href="/about-linktous">Link To Us</a></li>
+                        <li><a href="https://www.facebook.com/writetothem">Facebook</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="large-6 columns">
+
+                    <ul class="inline-list footer-links-credits">
+                        <li><a href="/about-us">Built by mySociety</a></li>
+                        <li><a href="/about-copyright">Data by GovEval</a></li>
+                        <li><a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a></li>
+                        <?php if(isset($values['credit'])) echo '<li>' . $values['credit'] . '</li>'; ?>
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<div id="footer">
-The new FaxYourMP.  
-<a href="/about-us">Built by mySociety</a>.  
-<a href="/about-copyright">Data by GovEval</a>.
-<a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a>.
-<br>
 
-<? $links = array(
-    '/about-qa'=>'Help',
-    '/about-contact' => 'Contact WriteToThem.com',
-    /* '/about-guidelines' => 'Guidelines for Campaigners', */  /* we don't get much campaign abuse any more, so prominent link not so needed? */
-    '/lords' => 'Lords',
-    '/stats' => 'Statistics',
-    '/about-linktous' => 'Link to us',
-    '/about-copyright' => 'Copyright', /* for GNU Affero GPL */
-    '/about-privacy' => 'Privacy and Cookies',
-);
-foreach ($links as $uri => $text) {
-    $f = '';
-    if ($_SERVER['REQUEST_URI'] != $uri)
-        $f .= '<a href="' . $uri . '">';
-    $f .= $text;
-    if ($_SERVER['REQUEST_URI'] != $uri)
-        $f .= '</a>';
-    $footer[] = $f;
-}
-print join(' | ', $footer);
-echo '</div>';
+</div>
+</div>
+</div>
 
-echo '</body></html>';
+<script>
+    document.write('<script src=' +
+    ('__proto__' in {} ? 'static/js/vendor/zepto' : 'static/js/vendor/jquery') +
+    '.js><\/script>')
+</script>
+
+<script src="static/js/foundation/foundation.js"></script>
+<script src="static/js/foundation/foundation.interchange.js"></script>
+
+<script>
+    $(document).foundation();
+</script>
+
+</body>
+</html>

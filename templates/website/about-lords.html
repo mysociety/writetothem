@@ -1,5 +1,22 @@
-<? $values['title'] = "House of Lords"; template_draw('header', $values);
-?> <h2><?=$values['title']?></h2>
+<?php
+
+$values['title'] = "House of Lords";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>House of Lords</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
 
 <dl>
 
@@ -9,7 +26,7 @@
 of Commons where your MP sits; on the other is the House of Lords. Proposed new
 laws have to be considered by both Houses. Lords become
 members by a complex mixture of appointment, religion,
-hereditary entitlement, and self-election 
+hereditary entitlement, and self-election
 (<a href="http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/members-and-their-roles/how-members-are-appointed/">details</a>).
 </p>
 
@@ -57,7 +74,7 @@ are in the Armed Services.</p>
 
 <dd><p>Not yet! Currently, we are just using the House of Lords central
 facility as the majority of peers don't have offices.</p>
-<p>If you are a peer yourself, and would prefer to receive messages directly, 
+<p>If you are a peer yourself, and would prefer to receive messages directly,
 please <a href="/about-contact">contact us</a>.</p></dd>
 
 <dt>How many Lords can I write to?</dt>
@@ -119,4 +136,16 @@ volunteer</a>!</p></dd>
 
 </dl>
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

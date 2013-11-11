@@ -1,62 +1,63 @@
-<?
+<?php
+$values['skip_header'] = TRUE;
 template_draw('header', $values);
 ?>
 
-<?= fyr_breadcrumbs(1) ?>
-
-
-<?=$values['blurb-top'] ?>
-
-<!--<p align="center">
-Due to the General Election, new MPs and County Councillors are not yet available.
-<br>We'll get the details up as soon as we can.
-</p>-->
-
-<? if ($values['error']) { ?>
-<p class="warning">
-<strong>Please try again.</strong>
-<?=$values['error']?>
-</p>
-<? } ?>
-
-<?=$values['form']?>
-
-<? if ($values['all_url']) { ?>
-    <p align="center">You may also have representatives at other levels of government.
-    <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
-<? } ?>
-
-<div id="front-help">
-<p>Do you need <a href="/about-constituency">help with your postcode</a>?</p>
-<p>Are you <a href="/about-campaigns">running a campaign</a>?</p>
+<div class="row hero">
+    <div class="large-10 large-centered columns">
+        <div class="ms_header_nav">
+            <nav>
+                <ul class="menu">
+                    <li id="ms_logo"><a class="ms_header_nav-logo" target="_blank" href="http://www.mysociety.org">&nbsp;</a></li>
+                </ul>
+            </nav>
+        </div>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="width:250px;height:70px;" alt="WriteToThem"></a>
+        <div style="text-align:center;">
+            <?=$values['blurb-top'] ?>
+        </div>
+    </div>
 </div>
 
-<!--<p><small><a href="http://uk.imdb.com/title/tt0047573/">A horror horde of
-        crawl-and-crush giants clawing out of the earth from mile-deep
-        catacombs</a>? &mdash; Nope, just your politicians.  Use them.  Help
-    them. Write to them!</small></p>
+<?php if ($values['error']): ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="alert-box alert">
+            <?=$values['error']?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
-<? if ($values['num_messages']) {
-    echo "* $values[cobrand] messages: $values[num_messages]";
-} ?>
+<div class="row index-input">
+    <div class="large-4 large-centered columns" style="text-align:center;">
 
--->
+        <?=$values['form']?>
 
-<script type="text/javascript"><!--
+    </div>
+</div>
+
+<div class="row index-input flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
+
+        <?=fyr_breadcrumbs(1)?>
+
+    </div>
+</div>
+
+<?php if ($values['all_url']): ?>
+<div class="row index-content">
+    <div class="large-10 large-centered columns" style="text-align:center;">
+        <p>You may also have representatives at other levels of government.
+        <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
+    </div>
+</div>
+<? endif; ?>
+
+<script type="text/javascript">
 <?=javascript_focus_set('postcodeForm', 'pc'); ?>
-
-// -->
 </script>
-<?
-/* The above focuses on the postcode box. Must come after the box is created, obviously. */
 
-/* Disable advert for now ?>
-<div style="padding: 0.25cm; font-size: 80%; background-color: #ffffaa; text-align: center;">
-<!--<p>Have a <a href="<?=OPTION_HEARFROMYOURMP_BASE_URL?>">long term relationship</a> with your MP!</p>-->
-<!--Did your MP respond quickly? See our <a href="stats/2005/zeitgeist">2005 league table</a>.-->
-New! <a href="/lords">Write to your Lord</a>
-</div>
-<? */
-
+<?php
+$values['credit'] = '<a href="http://www.flickr.com/photos/sovietuk/173678618/">Photograph by Rick Harrison</a>';
 template_draw('footer', $values);
-?>

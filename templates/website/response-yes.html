@@ -1,29 +1,42 @@
-<? 
-$values['title'] = "Thanks for your feedback... and one *last* question";
+<?php
+
+$values['title'] = "Thanks for your feedback... and one last question";
+$values['robots'] = 'noindex, nofollow';
 template_draw('header', $values);
+
 ?>
 
-<h1>Thanks for your feedback... and another question</h1>
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-<p>Great! Many, many thanks for your feedback. We're delighted that your
-representative got back to you.</p>
+        <h2>Thanks for your feedback&hellip; and another question</h2>
 
-<p>One more question ...</p>
+    </div>
+</div>
 
-<ul>
-<li><b>Is this the first time you've ever contacted one of your
-political representatives, by any means? &nbsp; 
-<a href=<?=$values['first_time_yes']?>>YES</a> / <a
-href=<?=$values['first_time_no']?>>NO</a></b>
-</ul>
+<div class="row">
+    <div class="large-8 large-centered columns">
 
-<p>Why are we being so nosey? Well, one of our aims is to convince
-politicians that, used wisely, the Web can encourage much greater
-participation in the democratic process.
-</p>
+        <p>Great! Many, many thanks for your feedback. We're delighted that your
+            representative got back to you.</p>
 
-<p>Thanks again for your feedback.</p>
+        <h3>One more question ...</h3>
 
-<p>&mdash; The WriteToThem.com team</p>
+        <p>Is this the first time you've ever contacted one of your
+            political representatives, by any means?</p>
 
-<? template_draw('footer', $values); ?>
+        <p><a href=<?=$values['first_time_yes']?> class="button">Yes</a> <a
+        href=<?=$values['first_time_no']?> class="button">No</a><p>
+
+        <p>Why are we being so nosey? Well, one of our aims is to convince
+            politicians that, used wisely, the Web can encourage much greater
+            participation in the democratic process.</p>
+
+        <p>Thanks again for your feedback.</p>
+
+        <p>&mdash; The WriteToThem.com team</p>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

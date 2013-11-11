@@ -36,7 +36,7 @@ $got_year = 0;
 $year_bar_array = array();
 foreach ($years as $y) {
     if ($year == $y) {
-        $year_bar_array[] = "<strong>$y</strong>";
+        $year_bar_array[] = "<b>$y</b>";
         $got_year = 1;
     } else {
         $year_bar_array[] = "<a href=\"/stats/$y/$type\">$y</a>";
@@ -45,7 +45,7 @@ foreach ($years as $y) {
 if (!$got_year) {
     template_show_error("We don't have statistics for that year");
 }
-$year_bar = "Statistics for other years: " . join($year_bar_array, " | ");
+$year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
 #    $year_bar = "";
 

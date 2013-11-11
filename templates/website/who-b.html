@@ -1,0 +1,89 @@
+<?php
+
+$values['title'] = "Choose your representative";
+$values['robots'] = 'index, nofollow';
+
+template_draw('header', $values);
+
+?>
+
+<div class="row flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
+
+        <?=fyr_breadcrumbs(2)?>
+
+    </div>
+</div>
+
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
+
+        <h2><?=$values['title'] ?></h2>
+
+        <?php if (sizeof($values['reps']) > 0): ?>
+
+            <?php if ($values['all_url']): ?>
+                <p>You have several elected representatives at different levels of government.
+                One level is shown here, or you can
+                <a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
+            <?php else: ?>
+                <p>You have several elected representatives at different levels of government.<br>
+                <small><a href="about-yourrep">Not sure who to contact?</a></small></p>
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="panel radius write-content">
+
+            <?php if (sizeof($values['reps']) === 0): ?>
+
+                <?php if ($values['all_url']): ?>
+                    <p><big>Sorry, but you don't have any representatives of this type.
+                    Instead, <a href="<?=$values['all_url']?>">show all your representatives</a>.
+                    </big></p>
+                <?php else: ?>
+                    <p><big>Sorry, but we've not got any data for your area. Please
+                    <a href="/about-contact">contact us</a> and let us know that this matters
+                    to you.</big></p>
+                <? endif; ?>
+
+            <?php else: ?>
+
+                <ul class="large-block-grid-<?=count($values['reps'])?>">
+
+                <?php foreach ($values['reps'] as $key => $rep): ?>
+
+                    <li>
+
+                        <h3 class="rep-heading v-b"><?=$values['headings'][$key]?></h3>
+
+                        <div class="rep-blurb">
+                            <?=$values['blurbs'][$key]?>
+                        </div>
+
+                        <div class="rep-list v-b">
+                            <?=$rep?>
+                        </div>
+
+                        <div class="rep-more">
+                            <?=$values['more'][$key]?>
+                        </div>
+
+                    </li>
+
+                <?php endforeach; ?>
+
+                </ul>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>

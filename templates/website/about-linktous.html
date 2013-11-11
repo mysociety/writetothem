@@ -1,11 +1,27 @@
-<? $values['title'] = "How to link to us";
-    template_draw('header', $values); ?>
+<?php
 
-<h2><?=$values['title']?></h2>
+$values['title'] = "How to link to us";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>How to link to us</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
+
 <p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
 </p>
 
-<ul>
+<ul class="side-nav">
 <li><a href="#envelope">Envelope style box</a></li>
 <li><a href="#conventional">Conventional style box</a></li>
 <li><a href="#types">Linking to specific types of representative</a></li>
@@ -48,7 +64,7 @@ END;
     }
 </script>
 <div style="width:167px;height:120px;
-    background: url(http://www.writetothem.com/envelope_bg.gif) no-repeat 0 0; 
+    background: url(http://www.writetothem.com/envelope_bg.gif) no-repeat 0 0;
     font:9pt/11pt arial,helvetica,sans-serif;position:relative;">
     <form method="get" action="http://www.writetothem.com/">
         <div style="padding:55px 0 0 20px;">
@@ -57,13 +73,13 @@ END;
             </label>
             <input type="text" value="Your Postcode" name="pc" size="13"
                 style="width:90px;vertical-align:bottom;
-                    font:8pt/11pt arial,helvetica,sans-serif;color:#666;" 
+                    font:8pt/11pt arial,helvetica,sans-serif;color:#666;"
                 onfocus="clearDefault(this)" onblur="fillDefault(this)" />
-            <input type="image" value="Go" style="vertical-align:bottom;" 
+            <input type="image" value="Go" style="vertical-align:bottom;"
                 src="http://www.writetothem.com/envelope_arrow.gif" />
         </div>
     </form>
-    <a href="http://www.writetothem.com/" title="Visit writetothem.com" 
+    <a href="http://www.writetothem.com/" title="Visit writetothem.com"
     style="display:block;position:absolute;bottom:0;width:100%;overflow:hidden;
     text-indent:-1234em;height:30px;bottom:0;">writetothem.com</a>
 </div>
@@ -71,55 +87,55 @@ END;
 END;
 ?>
 
-<h2><a name="envelope"></a>Envelope style box</h2>
+<h2 id="envelope">Envelope style box</h2>
 <?=$signup_form_envelope ?>
 <p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
-<pre class="sourcecode"><?=htmlspecialchars($signup_form_envelope)?></pre>
+<pre><code><?=htmlspecialchars($signup_form_envelope)?></code></pre>
 
-<h2><a name="conventional"></a>Conventional style box</h2>
+<h2 id="conventional">Conventional style box</h2>
 <?=$signup_form_normal ?>
 <p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
-<pre class="sourcecode"><?=htmlspecialchars($signup_form_normal)?></pre>
+<pre><code><?=htmlspecialchars($signup_form_normal)?></code></pre>
 
 
 <p>Feel free to hack around with the design as much as you like. Any questions, just <a href="/about-contact">drop us a line</a>.</p>
 
-<h2><a name="types"></a>Linking to specific types of representative</h2>
+<h2 id="types">Linking to specific types of representative</h2>
 
-<p>You can also link to a specific type of representative. 
+<p>You can also link to a specific type of representative.
 For example, if people on your website are writing only to their MP, use an
-address like this.
+address like this.</p>
 
-<pre class="sourcecode">http://www.writetothem.com/?a=westminstermp</pre>
+<pre><code>http://www.writetothem.com/?a=westminstermp</code></pre>
 
 <p>Or if you are using a form to link to us, add this code to your form. It
-goes just after the postcode &lt;input&gt; field, and before the submit/go
+goes just after the postcode <code>&lt;input&gt;</code> field, and before the submit/go
 button one.</p>
 
-<pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;westminstermp&quot;&gt;</pre>
+<pre><code>&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;westminstermp&quot;&gt;</code></pre>
 
 <p>Possible values for "a" in both cases are:</p>
 <ul>
-<li>westminstermp &mdash; just your MP</li>
-<li>council &mdash; all local government councillors (in some areas this will return
+<li><code>westminstermp</code> &mdash; just your MP</li>
+<li><code>council</code> &mdash; all local government councillors (in some areas this will return
 district and county councillors, in others unitary authority councillors)</li>
-<li>regionalmp &mdash; members of Scottish Parliament, Welsh Assembly, Northern Ireland Assembly, or London Assembly</li> 
-<li>mep &mdash; your MEPs (Members of European Parliament)</li>
+<li><code>regionalmp</code> &mdash; members of Scottish Parliament, Welsh Assembly, Northern Ireland Assembly, or London Assembly</li>
+<li><code>mep</code> &mdash; your MEPs (Members of European Parliament)</li>
 </ul>
 
 <p>There are some more detailed three letter codes that you can use instead.
-Put these in a list as the value of "a", separated by commas ",".  
+Put these in a list as the value of "a", separated by commas ",".
 <ul>
-<li>District type councils: DIW &ndash; district council, LBO &ndash; London Borough</li>
-<li>Unitary type councils: MTW &ndash; metropolitan district, UTW and UTE &ndash; Unitary authority,
-LGE &ndash; Local government district, COP &ndash; Council of the Isles (Scilly)</li>
-<li>County councils: CED</li>
-<li>London Assembly: LAC &ndash; constituency members, LAE &ndash; list members</li>
-<li>Welsh Assembly: WAC &ndash; constituency members, WAE &ndash; list members</li>
-<li>Scottish Parliament: SPC &ndash; constituency members, SPE &ndash; list members</li>
-<li>Northern Ireland Assembly: NIE</li>
-<li>House of Commons: WMC</li>
-<li>European Parliament: EUR</li>
+<li>District type councils: <code>DIW</code> &ndash; district council, <code>LBO</code> &ndash; London Borough</li>
+<li>Unitary type councils: <code>MTW</code> &ndash; metropolitan district, <code>UTW</code> and <code>UTE</code> &ndash; Unitary authority,
+<code>LGE</code> &ndash; Local government district, <code>COP</code> &ndash; Council of the Isles (Scilly)</li>
+<li>County councils: <code>CED</code></li>
+<li>London Assembly: <code>LAC</code> &ndash; constituency members, <code>LAE</code> &ndash; list members</li>
+<li>Welsh Assembly: <code>WAC</code> &ndash; constituency members, <code>WAE</code> &ndash; list members</li>
+<li>Scottish Parliament: <code>SPC</code> &ndash; constituency members, <code>SPE</code> &ndash; list members</li>
+<li>Northern Ireland Assembly: <code>NIE</code></li>
+<li>House of Commons: <code>WMC</code></li>
+<li>European Parliament: <code>EUR</code></li>
 </ul>
 
 <p>So, for example, this would only show representatives of district type
@@ -127,30 +143,30 @@ councils.  For people entering postcodes in unitary areas, it would say there
 were no representatives of that type and offer to show them all their
 representatives.
 
-<pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBO&quot;&gt;</pre>
+<pre><code>&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBO&quot;&gt;</code></pre>
 
-<h2><a name="prefill"></a>Prefilling name and address</h2>
+<h2 id="prefill">Prefilling name and address</h2>
 
 <p>If you already know the name, address or email of the person using your website,
 you can send the values to WriteToThem. They will then be defaults for the letter.
 The person writing the letter can check or alter them before sending.
 
 <p>
-<pre class="sourcecode">&lt;input type=&quot;hidden&quot; name=&quot;writer_email&quot; value=&quot;name@email.address&quot;&gt;</pre>
+<pre><code>&lt;input type=&quot;hidden&quot; name=&quot;writer_email&quot; value=&quot;name@email.address&quot;&gt;</code></pre>
 
 <p>The fields available are:
 
 <ul>
-<li>writer_name</li>
-<li>writer_address1</li>
-<li>writer_address2</li>
-<li>writer_town</li>
-<li>writer_county</li>
-<li>writer_email</li>
-<li>writer_phone</li>
+<li><code>writer_name</code></li>
+<li><code>writer_address1</code></li>
+<li><code>writer_address2</code></li>
+<li><code>writer_town</code></li>
+<li><code>writer_county</code></li>
+<li><code>writer_email</code></li>
+<li><code>writer_phone</code></li>
 </ul>
 
-<h2><a name="plugins"></a>Plugins for WordPress</h2>
+<h2 id="plugins">Plugins for WordPress</h2>
 
 <p>Philip John has made a
 <a href="http://wordpress.org/extend/plugins/writetothem/">WordPress plugin
@@ -160,4 +176,16 @@ WordPress site as a standard WordPress widget.
 <p>There is also a much older <a href="/WriteToThem.com.zip">WordPress
 plugin</a>, written by Richard Pope, that needs you to alter your PHP template.
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

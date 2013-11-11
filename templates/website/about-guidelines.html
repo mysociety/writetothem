@@ -1,13 +1,28 @@
-<? $values['title'] = "Guidelines for campaigning";
-    template_draw('header', $values); ?>
+<?php
 
-<h2>Guidelines for campaigning</h2>
+$values['title'] = "Guidelines for campaigning";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Guidelines for campaigning</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
 
 <p>If you&rsquo;re encouraging people to use WriteToThem.com to talk to their representatives about
 a particular issue, there are some particularly important points to keep in
-mind. Note that most of these are essential, not just handy hints: wilfully 
+mind. Note that most of these are essential, not just handy hints: wilfully
 ignoring them will be construed as an abuse of our service, and will automatically
-trigger filters which will 'freeze' your messages. Plus, the only effect it'll have on representatives is annoying them and that won't do your 
+trigger filters which will 'freeze' your messages. Plus, the only effect it'll have on representatives is annoying them and that won't do your
 campaign any good.</p>
 
 <ol>
@@ -35,7 +50,7 @@ non-UK residents to dig up a UK address to use as their own when contacting a
 representative.</li>
 
 <li><strong>If you&rsquo;re talking to a <em>very</em> large audience, please try to
-	<a href="/about-contact">let us know</a> in advance.</strong><br>
+    <a href="/about-contact">let us know</a> in advance.</strong><br>
 If you&rsquo;re going to mention WriteToThem.com in a campaign which reaches tens of
 thousands of people at once, <em>please</em> let us know first! If our servers
 can&rsquo;t cope, it breaks your campaign. With a few days notice, we can make this
@@ -45,7 +60,7 @@ much less likely.</li>
 By now, the common pattern to the above guidelines should be clear: If you
 irritate representatives, users or us, you&rsquo;re not helping anyone. </li>
 
-<li><strong>When linking to us</strong>, either link to our 
+<li><strong>When linking to us</strong>, either link to our
 <a href="http://www.writetothem.com/">front page</a> or
 use our <a href="/about-linktous">handy linking form</a>.
 You can also use the WriteToMP tool described in
@@ -55,4 +70,16 @@ You can also use the WriteToMP tool described in
 <li><strong>If in doubt, <a href="/about-contact">ask us first</a>.</strong></li>
 </ol>
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

@@ -1,0 +1,91 @@
+<?php
+$values['skip_header'] = TRUE;
+template_draw('header', $values);
+?>
+
+<div class="row hero">
+    <div class="large-10 large-centered columns">
+        <div class="ms_header_nav">
+            <nav>
+                <ul class="menu">
+                    <li id="ms_logo"><a class="ms_header_nav-logo" target="_blank" href="http://www.mysociety.org">&nbsp;</a></li>
+                </ul>
+            </nav>
+        </div>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" data-interchange="[/static/img/logo@2x.png, (retina)]" alt="WriteToThem"></a>
+        <div style="text-align:center;">
+            <?=$values['blurb-top'] ?>
+        </div>
+    </div>
+</div>
+
+<?php if ($values['error']): ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
+        <div class="alert-box alert">
+            <?=$values['error']?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<div class="row index-input">
+    <div class="large-4 large-centered columns" style="text-align:center;">
+
+        <?=$values['form']?>
+
+    </div>
+</div>
+
+<?php if ($values['all_url']): ?>
+<div class="row index-content">
+    <div class="large-10 large-centered columns" style="text-align:center;">
+        <p>You may also have representatives at other levels of government.
+        <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
+    </div>
+</div>
+<? endif; ?>
+
+<div class="row index-content">
+    <div class="large-10 large-centered columns">
+        <div class="row">
+            <div class="large-4 columns">
+
+                <h4>As simple as</h4>
+
+                <div class="instruction-list">
+                    <p><span class="number">1</span> Enter your postcode</p>
+                    <p><span class="number">2</span> Choose your representative</p>
+                    <p><span class="number">3</span> Write your message</p>
+                </div>
+
+            </div>
+
+            <div class="large-8 columns">
+                <h4>About</h4>
+                <div class="row">
+                    <div class="large-6 columns">
+                        <p>WriteToThem is a website which lets you quickly, easily and freely find and contact your elected representatives; including MPs, local councillors, members of the Scottish and Welsh Parliaments and more.</p>
+                    </div>
+                    <div class="large-6 columns">
+
+                        <ul class="index-about-links">
+                            <li><a href="/about-feedback">Does it work?</a></li>
+                            <li><a href="/about-constituency">Help &amp; FAQs</a></li>
+                            <li><a href="/about-campaigns">Are you running a campaign?</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+<?=javascript_focus_set('postcodeForm', 'pc'); ?>
+</script>
+
+<?php
+$values['credit'] = '<a href="http://www.flickr.com/photos/sovietuk/173678618/">Photograph by Rick Harrison</a>';
+template_draw('footer', $values);

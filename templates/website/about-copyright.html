@@ -1,10 +1,24 @@
-<? $values['title'] = "Copyright information";
-template_draw('header', $values); ?>
+<?php
 
-<h2>Copyright information</h2>
+$values['title'] = "Copyright information";
+template_draw('header', $values);
 
-<h3><a href="http://www.mysociety.org"><img src="images/mysociety_sm.gif"
-alt="mySociety" border="0"></a></h3>
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Copyright information</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
+
+<h3><a href="http://www.mysociety.org"><img src="/static/img/credits/ms.png" data-interchange="[/static/img/credits/ms@2x.png, (retina)]" alt="mySociety"></a></h3>
 
 <p>This site is built by mySociety.  You can read more <a
 href="about-us">about us and why we do this</a>.  Most of the site is Copyright &copy;
@@ -13,10 +27,13 @@ href="https://github.com/mysociety/writetothem">The source
 code is available</a> under an open source license.  We want you to use
 it, tinker with it, have fun with it.</p>
 
-<h3><a href="http://www.goveval.com/"><img src="images/ge.png"
-alt="GovEval" border="0"></a> &nbsp; &nbsp; <a
-href="http://www.ordnancesurvey.co.uk"><img src="images/os.png"
-alt="Ordnance Survey" border="0"></a></h3>
+<hr>
+
+<ul class="small-block-grid-3 large-block-grid-3">
+  <li><a href="http://www.goveval.com/"><img src="/static/img/credits/ge.png" alt="GovEval"></a></li>
+  <li><a href="http://www.ordnancesurvey.co.uk"><img src="/static/img/credits/os.png" alt="Ordnance Survey"></a></li>
+  <li><a href="http://www.locatoronline.co.uk/"><img src="/static/img/credits/lo.png" alt="Locator Online"></a></li>
+</ul>
 
 <p>Our database of local councillors is kindly supplied by <a
 href="http://www.goveval.com/">GovEval</a>.  Postcode lookup is done
@@ -24,4 +41,16 @@ using <a href="http://mapit.mysociety.org/">MaPit</a>, our tool for
 doing that sort of thing, and uses Ordnance Survey open data behind the scenes.
 Thanks to them both!
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

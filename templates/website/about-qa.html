@@ -1,9 +1,25 @@
-<? $values['title'] = "Questions and answers";
-    template_draw('header', $values); ?>
-<h2>Questions and answers</h2>
+<?php
+
+$values['title'] = "Questions and answers";
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>Questions and answers</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="large-8 columns">
 
 <a name="top"></a>
-<ul>
+<ul class="side-nav">
 <li><a href="#how">How do I send a message?</a></li>
 <li><a href="#address">Why do you want my address, name, email address and phone number?</a></li>
 <li><a href="#onlyrep">Why can&rsquo;t I write to any representative I like?</a></li>
@@ -124,7 +140,7 @@ your MP to pass on your concern to the relevant Minister.  They will do this
 even if they disagree with you, although you should ask them to add their own
 support if they do agree with you. Your MP will return the response that they
 get from the Minister.  If necessary, your MP can also chase the Minister, on
-your behalf, through Questions in Parliament. 
+your behalf, through Questions in Parliament.
 
 <p>If you would like to contact a Minister directly, you may find a list of
 their contact details on this <a
@@ -320,7 +336,7 @@ never reply.</li>
 </ul>
 
 <p>You can sometimes find direct email address for your MP on the Guardian's
-<a href="http://politics.guardian.co.uk/aristotle/">Ask Aristotle</a> site, 
+<a href="http://politics.guardian.co.uk/aristotle/">Ask Aristotle</a> site,
 or on the <a href="http://findyourmp.parliament.uk/">Parliament website</a>.</p>
 
 <p class="toplink"><a href="#top">top</a></p>
@@ -360,7 +376,7 @@ questions, within reason.</p>
 <dt><a name="volunteer"></a>Can I help you run the site?</dt>
 
 <dd>
-<p>Sure! See our <a href="http://www.mysociety.org/volunteertasks">volunteering
+<p>Sure! See our <a href="http://www.mysociety.org/helpus">volunteering
 page</a>.
 
 <p class="toplink"><a href="#top">top</a></p>
@@ -380,4 +396,16 @@ in life generally), or you see any error messages.
 
 </dl>
 
-<? template_draw('footer', $values); ?>
+            </div>
+
+            <div class="large-4 columns">
+
+                <?php template_draw('about-sidebar'); ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values);

@@ -1,5 +1,7 @@
-<?
+<?php
+
 template_draw('header', $values);
+
 $data = $values['data'];
 $info = $data['info'];
 $data = $data['data'];
@@ -7,204 +9,218 @@ $sort = $info['sort'];
 $mp = $info['mp'];
 
 ?>
-<p id="year_nav"><?=$values['year_bar']?></p>
-<h2><?=$values['title']?></h2>
-<p id="zeitgeist_nav"><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a> | <strong>MP Responsiveness League Table</strong></p>
 
-<p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
- messages to MPs in the year <?=$values['year']?> and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
-<strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
-about communicating with their MP. 
-<? if ($values['year'] < 2006) { ?>
-This asked whether MPs had responded to their message within 2 to 3 weeks.
-<? } else if ($values['year'] >= 2006) { ?>
-<p>The survey asked whether people had had <strong>a reply (not just an acknowledgement)</strong> from their
-representative. 
-    <? if ($values['year'] == 2006) { ?>
-    (Actually the text of the survey changed slightly in both March and April 2006. You
-can <a href="https://secure.mysociety.org/cvstrac/rlog?f=mysociety/fyr/templates/emails/questionnaire">see in our
-source code repository</a> when this happened, and what changed).
-    <? } ?>
-<? } ?>
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-<p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
-didn't answer, were surveyed again <strong>after 3 weeks</strong>. Because of
-this, and because of the way different people interpret the survey, you should
-interpret the figures below with caution.
+        <div class="zg-year-bar"><?=$values['year_bar']?></div>
 
-<p><strong>Journalists:</strong> Please feel free to use the data on this page,
-but if you do you <strong>must cite WriteToThem.com</strong> in the body of
-your articles as the source of any analysis or data you get from this site.
-Statistics without a referenced source are dangerous, so please do this.</p>
+        <h2><?=$values['title']?></h2>
 
-<p><strong>Note:</strong> While some MPs are very slow at responding to
-constituents mail, that doesn't mean they aren't otherwise active in or around
-Parliament on behalf of their constituents. You can see MPs voting record,
-committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.
+        <ul class="inline-list">
+            <li><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a></li>
+            <li><b>MP Responsiveness League Table</b></li>
+        </ul>
 
-<form method="get">
-<p align="center">Look up your MP; enter your postcode: <input type="text" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
-<input type="submit" value="Look up"></p>
-</form>
+        <hr>
 
-<? if (is_array($mp)) {
-     $h_name = htmlspecialchars($mp['name']);
-?>
-<div style="border: solid 1px #a5a57c; margin-bottom: 1em;">
-<ul>
-<li><strong><?=$h_name ?></strong>, <?=$mp['party'] ?> MP for <?=$mp['area'] ?>
-<li>Messages sent: <?=$mp['dispatched_success'] ?>
-<? if ($mp['notes']) { ?>
-<li><?=$mp['notes'] ?>
-<? } else { ?>
-<li>Response rate: <strong><?=fuzzy_response_description($mp['response']) ?></strong> 
-(<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
-<!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
-<? if ($mp['fymp_response']) { ?>
-<li>Previous year's response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
-<? } ?>
-<li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong> 
-(<?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys)
-<!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>-->
-<!--<li>Ranking: -->
-<?
-    $same_stat = 1;
-    $position = 0;
-    $last_response = -1;
-    $last_low = -1;
-    foreach ($data as $row) {
-        if ($row['response'] != $last_response || $row['low'] != $last_low) {
-	    $position += $same_stat;
-	    $same_stat = 1;
-	    $last_response = $row['response'];
-	    $last_low = $row['low'];
-	} else {
-	    $same_stat++;
-	}
-    if ($row['person_id'] == $mp['person_id']) {
-        /*
-	    print "<strong>$position</strong>";
-        print "(";
-            if ($row['fymp_rank']) {
-		$diff = $position - $row['fymp_rank'];
-                if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
-		elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
-		else print '<img alt="Same" src="/images/arrow_right.png"> =';
+        <p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
+            messages to MPs in the year <?=$values['year']?> and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
+            <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
+            about communicating with their MP.
+            <? if ($values['year'] < 2006) { ?>
+                This asked whether MPs had responded to their message within 2 to 3 weeks.
+            <? } else if ($values['year'] >= 2006) { ?>
+                <p>The survey asked whether people had had <strong>a reply (not just an acknowledgement)</strong> from their
+                representative.
+                <? if ($values['year'] == 2006) { ?>
+                    (Actually the text of the survey changed slightly in both March and April 2006. You
+                    can <a href="https://secure.mysociety.org/cvstrac/rlog?f=mysociety/fyr/templates/emails/questionnaire">see in our
+                    source code repository</a> when this happened, and what changed).
+                <? } ?>
+            <? } ?>
+            </p>
+
+        <p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
+            didn't answer, were surveyed again <strong>after 3 weeks</strong>. Because of
+            this, and because of the way different people interpret the survey, you should
+            interpret the figures below with caution.
+
+        <p><strong>Journalists:</strong> Please feel free to use the data on this page,
+            but if you do you <strong>must cite WriteToThem.com</strong> in the body of
+            your articles as the source of any analysis or data you get from this site.
+            Statistics without a referenced source are dangerous, so please do this.</p>
+
+        <p><strong>Note:</strong> While some MPs are very slow at responding to
+            constituents mail, that doesn't mean they aren't otherwise active in or around
+            Parliament on behalf of their constituents. You can see MPs voting record,
+            committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
+
+        <form method="get">
+            <p><label for="pc">Look up your MP; enter your postcode:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
+            <input type="submit" class="button small success" value="Look up"></p>
+        </form>
+
+
+        <?php if (is_array($mp)):
+             $h_name = htmlspecialchars($mp['name']);
+        ?>
+        <ul>
+        <li><strong><?=$h_name ?></strong>, <?=$mp['party'] ?> MP for <?=$mp['area'] ?>
+        <li>Messages sent: <?=$mp['dispatched_success'] ?>
+        <? if ($mp['notes']) { ?>
+        <li><?=$mp['notes'] ?>
+        <? } else { ?>
+        <li>Response rate: <strong><?=fuzzy_response_description($mp['response']) ?></strong>
+        (<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
+        <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
+        <? if ($mp['fymp_response']) { ?>
+        <li>Previous year's response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
+        <? } ?>
+        <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
+        (<?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys)
+        <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>-->
+        <!--<li>Ranking: -->
+        <?
+            $same_stat = 1;
+            $position = 0;
+            $last_response = -1;
+            $last_low = -1;
+            foreach ($data as $row) {
+                if ($row['response'] != $last_response || $row['low'] != $last_low) {
+                $position += $same_stat;
+                $same_stat = 1;
+                $last_response = $row['response'];
+                $last_low = $row['low'];
             } else {
-	        print 'New';
+                $same_stat++;
             }
-	    print ')';
-        */
-	    break;
-	}
-    }
-} ?>
-</ul>
-<p align="center">
-<a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a>
-<br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a>
-</p>
+            if ($row['person_id'] == $mp['person_id']) {
+                /*
+                print "<strong>$position</strong>";
+                print "(";
+                    if ($row['fymp_rank']) {
+                $diff = $position - $row['fymp_rank'];
+                        if ($diff<0) print '<img alt="Up" src="/images/arrow_up.png"> ' . -$diff;
+                elseif ($diff>0) print '<img alt="Down" src="/images/arrow_down.png"> ' . $diff;
+                else print '<img alt="Same" src="/images/arrow_right.png"> =';
+                    } else {
+                    print 'New';
+                    }
+                print ')';
+                */
+                break;
+            }
+            }
+        } ?>
+        </ul>
+        <p>
+        <a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a>
+        <br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a>
+        </p>
+
+        <?php endif; ?>
+
+        <?php
+        $head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
+        $head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
+        $head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
+        $head_response = 'Response rate of MP'; if ($sort != 'r') $head_response = '<a href="?">' . $head_response . '</a>';
+        $head_response .= '<br><small>(Previous year)</small>';
+        ?>
+        <table>
+        <tr>
+        <? if ($sort == 'r') print '<th>Position</th>'; ?>
+        <th><?=$head_name ?></th>
+        <th><?=$head_cons ?></th>
+        <th><?=$head_messages ?></th>
+        <th>Surveys saying "MP replied" out of total number of survey answers</th>
+        <th><?=$head_response ?></th>
+        <!--<th>95% confidence interval</th>-->
+        </tr>
+        <?
+
+        $c = 0;
+        $same_stat = 1;
+        $position = 0;
+        $last_response = -1;
+        $last_low = -1;
+        $linebreak = false;
+        foreach ($data as $row) {
+            $c++;
+            print '<tr';
+            $tdclass = "";
+            if ($sort == 'r' && !$linebreak && $row['notes']) {
+                $tdclass = "break";
+                $linebreak = true;
+            }
+            print '>';
+            if ($sort == 'r') {
+                if ($row['response'] != $last_response || $row['low'] != $last_low) {
+                    $position += $same_stat;
+                    $same_stat = 1;
+                    $last_response = $row['response'];
+                    $last_low = $row['low'];
+                } else {
+                    $same_stat++;
+                }
+                print '<td class="c '.$tdclass.'">';
+                if (!$row['notes']) {
+                    print "$position";
+                    /*
+                    print "<br><small>";
+                    if ($row['fymp_rank']) {
+                        $diff = $position - $row['fymp_rank'];
+                    if ($diff<0) print '(<img alt="Up" src="/images/arrow_up.png"> ' . -$diff . ')';
+                    elseif ($diff>0) print '(<img alt="Down" src="/images/arrow_down.png"> ' . $diff . ')';
+                    else print '(<img alt="Same" src="/images/arrow_right.png"> =)';
+                    } else {
+                        print '(New)';
+                        }
+                    print '</small>';
+                    */
+                }
+                print '</td>';
+            }
+            print '<td class="'.$tdclass.'">';
+            $href = str_replace(' ', '_', htmlspecialchars(strtolower($row['name'])));
+            if ($href == 'angela_smith' || $href == 'gareth_thomas')
+                $href .= ',' . str_replace(' ', '_', strtolower($row['area']));
+            print '<a name="' . $href . '"></a>';
+            print '<a href="http://www.theyworkforyou.com/mp?pid='.str_replace('uk.org.publicwhip/person/', '', $row['person_id']).'">';
+            print str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
+            print '</a>';
+            print '<br><small>';
+            print $row['party'];
+            print "</small></td>";
+            print "<td class=\"$tdclass\">$row[area]</td>";
+            print "<td class=\"$tdclass\">$row[sent]</td>";
+            if ($row['notes']) {
+                print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'];
+            } else {
+                print "<td class=\"$tdclass\">".$row['responded']." out of ". $row['responded_outof']."</td>";
+                print "<td class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
+                #print "<td class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
+                #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
+                if ($row['fymp_response']) {
+                    if ($row['fymp_notes']) {
+                        print '<br><small>(unknown)</small>';
+                    } else {
+                        print '<br><small>(' . fuzzy_response_description($row['fymp_response']). ')</small>';
+                    }
+                }
+            }
+            print "</td>";
+            print "</tr>\n";
+        }
+        print '</table>';
+
+        print '<p>If you would like to do further procesing, there is an <a href="?xml=1">XML version</a> of this data.';
+
+        ?>
+
+
+    </div>
 </div>
 
-<? }
-
-$head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
-$head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
-$head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
-$head_response = 'Response rate of MP'; if ($sort != 'r') $head_response = '<a href="?">' . $head_response . '</a>';
-$head_response .= '<br><span class="nostrong">(Previous year)</span>';
-?>
-<table class="zeitgeist">
-<tr>
-<? if ($sort == 'r') print '<th>Position</th>'; ?>
-<th><?=$head_name ?></th>
-<th><?=$head_cons ?></th>
-<th><?=$head_messages ?></th>
-<th>Surveys saying "MP replied" out of total number of survey answers</th>
-<th><?=$head_response ?></th>
-<!--<th>95% confidence interval</th>-->
-</tr>
-<?
-
-$c = 0;
-$same_stat = 1;
-$position = 0;
-$last_response = -1;
-$last_low = -1;
-$linebreak = false;
-foreach ($data as $row) {
-    print '<tr';
-    $classes = array();
-    $tdclass = "";
-    if ($sort == 'r' && !$linebreak && $row['notes']) {
-        $tdclass = "break";
-        $linebreak = true;
-    }
-    if ($c++%2) $classes[] = 'a';
-    if (count($classes))
-        print ' class="' . join(' ', $classes) . '"';
-    print '>';
-    if ($sort == 'r') {
-        if ($row['response'] != $last_response || $row['low'] != $last_low) {
-            $position += $same_stat;
-            $same_stat = 1;
-            $last_response = $row['response'];
-            $last_low = $row['low'];
-        } else {
-            $same_stat++;
-        }
-        print '<td class="c '.$tdclass.'">';
-        if (!$row['notes']) {
-            print "$position";
-            /*
-            print "<br><small>";
-            if ($row['fymp_rank']) {
-                $diff = $position - $row['fymp_rank'];
-            if ($diff<0) print '(<img alt="Up" src="/images/arrow_up.png"> ' . -$diff . ')';
-            elseif ($diff>0) print '(<img alt="Down" src="/images/arrow_down.png"> ' . $diff . ')';
-            else print '(<img alt="Same" src="/images/arrow_right.png"> =)';
-            } else {
-                print '(New)';
-                }
-            print '</small>';
-            */
-        }
-        print '</td>';
-    }
-    print '<td class="'.$tdclass.'">';
-    $href = str_replace(' ', '_', htmlspecialchars(strtolower($row['name'])));
-    if ($href == 'angela_smith' || $href == 'gareth_thomas')
-        $href .= ',' . str_replace(' ', '_', strtolower($row['area']));
-    print '<a name="' . $href . '"></a>';
-    print '<a href="http://www.theyworkforyou.com/mp?pid='.str_replace('uk.org.publicwhip/person/', '', $row['person_id']).'">';
-    print str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
-    print '</a>';
-    print '<br><small>';
-    print $row['party'];
-    print "</small></td>";
-    print "<td class=\"$tdclass\">$row[area]</td>";
-    print "<td align='right' class=\"$tdclass\">$row[sent]</td>";
-    if ($row['notes']) {
-        print '<td colspan="4" class="'.$tdclass.'">' . $row['notes'];
-    } else {
-        print "<td align='right' class=\"$tdclass\">".$row['responded']." out of ". $row['responded_outof']."</td>";
-        print "<td align='right' class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
-        #print "<td align='right' class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
-        #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
-        if ($row['fymp_response']) {
-            if ($row['fymp_notes']) {
-                print '<br> (unknown)';
-            } else {
-                print '<br> (' . fuzzy_response_description($row['fymp_response']). ')';
-            }
-        }
-    }
-    print "</td>";
-    print "</tr>\n";
-}
-print '</table>';
-
-print '<p>If you would like to do further procesing, there is an <a href="?xml=1">XML version</a> of this data.';
-
-template_draw('footer', $values);
-?>
+<?php template_draw('footer', $values); ?>

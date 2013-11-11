@@ -1,13 +1,31 @@
-<? 
-$values['title'] = "Oops... That ain't good...";
+<?php
+
+$values['title'] = "Oops... Something didn't quite work.";
+$values['robots'] = 'noindex, nofollow';
+
 template_draw('header', $values);
+
 ?>
 
-<h3>Oops... Something didn't quite work...</h3>
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
 
-<p>Thank you for trying to confirm your fax/email. We seem to have a
-problem though, so please let us know what went on and send a copy of
-the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
-it.</p>
+        <h2>Oops&hellip; Something didn't quite work.</h2>
 
-<? template_draw('footer', $values); ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <hr>
+
+        <p>Thank you for trying to confirm your fax/email. We seem to have a
+        problem though, so please let us know what went on and send a copy of
+        the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we'll look into
+        it.</p>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values);
