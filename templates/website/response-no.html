@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Thanks for your feedback... and one last question";
+$values['title'] = "Thanks for your feedback... and a few more questions";
 $values['robots'] = 'noindex, nofollow';
 template_draw('header', $values);
 
@@ -9,7 +9,12 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Thanks for your feedback&hellip; and another question</h2>
+        <h2>Thanks for your feedback!</h2>
+
+        <p>We hope your representative gets back to you with a full answer soon.</p>
+
+        <p>If they don't then see <a href="/about-qa#noreply" target="_blank">What should I do if my MP (or other representative) doesn't reply?</a> (opens in new window).</p>
+
 
     </div>
 </div>
@@ -17,25 +22,7 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-8 large-centered columns">
 
-        <p>We hope your representative gets back to you with a full answer soon.</p>
-
-        <p>If they don't then see <a href="/about-qa#noreply" target="_blank">What should I do if my MP (or other representative) doesn't reply?</a> (opens in new window).</p>
-
-        <h3>One more question ...</h3>
-
-        <p>Is this the first time you've ever contacted one of your
-            political representatives, by any means?</p>
-
-        <p><a href=<?=$values['first_time_yes']?> class="button">Yes</a> <a
-        href=<?=$values['first_time_no']?> class="button">No</a><p>
-
-        <p>Why are we being so nosey? Well, one of our aims is to convince
-            politicians that, used wisely, the Web can encourage much greater
-            participation in the democratic process.</p>
-
-        <p>Thanks again for your feedback.</p>
-
-        <p>&mdash; The WriteToThem.com team</p>
+        <?php template_draw('ucl-survey', $values); ?>
 
     </div>
 </div>

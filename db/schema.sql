@@ -228,4 +228,47 @@ create table confirmation_mail_autoreply (
     whenreceived integer not null
 );
 
+--
+-- Name: ucl_message_counts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE ucl_message_counts (
+    representative_id integer,
+    message_count integer
+);
+
+--
+-- Name: ucl_message_counts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY ucl_message_counts
+    ADD CONSTRAINT ucl_message_counts_pkey PRIMARY KEY (representative_id);
+
+--
+-- Name: ucl_testing_log; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE ucl_testing_log (
+    test_id serial,
+    test_token text,
+    message_id text,
+    shown_number boolean,
+    postcode text,
+    message_count integer,
+    visited_compose_page boolean DEFAULT false NOT NULL,
+    visited_preview_page boolean DEFAULT false NOT NULL,
+    message_sent boolean DEFAULT false NOT NULL,
+    message_confirmed boolean DEFAULT false NOT NULL,
+    survey_visited boolean DEFAULT false NOT NULL,
+    survey_submitted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: ucl_testing_log_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY ucl_testing_log
+    ADD CONSTRAINT ucl_testing_log_pkey PRIMARY KEY (test_id);
+
 commit;
