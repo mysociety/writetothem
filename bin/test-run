@@ -79,10 +79,14 @@ print "Set up web test harness...\n" if $verbose > 0;
 our $base_url;
 sub set_base_url($) {
     my $cobrand = shift;
-    $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    if (mySociety::Config::get('HTTPS_ONLY')) {
+        $base_url = "https://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    } else {
+        $base_url = "http://" . $cobrand . mySociety::Config::get('WEB_DOMAIN');
+    }
 }
 set_base_url('');
-die "domain conf not consistent" if (mySociety::Config::get('BASE_URL') ne $base_url);
+die "domain conf not consistent. Expected " . $base_url . ', got ' . mySociety::Config::get('BASE_URL') if (mySociety::Config::get('BASE_URL') ne $base_url);
 
 our $admin_url = mySociety::Config::get('ADMIN_URL');
 our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
@@ -95,8 +99,13 @@ our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy',
 
 $wth->log_watcher_self_test($base_url . "/test.php?error=1", "deliberate_error_to_test_error_handling");
 
-$base_url =~ m#^http://(.+)/?$#;
+if (mySociety::Config::get('HTTPS_ONLY')) {
+    $base_url =~ m#^https://(.+)/?$#;
+    $wth->browser_credentials("$1:443", "$1 admin pages", $admin_auth_user, $admin_auth_password);
+} else {
+    $base_url =~ m#^http://(.+)/?$#;
 $wth->browser_credentials("$1:80", "$1 admin pages", $admin_auth_user, $admin_auth_password);
+}
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
 
 $wth->fax_setup();

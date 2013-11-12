@@ -53,6 +53,10 @@ define('OPTION_WEB_DOMAIN', 'writetothem.com');
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN);
+
+// Is the site running in HTTPS mode?
+define('OPTION_HTTPS_ONLY', 1);
+
 define('OPTION_ADMIN_URL', 'https://secure.../admin');
 define('OPTION_ADMIN_AUTH_USER', undef);
 define('OPTION_ADMIN_AUTH_PASSWORD', undef);

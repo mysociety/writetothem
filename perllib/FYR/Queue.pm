@@ -1145,7 +1145,7 @@ sub make_confirmation_email ($;$) {
     # we manually make that transformation. Note that we're assuming here that
     # the confirm URLs have no characters which need to be entity-encoded,
     # which is bad, evil and wrong but actually true in this case.
-    $bodytext =~ s#(http://.+$)#<a href=" $1 ">$1</a>#m
+    $bodytext =~ s#(https://.+$)#<a href=" $1 ">$1</a>#m
         if ($msg->{sender_email} =~ m/\@aol\./i);
 
     # Append a separator and the text of the ms
@@ -1317,7 +1317,7 @@ sub make_questionnaire_email ($;$) {
     # we manually make that transformation. Note that we're assuming here that
     # the confirm URLs have no characters which need to be entity-encoded,
     # which is bad, evil and wrong but actually true in this case.
-    $text =~ s#(http://.+$)#<a href=" $1 ">$1</a>#mg
+    $text =~ s#(https://.+$)#<a href=" $1 ">$1</a>#mg
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
     return mySociety::Email::construct_email({
