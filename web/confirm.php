@@ -3,12 +3,12 @@
  * Confirmation from the constituent that they want to send the
  * fax/email.  This page is linked to from the email which confirms the
  * constituent's email address.
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * Email: francis@mysociety.org. WWW: http://www.mysociety.org
  *
  * $Id: confirm.php,v 1.24 2009-12-07 11:20:57 louise Exp $
- * 
+ *
  */
 
 require_once "../phplib/fyr.php";
@@ -47,8 +47,8 @@ if (rabx_is_error($result)) {
     if ($result->code == FYR_QUEUE_MESSAGE_EXPIRED) {
         $url = cobrand_url($cobrand, "/", $cocode);
         $text = <<<EOF
-You took so long to confirm your message that under our privacy policy 
-your message has already been removed from our database. 
+You took so long to confirm your message that under our privacy policy
+your message has already been removed from our database.
 If you'd still like to write a message, you can <a href="$url">try again from the
 beginning
 EOF;
@@ -69,14 +69,7 @@ if (!$result) {
         $values['cobrand'] = $cobrand;
         $values['host'] = fyr_get_host();
         template_draw("confirm-accept", $values);
-
-        // UCL A/B Testing
-        require_once "ucl_ab_test.php";
-        $UCLTest = new UCLTest($result);
-        $UCLTest->record_message_confirm();
-
     }
 }
 
 ?>
-

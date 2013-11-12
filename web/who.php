@@ -45,13 +45,8 @@ $meps_hidden = euro_check($area_representatives, $va_ids);
 // render.
 $fyr_representatives = array();
 $fyr_headings = array();
-$fyr_rep_descs = array(); 
+$fyr_rep_descs = array();
 $fyr_rep_lists = array();
-
-// UCL A/B Testing
-require_once "ucl_ab_test.php";
-$UCLTest = new UCLTest;
-$UCLTest->set_postcode($fyr_postcode);
 
 foreach ($va_display_order as $va_types) {
     $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
@@ -93,12 +88,12 @@ foreach ($va_display_order as $va_types) {
 // Display page, using all the fyr_* variables set above.
 template_draw("who", array(
     "reps" => $fyr_representatives,
-    "template" => "who", 
+    "template" => "who",
     "headings" => $fyr_headings,
     "all_url" => $fyr_all_url,
-    "cobrand" => $cobrand, 
-    "host" => fyr_get_host(), 
-    "rep_lists" => $fyr_rep_lists, 
+    "cobrand" => $cobrand,
+    "host" => fyr_get_host(),
+    "rep_lists" => $fyr_rep_lists,
     "rep_descs" => $fyr_rep_descs
     ));
 
@@ -258,7 +253,7 @@ function write_all_link($va_type, $rep_desc_plural) {
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
-        $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';  
+        $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">Write to all your ' . $rep_desc_plural . '</a>';
         if ($va_type == 'SPE') {
             $a .= ' <small>(only use this option if you are writing to your
 MSPs about <strong>voting issues or other issues concerning matters in the
@@ -329,27 +324,6 @@ function display_reps($va_type, $representatives, $va_area, $options) {
         $rep_list .= htmlspecialchars($rep_info['name']) . '</a>';
         if (array_key_exists('party', $rep_info)) {
             $rep_list .= ' <span class="party">(' . str_replace(' ', '&nbsp;', htmlspecialchars($rep_info['party'])) . ')</span>';
-        }
-
-        // UCL A/B Testing
-        global $UCLTest;
-        if ($va_type == 'WMC')
-        {
-            if ($UCLTest->show_numbers)
-            {
-                $rep_message_count = $UCLTest->get_rep_message_count($rep_specificid);
-                $UCLTest->set_message_count($rep_message_count);
-                $rep_list .= '<br>' . $rep_message_count . ' ';
-                if ($rep_message_count == 1)
-                {
-                    $rep_list .= 'person has';
-                }
-                else
-                {
-                    $rep_list .= 'people have';
-                }
-                $rep_list .= ' already written to ' . htmlspecialchars($rep_info['name']) . ' using WriteToThem in the last 12 months.';
-            }
         }
     }
 
@@ -422,7 +396,7 @@ write to your <strong>constituency MSP</strong> above, or pick just <strong>one<
 Only <strong>one</strong> MSP is allowed to help you at a time';
     }
     $text .= '.</p>';
-        
+
     if ($rep_count && $rep_counts[1]>1 && $va_types[1] != 'SPE' && $va_types[1] != 'LAE' && !$skip_write_all) {
         $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
     }
@@ -509,5 +483,3 @@ function check_area_status( $va_alone ) {
     }
     return $text;
 }
-
-

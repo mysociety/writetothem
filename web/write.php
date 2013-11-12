@@ -19,8 +19,8 @@ require_once "../commonlib/phplib/utility.php";
 function fix_dear_lord_address($name) {
     /* Lords are addressed specially at the start of letters:
      * http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm */
-    
-    # RT ticket 10264 
+
+    # RT ticket 10264
     # https://secure.mysociety.org/rt/Ticket/Display.html?id=10264
     if ($name == 'Baroness Sarah Ludford' || $name == 'Baroness Ludford')
         return 'Baroness Ludford';
@@ -142,7 +142,7 @@ function correct_address() {
     return $address;
 }
 
-function default_body_text() {     
+function default_body_text() {
     return "Dear " . correct_address() . ",\n\n\n\nYours sincerely,\n\n";
 }
 
@@ -192,17 +192,12 @@ function buildWriteForm($options) {
     global $fyr_voting_area;
     global $cobrand, $cocode;
 
-    // UCL A/B Testing
-    global $UCLTest;
-    $UCLTest->record_compose_visit();
-    $UCLTest->set_postcode($fyr_values['pc']);
-
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = new HTML_QuickForm('writeForm', 'post', $form_action);
-    
+
     if ($fyr_voting_area['name']=='United Kingdom')
         $fyr_voting_area['name'] = 'House of Lords';
- 
+
     $write_header = '';
     if ($options['include_write_header']){
         $write_header = "<strong>Now Write Your Message:</strong> <small>(* means required)</small><br><br>";
@@ -225,7 +220,7 @@ END;
         $form->addElement("html", "<tr><td valign=\"top\">$stuff_on_left</td><td align=\"right\">\n<table>"); // CSSify
     } else {
         $form->addElement("html", "<div class=\"highlight\">$stuff_on_left<ul class=\"data-input\">");
-    }  
+    }
 
     $form->addElement('text', 'name', "Your name:<sup>*</sup>", array('size' => 20, 'maxlength' => 255));
     $form->addRule('name', 'Please enter your name', 'required', null, null);
@@ -300,12 +295,12 @@ END;
         $preview_text = 'Ready? Press the "Preview" button to continue:';
     }
     $preview_button_text = cobrand_preview_button_text($cobrand);
-    if (!$preview_button_text) {   
+    if (!$preview_button_text) {
         $preview_button_text = 'preview your Message';
     }
-    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,"<p class=\"action\" id=\"preview-submit\">$preview_text"); 
+    $buttons[0] =& HTML_QuickForm::createElement('static', 'staticpreview', null,"<p class=\"action\" id=\"preview-submit\">$preview_text");
     $buttons[2] =& HTML_QuickForm::createElement('submit', 'submitPreview', $preview_button_text);
-    $buttons[3] =& HTML_QuickForm::createElement('static', 'staticpreview', null, "</p>");     
+    $buttons[3] =& HTML_QuickForm::createElement('static', 'staticpreview', null, "</p>");
     $form->addGroup($buttons, 'previewStuff', '', '', false);
 
     return $form;
@@ -313,11 +308,6 @@ END;
 
 function buildPreviewForm($options) {
     global $fyr_values, $cobrand, $cocode;
-
-    // UCL A/B Testing
-    global $UCLTest;
-    $UCLTest->record_preview_visit();
-    $UCLTest->set_postcode($fyr_values['pc']);
 
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
@@ -340,7 +330,7 @@ function renderForm($form, $pageName, $options)
     global $fyr_representative, $fyr_voting_area;
     global $cobrand, $cocode;
     debug("FRONTEND", "Form values:", $fyr_values);
-    
+
     // $renderer =& $page->defaultRenderer();
     if (is_object($form)) {
         $renderer =& $options['renderer'];
@@ -350,7 +340,7 @@ function renderForm($form, $pageName, $options)
             <!-- BEGIN error -->
             <TR><TD colspan=2>
             <span class="error">{error}:</span>
-            </TD></TR>                                                   
+            </TD></TR>
             <!-- END error -->
             <TR><TD colspan=2>
             {element}
@@ -366,7 +356,7 @@ function renderForm($form, $pageName, $options)
         $form->accept($renderer);
     // Make HTML
         $fyr_form = $renderer->toHtml();
-        if ($options['table_layout']){     
+        if ($options['table_layout']){
             $fyr_form = preg_replace('#(<form.*?>)(.*?)(</form>)#s','$1<div id="writebox">$2</div>$3',$fyr_form);
         }
     } else {
@@ -396,13 +386,13 @@ function renderForm($form, $pageName, $options)
             'voting_area' => $fyr_voting_area,
             'form' => $fyr_form,
             'prime_minister' => $prime_minister,
-            'cobrand_letter_help' => $cobrand_letter_help, 
+            'cobrand_letter_help' => $cobrand_letter_help,
             'cobrand' => $cobrand,
             'host' => fyr_get_host()
     ));
 
     if ($stash['group_msg']) {
-        # check if there are any reps whose message will be sent via somewhere 
+        # check if there are any reps whose message will be sent via somewhere
         # else
         $any_via = false;
         foreach ($stash['valid_reps'] as $rep) {
@@ -440,9 +430,6 @@ function renderForm($form, $pageName, $options)
 
 function submitFaxes() {
 
-    // UCL A/B Testing
-    global $UCLTest;
-
     /* Submit a group of messages or an individual message
      * and show the results to the user */
 
@@ -450,27 +437,27 @@ function submitFaxes() {
     global $repid_list;
     global $representatives_info, $fyr_voting_area;
     global $fyr_values, $cobrand;
-    
+
     // Set up some brief error descriptions
     $errors = cobrand_message_sending_errors($cobrand);
-    if (!$errors) { 
-        $errors = array("problem-generic" => "Message Rejected", 
-                        "problem-lords" => "You have sent too many messages to Lords", 
+    if (!$errors) {
+        $errors = array("problem-generic" => "Message Rejected",
+                        "problem-lords" => "You have sent too many messages to Lords",
                         "problem-lords-similar" => "Too many similar messages have been sent",
-                        "problem-postcodes" => "You seem to be sending messages with several different postcodes", 
+                        "problem-postcodes" => "You seem to be sending messages with several different postcodes",
                         "problem-similar" => "Your message is near-identical with others sent previously");
     }
- 
+
     // send the message to each representative
     $any_success = false;
     $error_msg = "";
-    
+
     if ($grpid) {
 
         // No questionnaire for group mails
         $no_questionnaire = true;
 
-        // check the group id  
+        // check the group id
         if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
             template_show_error('Sorry, but your browser seems to be transmitting
             erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.');
@@ -478,10 +465,10 @@ function submitFaxes() {
         // double check that the group_id isn't already being used
         // This could mean that these messages have already been
         // queued or (with a very small probability) that someone
-        // else got the same group id 
-        $result = msg_check_group_unused($grpid);    
+        // else got the same group id
+        $result = msg_check_group_unused($grpid);
         if (isset($result)) {
-            $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br>";        
+            $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br>";
             template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
         }
 
@@ -489,9 +476,6 @@ function submitFaxes() {
         $no_questionnaire = false;
         $msgid_list = array($msgid);
         $repid_list = array($fyr_values['who']);
-
-        // UCL A/B Testing
-        $UCLTest->set_message_id($msgid);
     }
 
     # set up the address
@@ -509,16 +493,16 @@ function submitFaxes() {
                                      $message_array,
                                      $repid_list,
                                      $fyr_values['signedbody'],
-                                     $cobrand, $cocode, $grpid, $no_questionnaire);       
+                                     $cobrand, $cocode, $grpid, $no_questionnaire);
 
-    #check for error    
+    #check for error
     if (rabx_is_error($result)) {
         template_show_error(rabx_mail_error_msg($result->code, $result->text));
-    } 
+    }
 
     foreach (array_keys($result) as $id) {
         $res = $result[$id];
-        $rep_id = $res['recipient_id'];        
+        $rep_id = $res['recipient_id'];
         $abuse_res = $res['abuse_result'];
         $status = $res['status_code'];
         $err = $res['error_text'];
@@ -526,10 +510,10 @@ function submitFaxes() {
         if ($status != 0) {
             $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .
             $representatives_info[$rep_id]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
-            
+
             if ($status == 1) {
                 # FYR Error code
-                if ($grpid) { 
+                if ($grpid) {
                     $error_msg .= $rep_name . ": " . rabx_mail_error_msg($code, $err) . "<br>";
                 } else {
                     template_show_error(rabx_mail_error_msg($code, $err));
@@ -550,58 +534,55 @@ function submitFaxes() {
             }
         } else {
             $any_success = true;
-        }   
+        }
 
     }
-          
+
     if (!$any_success) {
         // None of the messages could be sent
         template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
     } elseif ($error_msg) {
-        // Some problems 
+        // Some problems
         $error_msg = "
-    <p style=\"text-align: center; color: #ff0000; \">Note: 
+    <p style=\"text-align: center; color: #ff0000; \">Note:
     Some of your messages could not be sent for the following reasons: </p>
     " . $error_msg;
         show_check_email($error_msg);
     } else {
         //no problems
         show_check_email($error_msg);
-
-        // UCL A/B Testing
-        $UCLTest->record_message_send();
     }
 
 }
 
-function rabx_mail_error_msg($code, $text) { 
+function rabx_mail_error_msg($code, $text) {
     global $cobrand, $cocode;
-     /* Return an appropriate error message for a RABX error code. 
+     /* Return an appropriate error message for a RABX error code.
       * Log errors other than multiple send attempts */
-     
+
     $error_msg = "";
     $base_url = cobrand_url($cobrand, '/', $cocode);
     if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) {
-        
+
         $error_msg = "You've already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.";
     } elseif ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED) {
-        $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>."; 
+        $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>.";
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
         $error_msg = "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>.";
-    }  
+    }
     return $error_msg;
 }
- 
+
 function show_check_email($error_msg) {
-     
+
     /* Show them the "check your email and click the link" template. */
-     global $fyr_representative, $fyr_voting_area; 
+     global $fyr_representative, $fyr_voting_area;
      global $fyr_values, $stash, $cobrand;
      $our_values = array_merge($fyr_values, array('representative' => $fyr_representative,
             'voting_area' => $fyr_voting_area, 'date' => $stash['date'], 'group_msg' => $stash['group_msg'],
             'error_msg' => $error_msg, 'cobrand' => $cobrand, 'host' => fyr_get_host()));
-     template_draw("write-checkemail", $our_values); 
+     template_draw("write-checkemail", $our_values);
 }
 
 function prepare_address() {
@@ -658,10 +639,6 @@ function check_message_id($msgid) {
 
 $fyr_values = get_all_variables();
 set_up_variables($fyr_values);
-
-// UCL A/B Testing
-require_once "ucl_ab_test.php";
-$UCLTest = new UCLTest;
 
 // Various display and used fields, global variables
 $stash = array();
@@ -737,7 +714,7 @@ if ($stash['group_msg']) {
 
     // Get the representative info
     $area_representatives = dadem_get_representatives($fyr_voting_area['id']);
-    dadem_check_error($area_representatives);  
+    dadem_check_error($area_representatives);
     debug("FRONTEND", "area representatives $area_representatives");
     $area_representatives = array($fyr_voting_area['id'] => $area_representatives);
     euro_check($area_representatives, $area_ids);
@@ -755,12 +732,12 @@ if ($stash['group_msg']) {
     # randomize the order that representatives will be displayed in
     shuffle($all_representatives);
     foreach ($all_representatives as $rep_specificid) {
-       
+
         $success = msg_recipient_test($rep_specificid);
-        $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .  
+        $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .
             $representatives_info[$rep_specificid]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
 
-        if (rabx_is_error($success)) {    
+        if (rabx_is_error($success)) {
             list($rep_error_type, $rep_error_msg) = recipient_test_error($success, $eb_area, $fyr_voting_area, $representatives_info[$rep_specificid]);
             $error_msg .= "<p>$rep_name: $rep_error_msg</p>";
         } else {
@@ -769,7 +746,7 @@ if ($stash['group_msg']) {
         }
 
     }
- 
+
     if (!$any_contacts) {
         // None of the group of representatives can be contacted
         template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br> " . $error_msg);
@@ -778,7 +755,7 @@ if ($stash['group_msg']) {
         $stash['warning_text'] = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br> " . $error_msg;
     }
 
-    // Assemble the name string 
+    // Assemble the name string
     $stash['rep_text'] = "<ul>";
     foreach ($stash['valid_reps'] as $rep) {
         $stash['rep_text'] .= "<li>" . $fyr_voting_area['rep_prefix'] . " " . $rep['name'] . " " . $fyr_voting_area['rep_suffix'] . "</li>";

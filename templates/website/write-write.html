@@ -1,4 +1,4 @@
-<? 
+<?
 $values['title'] = "Now write your message to " . $values['title_text'];
 $values['robots'] = 'noindex, nofollow';
 
@@ -9,7 +9,7 @@ if ($values['prime_minister']) {
 ?>
 
 <h2 class="warning"><strong>VIP.... VIP... VIP.... VIP... READ THIS BIT
-PLEASE...</strong></h2> 
+PLEASE...</strong></h2>
 <p>Please <strong>*ONLY*</strong> use this service to contact David Cameron if you are one of his
 <strong>constituents</strong> in Witney.
 
@@ -52,33 +52,6 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 <h2>Read this before writing your message</h2>
 
 <ul id="tips">
-
-<?php
-// UCL A/B Testing
-if ($values['representative']['type'] == 'WMC')
-{
-
-    global $UCLTest;
-
-    if ($UCLTest->show_numbers)
-    {
-        $rep_message_count = $UCLTest->get_rep_message_count($values['representative']['id']);
-        $UCLTest->set_message_count($rep_message_count);
-        $ucl_output = '<li>You are joining ' . $rep_message_count . ' ';
-        if ($rep_message_count == 1)
-        {
-            $ucl_output .= 'person who has';
-        }
-        else
-        {
-            $ucl_output .= 'people who have';
-        }
-        $ucl_output .= ' already written to ' . htmlspecialchars($values['representative']['name']) . ' using WriteToThem in the last 12 months.';
-
-        echo $ucl_output;
-    }
-}
-?>
 
     <li>Please be polite, concise and to the point; if you abuse your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
 
@@ -154,4 +127,3 @@ echo '</ul>';
 
 echo $values['form'];
 template_draw('footer', $values);
-
