@@ -193,7 +193,7 @@ sub confirm_message {
         if ($cobrand && $cobrand eq "animalaid") {
             $wth->browser_check_contents("Thank you! You've completed the action for \"Let's stop veal farming for good\".");
         } else {
-            $wth->browser_check_contents("All done&hellip; We&rsquo;ll send your message now");
+            $wth->browser_check_contents("All done! Your message is on its way.");
         }
     }
 }
