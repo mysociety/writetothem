@@ -1,6 +1,6 @@
 <?php
 
-header("Content-Type: text/html; charset=utf-8"); 
+header("Content-Type: text/html; charset=utf-8");
 if (isset($values['cobrand'])) {
   print cobrand_headers($values['cobrand'], 'common_header');
 }
@@ -37,6 +37,16 @@ $(function(){
 <?php }
       if (OPTION_WEB_DOMAIN == 'writetothem.com') {
 ?>
+
+<!-- Google Content Experiments for redesign A/B testing -->
+<script src="//www.google-analytics.com/cx/api.js"></script>
+<script>
+    cxApi.setChosenVariation(
+        0,
+        'jS0G7spTQ6W4Hm33Aoj9LA'
+    );
+</script>
+
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>']);
