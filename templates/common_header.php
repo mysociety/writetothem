@@ -43,15 +43,6 @@ if (isset($values['cobrand']))
     <style type="text/css">@import "<?=$values['stylesheet']?>";</style>
     <?php endif; ?>
 
-    <!-- Google Content Experiments for redesign A/B testing -->
-    <script src="//www.google-analytics.com/cx/api.js"></script>
-    <script>
-        cxApi.setChosenVariation(
-            1,
-            'XHF3VzPlR2i_39Q5ASqoCw'
-        );
-    </script>
-
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
     <script type="text/javascript">
       var _gaq = _gaq || [];
