@@ -344,7 +344,7 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 template_draw($template, array(
         'body_id' => 'home',
         "title" => $title,
-        "blurb-top" => '<h2>Write to your politicians, national or local, for free.</h2><p id="subtitle">Over 200,000 messages sent last year.</p>',
+        "blurb-top" => '<h2>Write to your politicians, national or local, for free.</h2><p id="subtitle">&nbsp;</p>',
         "form" => $form,
         "error" => $error_message,
         "all_url" => $fyr_all_url,

@@ -55,7 +55,10 @@ if (isset($values['cobrand']))
 
         // Text variations to use
         var pageVariations = [
-            function() {},  // Original
+
+            function() {    // Original
+                document.getElementById('subtitle').innerHTML = 'Over 200,000 messages sent last year.';
+            },
             function() {    // Variant 1
                 document.getElementById('subtitle').innerHTML = 'It takes less than five minutes.';
             },
