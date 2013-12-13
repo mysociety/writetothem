@@ -45,7 +45,24 @@ if (isset($values['cobrand']))
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
+    <!-- Load GA experiments API -->
+    <script src="//www.google-analytics.com/cx/api.js?experiment=Daii1FTKSMG0Lo2lQoQUBw"></script>
+
     <script>
+
+        // Select GA experiment variation
+        var chosenVariation = cxApi.chooseVariation();
+
+        // Text variations to use
+        var pageVariations = [
+            function() {},  // Original
+            function() {    // Variant 1
+                document.getElementById('subtitle').innerHTML = 'It takes less than five minutes.';
+            },
+            function() {    // Variant 2
+                document.getElementById('subtitle').innerHTML = 'It takes less than 5 minutes.';
+            }
+        ];
 
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -55,6 +72,15 @@ if (isset($values['cobrand']))
         ga('create', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>', 'writetothem.com');
         ga('set', 'anonymizeIp', true);
         ga('send', 'pageview');
+
+        function trackFormSubmit(form, category, name) {
+            try {
+                ga('send', 'event', category, name);
+            } catch(err){}
+            setTimeout(function() {
+                form.submit();
+            }, 100);
+        }
 
     </script>
 

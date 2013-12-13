@@ -22,7 +22,7 @@ require_once "../commonlib/phplib/votingarea.php";
  */
 function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $options) {
 
-    $form = '<form action="/" method="get" name="postcodeForm" id="postcodeForm">';
+    $form = '<form action="/" method="get" name="postcodeForm" id="postcodeForm" onsubmit="trackFormSubmit(this, \'PostcodeSearch\', \'Submit\'); return false;">';
 
     if ($options['inner_div']){
         $form .= '<div id="postcodebox">';
@@ -344,7 +344,7 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 template_draw($template, array(
         'body_id' => 'home',
         "title" => $title,
-        "blurb-top" => '<h2>Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>',
+        "blurb-top" => '<h2>Write to your politicians, national or local, for free.</h2><p id="subtitle">Over 200,000 messages sent last year.</p>',
         "form" => $form,
         "error" => $error_message,
         "all_url" => $fyr_all_url,
