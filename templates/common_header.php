@@ -89,6 +89,12 @@ if (isset($values['cobrand']))
 
     <?php endif; ?>
 
+    <?php if (array_key_exists('header_js', $values)): ?>
+    <script>
+        <?=$values['header_js']?>
+    </script>
+    <?php endif; ?>
+
 </head>
 
 <body>
