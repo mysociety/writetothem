@@ -46,7 +46,7 @@ if (isset($values['cobrand']))
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
     <!-- Load GA experiments API -->
-    <script src="//www.google-analytics.com/cx/api.js?experiment=Daii1FTKSMG0Lo2lQoQUBw"></script>
+    <script src="//www.google-analytics.com/cx/api.js?experiment=9AJDuy1gQjiG51CmMpaVlg"></script>
 
     <script>
 
@@ -57,13 +57,13 @@ if (isset($values['cobrand']))
         var pageVariations = [
 
             function() {    // Original
-                document.getElementById('subtitle').innerHTML = 'Over 200,000 messages sent last year.';
+                document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
             },
             function() {    // Variant 1
-                document.getElementById('subtitle').innerHTML = 'It takes less than five minutes.';
+                document.getElementById('title').innerHTML = 'Email your MP, local councillors or other representatives.';
             },
             function() {    // Variant 2
-                document.getElementById('subtitle').innerHTML = 'It takes less than 5 minutes.';
+                document.getElementById('title').innerHTML = 'Email the people in power.';
             }
         ];
 

@@ -52,7 +52,11 @@
 
     // When page is ready, switch the content
     $(document).ready(
-        pageVariations[chosenVariation]
+        try {
+            pageVariations[chosenVariation]
+        } catch(e) {
+            document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+        }
     );
 
     <?php endif; ?>
