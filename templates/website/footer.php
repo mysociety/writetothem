@@ -48,18 +48,14 @@
 <script>
     $(document).foundation();
 
-    <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
-
     // When page is ready, switch the content
-    $(document).ready(
-        try {
+    try {
+        $(document).ready(
             pageVariations[chosenVariation]
-        } catch(e) {
-            document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
-        }
-    );
-
-    <?php endif; ?>
+        );
+    } catch(err) {
+        document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+    }
 
 </script>
 
