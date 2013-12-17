@@ -48,14 +48,14 @@
 <script>
     $(document).foundation();
 
-    <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
-
     // When page is ready, switch the content
-    $(document).ready(
-        pageVariations[chosenVariation]
-    );
-
-    <?php endif; ?>
+    try {
+        $(document).ready(
+            pageVariations[chosenVariation]
+        );
+    } catch(err) {
+        document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+    }
 
 </script>
 
