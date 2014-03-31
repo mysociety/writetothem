@@ -111,14 +111,6 @@ if (isset($values['cobrand']))
 
 <?php endif; ?>
 
-<div class="staging" style="background:#F4F3EF;color:#000;">
-    <div class="row">
-        <div class="large-10 large-centered columns">
-            We're running a survey to help us understand who uses our sites. If you have 10-15 minutes to spare then we'd be grateful if you could <a href="http://questions.mysociety.org/S/wtt/w/">take part</a>.
-        </div>
-    </div>
-</div>
-
 <div class="content-wrapper">
 <div class="row">
     <div class="large-12 columns content">
