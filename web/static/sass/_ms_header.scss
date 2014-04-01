@@ -67,6 +67,10 @@ This is the header that runs across the very top of each mySociety page
                 line-height:2;
                 padding: 0.5em 0;
 
+                &:hover {
+                  text-decoration: none;
+                }
+
                 @media #{$small} {
                     background-image: url('../img/mysociety-header_logo.png');
                     background-size: 80% auto;
