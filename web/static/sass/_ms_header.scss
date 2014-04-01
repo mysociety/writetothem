@@ -64,8 +64,10 @@ This is the header that runs across the very top of each mySociety page
                 display:block;
                 background: #222 url('../img/mysociety-header_logo-mini.png') no-repeat scroll center center;
                 background-size: auto 100%;
-                line-height:2;
-                padding: 0.5em 0;
+                /* px values because we don't want tag to scale down */
+                line-height:28px;
+                padding: 7px 0;
+                width: 105px;
 
                 &:hover {
                   text-decoration: none;
