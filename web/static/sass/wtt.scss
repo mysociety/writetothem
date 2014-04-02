@@ -239,6 +239,11 @@ textarea {
     }
 }
 
+#index-search {
+  text-align: center;
+  min-width: 360px; /* stop input getting too narrow in tablet view */
+}
+
 .error-input {
     background-color: transparent;
 }
