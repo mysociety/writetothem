@@ -697,22 +697,36 @@ form#writeForm {
         font-size: emCalc(22);
     }
 
-    fieldset {
-        border: none;
+    .row .row {
+      margin: 0;
+
+      .columns {
         padding-left: 0;
         padding-right: 0;
-        border-bottom: 1px solid #ccc;
+      }
+
+      .columns:first-child {
+        padding-right: 2em;
+      }
+    }
+
+    fieldset {
+        border: none;
         legend {
             background: none;
             font-family: $header-font-family;
             font-size: emCalc(20);
             font-weight: 600;
         }
-        &:last-child {
-            border-bottom: none;
+    }
 
-        }
+    fieldset.last {
+      padding: 0;
+      margin-top: 0;
 
+      legend {
+        margin-bottom: 1em;
+      }
     }
 
     label {
