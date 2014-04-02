@@ -26,7 +26,7 @@ template_draw('header', $values);
 
 <?php if (isset($values['error_msg']) AND $values['error_msg'] !== ''): ?>
 <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="large-10 large-centered columns" role="alert">
         <div class="alert-box alert radius">
             <?=$values['error_msg']?>
         </div>
@@ -35,7 +35,7 @@ template_draw('header', $values);
 <?php endif; ?>
 
 <div class="row">
-    <div class="large-8 large-centered columns">
+    <div class="large-8 large-centered columns" role="alert">
 
         <hr>
 

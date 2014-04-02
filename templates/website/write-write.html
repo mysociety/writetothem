@@ -18,7 +18,7 @@ template_draw('header', $values);
 </div>
 
 <div class="row write-header">
-    <div class="large-8 large-centered columns">
+    <div class="large-8 large-centered columns" role="heading">
 
         <h2>Write your message</h2>
 
@@ -32,7 +32,7 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <div class="alert-box alert radius">
+        <div class="alert-box alert radius" role="alert">
             Please only use this service to contact David Cameron if you are one of his
             constituents in Witney.
         </div>
@@ -69,7 +69,7 @@ template_draw('header', $values);
 
 <?php if (OPTION_FYR_REFLECT_EMAILS): ?>
 <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="large-10 large-centered columns" role="alert">
         <div class="alert-box alert radius">This is a test version of the
         site.  Messages will <b>not</b> be delivered to representatives.
         Instead a copy will be sent to you as if you were the

@@ -21,7 +21,7 @@ template_draw('header', $values);
 
 <?php if ($values['error']): ?>
 <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="large-10 large-centered columns" role="alert">
         <div class="alert-box alert">
             <?=$values['error']?>
         </div>
@@ -30,7 +30,7 @@ template_draw('header', $values);
 <?php endif; ?>
 
 <div class="row index-input">
-    <div class="large-4 large-centered columns" id="index-search">
+    <div class="large-4 large-centered columns" id="index-search" role="search">
 
         <?=$values['form']?>
 
