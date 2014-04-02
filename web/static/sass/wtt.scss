@@ -51,7 +51,7 @@ p {
 }
 
 a {
-    &:hover {
+    &:hover, &:focus {
         text-decoration: underline;
         color: #333
     }
@@ -86,7 +86,7 @@ textarea {
     border: 1px solid #dbdad7;
     color: #666;
     @include transition(border $transition-timing ease-in, background-color $transition-timing ease-in);
-    &:hover {
+    &:hover, &:focus {
         border-color: #999;
         color: #333;
         background-color: transparent;
@@ -95,7 +95,7 @@ textarea {
 }
 
 .button.success {
-    &:hover {
+    &:hover, &:focus {
         border-color: darken($success-color, 20%);
     }
 }
@@ -656,7 +656,7 @@ p.toplink {
     a {
         color: #666666;
         text-decoration: underline;
-        &:hover {
+        &:hover, &:focus {
             color: $primary-color;
         }
     }
