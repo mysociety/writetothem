@@ -119,22 +119,26 @@ textarea {
 
 .content-wrapper {
     border-top: 5px solid #222222;
+
+    .banner-top {
+        background: $primary-color;
+        padding-top: 0;
+        padding-bottom: 0;
+        min-height: 40px;
+        margin-bottom: emCalc(20);
+
+        @media #{$small} {
+            min-height: 75px;
+        }
+    }
+
 }
 
-.banner-top {
-    background: $primary-color;
-    padding-top: 0;
-    padding-bottom: 0;
-    min-height: 40px;
-
-    &.row {
-        margin-bottom: emCalc(20);
-    }
-
-    @media #{$small} {
-        min-height: 75px;
-    }
-
+.row-full-width {
+    /* add this class to Foundation .row elements will stop them
+    leaving gutters on either side on big screens, without losing
+    their useful float clearing properties */
+    max-width: none !important;
 }
 
 .hero {

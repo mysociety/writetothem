@@ -112,7 +112,7 @@ if (isset($values['cobrand']))
 <?php endif; ?>
 
 <div class="content-wrapper">
-<div class="row">
+<div class="row row-full-width">
     <div class="large-12 columns content">
 
 <?php
