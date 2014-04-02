@@ -141,6 +141,12 @@ textarea {
     max-width: none !important;
 }
 
+.large-centered {
+  &.column, &.columns {
+    max-width: $row-width;
+  }
+}
+
 @media only screen and (min-width: $small-screen) and (max-width: 1024px) {
   /* We use .large-10 quite a lot to centre content on the screen.
   That's fine on screens over 1024px, but for the magic 768px-1024px
