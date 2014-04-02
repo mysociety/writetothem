@@ -144,7 +144,7 @@ textarea {
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
     padding-top: 0;
-    padding-bottom: emCalc(36);
+    padding-bottom: emCalc(42);
     position: relative;
     min-height: 70px;
 
@@ -152,13 +152,13 @@ textarea {
         color: #FFFFFF;
         font-family: $body-font-family;
         font-size: emCalc(26);
-        margin-top: 2em;
+        margin-top: 1.5em;
         text-align: center;
     }
     p {
         text-align: center;
         max-width: 30em;
-        margin: 0 auto;
+        margin: 0 auto 1em auto;
     }
 
     @media #{$small} {
