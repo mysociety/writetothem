@@ -338,7 +338,7 @@ function buildWriteForm($options) {
         if (!$preview_button_text) {
             $preview_button_text = 'Preview and send';
         }
-        $form->addElement('static', 'staticpreview', null,"<p class=\"action\" id=\"preview-submit\">$preview_text</p>");
+        $form->addElement('html', "<p class=\"action\" id=\"preview-submit\">$preview_text</p>");
         $form->addElement('submit', 'submitPreview', $preview_button_text, array('class' => 'button radius success'));
 
     $form->addElement("html", "</fieldset>");
