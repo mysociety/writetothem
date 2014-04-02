@@ -41,9 +41,15 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,
-strong,
-b {
+strong, b {
     font-weight: 600;
+}
+
+h2 {
+  /* Foundation makes h2s too small by default.
+  So we give all h2s, at all screen sized, a
+  font-size matching the one for 768px+ displays. */
+  font-size: 1.71429em;
 }
 
 p {
