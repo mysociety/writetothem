@@ -69,9 +69,9 @@ foreach ($va_display_order as $va_types) {
     }
 
     if ($rep_count > 1) {
-        $heading = "Your {$va_areas[0]['rep_name_long_plural']}";
+        $heading = "Your {$va_areas[0]['rep_name_plural']}";
     } else {
-        $heading = "Your {$va_areas[0]['rep_name_long']}";
+        $heading = "Your {$va_areas[0]['rep_name']}";
     }
 
     // Data bad due to election etc?
