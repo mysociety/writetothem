@@ -389,7 +389,7 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count,
     }
     global $va_council_child_types;
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
-        $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Have you spotted a mistake in the above list?</a></small></p>';
+        $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
     }
     return array($text, $col_after);
 }
