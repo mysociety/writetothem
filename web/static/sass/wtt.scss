@@ -376,6 +376,7 @@ textarea {
 .write-header {
     text-align: center;
     padding-top: 12px;
+    padding-bottom: 1em;
 
     h2 {
         font-family: $body-font-family;
@@ -421,6 +422,10 @@ textarea {
         }
     }
 
+}
+
+#writebox textarea {
+  padding: 1.5em;
 }
 
 .write-instructions li:last-child {
