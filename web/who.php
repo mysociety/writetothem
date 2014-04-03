@@ -364,16 +364,19 @@ function display_reps($va_type, $representatives, $va_area, $options) {
 }
 
 function display_reps_one_type($va_type, $va_area, $representatives, $rep_count, $meps_hidden) {
-    global $representatives_info, $cobrand;
+    global $representatives_info, $cobrand, $va_council_child_types;
+
+    $text = ''; // a string of html containing the main rep names and links
+    $col_after = ''; // a string of html containing extra links, like help and TWFY
 
     if ($rep_count > 1) {
         if ($va_type == 'EUR' && count($meps_hidden))
             $rep_count += count($meps_hidden);
     }
 
-    $text = '';
     if ($rep_count > 1 && !skip_write_all()) {
-        $text .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
+        // $text .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
     }
 
     if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
@@ -381,24 +384,28 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count,
     }
     $text .= display_reps($va_type, $representatives, $va_area, array());
 
-    $col_after = '';
     if ($va_type == 'WMC') {
-        $col_after = extra_mp_text($rep_count, $va_area, $representatives);
+        $col_after .= extra_mp_text($rep_count, $va_area, $representatives);
     } elseif ($va_type == 'EUR' && count($meps_hidden)) {
-        $col_after = hidden_meps_list($meps_hidden, $va_type, $va_area);
+        $col_after .= hidden_meps_list($meps_hidden, $va_type, $va_area);
     }
-    global $va_council_child_types;
+
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
-        $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
+        // $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
+        $col_after .= '<p><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></p>';
     }
+
     return array($text, $col_after);
 }
 
 function display_reps_two_types($va_types, $va_area, $representatives, $rep_count, $rep_counts) {
-    $text = '';
+    $text = '';// a string of html containing the main rep names and links
+    $col_after = ''; // a string of html containing extra links, like help and TWFY
+
     $skip_write_all = skip_write_all();
     if ($rep_count && $rep_counts[0]>1 && !$skip_write_all) {
-        $text .= write_all_link($va_types[0], $va_area[0]['rep_name_plural']);
+        // $text .= write_all_link($va_types[0], $va_area[0]['rep_name_plural']);
+        $col_after .= '<p>' . write_all_link($va_types[0], $va_area[0]['rep_name_plural']) . '</p>';
     }
     if ($rep_count) {
         $text .= display_reps($va_types[0], $representatives[0], $va_area[0], array());
@@ -419,7 +426,8 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
     $text .= '.</p>';
 
     if ($rep_count && $rep_counts[1]>1 && $va_types[1] != 'SPE' && $va_types[1] != 'LAE' && !$skip_write_all) {
-        $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        // $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
     }
 
     if ($rep_count) {
@@ -427,9 +435,10 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
     }
 
     if ($rep_count && $rep_counts[1]>1 && ($va_types[1] == 'SPE' || $va_types[1] == 'LAE') && !$skip_write_all) {
-        $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        // $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
     }
-    return array($text, '');
+    return array($text, $col_after);
 }
 
 function skip_write_all() {
@@ -446,7 +455,7 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
     $text = '';
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
-        $text = '<p><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">Find out more about ' . $name . ' at TheyWorkForYou</a></p>';
+        $text = '<p><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">See ' . $name . '&rsquo;s voting record and speeches at TheyWorkForYou</a></p>';
 
         // A/B Testing Hack!
         if (isset($_GET['t']) AND $_GET['t'] == 'who-b') {

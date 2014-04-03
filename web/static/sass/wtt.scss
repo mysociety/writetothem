@@ -68,6 +68,10 @@ a {
     }
 }
 
+.help-text {
+  font-family: $header-font-family;
+}
+
 small {
     font-size: emCalc(13);
     line-height: 1.461538462em;
@@ -402,6 +406,10 @@ textarea {
         font-family: $body-font-family;
     }
 
+    p {
+      margin-bottom: 1em;
+    }
+
 }
 
 .write-content {
@@ -531,21 +539,13 @@ h3.rep-heading {
 
 }
 
-.rep-blurb {
-	font-family: $header-font-family;
-	font-size: emCalc(13);
-	line-height: emCalc(19);
-	color: #666666;
-}
-
 .rep-list {
     list-style: none;
     margin-left: 0;
     padding-left: 0;
 
     li {
-        margin-top: 3px;
-        margin-bottom: 3px;
+        margin-bottom: 0.5em;
 
         a {
             font-size: emCalc(18);
@@ -577,13 +577,30 @@ h3.rep-heading {
 
 }
 
+.rep-blurb, .rep-more {
+  color: #999;
+  p {
+    margin-bottom: 0.7em;
+    color: inherit;
+  }
+}
+
 .rep-more {
-    font-family: $header-font-family;
-    small {
-       font-size: emCalc(13);
-       line-height: emCalc(19);
-       color: #666;
-    }
+  a {
+    color: inherit;
+  }
+  a:hover {
+    color: $primary-color;
+  }
+}
+
+.rep-blurb {
+  a {
+    color: $primary-color;
+  }
+  strong {
+    color: #22AA35; /* a mid green, to match the breadcrumb dots */
+  }
 }
 
 
