@@ -187,6 +187,9 @@ textarea {
         font-family: $body-font-family;
         font-size: emCalc(26);
         margin-top: 1.5em;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 17em; /* break headline onto 2 lines */
         text-align: center;
     }
     p {
@@ -219,6 +222,23 @@ textarea {
 
     &.hero-sent {
         background-image: url(../img/heroes/sent.jpg);
+    }
+
+    @media #{$large} and (min-height: 800px) {
+      /* make the hero taller on tall, wide screens */
+
+      h2 {
+        font-size: emCalc(52);
+        max-width: 17em;
+        margin-top: 2.5em;
+        margin-bottom: 1em;
+      }
+
+      p {
+        font-size: 2em;
+        margin-bottom: 2.5em;
+      }
+
     }
 
 }
@@ -271,6 +291,12 @@ textarea {
         border-right: none;
         @include border-radius(3px 0 0 3px);
     }
+
+    @media #{$large} and (min-height: 800px) {
+      /* move input further from hero on tall, wide screens */
+      padding-top: emCalc(60);
+    }
+
 }
 
 #index-search {
