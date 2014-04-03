@@ -578,28 +578,10 @@ h3.rep-heading {
 }
 
 .rep-blurb, .rep-more {
-  color: #999;
+  color: #6c6b68;
   p {
     margin-bottom: 0.7em;
     color: inherit;
-  }
-}
-
-.rep-more {
-  a {
-    color: inherit;
-  }
-  a:hover {
-    color: $primary-color;
-  }
-}
-
-.rep-blurb {
-  a {
-    color: $primary-color;
-  }
-  strong {
-    color: #22AA35; /* a mid green, to match the breadcrumb dots */
   }
 }
 
