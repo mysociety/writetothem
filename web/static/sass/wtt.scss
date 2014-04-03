@@ -47,9 +47,14 @@ strong, b {
 
 h2 {
   /* Foundation makes h2s too small by default.
-  So we give all h2s, at all screen sized, a
+  So we give all h2s, at all screen sizes, a
   font-size matching the one for 768px+ displays. */
   font-size: 1.71429em;
+}
+
+h3 {
+  /* Likewise for h3s */
+  font-size: 1.14286em;
 }
 
 p {
