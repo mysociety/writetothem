@@ -12,17 +12,15 @@
 // Google Fonts
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Merriweather:400,700);
 
+$retina: "only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)";
+
 // Mixin for simplifying retina background images.
 // Applies at densities above 1.3, to avoid fuzzy images below full 2x displays.
-@mixin retina-bg($image, $retinaimage) {
+@mixin retina-bg($image, $retinaimage, $size: 100%) {
 	background-image: url($image);
-	@media (min--moz-device-pixel-ratio: 1.3),
-		(-o-min-device-pixel-ratio: 2.6/2),
-		(-webkit-min-device-pixel-ratio: 1.3),
-		(min-device-pixel-ratio: 1.3),
-		(min-resolution: 1.3dppx) {
+	@media #{$retina} {
 		background-image: url($retinaimage);
-		background-size: 100%;
+		background-size: $size;
 	}
 }
 
@@ -365,8 +363,8 @@ textarea {
 
 .flow-breadcrumbs {
     @extend .hide-for-small;
-	text-align: center;
-	margin-top: 12px;
+    text-align: center;
+    margin-top: 12px;
 }
 
 .flow-breadcrumbs li {
@@ -380,47 +378,47 @@ textarea {
 
 .flow-breadcrumbs li.done:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-complete.png', '../img/flow-start-complete@2x.png');
+	@include retina-bg('../img/flow-start-complete.png', '../img/flow-start-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.done {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-complete.png', '../img/flow-mid-complete@2x.png');
+	@include retina-bg('../img/flow-mid-complete.png', '../img/flow-mid-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.done:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-complete.png', '../img/flow-end-complete@2x.png');
+	@include retina-bg('../img/flow-end-complete.png', '../img/flow-end-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-current.png', '../img/flow-start-current@2x.png');
+	@include retina-bg('../img/flow-start-current.png', '../img/flow-start-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-current.png', '../img/flow-mid-current@2x.png');
+	@include retina-bg('../img/flow-mid-current.png', '../img/flow-mid-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-current.png', '../img/flow-end-current@2x.png');
+	@include retina-bg('../img/flow-end-current.png', '../img/flow-end-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-incomplete.png', '../img/flow-start-incomplete@2x.png');
+	@include retina-bg('../img/flow-start-incomplete.png', '../img/flow-start-incomplete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-incomplete.png', '../img/flow-mid-incomplete@2x.png');
+	@include retina-bg('../img/flow-mid-incomplete.png', '../img/flow-mid-incomplete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-incomplete.png', '../img/flow-end-incomplete@2x.png');
+	@include retina-bg('../img/flow-end-incomplete.png', '../img/flow-end-incomplete@2x.png', 400px 19px);
 }
 
 .write-header {
