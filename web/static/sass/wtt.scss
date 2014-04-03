@@ -266,7 +266,10 @@ textarea {
 
 #index-search {
   text-align: center;
-  min-width: 360px; /* stop input getting too narrow in tablet view */
+  @media #{$small} {
+    /* stop input getting too narrow in tablet view */
+    min-width: 360px;
+  }
 }
 
 .error-input {
