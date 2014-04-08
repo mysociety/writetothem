@@ -794,6 +794,7 @@ if ($stash['group_msg']) {
         // Check that the representative represents this postcode
         if (!$fyr_values['pc']) mismatch_error();
         $postcode_areas = mapit_call('postcode', $fyr_values['pc']);
+        mapit_check_error($postcode_areas);
         $area_ids = array_keys($postcode_areas['areas']);
         if (!in_array($fyr_representative['voting_area'], $area_ids)) {
             mismatch_error();
