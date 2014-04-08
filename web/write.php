@@ -730,7 +730,7 @@ if ($stash['group_msg']) {
     // Get the representative info
     $area_representatives = dadem_get_representatives($fyr_voting_area['id']);
     dadem_check_error($area_representatives);
-    debug("FRONTEND", "area representatives $area_representatives");
+    debug("FRONTEND", "area representatives", $area_representatives);
     $area_representatives = array($fyr_voting_area['id'] => $area_representatives);
     euro_check($area_representatives, $area_ids);
     $all_representatives = array_values($area_representatives[$fyr_voting_area['id']]);
@@ -738,7 +738,7 @@ if ($stash['group_msg']) {
     dadem_check_error($representatives_info);
     debug_timestamp();
 
-    debug("FRONTEND", "representatives info $representatives_info");
+    debug("FRONTEND", "representatives info", $representatives_info);
 
     //Check the contact method exists for each representative
     $any_contacts = false;
@@ -777,7 +777,7 @@ if ($stash['group_msg']) {
     }
     $stash['rep_text'] .= "</ul>";
 
-    debug("FRONTEND", "Valid reps $stash[valid_reps]");
+    debug("FRONTEND", "Valid reps", $stash['valid_reps']);
 
     // Set a msgid for each rep in the list
     assign_message_ids();
@@ -986,7 +986,7 @@ function get_area($id) {
     if (mapit_get_error($area)) {
         back_to_who();
     }
-    debug("FRONTEND", "FYR voting area $area");
+    debug("FRONTEND", "FYR voting area", $area);
     $area = add_area_vars($area);
     return $area;
 }
