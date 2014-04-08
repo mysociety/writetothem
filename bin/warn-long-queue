@@ -12,10 +12,10 @@
  */
  
  
-require_once "../conf/general";
-require_once "../phplib/queue.php";
+require_once dirname(__FILE__) . "/../conf/general";
+require_once dirname(__FILE__) . "/../phplib/queue.php";
 $long_opts = array('help', 'verbose');
-require_once '../commonlib/phplib/phpcli.php';
+require_once dirname(__FILE__) . '/../commonlib/phplib/phpcli.php';
 
 $switches = $options[0];
 $args = $options[1];
