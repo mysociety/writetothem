@@ -162,14 +162,16 @@ function by_response($a, $b) {
 
 function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report) {
     foreach ($last_year_report as $key => $row) {
-        $last_year_data[] = array(
+        if (is_array($row)) {
+            $last_year_data[] = array(
                 'name' => $row['name'],
                 'person_id' => $row['person_id'],
                 'category' => $row['category'],
                 'response' => $row['responded_mean'],
                 'low' => $row['responded_95_low'],
                 'high' => $row['responded_95_high'],
-        );
+            );
+        }
     }
     usort($last_year_data, 'by_response');
     $position = 0;
