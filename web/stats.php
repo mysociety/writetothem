@@ -17,7 +17,7 @@ require_once '../commonlib/phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2008';
+if (!$year) $year = '2013';
 #if (!get_http_var('really'))
 #    $year = '2005'; # XXX temp
 $year = intval($year);
@@ -31,7 +31,7 @@ $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
 
-$years = array('2005', '2006', '2007', '2008');
+$years = array('2005', '2006', '2007', '2008', '2013');
 $got_year = 0;
 $year_bar_array = array();
 foreach ($years as $y) {
@@ -75,8 +75,12 @@ if (!rabx_is_error($voting_areas)) {
 
 if ($type == 'mps') {
     // Table of responsiveness of MPs
-    require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
-    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_{$previous_year}_WMC"]);
+    $last_year = array();
+    if (file_exists("../phplib/questionnaire_report_${previous_year}_WMC.php")) {
+        require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
+        $last_year = $GLOBALS["questionnaire_report_{$previous_year}_WMC"];
+    }
+    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $last_year);
 } elseif ($type == 'zeitgeist') {
     // Miscellaneous general statistics
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
@@ -161,6 +165,7 @@ function by_response($a, $b) {
 }
 
 function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report) {
+    $last_year_data = array();
     foreach ($last_year_report as $key => $row) {
         if (is_array($row)) {
             $last_year_data[] = array(
@@ -178,6 +183,9 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     $same_stat = 1;
     $last_response = -1;
     $last_low = -1;
+    $fymp_ranked = array();
+    $fymp_response = array();
+    $fymp_category = array();
     foreach ($last_year_data as $key => $row) {
         if ($row['response'] != $last_response || $row['low'] != $last_low) {
             $position += $same_stat;
