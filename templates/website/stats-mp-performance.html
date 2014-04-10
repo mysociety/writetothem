@@ -126,7 +126,9 @@ $mp = $info['mp'];
         $head_cons = 'Constituency'; if ($sort != 'c') $head_cons = '<a href="?o=c">' . $head_cons . '</a>';
         $head_messages = 'Messages sent to MP'; if ($sort != 's') $head_messages = '<a href="?o=s">' . $head_messages . '</a>';
         $head_response = 'Response rate of MP'; if ($sort != 'r') $head_response = '<a href="?">' . $head_response . '</a>';
-        $head_response .= '<br><small>(Previous year)</small>';
+        if ($values['year'] != 2013) {
+            $head_response .= '<br><small>(Previous year)</small>';
+        }
         ?>
         <table>
         <tr>
