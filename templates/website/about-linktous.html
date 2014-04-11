@@ -18,36 +18,36 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives. Well, you can!
+<p>Wouldn't it be great if you could put a little box on your website which would let your users get in touch with their elected representatives? Well, you can!
 </p>
 
 <ul class="side-nav">
-<li><a href="#envelope">Envelope style box</a></li>
+<li><a href="#envelope">Envelope-style box</a></li>
 <li><a href="#conventional">Conventional style box</a></li>
-<li><a href="#types">Linking to specific types of representative</a></li>
-<li><a href="#prefill">Prefilling name and address</a></li>
+<li><a href="#types">Limiting to specific types of representative</a></li>
+<li><a href="#prefill">Pre-filling name and address</a></li>
 <li><a href="#plugins">Plugins for WordPress</a></li>
 </ul>
 
 <p>Before you do so, make sure you read the <a
 href="about-guidelines">guidelines for campaigners</a>.  You must not tell your
-users to send cut-and-paste messages &mdash; they are against our conditions of
+users to send pre-written, identical letters &mdash; they are against our conditions of
 use and we will block them.</p>
 
 <? $signup_form_normal = <<<END
 <!-- WriteToThem conventional box, start -->
 <div style="padding:0; border:1px solid #999999; width:14em; margin: 0;
-            background-color:#FFE88C; font: 83% Helvetica, Arial, sans-serif;">
-    <form method="get" action="https://www.writetothem.com/" style="text-align:center">
-        <div style="background-color:#D0BF69;padding:3px; color:#2B3260;">
-                <strong>Contact Your Politician</strong>
-        </div>
-        <div style="margin:0.5em; color:#2B3260; background-color: #ffe88c;">
-            <div style="margin-bottom:0.25em;">Enter your Postcode below:</div>
-            <input type="text" name="pc" size="13">
-            <input type="submit" value="Go">
-        </div>
-    </form>
+           background-color:#FFE88C; font: 83% Helvetica, Arial, sans-serif;">
+   <form method="get" action="http://www.writetothem.com/" style="text-align:center">
+       <div style="background-color:#D0BF69;padding:3px; color:#2B3260;">
+               <strong>Contact Your Politician</strong>
+       </div>
+       <div style="margin:0.5em; color:#2B3260; background-color: #ffe88c;">
+           <div style="margin-bottom:0.25em;">Enter your Postcode below:</div>
+           <input type="text" name="pc" size="13">
+           <input type="submit" value="Go">
+       </div>
+   </form>
 </div>
 <!-- WriteToThem conventional box, end-->
 END;
@@ -56,59 +56,57 @@ END;
 <? $signup_form_envelope = <<<END
 <!-- WriteToThem envelope box, start -->
 <script type="text/javascript">
-    function clearDefault(el) {
-      if (el.defaultValue==el.value) el.value = "";
-    }
-    function fillDefault(el) {
-      if (el.value=="") el.value = "Your Postcode";
-    }
+   function clearDefault(el) {
+     if (el.defaultValue==el.value) el.value = "";
+   }
+   function fillDefault(el) {
+     if (el.value=="") el.value = "Your Postcode";
+   }
 </script>
 <div style="width:167px;height:120px;
-    background: url(https://www.writetothem.com/envelope_bg.gif) no-repeat 0 0;
-    font:9pt/11pt arial,helvetica,sans-serif;position:relative;">
-    <form method="get" action="https://www.writetothem.com/">
-        <div style="padding:55px 0 0 20px;">
-            <label for="pc" style="display:none;">
-                Contact Your Politician
-            </label>
-            <input type="text" value="Your Postcode" name="pc" size="13"
-                style="width:90px;vertical-align:bottom;
-                    font:8pt/11pt arial,helvetica,sans-serif;color:#666;"
-                onfocus="clearDefault(this)" onblur="fillDefault(this)" />
-            <input type="image" value="Go" style="vertical-align:bottom;"
-                src="https://www.writetothem.com/envelope_arrow.gif" />
-        </div>
-    </form>
-    <a href="https://www.writetothem.com/" title="Visit writetothem.com"
-    style="display:block;position:absolute;bottom:0;width:100%;overflow:hidden;
-    text-indent:-1234em;height:30px;bottom:0;">writetothem.com</a>
+   background: url(http://www.writetothem.com/envelope_bg.gif) no-repeat 0 0;
+   font:9pt/11pt arial,helvetica,sans-serif;position:relative;">
+   <form method="get" action="http://www.writetothem.com/">
+       <div style="padding:55px 0 0 20px;">
+           <label for="pc" style="display:none;">
+               Contact Your Politician
+           </label>
+           <input type="text" value="Your Postcode" name="pc" size="13"
+               style="width:90px;vertical-align:bottom;
+                   font:8pt/11pt arial,helvetica,sans-serif;color:#666;"
+               onfocus="clearDefault(this)" onblur="fillDefault(this)" />
+           <input type="image" value="Go" style="vertical-align:bottom;"
+               src="http://www.writetothem.com/envelope_arrow.gif" />
+       </div>
+   </form>
+   <a href="http://www.writetothem.com/" title="Visit writetothem.com"
+   style="display:block;position:absolute;bottom:0;width:100%;overflow:hidden;
+   text-indent:-1234em;height:30px;bottom:0;">writetothem.com</a>
 </div>
 <!-- WriteToThem envelope box, end-->
 END;
 ?>
 
-<h2 id="envelope">Envelope style box</h2>
+<h2 id="envelope">Envelope-style box</h2>
 <?=$signup_form_envelope ?>
-<p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
+<p>To add the envelope-style postcode box to your site, just copy the HTML code below into your own webpage. </p>
 <pre><code><?=htmlspecialchars($signup_form_envelope)?></code></pre>
 
 <h2 id="conventional">Conventional style box</h2>
 <?=$signup_form_normal ?>
-<p>To add the postcode box to your site, copy the HTML code given below into your own webpage. </p>
+<p>To add the conventional postcode box to your site, copy the HTML code below into your own webpage. </p>
 <pre><code><?=htmlspecialchars($signup_form_normal)?></code></pre>
 
 
-<p>Feel free to hack around with the design as much as you like. Any questions, just <a href="/about-contact">drop us a line</a>.</p>
+<p>Feel free to hack around with the design as much as you like. If you have any questions, just <a href="/about-contact">drop us a line</a>.</p>
 
-<h2 id="types">Linking to specific types of representative</h2>
+<h2 id="types">Limiting to specific types of representative</h2>
 
-<p>You can also link to a specific type of representative.
-For example, if people on your website are writing only to their MP, use an
-address like this.</p>
+<p>If you only want to encourage people to write to one kind of representative - for example, only to their MP, link to WriteToThem using an address like this:</p>
 
-<pre><code>https://www.writetothem.com/?a=westminstermp</code></pre>
+<pre><code>http://www.writetothem.com/?a=westminstermp</code></pre>
 
-<p>Or if you are using a form to link to us, add this code to your form. It
+<p>Or if you are using one of the boxes, above, to link to us, add this code to your form. It
 goes just after the postcode <code>&lt;input&gt;</code> field, and before the submit/go
 button one.</p>
 
@@ -138,18 +136,18 @@ Put these in a list as the value of "a", separated by commas ",".
 <li>European Parliament: <code>EUR</code></li>
 </ul>
 
-<p>So, for example, this would only show representatives of district type
+<p>So, for example, the link below would only show representatives of district type
 councils.  For people entering postcodes in unitary areas, it would say there
 were no representatives of that type and offer to show them all their
-representatives.
+representatives:
 
 <pre><code>&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBO&quot;&gt;</code></pre>
 
-<h2 id="prefill">Prefilling name and address</h2>
+<h2 id="prefill">Pre-filling name and address</h2>
 
-<p>If you already know the name, address or email of the person using your website,
-you can send the values to WriteToThem. They will then be defaults for the letter.
-The person writing the letter can check or alter them before sending.
+<p>If you already know the name, address or email of the person using your website (ie if they are logged in) or reading your newsletter, you can send the values to WriteToThem. </p>
+
+<p>Your supporters will be able to check or alter them before sending.</p>
 
 <p>
 <pre><code>&lt;input type=&quot;hidden&quot; name=&quot;writer_email&quot; value=&quot;name@email.address&quot;&gt;</code></pre>
@@ -168,13 +166,14 @@ The person writing the letter can check or alter them before sending.
 
 <h2 id="plugins">Plugins for WordPress</h2>
 
-<p>Philip John has made a
-<a href="http://wordpress.org/extend/plugins/writetothem/">WordPress plugin
-for WriteToThem</a>, that lets you easily add a WriteToThem form to your
-WordPress site as a standard WordPress widget.
+<p>Philip John (not affiliated to WriteToThem, but working voluntarily) has made a
+<a href="http://wordpress.org/extend/plugins/writetothem/">WordPress plugin</a>. </p>
+<p>It lets you add a WriteToThem form to your WordPress site as a standard WordPress widget - so it's just drag-and-drop to install.</p>
 
 <p>There is also a much older <a href="/WriteToThem.com.zip">WordPress
-plugin</a>, written by Richard Pope, that needs you to alter your PHP template.
+plugin</a>, written by Richard Pope. To use that, you will need to alter your PHP template.</p>
+
+<p>Please address support queries about these plug-ins to their authors, on the plug-ins' pages.</p>
 
             </div>
 
