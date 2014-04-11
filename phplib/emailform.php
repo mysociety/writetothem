@@ -1,21 +1,22 @@
+
 <?php
 /*
- * emailform.php:
- * Email Form for contacting site administrators.
- *
- * Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
- * Email: angie@mysociety.org; WWW: http://www.mysociety.org
- *
- * $Id: emailform.php,v 1.10 2008-02-29 11:22:56 matthew Exp $
- *
- */
+* emailform.php:
+* Email Form for contacting site administrators.
+*
+* Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+* Email: angie@mysociety.org; WWW: http://www.mysociety.org
+*
+* $Id: emailform.php,v 1.10 2008-02-29 11:22:56 matthew Exp $
+*
+*/
 require_once "../phplib/fyr.php";
 require_once '../commonlib/phplib/evel.php';
 
 /* setup the fields that are wanted on the contact form,
- *    this will be dynamically built using emailform_display,
- * it will also be checked by emailform_test_message, if you want to add another field stick it in here.
- */
+*    this will be dynamically built using emailform_display,
+* it will also be checked by emailform_test_message, if you want to add another field stick it in here.
+*/
 $radiovals = array(
     array ('label' => 'The WriteToThem team', 'value' => 'us'),
     array ('label' => 'Your representative', 'value' => 'rep'),
@@ -59,7 +60,7 @@ $emailformfields = array (
     array ('label'     => '',
            'inputname' => 'send',
            'inputtype' => 'submit',
-           'value'     => 'Send us your thoughts'),
+           'value'     => 'Send'),
 );
 
 function fyr_display_emailform () {
@@ -76,7 +77,7 @@ function fyr_display_emailform () {
               $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit <a href="/">www.writetothem.com</a> and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
               wrongcontact_display($problem, $contact_message);
             } elseif ($dest == 'other') {
-              $problem = 'You can only contact the team behind WriteToThem using our contact form. Your message is printed below so you can copy and paste it to wherever you want to send it.';
+              $problem = 'This form is for contacting the WriteToThem technical support team. Your message is printed below so you can copy and paste it to wherever you want to send it.';
               wrongcontact_display($problem, $contact_message);
             } else {
               if (emailform_send_message()) {
@@ -162,7 +163,7 @@ function emailform_display ($messages) {
       return;
     }
     print '<div id ="sendmess">';
-    print '<h3>Tell us what you think</h3>';
+    print '<h3>Contact the WriteToThem technical support team</h3>';
     if ($messages) {
 
       print '<ul class="repwarning">';
