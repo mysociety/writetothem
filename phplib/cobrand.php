@@ -324,7 +324,7 @@ function cobrand_force_default_cocode($cobrand, $cocode) {
 // Force setting the representative type or types to a certain type, mainly for
 // when they land on the front page. Can set per cobrand or cocode.
 // $type, and your return value, are the options as described for the 'a'
-// parameter in http://www.writetothem.com/about-linktous
+// parameter in https://www.writetothem.com/about-linktous
 // $type input is the value set with the 'a' URL parameter, if there is one.
 function cobrand_force_representative_type($cobrand, $cocode, $type) {
     $cobrand_handle = cobrand_handle($cobrand);

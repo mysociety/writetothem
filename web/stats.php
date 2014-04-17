@@ -280,7 +280,7 @@ function category_lookup($cat) {
     elseif ($cat == 'shame') return "MP did not accept messages via WriteToThem";
     elseif ($cat == 'toofew') return 'Too little data for valid analysis';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
-    elseif ($cat == 'cheat') return '<a href="http://www.writetothem.com/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
+    elseif ($cat == 'cheat') return '<a href="https://www.writetothem.com/about-ilg">MP attempted to improve their response rate by sending themselves messages</a>';
     elseif ($cat == 'badcontact') return 'WriteToThem had possibly bad contact details for this MP';
     else template_show_error("Unknown MP categorisation '".htmlspecialchars($cat)."'");
     return $cat;

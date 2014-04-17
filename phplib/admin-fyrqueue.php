@@ -562,7 +562,7 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
                 "Hi " . $message['sender_name']. ",
 
 Unfortunately, your message to " . $message['recipient_name'] . " has not been sent. You can only use our service to write to your own elected representatives, not to representatives for other places.  Here is a full explanation as to why we have this policy:
-    http://www.writetothem.com/about-qa#onlyrep
+    https://www.writetothem.com/about-qa#onlyrep
 
 There's a copy of your message below, so you can send it another way, if you like.
 

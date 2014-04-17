@@ -94,7 +94,7 @@ while (my $q = new mySociety::CGIFast()) {
             print $q->header(),
                 $q->start_html('WriteToThem.com - report a problem'),
                 $q->p("<strong>Thank you!</strong> We've received your description of the problem you've found, and will fix it as soon as we can. If you gave an email address, we'll tell you when we've sorted it out."),
-                $q->p('You can now <a href="http://www.writetothem.com/">go back to WriteToThem.com</a> or to <a href="http://www.faxyourmp.com/">FaxYourMP.com</a>.'),
+                $q->p('You can now <a href="https://www.writetothem.com/">go back to WriteToThem.com</a> or to <a href="http://www.faxyourmp.com/">FaxYourMP.com</a>.'),
                 $q->end_html();
     } else {
         print $q->header(),

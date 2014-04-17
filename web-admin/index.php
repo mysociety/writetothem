@@ -35,9 +35,9 @@ delivery); or</dd>
 <dt><em>TEMPLATE</em></dt>
 <dd>to drop (abandon) the message and display the named <em>TEMPLATE</em>
 (for instance 'problem-similar' will display
-<a href="http://www.writetothem.com/problem-similar">the notice about
+<a href="https://www.writetothem.com/problem-similar">the notice about
 cut-and-paste messages</a>). Use
-"<a href="http://www.writetothem.com/problem-generic">problem-generic</a>"
+"<a href="https://www.writetothem.com/problem-generic">problem-generic</a>"
 if no more specific explanation of why the message was rejected is
 available.</dd>
 </dl>
