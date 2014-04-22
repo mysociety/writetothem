@@ -9,14 +9,15 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <h2><?=$values['title']?></h2>
-
-        <ul class="inline-list">
-            <li><b>Summary</b></li>
-            <li><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></li>
-        </ul>
-
-        <hr>
+        <div class="zg-year-bar"><?=$values['year_bar']?></div>
+        <h2 class="big-title"><?=$values['title']?></h2>
+        <div class="navigation-tabs">
+            <ul class="inline-list">
+                <li><b>Summary</b></li>
+                <li><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></li>
+            </ul>
+        </div>
+        <div class="statistics-page">
 
         <?php if ($values['year'] == '2005'): ?>
             <p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
@@ -228,10 +229,10 @@ template_draw('header', $values);
                 print "<td>";
                 if ($type == 'total') {
                     print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
-                    print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
                 } else {
                     print round(100 * $value['responded_mean'], 0) . "%";
-                    print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
                 }
                 print "</td>";
                 print "<td>";
@@ -240,7 +241,7 @@ template_draw('header', $values);
                 } else {
                     print round(100 * $value['firsttime_mean'], 0) . "%";
                 }
-                print " (" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")";
+                print " <i class=\"totals\">(" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")</i>";
                 print "</td>";
                 print "<td>".number_format($value['dispatched_success'])."</td>";
                 #print "<td>".number_format($value['dispatched_success'] * $value['firsttime'] / $value['firsttime_outof'])."</td>";
@@ -278,7 +279,7 @@ template_draw('header', $values);
             print "<td>$party</td>";
             print "<td>";
             print fuzzy_response_description($value['responded_mean']);
-            print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+            print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
             print "</td>";
             print "</tr>";
         }
@@ -302,7 +303,7 @@ template_draw('header', $values);
             print "<td>$party</td>";
             print "<td>";
             print fuzzy_response_description($value['responded_mean']);
-            print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+            print " <i class=\"totals\">(" . $value['responded'] . " out of " . $value['responded_outof'] . ")</i>";
             print "</td>";
             print "</tr>";
         }
@@ -315,18 +316,6 @@ template_draw('header', $values);
 
         <?php endif; ?>
 
-        <hr>
-
-        <div class="zg-year-bar"><?=$values['year_bar']?></div>
-
-        <div class="panel advert">
-
-        <ul>
-            <li><a href="https://www.mysociety.org/about/get-involved/">Volunteer to help build sites like this</a></li>
-            <li><a href="https://www.mysociety.org/donate/">Make a donation to mySociety</a> (we’re run by a charity!)</li>
-        </ul>
-
-        </div>
-
+        </div> <!-- /statistics-page -->
     </div>
 </div>

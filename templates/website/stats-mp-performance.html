@@ -15,25 +15,85 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <h2><?=$values['title']?></h2>
+        <div class="zg-year-bar"><?=$values['year_bar']?></div>
+        <h2 class="big-title"><?=$values['title']?></h2>
+        <div class="navigation-tabs">
+            <ul class="inline-list">
+                <li><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a></li>
+                <li><b>MP Responsiveness League Table</b></li>
+            </ul>
+        </div>
+        <div class="statistics-page">
+        <p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
+            messages to MPs in the year <?=$values['year']?> and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
+            <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
+            about communicating with their MP.
+            <? if ($values['year'] < 2006) { ?>
+                This asked whether MPs had responded to their message within 2 to 3 weeks.
+            <? } else if ($values['year'] >= 2006) { ?>
+                <p>The survey asked whether people had had <strong>a reply (not just an acknowledgement)</strong> from their
+                representative.
+                <? if ($values['year'] == 2006) { ?>
+                    (Actually the text of the survey changed slightly in both March and April 2006. You
+                    can <a href="https://secure.mysociety.org/cvstrac/rlog?f=mysociety/fyr/templates/emails/questionnaire">see in our
+                    source code repository</a> when this happened, and what changed).
+                <? } ?>
+            <? } ?>
+            </p>
 
-        <ul class="inline-list">
-            <li><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a></li>
-            <li><b>MP Responsiveness League Table</b></li>
-        </ul>
+        <p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
+            didn't answer, were surveyed again <strong>after 3 weeks</strong>. Because of
+            this, and because of the way different people interpret the survey, you should
+            interpret the figures below with caution.
 
-        <hr>
+        <p><strong>Journalists:</strong> Please feel free to use the data on this page,
+            but if you do you <strong>must cite WriteToThem.com</strong> in the body of
+            your articles as the source of any analysis or data you get from this site.
+            Statistics without a referenced source are dangerous, so please do this.</p>
+
+        <p><strong>Note:</strong> While some MPs are very slow at responding to
+            constituents mail, that doesn't mean they aren't otherwise active in or around
+            Parliament on behalf of their constituents. You can see MPs voting record,
+            committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
 
         <form method="get">
-            <p><label for="pc">Enter your postcode and see how your MP was ranked for responding to constituents’ emails in <?=$values['year']?>:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
-            <input type="submit" class="button small success" value="Look up"></p>
+            <div id="postcodebox">
+                <label for="pc">Enter your postcode and see how your MP was ranked for responding to constituents’ emails in <?=$values['year']?>:</label>
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
+                    </div>
+                    <div class="small-2 columns">
+                        <input type="submit" class="button success prefix" value="Go">
+                    </div>
+                </div>
+            </div>
         </form>
 
         <?php if (is_array($mp)):
             $h_name = htmlspecialchars($mp['name']);
         ?>
 
-        <?
+        <div class="mp-lookup-results">
+        <h2><?=$h_name ?><span class="stat-desc"><?=$mp['party'] ?> MP for <?=$mp['area'] ?></span></h2>
+        <ul class="mp-response-stats">
+
+        <li><span class="stat-desc">Messages sent:</span><span class="stat-number"><?=$mp['dispatched_success'] ?></span></li>
+        <? if ($mp['notes']) { ?>
+            <li><?=$mp['notes'] ?>
+        <? } else { ?>
+            <li><span class="stat-desc">Response rate: </span><strong class="stat-number"><?=fuzzy_response_description($mp['response']) ?></strong>
+            <span class="stat-desc-mini"><?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers</span>
+            <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>--></li>
+            <? if ($mp['fymp_response']) { ?>
+                <li><span class="stat-desc">Previous year's response rate: </span><strong class="stat-number"><?=fuzzy_response_description($mp['fymp_response']) ?></strong></li>
+            <? } ?>
+            <li><span class="stat-desc">People writing for first time: </span><strong class="stat-number"><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
+            <span class="stat-desc-mini"><?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys</span>
+            <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>--></li>
+            <!--<li>Ranking: -->
+
+            <?
             $same_stat = 1;
             $position = 0;
             $last_response = -1;
@@ -57,29 +117,7 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
                     break;
                 }
             }
-        ?>
-
-        <ul>
-            <li>In <?=$values['year']?> your MP was <b><?=$h_name ?></b>, <?=$mp['party'] ?> MP for <?=$mp['area'] ?></li>
-        <? if ($mp['notes']) { ?>
-            <li><?=$mp['notes'] ?>, and as such we haven’t ranked this MP</li>
-        </ul>
-
-        <? } else { ?>
-            <?=$mp_ranking_string ?>
-            <li>That rates this MP’s responsiveness as <b><?=fuzzy_response_description($mp['response']) ?></b></li>
-            <? if ($mp['fymp_response']) { ?>
-            <li>Their response rate for the previous year was <b><?=fuzzy_response_description($mp['fymp_response']) ?></b></li>
-            <? } ?>
-        </ul>
-
-        <p>How this result was calculated:</p>
-
-        <ul>
-            <li>Last year, WriteToThem users sent <?=$mp['dispatched_success'] ?> messages to this MP</li>
-            <li>Out of those, <?=$mp['responded_outof']?> users responded to our &lsquo;did you receive a reply’ survey</li>
-            <li><?=$mp['responded']?> (<?=round(($mp['responded']/$mp['responded_outof'])*100,0) ?>%) of those users confirmed that they had received a response</li>
-        </ul>
+            ?>
 
         <? } ?>
 
@@ -90,7 +128,10 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
         See how this MP voted, and more, on <a href="http://www.theyworkforyou.com/mp?pid=<?=str_replace('uk.org.publicwhip/person/', '', $mp['person_id']) ?>">TheyWorkForYou</a>
         </p>
 
-        <?php endif; ?>
+        <p><a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a></p>
+        <p><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a></p>
+        </div>
+        <?php endif; // this is the end of `if(is_array($mp):` ?>
 
         <p><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.writetothem.com/stats/<?=$values['year']?>/mps" data-size="large" data-text="<?=$tweet_text ?>" data-count="none" data-dnt="true">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
 
@@ -190,47 +231,11 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
         }
         print '</table>';
 
+        print '<p>If you would like to do further processing, there is an <a href="?xml=1">XML version</a> of this data.';
+
         ?>
 
-        <p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
-            messages to MPs in the year <?=$values['year']?> and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
-            <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
-            about communicating with their MP.
-            <? if ($values['year'] < 2006) { ?>
-                This asked whether MPs had responded to their message within 2 to 3 weeks.
-            <? } else if ($values['year'] >= 2006) { ?>
-                <p>The survey asked whether people had had <strong>a reply (not just an acknowledgement)</strong> from their
-                representative.
-                <? if ($values['year'] == 2006) { ?>
-                    (Actually the text of the survey changed slightly in both March and April 2006. You
-                    can <a href="https://github.com/mysociety/writetothem/commits/master/templates/emails/questionnaire">see in our
-                    source code repository</a> when this happened, and what changed).
-                <? } ?>
-            <? } ?>
-            </p>
-
-        <p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
-            didn’t answer, were surveyed again <strong>after 3 weeks</strong>. Because of
-            this, and because of the way different people interpret the survey, you should
-            interpret the figures below with caution.
-
-        <p><strong>Journalists:</strong> Please feel free to use the data on this page,
-            but if you do you <strong>must cite WriteToThem.com</strong> in the body of
-            your articles as the source of any analysis or data you get from this site.
-            Statistics without a referenced source are dangerous, so please do this.</p>
-
-        <p><strong>Note:</strong> While some MPs are very slow at responding to
-            constituents mail, that doesn’t mean they aren’t otherwise active in or around
-            Parliament on behalf of their constituents. You can see MPs voting record,
-            committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
-
-        <p>If you would like to do further processing, there is an <a href="?xml=1">XML version</a>
-            of this data.</p>
-
-        <hr>
-
-        <div class="zg-year-bar"><?=$values['year_bar']?></div>
-
+        </div>
     </div>
 </div>
 
