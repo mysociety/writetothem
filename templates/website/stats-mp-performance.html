@@ -56,10 +56,18 @@ $mp = $info['mp'];
             committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
 
         <form method="get">
-            <p><label for="pc">Look up your MP; enter your postcode:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
-            <input type="submit" class="button small success" value="Look up"></p>
+            <div id="postcodebox">
+                <label for="pc">Look up your MP; enter your postcode:</label>
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
+                    </div>
+                    <div class="small-2 columns">
+                        <input type="submit" class="button success prefix" value="Go">
+                    </div>
+                </div>
+            </div>
         </form>
-
 
         <?php if (is_array($mp)):
              $h_name = htmlspecialchars($mp['name']);

@@ -5888,6 +5888,8 @@ form#writeForm .error-element label {
     font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
     color: #666;
     font-size: 0.875em; }
+  .statistics-page #postcodebox {
+    max-width: 30em; }
 
 .navigation-tabs {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif; }
