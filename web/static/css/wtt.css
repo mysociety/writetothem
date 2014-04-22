@@ -5843,3 +5843,37 @@ form#writeForm .error-element textarea {
 form#writeForm .error-element label {
   font-weight: 600;
   color: #c63a3a; }
+
+/* Styles for the Zeitgeist pages */
+.statistics-page {
+  background-color: #fff;
+  padding: 1em;
+  margin-bottom: 2em; }
+  @media only screen and (min-width: 1280px) {
+    .statistics-page {
+      padding: 4em; } }
+  .statistics-page small {
+    color: #666; }
+
+.navigation-tabs {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif; }
+  .navigation-tabs a,
+  .navigation-tabs b {
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-weight: normal;
+    font-size: 1.28571em;
+    color: #333; }
+  .navigation-tabs a {
+    background: #e3e2de; }
+    .navigation-tabs a:hover, .navigation-tabs a:active, .navigation-tabs a:focus {
+      background: #fff; }
+  .navigation-tabs b {
+    background: #fff; }
+  .navigation-tabs .inline-list {
+    margin-left: 0;
+    margin-bottom: 0; }
+    .navigation-tabs .inline-list li {
+      margin-bottom: 0;
+      margin-right: 1em;
+      margin-left: 0; }

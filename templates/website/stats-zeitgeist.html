@@ -12,13 +12,13 @@ template_draw('header', $values);
         <div class="zg-year-bar"><?=$values['year_bar']?></div>
 
         <h2><?=$values['title']?></h2>
-
-        <ul class="inline-list">
-            <li><b>Summary</b></li>
-            <li><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></li>
-        </ul>
-
-        <hr>
+        <div class="navigation-tabs">
+            <ul class="inline-list">
+                <li><b>Summary</b></li>
+                <li><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></li>
+            </ul>
+        </div>
+        <div class="statistics-page">
 
         <?php if ($values['year'] == '2005'): ?>
             <p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
@@ -326,7 +326,7 @@ template_draw('header', $values);
         </ul>
 
         </div>
-
+        </div> <!-- /statistics-page -->
     </div>
 </div>
 

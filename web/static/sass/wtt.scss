@@ -730,3 +730,48 @@ form#writeForm {
         }
     }
 }
+
+/* Styles for the Zeitgeist pages */
+.statistics-page {
+    background-color: #fff;
+    padding: 1em;
+    margin-bottom: 2em;
+    @media #{$medium} {
+        padding: 4em;
+    }
+    small {
+        color: #666;
+    }
+}
+
+.navigation-tabs {
+    font-family: $header-font-family;
+    a,
+    b {
+        display: inline-block;
+        padding: 0.5em 1em;
+        font-weight: normal;
+        font-size: emCalc(18);
+        color: #333;
+    }
+    a {
+        background: #e3e2de;
+        &:hover,
+        &:active,
+        &:focus {
+            background: #fff;
+        }
+    }
+    b {
+        background: #fff;
+    }
+    .inline-list {
+        li {
+            margin-bottom: 0;
+            margin-right: 1em;
+            margin-left: 0;
+        }
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+}
