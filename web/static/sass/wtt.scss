@@ -94,6 +94,34 @@ textarea {
     }
 }
 
+/*
+ * Tables
+ */
+
+table {
+    border: none;
+    text-align: left;
+    th {
+        font-family: $header-font-family;
+        font-weight: normal;
+    }
+    tr {
+        line-height: 1.5em;
+        background-color: transparent;
+        border-top: 1px solid #E9E9E9;
+        &:first-child {
+            border-top: none;
+        }
+        &:nth-child(even) {
+            background-color: transparent;
+        }
+        &:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+    }
+}
+
+
 .button.success {
     &:hover {
         border-color: darken($success-color, 20%);

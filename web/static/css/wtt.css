@@ -5348,6 +5348,26 @@ textarea {
     -o-transition: border 0.1s ease-in, background-color 0.1s ease-in;
     transition: border 0.1s ease-in, background-color 0.1s ease-in; }
 
+/*
+ * Tables
+ */
+table {
+  border: none;
+  text-align: left; }
+  table th {
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+    font-weight: normal; }
+  table tr {
+    line-height: 1.5em;
+    background-color: transparent;
+    border-top: 1px solid #E9E9E9; }
+    table tr:first-child {
+      border-top: none; }
+    table tr:nth-child(even) {
+      background-color: transparent; }
+    table tr:hover {
+      background-color: rgba(0, 0, 0, 0.05); }
+
 .button.success:hover {
   border-color: #1c632e; }
 
