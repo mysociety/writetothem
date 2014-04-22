@@ -770,6 +770,16 @@ form#writeForm {
     small {
         color: #666;
     }
+    table {
+        width: 100%;
+        margin: 1em 0 2em;
+    }
+    .totals {
+        font-style: normal;
+        font-family: $header-font-family;
+        color: #666;
+        font-size: 0.875em;
+    }
 }
 
 .navigation-tabs {

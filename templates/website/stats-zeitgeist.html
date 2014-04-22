@@ -230,10 +230,10 @@ template_draw('header', $values);
                 print "<td>";
                 if ($type == 'total') {
                     print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
-                    print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
                 } else {
                     print round(100 * $value['responded_mean'], 0) . "%";
-                    print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
                 }
                 print "</td>";
                 print "<td>";
@@ -242,7 +242,7 @@ template_draw('header', $values);
                 } else {
                     print round(100 * $value['firsttime_mean'], 0) . "%";
                 }
-                print " (" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")";
+                print " <i class=\"totals\">(" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")</i>";
                 print "</td>";
                 print "<td>".number_format($value['dispatched_success'])."</td>";
                 #print "<td>".number_format($value['dispatched_success'] * $value['firsttime'] / $value['firsttime_outof'])."</td>";
@@ -280,7 +280,7 @@ template_draw('header', $values);
             print "<td>$party</td>";
             print "<td>";
             print fuzzy_response_description($value['responded_mean']);
-            print " (" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")";
+            print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
             print "</td>";
             print "</tr>";
         }
@@ -304,7 +304,7 @@ template_draw('header', $values);
             print "<td>$party</td>";
             print "<td>";
             print fuzzy_response_description($value['responded_mean']);
-            print " (" . $value['responded'] . " out of " . $value['responded_outof'] . ")";
+            print " <i class=\"totals\">(" . $value['responded'] . " out of " . $value['responded_outof'] . ")</i>";
             print "</td>";
             print "</tr>";
         }
