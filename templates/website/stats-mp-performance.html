@@ -15,15 +15,14 @@ $mp = $info['mp'];
 
         <div class="zg-year-bar"><?=$values['year_bar']?></div>
 
-        <h2><?=$values['title']?></h2>
-
-        <ul class="inline-list">
-            <li><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a></li>
-            <li><b>MP Responsiveness League Table</b></li>
-        </ul>
-
-        <hr>
-
+        <h2 class="big-title"><?=$values['title']?></h2>
+        <div class="navigation-tabs">
+            <ul class="inline-list">
+                <li><a href="/stats/<?=$values['year']?>/zeitgeist">Summary</a></li>
+                <li><b>MP Responsiveness League Table</b></li>
+            </ul>
+        </div>
+        <div class="statistics-page">
         <p>WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
             messages to MPs in the year <?=$values['year']?> and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.
             <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
@@ -221,7 +220,7 @@ $mp = $info['mp'];
 
         ?>
 
-
+        </div>
     </div>
 </div>
 
