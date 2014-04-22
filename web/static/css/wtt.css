@@ -5874,16 +5874,28 @@ form#writeForm .error-element label {
       padding: 4em; } }
   .statistics-page small {
     color: #666; }
+  .statistics-page table {
+    width: 100%;
+    margin: 1em 0 2em; }
+  .statistics-page .totals {
+    font-style: normal;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+    color: #666;
+    font-size: 0.875em; }
 
 .navigation-tabs {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif; }
   .navigation-tabs a,
   .navigation-tabs b {
     display: inline-block;
-    padding: 0.5em 1em;
+    padding: 0.25em .5em;
     font-weight: normal;
-    font-size: 1.28571em;
     color: #333; }
+    @media only screen and (min-width: 768px) {
+      .navigation-tabs a,
+      .navigation-tabs b {
+        padding: 0.5em 1em;
+        font-size: 1.28571em; } }
   .navigation-tabs a {
     background: #e3e2de; }
     .navigation-tabs a:hover, .navigation-tabs a:active, .navigation-tabs a:focus {
