@@ -72,21 +72,23 @@ $mp = $info['mp'];
         <?php if (is_array($mp)):
              $h_name = htmlspecialchars($mp['name']);
         ?>
-        <ul>
-        <li><strong><?=$h_name ?></strong>, <?=$mp['party'] ?> MP for <?=$mp['area'] ?>
-        <li>Messages sent: <?=$mp['dispatched_success'] ?>
+        <div class="mp-lookup-results">
+        <h2><?=$h_name ?><span class="stat-desc"><?=$mp['party'] ?> MP for <?=$mp['area'] ?></span></h2>
+        <ul class="mp-response-stats">
+
+        <li><span class="stat-desc">Messages sent:</span><span class="stat-number"><?=$mp['dispatched_success'] ?></span></li>
         <? if ($mp['notes']) { ?>
-        <li><?=$mp['notes'] ?>
+            <li><?=$mp['notes'] ?>
         <? } else { ?>
-        <li>Response rate: <strong><?=fuzzy_response_description($mp['response']) ?></strong>
-        (<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
-        <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
+        <li><span class="stat-desc">Response rate: </span><strong class="stat-number"><?=fuzzy_response_description($mp['response']) ?></strong>
+        <span class="stat-desc-mini"><?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers</span>
+        <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>--></li>
         <? if ($mp['fymp_response']) { ?>
-        <li>Previous year's response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
+        <li><span class="stat-desc">Previous year's response rate: </span><strong class="stat-number"><?=fuzzy_response_description($mp['fymp_response']) ?></strong></li>
         <? } ?>
-        <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
-        (<?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys)
-        <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>-->
+        <li><span class="stat-desc">People writing for first time: </span><strong class="stat-number"><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
+        <span class="stat-desc-mini"><?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys</span>
+        <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>--></li>
         <!--<li>Ranking: -->
         <?
             $same_stat = 1;
@@ -121,11 +123,10 @@ $mp = $info['mp'];
             }
         } ?>
         </ul>
-        <p>
-        <a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a>
-        <br><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a>
-        </p>
 
+        <p><a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a></p>
+        <p><a href="http://www.theyworkforyou.com/mp/?c=<?=$mp['area'] ?>">Find out more about <?=$h_name ?> MP on TheyWorkForYou</a></p>
+        </div>
         <?php endif; ?>
 
         <?php
