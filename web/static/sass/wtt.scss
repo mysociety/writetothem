@@ -760,6 +760,13 @@ form#writeForm {
 }
 
 /* Styles for the Zeitgeist pages */
+.big-title {
+    font-size: emCalc(32px);
+    @media #{$medium} {
+        font-size: emCalc(48px);
+    }
+
+}
 .statistics-page {
     background-color: #fff;
     padding: 1em;

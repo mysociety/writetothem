@@ -5865,6 +5865,12 @@ form#writeForm .error-element label {
   color: #c63a3a; }
 
 /* Styles for the Zeitgeist pages */
+.big-title {
+  font-size: 2.28571em; }
+  @media only screen and (min-width: 1280px) {
+    .big-title {
+      font-size: 3.42857em; } }
+
 .statistics-page {
   background-color: #fff;
   padding: 1em;
