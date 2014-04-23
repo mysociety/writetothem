@@ -771,6 +771,7 @@ form#writeForm {
     background-color: #fff;
     padding: 1em;
     margin-bottom: 2em;
+    overflow-x: scroll;
     @media #{$medium} {
         padding: 4em;
     }
