@@ -804,27 +804,37 @@ form#writeForm {
 
 .navigation-tabs {
     font-family: $header-font-family;
+    margin-bottom: 1em;
+    @media (min-width: 29em) {
+        margin-bottom: 0;
+    }
     a,
     b {
-        display: inline-block;
-        padding: 0.25em .5em;
+        display: block;
         font-weight: normal;
-        color: #333;
-        @media #{$small} {
+        @media (min-width: 29em) {
+            color: #333;
             padding: 0.5em 1em;
             font-size: emCalc(18);
+            display: inline-block;
+            padding: 0.25em .5em;
         }
     }
     a {
-        background: #e3e2de;
-        &:hover,
-        &:active,
-        &:focus {
-            background: #fff;
+        @media (min-width: 29em) {
+            background: #e3e2de;
+            &:hover,
+            &:active,
+            &:focus {
+                background: #fff;
+            }
         }
+
     }
     b {
-        background: #fff;
+        @media #{$small} {
+            background: #fff;
+        }
     }
     .inline-list {
         li {

@@ -5901,24 +5901,31 @@ form#writeForm .error-element label {
       border-bottom-left-radius: 0; }
 
 .navigation-tabs {
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif; }
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, Helmet, Freesans, sans-serif;
+  margin-bottom: 1em; }
+  @media (min-width: 29em) {
+    .navigation-tabs {
+      margin-bottom: 0; } }
   .navigation-tabs a,
   .navigation-tabs b {
-    display: inline-block;
-    padding: 0.25em .5em;
-    font-weight: normal;
-    color: #333; }
-    @media only screen and (min-width: 768px) {
+    display: block;
+    font-weight: normal; }
+    @media (min-width: 29em) {
       .navigation-tabs a,
       .navigation-tabs b {
+        color: #333;
         padding: 0.5em 1em;
-        font-size: 1.28571em; } }
-  .navigation-tabs a {
-    background: #e3e2de; }
-    .navigation-tabs a:hover, .navigation-tabs a:active, .navigation-tabs a:focus {
-      background: #fff; }
-  .navigation-tabs b {
-    background: #fff; }
+        font-size: 1.28571em;
+        display: inline-block;
+        padding: 0.25em .5em; } }
+  @media (min-width: 29em) {
+    .navigation-tabs a {
+      background: #e3e2de; }
+      .navigation-tabs a:hover, .navigation-tabs a:active, .navigation-tabs a:focus {
+        background: #fff; } }
+  @media only screen and (min-width: 768px) {
+    .navigation-tabs b {
+      background: #fff; } }
   .navigation-tabs .inline-list {
     margin-left: 1em;
     margin-bottom: 0; }
