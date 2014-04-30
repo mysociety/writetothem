@@ -899,11 +899,11 @@ sub as_utf8_octets ($) {
     return $s;
 }
 
-# make_representative_email MESSAGE
+# make_representative_email MESSAGE SENDER
 # Return the on-the-wire text of an email for the passed MESSAGE (hash of db
 # fields), suitable for immediate sending to the real recipient.
-sub make_representative_email ($) {
-    my ($msg) = (@_);
+sub make_representative_email ($$) {
+    my ($msg, $sender) = @_;
 
     my $subject = $msg->{recipient_type} eq 'HOC'
                         ? "Letter from $msg->{sender_name}"
@@ -942,14 +942,19 @@ sub make_representative_email ($) {
                 email_template_params($msg, representative_url => '') # XXX
             );
 
-    return mySociety::Email::construct_email({
-            From => [$msg->{sender_email}, $msg->{sender_name}],
-            To => [[$msg->{recipient_email}, $msg->{recipient_name}]],
-            Subject => $subject,
-            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-            'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $bodytext
-        });
+    my $headers = {
+        From => [ $msg->{sender_email}, $msg->{sender_name} ],
+        To => [ [ $msg->{recipient_email}, $msg->{recipient_name} ] ],
+        Subject => $subject,
+        Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+        'Message-ID' => email_message_id($msg->{id}),
+        _body_ => $bodytext
+    };
+    if ($msg->{sender_email} =~ /\@(aol|yahoo)\./i) {
+        $headers->{From} = [ $sender, $msg->{sender_name} ];
+        $headers->{'Reply-To'} = [ [ $msg->{sender_email}, $msg->{sender_name} ] ],
+    }
+    return mySociety::Email::construct_email($headers);
 }
 
 
@@ -1353,11 +1358,11 @@ sub deliver_email ($) {
     my $id = $msg->{id};
     die "attempt to deliver message $id while in state '" . state($id) . "' (should be 'ready')"
         unless (state($id) eq 'ready');
-    my $mail = make_representative_email($msg);
     my $sender = sprintf('%s%s@%s',
                             mySociety::Config::get('EMAIL_PREFIX'),
                             make_token("bounce", $id),
                             mySociety::Config::get('EMAIL_DOMAIN'));
+    my $mail = make_representative_email($msg, $sender);
     my $result = mySociety::EmailUtil::send_email($mail, $sender, $msg->{recipient_email});
     if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
         logmsg($id, 1, "delivered message by email to $msg->{recipient_email}");
@@ -2535,7 +2540,7 @@ sub admin_get_wire_email ($$) {
     my $msg = message($id);
 
     if ($type eq 'representative') {
-        return make_representative_email($msg);
+        return make_representative_email($msg, 'unknown');
     } elsif ($type eq 'confirm') {
         return make_confirmation_email($msg);
     } elsif ($type eq 'confirm-reminder') {
