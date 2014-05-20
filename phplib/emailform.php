@@ -141,7 +141,7 @@ function render_formfield ($defs, $messages) {
     $out = '<span class="intro-text';
     if (isset($messages[$defs['inputname']]))
         $out .= ' repwarning';
-    $out .= '">' . $intro_text . '</span>' . $input ;
+    $out .= '">' . $intro_text . '</span><br>' . $input ;
   }
   return '<p>' . $out . '</p>';
 }
