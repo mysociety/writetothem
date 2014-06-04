@@ -41,7 +41,7 @@ unless (GetOptions(
     'commit' => \$commit,
     'status=s' => \$status)
     && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
-    && $status =~ /^(pending|recent|none)$/) {
+    && $status =~ /^(pending|recent|boundary_changes|none)$/) {
     print <<EOF;
 --type - Three-letter type to switch on/off. (Note that the code in write.php
      checks both the area and its parent, so often you could do either e.g.
@@ -61,7 +61,7 @@ unless (GetOptions(
 	 WMC - 650 MPs
 --country - one letter if type is UTA, to turn off only Scotland or Wales.
 --exceptions - names or area IDs, comma separated, to exempt.
---status should be pending, recent, or none to turn them back on.
+--status should be pending, recent, boundary_changes, or none to turn them back on.
 --commit - Actually update the live database.
 EOF
     exit 1;
@@ -72,7 +72,7 @@ $exceptions =~ s/,/|/g;
 my %only = map { $_ => 1 } split /,/, $only;
 $only =~ s/,/|/g;
 
-$status .= '_election' unless $status eq 'none';
+$status .= '_election' if $status =~ /pending|recent/;
 
 print "DRY RUN\n" unless $commit;
 
