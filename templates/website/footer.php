@@ -1,5 +1,5 @@
 <div class="row footer">
-    <div class="large-10 large-centered columns">
+    <div class="large-10 large-centered columns" role="navigation">
         <div class="row">
             <div class="footer-content">
 

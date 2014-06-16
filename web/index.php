@@ -86,7 +86,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
         $form .= '&nbsp;';
     }
 
-    $form .= '<small><a href="/about-constituency">What postcode should I use?</a></small>';
+    $form .= '<a href="/about-constituency" class="help-text">What postcode should I use?</a>';
 
     // End the form
     if ($options['inner_div']){

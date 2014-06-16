@@ -12,17 +12,15 @@
 // Google Fonts
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Merriweather:400,700);
 
+$retina: "only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)";
+
 // Mixin for simplifying retina background images.
 // Applies at densities above 1.3, to avoid fuzzy images below full 2x displays.
-@mixin retina-bg($image, $retinaimage) {
+@mixin retina-bg($image, $retinaimage, $size: 100%) {
 	background-image: url($image);
-	@media (min--moz-device-pixel-ratio: 1.3),
-		(-o-min-device-pixel-ratio: 2.6/2),
-		(-webkit-min-device-pixel-ratio: 1.3),
-		(min-device-pixel-ratio: 1.3),
-		(min-resolution: 1.3dppx) {
+	@media #{$retina} {
 		background-image: url($retinaimage);
-		background-size: 100%;
+		background-size: $size;
 	}
 }
 
@@ -41,9 +39,20 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,
-strong,
-b {
+strong, b {
     font-weight: 600;
+}
+
+h2 {
+  /* Foundation makes h2s too small by default.
+  So we give all h2s, at all screen sizes, a
+  font-size matching the one for 768px+ displays. */
+  font-size: 1.71429em;
+}
+
+h3 {
+  /* Likewise for h3s */
+  font-size: 1.14286em;
 }
 
 p {
@@ -51,10 +60,14 @@ p {
 }
 
 a {
-    &:hover {
+    &:hover, &:focus {
         text-decoration: underline;
         color: #333
     }
+}
+
+.help-text {
+  font-family: $header-font-family;
 }
 
 small {
@@ -86,7 +99,7 @@ textarea {
     border: 1px solid #dbdad7;
     color: #666;
     @include transition(border $transition-timing ease-in, background-color $transition-timing ease-in);
-    &:hover {
+    &:hover, &:focus {
         border-color: #999;
         color: #333;
         background-color: transparent;
@@ -95,7 +108,7 @@ textarea {
 }
 
 .button.success {
-    &:hover {
+    &:hover, &:focus {
         border-color: darken($success-color, 20%);
     }
 }
@@ -119,22 +132,41 @@ textarea {
 
 .content-wrapper {
     border-top: 5px solid #222222;
+
+    .banner-top {
+        background: $primary-color;
+        padding-top: 0;
+        padding-bottom: 0;
+        min-height: 40px;
+        margin-bottom: emCalc(20);
+
+        @media #{$small} {
+            min-height: 75px;
+        }
+    }
+
 }
 
-.banner-top {
-    background: $primary-color;
-    padding-top: 0;
-    padding-bottom: 0;
-    min-height: 40px;
+.row-full-width {
+    /* adding this class to Foundation .row elements will stop them
+    leaving gutters on either side on big screens, without losing
+    their useful float clearing properties */
+    max-width: none !important;
+}
 
-    &.row {
-        margin-bottom: emCalc(20);
-    }
+.large-centered {
+  &.column, &.columns {
+    max-width: $row-width;
+  }
+}
 
-    @media #{$small} {
-        min-height: 75px;
-    }
-
+@media only screen and (min-width: $small-screen) and (max-width: 1024px) {
+  /* We use .large-10 quite a lot to centre content on the screen.
+  That's fine on screens over 1024px, but for the magic 768px-1024px
+  range, we want to avoid the useless gutters on either side. */
+  .row .row .large-10 {
+    width: 100%;
+  }
 }
 
 .hero {
@@ -144,7 +176,7 @@ textarea {
     color: #FFFFFF;
     @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
     padding-top: 0;
-    padding-bottom: emCalc(36);
+    padding-bottom: emCalc(42);
     position: relative;
     min-height: 70px;
 
@@ -152,13 +184,16 @@ textarea {
         color: #FFFFFF;
         font-family: $body-font-family;
         font-size: emCalc(26);
-        margin-top: 2em;
+        margin-top: 1.5em;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 17em; /* break headline onto 2 lines */
         text-align: center;
     }
     p {
         text-align: center;
         max-width: 30em;
-        margin: 0 auto;
+        margin: 0 auto 1em auto;
     }
 
     @media #{$small} {
@@ -187,6 +222,23 @@ textarea {
         background-image: url(../img/heroes/sent.jpg);
     }
 
+    @media #{$large} and (min-height: 800px) {
+      /* make the hero taller on tall, wide screens */
+
+      h2 {
+        font-size: emCalc(52);
+        max-width: 17em;
+        margin-top: 2.5em;
+        margin-bottom: 1em;
+      }
+
+      p {
+        font-size: 2em;
+        margin-bottom: 2.5em;
+      }
+
+    }
+
 }
 
 .wtt-logo {
@@ -194,8 +246,8 @@ textarea {
     top: 2px;
 
     img {
-        height: 35px;
-        width: 125px;
+        height: 50px;
+        width: auto;
     }
 
     @media #{$small} {
@@ -237,6 +289,20 @@ textarea {
         border-right: none;
         @include border-radius(3px 0 0 3px);
     }
+
+    @media #{$large} and (min-height: 800px) {
+      /* move input further from hero on tall, wide screens */
+      padding-top: emCalc(60);
+    }
+
+}
+
+#index-search {
+  text-align: center;
+  @media #{$small} {
+    /* stop input getting too narrow in tablet view */
+    min-width: 360px;
+  }
 }
 
 .error-input {
@@ -297,8 +363,8 @@ textarea {
 
 .flow-breadcrumbs {
     @extend .hide-for-small;
-	text-align: center;
-	margin-top: 12px;
+    text-align: center;
+    margin-top: 12px;
 }
 
 .flow-breadcrumbs li {
@@ -312,55 +378,60 @@ textarea {
 
 .flow-breadcrumbs li.done:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-complete.png', '../img/flow-start-complete@2x.png');
+	@include retina-bg('../img/flow-start-complete.png', '../img/flow-start-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.done {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-complete.png', '../img/flow-mid-complete@2x.png');
+	@include retina-bg('../img/flow-mid-complete.png', '../img/flow-mid-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.done:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-complete.png', '../img/flow-end-complete@2x.png');
+	@include retina-bg('../img/flow-end-complete.png', '../img/flow-end-complete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-current.png', '../img/flow-start-current@2x.png');
+	@include retina-bg('../img/flow-start-current.png', '../img/flow-start-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-current.png', '../img/flow-mid-current@2x.png');
+	@include retina-bg('../img/flow-mid-current.png', '../img/flow-mid-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li.current:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-current.png', '../img/flow-end-current@2x.png');
+	@include retina-bg('../img/flow-end-current.png', '../img/flow-end-current@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li:first-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-start-incomplete.png', '../img/flow-start-incomplete@2x.png');
+	@include retina-bg('../img/flow-start-incomplete.png', '../img/flow-start-incomplete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-mid-incomplete.png', '../img/flow-mid-incomplete@2x.png');
+	@include retina-bg('../img/flow-mid-incomplete.png', '../img/flow-mid-incomplete@2x.png', 400px 19px);
 }
 
 .flow-breadcrumbs li:last-child {
 	background: no-repeat center top;
-	@include retina-bg('../img/flow-end-incomplete.png', '../img/flow-end-incomplete@2x.png');
+	@include retina-bg('../img/flow-end-incomplete.png', '../img/flow-end-incomplete@2x.png', 400px 19px);
 }
 
 .write-header {
     text-align: center;
     padding-top: 12px;
+    padding-bottom: 1em;
 
     h2 {
         font-family: $body-font-family;
+    }
+
+    p {
+      margin-bottom: 1em;
     }
 
 }
@@ -397,8 +468,16 @@ textarea {
     a {
         color: #FFFFFF;
         text-decoration: underline;
+
+        &:hover, &:focus {
+          color: #C3E8FA;
+        }
     }
 
+}
+
+#writebox textarea {
+  padding: 1.5em;
 }
 
 .write-instructions li:last-child {
@@ -484,21 +563,13 @@ h3.rep-heading {
 
 }
 
-.rep-blurb {
-	font-family: $header-font-family;
-	font-size: emCalc(13);
-	line-height: emCalc(19);
-	color: #666666;
-}
-
 .rep-list {
     list-style: none;
     margin-left: 0;
-    padding: 0;
+    padding-left: 0;
 
     li {
-        margin-top: 3px;
-        margin-bottom: 3px;
+        margin-bottom: 0.5em;
 
         a {
             font-size: emCalc(18);
@@ -530,13 +601,12 @@ h3.rep-heading {
 
 }
 
-.rep-more {
-    font-family: $header-font-family;
-    small {
-       font-size: emCalc(13);
-       line-height: emCalc(19);
-       color: #666;
-    }
+.rep-blurb, .rep-more {
+  color: #6c6b68;
+  p {
+    margin-bottom: 0.7em;
+    color: inherit;
+  }
 }
 
 
@@ -651,7 +721,7 @@ p.toplink {
     a {
         color: #666666;
         text-decoration: underline;
-        &:hover {
+        &:hover, &:focus {
             color: $primary-color;
         }
     }
@@ -670,22 +740,36 @@ form#writeForm {
         font-size: emCalc(22);
     }
 
-    fieldset {
-        border: none;
+    .row .row {
+      margin: 0;
+
+      .columns {
         padding-left: 0;
         padding-right: 0;
-        border-bottom: 1px solid #ccc;
+      }
+
+      .columns:first-child {
+        padding-right: 2em;
+      }
+    }
+
+    fieldset {
+        border: none;
         legend {
             background: none;
             font-family: $header-font-family;
             font-size: emCalc(20);
             font-weight: 600;
         }
-        &:last-child {
-            border-bottom: none;
+    }
 
-        }
+    fieldset.last {
+      padding: 0;
+      margin-top: 0;
 
+      legend {
+        margin-bottom: 1em;
+      }
     }
 
     label {

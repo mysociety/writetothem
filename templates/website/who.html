@@ -16,19 +16,19 @@ template_draw('header', $values);
 </div>
 
 <div class="row write-header">
-    <div class="large-8 large-centered columns">
+    <div class="large-8 large-centered columns" role="heading">
 
         <h2><?=$values['title'] ?></h2>
 
         <?php if (sizeof($values['reps']) > 0): ?>
 
             <?php if ($values['all_url']): ?>
-                <p>You have several elected representatives at different levels of government.
-                One level is shown here, or you can
-                <a href="<?=$values['all_url']?>">see all your representatives</a>.</p>
+                <p>You have several elected representatives at different levels of government.</p>
+                <p>One level is shown here, or you can
+                <a href="<?=$values['all_url']?>">see all your representatives.</p>
             <?php else: ?>
-                <p>You have several elected representatives at different levels of government.<br>
-                <small><a href="about-yourrep">Not sure who to contact?</a></small></p>
+                <p>You have several elected representatives at different levels of government.</p>
+                <p class="help-text"><a href="about-yourrep">Not sure who to contact?</a></p>
             <?php endif; ?>
 
         <?php endif; ?>
@@ -60,15 +60,15 @@ template_draw('header', $values);
 
                     <div class="row">
 
-                        <div class="large-3 columns rep-blurb">
+                        <div class="large-4 columns help-text rep-blurb">
                             <?=$values['blurbs'][$key]?>
                         </div>
 
-                        <div class="large-4 large-offset-1 columns rep-list">
+                        <div class="large-4 large-offset-1 columns">
                             <?=$rep?>
                         </div>
 
-                        <div class="large-4 columns rep-more">
+                        <div class="large-3 columns help-text rep-more">
                             <?=$values['more'][$key]?>
                         </div>
 

@@ -3,7 +3,7 @@ $values['skip_header'] = TRUE;
 template_draw('header', $values);
 ?>
 
-<div class="row hero">
+<div class="row row-full-width hero">
     <div class="large-10 large-centered columns">
         <div class="ms_header_nav">
             <nav>
@@ -12,7 +12,7 @@ template_draw('header', $values);
                 </ul>
             </nav>
         </div>
-        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="width:250px;height:70px;" alt="WriteToThem"></a>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
         <div style="text-align:center;">
             <?=$values['blurb-top'] ?>
         </div>
@@ -20,8 +20,8 @@ template_draw('header', $values);
 </div>
 
 <?php if ($values['error']): ?>
-<div class="row">
-    <div class="large-10 large-centered columns">
+<div class="row row-full-width">
+    <div class="large-10 large-centered columns" role="alert">
         <div class="alert-box alert">
             <?=$values['error']?>
         </div>
@@ -29,15 +29,15 @@ template_draw('header', $values);
 </div>
 <?php endif; ?>
 
-<div class="row index-input">
-    <div class="large-4 large-centered columns" style="text-align:center;">
+<div class="row row-full-width index-input">
+    <div class="large-4 large-centered columns" id="index-search" role="search">
 
         <?=$values['form']?>
 
     </div>
 </div>
 
-<div class="row index-input flow-breadcrumbs">
+<div class="row row-full-width index-input flow-breadcrumbs">
     <div class="large-8 large-centered columns">
 
         <?=fyr_breadcrumbs(1)?>
@@ -46,7 +46,7 @@ template_draw('header', $values);
 </div>
 
 <?php if ($values['all_url']): ?>
-<div class="row index-content">
+<div class="row row-full-width index-content">
     <div class="large-10 large-centered columns" style="text-align:center;">
         <p>You may also have representatives at other levels of government.
         <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>

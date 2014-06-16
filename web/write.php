@@ -207,125 +207,77 @@ function buildWriteForm($options) {
     $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
     $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
 
-    $form->addElement("html", "<h3>Your details</h3>");
-    $form->addElement("html", "<p>Before we can send your message we need a few details about you.</p>");
+    $form->addElement('html', '<div class="row">');
 
-    $form->addElement("html", "<fieldset><legend>About You</legend>");
+        $form->addElement('html', '<fieldset class="large-6 columns">');
+            $form->addElement('html', '<legend>About You</legend>');
 
-        $form->addElement("html", '<div class="row">');
+            $form->addElement('text', 'name', "Your name", array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('name', 'Please enter your name', 'required', null, null);
+            $form->applyFilter('name', 'trim');
 
-            $form->addElement("html", '<div class="large-6 columns">');
+            $form->addElement('text', 'writer_email', "Your email", array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
+            $invalid_email_message = cobrand_invalid_email_message($cobrand);
+            if (!$invalid_email_message) {
+                 $invalid_email_message = 'Choose a valid email address';
+            }
+            $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
+            $form->applyFilter('writer_email', 'trim');
 
-                $form->addElement('text', 'name', "Your name", array('required' => 'required', 'maxlength' => 255));
-                $form->addRule('name', 'Please enter your name', 'required', null, null);
-                $form->applyFilter('name', 'trim');
+            $form->addElement('text', 'writer_email2', "Confirm email", array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
+            $form->applyFilter('writer_email2', 'trim');
+            $form->addFormRule('compare_email_addrs');
 
-            $form->addElement("html", '</div>');
+            $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">optional</span>', array('maxlength' => 255));
+            $form->applyFilter('writer_phone', 'trim');
 
-        $form->addElement("html", '</div>');
+        $form->addElement("html", "</fieldset>");
 
-        $form->addElement("html", '<div class="row">');
+        $form->addElement("html", '<fieldset class="large-6 columns">');
+            $form->addElement("html", '<legend>Your Address</legend>');
 
-            $form->addElement("html", '<div class="large-6 columns">');
+            $form->addElement('text', 'writer_address1', "Address Line 1", array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
+            $form->applyFilter('writer_address1', 'trim');
 
-                $form->addElement('text', 'writer_email', "Your email", array('required' => 'required', 'maxlength' => 255));
-                $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
-                $invalid_email_message = cobrand_invalid_email_message($cobrand);
-                if (!$invalid_email_message) {
-                     $invalid_email_message = 'Choose a valid email address';
-                }
-                $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
-                $form->applyFilter('writer_email', 'trim');
+            $form->addElement('text', 'writer_address2', 'Address Line 2 <span class="optional-text">optional</span>', array('maxlength' => 255));
+            $form->applyFilter('writer_address2', 'trim');
 
-            $form->addElement("html", '</div>');
+            $form->addElement('text', 'writer_town', "Town/City", array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_town', 'Please enter your town/city', 'required', null, null);
+            $form->applyFilter('writer_town', 'trim');
 
-            $form->addElement("html", '<div class="large-6 columns">');
+            $form->addElement('html', '<div class="row">');
+                $form->addElement('html', '<div class="small-8 columns">');
 
-                $form->addElement('text', 'writer_email2', "Confirm email", array('required' => 'required', 'maxlength' => 255));
-                $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
-                $form->applyFilter('writer_email2', 'trim');
-                $form->addFormRule('compare_email_addrs');
+                    # Call it state so that Google Toolbar (and presumably others) can auto-fill.
+                    $form->addElement('text', 'state', 'County <span class="optional-text">optional</span>', array('maxlength' => 255));
+                    $form->applyFilter('state', 'trim');
 
-            $form->addElement("html", '</div>');
+                $form->addElement('html', '</div>');
+                $form->addElement('html', '<div class="small-4 columns">');
 
-        $form->addElement("html", '</div>');
+                    if (is_postcode_editable($fyr_voting_area['type'])) {
+                        // House of Lords
+                        $form->addElement('text', 'pc', "UK postcode", array('required' => 'required', 'maxlength' => 8));
+                        $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
+                        $form->addRule('pc', 'Please enter a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', new RulePostcode(), null, null);
+                        $form->applyFilter('pc', 'trim');
+                    } else {
+                        // All other representatives (postcode fixed as must be in constituency)
+                        $form->addElement('text', 'staticpc', "UK postcode", array('disabled' => 'disabled', 'value' => htmlentities($fyr_values['pc'])));
+                    }
 
-        $form->addElement("html", '<div class="row">');
+                $form->addElement('html', '</div>');
+            $form->addElement('html', '</div>');
 
-            $form->addElement("html", '<div class="large-6 columns">');
+        $form->addElement("html", "</fieldset>");
 
-                $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">optional</span>', array('maxlength' => 255));
-                $form->applyFilter('writer_phone', 'trim');
+    $form->addElement('html', '</div>'); # close div.row
 
-            $form->addElement("html", '</div>');
-
-        $form->addElement("html", '</div>');
-
-    $form->addElement("html", "</fieldset>");
-
-    $form->addElement("html", "<fieldset><legend>Your Address</legend>");
-
-        $form->addElement("html", '<div class="row">');
-
-            $form->addElement("html", '<div class="large-6 columns">');
-
-                $form->addElement('text', 'writer_address1', "Address Line 1", array('required' => 'required', 'maxlength' => 255));
-                $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
-                $form->applyFilter('writer_address1', 'trim');
-
-            $form->addElement("html", '</div>');
-
-            $form->addElement("html", '<div class="large-6 columns">');
-
-                $form->addElement('text', 'writer_address2', 'Address Line 2 <span class="optional-text">optional</span>', array('maxlength' => 255));
-                $form->applyFilter('writer_address2', 'trim');
-
-            $form->addElement("html", '</div>');
-
-        $form->addElement("html", '</div>');
-
-        $form->addElement("html", '<div class="row">');
-
-            $form->addElement("html", '<div class="large-6 columns">');
-
-                $form->addElement('text', 'writer_town', "Town/City", array('required' => 'required', 'maxlength' => 255));
-                $form->addRule('writer_town', 'Please enter your town/city', 'required', null, null);
-                $form->applyFilter('writer_town', 'trim');
-
-            $form->addElement("html", '</div>');
-
-            $form->addElement("html", '<div class="large-6 columns">');
-
-                # Call it state so that Google Toolbar (and presumably others) can auto-fill.
-                $form->addElement('text', 'state', 'County <span class="optional-text">optional</span>', array('maxlength' => 255));
-                $form->applyFilter('state', 'trim');
-
-            $form->addElement("html", '</div>');
-
-        $form->addElement("html", '</div>');
-
-        $form->addElement("html", '<div class="row">');
-
-            $form->addElement("html", '<div class="large-6 columns">');
-
-                if (is_postcode_editable($fyr_voting_area['type'])) {
-                    // House of Lords
-                    $form->addElement('text', 'pc', "UK postcode", array('required' => 'required', 'maxlength' => 8));
-                    $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
-                    $form->addRule('pc', 'Please enter a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', new RulePostcode(), null, null);
-                    $form->applyFilter('pc', 'trim');
-                } else {
-                    // All other representatives (postcode fixed as must be in constituency)
-                    $form->addElement('text', 'staticpc', "UK postcode", array('disabled' => 'disabled', 'value' => htmlentities($fyr_values['pc'])));
-                }
-
-            $form->addElement("html", '</div>');
-
-        $form->addElement("html", '</div>');
-
-    $form->addElement("html", "</fieldset>");
-
-    $form->addElement("html", "<fieldset><legend>Ready?</legend>");
+    $form->addElement("html", '<fieldset class="last"><legend>Ready?</legend>');
 
         add_all_variables_hidden($form, $fyr_values, $options);
 
@@ -338,7 +290,7 @@ function buildWriteForm($options) {
         if (!$preview_button_text) {
             $preview_button_text = 'Preview and send';
         }
-        $form->addElement('static', 'staticpreview', null,"<p class=\"action\" id=\"preview-submit\">$preview_text</p>");
+        $form->addElement('html', "<p class=\"action\" id=\"preview-submit\">$preview_text</p>");
         $form->addElement('submit', 'submitPreview', $preview_button_text, array('class' => 'button radius success'));
 
     $form->addElement("html", "</fieldset>");
