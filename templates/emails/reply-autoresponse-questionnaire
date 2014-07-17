@@ -9,12 +9,12 @@ A few weeks ago we sent your letter to your representative.
 - If you HAVE had a reply (not just an acknowledgement), please
 click on the link below:
 
-    <?=$values['yes_url']?>
+<?=$values['yes_url']?>
 
 - If you HAVE NOT had a reply, or you have only had an acknowledgement, please
 click on the link below:
 
-    <?=$values['no_url']?>
+<?=$values['no_url']?>
 
 If you feel that neither link is suitable, then please do not answer the
 questionnaire. If you have a question or comment about the site, please send an

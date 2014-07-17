@@ -5,12 +5,12 @@ letter at the bottom of this email)
 - If you HAVE had a reply (not just an acknowledgement), please
 click on the link below:
 
-    <?=$values['yes_url']?>
+<?=$values['yes_url']?>
 
 - If you HAVE NOT had any reply at all, OR you have only had an
 acknowledgement, please click on the link below:
 
-    <?=$values['no_url']?>
+<?=$values['no_url']?>
 
 If you feel that neither link is suitable, then please do not answer the
 questionnaire.
