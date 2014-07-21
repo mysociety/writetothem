@@ -2,7 +2,7 @@ Please click on the link below to confirm that you wish WriteToThem.com to send
 the letter copied at the bottom of this email to your
 <?=$values['recipient_position_plural']?>:
 
-    <?=$values['confirm_url']?>
+<?=$values['confirm_url']?>
 
 If your email program does not let you click on this link, copy and paste
 it into your web browser and press return.
