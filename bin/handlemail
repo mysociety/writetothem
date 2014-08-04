@@ -98,10 +98,10 @@ if (!$data{is_bounce_message}) {
     }
 
     if ($forward) {
-        # Forward this on to CONTACT_EMAIL
+        # Forward this on to the originating address
         if (mySociety::EmailUtil::EMAIL_SUCCESS
-                != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $data{return_path}, mySociety::Config::get('CONTACT_EMAIL'))) {
-            print_log('err', 'unable to forward non-bounce to contact email address; deferring');
+                != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $data{return_path}, mySociety::HandleMail::get_bounce_recipient($data{message}))) {
+            print_log('err', 'unable to forward non-bounce to originating email address; deferring');
             exit(75);
         }
 
