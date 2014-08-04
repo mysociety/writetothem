@@ -5,13 +5,13 @@
 #
 # This script should be invoked through the .forward mechanism. It processes
 # bounce messages and saves their text in the database for review by an
-# administrator.
+# administrator, or auto-replies or forwards on.
 #
-# Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
-# Email: chris@mysociety.org; WWW: http://www.mysociety.org/
-#
+# Copyright (c) 2014 UK Citizens Online Democracy. All rights reserved.
+# WWW: http://www.mysociety.org/
 
-my $rcsid = ''; $rcsid .= '$Id: handlemail,v 1.44 2009-10-08 15:09:07 louise Exp $';
+# ---
+# Set up gubbins
 
 use strict;
 require 5.8.0;
@@ -55,16 +55,90 @@ sub logmsg_handler ($$$$$) {
 
 FYR::Queue::logmsg_set_handler(\&logmsg_handler);
 
+# ---
+# Main flow
+
 my %data = mySociety::HandleMail::get_message();
 my @lines = @{$data{lines}};
+my $token = get_envelope_token();
+my $verp = ($token ne 'bounce-null' && $token ne 'DO-NOT-REPLY' && $token ne 'do-not-reply');
+my $id = get_message_id();
 
 if (!$data{is_bounce_message}) {
-    # This is not a bounce message. We pass it on to the contact email address
-    # and also send a patronising response about clicking the link.
-    #print_log('info', "message was not a bounce message");
+    # This is not a bounce message. If it's to a VERP address, pass it on to
+    # the message sender; otherwise send an auto-reply or forward to support.
+    if ($verp) {
+        handle_non_bounce_to_verp_address();
+    } else {
+        handle_non_bounce_to_null_address();
+    }
+} else {
+    # Now we have a bounce. We don't care about non-VERP bounces.
+    if ($verp) {
+        handle_bounce_to_verp_address();
+    } else {
+        print_log('warning', "bounce received for don't-care email");
+    }
+}
 
-    exit 0 if is_ignorable($data{message});
+exit(0);
 
+# ---
+
+sub get_envelope_token {
+    my $m = $data{message};
+
+    # If we have a special suffix header for the local part suffix, use that.
+    # This is set by our exim so we have access to it through the domain name
+    # forwarding and routers.
+    my $suffix = $m->head()->get("X-Delivered-Suffix");
+    if ($suffix) {
+        chomp $suffix;
+        return substr($suffix, 1);
+    }
+
+    my $to = $m->head()->get("To");
+    exit 0 unless defined($to); # Not a lot we can do without an address to parse.
+
+    my ($a) = Mail::Address->parse($to);
+    exit 0 unless defined($a); # Couldn't parse Envelope-To address.
+
+    my $token = mySociety::HandleMail::get_token($a,
+        mySociety::Config::get('EMAIL_PREFIX'), mySociety::Config::get('EMAIL_DOMAIN')
+    );
+    exit 0 unless $token; # Don't care unless we have a token
+
+    return $token;
+}
+
+sub get_message_id {
+    return undef unless $verp;
+    my $id = FYR::Queue::check_token('bounce', $token);
+    if (!defined($id)) {
+        print_log('err', "received bounce with invalid token '$token'; discarding");
+        exit 0;
+    }
+    return $id;
+}
+
+sub handle_non_bounce_to_verp_address {
+    my $msg = FYR::Queue::message($id);
+    if (!defined($msg)) {
+        print_log('err', "email received for non-existent message '$id'; discarding");
+    } else {
+        # Send on to originator of WTT message
+        my $text = join("\n", @lines) . "\n";
+        my $sender = $data{return_path};
+        my $recipient = $msg->{sender_email};
+        if (mySociety::EmailUtil::EMAIL_SUCCESS
+                != mySociety::EmailUtil::send_email($text, $sender, $recipient)) {
+            print_log('err', 'unable to forward non-bounce to sender email address; deferring');
+            exit(75);
+        }
+    }
+}
+
+sub handle_non_bounce_to_null_address {
     # See whether the email contains one of our URLs.
     my ($first_url, $confirm_url, $yes_url, $no_url);
     foreach (@lines) {
@@ -99,13 +173,16 @@ if (!$data{is_bounce_message}) {
 
     if ($forward) {
         # Forward this on to CONTACT_EMAIL
+        my $text = join("\n", @lines) . "\n";
+        my $sender = FYR::Queue::do_not_reply_sender();
+        my $recipient = mySociety::Config::get('CONTACT_EMAIL');
         if (mySociety::EmailUtil::EMAIL_SUCCESS
-                != mySociety::EmailUtil::send_email(join("\n", @lines) . "\n", $data{return_path}, mySociety::Config::get('CONTACT_EMAIL'))) {
+                != mySociety::EmailUtil::send_email($text, $sender, $recipient)) {
             print_log('err', 'unable to forward non-bounce to contact email address; deferring');
             exit(75);
         }
 
-        exit(0);
+        return;
     }
 
     # OK, we drop the message here, and send patronising reply instead
@@ -132,14 +209,13 @@ if (!$data{is_bounce_message}) {
 
     $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
 
-    my $from = sprintf('%sDO-NOT-REPLY@%s',
-                    mySociety::Config::get('EMAIL_PREFIX'),
-                    mySociety::Config::get('EMAIL_DOMAIN'));
+    my $from_name = FYR::Queue::email_sender_name();
+    my $from_email = FYR::Queue::do_not_reply_sender();
 
     # We generate this as a bounce.
     my $mail = MIME::Entity->build(
                     Sender => '<>',
-                    From => mySociety::Email::format_email_address("WriteToThem", $from),
+                    From => mySociety::Email::format_email_address($from_name, $from_email),
                     To => $data{return_path},
                     Subject => 'Automatic reply to your message to WriteToThem',
                     Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
@@ -155,24 +231,10 @@ if (!$data{is_bounce_message}) {
     }
 
     dbh()->commit();
-
-    exit(0);
 }
 
-# Now we have a bounce. We need to know the address to which it was sent so
-# that we can distinguish VERP bounces (which must be recorded) from others
-# which we don't care about.
-my $a = mySociety::HandleMail::get_bounce_recipient($data{message});
-
-my $token = mySociety::HandleMail::get_token($a,
-    mySociety::Config::get('EMAIL_PREFIX'), mySociety::Config::get('EMAIL_DOMAIN')
-);
-exit(0) unless $token;
-my $id;
-if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-reply') {
-    print_log('warning', "bounce received for don't-care email");
-} elsif (defined($id = FYR::Queue::check_token('bounce', $token))) {
-    my $msg = FYR::Queue::message($id, 1);    # lock message
+sub handle_bounce_to_verp_address {
+    my $msg = FYR::Queue::message($id, 1); # lock message
     if (!defined($msg)) {
         print_log('err', "bounce received for non-existent message '$id'; discarding");
         dbh()->rollback();
@@ -239,28 +301,4 @@ if ($token eq 'bounce-null' || $token eq 'DO-NOT-REPLY' || $token eq 'do-not-rep
         
         dbh()->commit();
     }
-} else {
-    print_log('err', "received bounce with invalid token '$token'; discarding");
-}
-
-exit(0);
-
-# ---
-
-sub is_ignorable {
-    my $m = shift;
-    my $head = $m->head();
-    return 0 unless $head;
-    my ($from, $subject, $body) = ($head->get('From'), $head->get('Subject'), $m->body);
-    $body = join("\n", @$body);
-    return 0 unless $from && $subject && $body;
-
-    open my $fp, "$FindBin::Bin/../../data/ignored-emails.csv" or return 0;
-    while (<$fp>) {
-        chomp;
-        my ($f, $s, $b) = split /,/;
-        next unless $f || $s || $b;
-        return 1 unless ( $f && $from !~ /$f/ ) || ( $s && $subject !~ /$s/ ) || ( $b && $body !~ /$b/ );
-    }
-    return 0;
 }
