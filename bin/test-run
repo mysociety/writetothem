@@ -93,7 +93,7 @@ our $contact_email = mySociety::Config::get('CONTACT_EMAIL');
 our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
 our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
-our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Robert Sturdy', 'Andrew Duff', 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
+our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
 #############################################################################
 # Main code
 
@@ -756,7 +756,7 @@ sub do_send_group_abuse {
         }
     }
     # None of these messages should get through
-    my @new_rep_names = ('Tony Brett', 'Anne Marie Canning');
+    my @new_rep_names = ('Ruthi Brandt', 'Anne Marie Canning');
     $repinfo = {repname => 'all', 
                 reptype => 'District Councillors',
                 repnames => \@new_rep_names};
