@@ -97,11 +97,8 @@ sub get_envelope_token {
         return substr($suffix, 1);
     }
 
-    my $to = $m->head()->get("To");
-    exit 0 unless defined($to); # Not a lot we can do without an address to parse.
-
-    my ($a) = Mail::Address->parse($to);
-    exit 0 unless defined($a); # Couldn't parse Envelope-To address.
+    # Otherwise, fall back to To header
+    my $a = mySociety::HandleMail::get_bounce_recipient($m);
 
     my $token = mySociety::HandleMail::get_token($a,
         mySociety::Config::get('EMAIL_PREFIX'), mySociety::Config::get('EMAIL_DOMAIN')
@@ -127,8 +124,9 @@ sub handle_non_bounce_to_verp_address {
         print_log('err', "email received for non-existent message '$id'; discarding");
     } else {
         # Send on to originator of WTT message
+        print_log('info', "Forwarding email to message sender");
         my $text = join("\n", @lines) . "\n";
-        my $sender = $data{return_path};
+        my $sender = $data{return_path} || '<>';
         my $recipient = $msg->{sender_email};
         if (mySociety::EmailUtil::EMAIL_SUCCESS
                 != mySociety::EmailUtil::send_email($text, $sender, $recipient)) {
@@ -174,7 +172,7 @@ sub handle_non_bounce_to_null_address {
     if ($forward) {
         # Forward this on to CONTACT_EMAIL
         my $text = join("\n", @lines) . "\n";
-        my $sender = FYR::Queue::do_not_reply_sender();
+        my $sender = $data{return_path};
         my $recipient = mySociety::Config::get('CONTACT_EMAIL');
         if (mySociety::EmailUtil::EMAIL_SUCCESS
                 != mySociety::EmailUtil::send_email($text, $sender, $recipient)) {
@@ -234,6 +232,19 @@ sub handle_non_bounce_to_null_address {
 }
 
 sub handle_bounce_to_verp_address {
+    my $r = mySociety::HandleMail::parse_dsn_bounce(\@lines);
+
+    # Check if the Subject looks like an auto-reply rather than a delivery bounce.
+    # If so, treat as if it were a normal email
+    if (!defined($r)) {
+        my $subject = $data{message}->head()->get("Subject");
+        if ($subject =~ /Automated response|Auto(matic)?[ -]reply|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from/i) {
+            print_log('info', "Treating bounce as auto-reply to sender");
+            handle_non_bounce_to_verp_address();
+            return;
+        }
+    }
+
     my $msg = FYR::Queue::message($id, 1); # lock message
     if (!defined($msg)) {
         print_log('err', "bounce received for non-existent message '$id'; discarding");
@@ -242,8 +253,6 @@ sub handle_bounce_to_verp_address {
         # Record the bounce
         FYR::Queue::logmsg($id, 1, "received email bounce message", 'handlemail');
         dbh()->do('insert into message_bounce (message_id, whenreceived, bouncetext) values (?, ?, ?)', {}, $id, time(), join("\n", @lines) . "\n");
-
-        my $r = mySociety::HandleMail::parse_dsn_bounce(\@lines);
 
         if (!defined($r)) {
             FYR::Queue::logmsg($id, 1, "bounce message could not be parsed as an RFC1892/1894 DSN", 'handlemail');
