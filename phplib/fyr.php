@@ -370,23 +370,10 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $vas) {
-    if (!isset($area_reps[11811]) && !isset($area_reps[11814]))
+    if (!isset($area_reps[11811]))
         return array();
 
-    if (isset($area_reps[11814])) { # South West Conservative MEPs
-        $area_id = 11814;
-        $meps = array(
-            1085 => array( # Chichester
-                2249, 2250, 2658, 2617, 2251 # Devon, Cornwall, Plymouth, Torbay, Isles of Scilly
-            ),
-            45630 => array( # Girling
-                2226, 2239, 2608, 2642, 2551 # Gloucestershire, Somerset, S Gloucestershire, N Somerset, B&NES
-            ),
-            45632 => array( # Fox
-                2561, 2245, 2222, 2612, 2555, 2594 # Bristol, Wiltshire, Dorset, Swindon, Bournemouth, Poole
-            ),
-        );
-    } elseif (isset($area_reps[11811])) { # South East Conservative MEPs
+    if (isset($area_reps[11811])) { # South East Conservative MEPs
         $area_id = 11811;
         $meps = array(
             1072 => array( # Hannan
