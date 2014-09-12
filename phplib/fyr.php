@@ -370,52 +370,32 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $vas) {
-    if (!isset($area_reps[11811]) && !isset($area_reps[11814]))
+    if (!isset($area_reps[11811]))
         return array();
 
-    if (isset($area_reps[11814])) { # South West Conservative MEPs
-        $area_id = 11814;
-        $meps = array(
-            1085 => array( # Chichester
-                2249, 2250, 2658, 2617, 2251 # Devon, Cornwall, Plymouth, Torbay, Isles of Scilly
-            ),
-            45630 => array( # Girling
-                2226, 2239, 2608, 2642, 2551 # Gloucestershire, Somerset, S Gloucestershire, N Somerset, B&NES
-            ),
-            45632 => array( # Fox
-                2561, 2245, 2222, 2612, 2555, 2594 # Bristol, Wiltshire, Dorset, Swindon, Bournemouth, Poole
-            ),
-        );
-    } elseif (isset($area_reps[11811])) { # South East Conservative MEPs
+    if (isset($area_reps[11811])) { # South East Conservative MEPs
         $area_id = 11811;
         $meps = array(
-            1072 => array( # Hannan
-                # East Sussex: Brighton Kemptown, Brighton Pavilion, Eastbourne, Hove, Lewes (5)
-                # West Sussex: Arundel & South Downs, Bognor Regis & Littlehampton, Chichester, E Worthing & Shoreham, Mid Sussex, Worthing West (6)
-                # Hampshire: Gosport, E Hants, NE Hants, NW Hants, Havant, New Forest E, New Forest W, Portsmouth N, Portsmouth S, Romsey and Southampton North, Winchester, Isle of Wight (12)
-                65844, 65787, 65714, 65691, 66020,
-                65784, 65841, 65558, 65780, 65999, 65562,
-                65569, 65928, 65556, 65815, 65699, 65729, 65894, 65566, 66014, 65884, 65921, 65791
-            ),
-            1079 => array( # Elles
+            60855 => array( # Diane James - Surrey, Berkshire, Bucks, Oxfordshire
+                # Surrey (11)
                 # Bucks, Berks, Oxon (7, 8, 6)
+                65856, 65803, 66062, 65838, 65693, 66005, 65589, 65678, 65942, 65747, 66039,
                 65739, 65687, 65909, 65801, 65953, 66076, 66010,
                 65697, 65901, 65862, 65973, 65982, 65680, 65552, 65774,
                 66008, 65786, 66060, 65564, 65638, 65622
             ),
-            1082 => array( # Deva
-                # Surrey (11)
-                # West Sussex: Horsham, Crawley (2)
-                # Hampshire: Aldershot, Basingstoke, Eastleigh, Fareham, Southampton Itchen, Southampton Test (6)
-                65856, 65803, 66062, 65838, 65693, 66005, 65589, 65678, 65942, 65747, 66039,
-                65781, 65717,
-                65730, 65623, 65881, 65857, 66016, 65580
+            60856 => array( # Raymond Finch - West Sussex and Hampshire
+
+                # West Sussex (8)
+                # Hampshire (18)
+                65781, 65717, 65784, 65841, 65558, 65780, 65999, 65562,
+                65730, 65623, 65881, 65857, 66016, 65580, 65569, 65928, 65556, 65815, 65699, 65729, 65894, 65566, 66014, 65884, 65921, 65791
             ),
-            1101 => array( # Ashworth
+            60853 => array( # Janice Atkinson - Kent and East Sussex
                 # Kent (17)
-                # East Sussex: Bexhill & Battle, Wealden, Hastings & Rye (3)
+                # East Sussex (8)
                 65811, 65878, 66075, 66011, 65555, 65764, 65779, 65864, 65944, 65936, 65605, 66043, 65698, 65610, 65829, 65744, 65660,
-                65845, 65640, 65961,
+                65845, 65640, 65961, 65844, 65787, 65714, 65691, 66020,
             ),
         );
     }
