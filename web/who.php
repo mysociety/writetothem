@@ -472,7 +472,7 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
 
 function hidden_meps_list($meps_hidden, $va_type, $va_area) {
     # XXX Specific to what euro_check currently does!
-    $text = '<p style="margin-top:2em"><small>The Conservative MEPs
+    $text = '<p style="margin-top:2em"><small>Some MEPs
 for your region have informed us that they have divided it into areas, with ';
     if (count($meps_hidden)==1)
         $text .= 'one or two MEPs';
