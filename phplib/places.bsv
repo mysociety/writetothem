@@ -348,7 +348,6 @@
 13703|Bladen|Briantspuddle|the County of Dorset
 13702||Rothwell|the County of West Yorkshire
 13709|Newcastle||
-13708|Braintree|Coggeshall|the County of Essex
 13689|Birkenhead||
 13706|Winterbourne||the Royal County of Berkshire
 13701||Renagour|the District of Stirling
