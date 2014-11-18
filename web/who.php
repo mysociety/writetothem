@@ -75,7 +75,7 @@ foreach ($va_display_order as $va_types) {
     }
 
     // Data bad due to election etc?
-    if ( $disabled = check_area_status($va_areas[0]) ) {
+    if ( $disabled = check_area_status($va_areas[0], $fyr_postcode) ) {
         $text = $disabled;
         $heading = "<strike>$heading</strike>";
     }
@@ -493,7 +493,7 @@ for your region have informed us that they have divided it into areas, with ';
     return $text;
 }
 
-function check_area_status( $va_alone ) {
+function check_area_status( $va_alone, $pc ) {
     $parent_status = dadem_get_area_status($va_alone['parent_area']);
     dadem_check_error($parent_status);
     $status = dadem_get_area_status($va_alone['id']);
@@ -511,6 +511,9 @@ function check_area_status( $va_alone ) {
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
         $text = "<p>There's an upcoming election.  We'll be adding your new
                 representative as soon as we can after the election.</p>";
+        if ($va_alone['id'] = 66043) {
+            $text .= '<p>In the meantime you can contact <a href="' . general_write_rep_url(46719, $pc) . '">Tracey Crouch MP</a> with any correspondence.</p>';
+        }
     } else {
         $text = "Representative details are not available for an unknown reason.";
     }
