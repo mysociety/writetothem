@@ -511,6 +511,8 @@ function check_area_status( $va_alone, $pc ) {
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
         $text = "<p>There's an upcoming election.  We'll be adding your new
                 representative as soon as we can after the election.</p>";
+        // TODO: Remove on 21 Nov 2014
+        // Add additional correspondence option for Rochester and Strood
         if ($va_alone['id'] = 66043) {
             $text .= '<p>In the meantime you can contact <a href="' . general_write_rep_url(46719, $pc) . '">Tracey Crouch MP</a> with any correspondence.</p>';
         }
