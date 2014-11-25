@@ -749,11 +749,7 @@ if ($stash['group_msg']) {
         mapit_check_error($postcode_areas);
         $area_ids = array_keys($postcode_areas['areas']);
         if (!in_array($fyr_representative['voting_area'], $area_ids)) {
-            // TODO: Remove on 21 Nov 2014
-            // Allow correspondence for Rochester and Strood to Tracey Crouch
-            if (!(in_array(66043, $area_ids) AND $fyr_representative['id'] = 46719)) {
-                mismatch_error();
-            }
+            mismatch_error();
         }
         $eb_type = $va_inside[$fyr_voting_area['type']];
         foreach ($postcode_areas['areas'] as $id => $arr) {
