@@ -185,7 +185,8 @@ if ($pc) {
     $specialmap = array(
         'GIR0AA' => 'giro',
         'G1R0AA' => 'giro',
-        'SANTA1' => 'santa'
+        'SANTA1' => 'santa',
+        'XM45HQ' => 'santa',
     );
     $ft = null;
     if (array_key_exists($pc2, $specialmap)) {
