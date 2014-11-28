@@ -238,7 +238,7 @@ sub handle_bounce_to_verp_address {
     # If so, treat as if it were a normal email
     if (!defined($r)) {
         my $subject = $data{message}->head()->get("Subject");
-        if ($subject =~ /Automated response|Auto(matic)?[ -]reply|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from/i) {
+        if ($subject =~ /Auto(matic|mated)?[ -](reply|response)|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from/i) {
             print_log('info', "Treating bounce as auto-reply to sender");
             handle_non_bounce_to_verp_address();
             return;
