@@ -435,7 +435,7 @@ sub do_send_cobrand_message {
 
     $options->{base_url} = $base_url; 
     $options->{cobrand} = 'animalaid';
-    my $repinfo = {repname => 'Anne Marie Canning'};
+    my $repinfo = {repname => 'Alex Hollingsworth'};
 
     send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
@@ -451,7 +451,7 @@ sub do_send_cobrand_message {
     );
 
     confirm_message(2, $repinfo, $options);
-    check_delivered_to_rep(2, 'Anne Marie Canning', '32 Wheresome Wroad', $options);
+    check_delivered_to_rep(2, 'Alex Hollingsworth', '32 Wheresome Wroad', $options);
     $options->{cobrand} = undef;
 }
 
@@ -756,7 +756,7 @@ sub do_send_group_abuse {
         }
     }
     # None of these messages should get through
-    my @new_rep_names = ('Ruthi Brandt', 'Anne Marie Canning');
+    my @new_rep_names = ('Ruthi Brandt', 'Alex Hollingsworth');
     $repinfo = {repname => 'all', 
                 reptype => 'District Councillors',
                 repnames => \@new_rep_names};
