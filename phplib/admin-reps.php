@@ -429,6 +429,7 @@ class ADMIN_PAGE_REPS {
                         'none' => 'No special status', 
                         'pending_election' => 'Pending election, rep data not valid', 
                         'recent_election' => 'Recent election, our rep data not yet updated',
+                        'boundary_changes' => 'Recent election, had boundary changes',
                     ),
                     array()
             );

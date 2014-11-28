@@ -4,9 +4,7 @@
  * FYR queue admin page.
  * 
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
- * Email: francis@mysociety.org. WWW: http://www.mysociety.org
- *
- * $Id: admin-fyrqueue.php,v 1.125 2010-01-14 14:38:36 matthew Exp $
+ * WWW: https://www.mysociety.org
  * 
  */
 
@@ -71,7 +69,7 @@ class ADMIN_PAGE_FYR_QUEUE {
         print "top referrers in day: ";
         $topref = array();
         foreach ($freq_referrers_day as $row) {
-            if (!preg_match('#^http://(www\.)?(google|faxyourmp|writetothem|theyworkforyou)\.#i', $row[0])) {
+            if (!preg_match('#^https?://(www\.)?(google|faxyourmp|writetothem|theyworkforyou)\.#i', $row[0])) {
                 if ($row[1] > 1 && $row[0] != "") {
                     $topref[] = trim_url_to_domain($row[0]) . " $row[1]";
                 }
