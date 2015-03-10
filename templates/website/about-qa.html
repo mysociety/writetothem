@@ -1,6 +1,7 @@
 <?php
 
 $values['title'] = "Questions and answers";
+$contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
 template_draw('header', $values);
 
 ?>
@@ -358,6 +359,8 @@ site?</dt>
 <li>If you do not click on this link, 24 hours later, we send one further reminder.</li>
 <li>Two weeks after you use WriteToThem, we send you an email to check whether or not you received a response from your representative. Your answer to this query goes to make up the <a href="https://www.writetothem.com/stats/">WriteToThem Responsiveness League Tables</a>, as well as helping us to check that the service is working. </li>
 <li>If you do not click on this link, 24 hours later, we send one further reminder.</li></ul>
+
+<p>If at any point in this process you decide that you don't want to receive any more emails from us, please email <a href="mailto:<?=$contact_email?>"><?=$contact_email?></a>.</p>
 
 <p>We understand that it can be a nuisance to receive automated emails, but we do try to keep the balance right.</p>
 
