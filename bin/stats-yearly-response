@@ -121,7 +121,7 @@ print STDERR "year: $year epochs of calculation: $start_epoch => $end_epoch\n";
 
 # Need to obtain a list of MP/constituency names and then pick out messages by those.
 print STDERR "get constituency info... ";
-my $areainfo = %{mySociety::MaPit::call('areas', $area_type, min_generation => 1)}; # array of ids of ALL areas (not just current generation)
+my %areainfo = %{mySociety::MaPit::call('areas', $area_type, min_generation => 1)}; # array of ids of ALL areas (not just current generation)
 print STDERR "done\n";
 print STDERR "get representatives IDs... ";
 my $repids = mySociety::DaDem::get_representatives([keys %areainfo], 1); # hash from area to reps for that area
@@ -174,8 +174,11 @@ foreach my $repid (@allreps) {
     my $r_info = $repinfo{$repid};
     # TODO: Will have to fix this up for non-MP reps - possibly just make a
     # $reps_by_person with only one entry per array, keys just the $repid
-    die "missing parlparse_person_id for repid $repid" if !$r_info->{parlparse_person_id};
-    push @{$reps_by_person->{$r_info->{parlparse_person_id}}}, $repid;
+    if (!$r_info->{parlparse_person_id}){
+        print STDERR "\x1b[31mMissing parlparse_person_id for repid $repid! Make sure this isn't something bad.\x1b[39;49m\n"
+    } else {
+        push @{$reps_by_person->{$r_info->{parlparse_person_id}}}, $repid;
+    }
 }
 
 #print Dumper(\@allreps);
@@ -494,8 +497,10 @@ sub work_out_rep_category($) {
         $sent_m += $sent_messages{$repid};
         my @newints = @{$allintervals->{$repid}};
         if (scalar(@ints) > 0) {
-            die Dumper(\@ints) . Dumper(\@newints). "out of order intervals when merging the separate sets of intervals for each rep id belonging to person $person_id" 
-                if $ints[-1]->{'to'} >= $newints[0]->{'from'} + 30; # 30 seconds for scripts that del/add at once but with small gap
+#            if (!($ints[-1]{to} >= 1274050800 && $ints[-1]{to} <= 1274089200 && $newints[0]{from} >= 1273505377 && $newints[0]{from} <= 1273513836)) { # 2010 election
+                die Dumper(\@ints) . Dumper(\@newints). "out of order intervals when merging the separate sets of intervals for each rep id belonging to person $person_id" 
+                    if $ints[-1]->{'to'} >= $newints[0]->{'from'} + 30; # 30 seconds for scripts that del/add at once but with small gap
+#            }
         }
         push @ints, @newints;
     }
@@ -567,9 +572,9 @@ sub display_rep($$) {
     my ($person_id, $category) = @_;
 
     # only print unknowns in debug mode
-    if ($category ne "unknown" && $output_format eq "debug") {
-        return;
-    }
+    #if ($category ne "unknown" && $output_format eq "debug") {
+    #    return;
+    #}
 
     # add up Q results for each rep id for the person
     my $q_data;
@@ -612,6 +617,10 @@ sub display_rep($$) {
         $q_data->[1] > 0 ? mySociety::Sundries::binomial_confidence_interval($q_data->[0], $q_data->[1]) : undef;
     my ($ft_mean, $ft_low, $ft_high) = 
         $q_data->[3] > 0 ? mySociety::Sundries::binomial_confidence_interval($q_data->[2], $q_data->[3]) : undef;
+
+    #if ($re_mean > 0.2 && $output_format eq "debug") {
+    #    return;
+    #}
 
     if ($output_format eq "PHP") {
         print "    '$person_id' => array(\n";
@@ -658,7 +667,7 @@ sub display_rep($$) {
             print "\n";
         }
     } elsif ($output_format eq 'debug') {
-        die if $category ne "unknown";
+        #die if $category ne "unknown";
         print sprintf("%s (%s) of %s\n", $rep_name, $party, $area_name);
         print "\tPerson: $person_id Rep ids: $repids\n";
         foreach my $url_rep_id (@{$reps_by_person->{$person_id}}) {
@@ -768,6 +777,18 @@ foreach my $person_id (keys %$reps_by_person) {
         if ($person_id eq "uk.org.publicwhip/person/11194" ) { # Iris Robinson
             $category = "badcontact";
         }
+
+    } elsif ($year == 2011) {
+
+        # Michelle Gildernew and Pat Doherty, both zero responses
+        if ($person_id eq 'uk.org.publicwhip/person/10858' || $person_id eq 'uk.org.publicwhip/person/10913') {
+            $category = 'good';
+        }
+
+    } elsif ($year == 2013) {
+        if ($person_id =~ m{uk.org.publicwhip/person/(11734|11309|24716|11458)} ) {
+            $category = "badcontact";
+        }
     }
     display_rep($person_id, $category);
         
@@ -829,5 +850,5 @@ print ");\n" if $output_format eq "PHP";
 
 print "?>\n" if $output_format eq "PHP";
 
-dbh()->commit(); # for duplicate removal
+#dbh()->commit(); # for duplicate removal
 
