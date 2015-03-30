@@ -29,11 +29,11 @@ template_draw('header', $values);
                 <ul>
                     <li> The questions from here on are
                     <strong>completely anonymous.</strong>
-                    We only record whether you've answered or not. So nobody (not even we) can know how YOU answered.</li>
+                    We only record whether you’ve answered or not. So nobody (not even we) can know how YOU answered.</li>
                     <li>This also means that we cannot connect your answers to whatever you do on our sites.</li>
-                    <li>Of course we would like you to answer all questions but you don't have to if you feel it's none of our business.</li>
+                    <li>Of course we would like you to answer all questions but you don’t have to if you feel it’s none of our business.</li>
                     <li> These are all the questions.
-                    <strong>We won't ask more.</strong>
+                    <strong>We won’t ask more.</strong>
                     So it should take only 5 or so minutes.</li>
                 </ul>
                 <p> Your feedback will help us
@@ -82,10 +82,10 @@ template_draw('header', $values);
                                 <input type="text" name="referrer_other" value="please specify" size="50" maxlength="500" onclick="this.form.referrer[6].checked = true;if (this.value=='please specify') this.value=''" id="id_referrer_other">
                             </label><br>
                             <label>
-                                <input type="radio" name="referrer" value="98"> can't remember
+                                <input type="radio" name="referrer" value="98"> can’t remember
                             </label><br>
                             <label>
-                                <input type="radio" name="referrer" value="95"> don't want to answer
+                                <input type="radio" name="referrer" value="95"> don’t want to answer
                             </label><br></td>
                     </tr>
                     <tr>
@@ -106,7 +106,7 @@ template_draw('header', $values);
             <option value="8">8</option>
             <option value="9">9</option>
             <option value="10">10 - extremely likely</option>
-            <option value="95">don't want to answer</option>
+            <option value="95">don’t want to answer</option>
             </select><br />
             <br />
             <textarea name="netpromoter_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_netpromoter_reason">feel free to tell us why</textarea></td>
@@ -115,7 +115,7 @@ template_draw('header', $values);
             <tr>
               <td class="us_label">
                 <div class="us_label">
-                  We're thinking of adding a new feature so that in the future you could
+                  We’re thinking of adding a new feature so that in the future you could
                   choose whether you wanted your correspondence with your politician to
                   be private, as it is now, or public. Would you ever use this option?
                   </div>
@@ -124,14 +124,14 @@ template_draw('header', $values);
               <td class="us_formelement"><label><input type="radio" name="publication" value="2" id="id_publication_yes">yes</label><br>
               <label><input type="radio" name="publication" value="1" id="id_publication_yes_private">yes, but only if my name and email address would not be public</label><br>
               <label><input type="radio" name="publication" value="0" id="id_publication_no">no</label><br>
-              <label><input type="radio" name="publication" value="95" id="id_publication_NA">don't want to answer</label><br></td>
+              <label><input type="radio" name="publication" value="95" id="id_publication_NA">don’t want to answer</label><br></td>
             </tr>
 
         <? if ($values['questionnaire_0_yes']){ ?>
             <tr id="id_responsetype_line">
               <td class="us_label">
                 <div class="us_label">
-                  You've said that your representative replied to your message. In what form did your representative reply? <small>If you've got several replies to your message just indicate the format of the first real reply ie. not just an acknowledgement that they got your message.</small>
+                  You’ve said that your representative replied to your message. In what form did your representative reply? <small>If you’ve got several replies to your message just indicate the format of the first real reply ie. not just an acknowledgement that they got your message.</small>
                 </div>
               </td>
 
@@ -139,7 +139,7 @@ template_draw('header', $values);
               <label><input type="radio" name="responsetype" value="2" id="id_responsetype_letter">letter</label><br>
               <label><input type="radio" name="responsetype" value="3" id="id_responsetype_phonecall">phone call</label><br>
               <label><input type="radio" name="responsetype" value="4" id="id_responsetype_visit">personal visit</label><br>
-              <label><input type="radio" name="responsetype" value="95" id="id_responsetype_NA">don't want to answer</label><br></td>
+              <label><input type="radio" name="responsetype" value="95" id="id_responsetype_NA">don’t want to answer</label><br></td>
             </tr>
 
                     <tr id="id_satisfaction_line">
@@ -149,7 +149,7 @@ template_draw('header', $values);
                         <td class="us_formelement">
                             <label> <input type="radio" name="satisfaction" value="1"  id="id_satisfaction_yes"/> yes </label>
                             <label> <input type="radio" name="satisfaction" value="0"  id="id_satisfaction_no"/> no </label>
-                            <label> <input type="radio" name="satisfaction" value="95"  id="id_satisfaction_NA"/> don't want to answer </label><br><br>
+                            <label> <input type="radio" name="satisfaction" value="95"  id="id_satisfaction_NA"/> don’t want to answer </label><br><br>
         <textarea name="satisfaction_reason"  rows="2" cols="50" onclick="if (this.value=='feel free to tell us why') this.value=''" id="id_satisfaction_reason">feel free to tell us why</textarea></td>
                     </tr>
                     <tr id="id_dialogue_line">
@@ -159,7 +159,7 @@ template_draw('header', $values);
                         <td class="us_formelement">
                             <label> <input type="radio" name="dialogue" value="1"  id="id_dialogue_yes"/> yes </label>
                             <label> <input type="radio" name="dialogue" value="0"  id="id_dialogue_no"/> no </label>
-                            <label> <input type="radio" name="dialogue" value="95"  id="id_dialogue_NA"/> don't want to answer </label>
+                            <label> <input type="radio" name="dialogue" value="95"  id="id_dialogue_NA"/> don’t want to answer </label>
                         </td>
                     </tr>
         <? } ?>
@@ -177,8 +177,8 @@ template_draw('header', $values);
                 <option value="2"> to seek information </option>
                 <option value="3"> to seek help on a problem you have </option>
                 <option value="4"> for some other reason </option>
-                <option value="94"> don't know </option>
-                <option value="95"> don't want to answer </option>
+                <option value="94"> don’t know </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -206,8 +206,8 @@ template_draw('header', $values);
                 <option value="70"> welfare </option>
                 <option value="75"> youth </option>
                 <option value="85"> other </option>
-                <option value="94"> don't know </option>
-                <option value="95"> don't want to answer </option>
+                <option value="94"> don’t know </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -225,8 +225,8 @@ template_draw('header', $values);
                 <option value="3"> yourself or your family, as well as others like you </option>
                 <option value="4"> all people in the community </option>
                 <option value="5"> all people in the nation or all people in the world </option>
-                <option value="94"> don't know </option>
-                <option value="95"> don't want to answer </option>
+                <option value="94"> don’t know </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -253,8 +253,8 @@ template_draw('header', $values);
                 <option value="60"> Ulster Unionist Party (UUP) </option>
                 <option value="65"> UK Independence Party (UKIP) </option>
                 <option value="90"> Other </option>
-                <option value="94"> don't know </option>
-                <option value="95"> don't want to answer </option>
+                <option value="94"> don’t know </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -268,8 +268,8 @@ template_draw('header', $values);
               <td class="us_formelement">
                 <label><input type="radio" name="repgender" value="1" id="id_gender_female">female</label>
                 <label><input type="radio" name="repgender" value="0" id="id_gender_male">male</label>
-                <label><input type="radio" name="repgender" value="97" id="id_gender_dontknow">don't know</label>
-                <label><input type="radio" name="repgender" value="95" id="id_gender_NA">don't want to answer</label>
+                <label><input type="radio" name="repgender" value="97" id="id_gender_dontknow">don’t know</label>
+                <label><input type="radio" name="repgender" value="95" id="id_gender_NA">don’t want to answer</label>
               </td>
             </tr>
 
@@ -277,7 +277,7 @@ template_draw('header', $values);
             <tr id="id_previouscontact_line">
               <td class="us_label">
                 <div class="us_label">
-                  You've said that this is not the first time you've contacted your representative. The last time you've contacted your representative, how did you approach him or her?
+                  You’ve said that this is not the first time you’ve contacted your representative. The last time you’ve contacted your representative, how did you approach him or her?
                 </div>
               </td>
 
@@ -287,7 +287,7 @@ template_draw('header', $values);
               <label><input type="radio" name="previouscontact" value="3" id="id_previouscontact_phonecall">phone call</label><br>
               <label><input type="radio" name="previouscontact" value="4" id="id_previouscontact_visit">in person</label><br>
               <label><input type="radio" name="previouscontact" value="9">other</label> <label><input type="text" name="previouscontact_other" value="please specify" size="50" maxlength="500" onclick="this.form.previouscontact[5].checked = true;if (this.value=='please specify') this.value=''" id="id_previouscontact_other"></label><br>
-              <label><input type="radio" name="previouscontact" value="95" id="id_previouscontact_NA">don't want to answer</label><br></td>
+              <label><input type="radio" name="previouscontact" value="95" id="id_previouscontact_NA">don’t want to answer</label><br></td>
             </tr>
 
             <tr id="id_usefrequency_line">
@@ -304,7 +304,7 @@ template_draw('header', $values);
                 <option id="id_usefrequency_5" value="2"> 2 - 5 times within the last 12 months </option>
                 <option id="id_usefrequency_9" value="3"> 6 - 10 times within the last 12 months </option>
                 <option id="id_usefrequency_10" value="4"> more than 10 times within the last 12 months </option>
-                <option id="id_usefrequency_NA" value="95"> don't want to answer </option>
+                <option id="id_usefrequency_NA" value="95"> don’t want to answer </option>
               </select></td>
             </tr>
         <? } ?>
@@ -323,8 +323,8 @@ template_draw('header', $values);
                 <option value="3"> Fair </option>
                 <option value="2"> Poor </option>
                 <option value="1"> Bad </option>
-                <option value="97"> don't know/can't say </option>
-                <option value="95"> don't want to answer </option>
+                <option value="97"> don’t know/can’t say </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -350,7 +350,7 @@ template_draw('header', $values);
                                 <input type="radio" name="groups" value="0"  id="id_groups_no"/> none of the above
                             </label><br>
                             <label>
-                                <input type="radio" name="groups" value="95"  id="id_groups_NA"/> don't want to answer
+                                <input type="radio" name="groups" value="95"  id="id_groups_NA"/> don’t want to answer
                             </label><br></td>
                     </tr>
                     <tr>
@@ -373,7 +373,7 @@ template_draw('header', $values);
                                 <input type="radio" name="activity" value="0"  id="id_community_no"/> none of the above
                             </label><br>
                             <label>
-                                <input type="radio" name="activity" value="95"  id="id_community_NA"/> don't want to answer
+                                <input type="radio" name="activity" value="95"  id="id_community_NA"/> don’t want to answer
                             </label><br></td>
                     </tr>
                     <tr>
@@ -393,7 +393,7 @@ template_draw('header', $values);
                                 <option value="9"> 55-64 years old </option>
                                 <option value="11"> 65-74 years old </option>
                                 <option value="13"> 75 years and older </option>
-                                <option value="95"> don't want to answer </option>
+                                <option value="95"> don’t want to answer </option>
                             </select></td>
                     </tr>
                     <tr>
@@ -404,7 +404,7 @@ template_draw('header', $values);
                             <label> <input type="radio" name="gender" value="1"  id="id_gender_female"/> female </label>
                             <label> <input type="radio" name="gender" value="0"  id="id_gender_male"/> male </label>
                             <label>
-                                <input type="radio" name="gender" value="95"  id="id_gender_NA"/> don't want to answer
+                                <input type="radio" name="gender" value="95"  id="id_gender_NA"/> don’t want to answer
                             </label></td>
                     </tr>
             <tr>
@@ -425,7 +425,7 @@ template_draw('header', $values);
                 <option value="6"> Adult Community College </option>
                 <option value="7"> University or equivalent </option>
                 <option value="9"> other </option>
-                <option value="95"> don't want to answer </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -448,7 +448,7 @@ template_draw('header', $values);
                                 <option value="10"> in part time education (not degree or higher) </option>
                                 <option value="11"> doing housework, looking after children or other persons </option>
                                 <option value="98"> none of the above </option>
-                                <option value="95"> don't want to answer </option>
+                                <option value="95"> don’t want to answer </option>
                             </select></td>
                     </tr>
                     <tr>
@@ -482,7 +482,7 @@ template_draw('header', $values);
                                 more than £100,000 per year
                                 </option>
                                 <option value="95">
-                                don't want to answer
+                                don’t want to answer
                                 </option>
                             </select></td>
                     </tr>
@@ -566,10 +566,10 @@ template_draw('header', $values);
                                                         </optgroup>
                                                         <optgroup label="----">
                                                             <option value="97">
-                                                            don't know
+                                                            don’t know
                                                             </option>
                                                             <option value="95">
-                                                            don't want to answer
+                                                            don’t want to answer
                                                             </option>
                                                             </optgroup>
                             </select></td>
@@ -586,7 +586,7 @@ template_draw('header', $values);
                                 <input type="radio" name="disability" value="0"  id="id_disability_no"/> no
                             </label>
                             <label>
-                                <input type="radio" name="disability" value="95"  id="id_disability_NA"/> don't want to answer
+                                <input type="radio" name="disability" value="95"  id="id_disability_NA"/> don’t want to answer
                             </label></td>
                     </tr>
 
@@ -605,8 +605,8 @@ template_draw('header', $values);
                 <option value="4"> a country village </option>
                 <option value="5"> a farm or home in the country </option>
                 <option value="6"> other </option>
-                <option value="97"> don't know </option>
-                <option value="95"> don't want to answer </option>
+                <option value="97"> don’t know </option>
+                <option value="95"> don’t want to answer </option>
               </select></td>
             </tr>
 
@@ -620,7 +620,7 @@ template_draw('header', $values);
                   short email to Tobias Escher who is responsible for this survey? His
                   email address is <a
                   href="mailto:tobias&#64;mysociety.org?subject=WriteToThem%20survey">tobias&#64;mysociety.org</a>.
-                  Your help is really appreciated! We don't ask for your email address
+                  Your help is really appreciated! We don’t ask for your email address
                   here so as to be clear that your survey results are completely anonymous.</em>
               </td>
             </tr>

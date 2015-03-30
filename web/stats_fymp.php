@@ -81,7 +81,7 @@ function mp_response_table($questionnaire_report) {
 
 function category_lookup($cat) {
     if ($cat == 'good') return '';
-    elseif ($cat == 'shame') return "MP doesn't accept messages via WriteToThem";
+    elseif ($cat == 'shame') return "MP doesn’t accept messages via WriteToThem";
     elseif ($cat == 'toofew') return 'Too few messages sent to MP';
     elseif ($cat == 'unknown') return 'We need to manually check this MP';
     elseif ($cat == 'cheat') return 'MP attempted to improve their response rate by sending themselves messages';

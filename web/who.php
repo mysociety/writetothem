@@ -503,13 +503,13 @@ function check_area_status( $va_alone ) {
     }
     if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
         $text = "<p>There have been boundary changes at the last election that
-        means we can't yet say who your representative is. We hope to get our
+        means we can’t yet say who your representative is. We hope to get our
         boundary database updated as soon as we can.</p>";
     } elseif ($status == "recent_election" || $parent_status == "recent_election") {
-        $text = "<p>Due to the recent election, we don't yet have details for this
-            representative.  We'll be adding them as soon as we can.</p>";
+        $text = "<p>Due to the recent election, we don’t yet have details for this
+            representative.  We’ll be adding them as soon as we can.</p>";
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
-        $text = "<p>There's an upcoming election.  We'll be adding your new
+        $text = "<p>There’s an upcoming election.  We’ll be adding your new
                 representative as soon as we can after the election.</p>";
     } else {
         $text = "Representative details are not available for an unknown reason.";

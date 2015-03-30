@@ -42,7 +42,7 @@ $mp = $info['mp'];
             </p>
 
         <p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
-            didn't answer, were surveyed again <strong>after 3 weeks</strong>. Because of
+            didn’t answer, were surveyed again <strong>after 3 weeks</strong>. Because of
             this, and because of the way different people interpret the survey, you should
             interpret the figures below with caution.
 
@@ -52,7 +52,7 @@ $mp = $info['mp'];
             Statistics without a referenced source are dangerous, so please do this.</p>
 
         <p><strong>Note:</strong> While some MPs are very slow at responding to
-            constituents mail, that doesn't mean they aren't otherwise active in or around
+            constituents mail, that doesn’t mean they aren’t otherwise active in or around
             Parliament on behalf of their constituents. You can see MPs voting record,
             committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
 
@@ -75,7 +75,7 @@ $mp = $info['mp'];
         (<?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers)
         <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
         <? if ($mp['fymp_response']) { ?>
-        <li>Previous year's response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
+        <li>Previous year’s response rate: <strong><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
         <? } ?>
         <li>People writing for first time: <strong><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
         (<?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys)

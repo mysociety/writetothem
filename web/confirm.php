@@ -49,7 +49,7 @@ if (rabx_is_error($result)) {
         $text = <<<EOF
 You took so long to confirm your message that under our privacy policy 
 your message has already been removed from our database. 
-If you'd still like to write a message, you can <a href="$url">try again from the
+If you’d still like to write a message, you can <a href="$url">try again from the
 beginning
 EOF;
         template_show_error($text);

@@ -43,7 +43,7 @@ foreach ($years as $y) {
     }
 }
 if (!$got_year) {
-    template_show_error("We don't have statistics for that year");
+    template_show_error("We don’t have statistics for that year");
 }
 $year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
@@ -68,7 +68,7 @@ if (!rabx_is_error($voting_areas)) {
         $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
         $template = "index-advice";
     } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
-        $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
+        $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
         $template = "index-advice";
     }
 }

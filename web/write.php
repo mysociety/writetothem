@@ -95,7 +95,7 @@ function bad_contact_error_msg($eb_area) {
     them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
     full) or incorrect$via_error.
 
-    We'd be <em>really</em> grateful if you could <strong>spend five minutes on the website of
+    We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of
     $type_display_name</strong> (or even the phone$type_display_phone), finding out the contact details.
     Then <a href='/about-contact'>contact us</a> with the email address or fax number of
     your representative.
@@ -178,7 +178,7 @@ function compare_email_addrs($F) {
     if (!isset($F['writer_email2']) || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2']) {
         $error_message = cobrand_mismatched_emails_message($cobrand);
         if (!$error_message) {
-             $error_message = "The two email addresses you've entered differ; please check them carefully for mistakes";
+             $error_message = "The two email addresses you’ve entered differ; please check them carefully for mistakes";
         }
         return array('writer_email' => $error_message);
     }
@@ -283,7 +283,7 @@ function buildWriteForm($options) {
 
         $preview_text = cobrand_preview_text($cobrand);
         if (!$preview_text) {
-            $preview_text = "When you're ready to send your message click the button below. You'll get a chance to read through it again to check for problems before we send it.";
+            $preview_text = "When you’re ready to send your message click the button below. You’ll get a chance to read through it again to check for problems before we send it.";
         }
 
         $preview_button_text = cobrand_preview_button_text($cobrand);
@@ -531,9 +531,9 @@ function rabx_mail_error_msg($code, $text) {
     $base_url = cobrand_url($cobrand, '/', $cocode);
     if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) {
 
-        $error_msg = "You've already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.";
+        $error_msg = "You’ve already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.";
     } elseif ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED) {
-        $error_msg = "You've already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>.";
+        $error_msg = "You’ve already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>.";
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
         $error_msg = "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>.";
@@ -905,7 +905,7 @@ function back_to_who() {
 function mismatch_error() {
     global $cobrand, $cocode;
     $url = cobrand_url($cobrand, "/", $cocode);
-    template_show_error("There's been a mismatch error.  Sorry about
+    template_show_error("There’s been a mismatch error.  Sorry about
         this, <a href=\"$url\">please start again</a>.");
 }
 

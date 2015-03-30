@@ -276,7 +276,7 @@ if ($pc) {
     else if ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
         $error_message = cobrand_postcode_not_found_message($cobrand, $cocode);
         if (!$error_message) {
-            $error_message = "We're not quite sure why, but we can't seem to recognise your postcode.";
+            $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
         }
         $template = "index-advice";
     }
