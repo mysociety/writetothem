@@ -98,7 +98,7 @@ if (isset($_GET['t'])) {
 
 // Inject extra content for Lords
 // A/B Testing Hack!
-if ($template == 'who') {
+if ($template == 'who' && !$area_types) {
     array_push($fyr_headings, 'House of Lords');
     array_push($fyr_blurbs, '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>');
     array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul>');
@@ -451,14 +451,14 @@ function skip_write_all() {
 }
 
 function extra_mp_text($rep_count, $va_area, $representatives) {
-    global $representatives_info;
+    global $representatives_info, $area_types;
     $text = '';
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
         $text = '<p><a href="http://www.theyworkforyou.com/mp/?c=' . urlencode(str_replace(' and ',' &amp; ',$va_area['name'])) . '">See ' . $name . '&rsquo;s voting record and speeches at TheyWorkForYou</a></p>';
 
         // A/B Testing Hack!
-        if (isset($_GET['t']) AND $_GET['t'] == 'who-b') {
+        if (isset($_GET['t']) && $_GET['t'] == 'who-b' && !$area_types) {
 
             $text .= '</div>';
             $text .= '<h3 class="rep-heading lords v-b">House of Lords</h3>';
