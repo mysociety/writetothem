@@ -17,7 +17,7 @@ require_once '../commonlib/phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2013';
+if (!$year) $year = '2014';
 #if (!get_http_var('really'))
 #    $year = '2005'; # XXX temp
 $year = intval($year);
