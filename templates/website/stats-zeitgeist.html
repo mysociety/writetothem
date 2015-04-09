@@ -9,8 +9,6 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <div class="zg-year-bar"><?=$values['year_bar']?></div>
-
         <h2><?=$values['title']?></h2>
 
         <ul class="inline-list">
@@ -316,6 +314,10 @@ template_draw('header', $values);
         time.</p>
 
         <?php endif; ?>
+
+        <hr>
+
+        <div class="zg-year-bar"><?=$values['year_bar']?></div>
 
         <div class="panel advert">
 

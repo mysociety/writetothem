@@ -789,6 +789,10 @@ foreach my $person_id (keys %$reps_by_person) {
         if ($person_id =~ m{uk.org.publicwhip/person/(11734|11309|24716|11458)} ) {
             $category = "badcontact";
         }
+    } elsif ($year == 2014) {
+        if ($person_id =~ m{uk.org.publicwhip/person/(11863|24793|10348|11291|10120|10122|24739)} ) {
+            $category = "badcontact";
+        }
     }
     display_rep($person_id, $category);
         
