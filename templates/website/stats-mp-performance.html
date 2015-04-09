@@ -23,7 +23,7 @@ $mp = $info['mp'];
         <hr>
 
         <form method="get">
-            <p><label for="pc">How responsive was your MP in <?=$values['year']?>? Enter your postcode to check their performance:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
+            <p><label for="pc">Enter your postcode and see how your MP was ranked for responding to constituents’ emails in <?=$values['year']?>:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
             <input type="submit" class="button small success" value="Look up"></p>
         </form>
 
