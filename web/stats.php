@@ -31,7 +31,7 @@ $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
 
-$years = array('2005', '2006', '2007', '2008', '2013');
+$years = array('2005', '2006', '2007', '2008', '2013', '2014');
 $got_year = 0;
 $year_bar_array = array();
 foreach ($years as $y) {
