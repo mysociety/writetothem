@@ -504,13 +504,23 @@ function check_area_status( $va_alone ) {
     if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
         $text = "<p>There have been boundary changes at the last election that
         means we can’t yet say who your representative is. We hope to get our
-        boundary database updated as soon as we can.</p>";
+        boundary database updated as soon as we can, but at the moment we have no
+        definite time of completion.</p>";
     } elseif ($status == "recent_election" || $parent_status == "recent_election") {
-        $text = "<p>Due to the recent election, we don’t yet have details for this
-            representative.  We’ll be adding them as soon as we can.</p>";
+        $text = "<p>Due to the recent election, we don’t yet have details for
+        this representative. We generally rely on data from external sources,
+        and will be updating as soon as we can, but at the moment we have no
+        definite time of completion.</p>";
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
-        $text = "<p>There’s an upcoming election.  We’ll be adding your new
-                representative as soon as we can after the election.</p>";
+        if ($va_alone['type'] == 'WMC') {
+            $text = "<p>Parliament has been dissolved, and so there are no MPs
+until after the upcoming election. We’ll be adding your new representative as
+soon as we can after the election. For more information, see
+<a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>";
+        } else {
+            $text = "<p>There’s an upcoming election.  We’ll be adding your new
+                    representative as soon as we can after the election.</p>";
+        }
     } else {
         $text = "Representative details are not available for an unknown reason.";
     }
