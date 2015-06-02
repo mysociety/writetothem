@@ -45,7 +45,10 @@ if (isset($values['cobrand']))
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
-    <?php if ($_SERVER['REQUEST_URI'] == '/') { ?>
+    <?php
+        $url = parse_url($_SERVER['REQUEST_URI']);
+        if ($url['path'] == '/' && isset($values['experiment']) && $values['experiment']) {
+    ?>
         <!-- Load GA experiments API -->
         <script src="//www.google-analytics.com/cx/api.js?experiment=9AJDuy1gQjiG51CmMpaVlg"></script>
         <script>

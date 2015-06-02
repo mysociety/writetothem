@@ -292,9 +292,10 @@ if ($cobrand){
     $title = cobrand_step_title($cobrand, 1);
 }
 if ($title == ''){
-    $title = "Email your Councillor, MP, MEP, MSP or Welsh, NI, London Assembly Member for free";
+    $title = "Email your Councillor, MP, MEP, MSP or Welsh, NI, or London Assembly Member for free";
 }
-$blurb_top = '<p>Councillors, <abbr title="Member of Parliament">MP</abbr>, <abbr title="Members of the European Parliament">MEPs</abbr>, <abbr title="Members of the Scottish Parliament">MSPs</abbr>, or <br>Northern Ireland, Welsh and London <abbr title="Assembly Members">AMs</abbr>.</p>';
+
+$blurb_top = '<h2 id="title">&nbsp;<noscript>Write to your politicians, national or local, for free.</noscript></h2><p>Over 200,000 messages sent last year.</p>';
 
 $fyr_all_url = null;
 $area_types = null;
@@ -309,18 +310,10 @@ if ($a_forward) {
                         'fyr_extref', fyr_external_referrer(),
                         'cocode', get_http_var('cocode')));
         }
+        $blurb_top = "<h2>Write to your $area_type_desc</h2><p>Over 200,000 messages sent last year.</p>";
     }
 }
-if (!$area_types) {
-    # All representatives
-    global $va_child_types;
-    $area_types = array();
-    foreach ($va_child_types as $child)
-        if ($child != 'HOC')
-            $area_types[$child] = 1;
-    $area_type_desc = fyr_describe_area_type_list($area_types);
-}
-$blurb_top = "<p>$area_type_desc</p>";
+
 if ($template != 'index-advice') {
     header('Cache-Control: max-age=3600');
 }
@@ -343,9 +336,10 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 
 // Display page
 template_draw($template, array(
+        'experiment' => !$area_types,
         'body_id' => 'home',
         "title" => $title,
-        "blurb-top" => '<h2 id="title">&nbsp;<noscript>Write to your politicians, national or local, for free.</noscript></h2><p>Over 200,000 messages sent last year.</p>',
+        "blurb-top" => $blurb_top,
         "form" => $form,
         "error" => $error_message,
         "all_url" => $fyr_all_url,
