@@ -36,11 +36,9 @@
 </div>
 </div>
 
-<script>
-    document.write('<script src=' +
-    ('__proto__' in {} ? 'static/js/vendor/zepto' : 'static/js/vendor/jquery') +
-    '.js><\/script>')
-</script>
+<script src="static/js/vendor/jquery-1.11.3.min.js"></script>
+<script src="static/js/vendor/jquery-migrate-1.2.1.min.js"></script>
+<script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 
 <script src="static/js/foundation/foundation.js"></script>
 <script src="static/js/foundation/foundation.interchange.js"></script>
@@ -59,6 +57,13 @@
         }
     }
 
+    $(function() {
+        $('.fancybox').each(function(){
+            $(this).fancybox({
+                href: $(this).prop('href').replace('#', '-')
+            });
+        });
+    });
 </script>
 
 </body>

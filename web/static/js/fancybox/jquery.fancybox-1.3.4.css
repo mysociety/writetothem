@@ -56,6 +56,7 @@
 }
 
 #fancybox-wrap {
+    box-sizing: content-box;  /* mySociety addition */
 	position: absolute;
 	top: 0;
 	left: 0;

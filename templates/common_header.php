@@ -23,6 +23,10 @@ if (isset($values['cobrand']))
     <title>WriteToThem - <?=$values['title']?></title>
 
     <link rel="stylesheet" href="/static/css/wtt.css">
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css">
+    <?php if (array_key_exists('stylesheet', $values)): ?>
+    <style type="text/css">@import "<?=$values['stylesheet']?>";</style>
+    <?php endif; ?>
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" href="/static/img/favicon-128.png">
@@ -38,10 +42,6 @@ if (isset($values['cobrand']))
     <meta property="og:description" content="WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives.">
 
     <script src="/static/js/vendor/custom.modernizr.js"></script>
-
-    <?php if (array_key_exists('stylesheet', $values)): ?>
-    <style type="text/css">@import "<?=$values['stylesheet']?>";</style>
-    <?php endif; ?>
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
