@@ -45,28 +45,30 @@ if (isset($values['cobrand']))
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
-    <!-- Load GA experiments API -->
-    <script src="//www.google-analytics.com/cx/api.js?experiment=9AJDuy1gQjiG51CmMpaVlg"></script>
+    <?php if ($_SERVER['REQUEST_URI'] == '/') { ?>
+        <!-- Load GA experiments API -->
+        <script src="//www.google-analytics.com/cx/api.js?experiment=9AJDuy1gQjiG51CmMpaVlg"></script>
+        <script>
+            // Select GA experiment variation
+            var chosenVariation = cxApi.chooseVariation();
+
+            // Text variations to use
+            var pageVariations = [
+
+                function() {    // Original
+                    document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+                },
+                function() {    // Variant 1
+                    document.getElementById('title').innerHTML = 'Email your MP, local councillors or other representatives.';
+                },
+                function() {    // Variant 2
+                    document.getElementById('title').innerHTML = 'Email the people in power.';
+                }
+            ];
+        </script>
+    <?php } ?>
 
     <script>
-
-        // Select GA experiment variation
-        var chosenVariation = cxApi.chooseVariation();
-
-        // Text variations to use
-        var pageVariations = [
-
-            function() {    // Original
-                document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
-            },
-            function() {    // Variant 1
-                document.getElementById('title').innerHTML = 'Email your MP, local councillors or other representatives.';
-            },
-            function() {    // Variant 2
-                document.getElementById('title').innerHTML = 'Email the people in power.';
-            }
-        ];
-
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

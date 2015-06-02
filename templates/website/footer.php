@@ -49,12 +49,14 @@
     $(document).foundation();
 
     // When page is ready, switch the content
-    try {
-        $(document).ready(
-            pageVariations[chosenVariation]
-        );
-    } catch(err) {
-        document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+    if (typeof pageVariations !== 'undefined') {
+        try {
+            $(document).ready(
+                pageVariations[chosenVariation]
+            );
+        } catch(err) {
+            document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
+        }
     }
 
 </script>
