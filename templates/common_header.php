@@ -116,33 +116,26 @@ if (isset($values['cobrand']))
 
 <?php endif; ?>
 
-<div class="content-wrapper">
-<div class="row row-full-width">
-    <div class="large-12 columns content">
-
-<?php
-
-if ( ! isset($values['skip_header']) ):
-
-?>
-
-
-
-
-<div class="row banner-top">
-    <div class="large-10 large-centered columns">
-        <div class="ms_header_nav">
-            <nav>
-                <ul class="menu">
-                    <li id="ms_logo"><a class="ms_header_nav-logo" target="_blank" href="http://www.mysociety.org">&nbsp;</a></li>
-                </ul>
-            </nav>
+<div class="ms-header">
+    <div class="ms-header__container large-10 large-centered columns">
+        <div class="ms-header__logo">
+            <a href="http://mysociety.org">mySociety</a>
         </div>
-        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
     </div>
 </div>
 
-<?php endif; ?>
+<div class="content-wrapper">
+    <div class="row row-full-width">
+        <div class="large-12 columns content">
+
+          <?php if ( ! isset($values['skip_header']) ): ?>
+            <div class="row banner-top">
+                <div class="large-10 large-centered columns">
+                    <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
+                    <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
+                </div>
+            </div>
+          <?php endif; ?>
 
 <?php
 if (array_key_exists('header', $values)) {

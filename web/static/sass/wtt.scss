@@ -144,20 +144,17 @@ textarea {
 }
 
 .content-wrapper {
-    border-top: 5px solid #222222;
-
     .banner-top {
         background: $primary-color;
         padding-top: 0;
         padding-bottom: 0;
-        min-height: 40px;
+        min-height: 52px;
         margin-bottom: emCalc(20);
 
         @media #{$small} {
             min-height: 75px;
         }
     }
-
 }
 
 .row-full-width {
@@ -177,7 +174,8 @@ textarea {
   /* We use .large-10 quite a lot to centre content on the screen.
   That's fine on screens over 1024px, but for the magic 768px-1024px
   range, we want to avoid the useless gutters on either side. */
-  .row .row .large-10 {
+  .row .row .large-10,
+  .ms-header .large-10 {
     width: 100%;
   }
 }
@@ -192,6 +190,11 @@ textarea {
     padding-bottom: emCalc(42);
     position: relative;
     min-height: 70px;
+
+    // Correct site logo position, by stopping h2 margin collapsing.
+    & > :first-child {
+      padding-top: 40px;
+    }
 
     h2 {
         color: #FFFFFF;
@@ -270,6 +273,24 @@ textarea {
             width: 250px;
         }
     }
+}
+
+.wtt-help {
+  position: absolute;
+  right: 1em * (15/16); // this is the default Foundation gutter width (0.9375em)
+  top: 0.5em;
+  color: #fff;
+  padding: 0.6em 0;
+
+  &:hover,
+  &:focus {
+    color: #fff;
+    opacity: 0.9;
+  }
+
+  @media #{$small} {
+    top: 1.2em;
+  }
 }
 
 .index-input {
