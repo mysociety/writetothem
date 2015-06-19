@@ -70,7 +70,8 @@ a, .side-nav li a {
     }
 }
 
-p a {
+p a,
+.rep-list a {
   border-bottom: 1px solid $link-underline-color;
 
   &:hover, &:focus {
