@@ -191,7 +191,7 @@ sub confirm_message {
         $wth->email_check_url($1);
         $wth->browser_get($1);
         if ($cobrand && $cobrand eq "animalaid") {
-            $wth->browser_check_contents("Thank you! You've completed the action for \"Let's stop veal farming for good\".");
+            $wth->browser_check_contents("Thank you! You've completed the action");
         } else {
             $wth->browser_check_contents("All done! Your message is on its way.");
         }
