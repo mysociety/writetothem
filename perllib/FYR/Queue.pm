@@ -702,17 +702,6 @@ sub other_recipient_list($$){
     return $recipient_string;
 }
 
-
-=item actions ID
-
-Get the number of actions taken on this message while in the current state.
-
-=cut
-sub actions ($) {
-    my ($id) = @_;
-    return scalar(dbh()->selectrow_array('select numactions from message where id = ?', {}, $id));
-}
-
 # message ID [LOCK] [NOWAIT]
 # Return a hash of data about message ID. If LOCK is true, retrieves the fields
 # using SELECT ... FOR UPDATE. If NOWAIT is true, uses the NOWAIT option of the FOR UPDATE
@@ -1622,8 +1611,7 @@ my %state_action = (
             my $msg = message($id);
             # Early on we make sending attempts frequently, then back off to
             # the old five minute interval later.
-            my $nactions = actions($id);
-            if ($nactions > 10 && ($nactions % 10)) {
+            if ($msg->{numactions} > 10 && ($msg->{numactions} % 10)) {
                 # Bump state counter but don't do anything.
                 # For group messages, bump the state counter of all
                 # messages in the group
@@ -1648,11 +1636,7 @@ my %state_action = (
             my $msg = message($id);
             # Send reminder confirmation if necessary. We don't send one
             # immediately on entering this state, but do thereafter.
-            if (actions($id) == 0) {
-                # Bump action counter but don't do anything else.
-                group_state($id, 'pending', $msg->{group_id});
-                return;
-            } elsif (actions($id) < NUM_CONFIRM_MESSAGES) {
+            if ($msg->{numactions} > 0 && $msg->{numactions} < NUM_CONFIRM_MESSAGES) {
                 my $result = send_confirmation_email($id, 1);
                 if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
                     group_state($id, 'pending', $msg->{group_id});  # bump actions counter
@@ -1661,6 +1645,9 @@ my %state_action = (
                 } else {
                     logmsg($id, 1, "error sending confirmation reminder message (will retry)");
                 }
+            } else {
+                # Bump action counter but don't do anything else.
+                group_state($id, 'pending', $msg->{group_id});
             }
         },
 
@@ -1759,9 +1746,9 @@ my %state_action = (
                 # so give them two days less in the sent state than faxed messages
                 my $days_questionnaire = defined($msg->{recipient_email}) ? 12 : 14;
                 my $days_questionnaire_reminder = $days_questionnaire + 7;
-                if (actions($id) == $days_questionnaire) {
+                if ($msg->{numactions} == $days_questionnaire) {
                     $dosend = 1;
-                } elsif (actions($id) == $days_questionnaire_reminder) {
+                } elsif ($msg->{numactions} == $days_questionnaire_reminder) {
                     $dosend = $reminder = 1;
                 }
             }
