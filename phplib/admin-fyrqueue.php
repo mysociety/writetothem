@@ -646,7 +646,7 @@ There's a copy of your message below, so you can send it another way, if you lik
                 print "<h2>Bounce Messages</h2>";
                 foreach ($message['bounces'] as $bounce) {
                     print "<hr>";
-                    print "<blockquote>" .  nl2br(htmlspecialchars($bounce)) .  "</blockquote>";
+                    print "<blockquote>" .  nl2br(htmlspecialchars($bounce, ENT_SUBSTITUTE | ENT_COMPAT | ENT_HTML401)) .  "</blockquote>";
                 }
                 print "<hr>";
                 if ($message['state'] == 'bounce_confirm') {
