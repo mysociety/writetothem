@@ -319,10 +319,12 @@ textarea {
         font-weight: 600;
     }
 
+    // This is the postcode box
     input[type=text] {
         font-size: emCalc(18);
         border-right: none;
         @include border-radius(3px 0 0 3px);
+        text-transform: uppercase;
     }
 
     @media #{$large} and (min-height: 800px) {
