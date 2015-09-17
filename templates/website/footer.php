@@ -46,17 +46,6 @@
 <script>
     $(document).foundation();
 
-    // When page is ready, switch the content
-    if (typeof pageVariations !== 'undefined') {
-        try {
-            $(document).ready(
-                pageVariations[chosenVariation]
-            );
-        } catch(err) {
-            document.getElementById('title').innerHTML = 'Write to your politicians, national or local, for free.';
-        }
-    }
-
     $(function() {
         $('.fancybox').each(function(){
             $(this).fancybox({

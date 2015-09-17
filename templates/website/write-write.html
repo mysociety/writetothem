@@ -3,7 +3,7 @@
 $values['title'] = "Write your message to " . $values['title_text'];
 $values['robots'] = 'noindex, nofollow';
 
-$values['header_js'] = "ga('set', 'dimension1', '" . $values['voting_area']['rep_name'] . "');";
+$values['header_js'] = "setDimension1('" . $values['voting_area']['rep_name'] . "');";
 
 template_draw('header', $values);
 

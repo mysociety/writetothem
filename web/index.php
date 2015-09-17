@@ -295,7 +295,7 @@ if ($title == ''){
     $title = "Email your Councillor, MP, MEP, MSP or Welsh, NI, or London Assembly Member for free";
 }
 
-$blurb_top = '<h2 id="title">&nbsp;<noscript>Write to your politicians, national or local, for free.</noscript></h2><p>Over 200,000 messages sent last year.</p>';
+$blurb_top = '<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>';
 
 $fyr_all_url = null;
 $area_types = null;
@@ -336,7 +336,6 @@ if ($cobrand && file_exists("../../data/cobrand.csv")) {
 
 // Display page
 template_draw($template, array(
-        'experiment' => !$area_types,
         'body_id' => 'home',
         "title" => $title,
         "blurb-top" => $blurb_top,
