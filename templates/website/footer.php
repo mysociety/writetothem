@@ -11,7 +11,7 @@
                         <li><a href="/about-copyright">Copyright</a></li>
                         <li><a href="/about-privacy">Privacy &amp; Cookies</a></li>
                         <li><a href="/about-linktous">Link To Us</a></li>
-                        <li><a href="https://www.facebook.com/writetothem">Facebook</a></li>
+                        <li><a href="https://www.facebook.com/mysociety">Facebook</a></li>
                     </ul>
 
                 </div>

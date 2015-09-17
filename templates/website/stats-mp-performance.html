@@ -8,7 +8,7 @@ $data = $data['data'];
 $sort = $info['sort'];
 $mp = $info['mp'];
 
-$tweet_text = 'I found out how responsive my MP was in @writetothem\'s ' . $values['year'] . ' league table. See how yours did!';
+$tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $values['year'] . ' league table. See how yours did!';
 
 ?>
 
@@ -53,7 +53,7 @@ $tweet_text = 'I found out how responsive my MP was in @writetothem\'s ' . $valu
                 if ($row['person_id'] == $mp['person_id']) {
 
                     $mp_ranking_string = '<li>' . $h_name . ' is ranked at ' . $position . ' out of ' . count($data) . ' MPs for responsiveness</li>';
-                    $tweet_text = 'My MP was ranked ' . $position . ' out of ' . count($data) . ' in @writetothem\'s ' . $values['year'] . ' responsiveness league table. See how yours did!';
+                    $tweet_text = 'My MP was ranked ' . $position . ' out of ' . count($data) . ' in @mysociety’s ' . $values['year'] . ' responsiveness league table. See how yours did!';
                     break;
                 }
             }
@@ -92,7 +92,7 @@ $tweet_text = 'I found out how responsive my MP was in @writetothem\'s ' . $valu
 
         <?php endif; ?>
 
-        <p><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.writetothem.com/stats/<?=$values['year']?>/mps" data-size="large" data-text="<?=$tweet_text ?>" data-count="none">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+        <p><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.writetothem.com/stats/<?=$values['year']?>/mps" data-size="large" data-text="<?=$tweet_text ?>" data-count="none" data-dnt="true">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
 
         <?php
         $head_name = 'Name (Party)'; if ($sort != 'n') $head_name = '<a href="?o=n">' . $head_name . '</a>';
