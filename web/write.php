@@ -230,6 +230,8 @@ function buildWriteForm($options) {
             $form->applyFilter('writer_email2', 'trim');
             $form->addFormRule('compare_email_addrs');
 
+            $form->updateElementAttr(array('writer_email', 'writer_email2'), array('type' => 'email'));
+
             $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">optional</span>', array('maxlength' => 255));
             $form->applyFilter('writer_phone', 'trim');
 
