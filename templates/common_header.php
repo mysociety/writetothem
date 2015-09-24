@@ -98,7 +98,7 @@ if (isset($values['cobrand']))
 <div class="ms-header">
     <div class="ms-header__container large-10 large-centered columns">
         <div class="ms-header__logo">
-            <a href="http://mysociety.org">mySociety</a>
+            <a href="https://www.mysociety.org/">mySociety</a>
         </div>
     </div>
 </div>
