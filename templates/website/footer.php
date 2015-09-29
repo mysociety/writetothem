@@ -40,12 +40,7 @@
 <script src="/static/js/vendor/jquery-migrate-1.2.1.min.js"></script>
 <script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 
-<script src="/static/js/foundation/foundation.js"></script>
-<script src="/static/js/foundation/foundation.interchange.js"></script>
-
 <script>
-    $(document).foundation();
-
     $(function() {
         $('.fancybox').each(function(){
             $(this).fancybox({
