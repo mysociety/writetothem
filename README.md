@@ -1,6 +1,7 @@
 # WriteToThem
 
-[WriteToThem](https://www.writetothem.com/) lets you contact elected representitives in the United Kingdom.
+[WriteToThem](https://www.writetothem.com/) lets you contact elected
+representatives in the United Kingdom.
 
 If you want to build your own site for writing to people, we recommend you take
 a look at [WriteIt](https://github.com/ciudadanointeligente/write-it) instead.
