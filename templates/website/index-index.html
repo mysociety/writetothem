@@ -9,6 +9,9 @@ template_draw('header', $values);
         <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
         <div style="text-align:center;">
             <?=$values['blurb-top'] ?>
+            <?php if ($values['num_messages']) {
+                echo "<!-- * $values[cobrand] messages: $values[num_messages] -->";
+            } ?>
         </div>
     </div>
 </div>
