@@ -512,15 +512,16 @@ function check_area_status( $va_alone ) {
         and will be updating as soon as we can, but at the moment we have no
         definite time of completion.</p>";
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
+        /* Only around election time
         if ($va_alone['type'] == 'WMC') {
             $text = "<p>Parliament has been dissolved, and so there are no MPs
 until after the upcoming election. We’ll be adding your new representative as
 soon as we can after the election. For more information, see
 <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>";
-        } else {
+        } else { */
             $text = "<p>There’s an upcoming election.  We’ll be adding your new
                     representative as soon as we can after the election.</p>";
-        }
+        /* } */
     } else {
         $text = "Representative details are not available for an unknown reason.";
     }
