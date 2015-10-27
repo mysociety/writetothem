@@ -261,6 +261,7 @@ textarea {
     }
 
     @media #{$small} {
+        background-image: url(../img/heroes/index-large.jpg);
 
         h2 {
             font-size: emCalc(48);
