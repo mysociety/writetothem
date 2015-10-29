@@ -226,9 +226,17 @@ textarea {
     position: relative;
     min-height: 70px;
 
+    &.hero-error {
+        background-image: url(../img/heroes/error.jpg);
+    }
+
+    &.hero-sent {
+        background-image: url(../img/heroes/sent.jpg);
+    }
+
     // Correct site logo position, by stopping h2 margin collapsing.
     & > :first-child {
-      padding-top: 40px;
+        padding-top: 40px;
     }
 
     h2 {
@@ -241,10 +249,15 @@ textarea {
         max-width: 17em; /* break headline onto 2 lines */
         text-align: center;
     }
+
     p {
         text-align: center;
         max-width: 30em;
         margin: 0 auto 1em auto;
+    }
+
+    abbr {
+        color: #FFFFFF;
     }
 
     @media #{$small} {
@@ -252,44 +265,27 @@ textarea {
         h2 {
             font-size: emCalc(48);
         }
-    }
-
-    @media #{$small} {
 
         p {
             font-size: emCalc(20);
         }
     }
 
-    abbr {
-        color: #FFFFFF;
-    }
-
-    &.hero-error {
-        background-image: url(../img/heroes/error.jpg);
-    }
-
-    &.hero-sent {
-        background-image: url(../img/heroes/sent.jpg);
-    }
-
     @media #{$large} and (min-height: 800px) {
-      /* make the hero taller on tall, wide screens */
+        /* make the hero taller on tall, wide screens */
 
-      h2 {
-        font-size: emCalc(52);
-        max-width: 17em;
-        margin-top: 2.5em;
-        margin-bottom: 1em;
-      }
+        h2 {
+            font-size: emCalc(52);
+            max-width: 17em;
+            margin-top: 2.5em;
+            margin-bottom: 1em;
+        }
 
-      p {
-        font-size: 2em;
-        margin-bottom: 2.5em;
-      }
-
+        p {
+            font-size: 2em;
+            margin-bottom: 2.5em;
+        }
     }
-
 }
 
 .wtt-logo {
