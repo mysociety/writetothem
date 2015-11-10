@@ -2007,29 +2007,6 @@ sub notify_daemon () {
     $s->close();
 }
 
-=item get_time
-
-Returns the current time, in Unix seconds since epoch. This may not
-be the real world time, as it can be overriden in the database for
-the test script.
-
-=cut
-sub get_time () {
-    my ($id, $user) = @_;
-    return scalar(dbh()->selectrow_array("select extract(epoch from fyr_current_timestamp())", {}));
-}
-
-=item get_date
-
-Returns the current date, in iso format. This may not be the real world date,
-as it can be overriden in the database for the test script.
-
-=cut
-sub get_date () {
-    my ($id, $user) = @_;
-    return scalar(dbh()->selectrow_array("select fyr_current_date()", {}));
-}
-
 #
 # Administrative interface
 #

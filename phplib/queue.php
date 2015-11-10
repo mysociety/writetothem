@@ -239,29 +239,6 @@ function msg_get_questionnaire_message($token) {
     return $result;
 }
 
-/* msg_get_time
-
-  Returns the current time, in Unix seconds since epoch. This may not be
-  the real world time, as it can be overriden in the database for the test
-  script. */
-function msg_get_time() {
-    global $msg_client;
-    $params = func_get_args();
-    $result = $msg_client->call('FYR.Queue.get_time', $params);
-    return $result;
-}
-
-/* msg_get_date
-
-  Returns the current date, in iso format. This may not be the real world
-  date, as it can be overriden in the database for the test script. */
-function msg_get_date() {
-    global $msg_client;
-    $params = func_get_args();
-    $result = $msg_client->call('FYR.Queue.get_date', $params);
-    return $result;
-}
-
 /* msg_admin_recent_events COUNT [IMPORTANT]
 
   Returns an array of hashes of information about the most recent COUNT

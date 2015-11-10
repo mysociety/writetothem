@@ -333,14 +333,6 @@ function renderForm($form, $pageName, $options)
         $fyr_form = $form;
     }
 
-    // Add time-shift warning if in debug mode
-    if (OPTION_FYR_REFLECT_EMAILS) {
-        $fyr_today = strftime('%Y-%m-%d', $stash['time']);
-        if ($fyr_today != date('Y-m-d')) {
-            $fyr_form = "<p style=\"text-align: center; color: #ff0000; \">Note: On this test site, the date is faked to be $fyr_today</p>" . $fyr_form;
-        }
-    }
-
     $prime_minister = false;
     if ($fyr_values['who'] == 47292) { # Hardcoded
         $prime_minister = true;
@@ -611,9 +603,7 @@ set_up_variables($fyr_values);
 
 // Various display and used fields, global variables
 $stash = array();
-$stash['time'] = msg_get_time();
-msg_check_error($stash['time']);
-$stash['date'] = strftime('%A %e %B %Y', $stash['time']);
+$stash['date'] = strftime('%A %e %B %Y');
 
 if (!isset($fyr_values['who']) || ($fyr_values['who'] == "all" && !isset($fyr_values['type']))) {
     back_to_who();

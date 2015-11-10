@@ -64,12 +64,6 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.get_questionnaire_message' => sub {
                 return FYR::Queue::get_questionnaire_message($_[0]);
             },
-            'FYR.Queue.get_time' => sub {
-                return FYR::Queue::get_time();
-            },
-            'FYR.Queue.get_date' => sub {
-                return FYR::Queue::get_date();
-            },
             'FYR.Queue.admin_recent_events' => sub {
                 return FYR::Queue::admin_recent_events($_[0], $_[1]);
             },
