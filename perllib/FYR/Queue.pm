@@ -526,8 +526,7 @@ sub logmsg_set_handler ($) {
 sub logmsg ($$$;$) {
     my ($id, $important, $msg, $editor) = @_;
     our $dbh;
-    # XXX should ping
-    $dbh ||= new_dbh();
+    ($dbh) = mySociety::DBHandle::dbh_test($dbh);
     our $log_hostname;
     $log_hostname ||= (POSIX::uname())[1];
     $dbh->do('
