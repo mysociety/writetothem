@@ -42,6 +42,15 @@ if (isset($values['cobrand']))
     <meta property="og:description" content="WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives.">
 
     <script src="/static/js/vendor/custom.modernizr.js"></script>
+    <script>
+        function addss(d,u,l) {
+            l=d.createElement('link'),l.rel='stylesheet',l.href=u;
+            d.getElementsByTagName('head')[0].appendChild(l);
+        }
+        if (navigator.userAgent.match(/Windows.*Chrom(e|ium)\/2[2-8]\./)) {
+            addss(document, '/static/css/chrome22-28.css');
+        }
+    </script>
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 

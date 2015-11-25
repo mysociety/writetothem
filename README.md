@@ -24,3 +24,8 @@ The Sass files used to compile styles are located in `web/static/sass`. To
 compile them, `cd` to the `web/static` directory and run `compass compile`. If
 you are making frequent changes, `compass watch` will watch the directory for
 changes and recompile when necessary.
+
+## Acknowledgements
+
+Thanks to [Browserstack](https://www.browserstack.com/) who let us use their
+web-based cross-browser testing tools for this project.
