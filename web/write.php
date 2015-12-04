@@ -91,12 +91,8 @@ function bad_contact_error_msg($eb_area) {
         $type_display_phone = ', 020 7219 3000';
     }
     $error_msg = "
-    Sorry, we  are unable to send a message to this representative. 
-    
-    Note that Parliament is currently having issues with its email system.  If you are trying to contact an MP, please try again later.
-    
-    If you are trying to mail a councillor, MEP or other representative: we <strong>do not currently have contact details for this representative</strong>.
-    We may have had details in the past, which are currently not working (perhaps their mailbox is
+    Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send
+    them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
     full) or incorrect$via_error.
 
     We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of
