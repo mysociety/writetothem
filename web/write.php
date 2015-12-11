@@ -866,7 +866,7 @@ function generate_signature(&$fyr_values) {
 $fyr_values[body]
 
 $fyr_values[signature]
-(Signed with an electronic signature in accordance with subsection 7(3) of the Electronic Communications Act 2000.)
+(Signed with an electronic signature in accordance with section 7(3) of the Electronic Communications Act 2000.)
 EOF;
     } elseif (array_key_exists('body', $fyr_values)) {
         $fyr_values['signedbody'] = $fyr_values['body'];

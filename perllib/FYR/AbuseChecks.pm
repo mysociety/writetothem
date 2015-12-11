@@ -76,7 +76,7 @@ sub get_similar_messages ($;$) {
     # Signoff.
     $m =~ s#^\s*Yours sincerely,?\s*\n##gsm;
     # "Electronic signature".
-    $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with subsection 7\(3\) of the Electronic Communications Act 2000.\)##gs;
+    $m =~ s#[0-9a-f]+\s+\(Signed with an electronic signature in accordance with section 7\(3\) of the Electronic Communications Act 2000.\)##gs;
    
         
     my $start_time = Time::HiRes::time();
