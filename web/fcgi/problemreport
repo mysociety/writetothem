@@ -16,7 +16,7 @@ use mySociety::CGIFast;
 use HTTP::Request;
 use HTTP::Response;
 use LWP::UserAgent;
-use Mail::RFC822::Address;
+use Email::Address;
 
 my $ua = new LWP::UserAgent;
 
@@ -48,7 +48,7 @@ sub check_all_params ($$) {
     $email =~ s/^\s+//;
     $email =~ s/\s+$//;
     if ($email ne '') {
-        if (!Mail::RFC822::Address::valid($email)) {
+        if ($email !~ $Email::Address::addr_spec) {
             $p->{email} = "Please either enter a valid email address, or leave it blank";
             $good = 0;
         }

@@ -21,6 +21,7 @@ BEGIN {
 use Convert::Base32;
 use Crypt::CBC;
 use DBI;
+use Email::Address;
 use Encode;
 use Encode::Byte;       # for cp1252
 use Error qw(:try);
@@ -28,7 +29,7 @@ use Fcntl;
 use FindBin;
 use HTML::Entities;
 use IO::Socket;
-use Mail::RFC822::Address;
+use Net::DNS::Resolver;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
@@ -328,7 +329,7 @@ sub write_messages($$$$;$$$$){
                 unless (exists($sender->{$_}));
         }
         throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
-            unless (Mail::RFC822::Address::valid($sender->{email}));
+            unless $sender->{email} =~ $Email::Address::addr_spec;
         throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
             unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
                 
@@ -938,13 +939,42 @@ sub make_representative_email ($$) {
         'Message-ID' => email_message_id($msg->{id}),
         _body_ => $bodytext
     };
-    if ($msg->{sender_email} =~ /\@(aol|yahoo)\./i) {
+    if (test_dmarc($msg->{sender_email})) {
         $headers->{From} = [ $sender, $msg->{sender_name} ];
         $headers->{'Reply-To'} = [ [ $msg->{sender_email}, $msg->{sender_name} ] ],
     }
     return mySociety::Email::construct_email($headers);
 }
 
+sub test_dmarc {
+    my $email = shift;
+
+    my $addr = (Email::Address->parse($email))[0];
+    return unless $addr;
+
+    my $domain = $addr->host;
+    my @answers = _resolver_send(Net::DNS::Resolver->new, "_dmarc.$domain", 'TXT');
+    @answers = map { $_->txtdata } @answers;
+    my $dmarc = join(' ', @answers);
+    return unless $dmarc =~ /p *= *reject/;
+
+    return 1;
+}
+
+# Same as send->answer, but follows one CNAME and returns only matching results
+sub _resolver_send {
+    my ($resolver, $domain, $type) = @_;
+    my $packet = $resolver->send($domain, $type);
+    my @answers;
+    foreach my $rr ($packet->answer) {
+        if ($rr->type eq 'CNAME') {
+            push @answers, $resolver->send($rr->cname, $type)->answer;
+        } else {
+            push @answers, $rr;
+        }
+    }
+    return grep { $_->type eq $type } @answers;
+}
 
 #
 # Tokens.
