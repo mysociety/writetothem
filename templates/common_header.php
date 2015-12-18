@@ -92,9 +92,18 @@ if (isset($values['cobrand']))
 
 <body>
 
-<?php if (OPTION_FYR_REFLECT_EMAILS): ?>
+<div class="banner banner--donate">
+    <div class="row">
+        <div class="large-10 large-centered columns">
+            <strong>Help us make websites that empower people.</strong>
+            <a href="https://www.mysociety.org/donate/">Your donations support sites like this</a>.
+        </div>
+    </div>
+</div>
 
-<div class="staging">
+<?php if (0 && OPTION_FYR_REFLECT_EMAILS): ?>
+
+<div class="banner banner--staging">
     <div class="row">
         <div class="large-10 large-centered columns">
             <strong>This is a staging site.</strong> Emails will not be sent to representatives, but will instead be sent to you.
