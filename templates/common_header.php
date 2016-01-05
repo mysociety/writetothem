@@ -92,16 +92,7 @@ if (isset($values['cobrand']))
 
 <body>
 
-<div class="banner banner--donate">
-    <div class="row">
-        <div class="large-10 large-centered columns">
-            <strong>Help us make websites that empower people.</strong>
-            <a href="https://www.mysociety.org/donate/">Your donations support sites like this</a>.
-        </div>
-    </div>
-</div>
-
-<?php if (0 && OPTION_FYR_REFLECT_EMAILS): ?>
+<?php if (OPTION_FYR_REFLECT_EMAILS): ?>
 
 <div class="banner banner--staging">
     <div class="row">
