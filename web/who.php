@@ -70,6 +70,11 @@ foreach ($va_display_order as $va_types) {
         $heading = "Your {$va_areas[0]['rep_name_plural']}";
     } else {
         $heading = "Your {$va_areas[0]['rep_name']}";
+        if (count($representatives[0]) && $representatives_info[$representatives[0][0]]['name'] == 'Vacant Seat') {
+            $text = "<p>There’s an upcoming election.  We’ll be adding your new
+                    representative as soon as we can after the election.</p>";
+            $heading = "<strike>$heading</strike>";
+        }
     }
 
     // Data bad due to election etc?
