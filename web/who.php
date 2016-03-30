@@ -47,8 +47,6 @@ $fyr_representatives = array();
 $fyr_headings = array();
 $fyr_blurbs = array();
 $fyr_more = array();
-$fyr_rep_descs = array();
-$fyr_rep_lists = array();
 
 foreach ($va_display_order as $va_types) {
     $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
@@ -80,8 +78,6 @@ foreach ($va_display_order as $va_types) {
         $heading = "<strike>$heading</strike>";
     }
 
-    array_push($fyr_rep_descs, $col_blurb);
-    array_push($fyr_rep_lists, $text);
     array_push($fyr_representatives, $text);
     array_push($fyr_blurbs, $col_blurb);
     array_push($fyr_more, $col_after);
@@ -115,8 +111,6 @@ template_draw($template, array(
     "all_url" => $fyr_all_url,
     "cobrand" => $cobrand,
     "host" => fyr_get_host(),
-    "rep_lists" => $fyr_rep_lists,
-    "rep_descs" => $fyr_rep_descs
     ));
 
 debug_timestamp();
