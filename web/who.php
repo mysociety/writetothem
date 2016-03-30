@@ -73,6 +73,7 @@ foreach ($va_display_order as $va_types) {
         if (count($representatives[0]) && $representatives_info[$representatives[0][0]]['name'] == 'Vacant Seat') {
             $text = "<p>There’s an upcoming election.  We’ll be adding your new
                     representative as soon as we can after the election.</p>";
+            $col_after = '';
             $heading = "<strike>$heading</strike>";
         }
     }
@@ -80,6 +81,7 @@ foreach ($va_display_order as $va_types) {
     // Data bad due to election etc?
     if ( $disabled = check_area_status($va_areas[0]) ) {
         $text = $disabled;
+        $col_after = '';
         $heading = "<strike>$heading</strike>";
     }
 
