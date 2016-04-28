@@ -67,16 +67,23 @@ $instruction-list-number-size: 1.5em;
 $transition-timing: 0.1s;
 
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    min-height: 100%;
+  min-height: 100%;
+
+  &.home {
+    background-color: #fff;
+
+    .content {
+      background-color: #fff;
+    }
+  }
 }
 
-h1, h2, h3, h4, h5, h6,
-strong, b {
-    font-weight: 600;
+h1, h2, h3, h4, h5, h6, strong, b {
+  font-weight: 600;
 }
 
 h2 {
@@ -790,30 +797,6 @@ p.toplink {
 	margin: 0.25em 0;
 }
 
-.footer {
-    border-top: 1px solid #E9E9E9;
-    background: #FFFFFF;
-}
-
-.footer-content {
-    padding-top: 24px;
-    font-size: emCalc(12);
-    font-family: $header-font-family;
-    a {
-        color: #666666;
-        text-decoration: underline;
-        &:hover, &:focus {
-            color: $primary-color;
-        }
-    }
-}
-
-@media #{$small} {
-    .footer-links-credits li {
-        float: right;
-    }
-}
-
 form#writeForm {
 
     h3 {
@@ -899,6 +882,34 @@ form#writeForm {
 address {
     line-height: 170%;
     margin-bottom: 1em;
+}
+
+$mysoc-footer-border-top: 1px solid #E9E9E9;
+$mysoc-footer-background-color: $body-bg;
+$mysoc-footer-link-text-color: $link-color;
+$mysoc-footer-link-hover-text-color: #333;
+$mysoc-footer-donate-background-color: $content-background-colour;
+$mysoc-footer-donate-button-background-color: $success-color;
+
+@import "mysoc_footer";
+
+.mysoc-footer {
+  font-family: $header-font-family;
+  margin-top: 5em !important;
+
+  a {
+    border-bottom: none;
+  }
+}
+
+body.home {
+  .mysoc-footer {
+    background-color: $content-background-colour;
+  }
+
+  .mysoc-footer__donate {
+    background-color: #fff;
+  }
 }
 
 @import "overrides";
