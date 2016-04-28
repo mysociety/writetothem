@@ -90,7 +90,7 @@ if (isset($values['cobrand']))
 
 </head>
 
-<body>
+<body <?php if (array_key_exists('body_class', $values)): ?>class="<?php echo $values['body_class']; ?>"<?php endif; ?>>
 
 <?php if (OPTION_FYR_REFLECT_EMAILS): ?>
 
