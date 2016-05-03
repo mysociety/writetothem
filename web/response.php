@@ -26,7 +26,7 @@ if (!$token) {
     template_show_error($missing_token_message);
 }
 $answer = get_http_var('answer');
-if ($answer != "yes" && $answer != "no") {
+if ($answer != "yes" && $answer != "no" && $answer != "unsatisfactory" && $answer != "not_expected") {
     $missing_answer_message = cobrand_missing_answer_message($cobrand);
     if (!$missing_answer_message) {
          $missing_answer_message = "Please make sure you copy the URL from your email properly. The answer type was missing.";
@@ -64,6 +64,10 @@ $result = msg_record_questionnaire_answer($token, 0, $answer);
 msg_check_error($result);
 if ($answer == "yes") {
     template_draw("response-yes", $values);
+} elseif ($answer == "unsatisfactory") {
+    template_draw("response-unsatisfactory", $values);
+} elseif ($answer == "not_expected") {
+    template_draw("response-not-expected", $values);
 } elseif ($answer == "no") {
     template_draw("response-no", $values);
 } else {

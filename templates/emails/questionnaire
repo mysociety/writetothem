@@ -7,6 +7,16 @@ click on the link below:
 
     <?=$values['yes_url']?>
 
+- If you HAVE had a reply but do not feel the reply answers your
+question please click on the link below:
+
+    <?=$values['unsatisfactory_url']?>
+
+- If you HAVE NOT had any reply at all, but were not expecting a
+reply, please click on the link below:
+
+    <?=$values['not_expected_url']?>
+
 - If you HAVE NOT had any reply at all, OR you have only had an
 acknowledgement, please click on the link below:
 

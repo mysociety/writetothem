@@ -1469,11 +1469,15 @@ sub make_questionnaire_email ($;$) {
     my $base_url = FYR::Cobrand::base_url_for_emails($msg->{cobrand}, $msg->{cocode});
     my $token = make_token("questionnaire", $msg->{id});
     my $yes_url = $base_url . '/Y/' . $token;
+    my $unsatisfactory_url = $base_url . '/U/' . $token;
+    my $not_expected_url = $base_url . '/E/' . $token;
     my $no_url = $base_url . '/N/' . $token;
 
     my $settings = {
         yes_url => $yes_url,
         no_url => $no_url,
+        unsatisfactory_url => $unsatisfactory_url,
+        not_expected_url => $not_expected_url,
         weeks_ago => $reminder ? 'Three' : 'Two',
         their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
     };
@@ -1651,8 +1655,8 @@ sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
     throw FYR::Error("Bad QUESTION (should be '0' or '1')", FYR::Error::BAD_DATA_PROVIDED)
         if ($qn ne '0' and $qn ne '1');
-    throw FYR::Error("Bad RESPONSE (should be 'YES' or 'NO')", FYR::Error::BAD_DATA_PROVIDED)
-        if ($answer !~ /^(yes|no)$/i);
+    throw FYR::Error("Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')", FYR::Error::BAD_DATA_PROVIDED)
+        if ($answer !~ /^(yes|no|unsatisfactory|not_expected)$/i);
     if (my $id = check_token("questionnaire", $token)) {
         my $msg = message($id);
 
