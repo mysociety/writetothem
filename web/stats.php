@@ -32,6 +32,15 @@ if ($year == 2005)
     $previous_year = 'FYMP';
 
 $years = array('2005', '2006', '2007', '2008', '2013', '2014');
+
+# this is so we get the mapit IDs and cons names for the year and
+# hence can get the MP for the year from DaDem and not the current
+# one
+if ( $year >= 2005 && $year <= 2008 ) {
+    $mapit_args = array('generation' => '12');
+} else if ( $year >= 2013 && $year <= 2015 ) {
+    $mapit_args = array('generation' => '13');
+}
 $got_year = 0;
 $year_bar_array = array();
 foreach ($years as $y) {
@@ -58,31 +67,55 @@ require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
 
 $error_message = '';
-$rep_info = array();
-$voting_areas = mapit_call('postcode', $postcode, array(), array(
-    400 => MAPIT_BAD_POSTCODE,
-    404 => MAPIT_POSTCODE_NOT_FOUND,
-));
-if (!rabx_is_error($voting_areas)) {
-    $area_representatives = dadem_get_representatives($voting_areas['shortcuts']['WMC']);
-    dadem_check_error($area_representatives);
-    $rep_info = dadem_get_representative_info($area_representatives[0]);
-    dadem_check_error($rep_info);
-    $rep_info['postcode'] = $postcode;
-} else {
-    if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
-        $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
-    } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
-        $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
+$area_representatives = array();
+if ($postcode) {
+    $area_name = '';
+    $voting_areas = mapit_call('postcode', $postcode, $mapit_args, array(
+        400 => MAPIT_BAD_POSTCODE,
+        404 => MAPIT_POSTCODE_NOT_FOUND,
+    ));
+    if (!rabx_is_error($voting_areas)) {
+        # we're grabbing this here so we can use it when checking we've got
+        # the correct rep later on
+        $area_name = $voting_areas['areas'][$voting_areas['shortcuts']['WMC']]['name'];
+        $area_representatives = dadem_get_representatives($voting_areas['shortcuts']['WMC'], True);
+        dadem_check_error($area_representatives);
+    } else {
+        if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
+            $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
+        } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
+            $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
+        }
     }
 }
 
 if ($type == 'mps') {
     // Table of responsiveness of MPs
+    $rep_info = array();
     $last_year = array();
     if (file_exists("../phplib/questionnaire_report_${previous_year}_WMC.php")) {
         require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
         $last_year = $GLOBALS["questionnaire_report_{$previous_year}_WMC"];
+    }
+    # the current MP may not be the MP from the year of the stats so loop back
+    # through the reps till we get one who is in the stats. We need to check the
+    # area is the same on the small chance that e.g when asking for the 2007 stats
+    # the MP elected in 2015 was MP for a different seat and so you get their stats but
+    # for the wrong seat - e.g asking for stats for Uxbridge and South Ruislip for
+    # 2007 would get you Boris Johnson's stats for Henley in 2007. This only works if
+    # the cons name matches with MaPit which is should :/
+    if ($area_representatives) {
+        foreach ( $area_representatives as $rep ) {
+            $area_rep = dadem_get_representative_info($rep);
+            dadem_check_error($rep);
+            $key = $area_rep['parlparse_person_id'];
+            if ( array_key_exists($key, $GLOBALS["questionnaire_report_${year}_WMC"]) &&
+                 $area_name == $GLOBALS["questionnaire_report_${year}_WMC"][$key]["area"] ) {
+                $rep_info = $area_rep;
+                $rep_info['postcode'] = $postcode;
+                break;
+            }
+        }
     }
     mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $last_year, $error_message, $postcode);
 } elseif ($type == 'zeitgeist') {
