@@ -43,7 +43,12 @@ foreach ($years as $y) {
     }
 }
 if (!$got_year) {
-    template_show_error("We don’t have statistics for that year");
+    if ($year == 2015) {
+        template_draw('stats-2015', array("title" => "WriteToThem.com Zeitgeist $year"));
+        exit();
+    } else {
+        template_show_error("We don’t have statistics for that year");
+    }
 }
 $year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
