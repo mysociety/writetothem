@@ -57,6 +57,7 @@ $year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" .
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
 
+$error_message = '';
 $rep_info = array();
 $voting_areas = mapit_call('postcode', $postcode, array(), array(
     400 => MAPIT_BAD_POSTCODE,
@@ -71,10 +72,8 @@ if (!rabx_is_error($voting_areas)) {
 } else {
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
         $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
-        $template = "index-advice";
     } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
         $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
-        $template = "index-advice";
     }
 }
 
@@ -85,7 +84,7 @@ if ($type == 'mps') {
         require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
         $last_year = $GLOBALS["questionnaire_report_{$previous_year}_WMC"];
     }
-    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $last_year);
+    mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $last_year, $error_message, $postcode);
 } elseif ($type == 'zeitgeist') {
     // Miscellaneous general statistics
     zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
@@ -169,7 +168,7 @@ function by_response($a, $b) {
     return 0;
 }
 
-function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report) {
+function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report, $error_message, $pc) {
     $last_year_data = array();
     foreach ($last_year_report as $key => $row) {
         if (is_array($row)) {
@@ -266,7 +265,6 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
         $key = $rep_info['parlparse_person_id'];
         $row = $questionnaire_report[$key];
         $data['info']['mp'] = array_merge($row, array(
-	    'pc' => $rep_info['postcode'],
             'notes' => category_lookup($row['category']),
             'response' => $row['responded_mean'],
             'low' => $row['responded_95_low'],
@@ -284,7 +282,9 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
         "title" => "WriteToThem.com Zeitgeist $year",
         'year' => $year,
         'year_bar' => $year_bar,
-        'data' => $data
+        'data' => $data,
+        'error_message' => $error_message,
+        'pc' => $pc,
         ));
 }
 

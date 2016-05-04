@@ -382,6 +382,20 @@ textarea {
 
 }
 
+form#stats-search {
+    .error-message {
+        color: $alert-color;
+        font-family: $header-font-family;
+        width: 100%;
+        clear: both;
+        margin-bottom: 1em;
+        line-height: 1.5em;
+        font-weight: 600;
+        font-size: emCalc(16);
+    }
+}
+
+
 #index-search {
   text-align: center;
   @media #{$small} {

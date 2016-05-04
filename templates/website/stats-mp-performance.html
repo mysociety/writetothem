@@ -8,6 +8,8 @@ $data = $data['data'];
 $sort = $info['sort'];
 $mp = $info['mp'];
 
+$pc = $values['pc'];
+
 $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $values['year'] . ' league table. See how yours did!';
 
 ?>
@@ -24,10 +26,18 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
 
         <hr>
 
-        <form method="get">
-            <p><label for="pc">Enter your postcode and see how your MP was ranked for responding to constituents’ emails in <?=$values['year']?>:</label><input type="text" id="pc" name="pc" value="<? if (isset($mp['pc'])) print htmlspecialchars($mp['pc']); ?>" size="8">
+        <form method="get" id="stats-search">
+            <p><label for="pc">
+            Enter your postcode and see how your MP was ranked for responding
+            to constituents’ emails in <?=$values['year']?>:
+            </label>
+            <input type="text" id="pc" name="pc" value="<? if (isset($pc)) print htmlspecialchars($pc); ?>" size="8">
+            <?php if ($values['error_message']) { ?>
+                <p class="error-message"><?=$values['error_message']?></p>
+            <?php } ?>
             <input type="submit" class="button small success" value="Look up"></p>
         </form>
+
 
         <?php if (is_array($mp)):
             $h_name = htmlspecialchars($mp['name']);
@@ -83,7 +93,7 @@ $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $value
 
         <? } ?>
 
-        <!-- <p><a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">Send a message to one of your representatives</a></p> -->
+        <!-- <p><a href="/?pc=<?=htmlspecialchars($pc) ?>">Send a message to one of your representatives</a></p> -->
 
         <p>
         <b>Find out more about <?=$h_name ?></b><br>
