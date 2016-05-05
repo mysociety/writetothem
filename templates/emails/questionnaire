@@ -1,40 +1,35 @@
-<?=$values['weeks_ago']?> weeks ago we sent your letter to <?=$values['recipient_name']?>, your
-<?=$values['recipient_position']?>. (For reference, there's a copy of your
-letter at the bottom of this email)
+<?=$values['weeks_ago']?> weeks ago you sent a letter to <?=$values['recipient_name']?>, your
+<?=$values['recipient_position']?> through WriteToThem.com
 
-- If you HAVE had a reply (not just an acknowledgement), please
-click on the link below:
+For reference, there's a copy of your letter at the bottom of this email.
 
-    <?=$values['yes_url']?>
+Please help us understand how well representatives are doing at
+responding to their constituents.
 
-- If you HAVE had a reply but do not feel the reply answers your
-question please click on the link below:
+Did your <?=$values['recipient_position']?> reply to your message?
 
-    <?=$values['unsatisfactory_url']?>
+YES! - please click here:
+<?=$values['yes_url']?>
 
-- If you HAVE NOT had any reply at all, but were not expecting a
-reply, please click on the link below:
+YES, but I don't think my question was answered! - please click here:
+<?=$values['unsatisfactory_url']?>
 
-    <?=$values['not_expected_url']?>
+YES, but it was only an acknowledgement and I haven't received anything
+since! - please click here:
+<?=$values['no_url']?>
 
-- If you HAVE NOT had any reply at all, OR you have only had an
-acknowledgement, please click on the link below:
+NO! - please click here:
+<?=$values['no_url']?>
 
-    <?=$values['no_url']?>
+NO, but I didn't expect/require a response! - please click here:
+<?=$values['not_expected_url']?>
 
-If you feel that neither link is suitable, then please do not answer the
-questionnaire.
+Your feedback allows us to publish performance tables of the responsiveness
+of all the politicians in the UK. We are keen to give politicians the credit
+they deserve when they responsd promptly to their constituents. We think it's
+also worth highlighting the representatives who don't
 
-Your feedback will allow us to publish performance tables of the responsiveness
-of all the politicians in the UK. The majority of
-<?=$values['recipient_position_plural']?> deserve credit and respect for their
-conscientiousness as they respond promptly and diligently to the needs and
-views of <?=$values['their_constituents']?>. Likewise, we're keen to expose the
-minority of <?=$values['recipient_position_plural']?> who don't.
-
-The letter you sent to your <?=$values['recipient_position']?> will be deleted
-from our database within the next two weeks. Our full privacy policy can be read here:
-    https://www.writetothem.com/about-qa#personal
+Check how your MP's doing here: https://www.writetothem.com/stats
 
 Please do not reply to this mail. If you have a question or comment about the
 site, please send an email to <?=$values['contact_email']?>
