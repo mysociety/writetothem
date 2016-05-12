@@ -1,0 +1,104 @@
+<?php
+
+template_draw('header', $values);
+
+$share_url = 'https://www.writetothem.com/stats/' . $values['year'] . '/mps';
+$tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $values['year'] . ' league table. See how yours did!';
+$facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $values['year'] . ' league table. See how yours did!';
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <div class="row">
+            <div class="large-8 columns">
+                <div class="zg-year-bar"><?=$values['year_bar']?></div>
+            </div>
+            <div class="large-4 columns">
+              <p class="zg-share">
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?=$share_url?>" data-size="large" data-text="<?=$tweet_text ?>" data-count="none" data-dnt="true">Tweet</a>
+                  <a href="https://www.facebook.com/dialog/share?app_id=1058215044225767&display=popup&href=<?=urlencode($share_url)?>&quote=<?=urlencode($facebook_text)?>" class="facebook-share-button" data-url="<?=$share_url?>" data-text="<?=$facebook_text ?>">Share</a>
+              </p>
+            </div>
+        </div>
+
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId: '1058215044225767',
+              xfbml: true,
+              version: 'v2.6'
+            });
+          };
+          (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return;};js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/sdk.js";fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+        </script>
+
+        <h2 class="big-title"><?=$values['title']?></h2>
+
+        <div class="navigation-tabs"><?=$values['navigation_tabs']?></div>
+
+        <div class="statistics-page">
+
+            <h3 id="parties">Which party had the most responsive MPs in <?=$values['year']?>?</h3>
+            <table>
+                <tr>
+                    <th>Party</th>
+                    <th>Response rate of MPs<br>(in 2 to 3 weeks)</th>
+                </tr>
+                <?php
+                $c = 0;
+                foreach ($values['parties_by_responsiveness'] as $party) {
+                    $c++;
+                    if ($party == 'Deputy Speaker') continue;
+                    if ($party == 'Speaker') continue;
+                    $value = $values['party_summary'][$party];
+                    print '<tr>';
+                    print "<td>$party</td>";
+                    print "<td>";
+                    print fuzzy_response_description($value['responded_mean']);
+                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
+                    print "</td>";
+                    print "</tr>";
+                }
+                ?>
+            </table>
+
+          <?php if ($values['year'] == '2005') { ?>
+            <h3>First time writers by party</h3>
+            <table>
+                <tr>
+                    <th>Party</th>
+                    <th>First time</th>
+                </tr>
+                <?
+                $c = 0;
+                foreach ($values['parties_by_firsttime'] as $party) {
+                    $c++;
+                    if ($party == 'Deputy Speaker') continue;
+                    if ($party == 'Speaker') continue;
+                    $value = $values['party_summary'][$party];
+                    print '<tr>';
+                    print "<td>$party</td>";
+                    print "<td>";
+                    print fuzzy_response_description($value['responded_mean']);
+                    print " <i class=\"totals\">(" . $value['responded'] . " out of " . $value['responded_outof'] . ")</i>";
+                    print "</td>";
+                    print "</tr>";
+                }
+                ?>
+            </table>
+
+            <p>This table shows our estimate of the percentage of authors contacting MPs of
+            each party who were writing to an elected representative for the first
+            time.</p>
+
+          <?php } ?>
+
+        </div> <!-- /statistics-page -->
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>
