@@ -2,12 +2,12 @@
 /*
  * stats.php:
  * Statistics!
- * 
+ *
  * Copyright (c) 2006 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
  * $Id: stats.php,v 1.32 2009-09-02 18:11:29 matthew Exp $
- * 
+ *
  */
 require_once '../phplib/fyr.php';
 require_once '../commonlib/phplib/mapit.php';
@@ -31,6 +31,8 @@ $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
 
+
+# Construct the year navigation bar
 $years = array('2005', '2006', '2007', '2008', '2013', '2014');
 $got_year = 0;
 $year_bar_array = array();
@@ -48,6 +50,26 @@ if (!$got_year) {
 $year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
 #    $year_bar = "";
+
+
+# Construct the navigation tabs for this year's data
+$navigation_tabs = array(
+  array('mps', 'MPs', 'MP responsiveness league table'),
+  array('parties', 'Parties', 'MP responsiveness by party'),
+  array('bodies', 'Bodies', 'Responsiveness by body'),
+  array('methodology', 'Methodology', 'Methodology')
+);
+$navigation_tabs_array = array();
+foreach($navigation_tabs as $navigation_tab){
+  $html = '<span class="hide-for-large-up">' . $navigation_tab[1] . '</span>
+           <span class="show-for-large-up">' . $navigation_tab[2] . '</span>';
+  if($type == $navigation_tab[0]){
+    $navigation_tabs_array[] = '<b>' . $html . '</b>';
+  } else {
+    $navigation_tabs_array[] = '<a href="/stats/' . $year . '/' . $navigation_tab[0] . '">' . $html . '</a>';
+  }
+}
+$navigation_tabs = '<ul class="inline-list" role="navigation"><li>' . join($navigation_tabs_array, "</li><li>") . '</li></ul>';
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
@@ -74,19 +96,28 @@ if (!rabx_is_error($voting_areas)) {
 }
 
 if ($type == 'mps') {
-    // Table of responsiveness of MPs
     $last_year = array();
     if (file_exists("../phplib/questionnaire_report_${previous_year}_WMC.php")) {
         require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
         $last_year = $GLOBALS["questionnaire_report_{$previous_year}_WMC"];
     }
     mp_response_table($year, $xml, $rep_info, $GLOBALS["questionnaire_report_${year}_WMC"], $GLOBALS["zeitgeist_by_summary_type_$year"], $last_year);
+
+} elseif ($type == 'parties') {
+    party_response_table($year, $GLOBALS["party_report_${year}_WMC"]);
+
+} elseif ($type == 'bodies') {
+    type_response_table($year, $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_${year}_WMC"]);
+
+} elseif ($type == 'methodology') {
+    questionnaire_report($year, $GLOBALS["zeitgeist_by_summary_type_$year"], $GLOBALS["questionnaire_report_${year}_WMC"]);
+
 } elseif ($type == 'zeitgeist') {
-    // Miscellaneous general statistics
-    zeitgeist($year, $GLOBALS["zeitgeist_by_summary_type_$year"],
-        $GLOBALS["party_report_${year}_WMC"],
-        $GLOBALS["questionnaire_report_${year}_WMC"]
-        );
+    // This URL used to house the "summary" page, before we split out onto 4 tabs.
+    // Redirect the visitor to the "mps" page, since that's probably what they want.
+    header("Location: /stats/$year/mps");
+    exit;
+
 } else {
     template_show_error("Unknown report type '".htmlspecialchars($type)."'");
 }
@@ -94,57 +125,29 @@ if ($type == 'mps') {
 function fuzzy_response_description($a) {
     if ($a < 0.20)
         return "very low";
-    else if ($a < 0.40) 
-        return "low"; 
-    else if ($a < 0.60) 
-        return "medium"; 
-    else if ($a < 0.80) 
-        return "high"; 
-    else if ($a <= 1.00) 
-        return "very high"; 
+    else if ($a < 0.40)
+        return "low";
+    else if ($a < 0.60)
+        return "medium";
+    else if ($a < 0.80)
+        return "high";
+    else if ($a <= 1.00)
+        return "very high";
     return "unknown $a";
 }
 
-function zeitgeist($year, $type_summary, $party_summary, $questionnaire_report) {
-    function sort_by_responsiveness($a, $b) {
-        if (isset($a['total'])) return 1;
-        if (isset($b['total'])) return -1;
-        return $a['responded'] / $a['responded_outof'] <
-            $b['responded'] / $b['responded_outof'] ?
-            1 : -1;
-    }
-    function sort_by_firsttime($a, $b) {
-        return $a['firsttime'] / $a['firsttime_outof'] <
-            $b['firsttime'] / $b['firsttime_outof'] ?
-            1 : -1;
-    }
-    uasort($party_summary, 'sort_by_responsiveness');
-    $parties_by_responsiveness = array_keys($party_summary);
-    uasort($party_summary, 'sort_by_firsttime');
-    $parties_by_firsttime = array_keys($party_summary);
-    uasort($type_summary, 'sort_by_responsiveness');
-    $types_by_responsiveness = array_keys($type_summary);
-    $libdem_leadership_candidates = array();
-    if ($year == "2005") {
-        $libdem_leadership_candidates = 
-            array(
-                $questionnaire_report['uk.org.publicwhip/person/11565'],
-                $questionnaire_report['uk.org.publicwhip/person/10088'],
-                $questionnaire_report['uk.org.publicwhip/person/10298'],
-                );
-    }
-    global $year_bar;
-    template_draw('stats-zeitgeist', array(
-            "title" => "WriteToThem.com Zeitgeist $year",
-            'year' => $year,
-            'year_bar' => $year_bar,
-            'type_summary' => $type_summary,
-            'party_summary' => $party_summary,
-            'parties_by_responsiveness' => $parties_by_responsiveness,
-            'parties_by_firsttime' => $parties_by_firsttime,
-            'types_by_responsiveness' => $types_by_responsiveness,
-            'libdem_leadership_candidates' => $libdem_leadership_candidates
-            ));
+function sort_by_responsiveness($a, $b) {
+    if (isset($a['total'])) return 1;
+    if (isset($b['total'])) return -1;
+    return $a['responded'] / $a['responded_outof'] <
+        $b['responded'] / $b['responded_outof'] ?
+        1 : -1;
+}
+
+function sort_by_firsttime($a, $b) {
+    return $a['firsttime'] / $a['firsttime_outof'] <
+        $b['firsttime'] / $b['firsttime_outof'] ?
+        1 : -1;
 }
 
 function by_name($a, $b) {
@@ -162,6 +165,90 @@ function by_response($a, $b) {
     if ($a['low']<$b['low']) return 1;
     elseif ($a['low']>$b['low']) return -1;
     return 0;
+}
+
+function party_response_table($year, $party_summary) {
+    uasort($party_summary, 'sort_by_responsiveness');
+    $parties_by_responsiveness = array_keys($party_summary);
+    uasort($party_summary, 'sort_by_firsttime');
+    $parties_by_firsttime = array_keys($party_summary);
+
+    global $year_bar;
+    global $navigation_tabs;
+    template_draw('stats-party-performance', array(
+        "title" => "WriteToThem.com Zeitgeist $year",
+        'year' => $year,
+        'year_bar' => $year_bar,
+        'navigation_tabs' => $navigation_tabs,
+        'party_summary' => $party_summary,
+        'parties_by_responsiveness' => $parties_by_responsiveness,
+        'parties_by_firsttime' => $parties_by_firsttime
+    ));
+}
+
+function type_response_table($year, $type_summary, $questionnaire_report) {
+    uasort($type_summary, 'sort_by_responsiveness');
+    $types_by_responsiveness = array_keys($type_summary);
+
+    $data = array();
+    foreach ($questionnaire_report as $key => $row) {
+        if (is_array($row)) {
+            // No need for data on individuals for the methodology page
+        } else {
+            // These are handy figures like "total_dispatched_success" etc.
+            $data['info'][$key] = $row;
+        }
+    }
+
+    $non_mp_sent = 0;
+    foreach ($type_summary as $type => $row) {
+    	if ($type != 'westminster' && $type != 'total')
+	    $non_mp_sent += $row['dispatched_success'];
+    }
+    $data['info']['non_mp_sent'] = $non_mp_sent;
+
+    global $year_bar;
+    global $navigation_tabs;
+    template_draw('stats-type-performance', array(
+        "title" => "WriteToThem.com Zeitgeist $year",
+        'year' => $year,
+        'year_bar' => $year_bar,
+        'navigation_tabs' => $navigation_tabs,
+        'type_summary' => $type_summary,
+        'types_by_responsiveness' => $types_by_responsiveness,
+        'data' => $data
+    ));
+}
+
+function questionnaire_report($year, $type_summary, $questionnaire_report) {
+    global $year_bar;
+    global $navigation_tabs;
+
+    $data = array();
+    foreach ($questionnaire_report as $key => $row) {
+        if (is_array($row)) {
+            // No need for data on individuals for the methodology page
+        } else {
+            // These are handy figures like "total_dispatched_success" etc.
+            $data['info'][$key] = $row;
+        }
+    }
+
+    $non_mp_sent = 0;
+    foreach ($type_summary as $type => $row) {
+    	if ($type != 'westminster' && $type != 'total')
+	    $non_mp_sent += $row['dispatched_success'];
+    }
+    $data['info']['non_mp_sent'] = $non_mp_sent;
+
+    template_draw('stats-methodology', array(
+        "title" => "WriteToThem.com Zeitgeist $year",
+        'year' => $year,
+        'year_bar' => $year_bar,
+        'navigation_tabs' => $navigation_tabs,
+        'type_summary' => $type_summary,
+        'data' => $data
+    ));
 }
 
 function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_summary, $last_year_report) {
@@ -275,10 +362,12 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
 
     # Output data
     global $year_bar;
+    global $navigation_tabs;
     template_draw($xml ? 'stats-mp-twfy' : 'stats-mp-performance', array(
         "title" => "WriteToThem.com Zeitgeist $year",
         'year' => $year,
         'year_bar' => $year_bar,
+        'navigation_tabs' => $navigation_tabs,
         'data' => $data
         ));
 }

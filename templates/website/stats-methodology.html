@@ -1,25 +1,51 @@
 <?php
 
-$values['title'] = $values['title'];
-
 template_draw('header', $values);
+
+$data = $values['data'];
+$info = $data['info'];
+
+$share_url = 'https://www.writetothem.com/stats/' . $values['year'] . '/mps';
+$tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $values['year'] . ' league table. See how yours did!';
+$facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $values['year'] . ' league table. See how yours did!';
 
 ?>
 
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <div class="zg-year-bar"><?=$values['year_bar']?></div>
-        <h2 class="big-title"><?=$values['title']?></h2>
-        <div class="navigation-tabs">
-            <ul class="inline-list">
-                <li><b>Summary</b></li>
-                <li><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></li>
-            </ul>
+        <div class="row">
+            <div class="large-8 columns">
+                <div class="zg-year-bar"><?=$values['year_bar']?></div>
+            </div>
+            <div class="large-4 columns">
+              <p class="zg-share">
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?=$share_url?>" data-size="large" data-text="<?=$tweet_text ?>" data-count="none" data-dnt="true">Tweet</a>
+                  <a href="https://www.facebook.com/dialog/share?app_id=1058215044225767&display=popup&href=<?=urlencode($share_url)?>&quote=<?=urlencode($facebook_text)?>" class="facebook-share-button" data-url="<?=$share_url?>" data-text="<?=$facebook_text ?>">Share</a>
+              </p>
+            </div>
         </div>
+
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId: '1058215044225767',
+              xfbml: true,
+              version: 'v2.6'
+            });
+          };
+          (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return;};js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/sdk.js";fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+        </script>
+
+        <h2 class="big-title"><?=$values['title']?></h2>
+
+        <div class="navigation-tabs"><?=$values['navigation_tabs']?></div>
+
         <div class="statistics-page">
 
-        <?php if ($values['year'] == '2005'): ?>
+          <?php if ($values['year'] == 2005): ?>
             <p>Between 2001 and 2004 our predecessor FaxYourMP.com published a league
                 table of MP responsiveness data, measuring
                 the proportion of users who said that they had heard something back
@@ -29,11 +55,6 @@ template_draw('header', $values);
                 because we were busy totally rebuilding FaxYourMP as <a href="/">WriteToThem</a>,
                 adding all the UK’s 20,000+ other elected representatives, such as
                 councillors and MSPs.</p>
-
-            <p>We are now publishing this data to celebrate WriteToThem’s first
-                birthday, and to fulfil our parent charity’s registered objects &mdash; to
-                conduct research into the interaction between elected bodies and the
-                Internet.</p>
 
             <h3>Messages to MPs during 2005</h3>
 
@@ -46,25 +67,53 @@ template_draw('header', $values);
 
             <p><img src="/stats/signups-2005-WMC.png" alt="The number of messages sent to MPs via WriteToThem varied throughout the year. Peaks included the Jamie Oliver campaign in March, Our World Our Say at the end of June, and animalsasia.org in November" usemap="#imap"></p>
 
-            <p><small><a href="/stats/<?=$values['year']?>/mps">MP Responsiveness League Table</a></small></p>
-
             <p><b>Note:</b> During the period up to a General Election there are
                 no MPs, by electoral law.  We disabled WriteToThem’s facility for writing to
                 MPs on 14th April, enabling it again a week after the election on 12th May.</p>
 
-        <?php else: ?>
-
+          <?php else: ?>
             <p>WriteToThem sent a total of
                 <strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
-                messages to elected representatives (and Lords) in the year <?=$values['year']?>. This page contains
-                some facts and figures about those messages. You can find information about
-                your MP in the <a href="/stats/<?=$values['year']?>/mps">MP
-                Responsiveness League Table</a>.
+                messages to elected representatives (and Lords) in the year <?=$values['year']?>.</p>
 
-        <?php endif; ?>
+            <p>This included <strong><?=number_format($info['total_dispatched_success']) ?></strong>
+                messages to MPs, and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.</p>
+
+            <p>
+                <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
+                about communicating with their MP in <?=$values['year']?>.</p>
+                <? if ($values['year'] < 2006) { ?>
+                    This asked whether MPs had responded to their message within 2 to 3 weeks.
+                <? } else if ($values['year'] >= 2006) { ?>
+                    <p>The survey asked whether people had had <strong>a reply (not just an acknowledgement)</strong> from their
+                    representative.
+                    <? if ($values['year'] == 2006) { ?>
+                        (Actually the text of the survey changed slightly in both March and April 2006. You
+                        can <a href="https://secure.mysociety.org/cvstrac/rlog?f=mysociety/fyr/templates/emails/questionnaire">see in our
+                        source code repository</a> when this happened, and what changed).
+                    <? } ?>
+                <? } ?>
+                </p>
+
+            <p>People were surveyed initially <strong>after 2 weeks</strong>, and if they
+                didn't answer, were surveyed again <strong>after 3 weeks</strong>. Because of
+                this, and because of the way different people interpret the survey, you should
+                interpret the WriteToThem Zeitgeist figures with caution.
+
+            <p><strong>Journalists:</strong> Please feel free to use the data on these pages,
+                but if you do you <strong>must cite WriteToThem.com</strong> in the body of
+                your articles as the source of any analysis or data you get from this site.
+                Statistics without a referenced source are dangerous, so please do this.</p>
+
+            <p><strong>Note:</strong> While some MPs are very slow at responding to
+                constituents mail, that doesn't mean they aren't otherwise active in or around
+                Parliament on behalf of their constituents. You can see MPs voting record,
+                committee memberships and interests on their <a href="http://www.theyworkforyou.com">TheyWorkForYou</a> page.</p>
+
+          <?php endif; ?>
 
 
-        <?php if ($values['year'] == '2006'): ?>
+          <?php if ($values['year'] == 2006): ?>
             <ul class="side-nav">
                 <li><a href="#referrers">What do people write letters about?</a></li>
                 <li><a href="#responsehistogram">Did MPs do better this year or last year?</a></li>
@@ -126,10 +175,10 @@ template_draw('header', $values);
             <p><a href="/stats/deprivation-samsmith-2006.pdf">Deprivation Measure of Users of WriteToThem.com in England</a>
                 (PDF) - Sam Smith, April 2007</p>
 
-        <?php endif; ?>
+          <?php endif; ?>
 
 
-        <?php if ($values['year'] == '2007'): ?>
+          <?php if ($values['year'] == 2007): ?>
 
             <ul class="side-nav">
                 <li><a href="#referrers">What do people write letters about?</a></li>
@@ -186,136 +235,10 @@ template_draw('header', $values);
 
             <p><img border="0" src="/stats/response-histo-<?=$values['year']?>-WMC.png" alt=""></p>
 
-        <?php endif; ?>
-
-
-        <?php if (array_key_exists('lords', $values['type_summary'])): ?>
-            <h3 id="electedbodies">Which elected body* has the most responsive members? <small>(* and the House of Lords)</small></h3>
-        <?php else: ?>
-            <h3>Performance of elected bodies</h3>
-        <?php endif; ?>
-
-        <table>
-            <tr>
-            <th>Rank</th>
-            <th>Elected body</th>
-            <th>Response rate (in 2 to 3 weeks) *</th>
-            <th>People writing for first time &#8224;</th>
-            <th>Messages sent</th>
-            <!--<th>First time</th>-->
-            </tr>
-            <?php
-            $c = 0;
-            $type_map = array(
-                'europe' => 'Members of the European Parliament',
-                'scotland' => 'Members of the Scottish Parliament',
-                'wales' => 'Welsh Assembly Members',
-                'northern_ireland' => 'Northern Ireland Assembly Members',
-                'london' => 'London Assembly Members',
-                'westminster' => 'House of Commons',
-                'lords' => 'House of Lords',
-                'council' => 'Councillors',
-                'total' => 'Total / average'
-            );
-            foreach ($values['types_by_responsiveness'] as $type) {
-                $c++;
-                $value = $values['type_summary'][$type];
-                print '<tr>';
-                if ($type != "total")
-                    print "<td>$c.</td>";
-                else
-                    print "<td>&nbsp;</td>";
-                print "<td>".$type_map[$type]."</td>";
-                print "<td>";
-                if ($type == 'total') {
-                    print round(100 * $value['responded'] / $value['responded_outof'], 0) . "%";
-                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
-                } else {
-                    print round(100 * $value['responded_mean'], 0) . "%";
-                    print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
-                }
-                print "</td>";
-                print "<td>";
-                if ($type == 'total') {
-                    print round(100 * $value['firsttime'] / $value['firsttime_outof']) . "%";
-                } else {
-                    print round(100 * $value['firsttime_mean'], 0) . "%";
-                }
-                print " <i class=\"totals\">(" . number_format($value['firsttime']) . " out of " . number_format($value['firsttime_outof']) . ")</i>";
-                print "</td>";
-                print "<td>".number_format($value['dispatched_success'])."</td>";
-                #print "<td>".number_format($value['dispatched_success'] * $value['firsttime'] / $value['firsttime_outof'])."</td>";
-                print "</tr>";
-            }
-            ?>
-
-        </table>
-
-        <?php if ($values['year'] < 2006): ?>
-            <p><strong>Note:</strong> The Northern Ireland Assembly was added to
-            WriteToThem.com in February 2006, so does not appear here.</p>
-        <?php elseif ($values['year'] == 2006): ?>
-            <p><strong>Note:</strong> The Northern Ireland Assembly was added to
-            WriteToThem.com in February 2006, so figures are for only part of the year.</p>
-        <?php endif; ?>
-
-        <p><small>* Measured by survey of all users, asking 2 to 3 weeks after sending the message
-            if they have got a response yet.
-            <br>&#8224; Measured by survey of all users, asking if this is the first time they
-            have written to an elected representative of any kind.</small></p>
-
-
-        <h3 id="parties">Which party has the most responsive MPs?</h3>
-        <table>
-        <tr> <th>Party</th> <th>Response rate of MPs<br>(in 2 to 3 weeks)</th></tr>
-        <?php
-        $c = 0;
-        foreach ($values['parties_by_responsiveness'] as $party) {
-            $c++;
-            if ($party == 'Deputy Speaker') continue;
-            if ($party == 'Speaker') continue;
-            $value = $values['party_summary'][$party];
-            print '<tr>';
-            print "<td>$party</td>";
-            print "<td>";
-            print fuzzy_response_description($value['responded_mean']);
-            print " <i class=\"totals\">(" . number_format($value['responded']) . " out of " . number_format($value['responded_outof']) . ")</i>";
-            print "</td>";
-            print "</tr>";
-        }
-        ?>
-        </table>
-
-
-        <?php if ($values['year'] == '2005'): ?>
-
-        <h3>First time writers by party</h3>
-        <table>
-        <tr> <th>Party</th> <th>First time</th> </tr>
-        <?
-        $c = 0;
-        foreach ($values['parties_by_firsttime'] as $party) {
-            $c++;
-            if ($party == 'Deputy Speaker') continue;
-            if ($party == 'Speaker') continue;
-            $value = $values['party_summary'][$party];
-            print '<tr>';
-            print "<td>$party</td>";
-            print "<td>";
-            print fuzzy_response_description($value['responded_mean']);
-            print " <i class=\"totals\">(" . $value['responded'] . " out of " . $value['responded_outof'] . ")</i>";
-            print "</td>";
-            print "</tr>";
-        }
-        ?>
-        </table>
-
-        <p>This table shows our estimate of the percentage of authors contacting MPs of
-        each party who were writing to an elected representative for the first
-        time.</p>
-
-        <?php endif; ?>
+          <?php endif; ?>
 
         </div> <!-- /statistics-page -->
     </div>
 </div>
+
+<?php template_draw('footer', $values); ?>
