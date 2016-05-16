@@ -4,12 +4,13 @@ $values['body_class'] = 'home';
 template_draw('header', $values);
 ?>
 
-<div class="row row-full-width hero">
+<div class="row row-full-width hero hero--responsiveness">
     <div class="large-10 large-centered columns">
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
         <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
         <div style="text-align:center;">
-            <?=$values['blurb-top'] ?>
+            <h2 id="title">How responsive has your MP been since the general election?</h2>
+            <a href="/stats" class="button">Find out now</a>
             <?php if ($values['num_messages']) {
                 echo "<!-- * $values[cobrand] messages: $values[num_messages] -->";
             } ?>
@@ -26,6 +27,12 @@ template_draw('header', $values);
     </div>
 </div>
 <?php endif; ?>
+
+<div class="row row-full-width index-input sub-hero--responsiveness">
+    <div class="large-8 large-centered columns">
+        <?=$values['blurb-top'] ?>
+    </div>
+</div>
 
 <div class="row row-full-width index-input">
     <div class="large-4 large-centered columns" id="index-search" role="search">
@@ -57,5 +64,6 @@ template_draw('header', $values);
 </script>
 
 <?php
-$values['credit'] = '<a href="http://www.fortybelowzero.com/">Photograph by Rick Harrison</a>';
+// $values['credit'] = '<a href="http://www.fortybelowzero.com/">Photograph by Rick Harrison</a>';
+$values['credit'] = '<a href="https://unsplash.com/photos/OQMZwNd3ThU">Photograph by Helloquence</a>';
 template_draw('footer', $values);

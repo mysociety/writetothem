@@ -331,7 +331,7 @@ table {
         }
     }
 
-    @media #{$large} and (min-height: 800px) {
+    @media #{$large} and (min-height: 1000px) {
         /* make the hero taller on tall, wide screens */
 
         h2 {
@@ -345,6 +345,36 @@ table {
             font-size: 2em;
             margin-bottom: 2.5em;
         }
+    }
+}
+
+.hero--responsiveness {
+    background-image: url(../img/heroes/index-responsiveness.jpg);
+    background-position: 50% 40%;
+
+    @media #{$small} {
+        background-image: url(../img/heroes/index-responsiveness-large.jpg);
+    }
+
+    h2 {
+        max-width: 20em;
+    }
+
+    .button {
+      background: #f3f3f3;
+      color: #333;
+      font-weight: bold;
+      font-size: 1.2em;
+      @include box-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
+      border: none;
+      border-radius: 0.3em;
+      text-shadow: none;
+      text-decoration: none;
+
+      &:hover, &:focus {
+        background: #fff;
+        color: #000;
+      }
     }
 }
 
@@ -421,7 +451,19 @@ table {
       /* move input further from hero on tall, wide screens */
       padding-top: emCalc(60);
     }
+}
 
+.sub-hero--responsiveness {
+    padding-bottom: 0;
+
+    h2 {
+        text-align: center;
+        margin: 0;
+    }
+
+    p {
+        display: none;
+    }
 }
 
 form#stats-search {
