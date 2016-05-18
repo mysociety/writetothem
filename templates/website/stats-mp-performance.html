@@ -12,6 +12,10 @@ $share_url = 'https://www.writetothem.com/stats/' . $values['year'] . '/mps';
 $tweet_text = 'I found out how responsive my MP was in @mysociety’s ' . $values['year'] . ' league table. See how yours did!';
 $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $values['year'] . ' league table. See how yours did!';
 
+if (is_array($mp)) {
+    $share_url = 'https://www.writetothem.com/stats/' . $values['year'] . '/mps?id=' . $mp['id'];
+}
+
 ?>
 
 <div class="row">
@@ -151,11 +155,13 @@ $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $val
                         </p>
                     </div>
                     <div class="columns small-4">
+                        <?php if ($mp['pc']) { ?>
                         <p>
                             <strong>Send a message</strong> to your representatives in
                             <span style="text-transform:uppercase;"><?=htmlspecialchars($mp['pc']) ?></span>
                             with <a href="/?pc=<?=htmlspecialchars($mp['pc']) ?>">WriteToThem</a></a>
                         </p>
+                        <?php } ?>
                     </div>
                 </div>
 

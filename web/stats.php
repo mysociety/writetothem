@@ -27,6 +27,7 @@ if (!get_http_var('type') || !get_http_var('year')) {
     exit;
 }
 $postcode = get_http_var('pc');
+$parlparse_id = get_http_var('id');
 $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
@@ -75,23 +76,28 @@ require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
 
 $rep_info = array();
-$voting_areas = mapit_call('postcode', $postcode, array(), array(
-    400 => MAPIT_BAD_POSTCODE,
-    404 => MAPIT_POSTCODE_NOT_FOUND,
-));
-if (!rabx_is_error($voting_areas)) {
-    $area_representatives = dadem_get_representatives($voting_areas['shortcuts']['WMC']);
-    dadem_check_error($area_representatives);
-    $rep_info = dadem_get_representative_info($area_representatives[0]);
-    dadem_check_error($rep_info);
-    $rep_info['postcode'] = $postcode;
+if ( $parlparse_id) {
+    $rep_info['parlparse_person_id'] = 'uk.org.publicwhip/person/' . $parlparse_id;
+    $rep_info['postcode'] = '';
 } else {
-    if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
-        $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
-        $template = "index-advice";
-    } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
-        $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
-        $template = "index-advice";
+    $voting_areas = mapit_call('postcode', $postcode, array(), array(
+        400 => MAPIT_BAD_POSTCODE,
+        404 => MAPIT_POSTCODE_NOT_FOUND,
+    ));
+    if (!rabx_is_error($voting_areas)) {
+        $area_representatives = dadem_get_representatives($voting_areas['shortcuts']['WMC']);
+        dadem_check_error($area_representatives);
+        $rep_info = dadem_get_representative_info($area_representatives[0]);
+        dadem_check_error($rep_info);
+        $rep_info['postcode'] = $postcode;
+    } else {
+        if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
+            $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
+            $template = "index-advice";
+        } elseif ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
+            $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
+            $template = "index-advice";
+        }
     }
 }
 
@@ -346,9 +352,11 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     $data['info']['mp'] = null;
     if (count($rep_info)) {
         $key = $rep_info['parlparse_person_id'];
+        $parlparse_id = str_replace('uk.org.publicwhip/person/', '', $key);
         $row = $questionnaire_report[$key];
         $data['info']['mp'] = array_merge($row, array(
 	    'pc' => $rep_info['postcode'],
+            'id' => $parlparse_id,
             'notes' => category_lookup($row['category']),
             'response' => $row['responded_mean'],
             'low' => $row['responded_95_low'],
