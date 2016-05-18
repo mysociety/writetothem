@@ -27,6 +27,7 @@ if (!get_http_var('type') || !get_http_var('year')) {
     exit;
 }
 $postcode = get_http_var('pc');
+$parlparse_id = get_http_var('id');
 $previous_year = $year - 1;
 if ($year == 2005)
     $previous_year = 'FYMP';
@@ -90,7 +91,10 @@ require_once "../phplib/questionnaire_report_${year}_WMC.php";
 
 $error_message = '';
 $area_representatives = array();
-if ($postcode) {
+$rep_info = array();
+if ( $parlparse_id) {
+    $rep_info['parlparse_person_id'] = 'uk.org.publicwhip/person/' . $parlparse_id;
+} else if ($postcode) {
     $area_name = '';
     $voting_areas = mapit_call('postcode', $postcode, $mapit_args, array(
         400 => MAPIT_BAD_POSTCODE,
@@ -113,7 +117,6 @@ if ($postcode) {
 
 if ($type == 'mps') {
     // Table of responsiveness of MPs
-    $rep_info = array();
     $last_year = array();
     if (file_exists("../phplib/questionnaire_report_${previous_year}_WMC.php")) {
         require_once "../phplib/questionnaire_report_${previous_year}_WMC.php";
@@ -134,7 +137,6 @@ if ($type == 'mps') {
             if ( array_key_exists($key, $GLOBALS["questionnaire_report_${year}_WMC"]) &&
                  $area_name == $GLOBALS["questionnaire_report_${year}_WMC"][$key]["area"] ) {
                 $rep_info = $area_rep;
-                $rep_info['postcode'] = $postcode;
                 break;
             }
         }
@@ -384,8 +386,10 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     $data['info']['mp'] = null;
     if (count($rep_info)) {
         $key = $rep_info['parlparse_person_id'];
+        $parlparse_id = str_replace('uk.org.publicwhip/person/', '', $key);
         $row = $questionnaire_report[$key];
         $data['info']['mp'] = array_merge($row, array(
+            'id' => $parlparse_id,
             'notes' => category_lookup($row['category']),
             'response' => $row['responded_mean'],
             'low' => $row['responded_95_low'],
