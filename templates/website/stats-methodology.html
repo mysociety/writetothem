@@ -72,9 +72,16 @@ $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $val
                 MPs on 14th April, enabling it again a week after the election on 12th May.</p>
 
           <?php else: ?>
+
+            <?php if ($values['year'] == '2015'): ?>
+
+            <p>For the 2015&ndash;16 league table, we counted messages sent in the 12 months following the General Election on 7th May 2015.</p>
+
+            <?php endif; ?>
+
             <p>WriteToThem sent a total of
                 <strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
-                messages to elected representatives (and Lords) in the year <?=$values['year']?>.</p>
+                messages to elected representatives (and Lords) in the year <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>.</p>
 
             <p>This included <strong><?=number_format($info['total_dispatched_success']) ?></strong>
                 messages to MPs, and <strong><?=number_format($info['non_mp_sent']) ?></strong> to other elected representatives.</p>

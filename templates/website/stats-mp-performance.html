@@ -57,7 +57,7 @@ if (is_array($mp)) {
                 <div class="large-5 push-7 columns">
                     <p class="stats-postcodebox-intro">
                         WriteToThem sent <strong><?=number_format($info['total_dispatched_success']) ?></strong>
-                        messages to MPs in <?=$values['year']?>.
+                        messages to MPs in <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>.
                         <strong><?=number_format($info['total_responded_outof']) ?></strong> people answered our feedback survey
                         about their MP&rsquo;s response.
                     </p>
@@ -65,7 +65,7 @@ if (is_array($mp)) {
                 <div class="large-6 pull-6 columns">
                     <form method="get" action="#my-mp" id="my-mp">
                         <div id="postcodebox" class="stats-postcodebox">
-                            <label for="pc">See how responsive your MP was in <?=$values['year']?>:</label>
+                            <label for="pc">See how responsive your MP was in <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>:</label>
                             <div class="row collapse stats-postcodebox__inputs">
                                 <div class="small-8 columns">
                                     <input type="text" placeholder="Enter your postcode" id="pc" name="pc" value="<? if (isset($pc)) print htmlspecialchars($pc); ?>" size="8">
@@ -101,14 +101,22 @@ if (is_array($mp)) {
                   <? } else { ?>
                     <li>
                         <span class="stat-desc">Response rate: </span>
+                        <?php if ((int)$values['year'] >= 2015) { ?>
+                        <strong class="stat-number"><?= round($mp['response']*100) ?>%</strong>
+                        <?php } else { ?>
                         <strong class="stat-number"><?=fuzzy_response_description($mp['response']) ?></strong>
                         <span class="stat-desc-mini"><?=$mp['responded']?> "MP replied" out of <?=$mp['responded_outof']?> survey answers</span>
                         <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
+                        <?php } ?>
                     </li>
                       <? if ($mp['fymp_response']) { ?>
                         <li>
                             <span class="stat-desc">Previous year's response rate: </span>
+                            <?php if ((int)$values['year'] >= 2015) { ?>
+                            <strong class="stat-number"><?= round($mp['fymp_response']*100) ?>%</strong>
+                            <?php } else { ?>
                             <strong class="stat-number"><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
+                            <?php } ?>
                         </li>
                       <? } ?>
                     <li>
@@ -137,7 +145,7 @@ if (is_array($mp)) {
                           if ($row['person_id'] == $mp['person_id']) {
 
                               $mp_ranking_string = '<li>' . $h_name . ' is ranked at ' . $position . ' out of ' . count($data) . ' MPs for responsiveness</li>';
-                              $tweet_text = 'My MP was ranked ' . $position . ' out of ' . count($data) . ' in @mysociety’s ' . $values['year'] . ' responsiveness league table. See how yours did!';
+                              $tweet_text = 'My MP was ranked ' . $position . '/' . count($data) . ' in @mysociety’s ' . $values['year'] . ' responsiveness league table. See how yours did!';
                               break;
                           }
                       }
@@ -192,6 +200,9 @@ if (is_array($mp)) {
         }
 
         $head_response_text = 'Response rate of MP';
+        if ((int)$values['year'] >= 2015) {
+            $head_response_text .= ' based on survey responses';
+        }
         if ($values['year'] != 2013) {
             $head_response_text .= '<br><small>(Previous year)</small>';
         }
@@ -274,14 +285,22 @@ if (is_array($mp)) {
                   if ($row['notes']) {
                       print '<td colspan="2" class="'.$tdclass.'">' . $row['notes'] . '</td>';
                   } else {
-                      print "<td class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
-                      #print "<td class=\"$tdclass\">" . round($row['response']*100, 1) . "%</td>";
-                      #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
+                      if ((int)$values['year'] >= 2015) {
+                        print "<td class=\"$tdclass\">" . round($row['response']*100) . "%";
+                        #print "<td>" . round($row['low']*100, 0) . "%&ndash;" . round($row['high']*100, 0) . "%</td>";
+                      } else {
+                        print "<td class=\"$tdclass\"><strong>" . fuzzy_response_description($row['response']) . "</strong>";
+                      }
+
                       if ($row['fymp_response']) {
                           if ($row['fymp_notes']) {
                               print '<br><small>(unknown)</small>';
                           } else {
-                              print '<br><small>(' . fuzzy_response_description($row['fymp_response']). ')</small>';
+                              if ((int)$values['year'] >= 2015) {
+                                  print '<br><small>(' . round($row['fymp_response']*100). '%)</small>';
+                              } else {
+                                  print '<br><small>(' . fuzzy_response_description($row['fymp_response']). ')</small>';
+                              }
                           }
                       }
                       print "</td>";

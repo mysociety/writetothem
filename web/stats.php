@@ -17,7 +17,7 @@ require_once '../commonlib/phplib/dadem.php';
 $type = get_http_var('type');
 if (!$type) $type = 'zeitgeist';
 $year = get_http_var('year');
-if (!$year) $year = '2014';
+if (!$year) $year = '2015';
 #if (!get_http_var('really'))
 #    $year = '2005'; # XXX temp
 $year = intval($year);
@@ -34,7 +34,7 @@ if ($year == 2005)
 
 
 # Construct the year navigation bar
-$years = array('2005', '2006', '2007', '2008', '2013', '2014');
+$years = array('2005', '2006', '2007', '2008', '2013', '2014', '2015');
 
 # this is so we get the mapit IDs and cons names for the year and
 # hence can get the MP for the year from DaDem and not the current
@@ -55,12 +55,7 @@ foreach ($years as $y) {
     }
 }
 if (!$got_year) {
-    if ($year == 2015) {
-        template_draw('stats-2015', array("title" => "WriteToThem.com Zeitgeist $year"));
-        exit();
-    } else {
-        template_show_error("We don’t have statistics for that year");
-    }
+    template_show_error("We don’t have statistics for that year");
 }
 $year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
@@ -215,8 +210,13 @@ function party_response_table($year, $party_summary) {
 
     global $year_bar;
     global $navigation_tabs;
+    if ($year == '2015') {
+        $title_string = "WriteToThem.com Zeitgeist 2015&ndash;2016";
+    } else {
+        $title_string = "WriteToThem.com Zeitgeist $year";
+    }
     template_draw('stats-party-performance', array(
-        "title" => "WriteToThem.com Zeitgeist $year",
+        "title" => $title_string,
         'year' => $year,
         'year_bar' => $year_bar,
         'navigation_tabs' => $navigation_tabs,
@@ -249,8 +249,13 @@ function type_response_table($year, $type_summary, $questionnaire_report) {
 
     global $year_bar;
     global $navigation_tabs;
+    if ($year == '2015') {
+        $title_string = "WriteToThem.com Zeitgeist 2015&ndash;2016";
+    } else {
+        $title_string = "WriteToThem.com Zeitgeist $year";
+    }
     template_draw('stats-type-performance', array(
-        "title" => "WriteToThem.com Zeitgeist $year",
+        "title" => $title_string,
         'year' => $year,
         'year_bar' => $year_bar,
         'navigation_tabs' => $navigation_tabs,
@@ -281,8 +286,13 @@ function questionnaire_report($year, $type_summary, $questionnaire_report) {
     }
     $data['info']['non_mp_sent'] = $non_mp_sent;
 
+    if ($year == '2015') {
+        $title_string = "WriteToThem.com Zeitgeist 2015&ndash;2016";
+    } else {
+        $title_string = "WriteToThem.com Zeitgeist $year";
+    }
     template_draw('stats-methodology', array(
-        "title" => "WriteToThem.com Zeitgeist $year",
+        "title" => $title_string,
         'year' => $year,
         'year_bar' => $year_bar,
         'navigation_tabs' => $navigation_tabs,
@@ -404,8 +414,13 @@ function mp_response_table($year, $xml, $rep_info, $questionnaire_report, $type_
     # Output data
     global $year_bar;
     global $navigation_tabs;
+    if ($year == '2015') {
+        $title_string = "WriteToThem.com Zeitgeist 2015&ndash;2016";
+    } else {
+        $title_string = "WriteToThem.com Zeitgeist $year";
+    }
     template_draw($xml ? 'stats-mp-twfy' : 'stats-mp-performance', array(
-        "title" => "WriteToThem.com Zeitgeist $year",
+        "title" => $title_string,
         'year' => $year,
         'year_bar' => $year_bar,
         'data' => $data,

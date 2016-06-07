@@ -42,7 +42,7 @@ $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $val
 
         <div class="statistics-page">
 
-            <h3 id="parties">Which party had the most responsive MPs in <?=$values['year']?>?</h3>
+            <h3 id="parties">Which party had the most responsive MPs in <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>?</h3>
             <table>
                 <tr>
                     <th>Party</th>

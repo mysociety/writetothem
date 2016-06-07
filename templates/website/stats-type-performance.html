@@ -47,7 +47,7 @@ $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $val
 
           <p>
               WriteToThem doesn&rsquo;t just cover MPs.
-              In <?=$values['year']?>, WriteToThem users sent a total of
+              In <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>, WriteToThem users sent a total of
               <strong><?=number_format($values['type_summary']['total']['dispatched_success']) ?></strong>
               messages to their elected (and unelected) representatives, including
               <strong><?=number_format($info['non_mp_sent']) ?></strong> to
@@ -55,7 +55,7 @@ $facebook_text = 'I found out how responsive my MP was in mySociety’s ' . $val
           </p>
 
           <?php if (array_key_exists('lords', $values['type_summary'])): ?>
-            <h3 id="electedbodies">Which elected body* had the most responsive members in <?=$values['year']?>?<br><small>(* and the House of Lords)</small></h3>
+            <h3 id="electedbodies">Which elected body* had the most responsive members in <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>?<br><small>(* and the House of Lords)</small></h3>
           <?php else: ?>
             <h3>Performance of elected bodies in <?=$values['year']?></h3>
           <?php endif; ?>
