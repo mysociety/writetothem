@@ -27,7 +27,7 @@
             <div class="large-3 columns">
                 <div class="mysoc-footer__donate">
                     <p>Your donations keep this site and others like it running</p>
-                    <a href="https://www.mysociety.org/donate" class="mysoc-footer__donate__button">Donate now</a>
+                    <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=footer+donate+now&utm_medium=link&utm_campaign=mysoc_footer" class="mysoc-footer__donate__button">Donate now</a>
                 </div>
             </div>
             <?php } ?>
@@ -40,7 +40,7 @@
                 <div class="mysoc-footer__orgs">
                     <p class="mysoc-footer__org">
                         Built by
-                        <a href="https://www.mysociety.org" class="mysoc-footer__org__logo mysoc-footer__org__logo--mysociety">mySociety</a>
+                        <a href="https://www.mysociety.org?utm_source=writetothem.com&utm_content=footer+logo&utm_medium=link&utm_campaign=mysoc_footer" class="mysoc-footer__org__logo mysoc-footer__org__logo--mysociety">mySociety</a>
                     </p>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                         <a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a>.
                         <?php if(isset($values['credit'])) echo $values['credit']; ?>.
                     </p>
-                    <p>mySociety Limited is a project of UK Citizens Online Democracy, a registered charity in England and Wales. For full details visit <a href="https://www.mysociety.org">mysociety.org</a>.</p>
+                    <p>mySociety Limited is a project of UK Citizens Online Democracy, a registered charity in England and Wales. For full details visit <a href="https://www.mysociety.org?utm_source=writetothem.com&utm_content=footer+full+legal+details&utm_medium=link&utm_campaign=mysoc_footer">mysociety.org</a>.</p>
                 </div>
             </div>
 
