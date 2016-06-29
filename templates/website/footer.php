@@ -23,12 +23,14 @@
                 </nav>
             </div>
 
+            <?php if (!array_key_exists('donate_shown', $values)) { ?>
             <div class="large-3 columns">
                 <div class="mysoc-footer__donate">
                     <p>Your donations keep this site and others like it running</p>
                     <a href="https://www.mysociety.org/donate" class="mysoc-footer__donate__button">Donate now</a>
                 </div>
             </div>
+            <?php } ?>
 
         </div>
         <hr class="mysoc-footer__divider" role="presentation">
