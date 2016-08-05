@@ -53,6 +53,7 @@ use mySociety::SystemMisc qw(print_log);
 use FYR;
 use FYR::AbuseChecks;
 use FYR::EmailTemplate;
+use FYR::EmailSettings;
 use FYR::Fax;
 use FYR::Cobrand;
 
@@ -1142,6 +1143,40 @@ sub email_template_params ($%) {
     return \%params;
 }
 
+sub build_html_email {
+    my ($template, $msg, $settings) = @_;
+
+    my $html_settings = FYR::EmailSettings::get_settings;
+    foreach my $setting (keys %$settings) {
+        $html_settings->{$setting} = $settings->{$setting};
+    }
+
+    my $bodyhtml = FYR::EmailTemplate::format(
+                email_template('_top.php', $msg->{cobrand}),
+                email_template_params($msg, %$html_settings)
+            );
+    $bodyhtml .= FYR::EmailTemplate::format(
+                email_template($template . '.php', $msg->{cobrand}),
+                email_template_params($msg, %$html_settings)
+            );
+    $bodyhtml .= FYR::EmailTemplate::format(
+                email_template('_bottom.php', $msg->{cobrand}),
+                email_template_params($msg, %$html_settings)
+            );
+
+    my $mail = Email::MIME->create(
+        body_str => $bodyhtml,
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+            content_type => 'text/html'
+        }
+    );
+    $mail->header_set('Date');
+    $mail->header_set('MIME-Version');
+    return $mail;
+}
+
 # make_confirmation_email MESSAGE [REMINDER]
 # Return the on-the-wire text of an email for the given MESSAGE (reference to
 # hash of db fields), suitable for sending to the constituent so that they can
@@ -1155,7 +1190,7 @@ sub make_confirmation_email ($;$) {
     my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand}, $msg->{cocode});
     my $confirm_url = $url_start . '/C/' . $token;
     
-    my $bodytext;
+    my ($bodytext, $bodyhtml);
     if ($msg->{group_id}){
         $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder-group' : 'confirm-group', $msg->{cobrand}),
@@ -1163,12 +1198,20 @@ sub make_confirmation_email ($;$) {
                 );
         
     }else{
+        my $template = $reminder ? 'confirm-reminder' : 'confirm';
         $bodytext = FYR::EmailTemplate::format(
-                    email_template($reminder ? 'confirm-reminder' : 'confirm', $msg->{cobrand}),
+                    email_template($template, $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
+
+        my $settings = {
+            confirm_url => $confirm_url,
+            email_text => format_email_body($msg),
+        };
+
+        $bodyhtml = build_html_email($template, $msg, $settings)
     }
-    
+
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in
     # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
@@ -1203,7 +1246,11 @@ sub make_confirmation_email ($;$) {
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
-        parts => [ $bodytext ],
+        parts => [ $bodytext, $bodyhtml ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
     )->as_string
 }
 
