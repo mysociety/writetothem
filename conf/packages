@@ -15,3 +15,4 @@ libregexp-common-perl
 libgeo-ip-perl
 libstring-crc32-perl
 php5-curl
+libemail-mime-perl
