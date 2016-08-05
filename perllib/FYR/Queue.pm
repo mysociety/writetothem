@@ -34,6 +34,7 @@ use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
 use Data::Dumper;
+use Email::MIME;
 
 use utf8;
 
@@ -932,18 +933,24 @@ sub make_representative_email ($$) {
             );
 
     my $headers = {
-        From => [ $msg->{sender_email}, $msg->{sender_name} ],
-        To => [ [ $msg->{recipient_email}, $msg->{recipient_name} ] ],
+        From => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
+        To => mySociety::Email::format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
         Subject => $subject,
         Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
         'Message-ID' => email_message_id($msg->{id}),
-        _body_ => $bodytext
     };
     if (test_dmarc($msg->{sender_email})) {
-        $headers->{From} = [ $sender, $msg->{sender_name} ];
-        $headers->{'Reply-To'} = [ [ $msg->{sender_email}, $msg->{sender_name} ] ],
+        $headers->{From} = mySociety::Email::format_email_address($msg->{sender_name}, $sender);
+        $headers->{'Reply-To'} = mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email});
     }
-    return mySociety::Email::construct_email($headers);
+    return Email::MIME->create(
+        header_str => [%$headers],
+        parts => [ $bodytext ],
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+        },
+    )->as_string;
 }
 
 sub test_dmarc {
@@ -1188,14 +1195,16 @@ sub make_confirmation_email ($;$) {
         $subject_text = $msg->{recipient_name};
     }
         
-    return mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    return Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Please confirm that you want to send a message to $subject_text",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $bodytext
-        });
+        ],
+        parts => [ $bodytext ],
+    )->as_string
 }
 
 # do_not_reply_sender
@@ -1277,14 +1286,16 @@ sub make_failure_email ($) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
-    return ($bounced, mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    return Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $text
-        }));
+        ],
+        parts => [ $text ],
+    )->as_string
 }
 
 # send_failure_email ID
@@ -1343,14 +1354,16 @@ sub make_questionnaire_email ($;$) {
     $text =~ s#(https://.+$)#<a href=" $1 ">$1</a>#mg
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
-    return mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    return Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $text
-        });
+        ],
+        parts => [ $text ],
+    )->as_string
 }
 
 # send_questionnaire_email ID [REMINDER]
