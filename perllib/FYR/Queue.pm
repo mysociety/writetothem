@@ -1219,11 +1219,18 @@ sub make_confirmation_email ($;$) {
     
     my ($bodytext, $bodyhtml);
     if ($msg->{group_id}){
+        my $template = $reminder ? 'confirm-reminder-group' : 'confirm-group';
         $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder-group' : 'confirm-group', $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
         
+        my $settings = {
+            confirm_url => $confirm_url,
+            email_text => format_email_body($msg),
+        };
+
+        $bodyhtml = build_html_email($template, $msg, $settings)
     }else{
         my $template = $reminder ? 'confirm-reminder' : 'confirm';
         $bodytext = FYR::EmailTemplate::format(
