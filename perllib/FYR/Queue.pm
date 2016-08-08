@@ -1368,12 +1368,15 @@ sub make_questionnaire_email ($;$) {
     my $yes_url = $base_url . '/Y/' . $token;
     my $no_url = $base_url . '/N/' . $token;
 
+    my $settings = {
+        yes_url => $yes_url,
+        no_url => $no_url,
+        weeks_ago => $reminder ? 'Three' : 'Two',
+        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
+    };
     my $params;
     try {
-        $params = email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
-            weeks_ago => $reminder ? 'Three' : 'Two',
-            their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
-        );
+        $params = email_template_params($msg, %$settings);
     } catch RABX::Error::User with {
         # If representative ID no longer exists (councillors can be fully deleted), that is caught here.
         my $E = shift;
@@ -1392,6 +1395,9 @@ sub make_questionnaire_email ($;$) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
+    $settings->{'email_text'} = format_email_body($msg);
+    my $html = build_html_email('questionnaire', $msg, $settings);
+
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in
     # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
@@ -1409,7 +1415,11 @@ sub make_questionnaire_email ($;$) {
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
-        parts => [ $text ],
+        parts => [ $text, $html ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
     )->as_string
 }
 
