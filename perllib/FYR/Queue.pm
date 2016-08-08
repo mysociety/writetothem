@@ -29,6 +29,7 @@ use Fcntl;
 use FindBin;
 use HTML::Entities;
 use IO::Socket;
+use IO::All;
 use Net::DNS::Resolver;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
@@ -1151,6 +1152,17 @@ sub build_html_email {
         $html_settings->{$setting} = $settings->{$setting};
     }
 
+    my $logo = Email::MIME->create(
+       attributes => {
+            filename     => "logo.gif",
+            content_type => "image/gif",
+            encoding     => "base64",
+            name         => "logo.gif",
+       },
+       body => io( email_template('logo.gif', $msg->{cobrand}) )->binary->all
+    );
+    $logo->header_set('Content-ID', '<logo.gif>');
+
     my $bodyhtml = FYR::EmailTemplate::format(
                 email_template('_top.php', $msg->{cobrand}),
                 email_template_params($msg, %$html_settings)
@@ -1164,7 +1176,7 @@ sub build_html_email {
                 email_template_params($msg, %$html_settings)
             );
 
-    my $mail = Email::MIME->create(
+    my $html = Email::MIME->create(
         body_str => $bodyhtml,
         attributes => {
             charset => 'utf-8',
@@ -1172,8 +1184,23 @@ sub build_html_email {
             content_type => 'text/html'
         }
     );
+
+    foreach ($logo, $html) {
+        $_->header_set('Date');
+        $_->header_set('MIME-Version');
+    }
+
+    my $mail = Email::MIME->create(
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/related'
+        },
+        parts => [ $html, $logo ]
+    );
+
     $mail->header_set('Date');
     $mail->header_set('MIME-Version');
+
     return $mail;
 }
 

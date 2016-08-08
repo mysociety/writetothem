@@ -32,7 +32,7 @@
         <table <?= $values['table_reset'] ?>>
           <tr>
             <th style="<?= $values['td_style'] ?><?= $values['header_style'] ?>">
-                <img src="<?= inline_image('logo.gif') ?>" width="<?= $values['logo_width'] ?>" height="<?= $values['logo_height'] ?>" alt="WriteToThem" style="<?= $values['logo_style'] ?>"/>
+                <img src="cid:logo.gif" width="<?= $values['logo_width'] ?>" height="<?= $values['logo_height'] ?>" alt="WriteToThem" style="<?= $values['logo_style'] ?>"/>
             </th>
           </tr>
           <tr>
