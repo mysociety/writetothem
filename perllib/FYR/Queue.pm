@@ -1367,7 +1367,9 @@ sub make_failure_email ($) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
-    return Email::MIME->create(
+    my $html = build_html_email($template, $msg, {email_text => format_email_body($msg)});
+
+    my $mail = Email::MIME->create(
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
             To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
@@ -1375,8 +1377,14 @@ sub make_failure_email ($) {
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
-        parts => [ $text ],
-    )->as_string
+        parts => [ $text, $html ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
+    )->as_string;
+
+    return ($bounced, $mail)
 }
 
 # send_failure_email ID
