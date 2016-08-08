@@ -1164,15 +1164,15 @@ sub build_html_email {
     $logo->header_set('Content-ID', '<logo.gif>');
 
     my $bodyhtml = FYR::EmailTemplate::format(
-                email_template('_top.php', $msg->{cobrand}),
+                email_template('_top.html', $msg->{cobrand}),
                 email_template_params($msg, %$html_settings)
             );
     $bodyhtml .= FYR::EmailTemplate::format(
-                email_template($template . '.php', $msg->{cobrand}),
+                email_template($template . '.html', $msg->{cobrand}),
                 email_template_params($msg, %$html_settings)
             );
     $bodyhtml .= FYR::EmailTemplate::format(
-                email_template('_bottom.php', $msg->{cobrand}),
+                email_template('_bottom.html', $msg->{cobrand}),
                 email_template_params($msg, %$html_settings)
             );
 
