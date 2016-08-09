@@ -16,7 +16,7 @@ my $link_text_color = $color_cyan;
 my $link_hover_text_color = $color_cyan_dark;
 
 my $body_background_color = $color_cream;
-my $body_font_family = "Georgia; Times, serif",
+my $body_font_family = "Georgia, Times, serif",
 my $body_text_color = $color_grey;
 
 my $header_background_color = $color_cyan;
@@ -87,6 +87,7 @@ sub get_settings {
         h1_style => "margin: 0 0 30px 0; font-size: 32px; line-height: 36px;",
         h2_style => "margin: 0 0 30px 0; font-size: 24px; line-height: 28px;",
         p_style => "margin: 0 0 0.8em 0;",
+        preformatted_style => "white-space: pre-wrap;",
         button_style => make_button($button_background_color, $button_text_color),
         positive_button_style => make_button($button_background_color_positive, $button_text_color_positive),
         negative_button_style => make_button($button_background_color_negative, $button_text_color_negative),
