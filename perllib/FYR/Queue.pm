@@ -1152,6 +1152,18 @@ sub build_html_email {
         $html_settings->{$setting} = $settings->{$setting};
     }
 
+    # Convert the plain text message into html so it displays
+    # more or less correctly in HTML emails. This splits the
+    # address portion and the message portion as they have
+    # different formatting requirements
+    if ($html_settings->{email_text}) {
+        my $msg = $html_settings->{email_text};
+        my ($address, $body) = split 'Email:', $msg;
+        $address =~ s%\n%<br/>%gs;
+        $body =~ s%\n\n%</p>\n<p>%gs;
+        $html_settings->{email_text} = "$address</p><p>Email:$body";
+    }
+
     my $logo = Email::MIME->create(
        attributes => {
             filename     => "logo.gif",
@@ -1180,7 +1192,7 @@ sub build_html_email {
         body_str => $bodyhtml,
         attributes => {
             charset => 'utf-8',
-            encoding => 'quoted-printable',
+            encoding => 'base64',
             content_type => 'text/html'
         }
     );
