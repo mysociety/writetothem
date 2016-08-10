@@ -1175,17 +1175,24 @@ sub build_html_email {
     );
     $logo->header_set('Content-ID', '<logo.gif>');
 
+    # bounce emails don't have a message so we don't pass them to
+    # email_template_params as it needs one.
+    my $params = $html_settings;
+    if ( keys %$msg ) {
+        $params = email_template_params($msg, %$html_settings);
+    }
+
     my $bodyhtml = FYR::EmailTemplate::format(
                 email_template('_top.html', $msg->{cobrand}),
-                email_template_params($msg, %$html_settings)
+                $params
             );
     $bodyhtml .= FYR::EmailTemplate::format(
                 email_template($template . '.html', $msg->{cobrand}),
-                email_template_params($msg, %$html_settings)
+                $params
             );
     $bodyhtml .= FYR::EmailTemplate::format(
                 email_template('_bottom.html', $msg->{cobrand}),
-                email_template_params($msg, %$html_settings)
+                $params
             );
 
     my $html = Email::MIME->create(
