@@ -1,22 +1,11 @@
-<?php
+<th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
 
-include '_functions.php';
-include '_settings.php';
-
-$contact_email = 'support@writetothem.com';
-
-include '_top.php';
-
-?><th style="<?= $td_style ?> <?= $primary_column_style ?>">
-
-  <h1 style="<?= $h1_style ?>">Sorry, we don’t accept email at this address.</h1>
-  <p style="<?= $p_style ?> font-weight: bold;">This is an automatic response, we have NOT read your email.</p>
-  <p style="<?= $p_style ?>">If you are trying to confirm your letter so that we can send it, please click the link below, and we’ll send the letter right away!</p>
+  <h1 style="<?= $values['h1_style'] ?>">Sorry, we don&rsquo;t accept email at this address.</h1>
+  <p style="<?= $values['p_style'] ?> font-weight: bold;">This is an automatic response, we have NOT read your email.</p>
+  <p style="<?= $values['p_style'] ?>">If you are trying to confirm your letter so that we can send it, please click the link below, and we&rsquo;ll send the letter right away!</p>
   <p style="margin: 30px auto; text-align: center">
-    <a style="<?= $button_style ?>" href="#">Yes, send my letter!</a>
+    <a style="<?= $values['button_style'] ?>" href="<?= $values['confirm_url'] ?>">Yes, send my letter!</a>
   </p>
-  <p style="<?= $p_style ?>">If you have a question or comment about the site, please send an email to <a href="mailto:<?= $contact_email ?>"><?= $contact_email ?></a>.</p>
+  <p style="<?= $values['p_style'] ?>">If you have a question or comment about the site, please send an email to <a href="mailto:<?= $values['contact_email'] ?>"><?= $values['contact_email'] ?></a>.</p>
 
-</th><?php
-
-include '_bottom.php';
+</th>
