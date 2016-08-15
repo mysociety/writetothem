@@ -182,8 +182,8 @@ sub confirm_message {
             $conf_name = $repname;
         }
         my $confirmation_email = $wth->email_get_containing(
-            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
             '%To: "'.name_n($who).'" <'.email_n($who).'>'.
+            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
             '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
             '%to confirm that you wish%');
         die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);

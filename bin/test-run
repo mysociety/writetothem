@@ -199,8 +199,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
         "%Two weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
@@ -209,8 +209,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-22', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
         "%Three weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
 
     # Get links from questionnaire email
@@ -291,8 +291,8 @@ sub do_send_blocked_message {
     set_fyr_date('1990-07-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
-        "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP".
         '%To: "'.name_n(1).'" <'.email_n(1).'>'.
+        "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP".
         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
 }
 
@@ -491,8 +491,8 @@ sub do_send_lords_message {
     set_fyr_date('1992-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your Lord reply to your letter?'.
         '%To: "'.name_n(50).'" <'.email_n(50).'>'.
+        '%Subject: Did your Lord reply to your letter?'.
         '%Two weeks ago we sent your letter to Lord Rogers of Riverside%');
     $wth->email_check_none_left();
 
@@ -660,9 +660,10 @@ sub do_send_group_abuse {
     my $confirmation_email;
     foreach $rep_name (@rep_names){
         $confirmation_email = $wth->email_get_containing(
-        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
         '%To: "'.name_n(10).'" <'.email_n(10).'>'.
-                                                         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
+        '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+        );
 
     }
 
@@ -752,8 +753,8 @@ sub do_send_group_abuse {
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $options);
         }else{
             $confirmation_email = $wth->email_get_containing(
-            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
             '%To: "'.name_n(12).'" <'.email_n(12).'>'.
+            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
             '%We\'re very sorry, but it wasn\'t possible to send your letter%');
         }
     }
@@ -777,8 +778,8 @@ sub do_send_group_abuse {
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
             $confirmation_email = $wth->email_get_containing(
-            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
             '%To: "'.name_n(13).'" <'.email_n(13).'>'.
+            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
             '%We\'re very sorry, but it wasn\'t possible to send your letter%');
         }
 
