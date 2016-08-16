@@ -1160,8 +1160,14 @@ sub build_html_email {
         my $msg = $html_settings->{email_text};
         my ($address, $body) = split 'Email:', $msg;
         $address =~ s%\n%<br/>%gs;
-        $body =~ s%\n\n%</p>\n<p>%gs;
-        $html_settings->{email_text} = "$address</p><p>Email:$body";
+        my ($email_and_date, $message) = split 'Dear ', $body;
+        $email_and_date =~ s%\n\n%</p>\n<p align="right">%s;
+        $message =~ s%\n\n%</p>\n<p>%gs;
+        $html_settings->{email_text} = $address .
+            '</p><p align="right">Email:' .
+            $email_and_date .
+            '</p><p>Dear ' .
+            $message;
     }
 
     my $logo = Email::MIME->create(
