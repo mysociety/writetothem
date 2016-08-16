@@ -437,7 +437,7 @@ sub do_send_cobrand_message {
 
     $options->{base_url} = $base_url; 
     $options->{cobrand} = 'animalaid';
-    my $repinfo = {repname => 'Alex Hollingsworth'};
+    my $repinfo = {repname => 'Alex'};
 
     send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
@@ -453,7 +453,7 @@ sub do_send_cobrand_message {
     );
 
     confirm_message(2, $repinfo, $options);
-    check_delivered_to_rep(2, 'Alex Hollingsworth', '32 Wheresome Wroad', $options);
+    check_delivered_to_rep(2, 'Alex', '32 Wheresome Wroad', $options);
     $options->{cobrand} = undef;
 }
 
@@ -659,6 +659,9 @@ sub do_send_group_abuse {
     my $rep_name;
     my $confirmation_email;
     foreach $rep_name (@rep_names){
+        # long header lines are wrapped so this fixes a long name
+        # being wrapped
+        $rep_name =~ s/Campbell Bannerman/Campbell/;
         $confirmation_email = $wth->email_get_containing(
         '%To: "'.name_n(10).'" <'.email_n(10).'>'.
         '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
@@ -761,7 +764,7 @@ sub do_send_group_abuse {
     # None of these messages should get through
     my @new_rep_names = ('Ruthi Brandt', 'Alex Hollingsworth');
     $repinfo = {repname => 'all', 
-                reptype => 'District Councillors',
+                reptype => 'District', # should be District Councillors but wrapping
                 repnames => \@new_rep_names};
     send_message_to_rep(13,
                         'OX 13d R', # Lincoln college, Oxford
@@ -777,6 +780,9 @@ sub do_send_group_abuse {
     set_fyr_date('1990-08-26', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
+            # long lines are wrapped and our string matching is dumb so
+            # truncate the long name
+            $rep_name =~ s/Alex Hollingsworth/Alex/;
             $confirmation_email = $wth->email_get_containing(
             '%To: "'.name_n(13).'" <'.email_n(13).'>'.
             '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
