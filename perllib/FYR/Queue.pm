@@ -1403,6 +1403,10 @@ sub make_failure_email ($) {
         },
     )->as_string;
 
+    # the stock version of Email::MIME on wheezy uses Encode to MIME encode
+    # headers and it seems to be broken in that it adds a line break in the
+    # subject which is then squashed to a space elsewhere. This fixes that.
+    $mail =~ s/couldn' t/couldn't/s;
     return ($bounced, $mail)
 }
 
