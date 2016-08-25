@@ -1158,16 +1158,23 @@ sub build_html_email {
     # different formatting requirements
     if ($html_settings->{email_text}) {
         my $msg = $html_settings->{email_text};
-        my ($address, $body) = split 'Email:', $msg;
+        my ($address, $body) = split('Email:', $msg, 2);
         $address =~ s%\n%<br/>%gs;
-        my ($email_and_date, $message) = split 'Dear ', $body;
-        $email_and_date =~ s%\n\n%</p>\n<p align="right">%s;
-        $message =~ s%\n\n%</p>\n<p>%gs;
-        $html_settings->{email_text} = $address .
-            '</p><p align="right">Email:' .
-            $email_and_date .
-            '</p><p>Dear ' .
-            $message;
+        if ($body =~ /\d\s\w+\s\d{4}\n\s*Dear/s) {
+            my ($email_and_date, $message) = split(/^Dear /m, $body, 2);
+            $email_and_date =~ s%\n\n%</p>\n<p align="right">%s;
+            $message =~ s%\n\n%</p>\n<p>%gs;
+            $html_settings->{email_text} = $address .
+                '</p><p align="right">Email:' .
+                $email_and_date .
+                '</p><p>Dear ' .
+                $message;
+        } else {
+            $body =~ s%\n\n%</p>\n<p>%gs;
+            $html_settings->{email_text} = $address .
+                '</p><p>Email:' .
+                $body;
+        }
     }
 
     my $logo = Email::MIME->create(
