@@ -1205,7 +1205,7 @@ sub build_html_email {
         body_str => $bodyhtml,
         attributes => {
             charset => 'utf-8',
-            encoding => 'base64',
+            encoding => 'quoted-printable',
             content_type => 'text/html'
         }
     );
