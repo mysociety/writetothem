@@ -181,7 +181,7 @@ sub do_send_example_message {
             writer_town => 'Someplace',
             state => 'Someshire',
             writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
+            body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         }, 
 	$repinfo,         
         $options
@@ -526,7 +526,7 @@ sub send_fax($$$$$$;$$){
     $options->{base_url} = $base_url;
     $options->{birthday} = $birthday;
     my $repinfo = {repname => $repname};
-    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
+    my $body = "Dear Tester,This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
     for (my $i=1; $i<=$repeat_text; ++$i) {
         $body = $body . $body; 
     }
@@ -813,7 +813,7 @@ sub do_send_group_message {
                          writer_town => 'Batchcester',
                          state => 'Groupshire',
                          writer_phone => undef,
-                         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+                         body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
                         },
                         $repinfo, 
                         $options);
@@ -856,7 +856,7 @@ sub do_admin_confirm_group_message {
          writer_town => 'Batchcester',
          state => 'Groupshire',
          writer_phone => undef,
-         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+         body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
     }, $repinfo, $options);
 
     call_fyrqd($wth, $verbose, $multispawn);
