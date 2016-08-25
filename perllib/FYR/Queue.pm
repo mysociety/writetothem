@@ -1229,6 +1229,24 @@ sub build_html_email {
     return $mail;
 }
 
+sub build_text_email($) {
+    my $text = shift;
+
+    my $email = Email::MIME->create(
+        body_str => $text,
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+            content_type => 'text/plain',
+        },
+    );
+
+    $email->header_set('Date');
+    $email->header_set('MIME-Version');
+
+    return $email;
+}
+
 # make_confirmation_email MESSAGE [REMINDER]
 # Return the on-the-wire text of an email for the given MESSAGE (reference to
 # hash of db fields), suitable for sending to the constituent so that they can
@@ -1289,6 +1307,8 @@ sub make_confirmation_email ($;$) {
     if ($reflecting_mails) {
         $bodytext = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $bodytext;
     }
+
+    $bodytext = build_text_email($bodytext);
 
     my $subject_text;
     if ($msg->{group_id}){
@@ -1392,6 +1412,8 @@ sub make_failure_email ($) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
+    $text = build_text_email($text);
+
     my $html = build_html_email($template, $msg, {email_text => format_email_body($msg)});
 
     my $mail = Email::MIME->create(
@@ -1477,6 +1499,8 @@ sub make_questionnaire_email ($;$) {
     # which is bad, evil and wrong but actually true in this case.
     $text =~ s#(https://.+$)#<a href=" $1 ">$1</a>#mg
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
+
+    $text = build_text_email($text);
 
     return Email::MIME->create(
         header_str => [

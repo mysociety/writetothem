@@ -207,6 +207,7 @@ sub handle_non_bounce_to_null_address {
                 );
 
     $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
+    $text = FYR::Queue::build_text_email($text);
 
     my $html = FYR::Queue::build_html_email($template, {}, $vv);
 
