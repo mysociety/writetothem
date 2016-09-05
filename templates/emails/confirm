@@ -1,4 +1,4 @@
-Please click on the link below to confirm that you wish WriteToThem.com to send
+Please click on the link below to confirm that you wish WriteToThem to send
 your letter to
 <?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
 
