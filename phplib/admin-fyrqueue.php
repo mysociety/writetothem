@@ -564,7 +564,8 @@ Unfortunately, your message to " . $message['recipient_name'] . " has not been s
 
 There's a copy of your message below, so you can send it another way, if you like.
 
--------------------------------------------------------------",
+-------------------------------------------------------------\n\n" .
+                $message['message'],
                 "write-to-own-reps-only");
             make_mailto_link($message['sender_email'], 
                 "Your message to " . $message['recipient_name'],
