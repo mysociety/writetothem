@@ -945,6 +945,9 @@ sub make_representative_email ($$) {
         $headers->{From} = mySociety::Email::format_email_address($msg->{sender_name}, $sender);
         $headers->{'Reply-To'} = mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email});
     }
+
+    $bodytext = build_text_email($bodytext);
+
     return Email::MIME->create(
         header_str => [%$headers],
         parts => [ $bodytext ],
