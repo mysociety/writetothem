@@ -22,6 +22,7 @@ use lib "$FindBin::Bin/../perllib";
 use lib "$FindBin::Bin/../commonlib/perllib";
 
 use MIME::Entity;
+use Email::MIME;
 use POSIX qw(strftime);
 
 use mySociety::Config;
@@ -206,24 +207,31 @@ sub handle_non_bounce_to_null_address {
                 );
 
     $text = FYR::Queue::wrap(FYR::Queue::EMAIL_COLUMNS, $text);
+    $text = FYR::Queue::build_text_email($text);
+
+    my $html = FYR::Queue::build_html_email($template, {}, $vv);
 
     my $from_name = FYR::Queue::email_sender_name();
     my $from_email = FYR::Queue::do_not_reply_sender();
 
     # We generate this as a bounce.
-    my $mail = MIME::Entity->build(
-                    Sender => '<>',
-                    From => mySociety::Email::format_email_address($from_name, $from_email),
-                    To => $data{return_path},
-                    Subject => 'Automatic reply to your message to WriteToThem',
-                    Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
-                    Type => 'text/plain; charset="utf-8"',
-                    Encoding => 'quoted-printable',
-                    Data => FYR::Queue::as_utf8_octets($text)
-                );
+    my $mail = Email::MIME->create(
+        header_str => [
+            Sender => '<>',
+            From => mySociety::Email::format_email_address($from_name, $from_email),
+            To => $data{return_path},
+            Subject => "Automatic reply to your message to WriteToThem",
+            Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
+        ],
+        parts => [ $text, $html ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
+    );
 
     if (mySociety::EmailUtil::EMAIL_SUCCESS
-            != mySociety::EmailUtil::send_email($mail->stringify(), '<>', $data{return_path})) {
+            != mySociety::EmailUtil::send_email($mail->as_string(), '<>', $data{return_path})) {
         print_log('err', 'unable to send patronising reply; deferring');
         exit(75);
     }

@@ -181,7 +181,7 @@ sub do_send_example_message {
             writer_town => 'Someplace',
             state => 'Someshire',
             writer_phone => undef,
-            body => "This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
+            body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
         }, 
 	$repinfo,         
         $options
@@ -199,8 +199,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
         "%Two weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
@@ -209,8 +209,8 @@ sub do_send_example_message {
     set_fyr_date('1990-01-22', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your MP reply to your letter?'.
         '%To: "'.name_n(0).'" <'.email_n(0).'>'.
+        '%Subject: Did your MP reply to your letter?'.
         "%Three weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
 
     # Get links from questionnaire email
@@ -291,8 +291,8 @@ sub do_send_blocked_message {
     set_fyr_date('1990-07-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
-        "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP".
         '%To: "'.name_n(1).'" <'.email_n(1).'>'.
+        "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP".
         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
 }
 
@@ -437,7 +437,7 @@ sub do_send_cobrand_message {
 
     $options->{base_url} = $base_url; 
     $options->{cobrand} = 'animalaid';
-    my $repinfo = {repname => 'Alex Hollingsworth'};
+    my $repinfo = {repname => 'Alex'};
 
     send_message_to_rep(2, 
        'OX 13d R', # Lincoln college, Oxford
@@ -453,7 +453,7 @@ sub do_send_cobrand_message {
     );
 
     confirm_message(2, $repinfo, $options);
-    check_delivered_to_rep(2, 'Alex Hollingsworth', '32 Wheresome Wroad', $options);
+    check_delivered_to_rep(2, 'Alex', '32 Wheresome Wroad', $options);
     $options->{cobrand} = undef;
 }
 
@@ -491,8 +491,8 @@ sub do_send_lords_message {
     set_fyr_date('1992-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%Subject: Did your Lord reply to your letter?'.
         '%To: "'.name_n(50).'" <'.email_n(50).'>'.
+        '%Subject: Did your Lord reply to your letter?'.
         '%Two weeks ago we sent your letter to Lord Rogers of Riverside%');
     $wth->email_check_none_left();
 
@@ -526,7 +526,7 @@ sub send_fax($$$$$$;$$){
     $options->{base_url} = $base_url;
     $options->{birthday} = $birthday;
     my $repinfo = {repname => $repname};
-    my $body = "This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
+    my $body = "Dear Tester,This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
     for (my $i=1; $i<=$repeat_text; ++$i) {
         $body = $body . $body; 
     }
@@ -659,10 +659,14 @@ sub do_send_group_abuse {
     my $rep_name;
     my $confirmation_email;
     foreach $rep_name (@rep_names){
+        # long header lines are wrapped so this fixes a long name
+        # being wrapped
+        $rep_name =~ s/Campbell Bannerman/Campbell/;
         $confirmation_email = $wth->email_get_containing(
-        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
         '%To: "'.name_n(10).'" <'.email_n(10).'>'.
-                                                         '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
+        '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+        );
 
     }
 
@@ -752,15 +756,15 @@ sub do_send_group_abuse {
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $options);
         }else{
             $confirmation_email = $wth->email_get_containing(
-            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
             '%To: "'.name_n(12).'" <'.email_n(12).'>'.
+            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
             '%We\'re very sorry, but it wasn\'t possible to send your letter%');
         }
     }
     # None of these messages should get through
     my @new_rep_names = ('Ruthi Brandt', 'Alex Hollingsworth');
     $repinfo = {repname => 'all', 
-                reptype => 'District Councillors',
+                reptype => 'District', # should be District Councillors but wrapping
                 repnames => \@new_rep_names};
     send_message_to_rep(13,
                         'OX 13d R', # Lincoln college, Oxford
@@ -776,9 +780,12 @@ sub do_send_group_abuse {
     set_fyr_date('1990-08-26', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@new_rep_names){
+            # long lines are wrapped and our string matching is dumb so
+            # truncate the long name
+            $rep_name =~ s/Alex Hollingsworth/Alex/;
             $confirmation_email = $wth->email_get_containing(
-            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
             '%To: "'.name_n(13).'" <'.email_n(13).'>'.
+            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
             '%We\'re very sorry, but it wasn\'t possible to send your letter%');
         }
 
@@ -806,7 +813,7 @@ sub do_send_group_message {
                          writer_town => 'Batchcester',
                          state => 'Groupshire',
                          writer_phone => undef,
-                         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+                         body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
                         },
                         $repinfo, 
                         $options);
@@ -849,7 +856,7 @@ sub do_admin_confirm_group_message {
          writer_town => 'Batchcester',
          state => 'Groupshire',
          writer_phone => undef,
-         body => "This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
+         body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. When you have a really big problem, sometimes it can help to write to everyone who might be able to help. On the other hand that may just mean that everyone assumes that someone else has dealt with it."
     }, $repinfo, $options);
 
     call_fyrqd($wth, $verbose, $multispawn);

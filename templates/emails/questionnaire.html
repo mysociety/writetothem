@@ -1,0 +1,30 @@
+<th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
+
+  <h1 style="<?= $values['h1_style'] ?>">Has <?= $values['recipient_name'] ?> replied to your message?</h1>
+  <p style="<?= $values['p_style'] ?>"><?= $values['weeks_ago'] ?> weeks ago, you used <a href="https://www.writetothem.com/">WriteToThem.com</a> to send a message to <?= $values['recipient_name'] ?>. Have you recieved a reply yet?</p>
+  <table <?= $values['table_reset'] ?> style="margin: 30px 0">
+    <tr>
+      <th style="<?= $values['td_style'] ?> padding: 5px 0; text-align: center;">
+        <a style="<?= $values['positive_button_style'] ?>" href="<?=$values['yes_url']?>">I received a reply</a>
+      </th>
+      <th style="<?= $values['td_style'] ?> padding: 5px 0; text-align: center;">
+        <a style="<?= $values['negative_button_style'] ?>" href="<?=$values['no_url']?>">I haven't had a reply yet</a>
+      </th>
+    </tr>
+  </table>
+  <p style="<?= $values['p_style'] ?>; font-style: bold; font-size: ">If you feel that neither link is suitable, then please do not answer the questionnaire.</p>
+  <p style="<?= $values['p_style'] ?>">Your response helps us monitor whether the site is working for people. We also use it to help analyse <a href="https://www.writetothem.com/stats/">how well MPs respond to their constituents</a>.</p>
+  <p style="<?= $values['p_style'] ?>">A copy of your letter is below. <b>Note that we do not keep a copy of your letter on file, so please keep this email for your records.</b></p>
+
+</th>
+
+</tr><tr>
+  <th style="<?= $values['td_style'] ?> <?= $values['column_separator_style'] ?>"></th>
+</tr><tr>
+
+<th style="<?= $values['td_style'] ?> <?= $values['secondary_column_style'] ?>">
+  <h2 style="<?= $values['h2_style'] ?>">Your letter to <?= $values['recipient_name'] ?></h2>
+  <p align="right">
+  <?= $values['email_text'] ?>
+  </p>
+</th>

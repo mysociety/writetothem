@@ -182,14 +182,17 @@ sub confirm_message {
             $conf_name = $repname;
         }
         my $confirmation_email = $wth->email_get_containing(
-            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
             '%To: "'.name_n($who).'" <'.email_n($who).'>'.
+            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
             '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
             '%to confirm that you wish%');
-        die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*($base_url.*$)#m);
+        die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*(${base_url}[^ ]*)\n\n#m);
         print "Message confirm URL is $1\n" if $verbose > 1;
-        $wth->email_check_url($1);
-        $wth->browser_get($1);
+        my $url = $1;
+        # strip any linebreaks that might be in the URL due to wrapping
+        $url =~ s/\s//gs;
+        $wth->email_check_url($url);
+        $wth->browser_get($url);
         if ($cobrand && $cobrand eq "animalaid") {
             $wth->browser_check_contents("Thank you! You've completed the action");
         } else {

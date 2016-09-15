@@ -1,0 +1,20 @@
+<th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
+
+  <h1 style="<?= $values['h1_style'] ?>">Your letter could not be sent.</h1>
+  <p style="<?= $values['p_style'] ?>">We&rsquo;re very sorry, but it wasn&rsquo;t possible to send your message to
+<?= $values['recipient_name'] ?>, your <?= $values['recipient_position'] ?>.</p>
+  <p style="<?= $values['p_style'] ?>">Unfortunately, sometimes emails can&rsquo;t get through. It might be down to a server problem at the other end, or something unexpected in our system &ndash; we&rsquo;re looking into it.</p>
+  <p style="<?= $values['p_style'] ?>">We&rsquo;ve attached a copy of your letter to the bottom of this email, so that you can send it by other means. We&rsquo;re sorry that, on this occasion, our system didn&rsquo;t work as smoothly for you as it should have.</p>
+
+</th>
+
+</tr><tr>
+  <th style="<?= $values['td_style'] ?> <?= $values['column_separator_style'] ?>"></th>
+</tr><tr>
+
+<th style="<?= $values['td_style'] ?> <?= $values['secondary_column_style'] ?>">
+  <h2 style="<?= $values['h2_style'] ?>">Your letter to <?= $values['recipient_name'] ?></h2>
+  <p align="right">
+    <?= $values['email_text'] ?>
+  </p>
+</th>

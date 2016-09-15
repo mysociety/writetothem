@@ -1,0 +1,23 @@
+<th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
+
+  <h1 style="<?= $values['h1_style'] ?>">Don&rsquo;t forget to confirm your message.</h1>
+  <p style="<?= $values['p_style'] ?>">This is a second and final confirmation mail from <a href="https://www.writetothem.com/">WriteToThem</a>. You have not yet clicked the confirmation link, so your email to your <?=$values['recipient_position_plural']?> has not yet been sent.</p>
+  <p style="<?= $values['p_style'] ?>">Please click on the link below to send your message.</p>
+  <p style="margin: 30px auto; text-align: center">
+    <a style="<?= $values['button_style'] ?>" href="<?= $values['confirm_url'] ?>">Send the message to my <?= $values['recipient_position_plural'] ?></a>
+  </p>
+  <p style="<?= $values['p_style'] ?>">A copy of your message is at the end of this email.</p>
+  <p style="<?= $values['p_style'] ?>">If you have changed your mind and don&rsquo;t want to send it after all, then please ignore this email. This is the final reminder we&rsquo;ll send.</p>
+
+</th>
+
+</tr><tr>
+  <th style="<?= $values['td_style'] ?> <?= $values['column_separator_style'] ?>"></th>
+</tr><tr>
+
+<th style="<?= $values['td_style'] ?> <?= $values['secondary_column_style'] ?>">
+  <h2 style="<?= $values['h2_style'] ?>">Your letter to <?= $values['recipient_name'] ?></h2>
+  <p align="right">
+  <?= $values['email_text'] ?>
+  </p>
+</th>

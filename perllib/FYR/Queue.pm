@@ -29,11 +29,13 @@ use Fcntl;
 use FindBin;
 use HTML::Entities;
 use IO::Socket;
+use IO::All;
 use Net::DNS::Resolver;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
 use Data::Dumper;
+use Email::MIME;
 
 use utf8;
 
@@ -52,6 +54,7 @@ use mySociety::SystemMisc qw(print_log);
 use FYR;
 use FYR::AbuseChecks;
 use FYR::EmailTemplate;
+use FYR::EmailSettings;
 use FYR::Fax;
 use FYR::Cobrand;
 
@@ -932,18 +935,24 @@ sub make_representative_email ($$) {
             );
 
     my $headers = {
-        From => [ $msg->{sender_email}, $msg->{sender_name} ],
-        To => [ [ $msg->{recipient_email}, $msg->{recipient_name} ] ],
+        From => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
+        To => mySociety::Email::format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
         Subject => $subject,
         Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
         'Message-ID' => email_message_id($msg->{id}),
-        _body_ => $bodytext
     };
     if (test_dmarc($msg->{sender_email})) {
-        $headers->{From} = [ $sender, $msg->{sender_name} ];
-        $headers->{'Reply-To'} = [ [ $msg->{sender_email}, $msg->{sender_name} ] ],
+        $headers->{From} = mySociety::Email::format_email_address($msg->{sender_name}, $sender);
+        $headers->{'Reply-To'} = mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email});
     }
-    return mySociety::Email::construct_email($headers);
+    return Email::MIME->create(
+        header_str => [%$headers],
+        parts => [ $bodytext ],
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+        },
+    )->as_string;
 }
 
 sub test_dmarc {
@@ -1135,6 +1144,116 @@ sub email_template_params ($%) {
     return \%params;
 }
 
+sub build_html_email {
+    my ($template, $msg, $settings) = @_;
+
+    my $html_settings = FYR::EmailSettings::get_settings;
+    foreach my $setting (keys %$settings) {
+        $html_settings->{$setting} = $settings->{$setting};
+    }
+
+    # Convert the plain text message into html so it displays
+    # more or less correctly in HTML emails. This splits the
+    # address portion and the message portion as they have
+    # different formatting requirements
+    if ($html_settings->{email_text}) {
+        my $msg = $html_settings->{email_text};
+        my ($address, $body) = split('Email:', $msg, 2);
+        $address =~ s%\n%<br/>%gs;
+        if ($body =~ /\d\s\w+\s\d{4}\n\s*Dear/s) {
+            my ($email_and_date, $message) = split(/^Dear /m, $body, 2);
+            $email_and_date =~ s%\n\n%</p>\n<p align="right">%s;
+            $message =~ s%\n\n%</p>\n<p>%gs;
+            $html_settings->{email_text} = $address .
+                '</p><p align="right">Email:' .
+                $email_and_date .
+                '</p><p>Dear ' .
+                $message;
+        } else {
+            $body =~ s%\n\n%</p>\n<p>%gs;
+            $html_settings->{email_text} = $address .
+                '</p><p>Email:' .
+                $body;
+        }
+    }
+
+    my $logo = Email::MIME->create(
+       attributes => {
+            filename     => "logo.gif",
+            content_type => "image/gif",
+            encoding     => "base64",
+            name         => "logo.gif",
+       },
+       body => io( email_template('logo.gif', $msg->{cobrand}) )->binary->all
+    );
+    $logo->header_set('Content-ID', '<logo.gif>');
+
+    # bounce emails don't have a message so we don't pass them to
+    # email_template_params as it needs one.
+    my $params = $html_settings;
+    if ( keys %$msg ) {
+        $params = email_template_params($msg, %$html_settings);
+    }
+
+    my $bodyhtml = FYR::EmailTemplate::format(
+                email_template('_top.html', $msg->{cobrand}),
+                $params
+            );
+    $bodyhtml .= FYR::EmailTemplate::format(
+                email_template($template . '.html', $msg->{cobrand}),
+                $params
+            );
+    $bodyhtml .= FYR::EmailTemplate::format(
+                email_template('_bottom.html', $msg->{cobrand}),
+                $params
+            );
+
+    my $html = Email::MIME->create(
+        body_str => $bodyhtml,
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+            content_type => 'text/html'
+        }
+    );
+
+    foreach ($logo, $html) {
+        $_->header_set('Date');
+        $_->header_set('MIME-Version');
+    }
+
+    my $mail = Email::MIME->create(
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/related'
+        },
+        parts => [ $html, $logo ]
+    );
+
+    $mail->header_set('Date');
+    $mail->header_set('MIME-Version');
+
+    return $mail;
+}
+
+sub build_text_email($) {
+    my $text = shift;
+
+    my $email = Email::MIME->create(
+        body_str => $text,
+        attributes => {
+            charset => 'utf-8',
+            encoding => 'quoted-printable',
+            content_type => 'text/plain',
+        },
+    );
+
+    $email->header_set('Date');
+    $email->header_set('MIME-Version');
+
+    return $email;
+}
+
 # make_confirmation_email MESSAGE [REMINDER]
 # Return the on-the-wire text of an email for the given MESSAGE (reference to
 # hash of db fields), suitable for sending to the constituent so that they can
@@ -1148,20 +1267,35 @@ sub make_confirmation_email ($;$) {
     my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand}, $msg->{cocode});
     my $confirm_url = $url_start . '/C/' . $token;
     
-    my $bodytext;
+    my ($bodytext, $bodyhtml);
     if ($msg->{group_id}){
+        my $template = $reminder ? 'confirm-reminder-group' : 'confirm-group';
         $bodytext = FYR::EmailTemplate::format(
                     email_template($reminder ? 'confirm-reminder-group' : 'confirm-group', $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
         
+        my $settings = {
+            confirm_url => $confirm_url,
+            email_text => format_email_body($msg),
+        };
+
+        $bodyhtml = build_html_email($template, $msg, $settings)
     }else{
+        my $template = $reminder ? 'confirm-reminder' : 'confirm';
         $bodytext = FYR::EmailTemplate::format(
-                    email_template($reminder ? 'confirm-reminder' : 'confirm', $msg->{cobrand}),
+                    email_template($template, $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
+
+        my $settings = {
+            confirm_url => $confirm_url,
+            email_text => format_email_body($msg),
+        };
+
+        $bodyhtml = build_html_email($template, $msg, $settings)
     }
-    
+
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in
     # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
@@ -1181,6 +1315,8 @@ sub make_confirmation_email ($;$) {
         $bodytext = wrap(EMAIL_COLUMNS, "(NOTE: THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF NOT YOUR REPRESENTATIVE.)") . "\n\n" . $bodytext;
     }
 
+    $bodytext = build_text_email($bodytext);
+
     my $subject_text;
     if ($msg->{group_id}){
         $subject_text = "your $msg->{recipient_position_plural}";
@@ -1188,14 +1324,20 @@ sub make_confirmation_email ($;$) {
         $subject_text = $msg->{recipient_name};
     }
         
-    return mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    return Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Please confirm that you want to send a message to $subject_text",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $bodytext
-        });
+        ],
+        parts => [ $bodytext, $bodyhtml ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
+    )->as_string
 }
 
 # do_not_reply_sender
@@ -1277,14 +1419,30 @@ sub make_failure_email ($) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
-    return ($bounced, mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    $text = build_text_email($text);
+
+    my $html = build_html_email($template, $msg, {email_text => format_email_body($msg)});
+
+    my $mail = Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $text
-        }));
+        ],
+        parts => [ $text, $html ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
+    )->as_string;
+
+    # the stock version of Email::MIME on wheezy uses Encode to MIME encode
+    # headers and it seems to be broken in that it adds a line break in the
+    # subject which is then squashed to a space elsewhere. This fixes that.
+    $mail =~ s/couldn' t/couldn't/s;
+    return ($bounced, $mail)
 }
 
 # send_failure_email ID
@@ -1310,12 +1468,15 @@ sub make_questionnaire_email ($;$) {
     my $yes_url = $base_url . '/Y/' . $token;
     my $no_url = $base_url . '/N/' . $token;
 
+    my $settings = {
+        yes_url => $yes_url,
+        no_url => $no_url,
+        weeks_ago => $reminder ? 'Three' : 'Two',
+        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
+    };
     my $params;
     try {
-        $params = email_template_params($msg, yes_url => $yes_url, no_url => $no_url,
-            weeks_ago => $reminder ? 'Three' : 'Two',
-            their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
-        );
+        $params = email_template_params($msg, %$settings);
     } catch RABX::Error::User with {
         # If representative ID no longer exists (councillors can be fully deleted), that is caught here.
         my $E = shift;
@@ -1334,6 +1495,9 @@ sub make_questionnaire_email ($;$) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
+    $settings->{'email_text'} = format_email_body($msg);
+    my $html = build_html_email('questionnaire', $msg, $settings);
+
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
     # present URLs as hyperlinks in email bodies unless we enclose them in
     # <a href="...">...</a> (yes, in text/plain emails). So for users on AOL,
@@ -1343,14 +1507,22 @@ sub make_questionnaire_email ($;$) {
     $text =~ s#(https://.+$)#<a href=" $1 ">$1</a>#mg
         if ($msg->{sender_email} =~ m/\@aol\.com$/i);
 
-    return mySociety::Email::construct_email({
-            From => [do_not_reply_sender($msg->{cobrand}, $msg->{cocode}), email_sender_name($msg->{cobrand}, $msg->{cocode})],
-            To => [[$msg->{sender_email}, $msg->{sender_name}]],
+    $text = build_text_email($text);
+
+    return Email::MIME->create(
+        header_str => [
+            From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
+            To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
             Subject => "Did your $msg->{recipient_position} reply to your letter?",
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
-            _body_ => $text
-        });
+        ],
+        parts => [ $text, $html ],
+        attributes => {
+            charset => 'utf-8',
+            content_type => 'multipart/alternative',
+        },
+    )->as_string
 }
 
 # send_questionnaire_email ID [REMINDER]
