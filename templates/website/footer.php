@@ -74,6 +74,7 @@
 
 <script src="/static/js/vendor/jquery-1.8.3.min.js"></script>
 <script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script src="/static/js/jquery.fixedthead.js"></script>
 <script src="/static/js/main.js"></script>
 
 </body>

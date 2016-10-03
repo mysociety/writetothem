@@ -1255,4 +1255,10 @@ h2 {
     }
 }
 
+.js-fixed-thead__clone {
+    position: fixed;
+    background: #fff;
+    box-shadow: 0 6px 6px -4px rgba(0,0,0,0.2);
+}
+
 @import "overrides";

@@ -13,4 +13,6 @@ $(function() {
             quote: $(this).attr('data-text')
         }, function(response){});
     });
+
+    $('.js-fixed-thead').fixedThead();
 });
