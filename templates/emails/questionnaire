@@ -1,7 +1,6 @@
-<?=$values['weeks_ago']?> weeks ago you sent a letter to <?=$values['recipient_name']?>, your
-<?=$values['recipient_position']?> through WriteToThem.com
-
-For reference, there's a copy of your letter at the bottom of this email.
+<?=$values['weeks_ago']?> weeks ago we sent a letter to <?=$values['recipient_name']?>, your
+<?=$values['recipient_position']?>. (For reference, there's a copy of your
+letter at the bottom of this email.)
 
 Please help us understand how well representatives are doing at
 responding to their constituents.
