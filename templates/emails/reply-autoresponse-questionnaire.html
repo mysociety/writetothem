@@ -2,17 +2,45 @@
 
   <h1 style="<?= $values['h1_style'] ?>">Sorry, we don&rsquo;t accept email at this address.</h1>
   <p style="<?= $values['p_style'] ?> font-weight: bold;">This is an automatic response, we have NOT read your email.</p>
-  <p style="<?= $values['p_style'] ?>">If you are trying to respond to our questionnaire, you should click one of the links below, to let us know whether you had a reply (and not just an acknowledgement) to your letter.</p>
-  <table <?= $values['table_reset'] ?> style="margin: 30px 0">
+  <p style="<?= $values['p_style'] ?>">If you are trying to respond to our questionnaire, you should click one of the links below, to let us know whether you had a reply to your letter.</p>
+
+  <br>
+
+  <table <?= $values['table_reset'] ?> class="nofold" style="border-collapse: collapse;">
     <tr>
-      <th style="<?= $values['td_style'] ?> padding: 5px 0; text-align: center;">
-        <a style="<?= $values['positive_button_style'] ?>" href="<?= $values['yes_url'] ?>">I had a reply</a>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_good'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['yes_url']?>"><strong>Yes</strong>, I had a reply</a>
       </th>
-      <th style="<?= $values['td_style'] ?> padding: 5px 0; text-align: center;">
-        <a style="<?= $values['negative_button_style'] ?>" href="<?= $values['no_url'] ?>">No reply yet</a>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['unsatisfactory_url']?>"><strong>Yes</strong>, but I don't think my question was answered</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['no_url']?>"><strong>Yes</strong>, but it was only an acknowledgement</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['not_expected_url']?>"><strong>No</strong>, but I didn't expect/require a response</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_bad'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['no_url']?>"><strong>No</strong>, I did not get a reply</a>
       </th>
     </tr>
   </table>
+
+  <br>
+
   <p style="<?= $values['p_style'] ?>">If you have a question or comment about the site, please send an email to <a href="mailto:<?= $values['contact_email'] ?>"><?= $values['contact_email'] ?></a>.</p>
 
 </th>

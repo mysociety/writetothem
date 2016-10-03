@@ -21,6 +21,22 @@
     #main table, #main tbody, #main thead, #main tr, #main th {
       display: block !important;
     }
+
+    #main table.nofold {
+      display: table !important;
+    }
+
+    #main table.nofold > tbody, #main table.nofold > thead {
+      display: table-row-group !important;
+    }
+
+    #main table.nofold > tbody > tr, #main table.nofold > thead > tr, #main table.nofold > tr {
+      display: table-row !important;
+    }
+
+    #main table.nofold > tbody > tr > th, #main table.nofold > thead > tr > th, #main table.nofold > tr > th {
+      display: table-cell !important;
+    }
   }
   </style>
 </head>

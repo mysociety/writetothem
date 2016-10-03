@@ -4,6 +4,7 @@ my $color_cyan = '#4695b3';
 my $color_cyan_dark = '#0c5875';
 my $color_green = '#46b350';
 my $color_red = '#cc5350';
+my $color_orange = '#ffa500';
 my $color_cream = '#f4f3ef';
 my $color_cream_light = '#faf9f5';
 my $color_brown = '#696966';
@@ -49,12 +50,17 @@ my $button_font_weight = "bold";
 my $button_font_size = "20px";
 my $button_line_height = "24px";
 
-my $td_style = "font-family: $body_font_family; font-size: 18px; line-height: 26px; font-weight: normal; text-align: left;";
+my $td_style = "font-family: $body_font_family; font-size: 18px; line-height: 26px; font-weight: normal; text-align: left; border-collapse: collapse;";
 
 sub make_button {
     my ($background_color, $text_color) = @_;
     # https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design
     return "display: inline-block; border: 10px solid $background_color; border-width: 10px 20px; border-radius: $button_border_radius; background-color: $background_color; color: $text_color; font-size: $button_font_size; line-height: $button_line_height; font-weight: $button_font_weight; text-decoration: underline;",
+}
+
+sub make_dot {
+    my ($color) = @_;
+    return "<h1 style='width: 12px; height: 12px; overflow: hidden; border-radius: 12px; background-color: $color; font-size: 12px; line-height: 12px; margin: 0;'></h1>",
 }
 
 sub get_settings {
@@ -89,8 +95,10 @@ sub get_settings {
         p_style => "margin: 0 0 0.8em 0;",
         preformatted_style => "white-space: pre-wrap;",
         button_style => make_button($button_background_color, $button_text_color),
-        positive_button_style => make_button($button_background_color_positive, $button_text_color_positive),
-        negative_button_style => make_button($button_background_color_negative, $button_text_color_negative),
+        questionnaire_option_td_style => "$td_style padding: 0.5em; border-top: 1px solid #eee; border-bottom: 1px solid #eee;",
+        questionnaire_dot_good => make_dot($color_green),
+        questionnaire_dot_medium => make_dot($color_orange),
+        questionnaire_dot_bad => make_dot($color_red),
     };
 }
 
