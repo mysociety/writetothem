@@ -139,15 +139,17 @@ sub handle_non_bounce_to_verp_address {
 
 sub handle_non_bounce_to_null_address {
     # See whether the email contains one of our URLs.
-    my ($first_url, $confirm_url, $yes_url, $no_url);
+    my ($first_url, $confirm_url, $yes_url, $no_url, $unsatisfactory_url, $not_expected_url);
     foreach (@lines) {
         my $base_url = mySociety::Config::get('BASE_URL');
-        if (m#($base_url/[CNY]/[2-7A-Za-z]{10}[./_]?[2-7A-Za-z]{10,})#) {
+        if (m#($base_url/[CNYUE]/[2-7A-Za-z]{10}[./_]?[2-7A-Za-z]{10,})#) {
             my $url = $1;
             $first_url = $url if !$first_url;
             $confirm_url = $url if ($url =~ m#/C/#);
             $yes_url = $url if ($url =~ m#/Y/#);
             $no_url = $url if ($url =~ m#/N/#);
+            $unsatisfactory_url = $url if ($url =~ m#/U/#);
+            $not_expected_url = $url if ($url =~ m#/E/#);
         }
     }
 
@@ -199,6 +201,8 @@ sub handle_non_bounce_to_null_address {
         $template = 'reply-autoresponse-questionnaire';
         $vv->{'yes_url'} = $yes_url;
         $vv->{'no_url'} = $no_url;
+        $vv->{'unsatisfactory_url'} = $unsatisfactory_url;
+        $vv->{'not_expected_url'} = $not_expected_url;
     }
 
     my $text = FYR::EmailTemplate::format(
