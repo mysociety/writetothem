@@ -222,6 +222,14 @@ sub do_send_example_message {
     my $no_link = $1;
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
+    die "Questionnaire unsatisfactory link not found" if ($questionnaire_email !~ m#^\s*($base_url/U/.*$)#m);
+    my $unsatisfactory_link = $1;
+    $wth->email_check_url($unsatisfactory_link);
+    print "Questionnaire 'unsatisfactory' URL is $unsatisfactory_link\n" if $verbose > 1;
+    die "Questionnaire not expected link not found" if ($questionnaire_email !~ m#^\s*($base_url/E/.*$)#m);
+    my $not_expected_link = $1;
+    $wth->email_check_url($not_expected_link);
+    print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
 
     call_allow_new_survey(email_n(0), $wth, $verbose);
 
@@ -505,6 +513,14 @@ sub do_send_lords_message {
     my $no_link = $1;
     $wth->email_check_url($no_link);
     print "Questionnaire 'no' URL is $no_link\n" if $verbose > 1;
+    die "Questionnaire unsatisfactory link not found" if ($questionnaire_email !~ m#^\s*($base_url/U/.*$)#m);
+    my $unsatisfactory_link = $1;
+    $wth->email_check_url($unsatisfactory_link);
+    print "Questionnaire 'unsatisfactory' URL is $unsatisfactory_link\n" if $verbose > 1;
+    die "Questionnaire not expected link not found" if ($questionnaire_email !~ m#^\s*($base_url/E/.*$)#m);
+    my $not_expected_link = $1;
+    $wth->email_check_url($not_expected_link);
+    print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
 
     call_allow_new_survey(email_n(50), $wth, $verbose);
 
