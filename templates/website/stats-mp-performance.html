@@ -217,15 +217,17 @@ if (is_array($mp)) {
         ?>
 
             <table>
-                <tr>
-                    <? if ($sort == 'r') print '<th>Position</th>'; ?>
-                    <?=$head_name ?>
-                    <?=$head_cons ?>
-                    <?=$head_response ?>
-                    <th>Surveys saying "MP replied"<br/>out of total survey answers</th>
-                    <?=$head_messages ?>
-                    <!--<th>95% confidence interval</th>-->
-                </tr>
+                <thead class="js-fixed-thead">
+                    <tr>
+                        <? if ($sort == 'r') print '<th>Position</th>'; ?>
+                        <?=$head_name ?>
+                        <?=$head_cons ?>
+                        <?=$head_response ?>
+                        <th>Surveys saying "MP replied"<br/>out of total survey answers</th>
+                        <?=$head_messages ?>
+                        <!--<th>95% confidence interval</th>-->
+                    </tr>
+                </thead>
               <?
 
               $c = 0;

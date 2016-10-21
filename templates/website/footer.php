@@ -74,25 +74,8 @@
 
 <script src="/static/js/vendor/jquery-1.8.3.min.js"></script>
 <script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-
-<script>
-    $(function() {
-        $('.fancybox').each(function(){
-            $(this).fancybox({
-                href: $(this).prop('href').replace('#', '-')
-            });
-        });
-
-        $('.facebook-share-button').on('click', function(e){
-            e.preventDefault();
-            FB.ui({
-                method: 'share',
-                href: $(this).attr('data-url'),
-                quote: $(this).attr('data-text')
-            }, function(response){});
-        });
-    });
-</script>
+<script src="/static/js/jquery.fixedthead.js"></script>
+<script src="/static/js/main.js"></script>
 
 </body>
 </html>
