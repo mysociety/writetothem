@@ -92,7 +92,16 @@ if (isset($values['cobrand']))
 
 <body <?php if (array_key_exists('body_class', $values)): ?>class="<?php echo $values['body_class']; ?>"<?php endif; ?>>
 
-<?php if (OPTION_FYR_REFLECT_EMAILS): ?>
+<div class="banner banner--donate">
+    <div class="row">
+        <div class="large-10 large-centered columns">
+            <strong>Help us make websites that empower people.</strong>
+            <a href="https://www.mysociety.org/donate/?utm_source=writetothem.com&amp;utm_content=header+your+donations&amp;utm_campaign=december-2016">Your donations support sites like this</a>.
+        </div>
+    </div>
+</div>
+
+<?php if (0 && OPTION_FYR_REFLECT_EMAILS): ?>
 
 <div class="banner banner--staging">
     <div class="row">
