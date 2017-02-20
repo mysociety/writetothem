@@ -2457,7 +2457,7 @@ sub admin_get_queue ($$) {
         $params->{rep_ids} = [ $params->{rep_id} ] if $params->{rep_id};
         push @params, @{$params->{rep_ids}};
         my $qs = join(',', map { '?' } @{$params->{rep_ids}});
-        $where = "where recipient_id in ($qs) order by created asc";
+        $where = "where recipient_id in ($qs) order by created desc";
     }
     my $sth = dbh()->prepare("
             select *, $message_calculated_values

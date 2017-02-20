@@ -761,7 +761,7 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             }
             
             $years = array_keys($by_year);
-            sort($years);
+            rsort($years);
             foreach ($years as $year) {
                 $year_array = $by_year[$year];
                 print "<h2>Year $year for rep ids $rep_ids";
