@@ -95,7 +95,9 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('David Campbell Bannerman', 'Richard Howitt', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
+our @rep_names = ('David Campbell Bannerman', 'Alex Mayer', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
+my $mep_rep_name = 'Alex Mayer';
+
 #############################################################################
 # Main code
 
@@ -729,7 +731,7 @@ sub do_send_group_abuse {
         button => 'done');
     $wth->browser_check_contents('Similar body, same rep');
    
-    $repinfo = {repname => 'Richard Howitt'};
+    $repinfo = {repname => $mep_rep_name};
     # This message should get through
     send_message_to_rep(11,
                         'CB23QJ', # The Guildhall, Cambridge
@@ -762,13 +764,13 @@ sub do_send_group_abuse {
     confirm_message(12, $repinfo, $options);
     call_fyrqd($wth, $verbose, $multispawn);
     # First mail sent
-    check_delivered_to_rep(11, 'Richard Howitt', '23 Something Street', $options);
+    check_delivered_to_rep(11, $mep_rep_name, '23 Something Street', $options);
 
     # Check for successes and for email telling group constituent that one message wasn't sent
     set_fyr_date('1990-08-17', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     foreach $rep_name (@rep_names){
-        if ($rep_name ne 'Richard Howitt'){
+        if ($rep_name ne $mep_rep_name){
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $options);
         }else{
             $confirmation_email = $wth->email_get_containing(
