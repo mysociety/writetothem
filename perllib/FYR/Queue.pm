@@ -2291,11 +2291,11 @@ been frozen.  Combined with 'frozen' makes all 'important' messages.
 
 =item recentchanged
 
-Up to 100 of the messages which have most recently changed state.
+Messages which have most recently changed state.
 
 =item recentcreated
 
-Up to 100 of the messages which have recently been created.
+Messages which have recently been created.
 
 =item similarbody
 
@@ -2324,7 +2324,18 @@ All messages which were sent to representative of type PARAMS->{type}.
 
 =item rep_id
 
-All messages which were sent to representative PARAMS->{rep_id}.
+All messages which were sent to representative PARAMS->{rep_id} or
+PARAMS->{rep_ids}.
+
+=item limit
+
+Number of results to return (default 100).
+Ignored for needattention/failing/similarbody*.
+
+=item page
+
+Page of results to return (default 1).
+Ignored for needattention/failing/similarbody*.
 
 =back
 
@@ -2337,6 +2348,14 @@ sub admin_get_queue ($$) {
         if (!exists($allowed{$filter}));
     
     my $where = "order by created desc";
+    my $limit_sql = "";
+    if (ref $params eq 'HASH' && $params->{page}) {
+        my $page = $params->{page} =~ /^\d+\z/ ? $params->{page} : 1;
+        my $limit = ($params->{limit} || "") =~ /^\d+\z/ ? $params->{limit} : 100;
+        my $offset = ($page - 1) * $limit;
+        $limit_sql = "offset $offset limit $limit";
+    }
+
     my $msg;
     my @params;
     # XXX "frozen = 't'" because if you just say "frozen", PG won't use an
@@ -2353,9 +2372,9 @@ sub admin_get_queue ($$) {
                   and frozen = 'f' 
             order by created desc#;
     } elsif ($filter eq 'recentchanged') {
-        $where = "order by laststatechange desc limit 100";
+        $where = "order by laststatechange desc";
     } elsif ($filter eq 'recentcreated') {
-        $where = "order by created desc limit 100";
+        $where = "order by created desc";
     } elsif ($filter eq 'similarbody') {
         my $sth2 = dbh()->prepare("
                 select *, length(message) as message_length from message where id = ?
@@ -2435,13 +2454,15 @@ sub admin_get_queue ($$) {
         push @params, $params->{query};
         $where = "where recipient_type = ? order by created desc";
     } elsif ($filter eq 'rep_id') {
-        push @params, $params->{rep_id};
-        $where = "where recipient_id = ? order by created asc";
+        $params->{rep_ids} = [ $params->{rep_id} ] if $params->{rep_id};
+        push @params, @{$params->{rep_ids}};
+        my $qs = join(',', map { '?' } @{$params->{rep_ids}});
+        $where = "where recipient_id in ($qs) order by created asc";
     }
     my $sth = dbh()->prepare("
             select *, $message_calculated_values
             from message 
-            $where
+            $where $limit_sql
         ");
     $sth->execute(@params);
     my @ret;

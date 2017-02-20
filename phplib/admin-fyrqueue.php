@@ -486,6 +486,8 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
         $view = get_http_var('view', 'needattention');
         $id = get_http_var("id");
         $rep_id = get_http_var("rep_id");
+        $page = intval(get_http_var('p'));
+        $page = $page ?: 1;
 
         // Display about id
         if ($id) {
@@ -735,20 +737,18 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             if (!$sameperson) 
                 $sameperson = array($rep_id);
  
-            $messages = array();
             $this->render_bar("rep_id", true, $id);
-            $rep_ids = '';
-            foreach ($sameperson as $this_rep_id) {
-                $params = array('rep_id' => $this_rep_id);
-                $new_messages = msg_admin_get_queue('rep_id', $params);
-                if (msg_get_error($new_messages)) {
-                    print "Error contacting queue:";
-                    print_r($new_messages);
-                    $new_messages = array();
-                }
-                $messages = array_merge($messages, $new_messages);
-                $rep_ids = ' ' . $this_rep_id;
+            $params = array(
+                'rep_ids' => $sameperson,
+                'page' => $page,
+            );
+            $messages = msg_admin_get_queue('rep_id', $params);
+            if (msg_get_error($messages)) {
+                print "Error contacting queue:";
+                print_r($messages);
+                $messages = array();
             }
+            $rep_ids = join(' ', $sameperson);
 
             $by_year = array();
             foreach ($messages as $message) {
@@ -817,7 +817,7 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
                 } else {
                     print ' Nobody succesfully sent more than one message to this rep using same email.';
                 }
-                print '<p>';
+                print '<p><a href="?' . url_new('', true, 'p', $page + 1) . '">Next page</a></p>';
 
                 $this->print_messages($year_array, null);
             }
