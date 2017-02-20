@@ -772,6 +772,7 @@ sub format_postal_address ($) {
     my @lines = split(/\n/, $text);
     $text = '';
     local($Text::Wrap::columns) = EMAIL_COLUMNS / 2;
+    local($Text::Wrap::huge) = 'overflow';
     my $maxlen = 0;
     foreach (@lines) {
         my $l = length($_);
