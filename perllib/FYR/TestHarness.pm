@@ -104,7 +104,6 @@ sub send_message_to_rep {
     if (!$birthday) {
         # Postcode selection of representative
         my $start_url = $base_url;
-        $start_url .= "?cocode=9" if ($cobrand && $cobrand eq "animalaid");
         $wth->browser_get($start_url);
         $wth->browser_check_contents($expected_messages->{enter_postcode});
         $wth->browser_submit_form(form_name => 'postcodeForm',
@@ -193,11 +192,7 @@ sub confirm_message {
         $url =~ s/\s//gs;
         $wth->email_check_url($url);
         $wth->browser_get($url);
-        if ($cobrand && $cobrand eq "animalaid") {
-            $wth->browser_check_contents("Thank you! You've completed the action");
-        } else {
-            $wth->browser_check_contents("All done! Your message is on its way.");
-        }
+        $wth->browser_check_contents("All done! Your message is on its way.");
     }
 }
 

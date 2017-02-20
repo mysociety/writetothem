@@ -11,7 +11,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 3;
 use Test::Exception;
 
 use FindBin;
@@ -32,14 +32,6 @@ sub test_base_url_for_emails {
     # should get the results of the base_url_for_emails function in the cobrand module if one exists
     my $base_url = FYR::Cobrand::base_url_for_emails($cobrand);
     is('http://mysite.foremails.example.com', $base_url, 'base_url_for_emails returns output from cobrand module') ;
-
-    $cobrand = 'animalaid';
-    $base_url = FYR::Cobrand::base_url_for_emails($cobrand);
-    if ( mySociety::Config::get('HTTPS_ONLY') ) {
-        is('https://animalaid.' . mySociety::Config::get('WEB_DOMAIN'), $base_url, "should return a cobrand subdomain if a cobrand exists but doesn't define its own function");
-    } else {
-        is('http://animalaid.' . mySociety::Config::get('WEB_DOMAIN'), $base_url, "should return a cobrand subdomain if a cobrand exists but doesn't define its own function");
-    }
 
     $cobrand = undef;
     $base_url = FYR::Cobrand::base_url_for_emails($cobrand);

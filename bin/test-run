@@ -52,7 +52,7 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('fax', 'example', 'mistype', 'bounce', 'lords', 'group', 'unit', 'cobrand');
+my @actions = ('fax', 'example', 'mistype', 'bounce', 'lords', 'group', 'unit');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'mistype' => 'check mistyped postcodes work',
@@ -60,7 +60,6 @@ my %actions_desc = (
     'lords' => 'send example message to a Lord',
     'fax' => 'send example fax message successfully (no faxes sent 8pm-8am - tests will fail)',
     'group' => 'send example message to a group of reps',
-    'cobrand' => 'send example message via a cobrand site (AnimalAid), run any cobrand-specific tests in TestHarness files',
     'unit' => 'run the unit tests',
 );
 
@@ -143,7 +142,6 @@ foreach (@actions) {
     do_test_mistyped_postcode() if $_ eq 'mistype';
     do_test_bounce_stuff() if $_ eq 'bounce';
     do_send_fax_message() if $_ eq 'fax';
-    do_send_cobrand_message() if $_ eq 'cobrand';
     do_send_lords_message() if $_ eq 'lords';
     if ($_ eq 'group') {
         do_send_group_message();
@@ -437,34 +435,6 @@ END
     # ... check that user gets autoresponse
     $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
     $wth->email_check_none_left();
-}
-
-#############################################################################
-
-sub do_send_cobrand_message {
-    set_base_url("animalaid.");
-    set_fyr_date('1991-02-03', undef, $verbose);
-
-    $options->{base_url} = $base_url; 
-    $options->{cobrand} = 'animalaid';
-    my $repinfo = {repname => 'Alex'};
-
-    send_message_to_rep(2, 
-       'OX 13d R', # Lincoln college, Oxford
-        { 
-            writer_address1 => '32 Wheresome Wroad',
-            writer_town => 'Whereville',
-            state => 'Whereex',
-            writer_phone => undef,
-            body => "Oh my goodness! Another test message from the WTT test script. This should never get to anybody except when they're testing. This one is to test cobranding, using the 'animalaid' example.",
-        },
-        $repinfo,
-        $options
-    );
-
-    confirm_message(2, $repinfo, $options);
-    check_delivered_to_rep(2, 'Alex', '32 Wheresome Wroad', $options);
-    $options->{cobrand} = undef;
 }
 
 #############################################################################
