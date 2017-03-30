@@ -1,7 +1,7 @@
 <?php
 /*
  * Representatives admin page.
- * 
+ *
  * Copyright (c) 2012 UK Citizens Online Democracy. All rights reserved.
  * Email: matthew@mysociety.org. WWW: http://www.mysociety.org
  *
@@ -17,29 +17,36 @@ require_once $dir . "/../commonlib/phplib/HTML/QuickForm.php";
 require_once $dir . "/../commonlib/phplib/HTML/QuickForm/Rule.php";
 require_once $dir . "/../commonlib/phplib/HTML/QuickForm/Renderer/Default.php";
 
-class ADMIN_PAGE_REPS {
-    function ADMIN_PAGE_REPS () {
+class ADMIN_PAGE_REPS
+{
+    public function __construct()
+    {
         $this->id = "reps";
         $this->navname= "Representative Data";
     }
 
-    function get_token() {
+    private function getToken()
+    {
         $secret = dadem_get_secret();
         dadem_check_error($secret);
         $token = sha1(http_auth_user() . $secret);
         return $token;
     }
 
-    function render_reps($self_link, $reps, $bad_link = false) {
-        if (!$reps) return '';
+    private function renderReps($self_link, $reps, $bad_link = false)
+    {
+        if (!$reps) {
+            return '';
+        }
 
         $html = "";
         $info = dadem_get_representatives_info($reps);
         dadem_check_error($info);
 
         $areas = array();
-        foreach ($reps as $rep)
+        foreach ($reps as $rep) {
             $areas[] = $info[$rep]['voting_area'];
+        }
         $area_info = mapit_call('areas', $areas);
         mapit_check_error($area_info);
 
@@ -57,46 +64,59 @@ class ADMIN_PAGE_REPS {
             if (isset($area_info[$repinfo['voting_area']])) {
                 $ainfo = $area_info[$repinfo['voting_area']];
                 $html .= "<!-- gen ".$ainfo['generation_low']."-".$ainfo['generation_high']." -->";
-                if ($generation < $ainfo['generation_low'] || $generation > $ainfo['generation_high'])
+                if ($generation < $ainfo['generation_low'] || $generation > $ainfo['generation_high']) {
                     $html .= "<i>out of generation</i> ";
+                }
             } else {
                 $html .= '<i>area no longer exists</i> ';
             }
 
-            if ($repinfo['deleted'])
+            if ($repinfo['deleted']) {
                 $html .= "<i>deleted</i> ";
-            elseif ($repinfo['last_editor'] == 'fyr-queue') 
+            } elseif ($repinfo['last_editor'] == 'fyr-queue') {
                 $html .= "<i>failed</i> ";
-            if (array_key_exists('type', $repinfo))
+            }
+            if (array_key_exists('type', $repinfo)) {
                 $html .= $repinfo['type'] . " ";
-            else
+            } else {
                 $html .= $repinfo['area_type'] . " ";
+            }
             $link_extra = "";
-            if ($bad_link && $i < count($reps) - 1) 
+            if ($bad_link && $i < count($reps) - 1) {
                 $link_extra = "&nextbad=".urlencode($reps[$i+1]);
-            $html .= "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&rep_id=" . $rep .  "$link_extra\">" . $repinfo['name'] . " (". $repinfo['party'] . ")</a> \n";
+            }
+            $html .= "<a href=\"$self_link&pc=" . urlencode(get_http_var('pc')) . "&rep_id=" . $rep
+                .  "$link_extra\">" . $repinfo['name'] . " (". $repinfo['party'] . ")</a> \n";
             $html .= "prefer " . $repinfo['method'];
-            if ($repinfo['email']) 
+            if ($repinfo['email']) {
                 $html .= ", " .  $repinfo['email'];
-            if ($repinfo['fax']) 
+            }
+            if ($repinfo['fax']) {
                 $html .= ", " .  $repinfo['fax'];
+            }
             $html .= "<br>";
         }
         return $html;
     }
 
-    function render_area($self_link, $area_id, $area_info, $pc, $add_link=false) {
+    private function renderArea($self_link, $area_id, $area_info, $pc, $add_link = false)
+    {
         global $va_type_name;
-        if (!isset($va_type_name[$area_info['type']])) return;
+        if (!isset($va_type_name[$area_info['type']])) {
+            return;
+        }
         $url = $self_link . '&pc=' . urlencode($pc);
         $html = "<p><strong><a href='$url&va_id=$area_id'>$area_info[name]</a>";
         $html .= " (" .  $va_type_name[$area_info['type']] . ")</strong>";
-        if ($add_link) $html .= " &ndash; <a href='$url&new_in_va_id=$area_id'>Add new representative</a>";
+        if ($add_link) {
+            $html .= " &ndash; <a href='$url&new_in_va_id=$area_id'>Add new representative</a>";
+        }
         $html .= '</p>';
         return $html;
     }
 
-    function get_next_bad_contact($rep_id) {
+    private function getNextBadContact($rep_id)
+    {
         $badcontacts = dadem_get_bad_contacts();
         dadem_check_error($badcontacts);
         $prev = null;
@@ -106,12 +126,13 @@ class ADMIN_PAGE_REPS {
                 $rep_id = $badcontact;
                 break;
             }
-           $prev = $badcontact;
+            $prev = $badcontact;
         }
         return $rep_id;
     }
 
-    function display($self_link) {
+    function display()
+    {
         // Input data
         $rep_id = get_http_var('rep_id');
         $va_id = get_http_var('va_id');
@@ -131,6 +152,7 @@ class ADMIN_PAGE_REPS {
                 $new_in_va_id = $ds_va_id;
             }
         }
+
         // Postcode
         $pc = get_http_var('pc');
         // Search
@@ -144,12 +166,14 @@ class ADMIN_PAGE_REPS {
                 $rep_id = null;
             }
         }
-        if (get_http_var('cancel') != "") 
+        if (get_http_var('cancel') != "") {
             $rep_id = null;
+        }
         if (get_http_var('done') != "") {
-            if (get_http_var('token') != $this->get_token()) {
+            if (get_http_var('token') != $this->getToken()) {
                 print "<p><i>Token not found</i></p>";
             } else {
+                $newdata = array();
                 $newdata['name'] = get_http_var('name');
                 $newdata['party'] = get_http_var('party');
                 $newdata['method'] = get_http_var('method');
@@ -170,7 +194,8 @@ class ADMIN_PAGE_REPS {
 
                 if (get_http_var('nextbad')) {
                     $rep_id = get_http_var('nextbad');
-                    $url = $self_link . "&nextbad=" . urlencode($this->get_next_bad_contact($rep_id)) . "&just_done_bad=1&rep_id=" . urlencode($rep_id);
+                    $url = $self_link . "&nextbad=" . urlencode($this->getNextBadContact($rep_id))
+                        . "&just_done_bad=1&rep_id=" . urlencode($rep_id);
                     header("Location: $url");
                     exit;
                 } else {
@@ -182,9 +207,9 @@ class ADMIN_PAGE_REPS {
             print "<p><i>Moved on to next bad contact</i></p>";
         }
         if (get_http_var('delete') != "") {
-            if (get_http_var('token') != $this->get_token()) {
+            if (get_http_var('token') != $this->getToken()) {
                 print "<p><i>Token not found</i></p>";
-            } else { 
+            } else {
                 $result = dadem_admin_edit_representative($rep_id, null, http_auth_user(), get_http_var('note'));
                 dadem_check_error($result);
                 print "<p><i>Successfully deleted representative ". htmlspecialchars($rep_id) . "</i></p>";
@@ -199,24 +224,26 @@ class ADMIN_PAGE_REPS {
         if (get_http_var('vaupdate') != "") {
             $result = dadem_admin_set_area_status(get_http_var('va_id'), get_http_var('new_status'));
             dadem_check_error($result);
-            print "<p><i>Successfully updated voting area status ". htmlspecialchars(get_http_var('va_id')) . " to " . htmlspecialchars(get_http_var('new_status')) . "</i></p>";
+            print "<p><i>Successfully updated voting area status " . htmlspecialchars(get_http_var('va_id'))
+                . " to " . htmlspecialchars(get_http_var('new_status')) . "</i></p>";
         }
 
         // Postcode and search box
         $form = new HTML_QuickForm('adminRepsSearchForm', 'get', $self_link);
         $form->addElement('header', '', 'Search');
+        $buttons = array();
         $buttons[] =& HTML_QuickForm::createElement('text', 'search', null, array('size' => 20, 'maxlength' => 255));
         $buttons[] =& HTML_QuickForm::createElement('submit', 'gos', 'postcode or query');
         $form->addElement('hidden', 'page', $this->id);
         $form->addGroup($buttons, 'stuff', null, '&nbsp', false);
         admin_render_form($form);
 
-        // Conditional parts: 
+        // Conditional parts:
         if ($rep_id or $new_in_va_id) {
             $form = new HTML_QuickForm('adminRepsEditForm', 'post', $self_link);
             $form->addElement('hidden', 'page', $this->id);
-            $form->addElement('hidden', 'token', $this->get_token());
-           
+            $form->addElement('hidden', 'token', $this->getToken());
+
             // Edit representative
             $sameperson = null;
             if ($rep_id) {
@@ -233,8 +260,9 @@ class ADMIN_PAGE_REPS {
             if ($vainfo['parent_area']) {
                 $parentinfo = mapit_call('area', $vainfo['parent_area']);
                 mapit_check_error($parentinfo);
-            } else 
+            } else {
                 $parentinfo = null;
+            }
             $rephistory = $rep_id ? dadem_get_representative_history($rep_id) : array();
             dadem_check_error($rephistory);
             // Reverse postcode lookup
@@ -243,7 +271,8 @@ class ADMIN_PAGE_REPS {
                 if (!mapit_get_error($pc)) {
                     $form->addElement('static', 'note1', null, "Example postcode for testing: " .
                         "<a href='" . OPTION_BASE_URL . '/who?pc=' . urlencode($pc) . "'>"
-                        . htmlentities($pc) ."</a> (<a href='?search=" . urlencode($pc) . "&amp;gos=postcode+or+query&amp;page=reps'>all reps here</a>)");
+                        . htmlentities($pc) ."</a> (<a href='?search=" . urlencode($pc)
+                        . "&amp;gos=postcode+or+query&amp;page=reps'>all reps here</a>)");
                 } else {
                     $pc = '';
                 }
@@ -255,9 +284,10 @@ class ADMIN_PAGE_REPS {
                     'party' => $repinfo['party'],
                     'method' => $repinfo['method'],
                     'email' => $repinfo['email'],
-                    'fax' => $repinfo['fax']));
+                    'fax' => $repinfo['fax'])
+                );
             }
-    
+
             // Councillor types are not edited here, but in match.cgi interface
             global $va_council_child_types, $va_type_name, $va_rep_name;
             $editable_here = true;
@@ -269,10 +299,16 @@ class ADMIN_PAGE_REPS {
             if ($rep_id) {
                 $form->addElement('header', '', 'Edit Representative');
                 if ($repinfo['deleted']) {
-                    $form->addElement('static', 'notedeleted', null, "<strong style=\"color: red\">Deleted representative</strong>, click 'Done' to undelete");
+                    $form->addElement(
+                        'static',
+                        'notedeleted',
+                        null,
+                        "<strong style=\"color: red\">Deleted representative</strong>, click 'Done' to undelete"
+                    );
                 }
-            } else
+            } else {
                 $form->addElement('header', '', 'New Representative');
+            }
             if ($rep_id and $editable_here) {
                 $form->addElement('static', 'note1', null, "
                 Edit only the values which you need to.  If a representative
@@ -282,8 +318,11 @@ class ADMIN_PAGE_REPS {
             if ($rep_id && $sameperson) {
                 $html = '';
                 foreach ($sameperson as $samerep) {
-                    if ($samerep == $rep_id) continue;
-                    $html .= "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&rep_id=" . $samerep .  "\">" . $samerep. "</a> \n";
+                    if ($samerep == $rep_id) {
+                        continue;
+                    }
+                    $html .= "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&rep_id=" . $samerep
+                        . "\">" . $samerep. "</a> \n";
                 }
                 if ($html) {
                     $html = '(Note that these other representatives are the same person: ' . trim($html) . ')';
@@ -292,79 +331,117 @@ class ADMIN_PAGE_REPS {
             }
 
             $rep_name = isset($va_rep_name[$vainfo['type']]) ? $va_rep_name[$vainfo['type']] : '';
-            $form->addElement('static', 'office', 'Office:',
+            $form->addElement(
+                'static',
+                'office',
+                'Office:',
                 htmlspecialchars($rep_name) . " for " .
                 htmlspecialchars($vainfo['name']) . " " . htmlspecialchars($va_type_name[$vainfo['type']]) .
-                ($parentinfo ? " in " . 
-                htmlspecialchars($parentinfo['name']) . " " . htmlspecialchars($va_type_name[$parentinfo['type']]) : "" ));
+                ($parentinfo ? " in " .
+                htmlspecialchars($parentinfo['name']) . " " .
+                htmlspecialchars($va_type_name[$parentinfo['type']]) : "" )
+            );
             $form->addElement('text', 'name', "Full name:", array('size' => 60, $readonly => 1));
             $form->addElement('text', 'party', "Party:", array('size' => 60, $readonly => 1));
-            $form->addElement('static', 'note2', null, "Make sure you update contact method when you change email or fax numbers.");
-            $form->addElement('select', 'method', "Contact method:", 
-                    array(
+            $form->addElement(
+                'static',
+                'note2',
+                null,
+                "Make sure you update contact method when you change email or fax numbers."
+            );
+            $form->addElement(
+                'select',
+                'method',
+                "Contact method:",
+                array(
                         #'either' => 'Fax or Email',
-                        'fax' => 'Fax only', 
+                        'fax' => 'Fax only',
                         'email' => 'Email only',
                         'shame' => "Shame! Doesn't want contacting",
                         'via' => 'Contact via electoral body (e.g. Democratic Services)',
                         'unknown' => "We don't know contact details"
-                    ));
+                )
+            );
             $form->addElement('text', 'email', "Email:", array('size' => 60, $readonly => 1));
             $form->addElement('text', 'fax', "Fax:", array('size' => 60, $readonly => 1));
             $form->addElement('textarea', 'note', "Notes for log:", array('rows' => 3, 'cols' => 60, $readonly => 1));
             $form->addElement('hidden', 'pc', $pc);
-            if (get_http_var('nextbad'))
+            if (get_http_var('nextbad')) {
                 $form->addElement('hidden', 'nextbad', get_http_var('nextbad'));
-            if ($rep_id) 
+            }
+            if ($rep_id) {
                 $form->addElement('hidden', 'rep_id', $rep_id);
-            else
+            } else {
                 $form->addElement('hidden', 'new_in_va_id', $new_in_va_id);
+            }
 
+            $finalgroup = array();
             if ($editable_here) {
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'done', 'Done');
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'cancel', 'Cancel');
                 if ($rep_id) {
-                    $finalgroup[] = &HTML_QuickForm::createElement('static', 'newlink', null,
-                        "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&new_in_va_id=" . 
-                        $va_id .  "\">" . 
-                        "Make new " . 
-                        htmlspecialchars($vainfo['name']) . " rep". 
-                        "</a> \n");
+                    $finalgroup[] = &HTML_QuickForm::createElement(
+                        'static',
+                        'newlink',
+                        null,
+                        "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&new_in_va_id=" .
+                        $va_id .  "\">" .
+                        "Make new " .
+                        htmlspecialchars($vainfo['name']) . " rep".
+                        "</a> \n"
+                    );
                     if ($repinfo['deleted']) {
-                        $finalgroup[] = &HTML_QuickForm::createElement('static', 'staticspacer', null, '&nbsp; Deleted rep, no longer in office, just click done to undelete');
+                        $finalgroup[] = &HTML_QuickForm::createElement(
+                            'static',
+                            'staticspacer',
+                            null,
+                            '&nbsp; Deleted rep, no longer in office, just click done to undelete'
+                        );
                     } else {
-                        $finalgroup[] = &HTML_QuickForm::createElement('static', 'staticspacer', null, '&nbsp; No longer in office? --->');
+                        $finalgroup[] = &HTML_QuickForm::createElement(
+                            'static',
+                            'staticspacer',
+                            null,
+                            '&nbsp; No longer in office? --->'
+                        );
                         $finalgroup[] = &HTML_QuickForm::createElement('submit', 'delete', 'Delete');
                     }
                 }
-                $form->addGroup($finalgroup, "finalgroup", "",' ', false);
+                $form->addGroup($finalgroup, "finalgroup", "", ' ', false);
             } else {
-                $form->addElement('static', 'note3', null, 
+                $form->addElement(
+                    'static',
+                    'note3',
+                    null,
                     '<a href="'.OPTION_ADMIN_SERVICES_CGI.'match.cgi?page=councilinfo;area_id='
                     . $vainfo['parent_area'] . '">To edit Councillors please use the match.cgi interface</a>'.
                     '<br><a href="'.$self_link.'&ds_va_id='
-                    . $vainfo['parent_area'] . '">... or edit Democratic Services for this council</a>');
+                    . $vainfo['parent_area'] . '">... or edit Democratic Services for this council</a>'
+                );
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'done', 'Done');
                 $finalgroup[] = &HTML_QuickForm::createElement('submit', 'cancel', 'Cancel');
-                $form->addGroup($finalgroup, "finalgroup", "",' ', false);
+                $form->addGroup($finalgroup, "finalgroup", "", ' ', false);
             }
             if ($rep_id) {
                 $search_links = "Search for: ";
-                $search_links .= "<a href=\"$self_link&page=fyrqueue&rep_id=" . $rep_id .  "\">WriteToThem messages</a> | ";
+                $search_links .= "<a href=\"$self_link&page=fyrqueue&rep_id=" . $rep_id
+                    . "\">WriteToThem messages</a> | ";
                 foreach (array(
                     "tel ". $repinfo['name'],
                     "fax ". $repinfo['name'],
                     "tel ". $repinfo['name'] . " " . $rep_name,
                     "fax ". $repinfo['name'] . " " . $rep_name
-                    ) as $searchq) 
-                    $search_links .= "<a href=\"http://search.yahoo.com/search?p=".htmlspecialchars($searchq)."\"> ".htmlspecialchars($searchq)."</a> | ";
+                    ) as $searchq) {
+                    $search_links .= "<a href=\"http://search.yahoo.com/search?p=" . htmlspecialchars($searchq)
+                        . "\"> " . htmlspecialchars($searchq)."</a> | ";
+                }
                 $form->addElement('static', 'newlink', null, $search_links);
 
                 if ($repinfo['parlparse_person_id']) {
                     $form->addElement('static', 'person', 'parlparse person_id:', $repinfo['parlparse_person_id']);
                 }
             }
-    
+
             $form->addElement('header', '', 'Historical Changes');
             $html = "<table border=1>";
             $html .= "<th>Order</th><th>Date</th><th>Editor</th><th>Note</th>
@@ -374,28 +451,29 @@ class ADMIN_PAGE_REPS {
             $previous_row = null;
             foreach ($rephistory as $row) {
                 $html .= "<tr>";
-                foreach (array('order_id', 'whenedited', 'editor', 'note', 
+                foreach (array('order_id', 'whenedited', 'editor', 'note',
                     'name', 'party', 'method', 'email', 'fax', 'deleted') as $field) {
-
-                    If ($row['deleted'] && ($field == 'email' || $field == 'fax' || $field == 'method')) {
+                    if ($row['deleted'] && ($field == 'email' || $field == 'fax' || $field == 'method')) {
                         $display_value = 'deleted';
                         $html .= "<td>-</td>\n";
                         continue;
                     }
 
                     $value = $row[$field];
-                    if ($field == 'note')
+                    if ($field == 'note') {
                         $display_value = make_ids_links($value);
-                    elseif ($field == 'whenedited')
+                    } elseif ($field == 'whenedited') {
                         $display_value = strftime('%Y-%m-%d %H:%M:%S', $value);
-                    elseif ($field == 'deleted') 
+                    } elseif ($field == 'deleted') {
                         $display_value = $value ? 'deleted' : 'yes';
-                    else
+                    } else {
                         $display_value = $value;
+                    }
                     if ($field != "order_id" && $field != "whenedited" &&
                         $field != "editor" && $field != "note" &&
-                        $previous_row && $previous_row[$field] != $value) 
+                        $previous_row && $previous_row[$field] != $value) {
                         $display_value = "<strong>$display_value</strong>";
+                    }
 
                     # Try and spot stupidity
                     if (preg_match('#parl(i|a)ment#', $display_value)) {
@@ -418,25 +496,28 @@ class ADMIN_PAGE_REPS {
             $reps = dadem_get_representatives($va_id);
             dadem_check_error($reps);
             $reps = array_values($reps);
-            $html = $this->render_area($self_link, $va_id, $area_info, $pc); 
+            $html = $this->render_area($self_link, $va_id, $area_info, $pc);
             $html .= $this->render_reps($self_link, $reps);
             $form->addElement('static', 'bytype', null, $html);
             $form->addElement('hidden', 'page', $this->id);
             $form->addElement('hidden', 'token', $this->get_token());
             $form->addElement('hidden', 'va_id', $va_id);
-            $select = $form->addElement('select', 'new_status', null, 
-                    array(
-                        'none' => 'No special status', 
-                        'pending_election' => 'Pending election, rep data not valid', 
-                        'recent_election' => 'Recent election, our rep data not yet updated',
-                        'boundary_changes' => 'Recent election, had boundary changes',
-                    ),
-                    array()
+            $select = $form->addElement(
+                'select',
+                'new_status',
+                null,
+                array(
+                    'none' => 'No special status',
+                    'pending_election' => 'Pending election, rep data not valid',
+                    'recent_election' => 'Recent election, our rep data not yet updated',
+                    'boundary_changes' => 'Recent election, had boundary changes',
+                ),
+                array()
             );
             $status = dadem_get_area_status($va_id);
             dadem_check_error($status);
             $select->setSelected($status);
- 
+
             $form->addElement('submit', 'vaupdate', 'Update');
             admin_render_form($form);
         } elseif ($search) {
@@ -464,7 +545,7 @@ class ADMIN_PAGE_REPS {
             admin_render_form($form);
         } elseif ($pc) {
             $form = new HTML_QuickForm('adminRepsSearchResults', 'get', $self_link);
-            
+
             // Postcode search
             $voting_areas = mapit_call('postcode', $pc);
             mapit_check_error($voting_areas);
@@ -474,8 +555,9 @@ class ADMIN_PAGE_REPS {
             global $va_display_order, $va_inside;
             $our_order = array();
             foreach ($va_display_order as $row) {
-                if (!is_array($row))
+                if (!is_array($row)) {
                     $row = array($row);
+                }
                 if (!in_array($va_inside[$row[0]], $our_order)) {
                     $our_order[] = $va_inside[$row[0]];
                 }
@@ -485,9 +567,10 @@ class ADMIN_PAGE_REPS {
             }
             // Render everything in the order
             foreach ($our_order as $va_type) {
-                foreach ($areas_info as $area=>$area_info) {
-                    if ($va_type <> $area_info['type']) 
+                foreach ($areas_info as $area => $area_info) {
+                    if ($va_type <> $area_info['type']) {
                         continue;
+                    }
                     $va_id = $area;
 
                     // One voting area
@@ -507,7 +590,7 @@ class ADMIN_PAGE_REPS {
             $badcontacts = dadem_get_bad_contacts();
             dadem_check_error($badcontacts);
             $form->addElement('header', '', 'Bad Contacts ' . count($badcontacts));
-            $html = $this->render_reps($self_link, $badcontacts, true);
+            $html = $this->renderReps($self_link, $badcontacts, true);
             $form->addElement('static', 'badcontacts', null, $html);
             admin_render_form($form);
         } elseif ($user_corrections) {
@@ -516,7 +599,7 @@ class ADMIN_PAGE_REPS {
             $corrections = dadem_get_user_corrections();
             dadem_check_error($corrections);
             $form->addElement('header', '', 'User Submitted Corrections ' . count($corrections));
-            $form->addElement('hidden', 'token', $this->get_token());
+            $form->addElement('hidden', 'token', $this->getToken());
             admin_render_form($form);
             // Get all the data for areas and their parents in as few call as possible
             $vaids = array();
@@ -526,11 +609,11 @@ class ADMIN_PAGE_REPS {
             $info1 = mapit_call('areas', $vaids);
             mapit_check_error($info1);
             $vaids = array();
-            foreach ($info1 as $key=>$value) {
+            foreach ($info1 as $value) {
                 array_push($vaids, $value['parent_area']);
             }
             $info2 = mapit_call('areas', $vaids);
-            
+
             foreach ($corrections as $correction) {
                 $form = new HTML_QuickForm('adminRepsCorrections', 'post', $self_link);
                 $html = "";
@@ -538,8 +621,9 @@ class ADMIN_PAGE_REPS {
 
                 $html .= "<p>";
                 $html .= strftime('%Y-%m-%d %H:%M:%S', $correction['whenentered']) . " ";
-                if ($correction['user_email'])
+                if ($correction['user_email']) {
                     $html .= " by " . htmlspecialchars($correction['user_email']);
+                }
                 $html .= "<br>";
                 if ($correction['voting_area_id']) {
                     $wardinfo = $info1[$correction['voting_area_id']];
@@ -547,7 +631,7 @@ class ADMIN_PAGE_REPS {
                     $vainfo = $info2[$vaid];
                     // TODO: Make this councilinfo, and give a valid r= return URL
                     $html .= '<a href="'.OPTION_ADMIN_SERVICES_CGI.'match.cgi?page=councilinfo;area_id='
-                        . $vaid . '&r=' . '">' . 
+                        . $vaid . '&r=' . '">' .
                         htmlspecialchars($vainfo['name']) . "</a>, ";
                     $html .= htmlspecialchars($wardinfo['name']);
                     $html .= "<br>";
@@ -558,24 +642,29 @@ class ADMIN_PAGE_REPS {
                     $repinfo = dadem_get_representative_info($rep);
                     dadem_check_error($repinfo);
 
-                    $html .= "<a href=\"$self_link&pc=" .  urlencode(get_http_var('pc')). "&rep_id=" . $rep .  "\">" . htmlspecialchars($repinfo['name']) . " (". htmlspecialchars($repinfo['party']) . ")</a> \n";
+                    $html .= "<a href=\"$self_link&pc=" . urlencode(get_http_var('pc')). "&rep_id=" . $rep . "\">"
+                        . htmlspecialchars($repinfo['name']) . " (". htmlspecialchars($repinfo['party']) . ")</a> \n";
                     if ($correction['alteration'] != "delete") {
                         $html .= " to ";
                     }
                 }
                 if ($correction['alteration'] != "delete") {
-                    $html .= htmlspecialchars($correction['name']) .  " (" . htmlspecialchars($correction['party']) . ")";
+                    $html .= htmlspecialchars($correction['name']) .  " ("
+                        . htmlspecialchars($correction['party']) . ")";
                 }
-                if ($correction['user_notes'])
+                if ($correction['user_notes']) {
                     $html .= "<br>Notes: " . htmlspecialchars($correction['user_notes']);
+                }
 
                 $usercorr = array();
                 $usercorr[] =& HTML_QuickForm::createElement('static', 'usercorrections', null, $html);
                 // You can't do this with element type "hidden" as it only allows one value in a
                 // page for variable named ucid.  So once again I go to raw HTML.  Remind me not
                 // to use HTML_QuickForm again...
-                $usercorr[] =& HTML_QuickForm::createElement('html', 
-                    '<input name="ucid" type="hidden" value="'. $correction['user_correction_id'] . '" />');
+                $usercorr[] =& HTML_QuickForm::createElement(
+                    'html',
+                    '<input name="ucid" type="hidden" value="'. $correction['user_correction_id'] . '" />'
+                );
                 $usercorr[] =& HTML_QuickForm::createElement('submit', 'ucclose', 'hide (done)');
                 $form->addGroup($usercorr, 'stuff', null, '&nbsp', false);
                 admin_render_form($form);
@@ -587,8 +676,5 @@ class ADMIN_PAGE_REPS {
                 print '<br><a href="?page=reps&user_corrections=1">User corrections</a> (just for your interest, as sent automatically to GovEval)';
             }
         }
-   }
+    }
 }
-
-
-?>
