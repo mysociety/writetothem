@@ -176,17 +176,17 @@ class ADMIN_PAGE_REPS
             print "<p><i>Token not found</i></p>";
         } else {
             $newdata = array(
-                'name' => get_http_var('name'),
-                'party' => get_http_var('party'),
                 'method' => get_http_var('method'),
-                'email' => get_http_var('email'),
             );
-            if (!$this->params['rep_id']) {
-                // Making a new representative, put in type and id
-                $newdata['area_id'] = $this->params['new_in_va_id'];
-                $vainfo = mapit_call('area', $this->params['new_in_va_id']);
-                mapit_check_error($vainfo);
-                $newdata['area_type'] = $vainfo['type'];
+            if ($this->vainfo['editable_here']) {
+                $newdata['name'] = get_http_var('name');
+                $newdata['party'] = get_http_var('party');
+                $newdata['email'] = get_http_var('email');
+                if (!$this->params['rep_id']) {
+                    // Making a new representative, put in type and id
+                    $newdata['area_id'] = $this->params['new_in_va_id'];
+                    $newdata['area_type'] = $this->vainfo['type'];
+                }
             }
             $result = dadem_admin_edit_representative(
                 $this->params['rep_id'],
@@ -226,9 +226,6 @@ class ADMIN_PAGE_REPS
     {
         $this->getInputData();
 
-        if (get_http_var('done')) {
-            $this->updateRep();
-        }
         if (get_http_var('delete')) {
             $this->deleteRep();
         }
@@ -245,6 +242,15 @@ class ADMIN_PAGE_REPS
             dadem_check_error($result);
             print "<p><i>Successfully updated voting area status " . htmlspecialchars(get_http_var('va_id'))
                 . " to " . htmlspecialchars(get_http_var('new_status')) . "</i></p>";
+        }
+
+        // Need to work this out now as updateRep uses it
+        if ($this->params['rep_id'] or $this->params['new_in_va_id']) {
+            $this->getRepInfo();
+        }
+
+        if (get_http_var('done')) {
+            $this->updateRep();
         }
 
         // Postcode and search box
@@ -278,6 +284,19 @@ class ADMIN_PAGE_REPS
                     (just for your interest, as sent automatically to GovEval)';
             }
         }
+    }
+
+    private function getRepInfo()
+    {
+        if ($this->params['rep_id']) {
+            $this->repinfo = dadem_get_representative_info($this->params['rep_id']);
+            dadem_check_error($this->repinfo);
+            $va_id = $this->repinfo['voting_area'];
+        } else {
+            $this->repinfo = null;
+            $va_id = $this->params['new_in_va_id'];
+        }
+        $this->vainfo = $this->getAreaInfo($va_id);
     }
 
     private function getReps($va_id)
@@ -403,7 +422,7 @@ class ADMIN_PAGE_REPS
             )
         );
         $form->addElement('text', 'email', "Email:", array('size' => 60, $readonly => 1));
-        $form->addElement('textarea', 'note', "Notes for log:", array('rows' => 3, 'cols' => 60, $readonly => 1));
+        $form->addElement('textarea', 'note', "Notes for log:", array('rows' => 3, 'cols' => 60));
         if (get_http_var('nextbad')) {
             $form->addElement('hidden', 'nextbad', get_http_var('nextbad'));
         }
@@ -519,11 +538,7 @@ class ADMIN_PAGE_REPS
         $form->addElement('hidden', 'page', $this->id);
         $form->addElement('hidden', 'token', $this->getToken());
 
-        $this->repinfo = null;
-        if ($this->params['rep_id']) {
-            $this->repinfo = dadem_get_representative_info($this->params['rep_id']);
-            dadem_check_error($this->repinfo);
-            $va_id = $this->repinfo['voting_area'];
+        if ($this->repinfo) {
             $form->addElement('hidden', 'rep_id', $this->repinfo['id']);
             $form->setDefaults(
                 array('name' => $this->repinfo['name'],
@@ -533,11 +548,8 @@ class ADMIN_PAGE_REPS
                 )
             );
         } else {
-            $va_id = $this->params['new_in_va_id'];
             $form->addElement('hidden', 'new_in_va_id', $this->params['new_in_va_id']);
         }
-
-        $this->vainfo = $this->displayRepAreaInfo($va_id);
 
         $this->displayRepPostcodeLink($form);
         $this->displayRepHeader($form);
