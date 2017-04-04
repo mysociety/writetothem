@@ -180,7 +180,6 @@ class ADMIN_PAGE_REPS
                 'party' => get_http_var('party'),
                 'method' => get_http_var('method'),
                 'email' => get_http_var('email'),
-                'fax' => get_http_var('fax'),
             );
             if (!$this->params['rep_id']) {
                 // Making a new representative, put in type and id
@@ -391,19 +390,12 @@ class ADMIN_PAGE_REPS
         $form->addElement('static', 'office', 'Office:', $office);
         $form->addElement('text', 'name', "Full name:", array('size' => 60, $readonly => 1));
         $form->addElement('text', 'party', "Party:", array('size' => 60, $readonly => 1));
-        $form->addElement(
-            'static',
-            'note2',
-            null,
-            "Make sure you update contact method when you change email or fax numbers."
-        );
+        $form->addElement('static', 'note2', null, "Make sure you update contact method when you change email.");
         $form->addElement(
             'select',
             'method',
             "Contact method:",
             array(
-                    #'either' => 'Fax or Email',
-                    'fax' => 'Fax only',
                     'email' => 'Email only',
                     'shame' => "Shame! Doesn't want contacting",
                     'via' => 'Contact via electoral body (e.g. Democratic Services)',
@@ -411,7 +403,6 @@ class ADMIN_PAGE_REPS
             )
         );
         $form->addElement('text', 'email', "Email:", array('size' => 60, $readonly => 1));
-        $form->addElement('text', 'fax', "Fax:", array('size' => 60, $readonly => 1));
         $form->addElement('textarea', 'note', "Notes for log:", array('rows' => 3, 'cols' => 60, $readonly => 1));
         if (get_http_var('nextbad')) {
             $form->addElement('hidden', 'nextbad', get_http_var('nextbad'));
@@ -457,9 +448,7 @@ class ADMIN_PAGE_REPS
             . "\">WriteToThem messages</a> | ";
         foreach (array(
             "tel ". $this->repinfo['name'],
-            "fax ". $this->repinfo['name'],
             "tel ". $this->repinfo['name'] . " " . $this->vainfo['rep_type'],
-            "fax ". $this->repinfo['name'] . " " . $this->vainfo['rep_type']
             ) as $searchq) {
             $search_links .= "<a href=\"http://search.yahoo.com/search?p=" . htmlspecialchars($searchq)
                 . "\"> " . htmlspecialchars($searchq)."</a> | ";
@@ -541,7 +530,7 @@ class ADMIN_PAGE_REPS
                 'party' => $this->repinfo['party'],
                 'method' => $this->repinfo['method'],
                 'email' => $this->repinfo['email'],
-                'fax' => $this->repinfo['fax'])
+                )
             );
         } else {
             $va_id = $this->params['new_in_va_id'];
