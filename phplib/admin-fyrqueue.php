@@ -906,7 +906,9 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             }
 
             // Decide what message view to show
-            $params = array();
+            $params = array(
+                'page' => $page,
+            );
             $reverse = false;
             if (stristr($view, "_rev")) {
                 $view = str_replace("_rev", "", $view);

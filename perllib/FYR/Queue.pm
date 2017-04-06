@@ -2348,9 +2348,9 @@ sub admin_get_queue ($$) {
         if (!exists($allowed{$filter}));
 
     my $where = "order by created desc";
-    my $limit_sql = "";
-    if (ref $params eq 'HASH' && $params->{page}) {
-        my $page = $params->{page} =~ /^\d+\z/ ? $params->{page} : 1;
+    my $limit_sql = "offset 0 limit 100";
+    if (ref $params eq 'HASH') {
+        my $page = ($params->{page} || "") =~ /^\d+\z/ ? $params->{page} : 1;
         my $limit = ($params->{limit} || "") =~ /^\d+\z/ ? $params->{limit} : 100;
         my $offset = ($page - 1) * $limit;
         $limit_sql = "offset $offset limit $limit";
