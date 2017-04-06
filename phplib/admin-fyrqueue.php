@@ -2,10 +2,10 @@
 /*
  * admin-fyrqueue.php:
  * FYR queue admin page.
- * 
+ *
  * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
  * WWW: https://www.mysociety.org
- * 
+ *
  */
 
 require_once "queue.php";
@@ -24,37 +24,45 @@ $state_help_notes_map = array(
     'failed_closed' => 'Delivery failed, admin has dealt with it / timed out',
 );
 
-function make_mailto_link($email, $subject, $body, $link) {
+function make_mailto_link($email, $subject, $body, $link)
+{
     print '<a href="mailto:' . rawurlencode($email) .
         "?subject=" . rawurlencode($subject) .
         "&amp;body=" . rawurlencode($body) .
     "\">$link</a> ";
 }
 
-function get_token() {
+function get_token()
+{
     $secret = msg_secret();
     $token = sha1((http_auth_user() . $secret));
     return $token;
 }
 
-class ADMIN_PAGE_FYR_QUEUE {
-    function ADMIN_PAGE_FYR_QUEUE () {
+class ADMIN_PAGE_FYR_QUEUE
+{
+    public function ADMIN_PAGE_FYR_QUEUE()
+    {
         $this->id = "fyrqueue";
         $this->navname = "Message Queue";
     }
 
-    function state_help_notes($state) {
+    private function stateHelpNotes($state)
+    {
         global $state_help_notes_map;
         return $state_help_notes_map[$state];
     }
 
-    function render_bar($view, $reverse, $id) {
-        if ($id) $view = "none";
+    private function renderBar($view, $reverse, $id)
+    {
+        if ($id) {
+            $view = "none";
+        }
 
         // Quick referrers
         print "<p>";
         $freq_referrers_day = msg_admin_get_popular_referrers(60 * 60 * 24);
-        # for testing  
+        # for testing
         /*$freq_referrers_day = array(
         array("http://www.mouse.com/youandyourmp.php3", 7),
         array("http://www.google.co.uk/search?hl=en&q=fax+your+mp&meta=", 4),
@@ -81,51 +89,51 @@ class ADMIN_PAGE_FYR_QUEUE {
 
         // Bar to change view
         $qmenu = "";
-        if ($view == 'needattention')
+        if ($view == 'needattention') {
             $qmenu .= "[Need Attention] ";
-        else
+        } else {
             $qmenu .= "<a href=\"$this->self_link&amp;view=needattention\">[Need Attention]</a> ";
+        }
 
-        if ($view != 'failing')
+        if ($view != 'failing') {
             $qmenu .= "<a href=\"$this->self_link&amp;view=failing\">[Failing]</a> ";
-        else
+        } else {
             $qmenu .= "[Failing] ";
+        }
 
-        if ($view != 'recentcreated')
+        if ($view != 'recentcreated') {
             $qmenu .= "<a href=\"$this->self_link&amp;view=recentcreated\">[Recent Created]</a> ";
-        else
+        } else {
             $qmenu .= "[Recent Created] ";
-            
-        if ($view != 'recentchanged')
+        }
+
+        if ($view != 'recentchanged') {
             $qmenu .= "<a href=\"$this->self_link&amp;view=recentchanged\">[Recent Changed]</a> ";
-        else
+        } else {
             $qmenu .= "[Recent Changed] ";
+        }
 
         $qmenu .= "[Contains ";
 
-        if ($view != 'statistics')
+        if ($view != 'statistics') {
             $qmenu2 = "<a href=\"$this->self_link&amp;view=statistics\">[Statistics]</a> ";
-        else
+        } else {
             $qmenu2 = "[Statistics] ";
+        }
 
         $form = new HTML_QuickForm('searchForm', 'post', $this->self_link);
+        $searchgroup = array();
         $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
         $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>12));
         $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
         $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
         $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu2</b>");
-        $form->addGroup($searchgroup, "actiongroup", "",' ', false);
+        $form->addGroup($searchgroup, "actiongroup", "", ' ', false);
         admin_render_form($form);
-
     }
 
-
-
-    /* print_messages MESSAGES [ID]
-     * Print a table giving information about the MESSAGES (array of
-     * associative arrays of message data). If ID is given, it is the ID of the
-     * message being compared against in a "similar messages" search. */
-    function print_messages($messages, $msgid = null) {
+    private function printMessagesHeader()
+    {
 ?>
 
 <table border="1" width="100%">
@@ -142,160 +150,175 @@ class ADMIN_PAGE_FYR_QUEUE {
         <th>Tick</th>
     </tr>
     <form action="<?=htmlspecialchars(url_new("", false, 'view', get_http_var('view'), 'simto', get_http_var('simto'), 'page', get_http_var('page'))) ?>" method="post">
-<?
-            $c = 1;
-            foreach ($messages as $message) {
-                print '<tr' . ($c==1 ? ' class="v"' : '') . '>';
-                print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
-                print '<td><a href="'
-                        . $this->self_link . "&id=".urlencode($message['id'])
-                        . '">'
-                        .  $message['id'] . '</a>' 
-                        . "<br>${message['group_id']}"
-                        . '</td>';
-                print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
-                print "<td>";
-                print add_tooltip($message['state'], $this->state_help_notes($message['state']));
-                /* Only show frozen flag if the message is in a state this can
-                 * affect. */
-                if ($message['frozen']) 
-                {
-                    if ($message['state'] == 'new' or $message['state'] == 'pending' or $message['state'] == 'ready')
-                        print "<br><b>frozen</b>";
-                    else
-                        print "<br>frozen";
+<?php
+    }
+
+    /* printMessages MESSAGES [ID]
+     * Print a table giving information about the MESSAGES (array of
+     * associative arrays of message data). If ID is given, it is the ID of the
+     * message being compared against in a "similar messages" search. */
+    private function printMessages($messages, $msgid = null)
+    {
+        $this->printMessagesHeader();
+        $c = 1;
+        foreach ($messages as $message) {
+            print '<tr' . ($c==1 ? ' class="v"' : '') . '>';
+            print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['created']) . "</td>";
+            print '<td><a href="'
+                    . $this->self_link . "&id=".urlencode($message['id'])
+                    . '">'
+                    .  $message['id'] . '</a>'
+                    . "<br>${message['group_id']}"
+                    . '</td>';
+            print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $message['laststatechange']) . "</td>";
+            print "<td>";
+            print add_tooltip($message['state'], $this->stateHelpNotes($message['state']));
+            /* Only show frozen flag if the message is in a state this can
+             * affect. */
+            if ($message['frozen']) {
+                if ($message['state'] == 'new' or $message['state'] == 'pending' or $message['state'] == 'ready') {
+                    print "<br><b>frozen</b>";
+                } else {
+                    print "<br>frozen";
                 }
+            }
 
-                if ($message['numactions'] > 0) {
-                    if ($message['state'] == 'pending')  {
-                        print "<br>" .  ($message['numactions'] - 1) . " ".
-                        make_plural(($message['numactions'] - 1), 'reminder');
-                    } elseif ($message['state'] == 'sent' || $message['state'] == 'failed_closed')  {
-                        print "<br>". $message['numactions'] . " " .
-                        make_plural($message['numactions'], 'day');
-                    } elseif ($message['state'] == 'ready')  {
-                        print "<br>". $message['numactions'] . " " .
-                        make_plural($message['numactions'], 'failure');
-                    } else {
-                        print "<br>". $message['numactions'] . " " .
-                        make_plural($message['numactions'], 'attempt');
-                    }
+            if ($message['numactions'] > 0) {
+                if ($message['state'] == 'pending') {
+                    print "<br>" .  ($message['numactions'] - 1) . " ".
+                    make_plural(($message['numactions'] - 1), 'reminder');
+                } elseif ($message['state'] == 'sent' || $message['state'] == 'failed_closed') {
+                    print "<br>". $message['numactions'] . " " .
+                    make_plural($message['numactions'], 'day');
+                } elseif ($message['state'] == 'ready') {
+                    print "<br>". $message['numactions'] . " " .
+                    make_plural($message['numactions'], 'failure');
+                } else {
+                    print "<br>". $message['numactions'] . " " .
+                    make_plural($message['numactions'], 'attempt');
                 }
+            }
 
-                if ($message['lastaction'] > 0 && $message['state'] != 'failed_closed')
-                    print "<br>" .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
+            if ($message['lastaction'] > 0 && $message['state'] != 'failed_closed') {
+                print "<br>" .  strftime('%Y-%m-%d %H:%M:%S', $message['lastaction']);
+            }
 
-                print "</td>";
-                print "<td>"
-                        . htmlspecialchars($message['sender_name']) . "<br>"
-                        . str_replace($message['sender_postcode'], 
-                        '<a href="'.OPTION_BASE_URL.'/who?pc='.urlencode($message['sender_postcode']).'">'.$message['sender_postcode'].'</a>',
-                            htmlspecialchars($message['sender_addr'])
-                                ) . "<br>"
-                        . htmlspecialchars($message['sender_email'])
-                        . "</td>";
+            print "</td>";
+            print "<td>"
+                    . htmlspecialchars($message['sender_name']) . "<br>"
+                    . str_replace(
+                        $message['sender_postcode'],
+                        '<a href="'.OPTION_BASE_URL.'/who?pc=' . urlencode($message['sender_postcode']) . '">'
+                            . $message['sender_postcode'].'</a>',
+                        htmlspecialchars($message['sender_addr'])
+                    ) . "<br>"
+                    . htmlspecialchars($message['sender_email'])
+                    . "</td>";
 
-                $display_name = $message['recipient_name'];
-                if (!isset($display_name) || $display_name == "") {
-                    $display_name = "scrubbed, id " .
-                    $message['recipient_id'] . ", " .
-                    $message['recipient_type'];
+            $display_name = $message['recipient_name'];
+            if (!isset($display_name) || $display_name == "") {
+                $display_name = "scrubbed, id " .
+                $message['recipient_id'] . ", " .
+                $message['recipient_type'];
+            }
+            print '<td><a href="'
+                    . htmlspecialchars(url_new('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name) . "</a>"
+                    . " (<a href=\"" . htmlspecialchars(url_new('', false, 'page', 'fyrqueue', 'rep_id', $message['recipient_id']))                   . '">msgs</a>)'
+                    ."<br>";
+            if ($message['recipient_via']) {
+                $repinfo = dadem_get_representative_info($message['recipient_id']);
+                if (!dadem_get_error($repinfo)) {
+                    $vainfo = mapit_call('area', $repinfo['voting_area']);
+                    $parentinfo = mapit_call('area', $vainfo['parent_area']);
+                    mapit_check_error($parentinfo);
+                    print '<a href="' .
+                       htmlspecialchars(url_new('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area'], 'pc', $message['sender_postcode']))  . '">' .
+                        htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
+                } else {
+                    print 'recipient_via contact, but rep id not found ';
                 }
-                print '<td><a href="'
-                        . htmlspecialchars(url_new('', false, 'page', 'reps', 'rep_id', $message['recipient_id'], 'pc', $message['sender_postcode']))                   . '">' . htmlspecialchars($display_name) . "</a>"
-                        . " (<a href=\"" . htmlspecialchars(url_new('', false, 'page', 'fyrqueue', 'rep_id', $message['recipient_id']))                   . '">msgs</a>)' 
-                        ."<br>";
-                if ($message['recipient_via']) {
-                    $repinfo = dadem_get_representative_info($message['recipient_id']);
-                    if (!dadem_get_error($repinfo)) {
-                        $vainfo = mapit_call('area', $repinfo['voting_area']);
-                        $parentinfo = mapit_call('area', $vainfo['parent_area']);
-                        mapit_check_error($parentinfo);
-                        print '<a href="' .
-                           htmlspecialchars(url_new('', false, 'page', 'reps', 'ds_va_id', $vainfo['parent_area'], 'pc', $message['sender_postcode']))  . '">' . 
-                            htmlspecialchars("via " . $parentinfo['name']) . "</a>:<br>";
-                    } else {
-                        print 'recipient_via contact, but rep id not found ';
-                    }
-                }
-                if ($message['recipient_email'])
-                    print htmlspecialchars($message['recipient_email']) . "<br>";
-                if ($message['recipient_fax'])
-                    print htmlspecialchars($message['recipient_fax']) . "<br>";
-                print "</td>";
+            }
+            if ($message['recipient_email']) {
+                print htmlspecialchars($message['recipient_email']) . "<br>";
+            }
+            if ($message['recipient_fax']) {
+                print htmlspecialchars($message['recipient_fax']) . "<br>";
+            }
+            print "</td>";
 
-                print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a>".
-                    "<br>" . trim_url($message['sender_referrer']) . 
-                    "<br>" . $message['cobrand'] . " " . $message['cocode'] .
-                    "</td>";
-                print "<td>${message['message_length']}</td>";
+            print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a>".
+                "<br>" . trim_url($message['sender_referrer']) .
+                "<br>" . $message['cobrand'] . " " . $message['cocode'] .
+                "</td>";
+            print "<td>${message['message_length']}</td>";
 
-                $outof0 = ($message['questionnaire_0_no'] + $message['questionnaire_0_yes']);
-                $outof1 = ($message['questionnaire_1_no'] + $message['questionnaire_1_yes']);
-                print '<td>';
-                if ($outof0) {
-                    print 'responded:';
-                    print $message['questionnaire_0_yes'] .'/'. $outof0;
-                }
-                if ($outof0 && $outof1)
-                    print '<br>';
-                if ($outof1) {
-                    print ' firsttime:';
-                    print $message['questionnaire_1_yes'] .'/'. $outof1;
-                }
-                if ($message['no_questionnaire']) {
-                        print "<br>no quest";
-                }
-                if (!$outof0 && !$outof1) {
-                    print '&nbsp;';
-                }
-                print '</td>';
+            $outof0 = ($message['questionnaire_0_no'] + $message['questionnaire_0_yes']);
+            $outof1 = ($message['questionnaire_1_no'] + $message['questionnaire_1_yes']);
+            print '<td>';
+            if ($outof0) {
+                print 'responded:';
+                print $message['questionnaire_0_yes'] .'/'. $outof0;
+            }
+            if ($outof0 && $outof1) {
+                print '<br>';
+            }
+            if ($outof1) {
+                print ' firsttime:';
+                print $message['questionnaire_1_yes'] .'/'. $outof1;
+            }
+            if ($message['no_questionnaire']) {
+                print "<br>no quest";
+            }
+            if (!$outof0 && !$outof1) {
+                print '&nbsp;';
+            }
+            print '</td>';
 
-                /* Javascript code changes shading of table row for checked
-                 * messages to make them look "selected". */
-                print '<td><input type="checkbox" name="check_'
-                        . $message['id']
-                        . '" onclick="this.parentNode.parentNode.className = this.checked ? \'h\' : \''
-                            . ($c == 1 ? 'v' : '')
-                            . '\'" >';
-                print '</td>';
+            /* Javascript code changes shading of table row for checked
+             * messages to make them look "selected". */
+            print '<td><input type="checkbox" name="check_'
+                    . $message['id']
+                    . '" onclick="this.parentNode.parentNode.className = this.checked ? \'h\' : \''
+                        . ($c == 1 ? 'v' : '')
+                        . '\'" >';
+            print '</td>';
 
-                print "</tr>";
-                # this.checked this .className=
+            print "</tr>";
+            # this.checked this .className=
 
-                if (array_key_exists('diff', $message)) {
-                    /* Each element of the array consists either of an array of
-                     * two strings, which are the strings unique to the "from"
-                     * and "to" strings; or a string, representing a common
-                     * part; or null, indicating an elided part. */
-                    print '<tr'.($c==1?' class="v"':'').'><td colspan = "9">';
-                    print "<b>Differences: </b> ";
-                    if (isset($msgid) and $message['id'] == $msgid) {
-                        print 'This is the message being compared against. <span class="difffrom">Text that appears only in this message, </span><span class="diffto">or only in the other message.</span>';
-                    } else {
-                        foreach ($message['diff'] as $elem) {
-                            if (!isset($elem)) {
-                                print '<span class="diffsnipped">[ ... snipped ... ]</span>';
-                            } else if (is_array($elem)) {
-                                print '<span class="difffrom">'
-                                        . htmlspecialchars($elem[0])
-                                        . '</span><span class="diffto">'
-                                        . htmlspecialchars($elem[1])
-                                        . '</span>';
-                            } else {
-                                print htmlspecialchars($elem);
-                            }
+            if (array_key_exists('diff', $message)) {
+                /* Each element of the array consists either of an array of
+                 * two strings, which are the strings unique to the "from"
+                 * and "to" strings; or a string, representing a common
+                 * part; or null, indicating an elided part. */
+                print '<tr'.($c==1?' class="v"':'').'><td colspan = "9">';
+                print "<b>Differences: </b> ";
+                if (isset($msgid) and $message['id'] == $msgid) {
+                    print 'This is the message being compared against. <span class="difffrom">Text that appears only in this message, </span><span class="diffto">or only in the other message.</span>';
+                } else {
+                    foreach ($message['diff'] as $elem) {
+                        if (!isset($elem)) {
+                            print '<span class="diffsnipped">[ ... snipped ... ]</span>';
+                        } elseif (is_array($elem)) {
+                            print '<span class="difffrom">'
+                                    . htmlspecialchars($elem[0])
+                                    . '</span><span class="diffto">'
+                                    . htmlspecialchars($elem[1])
+                                    . '</span>';
+                        } else {
+                            print htmlspecialchars($elem);
                         }
                     }
-                    print "</td></tr>";
                 }
-
-                $c = 1 - $c;
+                print "</td></tr>";
             }
-            if (count($messages) > 1) {
+
+            $c = 1 - $c;
+        }
+        if (count($messages) > 1) {
 ?><tr><td colspan=9><b>Ticked items:</b>
-        <input name="token" value="<? print get_token(); ?>" type="hidden" />
-        <input size="20" name="notebody" type="text" /> 
+        <input name="token" value="<?=get_token() ?>" type="hidden" />
+        <input size="20" name="notebody" type="text" />
         <input name="note" value="Note" type="submit" />
         &nbsp; <b>Action:</b>
         <input name="freeze" value="Freeze" type="submit" />
@@ -303,45 +326,46 @@ class ADMIN_PAGE_FYR_QUEUE {
         <input name="error" value="Error with email" type="submit" />
         <input name="failed" value="Fail silently" type="submit" />
 </td><tr>
-<?
-    }
+<?php
+        }
 ?>
 </form>
 </table>
-<?
+<?php
     }
 
-    /* print_message MESSAGE
-     * Print a single message, as for print_messages above. */
-    function print_message($message) {
-        $this->print_messages(array($message));
+    /* printMessage MESSAGE
+     * Print a single message, as for printMessages above. */
+    private function printMessage($message)
+    {
+        $this->printMessages(array($message));
     }
 
 
-    /* print_events EVENTS
+    /* printEvents EVENTS
      * Print a list of logged EVENTS in a table. */
-    function print_events($recents) {
-?>
-<p>
-<table border=1
-width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th></tr>
-<?
-            foreach ($recents as $recent) {
-                print "<tr>";
-                print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
-                print "<td>" . $recent['hostname'] . "</td>";
-                print "<td>" . substr($recent['message_id'],0,10) .  "<br/>" . substr($recent['message_id'],10) . "</td>";
-                print "<td>" . add_tooltip($recent['state'], $this->state_help_notes($recent['state'])) . "</td>";
-                print "<td>" . make_ids_links($recent['message']) . "</td>";
-                print "</tr>";
-            }
+    private function printEvents($recents)
+    {
+        print "<p>
+<table border=1 width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th></tr>";
+        foreach ($recents as $recent) {
+            print "<tr>";
+            print "<td>" . strftime('%Y-%m-%d %H:%M:%S', $recent['whenlogged']) . "</td>";
+            print "<td>" . $recent['hostname'] . "</td>";
+            print "<td>" . substr($recent['message_id'], 0, 10) .  "<br/>"
+                . substr($recent['message_id'], 10) . "</td>";
+            print "<td>" . add_tooltip($recent['state'], $this->stateHelpNotes($recent['state'])) . "</td>";
+            print "<td>" . make_ids_links($recent['message']) . "</td>";
+            print "</tr>";
+        }
 ?>
 </table>
 </p>
-<?
+<?php
     }
 
-    function do_actions($id) {
+    private function doActions($id)
+    {
         // Freeze or thaw messages
         $redirect = false;
         if (get_http_var('token') != get_token()) {
@@ -352,77 +376,85 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
             msg_check_error($result);
             print "<p><b><i>Message $id frozen</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('thaw')) {
+        } elseif (get_http_var('thaw')) {
             $result = msg_admin_thaw_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id thawed</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('no_questionnaire')) {
+        } elseif (get_http_var('no_questionnaire')) {
             $result = msg_admin_no_questionnaire_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id now won't send questionnaire, and has had existing responses deleted</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('yes_questionnaire')) {
+        } elseif (get_http_var('yes_questionnaire')) {
             $result = msg_admin_yes_questionnaire_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id now will send questionnaire</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('error')) {
+        } elseif (get_http_var('error')) {
             $result = msg_admin_set_message_to_error($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to error state</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('failed')) {
+        } elseif (get_http_var('failed')) {
             $result = msg_admin_set_message_to_failed($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to failed state</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('bounce_wait')) {
+        } elseif (get_http_var('bounce_wait')) {
             $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('ready')) {
+        } elseif (get_http_var('ready')) {
             $result = msg_admin_set_message_to_ready($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to ready state</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('note')) {
+        } elseif (get_http_var('note')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
             msg_check_error($result);
             print "<p><b><i>Note added to message $id</i></b></p>";
             $redirect = true;
-        } else if (get_http_var('body')) {
+        } elseif (get_http_var('body')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message in admin interface');
             msg_check_error($result);
             print "<p><b><i>Logged that you are viewing body of message $id</i></b></p>";
-        } else if (get_http_var('wire_emails')) {
-            $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message (via wire text of emails) in admin interface');
+        } elseif (get_http_var('wire_emails')) {
+            $result = msg_admin_add_note_to_message(
+                $id,
+                http_auth_user(),
+                'viewed body of message (via wire text of emails) in admin interface'
+            );
             msg_check_error($result);
             print "<p><b><i>Logged that you are viewing body of message (via wire text of emails) $id</i></b></p>";
         }
-    return $redirect;
+        return $redirect;
     }
 
-    function _display_state_table($stats, $prefix) {
-?>
-<table border=1>
-<?
+    private function displayStateTable($stats, $prefix)
+    {
+        print "<table border=1>\n";
         $t = array();
         $types = array();
         $state_totals = array();
         $type_totals = array();
         global $state_help_notes_map;
-        foreach ($stats as $k=>$v) {
+        foreach ($stats as $k => $v) {
             if (stristr($k, $prefix)) {
                 list($type, $state) = explode(" ", str_replace($prefix, "", $k));
                 $t[$state][$type] = $v;
-                if (!array_key_exists($state, $state_totals)) $state_totals[$state] = 0;
-                if (!array_key_exists($type, $type_totals)) $type_totals[$type] = 0;
+                if (!array_key_exists($state, $state_totals)) {
+                    $state_totals[$state] = 0;
+                }
+                if (!array_key_exists($type, $type_totals)) {
+                    $type_totals[$type] = 0;
+                }
                 $state_totals[$state] += $v;
                 $type_totals[$type] += $v;
-                if (!array_key_exists($state, $state_help_notes_map))
+                if (!array_key_exists($state, $state_help_notes_map)) {
                     die("missing entry from state_help_notes_map '$state'");
+                }
                 $types[$type] = 1;
             }
         }
@@ -432,7 +464,7 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
         print "<tr><td>&nbsp;</td>";
         foreach ($states as $state) {
             print "<td><b>";
-            print add_tooltip($state, $this->state_help_notes($state));
+            print add_tooltip($state, $this->stateHelpNotes($state));
             print "</b></td>";
         }
         print "<td><b>Total</b></td>";
@@ -441,8 +473,9 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
         foreach ($types as $type) {
             print "<tr>";
             print "<td><b>";
-            if (array_key_exists($type, $va_inside))
+            if (array_key_exists($type, $va_inside)) {
                 print $va_type_name[$va_inside[$type]];
+            }
             print " (".$type.")";
             print "</b></td>";
             foreach ($states as $state) {
@@ -462,24 +495,27 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
         print "<tr><td><b>Total:</b></td>";
         foreach ($states as $state) {
             print "<td style=\"text-align: right\"><b>";
-            if (array_key_exists($state, $state_totals))
+            if (array_key_exists($state, $state_totals)) {
                 print $state_totals[$state];
-            else
+            } else {
                 print "&nbsp;";
+            }
             print "</b></td>";
         }
         $type_grand_total = array_sum(array_values($type_totals));
         $state_grand_total = array_sum(array_values($state_totals));
-        if ($type_grand_total != $state_grand_total)
+        if ($type_grand_total != $state_grand_total) {
             die("type_grand_total != state_grand_total");
+        }
         print "<td><b>".$type_grand_total."</b></td>";
         print "</tr>";
 ?>
 </table>
-<?
+<?php
     }
 
-    function display($self_link) {
+    public function display($self_link)
+    {
         $this->self_link = $self_link;
 
         #print "<pre>"; print_r($_POST); print "</pre>";
@@ -491,60 +527,71 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
 
         // Display about id
         if ($id) {
-            if ($this->do_actions($id)) {
+            if ($this->doActions($id)) {
 #               header("Location: ".$_SERVER['REQUEST_URI'] . "\n");
 #               exit;
             }
 
             // Navigation bar
-            $this->render_bar($view, false, $id);
+            $this->renderBar($view, false, $id);
 
             // Display general information
             print "<h2>Message id " . make_ids_links($id) . ":</h2>";
 
             $message = msg_admin_get_message($id);
             msg_check_error($message);
-            $this->print_message($message);
+            $this->printMessage($message);
 
             // Commands
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
+            $actiongroup = array();
             if (!get_http_var('note')) {
                 $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Note');
             }
             $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Action:</b>");
             if ($message['frozen']) {
-                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
+                if ($message['state'] != 'error' and $message['state'] != 'failed'
+                    and $message['state'] != 'failed_closed') {
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error with email');
-                if ($message['state'] != 'failed' and $message['state'] != 'failed_closed')
+                }
+                if ($message['state'] != 'failed' and $message['state'] != 'failed_closed') {
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail silently');
-                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed')
+                }
+                if ($message['state'] != 'error' and $message['state'] != 'failed'
+                    and $message['state'] != 'failed_closed') {
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
-            }
-            else {
-                if ($message['state'] != 'error' and $message['state'] != 'failed' and $message['state'] != 'failed_closed') 
+                }
+            } else {
+                if ($message['state'] != 'error' and $message['state'] != 'failed'
+                    and $message['state'] != 'failed_closed') {
                     $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
+                }
             }
-            if ($message['no_questionnaire'])
+            if ($message['no_questionnaire']) {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'yes_questionnaire', 'Allow Questionnaire');
-            else
+            } else {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
-            if ($message['state'] == 'pending')
+            }
+            if ($message['state'] == 'pending') {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
-            elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed')
+            } elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed') {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Retry');
+            }
 
-            if (!get_http_var('body'))
+            if (!get_http_var('body')) {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
-            else
+            } else {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
-            if (!get_http_var('wire_emails'))
+            }
+            if (!get_http_var('wire_emails')) {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'wire_emails', 'View Emails');
-            else
+            } else {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_wire_emails', 'Hide Emails');
+            }
             $form->addElement('hidden', 'id', $id);
             $form->addElement('hidden', 'token', get_token());
-            $form->addGroup($actiongroup, "actiongroup", "",' ', false);
+            $form->addGroup($actiongroup, "actiongroup", "", ' ', false);
 
             admin_render_form($form);
             print 'Similar messages: ';
@@ -557,7 +604,8 @@ width=100%><tr><th>Time</th><th>Host</th><th>ID</th><th>State</th><th>Event</th>
 
             // Links to send messages to sender
             print " Email sender: <small>";
-            make_mailto_link($message['sender_email'], 
+            make_mailto_link(
+                $message['sender_email'],
                 "Your message to " . $message['recipient_name'] . " has not been sent",
                 "Hi " . $message['sender_name']. ",
 
@@ -568,8 +616,10 @@ There's a copy of your message below, so you can send it another way, if you lik
 
 -------------------------------------------------------------\n\n" .
                 $message['message'],
-                "write-to-own-reps-only");
-            make_mailto_link($message['sender_email'], 
+                "write-to-own-reps-only"
+            );
+            make_mailto_link(
+                $message['sender_email'],
                 "Your message to " . $message['recipient_name'],
                 "Hi " . $message['sender_name']. ",
 
@@ -577,7 +627,8 @@ There's a copy of your message below, so you can send it another way, if you lik
 
 -------------------------------------------------------------\n\n".
                 $message['message'],
-                "blank-mail-quoting-message");
+                "blank-mail-quoting-message"
+            );
             print "</small>";
 
             // Body text if enabled
@@ -590,7 +641,8 @@ There's a copy of your message below, so you can send it another way, if you lik
 
             // Body text if enabled
             if (get_http_var('wire_emails')) {
-                foreach (array('representative', 'confirm', 'confirm-reminder', 'failure', 'questionnaire', 'questionnaire-reminder') as $type) {
+                foreach (array('representative', 'confirm', 'confirm-reminder', 'failure', 'questionnaire',
+                         'questionnaire-reminder') as $type) {
                     print "<h2>Wire text of email - $type</h2>";
                     $wire = msg_admin_get_wire_email($message['id'], $type);
                     if (msg_get_error($wire)) {
@@ -618,7 +670,7 @@ There's a copy of your message below, so you can send it another way, if you lik
                     print " <b>" . $q['answer'] .  "</b><br>";
                 }
             }
- 
+
             // Log of what has happened to message
             $allevents = get_http_var('allevents', 0);
 
@@ -635,7 +687,7 @@ There's a copy of your message below, so you can send it another way, if you lik
                     : '<a href="'
                         . htmlspecialchars(url_new('', true, 'allevents', 1))
                         . '">View all events</a>');
-                    
+
             $recents = msg_admin_message_events($id, !$allevents);
             if (msg_get_error($recents)) {
                 print "Error contacting queue:";
@@ -643,27 +695,34 @@ There's a copy of your message below, so you can send it another way, if you lik
                 $recents = array();
             }
 
-            $this->print_events($recents);
+            $this->printEvents($recents);
 
             if (count($message['bounces']) > 0) {
                 print "<h2>Bounce Messages</h2>";
                 foreach ($message['bounces'] as $bounce) {
                     print "<hr>";
-                    print "<blockquote>" .  nl2br(htmlspecialchars($bounce, ENT_SUBSTITUTE | ENT_COMPAT | ENT_HTML401)) .  "</blockquote>";
+                    print "<blockquote>"
+                        . nl2br(htmlspecialchars($bounce, ENT_SUBSTITUTE | ENT_COMPAT | ENT_HTML401))
+                        .  "</blockquote>";
                 }
                 print "<hr>";
                 if ($message['state'] == 'bounce_confirm') {
                     $form = new HTML_QuickForm('bounceForm', 'post', $self_link);
+                    $bouncegroup = array();
                     $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Fatal Delivery Error');
                     $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'bounce_wait', 'Temporary Problem');
-                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Fatal Delivery Error, but should retry with same details');
-                    $form->addGroup($bouncegroup, "bouncegroup", "Which kind of bounce message is this?",' ', false);
+                    $bouncegroup[] = &HTML_QuickForm::createElement(
+                        'submit',
+                        'ready',
+                        'Fatal Delivery Error, but should retry with same details'
+                    );
+                    $form->addGroup($bouncegroup, "bouncegroup", "Which kind of bounce message is this?", ' ', false);
                     $form->addElement('hidden', 'id', $id);
                     $form->addElement('hidden', 'token', get_token());
                     admin_render_form($form);
                 }
             }
-         } elseif ($view == 'statistics') {
+        } elseif ($view == 'statistics') {
             // Display general statistics
             $stats = msg_admin_get_stats(1);
             if (msg_get_error($stats)) {
@@ -684,8 +743,7 @@ There's a copy of your message below, so you can send it another way, if you lik
             }
 
             // Navigation bar
-            $this->render_bar($view, false, $id);
-
+            $this->renderBar($view, false, $id);
 
 ?>
 <h2>Queue statistics</h2>
@@ -693,40 +751,40 @@ There's a copy of your message below, so you can send it another way, if you lik
 <b><?=$stats["created_1"]?></b> new in last hour,
 <b><?=$stats["created_24"]?></b> new in last day,
 <b><?=$stats["created_168"]?></b> new in last week
-<br>last fax sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_fax_time"])?></b>, 
+<br>last fax sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_fax_time"])?></b>,
 last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></b>
 </p>
 <h2>Messages in each state by type (created in last day)</h2>
-<? $this->_display_state_table($stats, "day "); ?>
+<?php $this->displayStateTable($stats, "day "); ?>
 <h2>Messages in each state by type (created in last week)</h2>
-<? $this->_display_state_table($stats, "week "); ?>
+<?php $this->displayStateTable($stats, "week "); ?>
 <h2>Messages in each state by type (created in last four weeks)</h2>
-<? $this->_display_state_table($stats, "four "); ?>
+<?php $this->displayStateTable($stats, "four "); ?>
 <h2>Messages in each state by type (all time)</h2>
-<? $this->_display_state_table($stats, "alltime "); ?>
+<?php $this->displayStateTable($stats, "alltime "); ?>
 
 <h2>Top referrers in last day</h2>
 <table border=1>
-<?
+    <?php
     foreach ($freq_referrers_day as $row) {
         if ($row[1] > 1 && $row[0] != "") {
             print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
         }
     }
-?>
+    ?>
 </table>
 <h2>Top referrers in last week</h2>
 <table border=1>
-<?
+    <?php
     foreach ($freq_referrers_week as $row) {
         if ($row[1] > 1 && $row[0] != "") {
             print "<tr><td>" . trim_url($row[0]) . "</td><td>$row[1]</td></tr>";
         }
     }
-?>
+    ?>
 </table>
-<?
-         } elseif ($rep_id) {
+<?php
+        } elseif ($rep_id) {
             $repinfo = dadem_get_representative_info($rep_id);
             dadem_check_error($repinfo);
             $sameperson = null;
@@ -734,10 +792,11 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
                 $sameperson = dadem_get_same_person($repinfo['parlparse_person_id']);
                 dadem_check_error($sameperson);
             }
-            if (!$sameperson) 
+            if (!$sameperson) {
                 $sameperson = array($rep_id);
- 
-            $this->render_bar("rep_id", true, $id);
+            }
+
+            $this->renderBar("rep_id", true, $id);
             $params = array(
                 'rep_ids' => $sameperson,
                 'page' => $page,
@@ -752,14 +811,15 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
 
             $by_year = array();
             foreach ($messages as $message) {
-                if ($message['dispatched'])
+                if ($message['dispatched']) {
                     $year = strftime('%Y', $message['dispatched']);
-                else
+                } else {
                     $year = strftime('%Y', $message['created']);
+                }
 
                 $by_year[$year][] = $message;
             }
-            
+
             $years = array_keys($by_year);
             rsort($years);
             foreach ($years as $year) {
@@ -771,8 +831,10 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
                 $q_by_email_yes = array();
                 $dispatched_by_email = array();
                 $sent_by_email = array();
-                $q_0_no = 0; $q_0_yes = 0;
-                $q_1_no = 0; $q_1_yes = 0;
+                $q_0_no = 0;
+                $q_0_yes = 0;
+                $q_1_no = 0;
+                $q_1_yes = 0;
                 $dispatched = 0;
                 foreach ($year_array as $message) {
                     if (!array_key_exists($message['sender_email'], $q_by_email)) {
@@ -819,20 +881,20 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
                 }
                 print '<p><a href="?' . url_new('', true, 'p', $page + 1) . '">Next page</a></p>';
 
-                $this->print_messages($year_array, null);
+                $this->printMessages($year_array, null);
             }
-         } else {
+        } else {
             // Perform actions on checked items
             $sender_emails = array();
             $sender_full = array();
-            foreach ($_POST as $k=>$v) {
+            foreach (array_keys($_POST) as $k) {
                 if (stristr($k, "check_")) {
                     $checkid = str_replace("check_", "", $k);
-                    $this->do_actions($checkid);
+                    $this->doActions($checkid);
                     $message = msg_admin_get_message($checkid);
                     msg_check_error($message);
                     array_push($sender_emails, $message['sender_email']);
-                    array_push($sender_full, $message['sender_name'] . 
+                    array_push($sender_full, $message['sender_name'] .
                             " &lt;" .  $message['sender_email'] . "&gt;");
                 }
             }
@@ -857,10 +919,10 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             // Set up additional parameters for view if necessary.
             if ($view == "similarbody" || $view == 'similarbodysamerep') {
                 $params['msgid'] = get_http_var('simto');
-            } else if ($view == "search" || $view == "logsearch") {
+            } elseif ($view == "search" || $view == "logsearch") {
                 $params['query'] = get_http_var('query');
             }
-            
+
             // Get details about view
             $messages = msg_admin_get_queue($view, $params);
             if (msg_get_error($messages)) {
@@ -870,14 +932,15 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             }
 
             // Navigation bar
-            $this->render_bar($view, $reverse, $id);
+            $this->renderBar($view, $reverse, $id);
 
             // Display messages
             print "<h2>Messages which";
             if ($view == "similarbody") {
                 print " have similar bodies to " . make_ids_links(get_http_var('simto'));
             } elseif ($view == "similarbodysamerep") {
-                print " are to the same representative and have similar bodies to " . make_ids_links(get_http_var('simto'));
+                print " are to the same representative and have similar bodies to "
+                    . make_ids_links(get_http_var('simto'));
             } elseif ($view == "search") {
                 print " match search query '" . htmlspecialchars(get_http_var('query')) . "'";
             } elseif ($view == "logsearch") {
@@ -889,9 +952,13 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             if ($reverse) {
                 $messages = array_reverse($messages);
             }
-            $this->print_messages($messages, ($view == 'similarbody' || $view == 'similarbodysamerep') ? $params['msgid'] : null);
-            if ($view == 'recentchanged' or $view == 'recentcreated')
+            $this->printMessages(
+                $messages,
+                ($view == 'similarbody' || $view == 'similarbodysamerep') ? $params['msgid'] : null
+            );
+            if ($view == 'recentchanged' or $view == 'recentcreated') {
                 print "<p>..."; /* indicate that this isn't all the messages... */
+            }
 
             // Help
             ?>
@@ -918,18 +985,18 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             all messages written by someone called Francis who came to WTT via
             theyworkforyou.com.
             </p>
-            <?
+            <?php
         }
         if ($view != "statistics") {
 ?>
 <h2>Help &mdash; what do the buttons do?</h2>
-<?
+        <?php
         if (!$id) {
-?>
+        ?>
 <p>They apply to all items you have checked.</p>
-<?
+        <?php
         }
-?>
+        ?>
 <p>
 <b>note</b> adds the text entered as a remark in the message's log
 <br><b>freeze</b> stops delivery to representative, but other stuff
@@ -945,9 +1012,9 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
 </p>
 <p>To find out <b>state meanings</b>, point the mouse to find out what they are
 </p>
-<?
-        if (!$id) {
-        ?>
+            <?php
+            if (!$id) {
+            ?>
 <h2>Help &mdash; what do the states mean?</h2>
 <p>Here is a diagram of state changes:</p>
 <p><img src="queue-state-machine.png"></p>
@@ -986,8 +1053,8 @@ questionnaire reminder are sent.</dd>
 
 </dl>
 
-        <?
-        }
+            <?php
+            }
         }
     }
 }

@@ -60,13 +60,13 @@ use FYR::Cobrand;
 
 our $message_calculated_values = "
     length(message) as message_length,
-    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
         and question_id = 0 and answer = 'no') as questionnaire_0_no,
-    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
         and question_id = 0 and answer = 'yes') as questionnaire_0_yes,
-    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
         and question_id = 1 and answer = 'no') as questionnaire_1_no,
-    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id 
+    (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
         and question_id = 1 and answer = 'yes') as questionnaire_1_yes
 ";
 
@@ -99,7 +99,7 @@ Contact data not available for that representative.
 
 =item MESSAGE_SHAME 4004
 
-Representative does not want to be contacted 
+Representative does not want to be contacted
 
 =item GROUP_ALREADY_QUEUED 4006
 
@@ -194,11 +194,11 @@ sub get_via_representative ($) {
 sub work_out_destination ($);
 sub work_out_destination ($) {
     my ($recipient) = @_;
-   
+
     $recipient->{via} = 0 if (!exists($recipient->{via}));
 
     # Normalise any false values to undef
-    $recipient->{fax} ||= undef; 
+    $recipient->{fax} ||= undef;
     $recipient->{email} ||= undef;
 
     # Decide how to send the message.
@@ -224,7 +224,7 @@ sub work_out_destination ($) {
         my $viainfo = get_via_representative($recipient->{voting_area});
         throw FYR::Error("Bad contact method for via contact (shouldn't happen)", FYR::Error::BAD_DATA_PROVIDED)
             if ($viainfo->{method} eq 'via');
-        
+
         foreach (qw(method fax email)) {
             $recipient->{$_} = $viainfo->{$_};
         }
@@ -239,7 +239,7 @@ sub work_out_destination ($) {
 
 =item recipient_test RECIPIENT
 
-Verifies the contact method of the recipient.  Throws an error if they 
+Verifies the contact method of the recipient.  Throws an error if they
 do not have a fax or email address corresponding to the contact method
 set for them.  RECIPIENT is the DaDem ID number of the recipient.
 
@@ -274,10 +274,10 @@ SENDER is a reference to hash containing details of the sender including
 elements: name, the sender's full name; email, their email address; address,
 their full postal address; postcode, their post code; and optionally phone,
 their phone number; ipaddr, their IP address; referrer, website that referred
-them to this one. 
+them to this one.
 
-RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of the message; 
-and TEXT is the text of the message, with line breaks. 
+RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of the message;
+and TEXT is the text of the message, with line breaks.
 
 COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
 a reference code for them.
@@ -292,16 +292,16 @@ Returns an associative array keyed on message ID. Each value is a associative ar
 with the following keys
 
 'recipient_id' - DaDem id of the recipient
-'status_code' - 0 = success, 1 = FYR::Error in queueing, 2 = Flagged for abuse 
+'status_code' - 0 = success, 1 = FYR::Error in queueing, 2 = Flagged for abuse
 'abuse_result' - result of abuse flagging or undef
-'error_code'  - FYR::Error code or undef 
+'error_code'  - FYR::Error code or undef
 'error_text'- FYR::Error text or undef
 
 This function is called remotely and commits its changes.
 
 =cut
 sub write_messages($$$$;$$$$){
-    
+
     my ($msgidlist, $sender, $recipient_list, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
     my %ret = ();
     my $recipient_id;
@@ -315,13 +315,13 @@ sub write_messages($$$$;$$$$){
     if (scalar(@$msgidlist) > 1 && !defined($group_id)) {
         throw FYR::Error("No group ID supplied for multiple messages", FYR::Error::BAD_DATA_PROVIDED);
     }
-    
+
     if ($no_questionnaire){
         $no_questionnaire = 't';
     }else{
         $no_questionnaire = 'f';
     }
-    
+
     try{
 
         # Check that sender contains appropriate information.
@@ -335,17 +335,17 @@ sub write_messages($$$$;$$$$){
             unless $sender->{email} =~ $Email::Address::addr_spec;
         throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
             unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
-                
+
         foreach $id (@$msgidlist){
             try{
-        
+
                 $recipient_id = pop(@$recipient_list);
                 $ret{$id} = {recipient_id => $recipient_id,
                              status_code  => undef,
                              abuse_result => undef,
-                             error_code   => undef, 
+                             error_code   => undef,
                              error_text   => undef};
-                  
+
                 #pre insertion checks
                 throw FYR::Error("Bad ID specified", FYR::Error::BAD_DATA_PROVIDED)
                     unless ($id =~ m/^[0-9a-f]{20}$/i);
@@ -355,15 +355,15 @@ sub write_messages($$$$;$$$$){
                 my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
                 throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem", FYR::Error::BAD_DATA_PROVIDED)
                     if (!$recipient or ref($recipient) ne 'HASH');
-        
+
                 $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
-        
+
                 # Give recipient their proper prefixes/suffixes.
                 $recipient->{name} = mySociety::VotingArea::style_rep($recipient->{type}, $recipient->{name});
-        
+
                 # Decide how to send message
                 work_out_destination($recipient);
-        
+
                 # Bodge things so that mails go to sender if in testing
                 # ids > 2000000 are the ZZ9 9ZZ postcode test addresses.
                 if ($recipient_id < 2000000) {
@@ -372,19 +372,19 @@ sub write_messages($$$$;$$$$){
                     $recipient->{fax} = undef;
                     }
                 }
-        
+
                 # Strip any leading spaces from the address.
                 $sender->{address} = join("\n", map { s#^\s+##; $_ } split("\n", $sender->{address}));
-                                      
+
                 #check for existing message with this ID
                 if (my $msg = dbh()->selectrow_hashref("select * from message where id = ?", {}, $id)){
                     throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
                 }
-        
+
                 # XXX should also check that the text bits are valid UTF-8.
-        
+
                 # Queue the message.
-                              
+
                 dbh()->do(q#
                     insert into message (
                         id,
@@ -418,7 +418,7 @@ sub write_messages($$$$;$$$$){
                         $text,
                         FYR::DB::Time(), FYR::DB::Time(),
                         $cobrand, $cocode, $group_id, $no_questionnaire);
-                              
+
                 # Log creation of message but don't commit yet
                 my $logaddr = $sender->{address};
                 $logaddr =~ s#\n#, #gs;
@@ -441,11 +441,11 @@ sub write_messages($$$$;$$$$){
                 $ret{$id}{status_code} = 1;
                 $ret{$id}{error_code} = $E->value();
                 $ret{$id}{error_text} = $E->text();
-            };                      
-        }        
+            };
+        }
     }otherwise{
-        
-        # If there's a real problem inserting one of the messages, 
+
+        # If there's a real problem inserting one of the messages,
         # rollback the whole set
         my $E = shift;
         if ($E->value()) {
@@ -456,7 +456,7 @@ sub write_messages($$$$;$$$$){
     }finally{
         dbh()->commit();
     };
-        
+
      try{
          # now do abuse checks on the messages
          my $abuse_result;
@@ -496,12 +496,12 @@ sub write_messages($$$$;$$$$){
                      }
                  }
              }
-         }    
+         }
          # Commit changes
          dbh()->commit();
-         
+
          # Wake up the daemon to send the confirmation mail.
-         notify_daemon();   
+         notify_daemon();
      }otherwise{
          # If there's a real problem with the abuse stuff
          # rollback all the abuse checks
@@ -526,7 +526,7 @@ sub logmsg_set_handler ($) {
 # logmsg ID IMPORTANT DIAGNOSTIC [EDITOR]
 # Log a DIAGNOSTIC about the message with the given ID. If IMPORTANT is true,
 # then mark the log message as exceptional. Optionally, EDITOR is the name
-# of the human who performed the action relating to the log message. 
+# of the human who performed the action relating to the log message.
 sub logmsg ($$$;$) {
     my ($id, $important, $msg, $editor) = @_;
     our $dbh;
@@ -552,8 +552,8 @@ sub logmsg ($$$;$) {
 }
 
 # log_to_handler IMPORTANT DIAGNOSTIC [EDITOR]
-# log a DIAGNOSTIC only to any log handler that has been set, not to the database. 
-# If IMPORTANT is true, then mark the log message as exceptional. Optionally, 
+# log a DIAGNOSTIC only to any log handler that has been set, not to the database.
+# If IMPORTANT is true, then mark the log message as exceptional. Optionally,
 # EDITOR is the name of the human who performed the action relating to the log message.
 sub log_to_handler($$$;$){
     my ($id, $important, $msg, $editor) = @_;
@@ -594,7 +594,7 @@ sub scrubmessage ($) {
     # contain only the recipient ID and type, and a placeholder which indicates
     # whether the letter was delivered by fax or email.
     dbh()->do(q#
-                update message 
+                update message
                     set sender_ipaddr = '', sender_referrer = null,
                         message = '[ removed message of ' || length(message) || ' characters]'
                     where id = ?#, {}, $id);
@@ -643,8 +643,8 @@ sub state ($;$) {
 =item group_state ID [STATE] [GROUP_ID]
 
 If the message with the ID passed belongs to a group, get/change the state
-of the messages in the group with the given ID to STATE, using the state 
-method. Otherwise get/change the state of the message, using the state 
+of the messages in the group with the given ID to STATE, using the state
+method. Otherwise get/change the state of the message, using the state
 method.
 
 =cut
@@ -655,7 +655,7 @@ sub group_state ($;$$){
 
             # Get all the message IDs in the group
             my $msgs = group_messages($group_id);
-     
+
             # Set the state for each one
             foreach $id (@$msgs){
                 state($id, $state);
@@ -667,7 +667,7 @@ sub group_state ($;$$){
     }else{
         return state($id, $state);
     }
-   
+
 }
 
 =item group_messages GROUP_ID
@@ -708,20 +708,20 @@ sub other_recipient_list($$){
 # message ID [LOCK] [NOWAIT]
 # Return a hash of data about message ID. If LOCK is true, retrieves the fields
 # using SELECT ... FOR UPDATE. If NOWAIT is true, uses the NOWAIT option of the FOR UPDATE
-# clause, returning undef if no lock can be obtained on the message. 
+# clause, returning undef if no lock can be obtained on the message.
 sub message ($;$$) {
     my ($id, $forupdate, $nowait) = @_;
     $forupdate = defined($forupdate) ? ' for update' : '';
     my $nowait_str = defined($nowait) ? ' nowait' : '';
     my $msg;
     try{
-        $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait_str", {}, $id); 
+        $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait_str", {}, $id);
 	if ($msg) {
             # Add some convenience fields.
             my $recipient_position = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
             my $recipient_position_plural = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
             $recipient_position = FYR::Cobrand::recipient_position($msg->{cobrand}, $recipient_position);
-            $recipient_position_plural = FYR::Cobrand::recipient_position_plural($msg->{cobrand}, $recipient_position_plural); 
+            $recipient_position_plural = FYR::Cobrand::recipient_position_plural($msg->{cobrand}, $recipient_position_plural);
             $msg->{recipient_position} = $recipient_position;
             $msg->{recipient_position_plural} = $recipient_position_plural;
             return $msg;
@@ -782,12 +782,12 @@ sub format_postal_address ($) {
             $l = EMAIL_COLUMNS / 2;
             $_ = Text::Wrap::wrap('', '  ', $_);
         }
-        
+
         $maxlen = $l if ($l > $maxlen);
 
         $text .= $_;
     }
-    
+
     $text =~ s#^#" " x (EMAIL_COLUMNS - $maxlen)#gme;
 
     return $text;
@@ -852,7 +852,7 @@ sub format_email_body ($) {
     # Strip any lines which consist only of spaces. Because we send the mails
     # as quoted-printable, such lines get formatted as ugly strings of "=20".
     $text =~ s/^\s+$//gm;
-    
+
     return $text;
 }
 
@@ -901,7 +901,7 @@ sub make_representative_email ($$) {
     my $subject = $msg->{recipient_type} eq 'HOC'
                         ? "Letter from $msg->{sender_name}"
                         : "Letter from your constituent $msg->{sender_name}";
-    
+
     my $bodytext = '';
 
     # If this is being sent via some contact, we need to add blurb to the top
@@ -1054,7 +1054,7 @@ sub check_token ($$) {
     $token = lc($token);
     $token =~ s#[./_]##g;
     return undef if ($token !~ m#^[2-7a-z]{20,}$#);
-    
+
     $word = $token_wordmap{$word} if (exists($token_wordmap{$word}));
     my $rand;
     my $enc;
@@ -1119,7 +1119,7 @@ sub email_template ($;$) {
     my ($name, $cobrand) = @_;
     my $fn;
     if ($cobrand) {
-        $fn = "$FindBin::Bin/../templates/$cobrand/emails/$name"; 
+        $fn = "$FindBin::Bin/../templates/$cobrand/emails/$name";
         $fn = "$FindBin::Bin/../../templates/$cobrand/emails/$name" if (!-e $fn);
     }
     $fn = "$FindBin::Bin/../templates/emails/$name" if (!$fn || !-e $fn);
@@ -1266,11 +1266,11 @@ sub build_text_email($) {
 sub make_confirmation_email ($;$) {
     my ($msg, $reminder) = @_;
     $reminder ||= 0;
-    
+
     my $token = make_token("confirm", $msg->{id});
     my $url_start = FYR::Cobrand::base_url_for_emails($msg->{cobrand}, $msg->{cocode});
     my $confirm_url = $url_start . '/C/' . $token;
-    
+
     my ($bodytext, $bodyhtml);
     if ($msg->{group_id}){
         my $template = $reminder ? 'confirm-reminder-group' : 'confirm-group';
@@ -1278,7 +1278,7 @@ sub make_confirmation_email ($;$) {
                     email_template($reminder ? 'confirm-reminder-group' : 'confirm-group', $msg->{cobrand}),
                     email_template_params($msg, confirm_url => $confirm_url)
                 );
-        
+
         my $settings = {
             confirm_url => $confirm_url,
             email_text => format_email_body($msg),
@@ -1327,7 +1327,7 @@ sub make_confirmation_email ($;$) {
     }else{
         $subject_text = $msg->{recipient_name};
     }
-        
+
     return Email::MIME->create(
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
@@ -1666,7 +1666,7 @@ sub record_questionnaire_answer ($$$) {
             logmsg($id, 1, "silently ignored answer of \"$answer\" received for questionnaire qn #$qn");
             return $id;
         }
-    
+
         # record response, replacing existing response to same question
         dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
         dbh()->do('insert into questionnaire_answer (message_id, question_id, answer, whenanswered) values (?, ?, ?, ?)', {}, $id, $qn, $answer, time());
@@ -1827,7 +1827,7 @@ my %state_action = (
                 group_state($id, 'new', $msg->{group_id});
                 return;
             }
-            
+
             # Construct confirmation email and send it to the sender.
             my $result = send_confirmation_email($id);
             if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
@@ -1865,13 +1865,13 @@ my %state_action = (
             # Send email or fax to recipient.
             my $msg = message($id);
             if ($fax && defined($msg->{recipient_fax})) {
-                # 
+                #
                 # We want an exponential backoff for fax sending, because some
                 # sending errors (e.g. send to voice number not fax number)
                 # will *really* irritate people and we don't want to annoy them
                 # too much....
-                # 
-                
+                #
+
                 # Don't attempt to send faxes outside reasonably sane hours --
                 # if we have a typo in a phone number we don't want to call the
                 # victim at all hours of the night.
@@ -1893,7 +1893,7 @@ my %state_action = (
                 # passed.
                 my $howlong = FYR::DB::Time() - $msg->{laststatechange};
                 return if ($msg->{numactions} > 0 && $howlong < FAX_DELIVERY_INTERVAL * (FAX_DELIVERY_BACKOFF ** $msg->{numactions}));
-                
+
                 my $result = deliver_fax($msg);
                 if ($result == FYR::Fax::FAX_SUCCESS) {
                     dbh()->do('update message set dispatched = ? where id = ?', {}, FYR::DB::Time(), $id);
@@ -1949,7 +1949,7 @@ my %state_action = (
             # If we haven't got a questionnaire response, and it's been long
             # enough since the message was sent or since the last questionnaire
             # email was sent, then send another one.
-            my ($dosend, $reminder) = (0, 0); 
+            my ($dosend, $reminder) = (0, 0);
             if (0 == scalar(dbh()->selectrow_array('select count(*) from questionnaire_answer where message_id = ?', {}, $id))) {
                 # Emailed messages have already spent 2 days in the bounce_wait state,
                 # so give them two days less in the sent state than faxed messages
@@ -1972,7 +1972,7 @@ my %state_action = (
                     logmsg($id, 1, "sent questionnaire " . ($reminder ? 'reminder ' : '') . "email");
                 } # should trap hard error case
             }
-         
+
             # If we've had the message for long enough, then scrub personal
             # information and mark it finished.
             if ($msg->{dispatched} < (FYR::DB::Time() - MESSAGE_RETAIN_TIME)) {
@@ -2157,7 +2157,7 @@ sub process_queue ($$;$$) {
                     # See whether anything changed, and if it did update the
                     # action counter.
                     my $msg2 = message($id);
-                    
+
                     ++$nactions
                         if ($msg2->{state} ne $msg->{state}
                             || $msg2->{numactions} != $msg->{numactions}
@@ -2320,7 +2320,7 @@ search for ' rule #6 ' and the like.
 
 =item type
 
-All messages which were sent to representative of type PARAMS->{type}. 
+All messages which were sent to representative of type PARAMS->{type}.
 
 =item rep_id
 
@@ -2346,7 +2346,7 @@ sub admin_get_queue ($$) {
     my %allowed = map { $_ => 1 } qw(all needattention failing recentchanged recentcreated similarbody similarbodysamerep search logsearch type rep_id);
     throw FYR::Error("Bad filter type '$filter'", FYR::Error::BAD_DATA_PROVIDED)
         if (!exists($allowed{$filter}));
-    
+
     my $where = "order by created desc";
     my $limit_sql = "";
     if (ref $params eq 'HASH' && $params->{page}) {
@@ -2363,13 +2363,13 @@ sub admin_get_queue ($$) {
     #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
     if ($filter eq 'needattention') {
         $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed'
-                           and state <> 'pending' and state <> 'new') 
+                           and state <> 'pending' and state <> 'new')
                          or (state = 'bounce_confirm') order by created desc#;
     } elsif ($filter eq 'failing') {
         $where = q#
             where (state = 'failed'
                     or state = 'error')
-                  and frozen = 'f' 
+                  and frozen = 'f'
             order by created desc#;
     } elsif ($filter eq 'recentchanged') {
         $where = "order by laststatechange desc";
@@ -2417,16 +2417,16 @@ sub admin_get_queue ($$) {
         } else {
             my $query = merge_spaces($params->{query});
             my @terms = split m/ /, $query;
-            
+
             $where = "where ";
             $where .= join(" and ", map {
                         for (my $i=1; $i<=14; ++$i) {
                             push(@params, $_)
                         }
                         q#
-                             ((recipient_type = ?) or 
+                             ((recipient_type = ?) or
                               (state = ?) or
-                             
+
                               (sender_name ilike '%' || ? || '%') or
                               (sender_email ilike '%' || ? || '%') or
                               (sender_addr ilike '%' || ? || '%') or
@@ -2461,7 +2461,7 @@ sub admin_get_queue ($$) {
     }
     my $sth = dbh()->prepare("
             select *, $message_calculated_values
-            from message 
+            from message
             $where $limit_sql
         ");
     $sth->execute(@params);
@@ -2491,7 +2491,7 @@ Returns a hash of information about message with id ID.
 sub admin_get_message ($) {
     my ($id) = @_;
 
-    my $sth = dbh()->prepare("select 
+    my $sth = dbh()->prepare("select
         *, $message_calculated_values from message where id =
         ?");
     $sth->execute($id);
@@ -2501,7 +2501,7 @@ sub admin_get_message ($) {
         if ($sth->rows > 1);
     my $hash_ref = $sth->fetchrow_hashref();
 
-    my $bounces = dbh()->selectcol_arrayref("select 
+    my $bounces = dbh()->selectcol_arrayref("select
         bouncetext from message_bounce where message_id = ? order by whenreceived", {}, $id);
     $hash_ref->{bounces} = $bounces;
 
@@ -2509,7 +2509,7 @@ sub admin_get_message ($) {
         questionnaire_answer where message_id = ?");
     $sth->execute($id);
     my @ret;
-    
+
     while (my $hash_ref = $sth->fetchrow_hashref()) {
         push @ret, $hash_ref;
     }
@@ -2532,33 +2532,33 @@ sub admin_get_stats ($) {
     if ($amount) {
         my $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message group by recipient_type, state', {});
         foreach (@$rows) {
-            my ($type, $state, $count) = @$_; 
+            my ($type, $state, $count) = @$_;
             $ret{"alltime $type $state"} = $count;
         }
 
         $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - DAY);
         foreach (@$rows) {
-            my ($type, $state, $count) = @$_; 
+            my ($type, $state, $count) = @$_;
             $ret{"day $type $state"} = $count;
         }
 
         $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - WEEK);
         foreach (@$rows) {
-            my ($type, $state, $count) = @$_; 
+            my ($type, $state, $count) = @$_;
             $ret{"week $type $state"} = $count;
         }
 
         $rows = dbh()->selectall_arrayref('select recipient_type, state, count(*) from message where created > ? group by recipient_type, state', {}, FYR::DB::Time() - 4 * WEEK);
         foreach (@$rows) {
-            my ($type, $state, $count) = @$_; 
+            my ($type, $state, $count) = @$_;
             $ret{"four $type $state"} = $count;
         }
     }
 
     $ret{message_count} = dbh()->selectrow_array('select count(*) from message', {});
-    $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - HOUR); 
-    $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - DAY); 
-    $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - WEEK); 
+    $ret{created_1}     = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - HOUR);
+    $ret{created_24}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - DAY);
+    $ret{created_168}    = dbh()->selectrow_array('select count(*) from message where created > ?', {}, FYR::DB::Time() - WEEK);
 
     $ret{last_fax_time} = dbh()->selectrow_array('select dispatched from message where dispatched is not null and recipient_fax is not null and recipient_email is null order by dispatched desc limit 1', {});
     $ret{last_email_time} = dbh()->selectrow_array('select dispatched from message where dispatched is not null and recipient_fax is null and recipient_email is not null order by dispatched desc limit 1', {});
@@ -2575,7 +2575,7 @@ in the last TIME seconds.
 sub admin_get_popular_referrers($) {
     my ($secs) = @_;
     my $result = FYR::DB::dbh()->selectall_arrayref('
-        select sender_referrer, count(*) as c from message 
+        select sender_referrer, count(*) as c from message
             where created > ?
             group by sender_referrer
             order by c desc', {}, FYR::DB::Time() - $secs);
@@ -2799,7 +2799,7 @@ counts first.
 
 sub admin_get_diligency_queue($) {
     my ($from_time) = @_;
-    my $admin_activity = dbh()->selectall_arrayref("select count(*) as c, editor 
+    my $admin_activity = dbh()->selectall_arrayref("select count(*) as c, editor
         from message_log where whenlogged >= ? and editor is not null
         and message not like '% viewed body of message in admin interface'
         group by editor order by c desc", {}, $from_time);
