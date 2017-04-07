@@ -2365,6 +2365,7 @@ sub admin_get_queue ($$) {
         $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed'
                            and state <> 'pending' and state <> 'new')
                          or (state = 'bounce_confirm') order by created desc#;
+        $limit_sql = ""; # Want all results
     } elsif ($filter eq 'failing') {
         $where = q#
             where (state = 'failed'
