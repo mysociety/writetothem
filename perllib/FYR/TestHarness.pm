@@ -15,7 +15,7 @@ package FYR::TestHarness;
 BEGIN {
     use Exporter ();
     our @ISA = qw(Exporter);
-    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_allow_new_survey &call_handlemail &confirm_message);
+    our @EXPORT_OK = qw(&email_n &name_n &call_fyrqd &set_fyr_date &spin_queue &send_message_to_rep &check_delivered_to_rep &call_handlemail &confirm_message);
 }
 
 use strict;
@@ -212,12 +212,6 @@ sub check_delivered_to_rep {
     return $content;
 }
 
-
-# Clear survey result, so can take survey again
-sub call_allow_new_survey {
-    my ($email, $wth, $verbose) = @_;
-    $wth->multi_spawn(1, "./allow-new-survey $email", $verbose) ;
-}
 
 # Send one mail to bounce handling script
 sub call_handlemail {

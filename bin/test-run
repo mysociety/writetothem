@@ -49,7 +49,7 @@ use mySociety::WebTestHarness;
 use mySociety::Ratty;
 use FindBin;
 use lib "$FindBin::Bin/../perllib";
-use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_allow_new_survey call_handlemail confirm_message);
+use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail confirm_message);
 use FYR::Cobrand;
 
 my @actions = ('fax', 'example', 'mistype', 'bounce', 'lords', 'group', 'unit');
@@ -231,16 +231,8 @@ sub do_send_example_message {
     $wth->email_check_url($not_expected_link);
     print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
 
-    call_allow_new_survey(email_n(0), $wth, $verbose);
-
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
-    $wth->browser_follow_link(text_regex => qr/Yes/);
-    my $content = $wth->browser_content();
-    if ($content =~ "Thanks again! ... just a few more questions"){
-        $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
-    }
-    $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
 }
 
 #############################################################################
@@ -493,17 +485,6 @@ sub do_send_lords_message {
     my $not_expected_link = $1;
     $wth->email_check_url($not_expected_link);
     print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
-
-    call_allow_new_survey(email_n(50), $wth, $verbose);
-
-    $wth->browser_get($yes_link);
-    $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
-    $wth->browser_follow_link(text_regex => qr/Yes/);
-    my $content = $wth->browser_content();
-    if ($content =~ "Thanks again! ... just a few more questions"){
-        $wth->browser_submit_form(form_name => 'survey', fields => {}, button => 'submit_usersurvey');
-    }
-    $wth->browser_check_contents('Many thanks - We hope you enjoyed the experience');
     $options->{birthday} = undef;
 }
 
