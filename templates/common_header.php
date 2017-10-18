@@ -92,11 +92,11 @@ if (isset($values['cobrand']))
 
 <body <?php if (array_key_exists('body_class', $values)): ?>class="<?php echo $values['body_class']; ?>"<?php endif; ?>>
 
-<div class="banner banner--donate">
+<div class="banner banner--staging">
     <div class="row">
         <div class="large-10 large-centered columns">
-            <strong>Help mySociety make websites that empower people.</strong>
-            <a href="https://www.mysociety.org/donate/?utm_source=writetothem.com&amp;utm_content=header+help+mysociety&amp;utm_campaign=december-2016">Your donations support sites like this</a>.
+            <strong>Please be aware that WriteToThem will be down for essential maintenance between 21:30 and 23:30 on Wednesday 18th October 2017.</strong>
+            <p>Any messages in progress when maintenance begins may be lost, so we advise that you also save your text to your own computer before submitting.</p>
         </div>
     </div>
 </div>
