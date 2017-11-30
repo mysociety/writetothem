@@ -95,8 +95,8 @@ if (isset($values['cobrand']))
 <div class="banner banner--donate">
     <div class="row">
         <div class="large-10 large-centered columns">
-            <strong>Help mySociety make websites that empower people.</strong>
-            <a href="https://www.mysociety.org/donate/?utm_source=writetothem.com&amp;utm_content=header+help+mysociety&amp;utm_campaign=december-2016">Your donations support sites like this</a>.
+            <strong>We’re hiring for an exciting new project.</strong>
+            <a href="https://mysociety.workable.com/">Come and join our friendly team</a>.
         </div>
     </div>
 </div>
