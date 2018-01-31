@@ -15,5 +15,6 @@ libregexp-common-perl
 libgeo-ip-perl
 libstring-crc32-perl
 php5-curl
+libphp-phpmailer
 libemail-mime-perl
 libio-all-perl
