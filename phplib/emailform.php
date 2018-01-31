@@ -1,4 +1,3 @@
-
 <?php
 /*
 * emailform.php:
@@ -11,7 +10,7 @@
 *
 */
 require_once "../phplib/fyr.php";
-require_once '../commonlib/phplib/evel.php';
+require_once "libphp-phpmailer/class.phpmailer.php";
 
 /* setup the fields that are wanted on the contact form,
 *    this will be dynamically built using emailform_display,
@@ -222,7 +221,6 @@ function emailform_test_spam ($inputname) {
     }
 }
 
-
 // we could put the testing of the message in here, but not doing so allows us to test that messages can be sent without having to check everything first.
 function emailform_send_message () {
     global $emailformfields;
@@ -250,20 +248,15 @@ function emailform_send_message () {
     }
     $success = FALSE;
     if ($sender && $mailbody) {
-        $from = $_POST['name'] ? array ($sender, $_POST['name']) : $sender;
-        $spec = array(
-            '_unwrapped_body_' => $mailbody,
-            'Subject' => $subject,
-            'From' =>$from,
-            'To' => array(array($sendto, 'WriteToThem')),
-        );
-
-        $result = evel_send($spec, $sendto);
-        $error = evel_get_error($result);
-        if ($error)
-            error_log("fyr_send_email_internal: " . $error);
-        $success = $error ? FALSE : TRUE;
-
+        $mail = new PHPMailer;
+        $mail->setFrom($sender, $_POST['name'] || "");
+        $mail->addAddress($sendto, 'WriteToThem');
+        $mail->Subject = $subject;
+        $mail->Body = $mailbody;
+        $success = $mail->send();
+        if (!$success) {
+            error_log("fyr_send_email_internal: Failure to send email from $sender");
+        }
     }
     return $success;
 }
