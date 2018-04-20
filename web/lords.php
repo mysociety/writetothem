@@ -264,7 +264,7 @@ function lords_form($error = array()) {
     <div class="large-12 columns">
     	<div class="panel radius write-content">
     				
-			<form action="http://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
+			<form action="https://www.theyworkforyou.com/search/" method="get" name="topicLordForm" id="topicLordForm">
 			
 				<label for="s">Find a Lord interested in my <strong>topic</strong>:</label>
 				
