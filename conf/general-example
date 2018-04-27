@@ -133,4 +133,7 @@ define('OPTION_SURVEY_URL', 'http://survey.mysociety.org');
 // Analytics
 define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
 
+// Donation or Recruitment message for top banner. No banner displayed if empty.
+define('BANNER_MESSAGE', '')
+
 ?>
