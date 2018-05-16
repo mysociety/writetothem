@@ -116,14 +116,6 @@ if (isset($values['cobrand']))
 
 <?php endif; ?>
 
-<div class="ms-header">
-    <div class="ms-header__container large-10 large-centered columns">
-        <div class="ms-header__logo">
-            <a href="https://www.mysociety.org/">mySociety</a>
-        </div>
-    </div>
-</div>
-
 <div class="content-wrapper">
     <div class="row row-full-width">
         <div class="large-12 columns content">
