@@ -12,18 +12,28 @@ built from the start to be more flexible and easier to use.
 
 ### Stylesheets
 
-WriteToThem uses the [Foundation framework](http://foundation.zurb.com/), and
-styles are compiled using [Compass](http://compass-style.org/). Before you start
-editing files you will need some prerequisites, which can be installed as
-follows (you may need to use `sudo`):
+WriteToThem uses the [Foundation framework](http://foundation.zurb.com/),
+and styles are compiled using [Compass](http://compass-style.org/).
 
-* `gem install zurb-foundation` will install the necessary components of the framework.
-* `gem install compass` will install Compass, ready to compile assets.
+Most people prefer to manage their Ruby Gems using Bundler. If you don’t
+already have it, you can install it like so:
 
-The Sass files used to compile styles are located in `web/static/sass`. To
-compile them, `cd` to the `web/static` directory and run `compass compile`. If
-you are making frequent changes, `compass watch` will watch the directory for
-changes and recompile when necessary.
+    gem install bundler
+
+Then you can tell Bundler install the Gems for this project:
+
+    bundle install
+
+And finally, change into the Sass directory, and compile the Sass into CSS:
+
+    cd web/static
+    bundle exec compass compile
+
+If you are making frequent changes, you can tell Compass to watch the
+directory for updates, and recompile the CSS files as necessary:
+
+    cd web/static
+    bundle exec compass watch
 
 ## Acknowledgements
 
