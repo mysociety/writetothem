@@ -72,6 +72,7 @@ insert into state (name) values ('sent');
 insert into state (name) values ('finished');
 insert into state (name) values ('failed');
 insert into state (name) values ('failed_closed');
+insert into state (name) values ('anonymised');
 
 
 -- message

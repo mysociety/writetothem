@@ -1,0 +1,54 @@
+#!/usr/bin/perl -w
+#
+# anonymise-old-messages:
+# remove personal details from old messages to comply with our retention policy
+
+use strict;
+require 5.8.0;
+
+# Horrible boilerplate to set up appropriate library paths.
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
+
+use Getopt::Long;
+use POSIX qw(strftime);
+
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use FYR;
+
+my $verbose = 0;
+my $dry_run = 0;
+
+GetOptions ('verbose' => \$verbose, 'dry_run' => \$dry_run);
+
+# we hold detail for 2 years
+my $weeks = 104;
+my $old_messages = dbh()->selectall_hashref("select id from message
+    where state <> 'anonymised' and created < ?
+    order by created", 'id', {}, time() - $weeks * 7 * 24 * 60 * 60);
+
+my $c = 0;
+foreach my $id (keys(%$old_messages)) {
+    $c++;
+    print "anonymising message $id\n" if $verbose;
+    unless ( $dry_run ) {
+        # many of these should already be blank but let's just make sure
+        dbh()->do("update message set sender_name = '', sender_email = '',
+        sender_addr = '', sender_phone = '', sender_postcode = '', sender_ipaddr = '',
+        sender_referrer = '', message = '', state = 'anonymised'  where id = ?", {}, $id);
+        dbh()->commit();
+    }
+}
+
+if ($verbose) {
+    print "\n";
+    print "not doing anything because dry run\n" if $dry_run;
+    print "anonymising messages last updated over $weeks weeks ago\n";
+    print "anonymised $c messages\n";
+    print "\n";
+}
