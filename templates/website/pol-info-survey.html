@@ -7,14 +7,11 @@ template_draw('header', $values);
 	
 ?>
 
-<script type="text/javascript" >
-document.write('<script src="http' + ( ("https:" == document.location.protocol) ? "s" : "") + 
-                '://www.surveygizmo.com/s3/4342879/WTT-Political-Information-Survey?__no_style=true&__output=embedjs&__ref=' +
-                escape(document.location.origin + document.location.pathname) +
-                '&recipient_id=<?=$values['recipient_id']?>&first_use=<?=$values['questionnaire_1_yes'] ? 'true' : 'false'; ?>" type="text/javascript" ></scr' + 'ipt>');
+<script src="https://www.surveygizmo.com/s3/4342879/WTT-Political-Information-Survey?__no_style=true&amp;__output=embedjs&amp;__ref=pol-info-survey&amp;recipient_id=<?=$values['recipient_id']?>&amp;first_use=<?=$values['questionnaire_1_yes'] ? 'true' : 'false'; ?>" type="text/javascript">
 </script>
+
 <noscript>
-<a href="https://www.surveygizmo.com/s3/4342879/WTT-Political-Information-Survey?__no_style=true&?jsfallback=true&recipient_id=<?=$values['recipient_id']?>&first_use=<?=$values['questionnaire_1_yes'] ? 'true' : 'false'; ?>">Please click here to answer additional questions.</a>
+<a href="https://www.surveygizmo.com/s3/4342879/WTT-Political-Information-Survey?__no_style=true&amp;jsfallback=true&amp;recipient_id=<?=$values['recipient_id']?>&amp;first_use=<?=$values['questionnaire_1_yes'] ? 'true' : 'false'; ?>">Please click here to answer additional questions.</a>
 </noscript>
 <style>.sg-survey{display:none; }</style>
 	
