@@ -279,20 +279,32 @@ function buildWriteForm($options) {
 
     $form->addElement('html', '</div>'); # close div.row
 
-    $form->addElement("html", '<fieldset class="last"><legend>Ready?</legend>');
+    $form->addElement("html", '<fieldset class="last">');
 
         add_all_variables_hidden($form, $fyr_values, $options);
 
-        $preview_text = cobrand_preview_text($cobrand);
-        if (!$preview_text) {
-            $preview_text = "When you’re ready to send your message click the button below. You’ll get a chance to read through it again to check for problems before we send it.";
+        $before_you_submit = '';
+        if ($preview_text = cobrand_preview_text($cobrand)) {
+            $before_you_submit = '<p class="action" id="preview-submit">' . $preview_text . '</p>';
+        } else {
+            $before_you_submit = '<div class="before-you-submit">';
+            $before_you_submit .= '<p>All the information you provide here will be sent to ';
+            if ($stash['group_msg']) {
+                $before_you_submit .= 'your representatives or their offices';
+            } else {
+                $before_you_submit .= 'your representative or their office';
+            }
+            $before_you_submit .= '.</p>';
+            $before_you_submit .= '<p>Any response from them will come directly to you via email or letter. After you use WriteToThem, you will receive a maximum of two follow-up messages from us, checking whether you received a response.</p>';
+            $before_you_submit .= '<p><a href="/about-privacy" target="_blank">Read about how we keep your data private</a> (opens in a new window).</p>';
+            $before_you_submit .= '</div>';
         }
+        $form->addElement('html', $before_you_submit);
 
         $preview_button_text = cobrand_preview_button_text($cobrand);
         if (!$preview_button_text) {
             $preview_button_text = 'Preview and send';
         }
-        $form->addElement('html', "<p class=\"action\" id=\"preview-submit\">$preview_text</p>");
         $form->addElement('submit', 'submitPreview', $preview_button_text, array('class' => 'button radius success'));
 
     $form->addElement("html", "</fieldset>");

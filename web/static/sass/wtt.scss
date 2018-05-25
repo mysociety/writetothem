@@ -939,6 +939,24 @@ form#writeForm {
       legend {
         margin-bottom: 1em;
       }
+
+      // Submit button on /write is wrapped in a label, to increase hit area.
+      // We don't want its text size reduced to 0.875em.
+      label {
+        font-size: 1em;
+      }
+    }
+
+    // Contains the privacy information above submit button on /write form.
+    .before-you-submit {
+      color: #666;
+      font-size: emCalc(14);
+      margin-bottom: 2.5em;
+      margin-top: -1em;
+
+      p {
+          margin-bottom: 1em;
+      }
     }
 
     label {
