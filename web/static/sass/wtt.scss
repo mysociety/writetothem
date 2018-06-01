@@ -227,6 +227,34 @@ table {
     color: #fff;
 }
 
+$colour_violet: #a94ca6;
+
+.democracy-week-banner {
+    display: block;
+    padding: 1em;
+    text-align: center;
+    color: #fff;
+    background-color: $colour_violet;
+    text-shadow: 0 1px 1px rgba(#000, 0.5);
+    line-height: 1.4em;
+
+    &:hover,
+    &:focus {
+        color: #fff;
+        background-color: darken($colour_violet, 5%);
+        text-decoration: none;
+    }
+
+    strong {
+        margin-right: 0.8em;
+    }
+
+    small {
+        font-size: 0.8em;
+        text-decoration: underline;
+    }
+}
+
 .alert-box {
     font-weight: normal;
     font-family: $header-font-family;

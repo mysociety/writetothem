@@ -104,6 +104,11 @@ if (isset($values['cobrand']))
 
 <?php endif; ?>
 
+<a class="democracy-week-banner" href="https://www.mysociety.org/mysociety/2018/07/02/celebrating-national-democracy-week/">
+    <strong>We’re celebrating National Democracy Week!</strong>
+    <small>Find out more</small>
+</a>
+
 <?php if (0 && OPTION_FYR_REFLECT_EMAILS): ?>
 
 <div class="banner banner--staging">
