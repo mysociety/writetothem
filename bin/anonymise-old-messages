@@ -45,7 +45,7 @@ foreach my $id (keys(%$old_messages)) {
     }
 }
 
-if ($verbose) {
+if ($verbose || $dry_run) {
     print "\n";
     print "not doing anything because dry run\n" if $dry_run;
     print "anonymising messages last updated over $weeks weeks ago\n";
