@@ -1266,3 +1266,33 @@ h2 {
 }
 
 @import "overrides";
+
+/* 
+ * WTT political knowledge survey
+ */
+
+ .sg-content {
+     fieldset legend {
+         background-color: transparent;
+     }
+
+     ul li {
+         margin-bottom: 0;
+     }
+
+     .sg-question {
+        border-color: rgba(0,0,0,0.1);
+        margin-bottom: 2em;
+     }
+
+     .sg-button {
+        font-family: $header-font-family;
+        background-color: $success-color;
+        color: #fff;
+        font-size: emCalc(18);
+        letter-spacing: 1px;
+        @include border-radius(0 3px 3px 0);
+        text-transform: uppercase;
+        font-weight: 600;
+     }
+ }
