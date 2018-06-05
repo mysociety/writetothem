@@ -2363,7 +2363,7 @@ sub admin_get_queue ($$) {
     #   http://www.postgresql.org/docs/7.4/interactive/indexes.html
     if ($filter eq 'needattention') {
         $where = q# where (frozen = 't' and state <> 'failed_closed' and state <> 'failed'
-                           and state <> 'pending' and state <> 'new')
+                           and state <> 'pending' and state <> 'new' and state <> 'anonymised')
                          or (state = 'bounce_confirm') order by created desc#;
         $limit_sql = ""; # Want all results
     } elsif ($filter eq 'failing') {
