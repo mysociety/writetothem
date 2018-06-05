@@ -8,12 +8,18 @@ template_draw('header', $values);
 	
 ?>
 
-<script src="<?=$url?>&amp;__output=embedjs" type="text/javascript">
-</script>
+<div class="row">
+    <div class="large-10 large-centered columns">
 
-<noscript>
-<a href="<?=$url?>&amp;jsfallback=true">Please click here to answer additional questions.</a>
-</noscript>
-<style>.sg-survey{display:none; }</style>
+        <script src="<?=$url?>&amp;__output=embedjs" type="text/javascript">
+        </script>
+
+        <noscript>
+        <a href="<?=$url?>&amp;jsfallback=true">Please click here to answer additional questions.</a>
+        </noscript>
+        <style>.sg-survey{display:none; }</style>
+
+    </div>
+</div>
 	
 <?php template_draw('footer', $values);
