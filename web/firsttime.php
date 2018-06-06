@@ -36,5 +36,14 @@ if (rabx_is_error($result)) {
 $values = msg_admin_get_message($result);
 $values['cobrand'] = $cobrand;
 
-// Questionnaire done
-template_draw("survey-done", $values);
+
+// Political information survey
+
+$wrote_to_mp = $values["recipient_type"] == "WMC";
+$rand = rand(0, 1); // high rate when want lots of data
+if ($rand == 0 && $wrote_to_mp) {
+    template_draw("pol-info-survey", $values);
+} else {
+    // Questionnaire done
+    template_draw("survey-done", $values);
+}
