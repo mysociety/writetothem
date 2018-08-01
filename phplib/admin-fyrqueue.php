@@ -19,7 +19,8 @@ $state_help_notes_map = array(
     'bounce_confirm' => 'Email delivery failure received, admin',
     'error' => 'About to tell constituent that delivery failed',
     'sent' => 'Delivery to representative succeeded',
-    'finished' => 'Delivery succeeded, personal data has been scrubbed',
+    'finished' => 'Delivery succeeded, message/IP/referrer scrubbed',
+    'anonymised' => 'Delivery succeeded, personal data has been scrubbed',
     'failed' => 'Delivery to representative failed',
     'failed_closed' => 'Delivery failed, admin has dealt with it / timed out',
 );
