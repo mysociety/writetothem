@@ -101,4 +101,34 @@ sub Time () {
     }
     return time() + int($time_offset);
 }
+
+# scrub_message ID
+# Remove some personal data from message ID. This includes the text of
+# the letter, any extradata and bounce messages (since they usually
+# contain quoted text).
+sub scrub_message ($) {
+    my ($id) = @_;
+    dbh()->do(q#update message
+        set sender_ipaddr = '', sender_referrer = null,
+            message = '[ removed message of ' || length(message) || ' characters ]'
+        where id = ?#, {}, $id);
+    # The extra data, and bounce tables may also contain personal data.
+    dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
+    dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
+}
+
+# scrub_data ID
+# Remove all sender personal data from message ID, including name,
+# email, address, etc. Also remove all log messages.
+sub scrub_data ($) {
+    my ($id) = @_;
+    scrub_message($id);
+    dbh()->do("update message
+        set sender_name = '', sender_email = '', sender_addr = '',
+            sender_phone = '', sender_postcode = '', message = '',
+            state = 'anonymised'
+        where id = ?", {}, $id);
+    dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
+}
+
 1;

@@ -583,24 +583,12 @@ foreach (keys %allowed_transitions) {
 }
 
 # scrubmessage ID
-# Remove some personal data from message ID. This includes the text of the
-# letter, any log messages (since they may contain email addresses etc.), and
-# any bounce messages (since they usually contain quoted text).
+# Remove some personal data from message ID. This includes the text of
+# the letter, any extradata and bounce messages (since they usually
+# contain quoted text).
 sub scrubmessage ($) {
     my ($id) = @_;
-    # We delete any information which has to do with the sender or their
-    # message, except for information about the recipient which is needed for
-    # our statistics gathering. At the end of this operation the message will
-    # contain only the recipient ID and type, and a placeholder which indicates
-    # whether the letter was delivered by fax or email.
-    dbh()->do(q#
-                update message
-                    set sender_ipaddr = '', sender_referrer = null,
-                        message = '[ removed message of ' || length(message) || ' characters]'
-                    where id = ?#, {}, $id);
-    # The log, extra data, and bounce tables may also contain personal data.
-    dbh()->do(q#delete from message_extradata where message_id = ?#, {}, $id);
-    dbh()->do(q#delete from message_bounce where message_id = ?#, {}, $id);
+    FYR::DB::scrub_message($id);
     logmsg($id, 1, 'Scrubbed message of (some) personal data');
 }
 
@@ -2351,7 +2339,7 @@ sub admin_get_queue ($$) {
     my $limit_sql = "offset 0 limit 100";
     if (ref $params eq 'HASH') {
         my $page = ($params->{page} || "") =~ /^\d+\z/ ? $params->{page} : 1;
-        my $limit = ($params->{limit} || "") =~ /^\d+\z/ ? $params->{limit} : 100;
+        my $limit = ($params->{limit} || "") =~ /^(\d+|NULL)\z/ ? $params->{limit} : 100;
         my $offset = ($page - 1) * $limit;
         $limit_sql = "offset $offset limit $limit";
     }
@@ -2828,6 +2816,23 @@ sub admin_update_recipient($$$) {
          {}, $contact, $via ? 't' : 'f', $id);
     }
     dbh()->commit();
+}
+
+=item admin_scrub_data ID USER
+
+Remove all personal data from message ID.
+
+=cut
+sub admin_scrub_data($$) {
+    my ($id, $user) = @_;
+
+    my $msg = message($id);
+    my $msgs = admin_get_queue('search', { page => 1, limit => 'NULL', query => $msg->{sender_email} });
+    foreach (@$msgs) {
+        next unless $msg->{sender_email} eq $_->{sender_email};
+        FYR::DB::scrub_data($_->{id});
+        logmsg($_->{id}, 1, "Scrubbed message of personal data", $user);
+    }
 }
 
 1;
