@@ -1,0 +1,134 @@
+$contact-option-padding: 20px;
+
+.contact-options {
+    margin-bottom: 4em;
+
+    @media #{$medium} {
+        margin-right: 10%;
+    }
+
+    .postcodebox {
+        max-width: 20em;
+
+        label {
+            margin-bottom: 0.75em;
+        }
+
+        .button {
+            font-size: emCalc(18);
+            letter-spacing: 1px;
+            @include border-radius(0 3px 3px 0);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        input[type=text] {
+            font-size: emCalc(18);
+            border-right: none;
+            @include border-radius(3px 0 0 3px);
+            text-transform: uppercase;
+        }
+    }
+
+    textarea {
+        height: 15em;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .red {
+        color: $alert-color;
+    }
+}
+
+.contact-option {
+    padding: $contact-option-padding;
+    border-top: 1px solid darken($content-background-colour, 10%);
+    border-bottom: 1px solid darken($content-background-colour, 10%);
+
+    @media #{$medium} {
+        padding: ( $contact-option-padding * 1.5 );
+    }
+
+    h3 {
+        font-weight: inherit;
+        margin: 0;
+        font-size: 1.3em;
+        line-height: 1.2;
+
+        button {
+            display: block;
+            margin: ( $contact-option-padding * -1 );
+            padding: $contact-option-padding 0;
+            cursor: inherit;
+            border: none;
+            background: transparent;
+            color: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: 1em;
+            line-height: inherit;
+            text-align: inherit;
+            transition: padding 50ms linear, margin 50ms linear;
+
+            @media #{$medium} {
+                margin: ( $contact-option-padding * -1.5 );
+                padding: ( $contact-option-padding * 1.5 ) 0;
+            }
+
+            &:active {
+                box-shadow: none;
+            }
+
+            // Make it look clickable
+            .js & {
+                color: $link-color;
+                cursor: pointer;
+
+                &:hover, &:focus {
+                    color: #333
+                }
+            }
+        }
+
+        small {
+            display: block;
+            color: inherit;
+            font-size: 0.7em;
+            line-height: 1.3;
+        }
+    }
+
+    & + .contact-option {
+        border-top: none;
+    }
+}
+
+.contact-option--active {
+    background-color: #fff;
+    border: 1px solid darken($content-background-colour, 10%);
+    margin: 0 -1px;
+
+    h3 button {
+        padding: $contact-option-padding;
+
+        @media #{$medium} {
+            padding: ( $contact-option-padding * 0.5 );
+            margin: ( $contact-option-padding * -0.5 );
+        }
+    }
+
+    .contact-option + & {
+        margin-top: -1px;
+        border-top: 1px solid darken($content-background-colour, 10%);
+    }
+}
+
+.contact-option__detail {
+    position: relative; // stack in front of the button, which might overlap the top edge of the detail
+    margin: $contact-option-padding 0 0 0;
+
+    & > :last-child {
+        margin-bottom: 0;
+    }
+}

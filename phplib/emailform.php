@@ -59,7 +59,7 @@ $emailformfields = array (
     array ('label'     => '',
            'inputname' => 'send',
            'inputtype' => 'submit',
-           'value'     => 'Send'),
+           'value'     => 'Send message'),
 );
 
 function fyr_display_emailform () {
@@ -109,7 +109,7 @@ function render_formfield ($defs, $messages) {
       $input = '<textarea name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" rows="' . $sizes[0] . '" cols="' . $sizes[1] . '">' . $htmlvalue . '</textarea>';
   }
   if ($defs['inputtype'] == 'submit') {
-      $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '">';
+      $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '" class="button success">';
   }
   if ($defs['inputtype'] == 'radioset') {
       $radiovalues = $defs['values'];
@@ -162,7 +162,6 @@ function emailform_display ($messages) {
       return;
     }
     print '<div id ="sendmess">';
-    print '<h3>Contact the WriteToThem technical support team</h3>';
     if ($messages) {
 
       print '<ul class="repwarning">';
