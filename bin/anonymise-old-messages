@@ -38,9 +38,7 @@ foreach my $id (keys(%$old_messages)) {
     print "anonymising message $id\n" if $verbose;
     unless ( $dry_run ) {
         # many of these should already be blank but let's just make sure
-        dbh()->do("update message set sender_name = '', sender_email = '',
-        sender_addr = '', sender_phone = '', sender_postcode = '', sender_ipaddr = '',
-        sender_referrer = '', message = '', state = 'anonymised'  where id = ?", {}, $id);
+        FYR::DB::scrub_data($id);
         dbh()->commit();
     }
 }

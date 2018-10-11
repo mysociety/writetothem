@@ -368,55 +368,45 @@ class ADMIN_PAGE_FYR_QUEUE
     private function doActions($id)
     {
         // Freeze or thaw messages
-        $redirect = false;
         if (get_http_var('token') != get_token()) {
-            return $redirect;
+            return;
         }
         if (get_http_var('freeze')) {
             $result = msg_admin_freeze_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id frozen</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('thaw')) {
             $result = msg_admin_thaw_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id thawed</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('no_questionnaire')) {
             $result = msg_admin_no_questionnaire_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id now won't send questionnaire, and has had existing responses deleted</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('yes_questionnaire')) {
             $result = msg_admin_yes_questionnaire_message($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id now will send questionnaire</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('error')) {
             $result = msg_admin_set_message_to_error($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to error state</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('failed')) {
             $result = msg_admin_set_message_to_failed($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to failed state</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('bounce_wait')) {
             $result = msg_admin_set_message_to_bounce_wait($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to bounce_wait state</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('ready')) {
             $result = msg_admin_set_message_to_ready($id, http_auth_user());
             msg_check_error($result);
             print "<p><b><i>Message $id moved to ready state</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('note')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), get_http_var('notebody'));
             msg_check_error($result);
             print "<p><b><i>Note added to message $id</i></b></p>";
-            $redirect = true;
         } elseif (get_http_var('body')) {
             $result = msg_admin_add_note_to_message($id, http_auth_user(), 'viewed body of message in admin interface');
             msg_check_error($result);
@@ -429,8 +419,11 @@ class ADMIN_PAGE_FYR_QUEUE
             );
             msg_check_error($result);
             print "<p><b><i>Logged that you are viewing body of message (via wire text of emails) $id</i></b></p>";
+        } elseif (get_http_var('scrub_data')) {
+            $result = msg_admin_scrub_data($id, http_auth_user());
+            msg_check_error($result);
+            print "<p><b><i>Scrubbed all personal data</i></b></p>";
         }
-        return $redirect;
     }
 
     private function displayStateTable($stats, $prefix)
@@ -528,10 +521,7 @@ class ADMIN_PAGE_FYR_QUEUE
 
         // Display about id
         if ($id) {
-            if ($this->doActions($id)) {
-#               header("Location: ".$_SERVER['REQUEST_URI'] . "\n");
-#               exit;
-            }
+            $this->doActions($id);
 
             // Navigation bar
             $this->renderBar($view, false, $id);
@@ -590,6 +580,10 @@ class ADMIN_PAGE_FYR_QUEUE
             } else {
                 $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_wire_emails', 'Hide Emails');
             }
+            $actiongroup[] = &HTML_QuickForm::createElement(
+                'submit', 'scrub_data', 'Delete all user data', array(
+                    'onclick' => "return confirm('Are you sure?')",
+                ));
             $form->addElement('hidden', 'id', $id);
             $form->addElement('hidden', 'token', get_token());
             $form->addGroup($actiongroup, "actiongroup", "", ' ', false);

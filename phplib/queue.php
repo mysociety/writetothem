@@ -493,5 +493,9 @@ function msg_admin_get_diligency_queue($time) {
     return $result;
 }
 
-
-?>
+function msg_admin_scrub_data($id, $user) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.admin_scrub_data', $params);
+    return $result;
+}

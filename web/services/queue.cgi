@@ -109,6 +109,9 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.admin_add_note_to_message' => sub {
                 return FYR::Queue::admin_add_note_to_message($_[0], $_[1], $_[2]);
             },
+            'FYR.Queue.admin_scrub_data' => sub {
+                return FYR::Queue::admin_scrub_data($_[0], $_[1]);
+            },
             'FYR.Queue.admin_set_message_to_ready' => sub {
                 return FYR::Queue::admin_set_message_to_ready($_[0], $_[1]);
             },
