@@ -94,7 +94,7 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('David Campbell Bannerman', 'Alex Mayer', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'Vicky Ford');
+our @rep_names = ('David Campbell Bannerman', 'Alex Mayer', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'John Flack');
 my $mep_rep_name = 'Alex Mayer';
 
 #############################################################################
@@ -731,7 +731,7 @@ sub do_send_group_abuse {
         }
     }
     # None of these messages should get through
-    my @new_rep_names = ('Ruthi Brandt', 'Alex Hollingsworth');
+    my @new_rep_names = ('Richard Howlett', 'Alex Hollingsworth');
     $repinfo = {repname => 'all', 
                 reptype => 'District', # should be District Councillors but wrapping
                 repnames => \@new_rep_names};
