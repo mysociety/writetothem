@@ -54,7 +54,7 @@ use FYR;
 # Configurable parameters
 my $year = shift;
 die "enter a reasonable year as first argument, or 2005post for 2005 post-election" if !$year || 
-    ($year ne "2005post" && ($year < 2000 || $year > 5000));
+    ($year ne "2005post" && $year ne "2015ge" && $year ne "2016term" && ($year < 2000 || $year > 5000));
 my $output_format = shift;
 # Output formats are:
 #    PHP - for writetothem/phplib/questionnaire_report_2005_WMC.php and the like
@@ -107,10 +107,20 @@ print STDERR "done\n";
 
 my $year_param = $year;
 $year = "2005" if ($year eq "2005post");
+$year = "2015" if ($year eq "2015ge");
+$year = "2016" if ($year eq "2016term");
 my $start_epoch = DateTime->new( year=>$year, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 if ($year_param eq "2005post") {
     $start_epoch = 1115938800; # 2005-05-13, after things were on again
+}
+if ($year_param eq "2015ge") {
+    $start_epoch = 1431907200; # 2015-05-18 (Summoning, no business could have happened before this)
+    $end_epoch = 1462579200; # 2016-05-07 (one year post-election)
+}
+if ($year_param eq "2016term") {
+    $start_epoch = 1462665600; # 2016-05-08 (Following from 2015-16 year)
+    $end_epoch = 1491177600; # 2017-04-03
 }
 # We choose 4 weeks, because 2 weeks until first questionnaire, another week before reminder, then give
 # at least another week for reponse and safety margin.
@@ -497,10 +507,10 @@ sub work_out_rep_category($) {
         $sent_m += $sent_messages{$repid};
         my @newints = @{$allintervals->{$repid}};
         if (scalar(@ints) > 0) {
-#            if (!($ints[-1]{to} >= 1274050800 && $ints[-1]{to} <= 1274089200 && $newints[0]{from} >= 1273505377 && $newints[0]{from} <= 1273513836)) { # 2010 election
+            if (!($ints[-1]{to} >= 1431907200 && $ints[-1]{to} <= 1462579200)) { # 2015 election
                 die Dumper(\@ints) . Dumper(\@newints). "out of order intervals when merging the separate sets of intervals for each rep id belonging to person $person_id" 
                     if $ints[-1]->{'to'} >= $newints[0]->{'from'} + 30; # 30 seconds for scripts that del/add at once but with small gap
-#            }
+            }
         }
         push @ints, @newints;
     }
@@ -791,6 +801,10 @@ foreach my $person_id (keys %$reps_by_person) {
         }
     } elsif ($year == 2014) {
         if ($person_id =~ m{uk.org.publicwhip/person/(11863|24793|10348|11291|10120|10122|24739)} ) {
+            $category = "badcontact";
+        }
+    } elsif ($year == 2015) {
+        if ($person_id =~ m{uk.org.publicwhip/person/(10180)} ) { # IDS
             $category = "badcontact";
         }
     }

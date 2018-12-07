@@ -40,16 +40,29 @@ use mySociety::Sundries;
 use FYR;
 
 # Configurable parameters
-my $year = shift;
-die "enter a reasonable year as first argument" if !$year || $year < 2000 || $year > 5000;
+my $year_param = shift;
+die "enter a reasonable year as first argument, or 2005post for 2005 post-election, or 2015ge for 2015-2016 post-election year" if !$year_param ||
+    ($year_param ne "2005post" && $year_param ne "2015ge" && $year_param ne "2016term" && ($year_param < 2000 || $year_param > 5000));
 
 ############################################################################
 # Extract basic data from MaPit/DaDem
+
+my $year = $year_param;
+$year = "2015" if ($year_param eq "2015ge");
+$year = "2016" if ($year_param eq "2016term");
 
 my $start_epoch = DateTime->new( year=>$year, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 my $end_epoch = DateTime->new( year=>$year+1, month=>1, day=>1, hour=>0, minute=>0, time_zone=>'GMT')->epoch;
 # We choose 4 weeks, because 2 weeks until first questionnaire, another week before reminder, then give
 # at least another week for reponse and safety margin.
+if ($year_param eq "2015ge") {
+    $start_epoch = 1431907200; # 2015-05-18 (Summoning, no business could have happened before this)
+    $end_epoch = 1462579200; # 2016-05-07 (one year post-election)
+}
+if ($year_param eq "2016term") {
+    $start_epoch = 1462665600; # 2016-05-08 (Following from 2015-16 year)
+    $end_epoch = 1491177600; # 2017-04-03
+}
 die "Need to wait 4 weeks into year before running to be sure have all questionnaire info" if ($end_epoch > time() - 86400 * 28);
 my $period_length = $end_epoch - $start_epoch;
 
