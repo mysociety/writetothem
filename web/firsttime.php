@@ -36,6 +36,13 @@ if (rabx_is_error($result)) {
 $values = msg_admin_get_message($result);
 $values['cobrand'] = $cobrand;
 
-// Questionnaire done
-template_draw("survey-done", $values);
 
+// Proxy Information Survey
+
+$rand = rand(0, 1); // high rate when want lots of data
+if ($rand == 0) {
+    template_draw("surveygizmo-proxy", $values);
+} else {
+    // Questionnaire done
+    template_draw("survey-done", $values);
+}
