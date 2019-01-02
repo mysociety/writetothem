@@ -56,7 +56,7 @@ define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN);
 // Is the site running in HTTPS mode?
 define('OPTION_HTTPS_ONLY', 1);
 
-define('OPTION_ADMIN_URL', 'https://secure.../admin');
+define('OPTION_ADMIN_URL', 'https://.../admin/');
 define('OPTION_ADMIN_AUTH_USER', undef);
 define('OPTION_ADMIN_AUTH_PASSWORD', undef);
 
@@ -116,7 +116,7 @@ define('OPTION_MAX_BODY_LENGTH', 20000);
 define('OPTION_PHP_DEBUG_LEVEL', 0);
 
 // URLS of admin scripts
-define('OPTION_ADMIN_SERVICES_CGI', 'https://secure.mysociety.org/admin/services');
+define('OPTION_ADMIN_SERVICES_CGI', 'https://../admin/services/');
 
 // Log file (used in test harness, and later in admin scripts)
 define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');

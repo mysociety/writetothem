@@ -681,7 +681,7 @@ sub display_rep($$) {
         print sprintf("%s (%s) of %s\n", $rep_name, $party, $area_name);
         print "\tPerson: $person_id Rep ids: $repids\n";
         foreach my $url_rep_id (@{$reps_by_person->{$person_id}}) {
-            print "\thttps://secure.mysociety.org/admin/fyr/index.php?page=reps&rep_id=$url_rep_id\n";
+            print "\thttps://www.writetothem.com/admin/?page=reps&rep_id=$url_rep_id\n";
         }
         print sprintf("\tMessages sent in year: %d Response rate: %d/%d First time: %d/%d\n",
                 $sent_m, $q_data->[0], $q_data->[1], $q_data->[2], $q_data->[3]);

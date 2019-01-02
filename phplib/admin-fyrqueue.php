@@ -247,7 +247,7 @@ class ADMIN_PAGE_FYR_QUEUE
             }
             print "</td>";
 
-            print "<td><a href=\"ipaddrinfo.cgi?ipaddr=${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a>".
+            print "<td><a rel=\"noreferrer\" href=\"https://whatismyipaddress.com/ip/${message['sender_ipaddr']}\">${message['sender_ipaddr']}</a>".
                 "<br>" . trim_url($message['sender_referrer']) .
                 "<br>" . $message['cobrand'] . " " . $message['cocode'] .
                 "</td>";

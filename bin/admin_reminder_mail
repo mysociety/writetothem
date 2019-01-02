@@ -131,24 +131,6 @@ if ($councils_not_matched > 0) {
 ";
 }
 
-// Outstanding customer support mail
-/*
-verbose("querying rt for count of outstanding support mail");
-$rt_messages = `psql rt rt --pset t -c "
-    select count(*) from tickets 
-    left join queues on queues.id = tickets.queue 
-    where status  = 'new' or status = 'open' and queues.name = 'WriteToThem';
-    ;"`;
-$rt_messages = trim($rt_messages);
-if ($rt_messages > 0) {
-    $mail .= "
-* $rt_messages people are waiting for replies to support mails
-  Resolve some tickets now:   
-  https://secure.mysociety.org/rt/
-";
-}
-*/
-
 // Combine the first part.
 if ($mail) {
     $mail = "Here are some thing to do to make our service smoother and lovelier...
