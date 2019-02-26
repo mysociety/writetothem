@@ -76,7 +76,8 @@ $status .= '_election' if $status =~ /pending|recent/;
 
 print "DRY RUN\n" unless $commit;
 
-my $areas_info = mySociety::MaPit::call('areas', $type);
+my $generation = mySociety::Config::get('MAPIT_GENERATION');
+my $areas_info = mySociety::MaPit::call('areas', $type, $generation ? (generation => $generation) : ());
 my $count = 0;
 foreach (keys %$areas_info) {
     next if $exceptions{$_};

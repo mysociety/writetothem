@@ -26,9 +26,9 @@ $attend_prep = array(
 );
 
 require_once "../phplib/fyr.php";
+require_once "../phplib/mapit.php";
 require_once "../commonlib/phplib/utility.php";
 require_once "../commonlib/phplib/dadem.php";
-require_once "../commonlib/phplib/mapit.php";
 require_once "../commonlib/phplib/votingarea.php";
 
 $fyr_postcode = get_postcode();
@@ -149,7 +149,7 @@ function get_area_types() {
 // Find all the districts/constituencies and so on (we call them "voting
 // areas") for the postcode provided
 function postcode_to_areas($postcode) {
-    $voting_areas = mapit_call('postcode', $postcode);
+    $voting_areas = mapit_postcode($postcode);
     if (rabx_is_error($voting_areas)) {
         header('Location: ' . url_new('/', true, 'pc', $postcode));
         exit;

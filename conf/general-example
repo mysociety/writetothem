@@ -23,6 +23,9 @@ define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
 define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org/');
 define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
 
+// If MapIt calls should use a particular generation
+define('OPTION_MAPIT_GENERATION', null);
+
 // Where the FYR queue service is.
 define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/queue');
 define('OPTION_FYR_QUEUE_USERPWD', null);

@@ -11,7 +11,6 @@
  */
 require_once "../phplib/fyr.php";
 require_once "../commonlib/phplib/utility.php";
-require_once "../commonlib/phplib/mapit.php";
 require_once '../commonlib/phplib/dadem.php';
 require_once "../commonlib/phplib/votingarea.php";
 

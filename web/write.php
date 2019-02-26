@@ -9,9 +9,9 @@
  */
 
 require_once "../phplib/fyr.php";
+require_once "../phplib/mapit.php";
 require_once "../phplib/forms.php";
 require_once "../phplib/queue.php";
-require_once "../commonlib/phplib/mapit.php";
 require_once "../commonlib/phplib/dadem.php";
 require_once "../commonlib/phplib/votingarea.php";
 require_once "../commonlib/phplib/utility.php";
@@ -663,7 +663,7 @@ if ($stash['group_msg']) {
     }
 
     //Get the electoral body information
-    $voting_areas = mapit_call('postcode', $fyr_values['pc']);
+    $voting_areas = mapit_postcode($fyr_values['pc']);
     mapit_check_error($voting_areas);
     $area_ids = array_keys($voting_areas['areas']);
 
@@ -749,7 +749,7 @@ if ($stash['group_msg']) {
     } else {
         // Check that the representative represents this postcode
         if (!$fyr_values['pc']) mismatch_error();
-        $postcode_areas = mapit_call('postcode', $fyr_values['pc']);
+        $postcode_areas = mapit_postcode($fyr_values['pc']);
         mapit_check_error($postcode_areas);
         $area_ids = array_keys($postcode_areas['areas']);
         if (!in_array($fyr_representative['voting_area'], $area_ids)) {

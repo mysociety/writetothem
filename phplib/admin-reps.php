@@ -9,7 +9,7 @@
 
 $dir = dirname(__FILE__);
 require_once $dir . "/../commonlib/phplib/dadem.php";
-require_once $dir . "/../commonlib/phplib/mapit.php";
+require_once $dir . "/../phplib/mapit.php";
 require_once $dir . "/../commonlib/phplib/votingarea.php";
 require_once $dir . "/../commonlib/phplib/utility.php";
 
@@ -47,7 +47,7 @@ class ADMIN_PAGE_REPS
         foreach ($reps as $rep) {
             $areas[] = $info[$rep]['voting_area'];
         }
-        $area_info = mapit_call('areas', $areas);
+        $area_info = mapit_areas($areas);
         mapit_check_error($area_info);
 
         $generation = 0;
@@ -622,7 +622,7 @@ class ADMIN_PAGE_REPS
 
         $form = new HTML_QuickForm('adminRepsSearchResults', 'get', $this->self_link);
         $html = '';
-        $areas = mapit_call('areas', $this->params['search']);
+        $areas = mapit_areas($this->params['search']);
         mapit_check_error($areas);
         foreach (array_keys($areas) as $va_id) {
             $area_info = mapit_call('area', $va_id);
@@ -646,7 +646,7 @@ class ADMIN_PAGE_REPS
 
         $form = new HTML_QuickForm('adminRepsSearchResults', 'get', $this->self_link);
 
-        $voting_areas = mapit_call('postcode', $this->params['pc']);
+        $voting_areas = mapit_postcode($this->params['pc']);
         mapit_check_error($voting_areas);
         $areas_info = $voting_areas['areas'];
         $html = "";
@@ -706,13 +706,13 @@ class ADMIN_PAGE_REPS
         foreach ($corrections as $correction) {
             array_push($vaids, $correction['voting_area_id']);
         }
-        $info1 = mapit_call('areas', $vaids);
+        $info1 = mapit_areas($vaids);
         mapit_check_error($info1);
         $vaids = array();
         foreach ($info1 as $value) {
             array_push($vaids, $value['parent_area']);
         }
-        $info2 = mapit_call('areas', $vaids);
+        $info2 = mapit_areas($vaids);
 
         foreach ($corrections as $correction) {
             $form = new HTML_QuickForm('adminRepsCorrections', 'post', $this->self_link);

@@ -318,7 +318,8 @@ my @group_tests = (
             my $is_known = 0;
             my $yields_same_voting_area = 0;
             try {
-                my $areas = mySociety::MaPit::call('postcode', $newpc);
+                my $generation = mySociety::Config::get('MAPIT_GENERATION');
+                my $areas = mySociety::MaPit::call('postcode', $newpc, $generation ? (generation => $generation) : ());
                 $is_known = 1;
                 my $rep = mySociety::DaDem::get_representative_info($msg->{recipient_id});
                 #warn "va: $rep->{voting_area} dump: ".  Dumper(\%h). Dumper($rep);

@@ -8,8 +8,8 @@
  */
 
 require_once "../phplib/fyr.php";
+require_once "../phplib/mapit.php";
 require_once "../commonlib/phplib/utility.php";
-require_once "../commonlib/phplib/mapit.php";
 require_once '../commonlib/phplib/dadem.php';
 require_once "../commonlib/phplib/votingarea.php";
 
@@ -207,7 +207,7 @@ if ($pc) {
         exit;
     }
 
-    $voting_areas = mapit_call('postcode', $pc, array(), array(
+    $voting_areas = mapit_postcode($pc, array(), array(
         400 => MAPIT_BAD_POSTCODE,
         404 => MAPIT_POSTCODE_NOT_FOUND,
     ));
