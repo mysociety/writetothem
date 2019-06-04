@@ -37,11 +37,20 @@ $values = msg_admin_get_message($result);
 $values['cobrand'] = $cobrand;
 
 
-// Proxy Information Survey
+// SurveyGizmo survey hook
+// Current url for Proxy Use Survey - but will not be displayed
 
-$rand = rand(0, 1); // high rate when want lots of data
-if ($rand == 0) {
-    template_draw("surveygizmo-proxy", $values);
+$send_to_survey_gizmo = 0; 
+// use rand(0, 1); for a 50% referral rate 
+
+if ($send_to_survey_gizmo == 1) {
+    $values['title'] = "Help us by answering a few quick questions";
+    $values['survey_url'] = 'https://www.surveygizmo.com/s3/" . 
+							"4563120/A-few-more-questions-2" .
+							"?__no_style=true&amp;" .
+							"__ref=pol-info-survey&amp;message_id=' .
+							$values['id'];
+    template_draw("surveygizmo-survey", $values);
 } else {
     // Questionnaire done
     template_draw("survey-done", $values);
