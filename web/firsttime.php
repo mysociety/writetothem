@@ -38,18 +38,23 @@ $values['cobrand'] = $cobrand;
 
 
 // SurveyGizmo survey hook
-// Current url for Proxy Use Survey - but will not be displayed
+// Current url for local councillor name recognition survey
+// https://www.surveygizmo.com/s3/5057760/WTT-Name-Recognition-Local-Council
 
-$send_to_survey_gizmo = 0; 
+local_council_codes = ['DIW','CED','LBW','COP','LGE','MTW','UTE','UTW'];
+$wrote_to_councillor = in_array($values["recipient_type"], local_council_codes);
+
+$send_to_survey_gizmo = $wrote_to_councillor; 
 // use rand(0, 1); for a 50% referral rate 
 
 if ($send_to_survey_gizmo == 1) {
     $values['title'] = "Help us by answering a few quick questions";
-    $values['survey_url'] = 'https://www.surveygizmo.com/s3/" . 
-							"4563120/A-few-more-questions-2" .
-							"?__no_style=true&amp;" .
-							"__ref=pol-info-survey&amp;message_id=' .
-							$values['id'];
+    $values['survey_url'] = 'https://www.surveygizmo.com/s3/' .
+	'5057760/WTT-Name-Recognition-Local-Council' . 
+	'?__no_style=true&amp;' .
+	'__ref=WTT-Name-Recognition-Local-Councily&amp;' .
+	'recipient_id=' . $values['recipient_id'] . '&amp;' .
+	'first_use=' . ($values['questionnaire_1_yes'] ? 'true' : 'false');
     template_draw("surveygizmo-survey", $values);
 } else {
     // Questionnaire done
