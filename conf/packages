@@ -4,7 +4,6 @@ libemail-address-perl
 libnet-dns-perl
 libstring-ediff-perl
 libgd-gd2-perl
-php-html-common
 php-pear
 libcrypt-idea-perl
 netpbm
@@ -14,7 +13,7 @@ libjson-perl
 libregexp-common-perl
 libgeo-ip-perl
 libstring-crc32-perl
-php5-curl
+php-curl
 libphp-phpmailer
 libemail-mime-perl
 libio-all-perl
