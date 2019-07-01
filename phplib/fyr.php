@@ -370,52 +370,6 @@ function parse_date($date) {
 
 # Special case where MEPs of a party have divided up the region between them
 function euro_check(&$area_reps, $vas) {
-    if (!isset($area_reps[11811]))
-        return array();
-
-    if (isset($area_reps[11811])) { # South East Conservative MEPs
-        $area_id = 11811;
-        $meps = array(
-            60855 => array( # Diane James - Surrey, Berkshire, Bucks, Oxfordshire
-                # Surrey (11)
-                # Bucks, Berks, Oxon (7, 8, 6)
-                65856, 65803, 66062, 65838, 65693, 66005, 65589, 65678, 65942, 65747, 66039,
-                65739, 65687, 65909, 65801, 65953, 66076, 66010,
-                65697, 65901, 65862, 65973, 65982, 65680, 65552, 65774,
-                66008, 65786, 66060, 65564, 65638, 65622
-            ),
-            60856 => array( # Raymond Finch - West Sussex and Hampshire
-
-                # West Sussex (8)
-                # Hampshire (18)
-                65781, 65717, 65784, 65841, 65558, 65780, 65999, 65562,
-                65730, 65623, 65881, 65857, 66016, 65580, 65569, 65928, 65556, 65815, 65699, 65729, 65894, 65566, 66014, 65884, 65921, 65791
-            ),
-            60853 => array( # Janice Atkinson - Kent and East Sussex
-                # Kent (17)
-                # East Sussex (8)
-                65811, 65878, 66075, 66011, 65555, 65764, 65779, 65864, 65944, 65936, 65605, 66043, 65698, 65610, 65829, 65744, 65660,
-                65845, 65640, 65961, 65844, 65787, 65714, 65691, 66020,
-            ),
-        );
-    }
-    $keep = array();
-    foreach ($meps as $id => $areas) {
-        foreach ($vas as $va) {
-            if (in_array($va, $areas)) {
-                $keep[$id] = 1;
-                break;
-            }
-        }
-    }
-
-    $hidden = array();
-    foreach ($area_reps[$area_id] as $k => $v) {
-        if (!isset($keep[$v]) && in_array($v, array_keys($meps))) {
-            unset($area_reps[$area_id][$k]);
-            $hidden[] = $v;
-        }
-    }
-    return $hidden;
+    return array();
 }
 
