@@ -94,8 +94,8 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('David Campbell Bannerman', 'Alex Mayer', 'Tim Aker', "Patrick O'Flynn", 'Stuart Agnew', 'Geoffrey Van Orden', 'John Flack');
-my $mep_rep_name = 'Alex Mayer';
+our @rep_names = ('Barbara Gibson', 'Catherine Rowett', 'June Mummery', 'Lucy Nethsingha', 'Richard Tice', 'Geoffrey Van Orden', 'Michael Heaver');
+my $mep_rep_name = 'Catherine Rowett';
 
 #############################################################################
 # Main code
