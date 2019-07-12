@@ -47,7 +47,7 @@ $wrote_to_councillor = in_array($values["recipient_type"], $local_council_codes)
 $send_to_survey_gizmo = $wrote_to_councillor; 
 // use rand(0, 1); for a 50% referral rate 
 
-if ($send_to_survey_gizmo == 1) {
+if ($send_to_survey_gizmo) {
     $values['title'] = "Help us by answering a few quick questions";
     $values['survey_url'] = 'https://www.surveygizmo.com/s3/' .
 	'5057760/WTT-Name-Recognition-Local-Council' . 
