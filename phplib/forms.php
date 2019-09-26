@@ -62,7 +62,7 @@ class HTML_QuickForm_Renderer_mySociety extends HTML_QuickForm_Renderer_Default 
         return new HTML_QuickFormRenderer_mySociety();
     }
 
-    function HTML_QuickForm_Renderer_mySociety() {
+    function __construct() {
         $this->HTML_QuickForm_Renderer_Default();
         $this->setFormTemplate('
             <form{attributes}>

@@ -42,7 +42,7 @@ function get_token()
 
 class ADMIN_PAGE_FYR_QUEUE
 {
-    public function ADMIN_PAGE_FYR_QUEUE()
+    public function __construct()
     {
         $this->id = "fyrqueue";
         $this->navname = "Message Queue";
