@@ -181,10 +181,12 @@ sub confirm_message {
             $conf_name = $repname;
         }
         my $confirmation_email = $wth->email_get_containing(
-            '%To: "'.name_n($who).'" <'.email_n($who).'>'.
-            '%Subject: Please confirm that you want to send a message to %'.$conf_name.
-            '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF'.
-            '%to confirm that you wish%');
+            [ -and =>
+                '%To: "'.name_n($who).'" <'.email_n($who).'>%',
+                '%Subject: Please confirm that you want to send a message to %'.$conf_name.'%',
+                '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF%',
+                '%to confirm that you wish%'
+            ]);
         die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*(${base_url}[^ ]*)\n\n#m);
         print "Message confirm URL is $1\n" if $verbose > 1;
         my $url = $1;
@@ -204,11 +206,13 @@ sub check_delivered_to_rep {
 
     call_fyrqd($wth, $verbose, $multispawn);
     my $content = $wth->email_get_containing(
-        '%Subject: Letter from %'.name_n($who).
-        '%To: "%'.$repname.'%" <'.email_n($who).'>'.
-        '%From: "'.name_n($who).'" <'.email_n($who).'>'.
-        '%'.$extra_check.
-        '%Signed with an electronic signature%');
+        [ -and =>
+            '%Subject: Letter from %'.name_n($who).'%',
+            '%To: "%'.$repname.'%" <'.email_n($who).'>%',
+            '%From: "'.name_n($who).'" <'.email_n($who).'>%',
+            '%'.$extra_check.'%',
+            '%Signed with an electronic signature%'
+        ]);
     return $content;
 }
 

@@ -199,9 +199,11 @@ sub do_send_example_message {
     set_fyr_date('1990-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%To: "'.name_n(0).'" <'.email_n(0).'>'.
-        '%Subject: Did your MP reply to your letter?'.
-        "%Two weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
+        [ -and =>
+            '%To: "'.name_n(0).'" <'.email_n(0).'>%',
+            '%Subject: Did your MP reply to your letter?%',
+            "%Two weeks ago we sent your letter to $CAMBRIDGE_MP MP%"
+        ]);
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
     $wth->email_check_none_left();
@@ -209,9 +211,11 @@ sub do_send_example_message {
     set_fyr_date('1990-01-22', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     $questionnaire_email = $wth->email_get_containing(
-        '%To: "'.name_n(0).'" <'.email_n(0).'>'.
-        '%Subject: Did your MP reply to your letter?'.
-        "%Three weeks ago we sent your letter to $CAMBRIDGE_MP MP%");
+        [ -and =>
+            '%To: "'.name_n(0).'" <'.email_n(0).'>%',
+            '%Subject: Did your MP reply to your letter?%',
+            "%Three weeks ago we sent your letter to $CAMBRIDGE_MP MP%"
+        ]);
 
     # Get links from questionnaire email
     die "Questionnaire yes link not found" if ($questionnaire_email !~ m#^\s*($base_url/Y/.*$)#m);
@@ -291,9 +295,11 @@ sub do_send_blocked_message {
     set_fyr_date('1990-07-08', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $confirmation_email = $wth->email_get_containing(
-        '%To: "'.name_n(1).'" <'.email_n(1).'>'.
-        "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP".
-        '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+        [ -and =>
+            '%To: "'.name_n(1).'" <'.email_n(1).'>%',
+            "%Subject: Unfortunately, we couldn't send your message to $CAMBRIDGE_MP MP%",
+            '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+        ]);
 }
 
 #############################################################################
@@ -367,7 +373,7 @@ On Mon, Jan 01, 1990 at 03:04:58PM +0000, WriteToThem wrote:
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
-    $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
+    $wth->email_get_containing([ -and => '%To: <'.email_n(5).'>%', '%This is an automatic response%']);
     $wth->email_check_none_left();
 
     # Send message without link ...
@@ -389,7 +395,7 @@ Woot woot woot!
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # .. check that administrator gets the message
-    $wth->email_get_containing('%To: WriteToThem <'.$bounce_address.'>%Woot woot woot!%');
+    $wth->email_get_containing([ -and => '%To: WriteToThem <'.$bounce_address.'>%', '%Woot woot woot!%' ]);
     $wth->email_check_none_left();
 
     # Send message with questionnaire links ...
@@ -425,7 +431,7 @@ On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
-    $wth->email_get_containing('%To: <'.email_n(5).'>%This is an automatic response%');
+    $wth->email_get_containing([ -and => '%To: <'.email_n(5).'>%', '%This is an automatic response%' ]);
     $wth->email_check_none_left();
 }
 
@@ -463,9 +469,11 @@ sub do_send_lords_message {
     set_fyr_date('1992-01-15', undef, $verbose);
     call_fyrqd($wth, $verbose, $multispawn);
     my $questionnaire_email = $wth->email_get_containing(
-        '%To: "'.name_n(50).'" <'.email_n(50).'>'.
-        '%Subject: Did your Lord reply to your letter?'.
-        '%Two weeks ago we sent your letter to Lord Rogers of Riverside%');
+        [ -and =>
+            '%To: "'.name_n(50).'" <'.email_n(50).'>%',
+            '%Subject: Did your Lord reply to your letter?%',
+            '%Two weeks ago we sent your letter to Lord Rogers of Riverside%'
+        ]);
     $wth->email_check_none_left();
 
     # Get links from questionnaire email
@@ -632,10 +640,11 @@ sub do_send_group_abuse {
         # being wrapped
         $rep_name =~ s/Campbell Bannerman/Campbell/;
         $confirmation_email = $wth->email_get_containing(
-        '%To: "'.name_n(10).'" <'.email_n(10).'>'.
-        '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
-        '%We\'re very sorry, but it wasn\'t possible to send your letter%'
-        );
+            [ -and =>
+                '%To: "'.name_n(10).'" <'.email_n(10).'>%',
+                '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .'%',
+                '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+            ]);
 
     }
 
@@ -725,9 +734,11 @@ sub do_send_group_abuse {
             check_delivered_to_rep(12, $rep_name, '44 Multiple Street', $options);
         }else{
             $confirmation_email = $wth->email_get_containing(
-            '%To: "'.name_n(12).'" <'.email_n(12).'>'.
-            '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .
-            '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+                [ -and =>
+                    '%To: "'.name_n(12).'" <'.email_n(12).'>%',
+                    '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .'%',
+                    '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+                ]);
         }
     }
     # None of these messages should get through
@@ -753,9 +764,11 @@ sub do_send_group_abuse {
             # truncate the long name
             $rep_name =~ s/Alex Hollingsworth/Alex/;
             $confirmation_email = $wth->email_get_containing(
-            '%To: "'.name_n(13).'" <'.email_n(13).'>'.
-            '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .
-            '%We\'re very sorry, but it wasn\'t possible to send your letter%');
+                [ -and =>
+                    '%To: "'.name_n(13).'" <'.email_n(13).'>%',
+                    '%Subject: Unfortunately, we couldn\'t send your message to Cllr '. $rep_name .'%',
+                    '%We\'re very sorry, but it wasn\'t possible to send your letter%'
+                ]);
         }
 
     # Get rid of the rules we created so they don't affect the other tests
@@ -904,5 +917,3 @@ sub do_send_bouncing_message() {
     $wth->browser_check_contents('<b>frozen</b>');
 }
 =cut
-
-
