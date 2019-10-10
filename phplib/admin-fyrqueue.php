@@ -124,11 +124,11 @@ class ADMIN_PAGE_FYR_QUEUE
 
         $form = new HTML_QuickForm('searchForm', 'post', $this->self_link);
         $searchgroup = array();
-        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu</b>");
-        $searchgroup[] = &HTML_QuickForm::createElement('text', 'query', null, array('size'=>12));
-        $searchgroup[] = &HTML_QuickForm::createElement('submit', 'search', 'Search');
-        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>]</b>");
-        $searchgroup[] = &HTML_QuickForm::createElement('static', null, null, "<b>$qmenu2</b>");
+        $searchgroup[] = $form->createElement('static', null, null, "<b>$qmenu</b>");
+        $searchgroup[] = $form->createElement('text', 'query', null, array('size'=>12));
+        $searchgroup[] = $form->createElement('submit', 'search', 'Search');
+        $searchgroup[] = $form->createElement('static', null, null, "<b>]</b>");
+        $searchgroup[] = $form->createElement('static', null, null, "<b>$qmenu2</b>");
         $form->addGroup($searchgroup, "actiongroup", "", ' ', false);
         admin_render_form($form);
     }
@@ -537,50 +537,50 @@ class ADMIN_PAGE_FYR_QUEUE
             $form = new HTML_QuickForm('messageForm', 'post', $self_link);
             $actiongroup = array();
             if (!get_http_var('note')) {
-                $actiongroup[] = &HTML_QuickForm::createElement('text', 'notebody', null, array('size'=>30));
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'note', 'Note');
+                $actiongroup[] = $form->createElement('text', 'notebody', null, array('size'=>30));
+                $actiongroup[] = $form->createElement('submit', 'note', 'Note');
             }
-            $actiongroup[] = &HTML_QuickForm::createElement('static', null, null, " <b>Action:</b>");
+            $actiongroup[] = $form->createElement('static', null, null, " <b>Action:</b>");
             if ($message['frozen']) {
                 if ($message['state'] != 'error' and $message['state'] != 'failed'
                     and $message['state'] != 'failed_closed') {
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Error with email');
+                    $actiongroup[] = $form->createElement('submit', 'error', 'Error with email');
                 }
                 if ($message['state'] != 'failed' and $message['state'] != 'failed_closed') {
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'failed', 'Fail silently');
+                    $actiongroup[] = $form->createElement('submit', 'failed', 'Fail silently');
                 }
                 if ($message['state'] != 'error' and $message['state'] != 'failed'
                     and $message['state'] != 'failed_closed') {
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'thaw', 'Thaw');
+                    $actiongroup[] = $form->createElement('submit', 'thaw', 'Thaw');
                 }
             } else {
                 if ($message['state'] != 'error' and $message['state'] != 'failed'
                     and $message['state'] != 'failed_closed') {
-                    $actiongroup[] = &HTML_QuickForm::createElement('submit', 'freeze', 'Freeze');
+                    $actiongroup[] = $form->createElement('submit', 'freeze', 'Freeze');
                 }
             }
             if ($message['no_questionnaire']) {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'yes_questionnaire', 'Allow Questionnaire');
+                $actiongroup[] = $form->createElement('submit', 'yes_questionnaire', 'Allow Questionnaire');
             } else {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_questionnaire', 'No Questionnaire');
+                $actiongroup[] = $form->createElement('submit', 'no_questionnaire', 'No Questionnaire');
             }
             if ($message['state'] == 'pending') {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Confirm');
+                $actiongroup[] = $form->createElement('submit', 'ready', 'Confirm');
             } elseif ($message['state'] == 'failed' || $message['state'] == 'failed_closed') {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'ready', 'Retry');
+                $actiongroup[] = $form->createElement('submit', 'ready', 'Retry');
             }
 
             if (!get_http_var('body')) {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'body', 'View Body');
+                $actiongroup[] = $form->createElement('submit', 'body', 'View Body');
             } else {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'nobody', 'Hide Body');
+                $actiongroup[] = $form->createElement('submit', 'nobody', 'Hide Body');
             }
             if (!get_http_var('wire_emails')) {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'wire_emails', 'View Emails');
+                $actiongroup[] = $form->createElement('submit', 'wire_emails', 'View Emails');
             } else {
-                $actiongroup[] = &HTML_QuickForm::createElement('submit', 'no_wire_emails', 'Hide Emails');
+                $actiongroup[] = $form->createElement('submit', 'no_wire_emails', 'Hide Emails');
             }
-            $actiongroup[] = &HTML_QuickForm::createElement(
+            $actiongroup[] = $form->createElement(
                 'submit', 'scrub_data', 'Delete all user data', array(
                     'onclick' => "return confirm('Are you sure?')",
                 ));
@@ -704,9 +704,9 @@ There's a copy of your message below, so you can send it another way, if you lik
                 if ($message['state'] == 'bounce_confirm') {
                     $form = new HTML_QuickForm('bounceForm', 'post', $self_link);
                     $bouncegroup = array();
-                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'error', 'Fatal Delivery Error');
-                    $bouncegroup[] = &HTML_QuickForm::createElement('submit', 'bounce_wait', 'Temporary Problem');
-                    $bouncegroup[] = &HTML_QuickForm::createElement(
+                    $bouncegroup[] = $form->createElement('submit', 'error', 'Fatal Delivery Error');
+                    $bouncegroup[] = $form->createElement('submit', 'bounce_wait', 'Temporary Problem');
+                    $bouncegroup[] = $form->createElement(
                         'submit',
                         'ready',
                         'Fatal Delivery Error, but should retry with same details'

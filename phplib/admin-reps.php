@@ -257,8 +257,8 @@ class ADMIN_PAGE_REPS
         $form = new HTML_QuickForm('adminRepsSearchForm', 'get', $this->self_link);
         $form->addElement('header', '', 'Search');
         $buttons = array();
-        $buttons[] =& HTML_QuickForm::createElement('text', 'search', null, array('size' => 20, 'maxlength' => 255));
-        $buttons[] =& HTML_QuickForm::createElement('submit', 'gos', 'postcode or query');
+        $buttons[] = $form->createElement('text', 'search', null, array('size' => 20, 'maxlength' => 255));
+        $buttons[] = $form->createElement('submit', 'gos', 'postcode or query');
         $form->addElement('hidden', 'page', $this->id);
         $form->addGroup($buttons, 'stuff', null, '&nbsp', false);
         admin_render_form($form);
@@ -428,10 +428,10 @@ class ADMIN_PAGE_REPS
         }
     }
 
-    private function displayRepActions()
+    private function displayRepActions($form)
     {
         $finalgroup = array();
-        $finalgroup[] = &HTML_QuickForm::createElement(
+        $finalgroup[] = $form->createElement(
             'static',
             'newlink',
             null,
@@ -442,20 +442,20 @@ class ADMIN_PAGE_REPS
             "</a> \n"
         );
         if ($this->repinfo['deleted']) {
-            $finalgroup[] = &HTML_QuickForm::createElement(
+            $finalgroup[] = $form->createElement(
                 'static',
                 'staticspacer',
                 null,
                 '&nbsp; Deleted rep, no longer in office, just click done to undelete'
             );
         } else {
-            $finalgroup[] = &HTML_QuickForm::createElement(
+            $finalgroup[] = $form->createElement(
                 'static',
                 'staticspacer',
                 null,
                 '&nbsp; No longer in office? --->'
             );
-            $finalgroup[] = &HTML_QuickForm::createElement('submit', 'delete', 'Delete');
+            $finalgroup[] = $form->createElement('submit', 'delete', 'Delete');
         }
         return $finalgroup;
     }
@@ -557,11 +557,11 @@ class ADMIN_PAGE_REPS
         $this->displayRepMainForm($form);
 
         $finalgroup = array();
-        $finalgroup[] = &HTML_QuickForm::createElement('submit', 'done', 'Done');
-        $finalgroup[] = &HTML_QuickForm::createElement('submit', 'cancel', 'Cancel');
+        $finalgroup[] = $form->createElement('submit', 'done', 'Done');
+        $finalgroup[] = $form->createElement('submit', 'cancel', 'Cancel');
         if ($this->vainfo['editable_here']) {
             if ($this->repinfo) {
-                $finalgroup = array_merge($finalgroup, $this->displayRepActions());
+                $finalgroup = array_merge($finalgroup, $this->displayRepActions($form));
             }
         } else {
             $form->addElement(
@@ -757,15 +757,15 @@ class ADMIN_PAGE_REPS
             }
 
             $usercorr = array();
-            $usercorr[] =& HTML_QuickForm::createElement('static', 'usercorrections', null, $html);
+            $usercorr[] = $form->createElement('static', 'usercorrections', null, $html);
             // You can't do this with element type "hidden" as it only allows one value in a
             // page for variable named ucid.  So once again I go to raw HTML.  Remind me not
             // to use HTML_QuickForm again...
-            $usercorr[] =& HTML_QuickForm::createElement(
+            $usercorr[] = $form->createElement(
                 'html',
                 '<input name="ucid" type="hidden" value="'. $correction['user_correction_id'] . '" />'
             );
-            $usercorr[] =& HTML_QuickForm::createElement('submit', 'ucclose', 'hide (done)');
+            $usercorr[] = $form->createElement('submit', 'ucclose', 'hide (done)');
             $form->addGroup($usercorr, 'stuff', null, '&nbsp', false);
             admin_render_form($form);
         }
