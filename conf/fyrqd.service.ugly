@@ -1,0 +1,16 @@
+#
+# systemd unit for fyrqd
+#
+
+
+[Unit]
+Description=!!(*= $daemon_name *)!!
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=!!(*= $user *)!!
+ExecStart=/data/vhost/!!(*= $vhost *)!!/writetothem/bin/fyrqd --debug
+
+[Install]
+WantedBy=multi-user.target
