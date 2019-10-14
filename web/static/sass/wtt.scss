@@ -215,7 +215,8 @@ table {
     font-size: emCalc(16);
 }
 .banner--donate {
-    background: $success-color;
+    text-align: center;
+    background: $alert-color;
     color: #fff;
     a {
         color: #fff;
