@@ -39,12 +39,14 @@ $values['cobrand'] = $cobrand;
 
 // SurveyGizmo survey hook
 // Current url for local councillor name recognition survey
+// Survey disabled
 // https://www.surveygizmo.com/s3/5057760/WTT-Name-Recognition-Local-Council
 
 $local_council_codes = ['DIW','CED','LBW','COP','LGE','MTW','UTE','UTW'];
 $wrote_to_councillor = in_array($values["recipient_type"], $local_council_codes);
 
-$send_to_survey_gizmo = $wrote_to_councillor; 
+//send no surveys
+$send_to_survey_gizmo = 0; 
 // use rand(0, 1); for a 50% referral rate 
 
 if ($send_to_survey_gizmo) {
