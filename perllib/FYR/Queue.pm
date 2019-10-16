@@ -411,11 +411,11 @@ sub write_messages($$$$;$$$$){
                         ?, ?, ?, ?
                     )#, {},
                         $id,
-                        (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
+                        (map { as_utf8_octets($sender->{$_}) || undef } qw(name email address phone postcode ipaddr referrer)),
                         $recipient_id,
-                        (map { $recipient->{$_} || undef } qw(name type email fax)),
+                        (map { as_utf8_octets($recipient->{$_}) || undef } qw(name type email fax)),
                         $recipient->{via} ? 't' : 'f',
-                        $text,
+                        as_utf8_octets($text),
                         FYR::DB::Time(), FYR::DB::Time(),
                         $cobrand, $cocode, $group_id, $no_questionnaire);
 
@@ -543,7 +543,7 @@ sub logmsg ($$$;$) {
         {},
         $id,
         $log_hostname, FYR::DB::Time(), state($id),
-        $msg, $important ? 't' : 'f',
+        as_utf8_octets($msg), $important ? 't' : 'f',
         $editor);
     $dbh->commit();
     # XXX should we pass the hostname to the handler?
@@ -704,7 +704,7 @@ sub message ($;$$) {
     my $msg;
     try{
         $msg = dbh()->selectrow_hashref("select * from message where id = ?$forupdate$nowait_str", {}, $id);
-	if ($msg) {
+        if ($msg) {
             # Add some convenience fields.
             my $recipient_position = $mySociety::VotingArea::rep_name{$msg->{recipient_type}};
             my $recipient_position_plural = $mySociety::VotingArea::rep_name_plural{$msg->{recipient_type}};
@@ -875,6 +875,7 @@ sub as_cp1252_octets ($) {
 # in UTF-8.
 sub as_utf8_octets ($) {
     my $s = shift;
+    return $s unless $s;
     die "STRING is not valid ASCII/UTF-8" unless (utf8::valid($s));
     utf8::encode($s);
     return $s;
