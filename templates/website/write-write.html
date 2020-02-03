@@ -108,26 +108,12 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 <li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
 your message will be ignored.</li>
 
-    <?php if (($values['who'] == 'all' && $values['type'] == 'EUR') || $values['representative']['type'] == 'EUR') { ?>
-
-    <li>MEPs can help you on proposed European directives (laws), and questions on
-    the European Parliament, Commission, or Union.  However, once passed, EU laws
-    become the responsibility of the UK to implement, so you may wish to go back
-    and contact your MP about them in that case. Similarly if your letter is about
-    a local or national issue, please go back and contact a regional or national
-    representative, as your MEP will be unable to help you in that case.
-
-    <li>Note that MEPs cannot help raise an issue with the European Court of Human
-    Rights. The Convention is incorporated into UK law, so any challenge must start
-    in the UK legal system.
-
-    <?  } else {
-            $hashref = strtolower($values['voting_area']['rep_name']);
-            if ($hashref == 'london assembly member') $hashref = 'lam';
-            if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
-            echo '<li><a class="fancybox" href="about-yourrep#' . $hashref . '" target="_blank">Read this<small></small></a> to learn when a ',
-                $values['voting_area']['rep_name'], ' can help you &ndash; and when they can&rsquo;t.</li>';
-        }
+    <?
+        $hashref = strtolower($values['voting_area']['rep_name']);
+        if ($hashref == 'london assembly member') $hashref = 'lam';
+        if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
+        echo '<li><a class="fancybox" href="about-yourrep#' . $hashref . '" target="_blank">Read this<small></small></a> to learn when a ',
+            $values['voting_area']['rep_name'], ' can help you &ndash; and when they can&rsquo;t.</li>';
         ?>
 
     <?php else: ?>

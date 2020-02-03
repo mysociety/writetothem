@@ -38,7 +38,6 @@ $fyr_all_url = limit_areas($area_types, $voting_areas); # Might alter voting_are
 $va_ids = area_ids($voting_areas);
 $area_representatives = get_reps($va_ids);
 $representatives_info = get_reps_info($area_representatives);
-$meps_hidden = euro_check($area_representatives, $va_ids);
 
 // For each voting area in order, find all the representatives.  Put
 // descriptive text and form text in an array for the template to
@@ -63,7 +62,7 @@ foreach ($va_display_order as $va_types) {
     if ($has_list_reps) {
         list($text, $col_after) = display_reps_two_types($va_types, $va_areas, $representatives, $rep_count, $rep_counts);
     } else {
-        list($text, $col_after) = display_reps_one_type($va_types[0], $va_areas[0], $representatives[0], $rep_count, $meps_hidden);
+        list($text, $col_after) = display_reps_one_type($va_types[0], $va_areas[0], $representatives[0], $rep_count);
     }
 
     if ($rep_count > 1) {
@@ -364,16 +363,11 @@ function display_reps($va_type, $representatives, $va_area, $options) {
     return $out;
 }
 
-function display_reps_one_type($va_type, $va_area, $representatives, $rep_count, $meps_hidden) {
+function display_reps_one_type($va_type, $va_area, $representatives, $rep_count) {
     global $representatives_info, $cobrand, $va_council_child_types;
 
     $text = ''; // a string of html containing the main rep names and links
     $col_after = ''; // a string of html containing extra links, like help and TWFY
-
-    if ($rep_count > 1) {
-        if ($va_type == 'EUR' && count($meps_hidden))
-            $rep_count += count($meps_hidden);
-    }
 
     if ($rep_count > 1 && !skip_write_all()) {
         // $text .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
@@ -387,8 +381,9 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count,
 
     if ($va_type == 'WMC') {
         $col_after .= extra_mp_text($rep_count, $va_area, $representatives);
-    } elseif ($va_type == 'EUR' && count($meps_hidden)) {
-        $col_after .= hidden_meps_list($meps_hidden, $va_type, $va_area);
+    } elseif ($va_type == 'EUR') {
+        $col_after = 'EUR';
+
     }
 
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
@@ -468,29 +463,6 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
             $text .= '<div class="rep-more">';
         }
     }
-    return $text;
-}
-
-function hidden_meps_list($meps_hidden, $va_type, $va_area) {
-    # XXX Specific to what euro_check currently does!
-    $text = '<p style="margin-top:2em"><small>Some MEPs
-for your region have informed us that they have divided it into areas, with ';
-    if (count($meps_hidden)==1)
-        $text .= 'one or two MEPs';
-    else
-        $text .= 'one MEP';
-    $text .= ' dealing with constituent correspondence per area, so we only show ';
-    if (count($meps_hidden)==1)
-        $text .= 'them';
-    else
-        $text .= 'that MEP';
-    $text .= ' above; you can contact the ';
-    if (count($meps_hidden)==1)
-        $text .= 'other';
-    else
-        $text .= 'others';
-    $text .= ' here:</small></p>';
-    $text .= display_reps($va_type, $meps_hidden, $va_area, array('small' => true));
     return $text;
 }
 

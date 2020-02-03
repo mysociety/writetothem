@@ -973,11 +973,11 @@ last email sent <b><?=strftime('%e %b %Y, %H:%M', $stats["last_email_time"])?></
             <br><b>Contains:</b> Searches the sender details, recipient details and message
             body.  Enter multiple terms separate by spaces, all must be
             present to match.  If you query by state name ('pending') or
-            representative type ('EUR') you must enter the whole word, case
+            representative type ('WMC') you must enter the whole word, case
             sensitive.  Otherwise queries are case insensitive.  Yes, you
             can query on the referrer URL.  If you have one, you can enter
             a confirmation or questionnaire token from an email, such as
-            cqyv7yrisjugc5i5rfz4w75tmnxzi.  Examples: '<b>ready EUR</b>' - all messages to MEPs
+            cqyv7yrisjugc5i5rfz4w75tmnxzi.  Examples: '<b>ready WMC</b>' - all messages to MPs
             which are ready to be sent.  '<b>francis theyworkforyou</b>' - probably
             all messages written by someone called Francis who came to WTT via
             theyworkforyou.com.

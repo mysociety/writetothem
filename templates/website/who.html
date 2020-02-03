@@ -60,6 +60,12 @@ template_draw('header', $values);
 
                     <div class="row">
 
+                      <?php if ($values['more'][$key] == 'EUR'): ?>
+                        <div class="large-12 columns help-text rep-blurb">
+                            <p>As the UK left the European Union on 31st January 2020, you are no longer represented by MEPs.</p>
+                        </div>
+                      <?php else: ?>
+
                         <div class="large-4 columns help-text rep-blurb">
                             <?=$values['blurbs'][$key]?>
                         </div>
@@ -71,6 +77,8 @@ template_draw('header', $values);
                         <div class="large-3 columns help-text rep-more">
                             <?=$values['more'][$key]?>
                         </div>
+
+                      <?php endif; ?>
 
                     </div>
 

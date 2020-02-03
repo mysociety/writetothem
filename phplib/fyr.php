@@ -169,7 +169,7 @@ function fyr_external_referrer() {
  * return an array whose keys are the valid listed TYPES, or null if there are
  * none or if TYPES is null or empty. Known aliases are "council", for
  * councillors of any type; "westminstermp", for MP; "regionalmp" for devolved
- * assembly members/MSPs; or "mep" for MEPs. */
+ * assembly members/MSPs. */
 function fyr_parse_area_type_list($types) {
     if (!isset($types) || $types == '')
         return null;
@@ -215,7 +215,6 @@ function fyr_describe_area_type_list($area_types) {
     $ordered_descs_array = array(
         'Councillors' => $va_aliases['council'],
         '<abbr title="Member of Parliament">MP</abbr>' => array('WMC'),
-        '<abbr title="Members of the European Parliament">MEPs</abbr>' => array('EUR'),
         '<abbr title="Members of the Scottish Parliament">MSPs</abbr>' => array('SPE', 'SPC'),
     );
     foreach ($ordered_descs_array as $k => $v) {
@@ -367,9 +366,3 @@ function parse_date($date) {
                 return null;
         return array('iso'=>"$year-$month-$day", 'epoch'=>$epoch, 'day'=>$day, 'month'=>$month, 'year'=>$year);
 }
-
-# Special case where MEPs of a party have divided up the region between them
-function euro_check(&$area_reps, $vas) {
-    return array();
-}
-
