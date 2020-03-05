@@ -60,7 +60,7 @@ if (isset($values['cobrand']))
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>', 'writetothem.com');
+        ga('create', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>', 'writetothem.com', {'storage':'none'});
         ga('set', 'anonymizeIp', true);
         ga('send', 'pageview');
 
