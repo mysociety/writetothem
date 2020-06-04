@@ -23,6 +23,7 @@ use lib "$FindBin::Bin/../commonlib/perllib";
 
 use MIME::Entity;
 use Email::MIME;
+use Encode qw(decode);
 use POSIX qw(strftime);
 
 use mySociety::Config;
@@ -248,7 +249,8 @@ sub handle_bounce_to_verp_address {
     # If so, treat as if it were a normal email
     if (!defined($r)) {
         my $subject = $data{message}->head()->get("Subject");
-        if ($subject =~ /Auto(matic|mated)?[ -]?(reply|response)|Thank you for your email|Thank_you_for_your_email|Out of Office|This office is closed until|^Re: Letter from|^Auto: /i) {
+        $subject = decode("MIME-Header", $subject);
+        if ($subject =~ /Auto(matic|mated)?[ -]?(reply|response)|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from|^Auto: /i) {
             print_log('info', "Treating bounce as auto-reply to sender");
             handle_non_bounce_to_verp_address();
             return;
