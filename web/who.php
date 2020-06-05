@@ -18,7 +18,7 @@ $attend_prep = array(
     'COI' => "on",
     'LGD' => "on",
     'SPA' => "in the",
-    'WAS' => "on the",
+    'WAS' => "in the",
     'NIA' => "on the",
     'WMP' => "in the",
     'HOL' => "in the",
@@ -48,7 +48,7 @@ $fyr_blurbs = array();
 $fyr_more = array();
 
 foreach ($va_display_order as $va_types) {
-    $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
+    $has_list_reps = is_array($va_types); # e.g. Welsh Parliament, Scottish Parliament, London Assembly
     if (!is_array($va_types)) $va_types = array($va_types);
     if (!type_present($voting_areas, $va_types)) continue;
 
@@ -272,6 +272,9 @@ function write_all_link($va_type, $rep_desc_plural) {
         $rep_desc_plural = 'London Assembly list members';
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
+    if ($rep_desc_plural == 'MSs') {
+        $rep_desc_plural = 'regional MSs';
+    }
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
