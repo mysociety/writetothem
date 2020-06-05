@@ -48,7 +48,7 @@ $fyr_blurbs = array();
 $fyr_more = array();
 
 foreach ($va_display_order as $va_types) {
-    $has_list_reps = is_array($va_types); # e.g. Welsh Assembly, Scottish Parliament, London Assembly
+    $has_list_reps = is_array($va_types); # e.g. Welsh Parliament, Scottish Parliament, London Assembly
     if (!is_array($va_types)) $va_types = array($va_types);
     if (!type_present($voting_areas, $va_types)) continue;
 

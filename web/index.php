@@ -292,7 +292,7 @@ if ($cobrand){
     $title = cobrand_step_title($cobrand, 1);
 }
 if ($title == ''){
-    $title = "Email your Councillor, MP, MSP or Welsh, NI, or London Assembly Member for free";
+    $title = "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free";
 }
 
 $blurb_top = '<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>';
