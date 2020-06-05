@@ -54,6 +54,9 @@ if ($page == 'write-checkemail')
 
 if ($page == 'confirm-accept') {
     $values['recipient_via'] = '';
+    $values['recipient_name'] = 'Recipient Name';
+    $values['sender_postcode'] = 'SW1A 0AA';
+    $values['group_id'] = '';
 }
 if ($page == 'write-checkemail') {
     $values['group_msg'] = '';

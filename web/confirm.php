@@ -24,7 +24,7 @@ if ($ad) {
     $values = array(
         'recipient_via' => null, 'recipient_name' => 'Recipient Name', 'recipient_type' => 'Type',
         'sender_name' => 'Sender Name', 'sender_email' => 'email', 'sender_postcode' => 'SW1A1AA',
-        'advert' => $ad, 'cobrand' => $cobrand, 'host' => fyr_get_host()
+        'group_id' => '', 'advert' => $ad, 'cobrand' => $cobrand, 'host' => fyr_get_host()
     );
     template_draw("confirm-accept", $values);
     exit;
