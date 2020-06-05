@@ -108,7 +108,7 @@ function shame_error_msg($fyr_voting_area, $fyr_representative) {
      * requested not to be contacted */
     global $fyr_values;
     if ($fyr_voting_area['type'] == 'WMC') {
-        $url = 'http://findyourmp.parliament.uk/postcodes/' . urlencode(str_replace(' ', '', $fyr_values['pc']));
+        $url = 'https://members.parliament.uk/FindYourMP?SearchText=' . urlencode(str_replace(' ', '', $fyr_values['pc']));
         $error_msg = <<<EOF
 $fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
 has told us not to deliver any messages from the constituents of
