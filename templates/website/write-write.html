@@ -128,7 +128,7 @@ your message will be ignored.</li>
 
 if (isset($values['representative']['parlparse_person_id'])) {
 $pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['parlparse_person_id']);
-echo '<li><a target="_blank" href="http://www.theyworkforyou.com/mp/?p=', $pid,
+echo '<li><a target="_blank" href="https://www.theyworkforyou.com/mp/?p=', $pid,
     '">Find out more about ', str_replace('The ', 'the ', $values['representative']['name']),
     '<small></small></a>';
 if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) {

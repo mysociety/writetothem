@@ -18,7 +18,7 @@ require_once "../commonlib/phplib/utility.php";
 
 function fix_dear_lord_address($name) {
     /* Lords are addressed specially at the start of letters:
-     * http://www.parliament.uk/directories/house_of_lords_information_office/address.cfm */
+     * https://www.parliament.uk/business/lords/whos-in-the-house-of-lords/how-to-address-a-lord/ */
 
     # RT ticket 10264
     # https://secure.mysociety.org/rt/Ticket/Display.html?id=10264

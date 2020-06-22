@@ -49,7 +49,7 @@
                 <div class="mysoc-footer__legal">
                     <p>
                         <a href="/about-copyright">Data by GovEval</a>.
-                        <a href="http://www.bytemark.co.uk/">Hosted by Bytemark</a>.
+                        <a href="https://www.bytemark.co.uk/">Hosted by Bytemark</a>.
                         <?php if(isset($values['credit'])) echo $values['credit']; ?>.
                     </p>
                     <p><a href="https://www.mysociety.org?utm_source=writetothem.com&amp;utm_content=footer+full+legal+details&amp;utm_medium=link&amp;utm_campaign=mysoc_footer">mySociety</a> is a registered charity in England and Wales (1076346).</p>

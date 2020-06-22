@@ -33,7 +33,7 @@ if ($page == 'about-index') {
     exit;
 }
 if ($page == 'about-pledgebank') {
-    header("Location: http://www.pledgebank.com");
+    header("Location: https://www.pledgebank.com");
     exit;
 }
 

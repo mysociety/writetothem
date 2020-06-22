@@ -147,7 +147,7 @@ if ($pc) {
     /* Test for various special-case postcodes which lie outside the UK. Many
      * of these aren't valid UK postcode formats, so do a special-case test
      * here rather than passing them down to MaPit. See
-     * http://en.wikipedia.org/wiki/Postcode#Overseas_Territories */
+     * https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#British_Overseas_Territories */
     $pc2 = preg_replace('/\\s+/', '', strtoupper($pc));
     $pc22 = substr($pc2, 0, 2); $pc23 = substr($pc2, 0, 3);
     $otmap = array(

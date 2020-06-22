@@ -282,7 +282,7 @@ function lords_form($error = array()) {
 				
 				<?=$form_extra ?>
 				
-				<p><small><em>(uses <a href="http://www.theyworkforyou.com/">TheyWorkForYou</a>;
+				<p><small><em>(uses <a href="https://www.theyworkforyou.com/">TheyWorkForYou</a>;
 				by words spoken in Parliament, nothing more)</em></small></p>
 			
 			</form>

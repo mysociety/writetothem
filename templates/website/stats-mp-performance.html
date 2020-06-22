@@ -164,7 +164,7 @@ if (is_array($mp)) {
                     <div class="column small-3">
                         <p>
                             <strong>See how <?=$h_name ?></strong> voted, and more, on
-                            <a href="http://www.theyworkforyou.com/mp?pid=<?=str_replace('uk.org.publicwhip/person/', '', $mp['person_id']) ?>">TheyWorkForYou</a>
+                            <a href="https://www.theyworkforyou.com/mp?pid=<?=str_replace('uk.org.publicwhip/person/', '', $mp['person_id']) ?>">TheyWorkForYou</a>
                         </p>
                     </div>
                     <div class="columns small-4">
@@ -277,7 +277,7 @@ if (is_array($mp)) {
                   if ($href == 'angela_smith' || $href == 'gareth_thomas')
                       $href .= ',' . str_replace(' ', '_', strtolower($row['area']));
                   print '<a name="' . $href . '"></a>';
-                  print '<a href="http://www.theyworkforyou.com/mp?pid='.str_replace('uk.org.publicwhip/person/', '', $row['person_id']).'">';
+                  print '<a href="https://www.theyworkforyou.com/mp?pid='.str_replace('uk.org.publicwhip/person/', '', $row['person_id']).'">';
                   print str_replace(' ','&nbsp;', htmlspecialchars($row['name']));
                   print '</a>';
                   print '<br><small>';

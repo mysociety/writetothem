@@ -5,4 +5,4 @@ We have sent this email to <?=$values['recipient_email']?>; if this
 address is out of date please email us so that we can update our records. ]
 
 Get emails when local people report street problems in your ward
-at: http://www.fixmystreet.com/alert
+at: https://www.fixmystreet.com/alert
