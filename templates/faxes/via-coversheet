@@ -6,4 +6,4 @@ OR, if they are no longer <?=$values['recipient_position']?>, please forward it 
 
 IF IT IS NOT YOUR JOB TO FORWARD THIS MAIL, or if there is a more appropriate email address or fax number for messages to this <?=$values['recipient_position']?>, please let us know by sending an email to feedback@writetothem.com, quoting reference <?=$values['recipient_id']?>. This will prevent you from receiving further mail, and improve the service for local people. We also welcome any other feedback you may have.
 
-(Sent via WriteToThem.com, a project of UKCOD, registered charity number 1076346.)
+(Sent via WriteToThem.com, a project of mySociety, registered charity number 1076346.)
