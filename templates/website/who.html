@@ -50,9 +50,22 @@ template_draw('header', $values);
                     <p><big>Sorry, but we’ve not got any data for your area. Please
                     <a href="/about-contact">contact us</a> and let us know that this matters
                     to you.</big></p>
-                <? endif; ?>
+                <?php endif; ?>
 
             <?php else: ?>
+
+                <?php if (1 < count($values['reps']) && strpos($values['blurbs'][1], 'Buckinghamshire County Council') !== false): ?>
+                    <h2>Important note</h2>
+                    <p>Buckinghamshire County Council and its district councils
+                    merged into one Buckinghamshire Council in April 2020.
+                    Elections were due to be held in May 2020, but these were
+                    postponed for a year because of COVID-19.  The official
+                    site has a PDF that assigns existing councillors to any
+                    ward their previous area covered; for simplicity we keep
+                    showing the two levels of councillor here, though all are
+                    now equivalent councillors on the same unitary
+                    authority.</p>
+                <?php endif; ?>
 
                 <?php foreach ($values['reps'] as $key => $rep): ?>
 
