@@ -18,7 +18,7 @@
                     </ul>
                     <ul>
                         <li role="presentation"><a href="/about-copyright">Copyright</a></li>
-                        <li role="presentation"><a href="/about-privacy">Privacy &amp; Cookies</a></li>
+                        <li role="presentation"><a href="/about-privacy">Privacy</a></li>
                     </ul>
                 </nav>
             </div>
