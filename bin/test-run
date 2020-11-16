@@ -94,8 +94,8 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('Barbara Gibson', 'Catherine Rowett', 'June Mummery', 'Lucy Nethsingha', 'Richard Tice', 'Geoffrey Van Orden', 'Michael Heaver');
-my $mep_rep_name = 'Catherine Rowett';
+our @rep_names = ('Anthony Martinelli', 'Katie Porrer', 'Tim Bick');
+my $mep_rep_name = 'Katie Porrer';
 
 #############################################################################
 # Main code
@@ -611,7 +611,7 @@ sub do_send_group_abuse {
     $options->{base_url} = $base_url;
     my $repinfo = {repname => 'all', 
                    repnames => \@rep_names, 
-                   reptype => 'MEPs'};
+                   reptype => 'District Councillors'};
 
     # All mails in a group should be checked for abuse
     send_message_to_rep(10,
@@ -642,7 +642,7 @@ sub do_send_group_abuse {
         $confirmation_email = $wth->email_get_containing(
             [ -and =>
                 '%To: "'.name_n(10).'" <'.email_n(10).'>%',
-                '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .'%',
+                '%Subject: Unfortunately, we couldn\'t send your message to Cllr%'. $rep_name .'%',
                 '%We\'re very sorry, but it wasn\'t possible to send your letter%'
             ]);
 
@@ -708,7 +708,7 @@ sub do_send_group_abuse {
 
     # All these messages should get through except the one to the same rep
     $repinfo = {repname => 'all',
-                reptype => 'MEPs', 
+                reptype => 'District Councillors',
                 repnames => \@rep_names};
     send_message_to_rep(12,
                         'CB23QJ', # The Guildhall, Cambridge
@@ -736,7 +736,7 @@ sub do_send_group_abuse {
             $confirmation_email = $wth->email_get_containing(
                 [ -and =>
                     '%To: "'.name_n(12).'" <'.email_n(12).'>%',
-                    '%Subject: Unfortunately, we couldn\'t send your message to '. $rep_name .'%',
+                    '%Subject: Unfortunately, we couldn\'t send your message to Cllr%'. $rep_name .'%',
                     '%We\'re very sorry, but it wasn\'t possible to send your letter%'
                 ]);
         }
@@ -744,7 +744,7 @@ sub do_send_group_abuse {
     # None of these messages should get through
     my @new_rep_names = ('Richard Howlett', 'Alex Hollingsworth');
     $repinfo = {repname => 'all', 
-                reptype => 'District', # should be District Councillors but wrapping
+                reptype => 'District Councillors',
                 repnames => \@new_rep_names};
     send_message_to_rep(13,
                         'OX 13d R', # Lincoln college, Oxford
@@ -786,7 +786,7 @@ sub do_send_group_message {
     $options->{base_url} = $base_url;
     my $repinfo = {repname => 'all',
                    repnames => \@rep_names,
-                   reptype => 'MEPs'};
+                   reptype => 'District Councillors'};
                    
     send_message_to_rep(7,
                         'CB23QJ', # The Guildhall, Cambridge 
@@ -831,7 +831,7 @@ sub do_admin_confirm_group_message {
     set_base_url("");
     set_fyr_date('1994-01-01', undef, $verbose);
     $options->{base_url} = $base_url;
-    my $repinfo = { repname => 'all', repnames => \@rep_names, reptype => 'MEPs' };
+    my $repinfo = { repname => 'all', repnames => \@rep_names, reptype => 'District Councillors' };
 
     send_message_to_rep(7, 'CB23QJ', {
          writer_address1 => '44 Multiple Street',
