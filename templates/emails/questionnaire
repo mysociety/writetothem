@@ -22,10 +22,10 @@ NO, but I didn't expect/require a response! - please click here:
 NO, they did not reply! - please click here:
 <?=$values['no_url']?>
 
-Your feedback allows us to analyse the responsiveness
-of all the politicians in the UK. We are keen to give politicians the credit
-they deserve when they respond promptly to their constituents. We think it's
-also worth highlighting the representatives who don't.
+Your feedback allows us to analyse the responsiveness of politicians in the UK.
+ We use this information to check that the service is working, alert us to
+ potential issues, and perform research into how responsive politicians
+ are to contact from constituents.
 
 Please do not reply to this mail. If you have a question or comment about the
 site, please send an email to <?=$values['contact_email']?>
