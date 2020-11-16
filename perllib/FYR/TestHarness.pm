@@ -180,6 +180,7 @@ sub confirm_message {
         }else{
             $conf_name = $repname;
         }
+        $conf_name =~ s/ /%/g;
         my $confirmation_email = $wth->email_get_containing(
             [ -and =>
                 '%To: "'.name_n($who).'" <'.email_n($who).'>%',
