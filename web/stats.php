@@ -57,7 +57,7 @@ foreach ($years as $y) {
 if (!$got_year) {
     template_show_error("We don’t have statistics for that year");
 }
-$year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
+$year_bar = "<p>Statistics for other years (<a href="https://www.mysociety.org/2020/11/16/publishing-less-our-current-thinking-about-comparative-statistics/">why don’t we publish these any more?</a>):</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
 #if (!get_http_var('really'))
 #    $year_bar = "";
 
