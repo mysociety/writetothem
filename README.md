@@ -10,6 +10,42 @@ built from the start to be more flexible and easier to use.
 
 ## Developing WriteToThem
 
+This repository contains a simple development environment based on Docker Compose.
+
+Currently, this environment can be used for making changes to the front-end of the
+site - HTML, styles, etc. Additional integration for full back-end testing (such as
+representative lookup, etc) is not currently available.
+
+Assuming you have Docker installed locally, you should be able to start the 
+development environment by running:
+
+    docker-compose up
+
+This will start two containers (one for the app and a Postgres database) in the
+foreground. You can stop the environment by pressing `CTRL-C`.
+
+If you'd prefer them to run in the background, add the `-d` flag:
+
+    docker-compose up -d
+
+To stop the environment in this case run:
+
+    docker-compose down
+
+The first time you run the environment, a local image will be built for the app
+container and the database will have the schema loaded automatically.
+
+Once the environment is running, it should be accessible at http://127.0.0.1.xip.io:8085/
+(note that you'll get an error if you simply visit localhost:8085 at present).
+
+If you need to rebuild the app container, you can do so by running:
+
+    docker-compose build
+
+Changes made to styles, etc, (as described in the next section) should be
+reflected when a page is reloaded as your local working copy is mapped to
+the document root of the app container.
+
 ### Stylesheets
 
 WriteToThem uses the [Foundation framework](http://foundation.zurb.com/),
