@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  fyr:
+    build: .
+    ports:
+      - 8085:80
+    volumes:
+      - ./:/var/www/html/writetothem
+      - ./conf/general.docker:/var/www/html/writetothem/conf/general
+      - ./conf/httpd.conf.docker:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - postgres
+
+  postgres:
+    image: fixmystreet/postgres:latest
+    environment:
+      - POSTGRES_USER=fyr
+      - POSTGRES_PASSWORD=fyr
+      - POSTGRES_DB=fyr
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  postgres_data:
