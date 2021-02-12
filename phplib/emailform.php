@@ -22,14 +22,14 @@ $radiovals = array(
     array ('label' => 'Other', 'value' => 'other')
 );
 $emailformfields = array (
-    array ('label'        => 'Name',
+    array ('label'        => 'Your name',
            'inputname'    => 'name',
            'inputtype'    => 'text',
            'size'         => '30',
            'spamcheck'    => "1",
            'errormessage' => 'Please enter your name',
            'required'     => 1),
-    array ('label'       => 'Email Address',
+    array ('label'       => 'Your email',
            'inputname'   => 'emailaddy',
            'inputtype'   => 'text',
            'size'        => '30',
@@ -94,19 +94,23 @@ function fyr_display_emailform () {
 
 function render_formfield ($defs, $messages) {
   $input = '';
-  $value='';
+  $value = '';
   if (isset($defs['value']))
       $value = $defs['value'];
   if (isset($_POST[$defs['inputname']]))
       $value = $_POST[$defs['inputname']];
+
   $htmlvalue = htmlentities($value, ENT_QUOTES, 'UTF-8');
+  $class = isset($messages[$defs['inputname']]) ? 'error' : '';
+  $required = ( $defs['required'] ?? 0 ) ? ' required' : '';
+  $label_suffix = '';
 
   if ($defs['inputtype'] == 'text') {
-      $input = '<input type="text" name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" size="' . $defs['size'] . '" value="' . $htmlvalue . '">';
+      $input = '<input type="text" name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" size="' . $defs['size'] . '" value="' . $htmlvalue . '" class="' . $class .'"' . $required . '>';
   }
   if ($defs['inputtype'] == 'textarea') {
       $sizes = explode(",", $defs['size']);
-      $input = '<textarea name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" rows="' . $sizes[0] . '" cols="' . $sizes[1] . '">' . $htmlvalue . '</textarea>';
+      $input = '<textarea name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" rows="' . $sizes[0] . '" cols="' . $sizes[1] . '" class="' . $class .'"' . $required . '>' . $htmlvalue . '</textarea>';
   }
   if ($defs['inputtype'] == 'submit') {
       $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '" class="button success">';
@@ -116,37 +120,35 @@ function render_formfield ($defs, $messages) {
       foreach ($radiovalues as $radvalue) {
           $element_id = $defs['inputname'] . '_' . $radvalue['value'];
           $checked = ($value == $radvalue['value']) ? ' checked' : '';
-          $input .= '<input name="' . $defs['inputname'] . '" id="' . $element_id . '" type="radio" value="' . $radvalue['value'] . '" ' . $checked . '> ';
-          $input .= '<label class="inline-label" for="' . $element_id . '">' . $radvalue['label'] . '</label><br>';
+          $input .= '<p>';
+          $input .= '<input name="' . $defs['inputname'] . '" id="' . $element_id . '" type="radio" value="' . $radvalue['value'] . '"' . $checked . $required . '> ';
+          $input .= '<label class="inline-label ' . $class . '" for="' . $element_id . '">' . $radvalue['label'] . '</label>';
+          $input .= '</p>';
       }
   }
 
+  if ($defs['inputtype'] != 'submit' && ( !( $defs['required'] ?? 0 ) )) {
+      $label_suffix = ' <span class="optional-text">optional</span>';
+  }
+
   if (isset($defs['label'])){
-    $label = $defs['label'];
-    if (isset($defs['required']) && $defs['required']) {
-        $label .= ' (required)';
-    }
-    if ($label) $label .= ':';
     $out = '<label for="' . $defs['inputname'] . '"';
     if (isset($messages[$defs['inputname']]))
-        $out .= ' class="repwarning"';
-    $out .= '>' . $label . '</label>' . $input ;
-  }else{
-    $intro_text = $defs['intro_text'];
-    if (isset($defs['required']) && $defs['required']) {
-        $intro_text .= ' (required)';
-    }
-    if ($intro_text) $intro_text .= ':';
-    $out = '<span class="intro-text';
+        $out .= ' class="error"';
+    $out .= '>' . $defs['label'] . $label_suffix . '</label>' . $input ;
+    return '<p>' . $out . '</p>';
+
+  } else {
+    $out = '<legend';
     if (isset($messages[$defs['inputname']]))
-        $out .= ' repwarning';
-    $out .= '">' . $intro_text . '</span><br>' . $input ;
+        $out .= ' class="error"';
+    $out .= '>' . $defs['intro_text'] . $label_suffix . '</legend>' . $input ;
+    return '<fieldset>' . $out . '</fieldset>';
   }
-  return '<p>' . $out . '</p>';
 }
 
 function wrongcontact_display($problem, $contact_message) {
-  print '<div id ="sendmess">';
+  print '<div id="sendmess">';
   print '<div class="wrong-contact">';
   print $problem;
   print '<hr>';
@@ -157,19 +159,22 @@ function wrongcontact_display($problem, $contact_message) {
 
 function emailform_display ($messages) {
     global $emailformfields;
+
     if ($messages && isset($messages['messagesent'])){
       print '<p class="alertsuccess">' . $messages['messagesent']  . '</p>';
       return;
     }
-    print '<div id ="sendmess">';
-    if ($messages) {
 
-      print '<ul class="repwarning">';
+    print '<div id="sendmess">';
+
+    if ($messages) {
+      print '<ul class="errors">';
       foreach ($messages as $inp => $mess) {
           print '<li>' . $mess;
       }
       print '</ul>';
-
+    } else {
+        print '<p><strong class="text-warning">This message will not go to your MP.</strong></p>';
     }
     print '<form action="about-contactresponse" accept-charset="utf8" method="post">';
     print '<input name="action" type="hidden" value="testmess">';

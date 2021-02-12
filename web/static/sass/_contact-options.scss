@@ -35,10 +35,10 @@ $contact-option-padding: 20px;
         min-width: 100%;
         max-width: 100%;
     }
+}
 
-    .red {
-        color: $alert-color;
-    }
+.text-warning {
+    color: $alert-color;
 }
 
 .contact-option {
