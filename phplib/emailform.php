@@ -42,14 +42,7 @@ $emailformfields = array (
            'size'      => '30',
            'spamcheck' => "1",
            'emailoutput'  => 'subject'),
-    array ('intro_text'   => 'Who is your message for',
-           'inputname'    => 'dest',
-           'inputtype'    => 'radioset',
-           'values'       => $radiovals,
-           'nomail'       => 1,
-           'errormessage' => 'Please say who your message is for',
-           'required'     => 1),
-    array ('label'        => 'Message',
+    array ('label'        => 'Message for the technical team',
            'inputname'    => 'notjunk',
            'inputtype'    => 'textarea',
            'size'         => '10,29',
@@ -70,22 +63,12 @@ function fyr_display_emailform () {
             emailform_display($messages);
             return;
         } else {
-            $dest = get_http_var('dest');
-            $contact_message = get_http_var('notjunk');
-            if ($dest == 'rep') {
-              $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit <a href="/">www.writetothem.com</a> and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
-              wrongcontact_display($problem, $contact_message);
-            } elseif ($dest == 'other') {
-              $problem = 'This form is for contacting the WriteToThem technical support team. Your message is printed below so you can copy and paste it to wherever you want to send it.';
-              wrongcontact_display($problem, $contact_message);
+            if (emailform_send_message()) {
+                $messages['messagesent'] = 'Thanks, your message has been sent to ' . OPTION_WEB_DOMAIN;
             } else {
-              if (emailform_send_message()) {
-                  $messages['messagesent'] = 'Thanks, your message has been sent to ' . OPTION_WEB_DOMAIN;
-              } else {
-                  $messages['messagenotsent'] = 'Sorry, there was a problem';
-              }
-              emailform_display($messages);
+                $messages['messagenotsent'] = 'Sorry, there was a problem';
             }
+            emailform_display($messages);
         }
     } else {
         emailform_display($messages);
@@ -145,16 +128,6 @@ function render_formfield ($defs, $messages) {
     $out .= '>' . $defs['intro_text'] . $label_suffix . '</legend>' . $input ;
     return '<fieldset>' . $out . '</fieldset>';
   }
-}
-
-function wrongcontact_display($problem, $contact_message) {
-  print '<div id="sendmess">';
-  print '<div class="wrong-contact">';
-  print $problem;
-  print '<hr>';
-  print fyr_format_message_body_for_preview($contact_message);
-  print '</div>';
-  print '</div>';
 }
 
 function emailform_display ($messages) {
