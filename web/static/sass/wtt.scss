@@ -159,6 +159,59 @@ textarea {
     }
 }
 
+input.error,
+textarea.error {
+    background-color: #fff; // override Foundation default
+}
+
+// Vertical space between label text and input, when nested.
+label input {
+    margin-top: 0.2em;
+}
+
+label .optional-text,
+legend .optional-text {
+    font-size: emCalc(12);
+    opacity: 0.8;
+    float: right;
+    font-family: $header-font-family;
+}
+
+fieldset {
+    legend {
+        display: block;
+        width: 100%;
+        margin-bottom: $paragraph-margin-bottom;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+fieldset.error legend,
+legend.error {
+    color: $alert-color;
+}
+
+.inline-label {
+    display: inline;
+    margin: 0 0.3em;
+}
+
+ul.errors {
+    color: $alert-color;
+    margin: 1.5em 0;
+
+    li {
+        margin-bottom: 0;
+    }
+
+    li + li {
+        margin-top: 0.5em;
+    }
+}
+
 /*
  * Tables
  */
@@ -951,9 +1004,7 @@ form#writeForm {
     }
 
     fieldset {
-        border: none;
         legend {
-            background: none;
             font-family: $header-font-family;
             font-size: emCalc(20);
             font-weight: 600;
@@ -985,19 +1036,6 @@ form#writeForm {
       p {
           margin-bottom: 1em;
       }
-    }
-
-    label {
-        input {
-            margin-top: 0.2em;
-        }
-    }
-
-    .optional-text {
-        font-size: emCalc(12);
-        color: #666;
-        float: right;
-        font-family: $header-font-family;
     }
 
     .error-message {
@@ -1308,7 +1346,6 @@ h2 {
 }
 
 @import "contact-options";
-@import "overrides";
 
 /* 
  * WTT political knowledge survey
