@@ -157,7 +157,7 @@ sub handle_non_bounce_to_null_address {
         }
     }
 
-    my $forward = 0;
+    my $discard = 0;
     if ($first_url) {
         print_log('info', "mail contains first URL $first_url");
         my $h = dbh();
@@ -167,25 +167,16 @@ sub handle_non_bounce_to_null_address {
                             (url, whenreceived)
                     values (?, ?)',
                     {}, $first_url, time())) {
-            # Have already sent an autoreply to this one, so forward instead
+            # Have already sent an autoreply to this one, so discard instead
             print_log('info', "have already sent one autoresponse for this confirm/questionnaire URL");
-            $forward = 1;
+            $discard = 1;
         }
     } else {
-        # No URL, so just forward rather than autoreply
-        $forward = 1;
+        # No URL, so just discard rather than autoreply
+        $discard = 1;
     }
 
-    if ($forward) {
-        # Forward this on to CONTACT_EMAIL
-        my $text = join("\n", @lines) . "\n";
-        my $recipient = mySociety::Config::get('CONTACT_EMAIL');
-        if (mySociety::EmailUtil::EMAIL_SUCCESS
-                != mySociety::EmailUtil::send_email($text, '<>', $recipient)) {
-            print_log('err', 'unable to forward non-bounce to contact email address; deferring');
-            exit(75);
-        }
-
+    if ($discard) {
         return;
     }
 
