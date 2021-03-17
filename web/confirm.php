@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Confirmation from the constituent that they want to send the
  * fax/email.  This page is linked to from the email which confirms the

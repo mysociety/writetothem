@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * elections.php:
  * Show current state after an election
@@ -190,7 +190,7 @@ template_draw('header', array('title'=>'2008 elections', 'cobrand' => $cobrand))
 if (isset($out['none'])) { ?>
 <div style="float: left; width: 48%;">
 <p>Here is a list of the areas for which we have received new data since the election:</p>
-<?
+<?php
 	foreach ($out['none'] as $date => $data) {
 	print '<strong>'.$date.'</strong> ('.count($data).') <ul><li>';
 	if (is_array($data)) print join("\n<li>", $data);
@@ -203,7 +203,7 @@ if (isset($out['recent_election'])) {
 ?>
 <div style="float: left; width: 48%;">
 <p>Here's a list of areas with new data, but there have been boundary changes:</p>
-<?
+<?php
 	foreach ($out['recent_election'] as $date => $data) {
 		if (!preg_match('#\d\d\d\d-\d\d-\d\d#', $date))
 			continue;
@@ -215,7 +215,7 @@ if (isset($out['recent_election'])) {
 	}
 	if (count($out['recent_election'])) { ?>
 <p>Here is a list of the <?=count($out['recent_election']) ?> areas for which we are still awaiting election results:</p>
-<ul><li><?
+<ul><li><?php
 		echo join("\n<li>", $out['recent_election']);
 		echo '</ul>';
 	} else {

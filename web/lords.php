@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * index.php:
  * Main page of FaxYourRepresentative, where you enter your postcode
@@ -291,7 +291,7 @@ function lords_form($error = array()) {
 			
 			<?php if (isset($error['place'])): ?>
 			<div class="alert-box alert"><?=$error['place'] ?></div>
-			<? endif; ?>
+			<?php endif; ?>
 			
 			<form action="/lords" method="get" name="placeLordForm" id="placeLordForm">
 			
@@ -338,11 +338,11 @@ function lords_form($error = array()) {
 			</form>
 
 
-			<? /*
+			<?php /*
 			<li>
-			<? if (isset($error['college'])) { ?>
+			<?php if (isset($error['college'])) { ?>
 			<div id="error"><?=$error['college'] ?></div>
-			<?  } ?>
+			<?php  } ?>
 			<form action="/lords" method="get" name="collegeLordForm" id="collegeLordForm">
 			Find a Lord who went to this Oxbridge <strong>college</strong>:
 			<input type="text" name="c" id="c" value="<?=htmlentities(get_http_var('c')) ?>" size="10">
@@ -371,6 +371,6 @@ function lords_form($error = array()) {
 			
 		</div>
 
-<?
+<?php
 }
 ?>
