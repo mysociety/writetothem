@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * firsttime.php:
  * Record answer to question about whether this is the first time the

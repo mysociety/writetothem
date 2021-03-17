@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * corrections.php:
  * Page where they make councillor corrections

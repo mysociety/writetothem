@@ -1,5 +1,5 @@
 #!/usr/bin/php -q
-<?
+<?php
 /*
  * stats-extract-100pcs:
  * Extract contact details of MPs with 100% response rate.

@@ -1,4 +1,4 @@
-<?
+<?php
 // test.php:
 // Part of test harness.  See ../bin/test-run.pl for where this is called.
 //

@@ -99,7 +99,7 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 <h3>Instructions</h3>
 
 <ul id="tips">
-<li>Please be polite, concise and to the point; if you abuse your <? print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
+<li>Please be polite, concise and to the point; if you abuse your <?php print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
 
 <li><a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.</li>
 
@@ -108,7 +108,7 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 <li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
 your message will be ignored.</li>
 
-    <?
+    <?php
         $hashref = strtolower($values['voting_area']['rep_name']);
         if ($hashref == 'london assembly member') $hashref = 'lam';
         if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
@@ -122,7 +122,7 @@ your message will be ignored.</li>
     about, provide information to someone who you support, or provide counter
     evidence to someone you disagree with. For other matters, it might be better
     to contact your MP or a local representative.</li>
-    <? endif; ?>
+    <?php endif; ?>
 
 <?php
 

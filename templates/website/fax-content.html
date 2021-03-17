@@ -6,9 +6,9 @@
 <div class="preview-from">
     <p><?=htmlspecialchars($values['name'])?><br>
     <?=htmlspecialchars($values['writer_address1'])?><br>
-    <?=htmlspecialchars($values['writer_address2'])?><? if ($values['writer_address2']) print "<br>";?>
+    <?=htmlspecialchars($values['writer_address2'])?><?php if ($values['writer_address2']) print "<br>";?>
     <?=htmlspecialchars($values['writer_town'])?><br>
-    <?=htmlspecialchars($values['state'])?><? if ($values['state']) print "<br>";?>
+    <?=htmlspecialchars($values['state'])?><?php if ($values['state']) print "<br>";?>
     <?=htmlspecialchars($values['pc'])?></p>
     <p><?=htmlspecialchars($values['writer_email'])?><br>
     <?=htmlspecialchars($values['writer_phone'])?></p>

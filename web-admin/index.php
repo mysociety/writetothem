@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * index.php:
  * Admin index for FaxYourRepresentative.

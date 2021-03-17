@@ -68,7 +68,7 @@ if (is_array($mp)) {
                             <label for="pc">See how responsive your MP was in <?= $values['year'] == '2015' ? '2015&ndash;16' : $values['year'] ?>:</label>
                             <div class="row collapse stats-postcodebox__inputs">
                                 <div class="small-8 columns">
-                                    <input type="text" placeholder="Enter your postcode" id="pc" name="pc" value="<? if (isset($pc)) print htmlspecialchars($pc); ?>" size="8">
+                                    <input type="text" placeholder="Enter your postcode" id="pc" name="pc" value="<?php if (isset($pc)) print htmlspecialchars($pc); ?>" size="8">
                                 </div>
                                 <div class="small-4 columns">
                                     <input type="submit" class="button success prefix" value="Find my MP">
@@ -96,9 +96,9 @@ if (is_array($mp)) {
                         <span class="stat-desc">Messages sent:</span>
                         <span class="stat-number"><?=$mp['dispatched_success'] ?></span>
                     </li>
-                  <? if ($mp['notes']) { ?>
+                  <?php if ($mp['notes']) { ?>
                     <li><?=$mp['notes'] ?></li>
-                  <? } else { ?>
+                  <?php } else { ?>
                     <li>
                         <span class="stat-desc">Response rate: </span>
                         <?php if ((int)$values['year'] >= 2015) { ?>
@@ -109,7 +109,7 @@ if (is_array($mp)) {
                         <!--<small>[<?=round($mp['low']*100,0) ?>%&ndash;<?=round($mp['high']*100,0) ?>%]</small>-->
                         <?php } ?>
                     </li>
-                      <? if ($mp['fymp_response']) { ?>
+                      <?php if ($mp['fymp_response']) { ?>
                         <li>
                             <span class="stat-desc">Previous year's response rate: </span>
                             <?php if ((int)$values['year'] >= 2015) { ?>
@@ -118,14 +118,14 @@ if (is_array($mp)) {
                             <strong class="stat-number"><?=fuzzy_response_description($mp['fymp_response']) ?></strong>
                             <?php } ?>
                         </li>
-                      <? } ?>
+                      <?php } ?>
                     <li>
                         <span class="stat-desc">People writing for first time: </span>
                         <strong class="stat-number"><?=round($mp['firsttime_mean']*100,0) ?>%</strong>
                         <span class="stat-desc-mini"><?=$mp['firsttime']?> out of <?=$mp['firsttime_outof']?> surveys</span>
                         <!--<small>[<?=round($mp['firsttime_95_low']*100,0) ?>%&ndash;<?=round($mp['firsttime_95_high']*100,0) ?>%]</small>-->
                     </li>
-                      <?
+                      <?php
                       $same_stat = 1;
                       $position = 0;
                       $last_response = -1;
@@ -150,7 +150,7 @@ if (is_array($mp)) {
                           }
                       }
                       ?>
-                  <? } // this is the end of `if($mp['notes']){}else{}` ?>
+                  <?php } // this is the end of `if($mp['notes']){}else{}` ?>
                 </ul>
 
                 <h2>Next steps</h2>
@@ -219,7 +219,7 @@ if (is_array($mp)) {
             <table>
                 <thead class="js-fixed-thead">
                     <tr>
-                        <? if ($sort == 'r') print '<th>Position</th>'; ?>
+                        <?php if ($sort == 'r') print '<th>Position</th>'; ?>
                         <?=$head_name ?>
                         <?=$head_cons ?>
                         <?=$head_response ?>
@@ -228,7 +228,7 @@ if (is_array($mp)) {
                         <!--<th>95% confidence interval</th>-->
                     </tr>
                 </thead>
-              <?
+              <?php
 
               $c = 0;
               $same_stat = 1;

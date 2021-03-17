@@ -43,7 +43,7 @@ to stdout.
 --help      Display this help message
 --verbose   Display more information while working
 
-<?
+<?php
         exit;
     }
 }

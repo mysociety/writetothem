@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * who.php:
  * Page to ask which representative they would like to contact

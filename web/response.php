@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Record answer to questionnaire to find out whether the representative
  * replied to their constituent.

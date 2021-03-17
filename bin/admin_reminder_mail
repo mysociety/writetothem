@@ -60,7 +60,7 @@ Usage: admin_reminder_mail [--verbose] [--nobadmps] [--realrun] [TO_ADDRESS]
 --verbose   Display more information while working
 --nobadmps  Don't check for bad MPs
 --realrun   Really send email (when not set, prints to standard out unless email address is supplied)
-<?
+<?php
         exit;
     }
 }

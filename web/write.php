@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * write.php:
  * Page where they enter details, write their message, and preview it
