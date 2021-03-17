@@ -1,4 +1,0 @@
-; WriteToThem overrides
-
-; short_open_tag - our code uses short tags
-short_open_tag = On

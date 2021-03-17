@@ -7,7 +7,6 @@ services:
     volumes:
       - ./:/var/www/html/writetothem
       - ./conf/general.docker:/var/www/html/writetothem/conf/general
-      - ./conf/php.ini.docker:/etc/php/7.0/fpm/conf.d/10-writetothem.ini
       - ./conf/httpd.conf.docker:/etc/apache2/sites-available/000-default.conf
     depends_on:
       - postgres
