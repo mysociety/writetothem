@@ -67,6 +67,18 @@ template_draw('header', $values);
                     authority.</p>
                 <?php endif; ?>
 
+                <?php if (1 < count($values['reps']) && strpos($values['blurbs'][1], 'Northamptonshire County Council') !== false): ?>
+                    <h2>Important note</h2>
+                    <p>Northamptonshire County Council and its district
+                    councils merged into two new councils, North
+                    Northamptonshire and West Northamptonshire, in April 2021.
+                    Elections are due to be held in May 2021. The official site
+                    lists the existing councillors; for simplicity we keep
+                    showing the two levels of councillor here until the
+                    election, though all are now equivalent councillors on the
+                    same unitary authority.</p>
+                <?php endif; ?>
+
                 <?php foreach ($values['reps'] as $key => $rep): ?>
 
                     <h3 class="rep-heading"><?=$values['headings'][$key]?></h3>
