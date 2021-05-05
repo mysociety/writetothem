@@ -2400,7 +2400,7 @@ sub admin_get_queue ($$) {
             $where = "where lower(sender_email) = lower(?) or lower(recipient_email) = lower(?)";
             push @params, $params->{query};
             push @params, $params->{query};
-        } elsif ($params->{query} =~ /^(ready) (CED|COP|DIW|EUR|HOC|LAC|LAE|LBW|LGE|MTW|NIE|SPC|SPE|UTE|UTW|WAC|WAE|WMC)$/) {
+        } elsif ($params->{query} =~ /^(ready) (CED|COP|DIW|HOC|LAC|LAE|LBW|LGE|MTW|NIE|SPC|SPE|UTE|UTW|WAC|WAE|WMC)$/) {
             $where = "where state = ? and recipient_type = ?";
             push @params, $1;
             push @params, $2;

@@ -384,9 +384,6 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count)
 
     if ($va_type == 'WMC') {
         $col_after .= extra_mp_text($rep_count, $va_area, $representatives);
-    } elseif ($va_type == 'EUR') {
-        $col_after = 'EUR';
-
     }
 
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {

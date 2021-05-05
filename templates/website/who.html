@@ -54,42 +54,11 @@ template_draw('header', $values);
 
             <?php else: ?>
 
-                <?php if (1 < count($values['reps']) && strpos($values['blurbs'][1], 'Buckinghamshire County Council') !== false): ?>
-                    <h2>Important note</h2>
-                    <p>Buckinghamshire County Council and its district councils
-                    merged into one Buckinghamshire Council in April 2020.
-                    Elections were due to be held in May 2020, but these were
-                    postponed for a year because of COVID-19.  The official
-                    site has a PDF that assigns existing councillors to any
-                    ward their previous area covered; for simplicity we keep
-                    showing the two levels of councillor here, though all are
-                    now equivalent councillors on the same unitary
-                    authority.</p>
-                <?php endif; ?>
-
-                <?php if (1 < count($values['reps']) && strpos($values['blurbs'][1], 'Northamptonshire County Council') !== false): ?>
-                    <h2>Important note</h2>
-                    <p>Northamptonshire County Council and its district
-                    councils merged into two new councils, North
-                    Northamptonshire and West Northamptonshire, in April 2021.
-                    Elections are due to be held in May 2021. The official site
-                    lists the existing councillors; for simplicity we keep
-                    showing the two levels of councillor here until the
-                    election, though all are now equivalent councillors on the
-                    same unitary authority.</p>
-                <?php endif; ?>
-
                 <?php foreach ($values['reps'] as $key => $rep): ?>
 
                     <h3 class="rep-heading"><?=$values['headings'][$key]?></h3>
 
                     <div class="row">
-
-                      <?php if ($values['more'][$key] == 'EUR'): ?>
-                        <div class="large-12 columns help-text rep-blurb">
-                            <p>As the UK left the European Union on 31st January 2020, you are no longer represented by MEPs.</p>
-                        </div>
-                      <?php else: ?>
 
                         <div class="large-4 columns help-text rep-blurb">
                             <?=$values['blurbs'][$key]?>
@@ -102,8 +71,6 @@ template_draw('header', $values);
                         <div class="large-3 columns help-text rep-more">
                             <?=$values['more'][$key]?>
                         </div>
-
-                      <?php endif; ?>
 
                     </div>
 

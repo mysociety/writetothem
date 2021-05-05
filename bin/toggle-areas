@@ -40,7 +40,7 @@ unless (GetOptions(
     'only:s' => \$only,
     'commit' => \$commit,
     'status=s' => \$status)
-    && $type =~ /^(COI|CTY|DIS|EUR|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
+    && $type =~ /^(COI|CTY|DIS|LAC|LBO|LGD|MTD|NIE|SPC|UTA|WAC|WMC)$/
     && $status =~ /^(pending|recent|boundary_changes|none)$/) {
     print <<EOF;
 --type - Three-letter type to switch on/off. (Note that the code in write.php
@@ -49,7 +49,6 @@ unless (GetOptions(
 	 COI - Isles of Scilly
 	 CTY - 27 county councils
 	 DIS - 201 district councils
-	 EUR - 12 European regions
 	 LAC - 14 London Assembly areas
 	 LBO - 33 London boroughs (32 + City)
 	 LGD - 26 NI Local Government Districts
