@@ -246,7 +246,13 @@ function type_area($voting_areas, $va_types) {
 function elected_body_area($voting_areas, $va_types) {
     global $va_inside, $va_responsibility_description;
     $eb_type = $va_inside[$va_types[0]];
-    $eb_area = $voting_areas[$eb_type];
+    if (array_key_exists($eb_type, $voting_areas)) {
+        $eb_area = $voting_areas[$eb_type];
+    } else {
+        # Bucks has a temporary issue whereby it currently has DIW/CED children with UTA parent
+        $eb_type = 'UTA';
+        $eb_area = $voting_areas[$eb_type];
+    }
     debug("FRONTEND", "electoral body is type $eb_type id $eb_area[id]");
     $eb_area['description'] = $va_responsibility_description[$eb_type];
     return $eb_area;
