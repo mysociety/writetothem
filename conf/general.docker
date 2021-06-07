@@ -1,0 +1,142 @@
+<?php
+/*
+ * general-example:
+ * Example values for the "general" config file.
+ *
+ * Configuration parameters, in PHP syntax. Configuration parameters are set
+ * using the PHP define('OPTION_...', '...') function. Both perl and PHP code
+ * parse this properly, so you can use comments and conditionals and whatnot,
+ * but unless essential it's better to keep it simple....
+ *
+ * Copy this file to one called "general" in the same directory.  Or
+ * have multiple config files and use a symlink to change between them.
+ * 
+ * Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
+ * Email: francis@mysociety.org; WWW: http://www.mysociety.org
+ *
+ * $Id: general-example,v 1.42 2009-10-28 15:42:14 louise Exp $
+ * 
+ */
+
+// Where the DaDem, MaPit and Ratty services are.
+define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
+define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org/');
+define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
+
+// If MapIt calls should use a particular generation
+define('OPTION_MAPIT_GENERATION', null);
+
+// Where the FYR queue service is.
+define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/queue');
+define('OPTION_FYR_QUEUE_USERPWD', null);
+
+// Name of SMTP server. This host must allow relaying from the machine on which
+// fyrqd runs.
+define('OPTION_SMTP_SMARTHOST', 'localhost');
+
+// PostgreSQL database for FYR queue
+define('OPTION_FYR_QUEUE_DB_HOST', 'postgres');
+define('OPTION_FYR_QUEUE_DB_PORT', '5432');
+define('OPTION_FYR_QUEUE_DB_NAME', 'fyr');
+define('OPTION_FYR_QUEUE_DB_USER', 'fyr');
+define('OPTION_FYR_QUEUE_DB_PASS', 'fyr');
+
+// Puts in a testing mode where emails are reflected back to
+// sender, rather than sent to their representative.
+define('OPTION_FYR_REFLECT_EMAILS', 1);
+
+// Don't mark contacts as failing when delivery fails. This should be set to
+// 1 ONLY on the live site, and not on any other installation.
+define('OPTION_FYR_MARK_CONTACTS_FAILING', 0);
+
+// Base domain of the website. This is used to distinguish internal from
+// external referrers, for instance.
+define('OPTION_WEB_DOMAIN', 'writetothem.com');
+
+// Top-level URL of current website
+define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN);
+
+// Is the site running in HTTPS mode?
+define('OPTION_HTTPS_ONLY', 0);
+
+define('OPTION_ADMIN_URL', 'https://.../admin/');
+define('OPTION_ADMIN_AUTH_USER', undef);
+define('OPTION_ADMIN_AUTH_PASSWORD', undef);
+
+
+// Domain name for emails to current website
+define('OPTION_EMAIL_DOMAIN', 'sometestdomain.writetothem.com');
+// Address for support email. TODO: Actually use this everywhere in code
+// (currently only used in place where needed for test suite)
+define('OPTION_CONTACT_EMAIL', 'team@'.OPTION_EMAIL_DOMAIN);
+// Prefix of return-path local part. All mail for EMAIL_PREFIX(.*)@EMAIL_DOMAIN
+// must be delivered to the bounce processing scripts.
+define('OPTION_EMAIL_PREFIX', 'fyr-');
+
+// Maximum similarity between a new message and existing messages before a
+// message is noted as being similar to another. Numbers nearer to unity
+// indicate greater similarity.
+define('OPTION_MESSAGE_SIMILARITY_THRESHOLD', '0.50');
+
+// Configuration for fax generation and sending.
+// Truetype font for writing faxes
+define('OPTION_FAX_FONT', '/home/chris/projects/mysociety/cvs/mysociety/fyr/data/Cyberbit.ttf');
+// Location of efax command.
+define('OPTION_FAX_COMMAND', '/software/bin/efax');
+// Where we keep UUCP lock files.
+define('OPTION_FAX_LOCKDIR', '/var/lock');  // Linux
+//define('OPTION_FAX_LOCKDIR', '/var/spool/lock');  // *BSD?
+// Device to use for fax sending, without the /dev/.
+define('OPTION_FAX_DEVICE', 'ttyS0');
+// efax(1) options to configure the modem. This is NOT interpreted by the
+// shell.
+define('OPTION_FAX_OPTIONS', '-iZ -i&FE0&D2S7=120 -i&C0 -kZ -iM1L0');
+// nb -iM1L0 is the speaker config -- see efax(1)
+// Sending station ID for faxes. Should be a full international phone number.
+define('OPTION_FAX_STATIONID', '000000000000');
+// Fax header (sent by the fax machine, not written into the fax).
+define('OPTION_FAX_HEADER', 'Sent via WRITE TO THEM https://www.writetothem.com/');
+// Do faxes to the Lords fax machine continue outside fax hours?
+define('OPTION_FAX_LORDS_OUTSIDE_FAX_HOURS', 0);
+
+
+// Configuration of the queue management daemon:
+// Number of worker processes
+define('OPTION_QUEUE_DAEMON_PROCESSES', '5');
+// Notification socket path
+define('OPTION_QUEUE_DAEMON_SOCKET', '/tmp/fyrqd.sock');
+// PID file location
+define('OPTION_QUEUE_DAEMON_PIDFILE', '/var/run/fyrqd.pid');
+
+// Should the queue daemon on this host send emails and/or faxes?
+define('OPTION_QUEUE_DAEMON_SEND_EMAIL', '0');
+define('OPTION_QUEUE_DAEMON_SEND_FAX', '0');
+
+// Limit on length of message
+define('OPTION_MAX_BODY_LENGTH', 20000);
+
+// Debug log level for PHP website
+define('OPTION_PHP_DEBUG_LEVEL', 0);
+
+// URLS of admin scripts
+define('OPTION_ADMIN_SERVICES_CGI', 'http://../admin/services/');
+
+// Log file (used in test harness, and later in admin scripts)
+define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
+
+// Tracking
+define('OPTION_TRACKING', 0);   // off by default
+define('OPTION_TRACKING_URL', 'http://path/to/web/bug');
+define('OPTION_TRACKING_SECRET', 'really-secret-value');
+
+// Surveying
+define('OPTION_SURVEY_SECRET', 'your-secret-value-here');
+define('OPTION_SURVEY_URL', 'http://survey.mysociety.org');
+
+// Analytics
+define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
+
+// Donation or Recruitment message for top banner. No banner displayed if empty.
+define('BANNER_MESSAGE', '')
+
+?>

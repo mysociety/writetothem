@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * about.php:
  * Wrapper for displaying templated about/problem pages.

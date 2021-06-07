@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * stats.php:
  * Statistics!
