@@ -245,7 +245,7 @@ sub handle_bounce_to_verp_address {
     if (!defined($r)) {
         my $subject = $data{message}->head()->get("Subject");
         $subject = decode("MIME-Header", $subject);
-        if ($subject =~ /Auto(matic|mated)?[ -]?(reply|response)|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from|^Auto: /i) {
+        if ($subject =~ /Auto(matic|mated)?[ -]?(reply|response)|Thank you for your email|Out of Office|This office is closed until|^Re: Letter from|^Auto: |Ateb awtomatig/i) {
             print_log('info', "Treating bounce as auto-reply to sender");
             handle_non_bounce_to_verp_address();
             return;
