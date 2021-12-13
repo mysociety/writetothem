@@ -15,7 +15,6 @@ require_once "../phplib/fyr.php";
 require_once "../phplib/queue.php";
 
 require_once "../commonlib/phplib/utility.php";
-require_once "../commonlib/phplib/survey.php";
 
 fyr_rate_limit(array());
 
