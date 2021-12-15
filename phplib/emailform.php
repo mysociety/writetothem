@@ -17,8 +17,8 @@ require_once "libphp-phpmailer/class.phpmailer.php";
 * it will also be checked by emailform_test_message, if you want to add another field stick it in here.
 */
 $radiovals = array(
-    array ('label' => 'The WriteToThem team', 'value' => 'us'),
     array ('label' => 'Your representative', 'value' => 'rep'),
+    array ('label' => 'The WriteToThem team', 'value' => 'us'),
     array ('label' => 'Other', 'value' => 'other')
 );
 $emailformfields = array (
@@ -62,33 +62,64 @@ $emailformfields = array (
            'value'     => 'Send message'),
 );
 
+function verify_recaptcha() {
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => OPTION_RECAPTCHA_SECRET,
+        'response' => $_POST['g-recaptcha-response'],
+    ];
+    $headers = [
+        "Content-Type: application/x-www-form-urlencoded",
+    ];
+
+    $options = array(
+        'http' => array(
+            'header' => $headers,
+            'method' => 'POST',
+            'content' => http_build_query($data),
+            'ignore_errors' => TRUE,
+        )
+    );
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $result = json_decode($result);
+    if ($result->success) {
+        return;
+    }
+    return array( "recaptcha" => join(', ', $result->{'error-codes'}) );
+}
+
 function fyr_display_emailform () {
     $messages = array();
-    if (isset($_POST['action'])  && $_POST['action']== 'testmess') {
-        $messages = emailform_test_message();
-        if ($messages) {
-            emailform_display($messages);
-            return;
-        } else {
-            $dest = get_http_var('dest');
-            $contact_message = get_http_var('notjunk');
-            if ($dest == 'rep') {
-              $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit <a href="/">www.writetothem.com</a> and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
-              wrongcontact_display($problem, $contact_message);
-            } elseif ($dest == 'other') {
-              $problem = 'This form is for contacting the WriteToThem technical support team. Your message is printed below so you can copy and paste it to wherever you want to send it.';
-              wrongcontact_display($problem, $contact_message);
-            } else {
-              if (emailform_send_message()) {
-                  $messages['messagesent'] = 'Thanks, your message has been sent to ' . OPTION_WEB_DOMAIN;
-              } else {
-                  $messages['messagenotsent'] = 'Sorry, there was a problem';
-              }
-              emailform_display($messages);
-            }
-        }
+    if (!isset($_POST['action']) || $_POST['action'] != 'testmess') {
+        return emailform_display($messages);
+    }
+
+    $messages = verify_recaptcha();
+    if ($messages) {
+        return emailform_display($messages);
+    }
+
+    $messages = emailform_test_message();
+    if ($messages) {
+        return emailform_display($messages);
+    }
+
+    $dest = get_http_var('dest');
+    $contact_message = get_http_var('notjunk');
+    if ($dest == 'rep') {
+      $problem = 'You cannot contact your representative by filling in the WriteToThem contact form. To contact your representative, please visit <a href="/">www.writetothem.com</a> and enter your postcode. We have printed your message below so you can copy and paste it into the WriteToThem message box.';
+      wrongcontact_display($problem, $contact_message);
+    } elseif ($dest == 'other') {
+      $problem = 'This form is for contacting the WriteToThem technical support team. Your message is printed below so you can copy and paste it to wherever you want to send it.';
+      wrongcontact_display($problem, $contact_message);
     } else {
-        emailform_display($messages);
+      if (emailform_send_message()) {
+          $messages['messagesent'] = 'Thanks, your message has been sent to ' . OPTION_WEB_DOMAIN;
+      } else {
+          $messages['messagenotsent'] = 'Sorry, there was a problem';
+      }
+      emailform_display($messages);
     }
 }
 
@@ -113,7 +144,7 @@ function render_formfield ($defs, $messages) {
       $input = '<textarea name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" rows="' . $sizes[0] . '" cols="' . $sizes[1] . '" class="' . $class .'"' . $required . '>' . $htmlvalue . '</textarea>';
   }
   if ($defs['inputtype'] == 'submit') {
-      $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" type="submit" value="' . $defs['value'] . '" class="button success">';
+      $input = '<input name="' . $defs['inputname'] . '" id="' . $defs['inputname'] . '" class="g-recaptcha" data-sitekey="' . OPTION_RECAPTCHA_SITE_KEY . '" type="submit" value="' . $defs['value'] . '" class="button success">';
   }
   if ($defs['inputtype'] == 'radioset') {
       $radiovalues = $defs['values'];

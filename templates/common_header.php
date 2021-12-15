@@ -52,6 +52,10 @@ if (isset($values['cobrand']))
         }
     </script>
 
+    <?php if (isset($values['recaptcha'])) { ?>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php } ?>
+
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
     <script>

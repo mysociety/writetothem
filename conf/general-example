@@ -131,6 +131,8 @@ define('OPTION_TRACKING_SECRET', 'really-secret-value');
 
 // Analytics
 define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
+define('OPTION_RECAPTCHA_SITE_KEY', '');
+define('OPTION_RECAPTCHA_SECRET', '');
 
 // Donation or Recruitment message for top banner. No banner displayed if empty.
 define('BANNER_MESSAGE', '')
