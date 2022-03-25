@@ -147,11 +147,11 @@ function default_body_text() {
 }
 
 function default_body_regex() {
-    return '^Dear ' . correct_address() . ',\s+Yours sincerely,\s+';
+    return '^Dear .*?,\s*Yours sincerely,';
 }
 
 function default_body_notsigned() {
-    return 'Yours sincerely,\s+$';
+    return 'Yours sincerely,\s*$';
 }
 
 
