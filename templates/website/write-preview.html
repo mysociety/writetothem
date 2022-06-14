@@ -10,7 +10,7 @@ template_draw('header', $values);
 <div class="row flow-breadcrumbs">
     <div class="large-8 large-centered columns">
 
-            <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
+            <?=(isset($values['representative']['type']) && $values['representative']['type'] == 'HOC') ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
 
     </div>
 </div>

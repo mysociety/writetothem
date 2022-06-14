@@ -12,7 +12,7 @@ template_draw('header', $values);
 <div class="row flow-breadcrumbs">
     <div class="large-8 large-centered columns">
 
-        <?=$values['representative']['type'] == 'HOC' ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
+        <?=(isset($values['representative']['type']) && $values['representative']['type'] == 'HOC') ? fyr_breadcrumbs(2, 'lords') : fyr_breadcrumbs(3)?>
 
     </div>
 </div>
@@ -103,7 +103,7 @@ if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_he
 
 <li><a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.</li>
 
-<?php if ($values['representative']['type'] != 'HOC'): ?>
+<?php if (isset($values['representative']['type']) && $values['representative']['type'] != 'HOC'): ?>
 
 <li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
 your message will be ignored.</li>
@@ -131,7 +131,7 @@ $pid = str_replace('uk.org.publicwhip/person/', '', $values['representative']['p
 echo '<li><a target="_blank" href="https://www.theyworkforyou.com/mp/?p=', $pid,
     '">Find out more about ', str_replace('The ', 'the ', $values['representative']['name']),
     '<small></small></a>';
-if ($values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) {
+if (isset($values['representative']['type']) && $values['representative']['type'] == 'HOC' && isset($values['representative']['party'])) {
     if ($values['representative']['party'] == 'Judge') {
         echo ', a <strong>Law Lord</strong>,';
     } elseif ($values['representative']['party'] != 'Bishop') {
@@ -148,7 +148,7 @@ will be sent via the internal mail systems of the body to which they
 were elected.</strong>';
 }
 
-if ($values['representative']['method'] == 'via') {
+if (isset($values['representative']['method']) && $values['representative']['method'] == 'via') {
 echo '<li><strong>We do not have direct contact details for ', $values['representative']['name'], ', ';
 echo 'so your message will be sent via the internal mail systems of the body to which they were elected.';
 echo '</strong></li>';
