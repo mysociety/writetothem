@@ -93,7 +93,7 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('Anthony Martinelli', 'Katie Porrer', 'Tim Bick');
+our @rep_names = ('Alice Gilderdale', 'Katie Porrer', 'Tim Bick');
 my $mep_rep_name = 'Katie Porrer';
 
 #############################################################################
