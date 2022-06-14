@@ -367,7 +367,7 @@ On Mon, Jan 01, 1990 at 03:04:58PM +0000, WriteToThem wrote:
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
-    $wth->email_get_containing([ -and => '%To: <'.email_n(5).'>%', '%This is an automatic response%']);
+    $wth->email_get_containing([ -and => '%To: '.email_n(5).'%', '%This is an automatic response%']);
     $wth->email_check_none_left();
 
     # Send message without link ...
@@ -425,7 +425,7 @@ On Sat, Nov 26, 2005 at 09:30:50PM +0000, WriteToThem wrote:
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
     # ... check that user gets autoresponse
-    $wth->email_get_containing([ -and => '%To: <'.email_n(5).'>%', '%This is an automatic response%' ]);
+    $wth->email_get_containing([ -and => '%To: '.email_n(5).'%', '%This is an automatic response%' ]);
     $wth->email_check_none_left();
 }
 
