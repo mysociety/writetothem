@@ -52,13 +52,12 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('fax', 'example', 'mistype', 'bounce', 'lords', 'group', 'unit');
+my @actions = ('example', 'mistype', 'bounce', 'lords', 'group', 'unit');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'mistype' => 'check mistyped postcodes work',
     'bounce' => 'test autoresponder (TODO: doesn\'t test rep email failure bounces)',
     'lords' => 'send example message to a Lord',
-    'fax' => 'send example fax message successfully (no faxes sent 8pm-8am - tests will fail)',
     'group' => 'send example message to a group of reps',
     'unit' => 'run the unit tests',
 );
@@ -111,7 +110,6 @@ $wth->browser_credentials("$1:80", "$1 admin pages", $admin_auth_user, $admin_au
 }
 mySociety::Ratty::admin_delete_rules('fyr-abuse');
 
-$wth->fax_setup();
 # Syntax check all .php files
 print "Syntax check all PHP files...\n" if $verbose > 0;
 $wth->php_check_syntax("../../writetothem/");
@@ -141,7 +139,6 @@ foreach (@actions) {
     }
     do_test_mistyped_postcode() if $_ eq 'mistype';
     do_test_bounce_stuff() if $_ eq 'bounce';
-    do_send_fax_message() if $_ eq 'fax';
     do_send_lords_message() if $_ eq 'lords';
     if ($_ eq 'group') {
         do_send_group_message();
@@ -153,14 +150,11 @@ foreach (@actions) {
 #print "Sending bouncing message...\n" if $verbose > 0;
 #do_send_bouncing_message();
 
-# Check for any unhandled mails, faxes or errors
+# Check for any unhandled mails or errors
 call_fyrqd($wth, $verbose, $multispawn);
-call_fyrqd($wth, $verbose, $multispawn, '--fax');
 
 print "Checking no emails left at end...\n" if $verbose > 1;
 $wth->email_check_none_left();
-print "Checking no faxes left at end...\n" if $verbose > 1;
-$wth->fax_check_none_left();
 print "Checking no log file errors at end...\n" if $verbose > 1;
 $wth->log_watcher_check();
 print "Everything completed successfully\n";
@@ -494,108 +488,6 @@ sub do_send_lords_message {
     $wth->email_check_url($not_expected_link);
     print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
     $options->{birthday} = undef;
-}
-
-#############################################################################
-sub send_fax($$$$$$;$$){
-    my ($email_num, $dummy_fax, $repeat_text, $postcode, $repname, $fields, $birthday, $recipient_via) = @_;
-
-    $options->{base_url} = $base_url;
-    $options->{birthday} = $birthday;
-    my $repinfo = {repname => $repname};
-    my $body = "Dear Tester,This is a test message which shouldn't ever get to a real representative. It is intended to test the layout of messages that need to be delivered by fax. The fax layout should be flexible enough to be able to deal with both long and short messages. This one, as it happens, is somewhere in between.";
-    for (my $i=1; $i<=$repeat_text; ++$i) {
-        $body = $body . $body; 
-    }
-    $fields->{body} = $body;
-    send_message_to_rep($email_num, $postcode, $fields, $repinfo, $options);
-    confirm_message($email_num, $repinfo, $options);
-    
-    # Set a dummy fax number on the message and erase the recipient email
-    dbh()->do("update message set recipient_fax = ?, recipient_email = null, no_questionnaire = 't' where sender_email = ?", {}, $dummy_fax, email_n($email_num));
-    dbh()->commit();
-    if ($recipient_via){
-        # Set a via flag on the message 
-        dbh()->do("update message set recipient_via = 't' where sender_email = ?", {},  email_n($email_num));
-        dbh()->commit();  
-    }
-    $options->{birthday} = undef;
-    
-}
-#############################################################################
-
-sub do_send_fax_message {
-    set_base_url("");
-
-    # Make sure we're in working hours
-    set_fyr_date('1995-01-01', '12:00:00', $verbose);
-    
-    my $postcode = 'CB23QJ';
-    my $repname = $CAMBRIDGE_MP;
-    my $fields = { writer_address1 => '75 Toner Place',
-                   writer_town => 'Paper Lane',
-                   state => 'Facsimileshire',
-                   writer_phone => undef
-                };  
-    # set up a couple of fax messages
-    my $first_dummy_fax = '0000';
-    my $second_dummy_fax = '0001';
-    send_fax(6, $first_dummy_fax, 1, $postcode, $repname, $fields);
-    send_fax(14, $second_dummy_fax, 1, $postcode, $repname, $fields);
-
-    # Run the queue in fax mode
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-
-    # Check that a one page fax is sent to each 
-    $wth->fax_get_sent_to($first_dummy_fax, 1);
-    $wth->fax_get_sent_to($second_dummy_fax, 1);
-
-    # try a via message
-    my $dummy_fax = '0001';
-    send_fax(8, $dummy_fax, 1, $postcode, $repname, $fields, undef, 1);
-
-    # Run the queue in fax mode
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-
-    # Check that a two page fax is sent (one page and one cover)
-    $wth->fax_get_sent_to($dummy_fax, 2);
-
-    # Try a multiple page message 
-    $dummy_fax = '0002';
-
-    send_fax(9, $dummy_fax, 3, $postcode, $repname, $fields);
-
-    # Run the queue in fax mode
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-
-    # Check that a two page fax is sent
-    $wth->fax_get_sent_to($dummy_fax, 2);
-    
-    # Check that a fax won't be sent out of hours
-    set_fyr_date('1995-01-01', '21:00:00', $verbose);
-    send_fax(15, $dummy_fax, 1, $postcode, $repname, $fields);
-    
-    # Run the queue in fax mode
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-    $wth->fax_check_none_left();
-    
-    # Check that a fax to the Lords will be sent out of hours
-    # Relies on FAX_LORDS_OUTSIDE_FAX_HOURS being set to 1 for the testharness
-    my $lords_dummy_fax = '0003';
-    send_fax(16, $lords_dummy_fax, 1, 'PE35 6EN', 'Lord Rogers', $fields, '23 July', 1);
- 
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-    # If a Lords message is being sent 'via', we don't add a cover page
-    $wth->fax_get_sent_to($lords_dummy_fax, 1);
-    
-    # next day time, other fax should get sent
-    set_fyr_date('1995-01-02', '10:00:00',  $verbose);
-    call_fyrqd($wth, $verbose, $multispawn, '--fax');
-    $wth->fax_get_sent_to($dummy_fax, 1);
-    
-    $wth->fax_check_none_left();
-    $options->{birthday} = undef;
-    
 }
 
 #############################################################################
