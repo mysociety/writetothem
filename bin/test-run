@@ -370,7 +370,7 @@ END
     $wth->email_get_containing([ -and => '%To: '.email_n(5).'%', '%This is an automatic response%']);
     $wth->email_check_none_left();
 
-    # Send message without link ...
+    # Send message without link - since `c2b18389` this will be discarded and will not reach the database.
     $msg = <<END;
 Date: Thu, 30 Aug 1990 16:30:05 +0100
 From: $user_name <$user_email>
@@ -388,8 +388,8 @@ Status: RO
 Woot woot woot!
 END
     mySociety::EmailUtil::send_email($msg, $user_email, $bounce_address);
-    # .. check that administrator gets the message
-    $wth->email_get_containing([ -and => '%To: WriteToThem <'.$bounce_address.'>%', '%Woot woot woot!%' ]);
+    # Check there isn't an email after a few seconds
+    sleep 5;
     $wth->email_check_none_left();
 
     # Send message with questionnaire links ...
