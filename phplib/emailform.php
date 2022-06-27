@@ -10,7 +10,7 @@
 *
 */
 require_once "../phplib/fyr.php";
-require_once "libphp-phpmailer/class.phpmailer.php";
+require_once "libphp-phpmailer/src/PHPMailer.php";
 
 /* setup the fields that are wanted on the contact form,
 *    this will be dynamically built using emailform_display,
@@ -252,7 +252,7 @@ function emailform_send_message () {
     }
     $success = FALSE;
     if ($sender && $mailbody) {
-        $mail = new PHPMailer;
+        $mail = new PHPMailer\PHPMailer\PHPMailer;
         $mail->setFrom($sender, $_POST['name'] ?: "");
         $mail->addAddress($sendto, 'WriteToThem');
         $mail->Subject = $subject;
