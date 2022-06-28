@@ -49,7 +49,7 @@
                 <div class="mysoc-footer__legal">
                     <p>
                         <a href="/about-copyright">Data by GovEval</a>.
-                        <a href="https://www.bytemark.co.uk/">Hosted by Bytemark</a>.
+                        <a href="https://www.mythic-beasts.com/">Hosted by Mythic Beasts</a>.
                         <?php if(isset($values['credit'])) echo $values['credit']; ?>.
                     </p>
                     <p>
