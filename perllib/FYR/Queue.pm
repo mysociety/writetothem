@@ -411,11 +411,11 @@ sub write_messages($$$$;$$$$){
                         ?, ?, ?, ?
                     )#, {},
                         $id,
-                        (map { as_utf8_octets($sender->{$_}) || undef } qw(name email address phone postcode ipaddr referrer)),
+                        (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
                         $recipient_id,
-                        (map { as_utf8_octets($recipient->{$_}) || undef } qw(name type email fax)),
+                        (map { $recipient->{$_} || undef } qw(name type email fax)),
                         $recipient->{via} ? 't' : 'f',
-                        as_utf8_octets($text),
+                        $text,
                         FYR::DB::Time(), FYR::DB::Time(),
                         $cobrand, $cocode, $group_id, $no_questionnaire);
 
@@ -543,7 +543,7 @@ sub logmsg ($$$;$) {
         {},
         $id,
         $log_hostname, FYR::DB::Time(), state($id),
-        as_utf8_octets($msg), $important ? 't' : 'f',
+        $msg, $important ? 't' : 'f',
         $editor);
     $dbh->commit();
     # XXX should we pass the hostname to the handler?
@@ -842,43 +842,6 @@ sub format_email_body ($) {
     $text =~ s/^\s+$//gm;
 
     return $text;
-}
-
-# as_ascii_octets STRING
-# Given a UNICODE STRING, return a byte string giving that string's encoding
-# in ASCII, if it can be so encoded; or undef otherwise.
-sub as_ascii_octets ($) {
-    my $octets = as_utf8_octets($_[0]);
-    if ($octets !~ /[\x80-\xff]/) {
-        return $octets;
-    } else {
-        return undef;
-    }
-}
-
-# as_cp1252_octets STRING
-# Given a UNICODE STRING, return a byte string giving that string's encoding
-# in CP1252, if it can be so encoded; or undef otherwise.
-sub as_cp1252_octets ($) {
-    my $s = shift;
-    die "STRING is not valid ASCII/UTF-8" unless (utf8::valid($s));
-    my $out;
-    eval {
-        my $octets = encode('windows-1252', $s, Encode::FB_CROAK);
-        $out = $octets;
-    };
-    return $out;
-}
-
-# as_utf8_octets STRING
-# Given a UNICODE STRING, return a byte string giving that string's encoding
-# in UTF-8.
-sub as_utf8_octets ($) {
-    my $s = shift;
-    return $s unless $s;
-    die "STRING is not valid ASCII/UTF-8" unless (utf8::valid($s));
-    utf8::encode($s);
-    return $s;
 }
 
 # make_representative_email MESSAGE SENDER
