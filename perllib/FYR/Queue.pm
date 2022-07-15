@@ -30,7 +30,6 @@ use FindBin;
 use HTML::Entities;
 use IO::Socket;
 use IO::All;
-use Net::DNS::Resolver;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
@@ -888,16 +887,13 @@ sub make_representative_email ($$) {
             );
 
     my $headers = {
-        From => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
+        From => mySociety::Email::format_email_address($msg->{sender_name}, $sender),
+        'Reply-To' => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
         To => mySociety::Email::format_email_address($msg->{recipient_name}, $msg->{recipient_email}),
         Subject => $subject,
         Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
         'Message-ID' => email_message_id($msg->{id}),
     };
-    if (test_dmarc($msg->{sender_email})) {
-        $headers->{From} = mySociety::Email::format_email_address($msg->{sender_name}, $sender);
-        $headers->{'Reply-To'} = mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email});
-    }
 
     $bodytext = build_text_email($bodytext);
 
@@ -909,36 +905,6 @@ sub make_representative_email ($$) {
             encoding => 'quoted-printable',
         },
     )->as_string;
-}
-
-sub test_dmarc {
-    my $email = shift;
-
-    my $addr = (Email::Address->parse($email))[0];
-    return unless $addr;
-
-    my $domain = $addr->host;
-    my @answers = _resolver_send(Net::DNS::Resolver->new, "_dmarc.$domain", 'TXT');
-    @answers = map { $_->txtdata } @answers;
-    my $dmarc = join(' ', @answers);
-    return unless $dmarc =~ /p *= *(reject|quarantine)/;
-
-    return 1;
-}
-
-# Same as send->answer, but follows one CNAME and returns only matching results
-sub _resolver_send {
-    my ($resolver, $domain, $type) = @_;
-    my $packet = $resolver->send($domain, $type);
-    my @answers;
-    foreach my $rr ($packet->answer) {
-        if ($rr->type eq 'CNAME') {
-            push @answers, $resolver->send($rr->cname, $type)->answer;
-        } else {
-            push @answers, $rr;
-        }
-    }
-    return grep { $_->type eq $type } @answers;
 }
 
 #
