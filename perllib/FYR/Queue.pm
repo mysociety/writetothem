@@ -812,6 +812,19 @@ sub make_house_of_lords_address ($) {
 sub format_email_body ($) {
     my ($msg) = @_;
 
+    my $text = format_email_body_hdr($msg);
+    $text .= format_email_body_main($msg);
+
+    # Strip any lines which consist only of spaces. Because we send the mails
+    # as quoted-printable, such lines get formatted as ugly strings of "=20".
+    $text =~ s/^\s+$//gm;
+
+    return $text;
+}
+
+sub format_email_body_hdr {
+    my ($msg) = @_;
+
     my $addr = "$msg->{sender_name}\n$msg->{sender_addr}";
     $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
     $addr .= "\n\n" . "Email: $msg->{sender_email}";
@@ -827,6 +840,13 @@ sub format_email_body ($) {
                 . "\n\n"
                 . "\n";
 
+    return $text;
+}
+
+sub format_email_body_main {
+    my ($msg) = @_;
+    my $text = '';
+
     # If the message is going to a peer via, then stick their House of Lords
     # address on it to.
     if ($msg->{recipient_via} && $msg->{recipient_type} eq 'HOC') {
@@ -835,10 +855,6 @@ sub format_email_body ($) {
 
     # and now the actual text.
     $text .= "\n" . wrap(EMAIL_COLUMNS, $msg->{message});
-
-    # Strip any lines which consist only of spaces. Because we send the mails
-    # as quoted-printable, such lines get formatted as ugly strings of "=20".
-    $text =~ s/^\s+$//gm;
 
     return $text;
 }
@@ -1066,6 +1082,16 @@ sub email_template_params ($%) {
     return \%params;
 }
 
+sub html_paragraph {
+    my $text = shift;
+    my $right = shift;
+    my $p = $right ? '<p align="right">' : '<p>';
+    my @paras = grep { $_ } split(/(?:\r?\n){2,}/, $text);
+    s/\r?\n/<br>\n/g for @paras;
+    $text = "$p\n" . join("\n</p>\n\n$p\n", @paras) . "</p>\n";
+    return $text;
+}
+
 sub build_html_email {
     my ($template, $msg, $settings) = @_;
 
@@ -1075,29 +1101,10 @@ sub build_html_email {
     }
 
     # Convert the plain text message into html so it displays
-    # more or less correctly in HTML emails. This splits the
-    # address portion and the message portion as they have
-    # different formatting requirements
-    if ($html_settings->{email_text}) {
-        my $msg = $html_settings->{email_text};
-        my ($address, $body) = split('Email:', $msg, 2);
-        $address =~ s%\n%<br/>%gs;
-        if ($body =~ /\d\s\w+\s\d{4}\n\s*Dear/s) {
-            my ($email_and_date, $message) = split(/^Dear /m, $body, 2);
-            $email_and_date =~ s%\n\n%</p>\n<p align="right">%s;
-            $message =~ s%\n\n%</p>\n<p>%gs;
-            $html_settings->{email_text} = $address .
-                '</p><p align="right">Email:' .
-                $email_and_date .
-                '</p><p>Dear ' .
-                $message;
-        } else {
-            $body =~ s%\n\n%</p>\n<p>%gs;
-            $html_settings->{email_text} = $address .
-                '</p><p>Email:' .
-                $body;
-        }
-    }
+    # more or less correctly in HTML emails.
+    my $address = html_paragraph(format_email_body_hdr($msg), 1);
+    my $message = html_paragraph(format_email_body_main($msg));
+    $html_settings->{email_text} = $address . $message;
 
     my $logo = Email::MIME->create(
        attributes => {
@@ -1199,7 +1206,6 @@ sub make_confirmation_email ($;$) {
 
         my $settings = {
             confirm_url => $confirm_url,
-            email_text => format_email_body($msg),
         };
 
         $bodyhtml = build_html_email($template, $msg, $settings)
@@ -1212,7 +1218,6 @@ sub make_confirmation_email ($;$) {
 
         my $settings = {
             confirm_url => $confirm_url,
-            email_text => format_email_body($msg),
         };
 
         $bodyhtml = build_html_email($template, $msg, $settings)
@@ -1343,7 +1348,7 @@ sub make_failure_email ($) {
 
     $text = build_text_email($text);
 
-    my $html = build_html_email($template, $msg, {email_text => format_email_body($msg)});
+    my $html = build_html_email($template, $msg);
 
     my $mail = Email::MIME->create(
         header_str => [
@@ -1421,7 +1426,6 @@ sub make_questionnaire_email ($;$) {
                 . "\n\n\n"
                 . format_email_body($msg);
 
-    $settings->{'email_text'} = format_email_body($msg);
     my $html = build_html_email('questionnaire', $msg, $settings);
 
     # XXX Monstrous hack. The AOL client software (in some versions?) doesn't
