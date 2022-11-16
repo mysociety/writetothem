@@ -21,7 +21,6 @@ use strict;
 use Data::Dumper;
 use DBD::Pg; # for BLOB (bytea) support
 use Error qw(:try);
-use Geo::IP;
 use POSIX;  # strftime
 use Storable;
 use Time::HiRes;
@@ -29,24 +28,13 @@ use Time::HiRes;
 use mySociety::Config;
 use mySociety::DaDem;
 use mySociety::DBHandle qw(dbh);
+use mySociety::Gaze;
 use mySociety::MaPit;
 use mySociety::Ratty;
 
 use FYR;
 use FYR::Queue;
 use FYR::SubstringHash;
-
-# get_country_from_ip ADDRESS
-# Return the country code for the given IP address, or undef if none could be
-# found.
-sub get_country_from_ip ($) {
-    my ($addr) = @_;
-    return 'localhost' if $addr eq '127.0.0.1';
-    our $geoip;
-    $geoip ||= new Geo::IP(GEOIP_STANDARD);
-    my $country = $geoip->country_code_by_addr($addr);
-    return $country;
-}
 
 # Constants for similarity hashing.
 # Length of substrings we consider.
@@ -235,7 +223,7 @@ my @group_tests = (
         # Country of origin of IP address
         sub ($) {
             my ($msg) = @_;
-            my $cc = get_country_from_ip($msg->{sender_ipaddr});
+            my $cc = mySociety::Gaze::get_country_from_ip($msg->{sender_ipaddr});
             $cc ||= 'unknown';
             return ( sender_ip_country => [$cc, 
                 "Country of constituent's IP address, or localhost if 127.0.0.1"] );

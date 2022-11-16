@@ -11,7 +11,6 @@ ttf-bitstream-vera
 libio-string-perl
 libjson-perl
 libregexp-common-perl
-libgeo-ip-perl
 libstring-crc32-perl
 php-curl
 libphp-phpmailer
