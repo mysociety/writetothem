@@ -813,7 +813,7 @@ sub format_email_body ($) {
     my ($msg) = @_;
 
     my $text = format_email_body_hdr($msg);
-    $text .= format_email_body_main($msg);
+    $text .= format_email_body_main($msg, 1);
 
     # Strip any lines which consist only of spaces. Because we send the mails
     # as quoted-printable, such lines get formatted as ugly strings of "=20".
@@ -844,7 +844,7 @@ sub format_email_body_hdr {
 }
 
 sub format_email_body_main {
-    my ($msg) = @_;
+    my ($msg, $wrap) = @_;
     my $text = '';
 
     # If the message is going to a peer via, then stick their House of Lords
@@ -854,7 +854,7 @@ sub format_email_body_main {
     }
 
     # and now the actual text.
-    $text .= "\n" . wrap(EMAIL_COLUMNS, $msg->{message});
+    $text .= "\n" . ($wrap ? wrap(EMAIL_COLUMNS, $msg->{message}) : $msg->{message});
 
     return $text;
 }
@@ -1103,7 +1103,7 @@ sub build_html_email {
     # Convert the plain text message into html so it displays
     # more or less correctly in HTML emails.
     my $address = html_paragraph(format_email_body_hdr($msg), 1);
-    my $message = html_paragraph(format_email_body_main($msg));
+    my $message = html_paragraph(format_email_body_main($msg, 0));
     $html_settings->{email_text} = $address . $message;
 
     my $logo = Email::MIME->create(
