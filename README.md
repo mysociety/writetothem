@@ -35,7 +35,7 @@ To stop the environment in this case run:
 The first time you run the environment, a local image will be built for the app
 container and the database will have the schema loaded automatically.
 
-Once the environment is running, it should be accessible at http://127.0.0.1.xip.io:8085/
+Once the environment is running, it should be accessible at http://127.0.0.1.nip.io:8085/
 (note that you'll get an error if you simply visit localhost:8085 at present).
 
 If you need to rebuild the app container, you can do so by running:
