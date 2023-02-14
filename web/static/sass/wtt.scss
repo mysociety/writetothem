@@ -459,9 +459,42 @@ $colour_violet: #a94ca6;
     margin-bottom: 0.5em;
 }
 
+$mysoc-badge-mobile-width:    55px;
+$mysoc-badge-desktop-width:   80px;
+$badge-horizontal-shadow-mobile: 6px; 
+$badge-horizontal-shadow-desktop: 8px; 
+
+#mysociety-badge {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: $badge-horizontal-shadow-mobile; // Align with container
+    width: $mysoc-badge-mobile-width;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+    .badge-desktop {
+        display: none;
+    }
+
+    @media only screen and (min-width: $small-screen) {
+        width: $mysoc-badge-desktop-width;
+        left: $badge-horizontal-shadow-desktop; // Align with container
+        .badge-mobile {
+            display: none;
+        }
+        .badge-desktop {
+            display: block;
+        }
+    }
+}
+
 .wtt-logo {
     position: absolute;
     top: 2px;
+    left: $mysoc-badge-mobile-width + 10px;
 
     img {
         height: 50px;
@@ -469,6 +502,7 @@ $colour_violet: #a94ca6;
     }
 
     @media #{$small} {
+        left: $mysoc-badge-desktop-width + 20px;
 
         img {
             height: 70px;
