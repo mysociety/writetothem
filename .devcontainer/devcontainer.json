@@ -1,0 +1,31 @@
+{
+    "name":"theyworkforyou",
+    "dockerComposeFile":"../docker-compose.yml",
+    "service":"fyr",
+    "workspaceFolder":"/workspaces/writetothem",
+    "initializeCommand":[
+       ".devcontainer/initializeCommand"
+    ],
+    "onCreateCommand": [
+      ".devcontainer/onCreateCommand"
+    ],
+    "portsAttributes":{
+       "8085":{
+          "label":"WTT"
+       }
+    },
+    "forwardPorts":[
+      8085
+    ],
+    "customizations":{
+       "vscode":{
+          "extensions":[
+             "ms-vscode.test-adapter-converter",
+             "ms-azuretools.vscode-docker",
+             "bmewburn.vscode-intelephense-client",
+             "felixfbecker.php-debug",
+             "recca0120.vscode-phpunit"
+          ]
+       }
+    }
+ }

@@ -71,6 +71,8 @@ directory for updates, and recompile the CSS files as necessary:
     cd web/static
     bundle exec compass watch
 
+If using the codespaces/devcontainer setup, the above will be setup on container creation, and `script/watch` will watch for changes.
+
 ## Acknowledgements
 
 Thanks to [Browserstack](https://www.browserstack.com/) who let us use their

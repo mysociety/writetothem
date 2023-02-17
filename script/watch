@@ -1,0 +1,5 @@
+#!/bin/sh
+# Watch SASS files for changes and recompile
+
+cd web/static
+bundle exec compass watch
