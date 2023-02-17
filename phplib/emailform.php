@@ -10,7 +10,14 @@
 *
 */
 require_once "../phplib/fyr.php";
-require_once "libphp-phpmailer/src/PHPMailer.php";
+
+# try and import the PHPMailer library using the original method, but switch if fails (for testing help pages)
+
+if (file_exists("libphp-phpmailer/src/PHPMailer.php")) {
+    require_once "libphp-phpmailer/src/PHPMailer.php";
+} else {
+    require_once "libphp-phpmailer/class.phpmailer.php";
+}
 
 /* setup the fields that are wanted on the contact form,
 *    this will be dynamically built using emailform_display,
