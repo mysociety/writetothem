@@ -264,3 +264,4 @@ function emailform_send_message () {
     }
     return $success;
 }
+
