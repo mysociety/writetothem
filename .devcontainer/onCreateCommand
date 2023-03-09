@@ -1,0 +1,6 @@
+#!/bin/sh
+# This script is run inside the container after it is created.
+apt update
+apt install -y ruby-full build-essential zlib1g-dev
+gem install bundler -v '1.17.2'
+bundle install

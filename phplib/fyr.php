@@ -40,7 +40,13 @@ template_set_style($dir . "/../templates/website");
 global $cobrand;
 $cobrand = null;
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
-    $host_parts = explode('.', $_SERVER['HTTP_HOST'], 2);
+    # if localhost or localhost:8085, skip the dot exploding step
+    $localhost_values = array('localhost', 'localhost:8085');
+    if (in_array( $_SERVER['HTTP_HOST'], $localhost_values)) {
+        $host_parts = array('localhost', 'localhost');
+    } else {
+        $host_parts = explode('.', $_SERVER['HTTP_HOST'], 2);
+    }
     if ($host_parts[1] == OPTION_WEB_DOMAIN && $host_parts[0] != 'www') {
         $cobrand = $host_parts[0];
     }

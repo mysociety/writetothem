@@ -1,4 +1,4 @@
-FROM mysocietyorg/apache-php-fpm:stretch
+FROM mysocietyorg/apache-php-fpm:bullseye
 LABEL maintainer="sysadmin@mysociety.org"
 
 COPY ./conf/packages /tmp/packages
