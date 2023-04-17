@@ -49,8 +49,8 @@
                 <div class="mysoc-footer__legal">
                     <p>
                         <a href="/about-copyright">Data by GovEval</a>.
-                        <a href="https://www.bytemark.co.uk/">Hosted by Bytemark</a>.
-                        <?php if(isset($values['credit'])) echo $values['credit']; ?>.
+                        <a href="https://www.mythic-beasts.com/">Hosted by Mythic Beasts</a>.
+                        <?php if(isset($values['credit'])) echo $values['credit'] . '.'; ?>
                     </p>
                     <p>
                         <a href="https://www.mysociety.org?utm_source=writetothem.com&amp;utm_content=footer+full+legal+details&amp;utm_medium=link&amp;utm_campaign=mysoc_footer">mySociety</a>
