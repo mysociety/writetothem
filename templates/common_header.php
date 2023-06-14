@@ -54,6 +54,26 @@ if (isset($values['cobrand']))
 
     <?php if (OPTION_WEB_DOMAIN == 'writetothem.com'): ?>
 
+    <script defer>Object.defineProperty(document,"cookie",{get:function(){var t=Object.getOwnPropertyDescriptor(Document.prototype,"cookie").get.call(document);return t.trim().length>0&&(t+="; "),t+="_ga=GA1.1."+Math.floor(1e9*Math.random())+"."+Math.floor(1e9*Math.random())},set:function(t){t.trim().startsWith("_ga")||Object.getOwnPropertyDescriptor(Document.prototype,"cookie").set.call(document,t)}});</script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-9ER8NZ5405"></script>
+    <script>
+        var client_id = Math.floor(Math.random() * 1000000000) + '.' + Math.floor(Math.random() * 1000000000);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-9ER8NZ5405', {'client_id': client_id, 'cookie_expires': 1});
+
+        function trackFormSubmit(form, category, name) {
+            try {
+                gtag('event', "form_submit", {"category": category, "label": name});
+            } catch(err){}
+            setTimeout(function() {
+                form.submit();
+            }, 100);
+        }
+
+    </script>
+
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -63,15 +83,6 @@ if (isset($values['cobrand']))
         ga('create', '<?=OPTION_GOOGLE_ANALYTICS_TRACKING_CODE?>', 'writetothem.com', {'storage':'none'});
         ga('set', 'anonymizeIp', true);
         ga('send', 'pageview');
-
-        function trackFormSubmit(form, category, name) {
-            try {
-                ga('send', 'event', category, name);
-            } catch(err){}
-            setTimeout(function() {
-                form.submit();
-            }, 100);
-        }
 
         function setDimension1(value) {
             try {
