@@ -210,7 +210,7 @@ sub check_delivered_to_rep {
         [ -and =>
             '%Subject: Letter from %'.name_n($who).'%',
             '%To: "%'.$repname.'%" <'.email_n($who).'>%',
-            '%From: "'.name_n($who).'" <'.email_n($who).'>%',
+            '%Reply-To: "'.name_n($who).'" <'.email_n($who).'>%',
             '%'.$extra_check.'%',
             '%Signed with an electronic signature%'
         ]);
