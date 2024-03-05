@@ -93,7 +93,7 @@ our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
 
-our @rep_names = ('Alice Gilderdale', 'Katie Porrer', 'Tim Bick');
+our @rep_names = ('Anthony Martinelli', 'Katie Porrer', 'Tim Bick');
 my $mep_rep_name = 'Katie Porrer';
 
 #############################################################################
@@ -530,7 +530,6 @@ sub do_send_group_abuse {
     foreach $rep_name (@rep_names){
         # long header lines are wrapped so this fixes a long name
         # being wrapped
-        $rep_name =~ s/Campbell Bannerman/Campbell/;
         $confirmation_email = $wth->email_get_containing(
             [ -and =>
                 '%To: "'.name_n(10).'" <'.email_n(10).'>%',
