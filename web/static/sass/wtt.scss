@@ -425,6 +425,22 @@ $colour_violet: #a94ca6;
     }
 }
 
+.hero-text-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top:10px;
+    padding-bottom:10px
+}
+
+.hero-text-container h2 {
+    font-size: 2em;
+}
+
+@media only screen and (max-width: 767px) {
+    .hero-text-container h2 {
+        font-size: 1.5em;
+    }
+}
+
 .hero--responsiveness {
     background-image: url(../img/heroes/index-responsiveness.jpg);
     background-position: 50% 40%;
