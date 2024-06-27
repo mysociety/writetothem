@@ -8,7 +8,7 @@ template_draw('header', $values);
 
 ?>
 
-<div class="row hero hero-sent">
+<div class="row hero">
     <div class="large-10 large-centered columns">
         <div class="ms_header_nav">
             <nav>
@@ -18,18 +18,24 @@ template_draw('header', $values);
             </nav>
         </div>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
-        <div style="text-align:center;">
-            <h2>All done! Your message is on its way.</h2>
-            <p class="subtitle">If, for some reason, we couldn&rsquo;t send your message
-                to your representative, we will email you to tell you. Otherwise, you can sit
-                back and relax &mdash; your message is on its way.</p>
+        <div class="hero-text-container">
+        <div style="text-align:center;" >
+            <h2>Your message is on its way.</h2>
+            <p class="subtitle">If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit
+                back and relax.</p>
         </div>
-
+        <div style="text-align:center;">
+            <hr style="background-color: white;">
+        </div>
         <div style="text-align:center;">
             <?php $values['donate_shown'] = True; ?>
-            <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=donate+now&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
-            <p>Your donations keep this site and others like it running</p>
+            <h2>
+            Can you help other people who need to send a message?
+            </h2>
+            <p>With your support, we can help more people get their message to the right place.</p>
+            <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
         </div>
+    </div>
     </div>
 
 </div>
