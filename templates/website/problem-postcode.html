@@ -1,0 +1,48 @@
+<?php
+
+if (!isset($values['skip_header'])) {
+    $values['title'] = "Problem with your message";
+    $values['robots'] = 'noindex, nofollow';
+    template_draw('header', $values);
+}
+
+?>
+
+<div class="row write-header">
+    <div class="large-8 large-centered columns">
+
+        <h2>It looks like you’ve included more than one postcode</h2>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-8 large-centered columns" role="alert">
+
+        <p>Sorry, but please read <a href="/about-qa#onlyrep">this</a> to understand
+            why our site only lets you write to <em>your own elected representatives</em>,
+            not those for other parts of the country.</p>
+
+        <p>If we didn’t do this, then representatives would be snowed under with mail
+            from all and sundry, and that would mean they ignored the important mail from
+            their own constituents. They might even bin <strong>all</strong> messages
+            sent via WriteToThem.com.</p>
+
+        <p>Either of which would be A Bad Thing.</p>
+
+        <p>If you’re writing <a href="/about-qa#onbehalf">on behalf of someone else</a>,
+            the ‘correct’ procedure is to write to your own representative and ask
+            them to take up the matter with the most appropriate colleague.</p>
+
+        <p>Please <a href="/">start again from the beginning</a>, use your own
+            address and postcode, and in your message, give the details of the
+            person or place you’re writing about.</p>
+
+    </div>
+</div>
+
+<?php
+
+if (!isset($values['skip_header'])) {
+    template_draw('footer', $values);
+}
