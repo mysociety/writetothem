@@ -187,6 +187,8 @@ if ($pc) {
         'G1R0AA' => 'giro',
         'SANTA1' => 'santa',
         'XM45HQ' => 'santa',
+        'M109KC' => 'coronationstreet',
+        'WG77FU' => 'wallaceandgromit',
     );
     $ft = null;
     if (array_key_exists($pc2, $specialmap)) {
@@ -197,6 +199,10 @@ if ($pc) {
         $ft = 'training';
     } elseif ($pc23 == 'RE1') {
         $ft = 'reddwarf';
+    } elseif ($pc23 == 'WG7') {
+        $ft = 'wallaceandgromit';
+    } elseif ($pc23 == 'M10') {
+        $ft = 'coronationstreet';
     }
 
     if (isset($ft)) {
