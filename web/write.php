@@ -481,8 +481,11 @@ function submitFaxes() {
         $err = $res['error_text'];
         $code = $res['error_code'];
         if ($status != 0) {
-            $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .
-            $representatives_info[$rep_id]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
+            $rep_name = "";
+            if ($grpid) {
+                $rep_name = "<strong>" . $fyr_voting_area['rep_prefix'] . " " .
+                $representatives_info[$rep_id]['name'] . " " . $fyr_voting_area['rep_suffix'] . "</strong>";
+            }
 
             if ($status == 1) {
                 # FYR Error code
