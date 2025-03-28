@@ -3,5 +3,7 @@ if [ -e "/etc/php/7.4/fcgi" ]; then
     PHP_FCGI_CHILDREN=0 PHPRC=/etc/php/7.4/fcgi exec /usr/bin/php-cgi -d apc.enabled=1
 elif [ -e "/etc/php/7.3/fcgi" ]; then
     PHP_FCGI_CHILDREN=0 PHPRC=/etc/php/7.3/fcgi exec /usr/bin/php-cgi -d apc.enabled=1
+elif [ -e "/etc/php/8.2/fcgi" ]; then
+    PHP_FCGI_CHILDREN=0 PHPRC=/etc/php/8.2/fcgi exec /usr/bin/php-cgi -d apc.enabled=1
 fi
 
