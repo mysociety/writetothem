@@ -66,7 +66,7 @@ if ($cobrand) {
 
 /* fyr_display_error NUMBER MESSAGE
  * Display an error message to the user. */
-function fyr_display_error($num, $message, $file, $line, $context) {
+function fyr_display_error($num, $message, $file, $line) {
     /* Nuke any existing page output to display the error message. */
     if (OPTION_PHP_DEBUG_LEVEL == 0)
         ob_clean();
