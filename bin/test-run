@@ -175,7 +175,7 @@ sub do_send_example_message {
             writer_town => 'Someplace',
             state => 'Someshire',
             writer_phone => undef,
-            body => "Dear Tester,This is a test message which shouldn't ever get to a real representative. It means the test harness is working. It's quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it doesn't."
+            body => "Dear Tester,This is a test message which should never get to a real representative. It means the test harness is working. It is quite long because real messages are quite long. People ask lots of questions which when they are answered will solve all their problems. Sometimes this works, sometimes it does not."
         }, 
 	$repinfo,         
         $options
