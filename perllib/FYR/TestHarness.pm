@@ -195,7 +195,7 @@ sub confirm_message {
         $url =~ s/\s//gs;
         $wth->email_check_url($url);
         $wth->browser_get($url);
-        $wth->browser_check_contents("All done! Your message is on its way.");
+        $wth->browser_check_contents("Your message is on its way.");
     }
 }
 
