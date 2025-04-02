@@ -35,6 +35,7 @@ use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
 use Data::Dumper;
 use Email::MIME;
+use Digest::MD5 'md5';
 
 use utf8;
 
@@ -967,8 +968,9 @@ sub make_token ($$) {
     my $string = $word . pack('nh*', $rand, $id);
 
     my $c = Crypt::CBC->new({
-                    key => $word . FYR::DB::secret(),
+                    key => md5($word . FYR::DB::secret()),
                     cipher => 'IDEA',
+                    pbkdf => 'none',
                     prepend_iv => 0,
                     iv => token_iv
                 });
@@ -996,9 +998,10 @@ sub check_token ($$) {
     return undef if $@;
 
     my $c = Crypt::CBC->new({
-                    key => $word . FYR::DB::secret(),
+                    key => md5($word . FYR::DB::secret()),
                     cipher => 'IDEA',
-                    prepend_iv => 0,
+                    pbkdf => 'none',
+                    header => 'none',
                     iv => token_iv
                 });
 
