@@ -206,14 +206,16 @@ sub check_delivered_to_rep {
     my $multispawn = $options->{multispawn};
 
     call_fyrqd($wth, $verbose, $multispawn);
+    my $email = email_n($who);
+    $email =~ s/\+/\\+/g;
     my $content = $wth->email_get_containing(
         [ -and =>
             '%Subject: Letter from %'.name_n($who).'%',
-            '%To: "%'.$repname.'%" <'.email_n($who).'>%',
-            '%Reply-To: "'.name_n($who).'" <'.email_n($who).'>%',
+            '%To: "%'.$repname.'%"[\n\r\s]*<'.$email.'>%',
+            '%Reply-To: "'.name_n($who).'"[\n\r\s]*<'.$email.'>%',
             '%'.$extra_check.'%',
             '%Signed with an electronic signature%'
-        ]);
+        ], 1);
     return $content;
 }
 
