@@ -145,7 +145,9 @@ sub send_message_to_rep {
         fields => $fields, button => 'submitPreview');
     # ... check preview and submit it
     $wth->browser_check_contents($expected_messages->{preview});
-    $wth->browser_check_contents($fields->{body});
+    my $html_encoded_body = $fields->{body};
+    $html_encoded_body =~ s/'/&#039;/g;
+    $wth->browser_check_contents($html_encoded_body);
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents($expected_messages->{check_email});
 
