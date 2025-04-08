@@ -178,6 +178,18 @@ create index message_extradata_message_id_idx
 create unique index message_extradata_message_id_name_idx
     on message_extradata(message_id, name);
 
+-- analysis_data
+-- store post confirmation survey data for analysis
+create table analysis_data (
+    message_id char(20) not null references message(id) on delete cascade,
+    message_summary text,
+    analysis_data jsonb,
+    whenanswered timestamp with time zone
+);
+
+create unique index analysis_data_message_id_idx
+    on analysis_data(message_id);
+
 -- message_log
 -- Events relating to each message.
 create table message_log (
