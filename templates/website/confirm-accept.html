@@ -27,6 +27,17 @@ template_draw('header', $values);
         <div style="text-align:center;">
             <hr style="background-color: white;">
         </div>
+
+        <?php if ($values['form']): ?>
+        <div style="text-align:center;" class="analysis">
+            <p class="subtitle">If you have time could you answer a few questions?</p>
+            <?= $values['form'] ?>
+        </div>
+
+        <div style="text-align:center;">
+            <hr style="background-color: white;">
+        </div>
+        <?php endif; ?>
         <div style="text-align:center;">
             <?php $values['donate_shown'] = True; ?>
             <h2>
