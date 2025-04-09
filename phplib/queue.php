@@ -224,6 +224,17 @@ function msg_record_questionnaire_answer($token, $question, $response) {
     return $result;
 }
 
+/* msg_record_analysis_data ID SUMMARY ANALYSIS_DATA
+
+ Record a user's response to the post confirm option analysis data questionnaire
+*/
+function msg_record_analysis_data($id, $summary, $analysis_data) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.record_analysis_data', $params);
+    return $result;
+}
+
 /* msg_get_questionnaire_message TOKEN
 
   Return id of the message associated with a questionnaire email. TOKEN is

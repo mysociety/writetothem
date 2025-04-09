@@ -30,6 +30,7 @@ use FindBin;
 use HTML::Entities;
 use IO::Socket;
 use IO::All;
+use JSON;
 use POSIX qw(strftime);
 use Text::Wrap (); # don't pollute our namespace
 use Time::HiRes ();
@@ -1614,6 +1615,26 @@ sub get_questionnaire_message ($) {
     if (my $id = check_token("questionnaire", $token)) {
         return $id;
     }
+}
+
+=item record_analysis_data MSGID MSG_SUMMARY ANALYSIS_DATA
+
+Record a user's response to the post confirm questionnaire for some extra analysis data.
+
+MSGID is the messageid
+MSG_SUMMARY is a text string with an optional description of the message,
+ANALYSIS_DATA is a hashref that will be punted as is into the jsonb field.
+
+=cut
+
+sub record_analysis_data($$$) {
+    my ($msgid, $msg_summary, $analysis_data) = @_;
+
+    my $encoded_data = encode_json($analysis_data);
+    dbh()->do('insert into analysis_data (message_id, message_summary, analysis_data, whenanswered) values (?, ?, ?, \'now\') on conflict(message_id) do update set message_summary = ?, analysis_data = ?, whenanswered = \'now\'', {}, $msgid, $msg_summary, $encoded_data, $msg_summary, $encoded_data);
+    dbh()->commit();
+
+    return 1;
 }
 
 #
