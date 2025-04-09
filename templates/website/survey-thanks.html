@@ -1,0 +1,45 @@
+<?php
+
+$values['title'] = "Thanks for your help";
+$values['robots'] = 'noindex, nofollow';
+$values['skip_header'] = TRUE;
+
+template_draw('header', $values);
+
+?>
+
+<div class="row hero">
+    <div class="large-10 large-centered columns">
+        <div class="ms_header_nav">
+            <nav>
+                <ul class="menu">
+                    <li id="ms_logo"><a class="ms_header_nav-logo" href="https://www.mysociety.org">&nbsp;</a></li>
+                </ul>
+            </nav>
+        </div>
+        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
+        <div class="hero-text-container">
+        <div style="text-align:center;" >
+            <h2>Thanks for your help</h2>
+            <p class="subtitle">Your information will never be shared.</p>
+        </div>
+
+        <div style="text-align:center;">
+            <hr style="background-color: white;">
+        </div>
+        <div style="text-align:center;">
+            <?php $values['donate_shown'] = True; ?>
+            <h2>
+            Can you help other people who need to send a message?
+            </h2>
+            <p>With your support, we can help more people get their message to the right place.</p>
+            <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
+        </div>
+    </div>
+    </div>
+
+</div>
+
+<?php
+$values['credit'] = '<a href="https://www.freeimages.com/photographer/hisks-57682">Photograph by Krzysztof Szkurlatowski</a>';
+template_draw('footer', $values);
