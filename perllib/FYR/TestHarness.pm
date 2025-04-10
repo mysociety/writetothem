@@ -161,6 +161,7 @@ sub confirm_message {
     my $cobrand = $options->{cobrand}; 
     my $wth = $options->{wth};
     my $base_url = $options->{base_url};
+    my $do_survey = $options->{do_post_confirm_survey};
 
     my $reptype = $repinfo->{reptype};
     my $repname = $repinfo->{repname};
@@ -198,6 +199,23 @@ sub confirm_message {
         $wth->email_check_url($url);
         $wth->browser_get($url);
         $wth->browser_check_contents("Your message is on its way.");
+        my $summary = "a test message to " . name_n($who);
+        if ($do_survey) {
+            $wth->browser_submit_form(
+                form_name => 'analysisForm',
+                fields => {
+                    msg_summary => $summary,
+                    reason => 'casework',
+                },
+                button => 'submit',
+            );
+            $wth->browser_check_contents('Thanks for your help');
+            my $data = dbh()->selectall_arrayref("select message_id from analysis_data
+                where message_summary = ?", {}, $summary);
+            my $got = scalar @$data;
+            die "No survey results found matching $summary" if ($got == 0);
+            die "Too many survey results" if ($got > 1);
+        }
     }
 }
 
