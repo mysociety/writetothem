@@ -129,6 +129,7 @@ sub scrub_data ($) {
             state = 'anonymised'
         where id = ?", {}, $id);
     dbh()->do(q#delete from message_log where message_id = ?#, {}, $id);
+    dbh()->do(q#delete from analysis_data where message_id = ?#, {}, $id);
 }
 
 1;
