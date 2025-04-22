@@ -26,16 +26,14 @@ function buildAnalysisForm($values) {
     $form_action = cobrand_url($cobrand, '/survey', $cocode);
 
     $form = new HTML_QuickForm('analysisForm', 'post', $form_action);
-    $form->addElement('textarea', 'msg_summary', "Message Summary", array('class' => 'summary'));
-    $form->addElement(
-        'select',
-        'reason',
-        "Which of the following best describes why you are writing to your representative",
+    $form->addElement('textarea', 'msg_summary', "Can you tell us in a sentence what your message was about?", array('class' => 'summary'));
+    $form->addGroup(
         array(
-            '' => '',
-            'casework' => 'Casework',
-            'campainging' => 'Campaiging'
-        )
+            $form->createElement('radio', 'reason', null, 'Casework (trying to resolve a problem you or another person is having)', 'casework'),
+            $form->createElement('radio', 'reason', null, 'Campaigning (seeking to persuade or inform your representative about a wider issue)', 'campainging')
+        ),
+        'reason',
+        "Which of the following best describes why you are writing to your representative?"
     );
     $form->addElement('submit', 'submit', "Submit", array('class' => 'button radius success'));
 
