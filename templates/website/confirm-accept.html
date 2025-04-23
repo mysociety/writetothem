@@ -8,8 +8,8 @@ template_draw('header', $values);
 
 ?>
 
-<div class="row hero">
-    <div class="large-10 large-centered columns">
+<div class="row hero hero-transparent">
+    <div class="large-8 large-centered columns">
         <div class="ms_header_nav">
             <nav>
                 <ul class="menu">
@@ -19,26 +19,29 @@ template_draw('header', $values);
         </div>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
         <div class="hero-text-container">
-        <div style="text-align:center;" >
-            <h2>Your message is on its way.</h2>
-            <p class="subtitle">If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit
-                back and relax.</p>
-        </div>
-        <div style="text-align:center;">
-            <hr style="background-color: white;">
+        <div class="card card-lg">
+            <h2>
+                <svg style="vertical-align: sub;" viewBox="0 0 16 16" width="2.5rem" height="2.5rem" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16C9.05058 16 10.0909 15.7931 11.0615 15.391C12.0321 14.989 12.914 14.3997 13.6569 13.6569C14.3997 12.914 14.989 12.0321 15.391 11.0615C15.7931 10.0909 16 9.05058 16 8C16 6.94943 15.7931 5.90914 15.391 4.93853C14.989 3.96793 14.3997 3.08601 13.6569 2.34315C12.914 1.60028 12.0321 1.011 11.0615 0.608964C10.0909 0.206926 9.05058 -1.56548e-08 8 0C5.87827 3.16163e-08 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM7.79378 11.2356L12.2382 5.90222L10.8729 4.76444L7.05067 9.35022L5.07289 7.37156L3.816 8.62844L6.48267 11.2951L7.17067 11.9831L7.79378 11.2356Z" fill="var(--success-color)"/>
+                    </svg>
+                Your message is on its way
+            </h2>
+            <p><small>If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit back and relax.</small></p>
         </div>
 
+        <br><br>
         <?php if ($values['form']): ?>
-        <div style="text-align:center;" class="analysis">
-            <p class="subtitle">If you have time could you answer a few questions?</p>
+        <div class="card card-md card-text-center">
+            <h2 class="subtitle">If you have time could you answer a few questions?</h2>
             <?= $values['form'] ?>
+            <small class="text-muted">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.
+            </small>
         </div>
 
-        <div style="text-align:center;">
-            <hr style="background-color: white;">
-        </div>
+        <br><br>
+
         <?php endif; ?>
-        <div style="text-align:center;">
+        <div class="card card-md card-text-center">
             <?php $values['donate_shown'] = True; ?>
             <h2>
             Can you help other people who need to send a message?

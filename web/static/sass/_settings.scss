@@ -72,6 +72,11 @@ $primary-color: #4695b3;
 $alert-color: #c63a3a;
 $success-color: #32b353;
 
+// We can use CSS variables for svg icon on the HTML templates
+:root {
+  --success-color: #{$success-color};
+}
+
 // Make sure border radius matches unless we want it different.
 
 // $global-radius: 3px;
