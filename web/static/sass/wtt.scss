@@ -55,6 +55,11 @@ $retina: "only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-
 	}
 }
 
+@mixin focus-state {
+  outline: 2px solid $body-font-color;
+  box-shadow: 0 0 0 5px #e3db00;
+}
+
 // Custom Styles
 
 $link-color: #0077a3; // astonishingly this is not a Foundation variable!!
@@ -362,6 +367,15 @@ $colour_violet: #a94ca6;
     position: relative;
     min-height: 70px;
 
+    &.hero-transparent {
+        text-shadow: none;
+        color: $body-font-color;
+
+        h2 {
+            color: $body-font-color;
+        }
+    }
+
     &.hero-error {
         background-image: url(../img/heroes/error.jpg);
     }
@@ -390,6 +404,10 @@ $colour_violet: #a94ca6;
         text-align: center;
         max-width: 30em;
         margin: 0 auto 1em auto;
+
+        &.message {
+          text-align: start;
+        }
     }
 
     abbr {
@@ -428,7 +446,11 @@ $colour_violet: #a94ca6;
 .hero-text-container {
     background-color: rgba(0, 0, 0, 0.5);
     padding-top:10px;
-    padding-bottom:10px
+    padding-bottom:10px;
+
+    .hero-transparent & {
+        background-color: transparent;
+    }
 }
 
 .hero-text-container h2 {
@@ -1435,14 +1457,204 @@ h2 {
  }
 
 /*
- * WTT analsis questions
+ * WTT Cards
  */
-.analysis {
-  label {
-    color: white;
+
+.card {
+  background-color: transparentize(#fff, 0.1);
+  padding: 1rem;
+  border-radius: 0.3em;
+
+  > *:first-child {
+    margin-top: 0;
   }
 
-  .summary {
-    height: 5em;
+  > *:last-child {
+    margin-bottom: 0;
   }
+
+  &-md {
+    padding: 2rem 1rem;
+  }
+  
+  &-lg {
+    padding: 3rem 1rem;
+  }
+
+  &-text-center {
+    text-align: center;
+  }
+  
+  small {
+    font-size: 0.75rem;
+  }
+  
+  @media #{$small} {
+    &-md {
+      padding: 2rem 2rem;
+    }
+  
+    &-lg {
+      padding: 3rem 2rem;
+    }
+  }
+}
+
+/*
+ * Analysis Form
+*/
+
+.analysis-form {
+  margin-top: 2rem;
+
+  label {
+    color: $body-font-color;
+  }
+
+  fieldset {
+    margin: 2.5rem 0;
+
+    legend {
+      font-weight: 400;
+    }
+  }
+
+  .msg-summary {
+    max-height: 3rem;
+    line-height: 2rem;
+    margin-top: 0.5rem;
+
+    &:focus-visible {
+      @include focus-state();
+    }
+  }
+}
+
+/*
+* Input card component
+*/
+
+.input-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+
+  @media #{$small} {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 45%), 1fr));
+    justify-content: center;
+  }
+
+  &-narrow-card {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 30%), 1fr));
+    }
+  }
+}
+
+// Radio boxes
+
+$radio-card-border-radius: 3px;
+$radio-card-transition-speed: 0.3s;
+$radio-card-checked-bg-color: mix($success-color, #fff, 15%);
+$radio-card-checked-border-color: darken($success-color, 20%);;
+$radio-card-default-bg-color: #ffffff;
+$radio-card-default-border-color: transparentize($body-font-color, 0.8);
+$radio-card-text-color: $body-font-color;
+$radio-card-hint-text-color: #444;
+$radio-card-circle-size: 24px;
+
+
+.radio-card {
+  position: relative;
+
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + label {
+      background-color: $radio-card-checked-bg-color;
+      border-color: $radio-card-checked-border-color;
+
+      &::before {
+        border: 2px solid $radio-card-checked-border-color;
+      }
+      
+      &::after {
+        background-color: $radio-card-checked-border-color;
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    &:focus-visible + label {
+      @include focus-state();
+    }
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 1rem 1rem 1rem 3rem;
+    border-radius: $radio-card-border-radius;
+    border: 1px solid $radio-card-default-border-color;
+    background-color: $radio-card-default-bg-color;
+    transition: background-color $radio-card-transition-speed, border-color $radio-card-transition-speed;
+    font-weight: 600;
+    color: $radio-card-text-color;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    line-height: 120%;
+
+    // Radio circle (outer)
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0.75rem;
+      top: 1rem;
+      width: $radio-card-circle-size;
+      height: $radio-card-circle-size;
+      border: 2px solid #aaa;
+      border-radius: 50%;
+      background-color: #fff;
+      transition: all $radio-card-transition-speed;
+    }
+
+    // Radio circle (inner)
+    &::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 22px;
+      width: $radio-card-circle-size/2;
+      height: $radio-card-circle-size/2;
+      border-radius: 50%;
+      background-color: #fff;
+      transform: scale(0);
+      opacity: 0;
+      transition: all $radio-card-transition-speed;
+    }
+
+    .label-hint {
+      display: block;
+      margin-top: 0.25rem;
+      font-weight: normal;
+      font-size: 0.9em;
+      color: $radio-card-hint-text-color;
+    }
+  }
+
+  &:hover label {
+    background-color: mix($body-font-color, #fff, 10%);
+    border-color: transparentize($body-font-color, 0.7);
+  }
+}
+
+.text-muted {
+  color: transparentize($body-font-color, 0.2)
 }

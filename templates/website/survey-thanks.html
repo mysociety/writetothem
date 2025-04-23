@@ -8,8 +8,8 @@ template_draw('header', $values);
 
 ?>
 
-<div class="row hero">
-    <div class="large-10 large-centered columns">
+<div class="row hero hero-transparent">
+    <div class="large-8 large-centered columns">
         <div class="ms_header_nav">
             <nav>
                 <ul class="menu">
@@ -18,23 +18,24 @@ template_draw('header', $values);
             </nav>
         </div>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
-        <div class="hero-text-container">
-        <div style="text-align:center;" >
-            <h2>Thanks for your help</h2>
-            <p class="subtitle">Your information will never be shared.</p>
-        </div>
 
-        <div style="text-align:center;">
-            <hr style="background-color: white;">
-        </div>
-        <div style="text-align:center;">
-            <?php $values['donate_shown'] = True; ?>
-            <h2>
-            Can you help other people who need to send a message?
-            </h2>
-            <p>With your support, we can help more people get their message to the right place.</p>
-            <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
-        </div>
+        <div class="hero-text-container">
+            <div class="card card-lg">
+                <h2>Thanks for your help</h2>
+                <p class="message">Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas.</p>
+            </div>
+
+            <br><br><br>
+            <div class="card card-lg card-text-center">
+                <?php $values['donate_shown'] = True; ?>
+                <h2>
+                Can you help other people who need to send a message?
+                </h2>
+                <p>With your support, we can help more people get their message to the right place.</p>
+                <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
+            </div>
+            <br><br>
+
     </div>
     </div>
 
