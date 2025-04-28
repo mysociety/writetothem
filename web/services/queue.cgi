@@ -61,6 +61,9 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.record_questionnaire_answer' => sub {
                 return FYR::Queue::record_questionnaire_answer($_[0], $_[1], $_[2]);
             },
+            'FYR.Queue.record_analysis_data' => sub {
+                return FYR::Queue::record_analysis_data($_[0], $_[1], $_[2]);
+            },
             'FYR.Queue.get_questionnaire_message' => sub {
                 return FYR::Queue::get_questionnaire_message($_[0]);
             },
