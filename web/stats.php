@@ -57,7 +57,7 @@ foreach ($years as $y) {
 if (!$got_year) {
     template_show_error("We don’t have statistics for that year");
 }
-$year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join($year_bar_array, "</li><li>") . "</li></ul>";
+$year_bar = "<p>Statistics for other years:</p><ul class=\"inline-list\"><li>" . join("</li><li>", $year_bar_array) . "</li></ul>";
 #if (!get_http_var('really'))
 #    $year_bar = "";
 
@@ -79,7 +79,7 @@ foreach($navigation_tabs as $navigation_tab){
     $navigation_tabs_array[] = '<a href="/stats/' . $year . '/' . $navigation_tab[0] . '">' . $html . '</a>';
   }
 }
-$navigation_tabs = '<ul class="inline-list" role="navigation"><li>' . join($navigation_tabs_array, "</li><li>") . '</li></ul>';
+$navigation_tabs = '<ul class="inline-list" role="navigation"><li>' . join("</li><li>", $navigation_tabs_array) . '</li></ul>';
 
 require_once "../phplib/summary_report_${year}.php";
 require_once "../phplib/questionnaire_report_${year}_WMC.php";
