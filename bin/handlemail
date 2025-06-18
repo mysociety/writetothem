@@ -133,8 +133,11 @@ sub handle_non_bounce_to_verp_address {
             print_log('err', 'unable to forward non-bounce to anonymized sender; discarding');
             exit 0;
         }
+
+        # Use do-not-reply email as sender rather than <> to see if that helps with Microsoft SPF
+        my $from_email = FYR::Queue::do_not_reply_sender();
         if (mySociety::EmailUtil::EMAIL_SUCCESS
-                != mySociety::EmailUtil::send_email($text, '<>', $recipient)) {
+                != mySociety::EmailUtil::send_email($text, $from_email, $recipient)) {
             print_log('err', 'unable to forward non-bounce to sender email address; deferring');
             exit(75);
         }
