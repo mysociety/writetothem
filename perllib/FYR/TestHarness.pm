@@ -198,7 +198,7 @@ sub confirm_message {
         $url =~ s/\s//gs;
         $wth->email_check_url($url);
         $wth->browser_get($url);
-        $wth->browser_check_contents("Your message is on its way.");
+        $wth->browser_check_contents("Your message is on its way");
         my $summary = "a test message to " . name_n($who);
         if ($do_survey) {
             $wth->browser_submit_form(

@@ -3,6 +3,7 @@
 $values['title'] = "We’ll send your message now";
 $values['robots'] = 'noindex, nofollow';
 $values['skip_header'] = TRUE;
+$values['utm_campaign'] = 'submitted_page';
 
 template_draw('header', $values);
 
@@ -40,15 +41,7 @@ template_draw('header', $values);
         <br><br>
 
         <?php endif; ?>
-        <div class="card card-md card-text-center">
-            <?php $values['donate_shown'] = True; ?>
-            <h2>
-            Can you help other people who need to send a message?
-            </h2>
-            <p>With your support, we can help more people get their message to the right place.</p>
-            <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
-        </div>
-        <br><br>
+        <?php template_draw('can-you-help', $values) ?>
     </div>
     </div>
 
