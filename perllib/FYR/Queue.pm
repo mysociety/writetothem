@@ -1631,8 +1631,7 @@ sub record_analysis_data($$$) {
     my ($msgid, $msg_summary, $analysis_data) = @_;
 
     my $encoded_data = encode_json($analysis_data);
-    my $time = time();
-    dbh()->do('insert into analysis_data (message_id, message_summary, analysis_data, whenanswered) values (?, ?, ?, ?) on conflict(message_id) do update set message_summary = ?, analysis_data = ?, whenanswered = ?', {}, $msgid, $msg_summary, $encoded_data, $time, $msg_summary, $encoded_data, $time);
+    dbh()->do('insert into analysis_data (message_id, message_summary, analysis_data, whenanswered) values (?, ?, ?, \'now\') on conflict(message_id) do update set message_summary = ?, analysis_data = ?, whenanswered = \'now\'', {}, $msgid, $msg_summary, $encoded_data, $msg_summary, $encoded_data);
     dbh()->commit();
 
     return 1;
