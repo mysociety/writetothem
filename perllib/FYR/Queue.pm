@@ -1623,7 +1623,7 @@ Record a user's response to the post confirm questionnaire for some extra analys
 
 MSGID is the messageid
 MSG_SUMMARY is a text string with an optional description of the message,
-ANALYSIS_DATA is a hashref that will be punted as it into the jsonb field.
+ANALYSIS_DATA is a hashref that will be punted as is into the jsonb field.
 
 =cut
 
