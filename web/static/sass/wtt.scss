@@ -404,6 +404,10 @@ $colour_violet: #a94ca6;
         text-align: center;
         max-width: 30em;
         margin: 0 auto 1em auto;
+
+        &.message {
+          text-align: start;
+        }
     }
 
     abbr {

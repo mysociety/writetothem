@@ -26,13 +26,13 @@ template_draw('header', $values);
                     </svg>
                 Your message is on its way
             </h2>
-            <p><small>If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit back and relax.</small></p>
+            <p>If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit back and relax.</p>
         </div>
 
         <br><br>
         <?php if ($values['form']): ?>
         <div class="card card-md card-text-center">
-            <h2 class="subtitle">If you have time could you answer a few questions?</h2>
+            <h2 class="subtitle">If you have time could you answer a couple of questions?</h2>
             <?= $values['form'] ?>
             <small class="text-muted">We use this information in combination with your postcode to understand what people in different parts of the country are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas.</small>
         </div>
@@ -48,6 +48,7 @@ template_draw('header', $values);
             <p>With your support, we can help more people get their message to the right place.</p>
             <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&utm_content=help+others&utm_medium=link&utm_campaign=submitted_page" class="hero__donate__button mysoc-footer__donate__button">Donate now</a>
         </div>
+        <br><br>
     </div>
     </div>
 
