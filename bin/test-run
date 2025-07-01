@@ -167,6 +167,7 @@ sub do_send_example_message {
 
     $options->{base_url} = $base_url;
     my $repinfo = {repname => $CAMBRIDGE_MP};
+    $options->{do_post_confirm_survey} = 1;
 
     send_message_to_rep(0, 
         'CB23QJ', # The Guildhall, Cambridge 
