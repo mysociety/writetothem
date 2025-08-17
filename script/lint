@@ -1,0 +1,5 @@
+#!/bin/sh
+# Watch SASS files for changes and recompile
+
+poetry run ruff format .
+poetry run ruff check . --fix

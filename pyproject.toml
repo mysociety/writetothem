@@ -1,0 +1,67 @@
+[project]
+name = "wtt-tools"
+version = "0.1.0"
+description = "Python tooling for data analysis"
+authors = [
+]
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.poetry.scripts]
+wtt-tools = "wtt_tools.__main__:main"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.3.1"
+pyarrow = "15.0.2"
+commonlib = {path = "commonlib"}
+pydantic = "^2.8.2"
+sqlalchemy = "^2.0.32"
+django = ">=4.2,<5.0"
+typer = "^0.16.0"
+mini-postcode-lookup = {git = "https://github.com/mysociety/mini-postcode-lookup"}
+psycopg2 = "^2.9.10"
+probablepeople = "^0.5.6"
+gender-detect = {git = "https://github.com/mysociety/gender-detect"}
+scipy = "^1.16.1"
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.9"
+pytest = "^8.4.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+extend-exclude = ["migrations", "commonlib", "scripts/historic"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    # flake8
+    "F",
+    # isort
+    "I",
+]
+ignore = [
+    # line too long, sorted with formatter where it can be
+    "E501", 
+]
+
+
+[tool.ruff.lint.isort]
+known-first-party = ["hub"]
+section-order = [
+  "future",
+  "standard-library",
+  "django",
+  "third-party",
+  "first-party",
+  "local-folder"
+]
+
+[tool.ruff.lint.isort.sections]
+django = ["django"]

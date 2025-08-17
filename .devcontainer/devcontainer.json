@@ -24,7 +24,9 @@
              "ms-azuretools.vscode-docker",
              "bmewburn.vscode-intelephense-client",
              "felixfbecker.php-debug",
-             "recca0120.vscode-phpunit"
+             "recca0120.vscode-phpunit",
+             "ms-python.vscode-pylance",
+             "ms-python.python"
           ]
        }
     }
