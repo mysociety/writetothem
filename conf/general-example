@@ -129,6 +129,9 @@ define('OPTION_HTTPD_ERROR_LOG', '/var/log/apache/error.log');
 define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
 
 // Donation or Recruitment message for top banner. No banner displayed if empty.
-define('BANNER_MESSAGE', '')
+define('BANNER_MESSAGE', '');
+
+// Directory for exported data
+define('OPTION_EXPORT_DATA_DIR', 'data/')
 
 ?>
