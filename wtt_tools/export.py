@@ -36,7 +36,10 @@ roles = {
 export_query = """
 select 
 	ms.id,
+    to_timestamp(ms.created)::timestamptz as created,
 	ms.recipient_type,
+    ms.recipient_name,
+    ms.recipient_id,
 	qa0.answer as got_response,
 	qa1.answer as first_time,
 	ad.message_summary,
