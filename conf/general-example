@@ -132,6 +132,9 @@ define('OPTION_GOOGLE_ANALYTICS_TRACKING_CODE', '');
 define('BANNER_MESSAGE', '');
 
 // Directory for exported data
-define('OPTION_EXPORT_DATA_DIR', 'data/')
+define('OPTION_EXPORT_DATA_DIR', 'data/');
+
+// token to allow access to download exported data
+define('OPTION_DATA_TOKEN', '');
 
 ?>
