@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd `dirname $0`
+cd ..
+poetry run wtt-tools analysis
+poetry run wtt-tools export
