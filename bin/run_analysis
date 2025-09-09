@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# need this to make sure when used under cron this
+# get the correct path
+. $HOME/.bashrc
 cd `dirname $0`
 cd ..
 poetry run wtt-tools analysis
