@@ -16,6 +16,7 @@ def test_gender():
         Message(id="testb", sender_name="Mary Johnson"),
         Message(id="testc", sender_name="Alex Smith"),
         Message(id="testd", sender_name="ms. Alex Smith"),
+        Message(id="testf", sender_name="Alex de Rosa Smith"),
     ]
 
     items = GenderAnalysis().convert_data(messages)
@@ -24,3 +25,4 @@ def test_gender():
     assert items["testb"] == "female", "Expected gender to be female"
     assert items["testc"] == "unknown", "Expected gender to be unknown"
     assert items["testd"] == "female", "Expected gender to be female"
+    assert items["testd"] == "male", "Expected gender to be male"

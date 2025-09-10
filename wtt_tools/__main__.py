@@ -25,8 +25,9 @@ def analysis(option: AnalysisOptions = AnalysisOptions.ALL):
 
     if option in [AnalysisOptions.ALL, AnalysisOptions.LSOA]:
         add_lsoas()
-    if option in [AnalysisOptions.ALL, AnalysisOptions.GENDER]:
-        add_gender()
+    # disable this while we sort out some issues with name classification
+    # if option in [AnalysisOptions.ALL, AnalysisOptions.GENDER]:
+    #    add_gender()
 
 
 @app.command()
