@@ -18,7 +18,7 @@ MAILTO=cron-!!(*= $site *)!!@mysociety.org
 35 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/message-fax-graph
 37 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/anonymise-old-messages
 37 2 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/anonymise-old-messages
-21 3 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/run_analysis
+21 3 * * * !!(*= $user *)!! /data/vhost/!!(*= $vhost *)!!/writetothem/bin/run_analysis --quiet
 !!(* } *)!!
 
 # Once a week, on Sunday, on one machine

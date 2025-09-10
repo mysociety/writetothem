@@ -31,16 +31,16 @@ def analysis(option: AnalysisOptions = AnalysisOptions.ALL):
 
 
 @app.command()
-def export(all: bool = False):
+def export(all: bool = False, quiet: bool = False):
     """
     Export data from the database to parquet files
     """
     from wtt_tools.export import MonthYear
 
     if all:
-        MonthYear.export_all()
+        MonthYear.export_all(quiet)
     else:
-        MonthYear.export_recent()
+        MonthYear.export_recent(quiet)
 
 
 def main():

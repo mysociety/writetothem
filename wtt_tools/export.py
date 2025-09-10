@@ -119,19 +119,19 @@ class MonthYear:
         return MonthYear(month=new_month, year=new_year)
 
     @classmethod
-    def export_all(cls):
+    def export_all(cls, quiet: bool = False):
         """
         Export messages for all months.
         """
-        for month in tqdm(list(cls.all_months())):
+        for month in tqdm(list(cls.all_months()), disable=quiet):
             month.export_month()
 
     @classmethod
-    def export_recent(cls):
+    def export_recent(cls, quiet: bool = False):
         """
         Export messages for the last 3 months.
         """
-        for month in tqdm(list(cls.recent_months())):
+        for month in tqdm(list(cls.recent_months()), disable=quiet):
             month.export_month()
 
     def export_month(self):

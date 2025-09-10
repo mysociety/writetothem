@@ -5,4 +5,4 @@
 cd `dirname $0`
 cd ..
 $HOME/.local/bin/poetry run -q wtt-tools analysis
-$HOME/.local/bin/poetry run -q wtt-tools export
+$HOME/.local/bin/poetry run -q wtt-tools export $@
