@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# need this to make sure when used under cron this
+# get the correct path
+cd `dirname $0`
+cd ..
+$HOME/.local/bin/poetry run -q wtt-tools export $@
