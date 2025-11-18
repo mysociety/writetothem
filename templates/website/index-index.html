@@ -50,7 +50,7 @@ template_draw('header', $values);
 <?php if ($values['all_url']): ?>
 <div class="row row-full-width index-content">
     <div class="large-10 large-centered columns" style="text-align:center;">
-        <p>You may also have representatives at other levels of government.
+        <p><?= _('You may also have representatives at other levels of government.') ?>
         <br><a href="<?=$values['all_url']?>">Show all representatives</a> to view them as well.</p>
     </div>
 </div>
@@ -61,6 +61,6 @@ template_draw('header', $values);
 </script>
 
 <?php
-$values['credit'] = '<a href="https://www.fortybelowzero.com/">Photograph by Rick Harrison</a>';
-// $values['credit'] = '<a href="https://unsplash.com/photos/OQMZwNd3ThU">Photograph by Helloquence</a>';
+$values['credit'] = _('<a href="https://www.fortybelowzero.com/">Photograph by Rick Harrison</a>');
+// $values['credit'] = _('<a href="https://unsplash.com/photos/OQMZwNd3ThU">Photograph by Helloquence</a>');
 template_draw('footer', $values);
