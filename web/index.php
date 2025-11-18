@@ -37,7 +37,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
     $message = cobrand_enter_postcode_message($cobrand, $cocode);
 
     if (!$message) {
-        $message = 'First, enter your UK postcode';
+        $message = _('First, enter your UK postcode');
     }
 
     $form .= $message;
@@ -65,7 +65,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
           <input type="text" id="pc" name="pc" value="'.htmlspecialchars($pc).'" placeholder="SW1H 9NB">
         </div>
         <div class="small-2 columns">
-          <input type="submit" class="button success prefix" value="Go">
+          <input type="submit" class="button success prefix" value="' . _('Go') . '">
         </div>
       </div>';
 
@@ -86,7 +86,7 @@ function postcode_form($pc, $cobrand, $cocode, $a_forward, $error_message, $opti
         $form .= '&nbsp;';
     }
 
-    $form .= '<a href="/about-constituency" class="help-text">What postcode should I use?</a>';
+    $form .= '<a href="/about-constituency" class="help-text">' . _('What postcode should I use?') . '</a>';
 
     // End the form
     if ($options['inner_div']){
@@ -103,7 +103,7 @@ if ($cobrand) {
 }
 
 $pc = canonicalise_postcode(get_http_var('pc'));
-fyr_rate_limit(array("postcode" => array($pc, "Postcode that's been typed in")));
+fyr_rate_limit(array("postcode" => array($pc, _("Postcode that's been typed in"))));
 if ($new_pc = validate_easily_mistyped_postcode($pc)) {
     header('Location: ' . url_new('', true, 'pc', $new_pc));
     exit;
@@ -275,14 +275,14 @@ if ($pc) {
     if ($voting_areas->code == MAPIT_BAD_POSTCODE) {
         $error_message = cobrand_bad_postcode_message($cobrand, $cocode);
         if (!$error_message) {
-            $error_message = "Sorry, we need your complete UK postcode to identify your elected representatives.";
+            $error_message = _("Sorry, we need your complete UK postcode to identify your elected representatives.");
         }
         $template = "index-advice";
     }
     else if ($voting_areas->code == MAPIT_POSTCODE_NOT_FOUND) {
         $error_message = cobrand_postcode_not_found_message($cobrand, $cocode);
         if (!$error_message) {
-            $error_message = "We’re not quite sure why, but we can’t seem to recognise your postcode.";
+            $error_message = _("We’re not quite sure why, but we can’t seem to recognise your postcode.");
         }
         $template = "index-advice";
     }
@@ -298,7 +298,7 @@ if ($cobrand){
     $title = cobrand_step_title($cobrand, 1);
 }
 if ($title == ''){
-    $title = "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free";
+    $title = _("Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free");
 }
 
 $blurb_top = _('<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>');
@@ -316,7 +316,7 @@ if ($a_forward) {
                         'fyr_extref', fyr_external_referrer(),
                         'cocode', get_http_var('cocode')));
         }
-        $blurb_top = "<h2>Write to your $area_type_desc</h2><p>Over 200,000 messages sent last year.</p>";
+        $blurb_top = _("<h2>Write to your $area_type_desc</h2><p>Over 200,000 messages sent last year.</p>");
     }
 }
 
