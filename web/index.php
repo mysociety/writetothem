@@ -301,7 +301,7 @@ if ($title == ''){
     $title = "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free";
 }
 
-$blurb_top = '<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>';
+$blurb_top = _('<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>');
 
 $fyr_all_url = null;
 $area_types = null;
