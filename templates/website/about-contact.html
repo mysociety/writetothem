@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Contact technical support";
+$values['title'] = _("Contact technical support");
 $contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
 template_draw('header', $values);
 
@@ -9,7 +9,7 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <h2>How can we help?</h2>
+        <h2><?= _('How can we help?') ?></h2>
 
         <div class="row">
             <div class="large-8 columns">
@@ -18,116 +18,116 @@ template_draw('header', $values);
                     <div class="contact-option">
                         <h3>
                             <button>
-                                I just want to contact my MP or local representative
+                                <?= _('I just want to contact my MP or local representative') ?>
                             </button>
                         </h3>
                         <form action="/" method="get" class="contact-option__detail">
-                            <p>Enter your UK postcode to begin a message to your local councillors, MP, MSPs, or Northern Irish, Welsh, or London Assembly Members.</p>
+                            <p><?= _('Enter your UK postcode to begin a message to your local councillors, MP, MSPs, or Northern Irish, Welsh, or London Assembly Members.') ?></p>
                             <div class="postcodebox">
-                                <label for="pc1">Enter your UK postcode</label>
+                                <label for="pc1"><?= _('Enter your UK postcode') ?></label>
                                 <div class="row collapse">
                                     <div class="small-10 columns">
                                         <input type="text" id="pc1" name="pc" value="" placeholder="SW1H 9NB">
                                     </div>
                                     <div class="small-2 columns">
-                                        <input type="submit" class="button success prefix" value="Go">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
                                     </div>
                                 </div>
                             </div>
-                            <p><a href="/about-constituency" class="help-text">What if I don’t have a postcode?</a></p>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
                         </form>
                     </div>
                     <div class="contact-option">
                         <h3>
                             <button>
-                                I’ve been treated unfairly by a government agency
+                                <?= _('I’ve been treated unfairly by a government agency
                                 <small>
                                     e.g. benefits, visas and immigration, HMRC,
                                     or Work and Pensions
-                                </small>
+                                </small>') ?>
                             </button>
                         </h3>
                         <form action="/" method="get" class="contact-option__detail">
-                            <p>This is something to contact your MP about. Enter your UK postcode to begin a message to them.</p>
+                            <p><?= _('This is something to contact your MP about. Enter your UK postcode to begin a message to them.') ?></p>
                             <div class="postcodebox">
-                                <label for="pc2">Enter your UK postcode</label>
+                                <label for="pc2"><?= _('Enter your UK postcode') ?></label>
                                 <div class="row collapse">
                                     <div class="small-10 columns">
                                         <input type="text" id="pc2" name="pc" value="" placeholder="SW1H 9NB">
                                     </div>
                                     <div class="small-2 columns">
                                         <input type="hidden" name="a" value="westminstermp">
-                                        <input type="submit" class="button success prefix" value="Go">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
                                     </div>
                                 </div>
                             </div>
-                            <p><a href="/about-constituency" class="help-text">What if I don’t have a postcode?</a></p>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
                         </form>
                     </div>
                     <div class="contact-option">
                         <h3>
                             <button>
-                                I’m having a problem locally
+                                <?= _('I’m having a problem locally
                                 <small>
                                     e.g. disputes with neighbours and landlords,
                                     or issues with council services
-                                </small>
+                                </small>') ?>
                             </button>
                         </h3>
                         <form action="/" method="get" class="contact-option__detail">
-                            <p>Your Local Councillor can help with this kind of issue. Enter your UK postcode to begin a message to them.</p>
+                            <p><?= _('Your Local Councillor can help with this kind of issue. Enter your UK postcode to begin a message to them.') ?></p>
                             <div class="postcodebox">
-                                <label for="pc3">Enter your UK postcode</label>
+                                <label for="pc3"><?= _('Enter your UK postcode') ?></label>
                                 <div class="row collapse">
                                     <div class="small-10 columns">
                                         <input type="text" id="pc3" name="pc" value="" placeholder="SW1H 9NB">
                                     </div>
                                     <div class="small-2 columns">
                                         <input type="hidden" name="a" value="council">
-                                        <input type="submit" class="button success prefix" value="Go">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
                                     </div>
                                 </div>
                             </div>
-                            <p><a href="/about-constituency" class="help-text">What if I don’t have a postcode?</a></p>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
                         </form>
                     </div>
                     <div class="contact-option">
                         <h3>
                             <button>
-                                I’ve contacted my MP, but they won’t help me
+                                <?= _('I’ve contacted my MP, but they won’t help me') ?>
                             </button>
                         </h3>
                         <div class="contact-option__detail">
                             <p>
-                                If it’s been more than two weeks, and your MP
+                                <?= _('If it’s been more than two weeks, and your MP
                                 or other representative still hasn’t responded
                                 to you, <a href="/about-qa#noreply">there are
-                                a few things you can try</a>.
+                                a few things you can try</a>.') ?>
                             </p>
                             <p>
-                                Alternatively, if you did get a reply, but it
+                                <?= _('Alternatively, if you did get a reply, but it
                                 was unsatisfactory, <a href="/about-qa#unsatis">
-                                here is our advice on what to do next</a>.
+                                here is our advice on what to do next</a>.') ?>
                             </p>
                         </div>
                     </div>
                     <div class="contact-option">
                         <h3>
                             <button>
-                                I’ve noticed a problem with this website
+                                <?= _('I’ve noticed a problem with this website
                                 <small>
                                     e.g. missing or incorrect contact details,
                                     broken pages, or technical questions
-                                </small>
+                                </small>') ?>
                             </button>
                         </h3>
                         <div class="contact-option__detail">
                             <p>
-                                WriteToThem.com is run by a charity called
+                                <?= _('WriteToThem.com is run by a charity called
                                 <a href="https://www.mysociety.org">mySociety</a>.
                                 If you’ve spotted something wrong with the
                                 website, or have a question about how it works,
-                                you should contact us using the form below.
+                                you should contact us using the form below.') ?>
                             </p>
                             <?php fyr_display_emailform($values); ?>
                         </div>
