@@ -3,3 +3,4 @@ Cities*
 .sass-cache
 *.pyc
 data
+*.mo

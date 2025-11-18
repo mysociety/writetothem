@@ -1,0 +1,17 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-18 12:24+0000\n"
+"PO-Revision-Date: 2023-03-20 17:59-0000\n"
+"Last-Translator: mySociety\n"
+"Language-Team: mySociety\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: web/index.php:304
+msgid "<h2 id=\"title\">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>"
+msgstr "<h2 id=\"title\">Ysgrifennwch at eich gwleidyddion, cenedlaethol neu leol, am ddim.</h2><p>Anfonwyd dros 200,000 o negeseuon y llynedd.</p>"
