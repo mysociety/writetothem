@@ -36,13 +36,15 @@ ob_start();
 
 template_set_style($dir . "/../templates/website");
 
+bindtextdomain('WriteToThem', $dir . '/../locale');
+
 # syndication type, read from domain name
 global $cobrand;
 $cobrand = null;
 if (array_key_exists('HTTP_HOST', $_SERVER)) {
     # if localhost or localhost:8085, skip the dot exploding step
     $localhost_values = array('localhost', 'localhost:8085');
-    if (in_array( $_SERVER['HTTP_HOST'], $localhost_values)) {
+    if (in_array($_SERVER['HTTP_HOST'], $localhost_values)) {
         $host_parts = array('localhost', 'localhost');
     } else {
         $host_parts = explode('.', $_SERVER['HTTP_HOST'], 2);
@@ -50,7 +52,10 @@ if (array_key_exists('HTTP_HOST', $_SERVER)) {
     if ($host_parts[1] == OPTION_WEB_DOMAIN && $host_parts[0] != 'www') {
         $cobrand = $host_parts[0];
     }
+
+    $cobrand = fyr_set_language($cobrand);
 }
+
 
 if (is_dir("../templates/$cobrand")) {
     template_set_style("../templates/$cobrand", true);
@@ -62,6 +67,31 @@ if ($cobrand) {
     if (!cobrand_cocode_allowed($cobrand, $cocode)) {
         $cocode = '';
     }
+}
+
+/* fyr_set_language COBRAND
+ * Check if the cobrand is a language and set locale etc accordingly. */
+function fyr_set_language($cobrand) {
+    $language = "en";
+    $locale = "en_GB.UTF-8";
+    $available_languages = ["cy"];
+    $lang_map = [
+    "cy" => "cy_GB.UTF-8",
+    ];
+
+    if (in_array($cobrand, $available_languages)) {
+        $language = $cobrand;
+        $locale = $lang_map[$cobrand];
+        $cobrand = null;
+
+    }
+
+    define('LANGUAGE', $language);
+    setlocale(LC_ALL, $locale);
+    putenv("LC_ALL=$locale");
+    textdomain('WriteToThem');
+
+    return $cobrand;
 }
 
 /* fyr_display_error NUMBER MESSAGE
