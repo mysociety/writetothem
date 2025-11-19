@@ -303,16 +303,16 @@ function fyr_describe_area_type_list($area_types) {
 function fyr_breadcrumbs($num, $type = 'default') {
     if ($type == 'default') {
         $steps = array(
-                    'Enter postcode',
-                    'Choose representative',
-                    'Write message',
-                    'Send message'
+                    _('Enter postcode'),
+                    _('Choose representative'),
+                    _('Write message'),
+                    _('Send message')
                 );
     } elseif ($type == 'lords') {
         $steps = array(
-                    'Choose a Lord',
-                    'Write message',
-                    'Send message'
+                    _('Choose a Lord'),
+                    _('Write message'),
+                    _('Send message')
                 );
     }
     /* Ideally we'd like the numbers to appear as a result of this being a
