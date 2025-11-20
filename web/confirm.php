@@ -25,7 +25,7 @@ function buildAnalysisForm($values) {
     $form_action = cobrand_url($cobrand, '/survey', $cocode);
     $form = new HTML_QuickForm('analysisForm', 'post', $form_action);
     $form->setAttribute('class', 'analysis-form');
-    $form->addElement('textarea', 'msg_summary', "Can you tell us in a sentence what your message was about?", array('class' => 'msg-summary'));
+    $form->addElement('textarea', 'msg_summary', _("Can you tell us in a sentence what your message was about?"), array('class' => 'msg-summary'));
 
     $casework_element = $form->createElement('radio', 'reason', null, '', 'casework');
     $campaigning_element = $form->createElement('radio', 'reason', null, '', 'campainging');
@@ -37,21 +37,21 @@ function buildAnalysisForm($values) {
     // Creates a fieldset with radio options and legend
     $form->addElement('html', "
     <fieldset>
-        <legend id=\"{$legend_id}\">Which of the following best describes why you are writing to your representative?</legend>
+        <legend id=\"{$legend_id}\">" . _('Which of the following best describes why you are writing to your representative?') . "</legend>
         <div class=\"input-card-grid\">
             <div class=\"radio-card\">
                 <input name=\"reason\" value=\"casework\" type=\"radio\" id=\"{$casework_id}\" aria-labelledby=\"{$legend_id}\">
-                <label for=\"{$casework_id}\">Casework <span class=\"label-hint\">Trying to resolve a problem you or another person is having</span></label>
+                <label for=\"{$casework_id}\">" . _('Casework') . "<span class=\"label-hint\">" . _('Trying to resolve a problem you or another person is having') . "</span></label>
             </div>
             <div class=\"radio-card\">
                 <input name=\"reason\" value=\"campainging\" type=\"radio\" id=\"{$campaigning_id}\" aria-labelledby=\"{$legend_id}\">
-                <label for=\"{$campaigning_id}\">Campaigning<span class=\"label-hint\">Seeking to persuade or inform your representative about a wider issue</span></label>
+                <label for=\"{$campaigning_id}\">" . _('Campaigning') . "<span class=\"label-hint\">" . _('Seeking to persuade or inform your representative about a wider issue') . "</span></label>
             </div>
         </div>
     </fieldset>
     ");
 
-    $form->addElement('html', '<input class="button radius success" name="submit" value="Submit" type="submit">');
+    $form->addElement('html', '<input class="button radius success" name="submit" value="' . _('Submit') . '" type="submit">');
     add_all_variables_hidden($form, $values, $options);
     $r = new HTML_QuickForm_Renderer_mySociety();
     $form->accept($r);
@@ -76,7 +76,7 @@ if (!$token) {
 
     $missing_token_message = cobrand_missing_token_message($cobrand);
     if (!$missing_token_message) {
-         $missing_token_message = "Please make sure you copy the URL from your email properly. The token was missing.";
+         $missing_token_message = _("Please make sure you copy the URL from your email properly. The token was missing.");
     }
     template_show_error($missing_token_message);
 }
