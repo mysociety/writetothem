@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Sorry! Something’s gone wrong.";
+$values['title'] = _("Sorry! Something’s gone wrong.");
 $values['robots'] = 'index, nofollow';
 template_draw('header', $values);
 
@@ -32,9 +32,9 @@ if (isset($_POST['mysociety_serialized_variables'])) {
 
         <hr>
 
-        <p><strong>Here are the contents of your message</strong> &ndash;
+        <p><strong><?= _('Here are the contents of your message</strong> &ndash;
 please copy and paste into a different application such as Word or Notepad
-to be sure you do not lose your message.</p>
+to be sure you do not lose your message.') ?></p>
 
         <div class="panel radius write-content">
             <p><?=str_replace("\n", "<br>\n", htmlspecialchars($saved_values['body']))?></p>

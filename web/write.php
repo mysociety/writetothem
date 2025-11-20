@@ -90,16 +90,9 @@ function bad_contact_error_msg($eb_area) {
         $type_display_name = ' the MP, the House of Commons';
         $type_display_phone = ', 020 7219 3000';
     }
-    $error_msg = "
-    Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send
-    them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is
-    full) or incorrect$via_error.
+    $error_msg = sprintf(_("Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is full) or incorrect%s.
 
-    We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of
-    $type_display_name</strong> (or even the phone$type_display_phone), finding out the contact details.
-    Then <a href='/about-contact'>contact us</a> with the email address of
-    your representative.
-    ";
+    We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of %s</strong> (or even the phone%s), finding out the contact details. Then <a href='/about-contact'>contact us</a> with the email address of your representative."), $via_error, $type_display_name, $type_display_phone);
     return $error_msg;
 }
 
@@ -109,13 +102,8 @@ function shame_error_msg($fyr_voting_area, $fyr_representative) {
     global $fyr_values;
     if ($fyr_voting_area['type'] == 'WMC') {
         $url = 'https://members.parliament.uk/FindYourMP?SearchText=' . urlencode(str_replace(' ', '', $fyr_values['pc']));
-        $error_msg = <<<EOF
-$fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
-has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name]. Instead you can try looking them up on
-<a href="$url">the Parliament website</a>. There you will get a phone number, a
-postal address, and for some MPs a website or way to contact them by email.
-EOF;
+        $error_msg = sprintf(_('%s %s %s has told us not to deliver any messages from the constituents of %s. Instead you can try looking them up on <a href="%s">the Parliament website</a>. There you will get a phone number, a postal address, and for some MPs a website or way to contact them by email.'),
+$fyr_voting_area['rep_prefix'], $fyr_representative['name'], $fyr_voting_area['rep_suffix'], $fyr_voting_area['name'], $url);
 
     } else {
         $error_msg = <<<EOF
@@ -143,15 +131,15 @@ function correct_address() {
 }
 
 function default_body_text() {
-    return "Dear " . correct_address() . ",\n\n\n\nYours sincerely,\n\n";
+    return _('Dear') . " " . correct_address() . ",\n\n\n\n" . _('Yours sincerely') . ",\n\n";
 }
 
 function default_body_regex() {
-    return '^Dear .*?,\s*Yours sincerely,';
+    return '^' . _('Dear') . ' .*?,\s*' . _('Yours sincerely') . ',';
 }
 
 function default_body_notsigned() {
-    return 'Yours sincerely,\s*$';
+    return _('Yours sincerely') . ',\s*$';
 }
 
 
@@ -202,60 +190,60 @@ function buildWriteForm($options) {
 
 
     $form->addElement('textarea', 'body', null, array('class' => 'message'));
-    $form->addRule('body', 'Please enter your message', 'required', null, null);
-    $form->addRule('body', 'Please enter your message', new RuleAlteredBodyText(), null, null);
-    $form->addRule('body', 'Please sign at the bottom with your name, or alter the "Yours sincerely" signature', new RuleSigned(), null, null);
-    $form->addRule('body', 'Your message is a bit too long for us to send', 'maxlength', OPTION_MAX_BODY_LENGTH);
+    $form->addRule('body', _('Please enter your message'), 'required', null, null);
+    $form->addRule('body', _('Please enter your message'), new RuleAlteredBodyText(), null, null);
+    $form->addRule('body', _('Please sign at the bottom with your name, or alter the "Yours sincerely" signature'), new RuleSigned(), null, null);
+    $form->addRule('body', _('Your message is a bit too long for us to send'), 'maxlength', OPTION_MAX_BODY_LENGTH);
 
     $form->addElement('html', '<div class="row">');
 
         $form->addElement('html', '<fieldset class="large-6 columns">');
-            $form->addElement('html', '<legend>About You</legend>');
+            $form->addElement('html', '<legend>' . _('About You') . '</legend>');
 
-            $form->addElement('text', 'name', "Your name", array('required' => 'required', 'maxlength' => 255));
-            $form->addRule('name', 'Please enter your name', 'required', null, null);
+            $form->addElement('text', 'name', _("Your name"), array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('name', _('Please enter your name'), 'required', null, null);
             $form->applyFilter('name', 'trim');
 
-            $form->addElement('text', 'writer_email', "Your email", array('required' => 'required', 'maxlength' => 255));
-            $form->addRule('writer_email', 'Please enter your email address', 'required', null, null);
+            $form->addElement('text', 'writer_email', _("Your email"), array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_email', _('Please enter your email address'), 'required', null, null);
             $invalid_email_message = cobrand_invalid_email_message($cobrand);
             if (!$invalid_email_message) {
-                 $invalid_email_message = 'Choose a valid email address';
+                 $invalid_email_message = _('Choose a valid email address');
             }
             $form->addRule('writer_email', $invalid_email_message, 'email', null, null);
             $form->applyFilter('writer_email', 'trim');
 
-            $form->addElement('text', 'writer_email2', "Confirm email", array('required' => 'required', 'maxlength' => 255));
-            $form->addRule('writer_email2', 'Please re-enter your email address', 'required', null, null);
+            $form->addElement('text', 'writer_email2', _("Confirm email"), array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_email2', _('Please re-enter your email address'), 'required', null, null);
             $form->applyFilter('writer_email2', 'trim');
             $form->addFormRule('compare_email_addrs');
 
             $form->updateElementAttr(array('writer_email', 'writer_email2'), array('type' => 'email'));
 
-            $form->addElement('text', 'writer_phone', 'Phone <span class="optional-text">optional</span>', array('maxlength' => 255));
+            $form->addElement('text', 'writer_phone', _('Phone') . ' <span class="optional-text">' . _('optional') . '</span>', array('maxlength' => 255));
             $form->applyFilter('writer_phone', 'trim');
 
         $form->addElement("html", "</fieldset>");
 
         $form->addElement("html", '<fieldset class="large-6 columns">');
-            $form->addElement("html", '<legend>Your Address</legend>');
+            $form->addElement("html", '<legend>' . _('Your Address') . '</legend>');
 
-            $form->addElement('text', 'writer_address1', "Address Line 1", array('required' => 'required', 'maxlength' => 255));
-            $form->addRule('writer_address1', 'Please enter your address', 'required', null, null);
+            $form->addElement('text', 'writer_address1', _("Address Line 1"), array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_address1', _('Please enter your address'), 'required', null, null);
             $form->applyFilter('writer_address1', 'trim');
 
-            $form->addElement('text', 'writer_address2', 'Address Line 2 <span class="optional-text">optional</span>', array('maxlength' => 255));
+            $form->addElement('text', 'writer_address2', _('Address Line 2') . ' ' . '<span class="optional-text">' . _('optional') . '</span>', array('maxlength' => 255));
             $form->applyFilter('writer_address2', 'trim');
 
-            $form->addElement('text', 'writer_town', "Town/City", array('required' => 'required', 'maxlength' => 255));
-            $form->addRule('writer_town', 'Please enter your town/city', 'required', null, null);
+            $form->addElement('text', 'writer_town', _("Town/City"), array('required' => 'required', 'maxlength' => 255));
+            $form->addRule('writer_town', _('Please enter your town/city'), 'required', null, null);
             $form->applyFilter('writer_town', 'trim');
 
             $form->addElement('html', '<div class="row">');
                 $form->addElement('html', '<div class="small-8 columns">');
 
                     # Call it state so that Google Toolbar (and presumably others) can auto-fill.
-                    $form->addElement('text', 'state', 'County <span class="optional-text">optional</span>', array('maxlength' => 255));
+                    $form->addElement('text', 'state', _('County') . '<span class="optional-text">' . _('optional') . '</span>', array('maxlength' => 255));
                     $form->applyFilter('state', 'trim');
 
                 $form->addElement('html', '</div>');
@@ -263,13 +251,13 @@ function buildWriteForm($options) {
 
                     if (is_postcode_editable($fyr_voting_area['type'])) {
                         // House of Lords
-                        $form->addElement('text', 'pc', "UK postcode", array('required' => 'required', 'maxlength' => 8));
-                        $form->addRule('pc', 'Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', 'required', null, null);
-                        $form->addRule('pc', 'Please enter a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)', new RulePostcode(), null, null);
+                        $form->addElement('text', 'pc', _("UK postcode"), array('required' => 'required', 'maxlength' => 8));
+                        $form->addRule('pc', _('Please enter a UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)'), 'required', null, null);
+                        $form->addRule('pc', _('Please enter a valid UK postcode (<a href="/about-lords#ukpostcode" target="_blank">why?</a>)'), new RulePostcode(), null, null);
                         $form->applyFilter('pc', 'trim');
                     } else {
                         // All other representatives (postcode fixed as must be in constituency)
-                        $form->addElement('text', 'staticpc', "UK postcode", array('disabled' => 'disabled', 'value' => htmlentities($fyr_values['pc'])));
+                        $form->addElement('text', 'staticpc', _("UK postcode"), array('disabled' => 'disabled', 'value' => htmlentities($fyr_values['pc'])));
                     }
 
                 $form->addElement('html', '</div>');
@@ -288,22 +276,22 @@ function buildWriteForm($options) {
             $before_you_submit = '<p class="action" id="preview-submit">' . $preview_text . '</p>';
         } else {
             $before_you_submit = '<div class="before-you-submit">';
-            $before_you_submit .= '<p>All the information you provide here will be sent to ';
+        $before_you_submit .= '<p>';
             if ($stash['group_msg']) {
-                $before_you_submit .= 'your representatives or their offices';
+                $before_you_submit .= _('All the information you provide here will be sent to your representatives or their offices');
             } else {
-                $before_you_submit .= 'your representative or their office';
+                $before_you_submit .= _('All the information you provide here will be sent to your representative or their office');
             }
             $before_you_submit .= '.</p>';
-            $before_you_submit .= '<p>Any response from them will come directly to you via email or letter. After you use WriteToThem, you will receive a maximum of two follow-up messages from us, checking whether you received a response.</p>';
-            $before_you_submit .= '<p><a href="/about-privacy" target="_blank">Read about how we keep your data private</a> (opens in a new window).</p>';
+            $before_you_submit .= '<p>' . _('Any response from them will come directly to you via email or letter. After you use WriteToThem, you will receive a maximum of two follow-up messages from us, checking whether you received a response.') . '</p>';
+            $before_you_submit .= '<p>' . _('<a href="/about-privacy" target="_blank">Read about how we keep your data private</a> (opens in a new window).') . '</p>';
             $before_you_submit .= '</div>';
         }
         $form->addElement('html', $before_you_submit);
 
         $preview_button_text = cobrand_preview_button_text($cobrand);
         if (!$preview_button_text) {
-            $preview_button_text = 'Preview and send';
+            $preview_button_text = _('Preview and send');
         }
         $form->addElement('submit', 'submitPreview', $preview_button_text, array('class' => 'button radius success'));
 
@@ -318,8 +306,8 @@ function buildPreviewForm($options) {
     $form_action = cobrand_url($cobrand, '/write', $cocode);
     $form = '<form method="post" action="' . $form_action . '" id="previewForm" name="previewForm">';
     $form .= add_all_variables_hidden_nonQF($fyr_values);
-    $form .= '<input type="submit" name="submitWrite" class="button radius" value="Edit some more">
-<input type="submit" name="submitSendFax" class="button radius success" value="I&apos;m happy, send it">';
+    $form .= '<input type="submit" name="submitWrite" class="button radius" value="' . _('Edit some more') .'">
+<input type="submit" name="submitSendFax" class="button radius success" value="' ._('I’m happy, send it') . '">';
     $form .= '</form>';
     return $form;
 }
@@ -392,11 +380,10 @@ function renderForm($form, $pageName, $options)
     } else {
         $message = cobrand_generic_error_message($cobrand, $cocode, $pageName);
         if (!$message) {
-             $message = 'Sorry. An error has occurred: pageName "'
-                    . htmlspecialchars($pageName) .
-                '". Please <a href="/about-contact">get in touch with us</a>,
-                quoting this message. You can <a href="/">try again from the
-                beginning</a>.';
+            $message = sprintf(
+                _('Sorry. An error has occurred: pageName "%s". Please <a href="/about-contact">get in touch with us</a>, quoting this message. You can <a href="/">try again from the beginning</a>.'),
+                htmlspecialchars($pageName)
+            );
         }
         template_show_error($message);
     }
@@ -433,8 +420,7 @@ function submitFaxes() {
 
         // check the group id
         if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
-            template_show_error('Sorry, but your browser seems to be transmitting
-            erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.');
+            template_show_error(_('Sorry, but your browser seems to be transmitting erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.'));
         }
         // double check that the group_id isn't already being used
         // This could mean that these messages have already been
@@ -443,7 +429,7 @@ function submitFaxes() {
         $result = msg_check_group_unused($grpid);
         if (isset($result)) {
             $error_msg .= rabx_mail_error_msg($result->code, $result->text) . "<br>";
-            template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
+            template_show_error(_("Sorry, we were unable to send your messages for the following reasons:") . " <br>" . $error_msg);
         }
     } else {
         $no_questionnaire = false;
@@ -516,7 +502,7 @@ function submitFaxes() {
 
     if (!$any_success) {
         // None of the messages could be sent
-        template_show_error("Sorry, we were unable to send your messages for the following reasons: <br>" . $error_msg);
+        template_show_error(_("Sorry, we were unable to send your messages for the following reasons:") . ' <br>' . $error_msg);
     } elseif ($error_msg) {
         // Some problems
         $error_msg = "
@@ -578,9 +564,9 @@ function check_message_length() {
         /* check message not too long */
     global $fyr_values;
     if (strlen($fyr_values['body']) > OPTION_MAX_BODY_LENGTH) {
-        template_show_error("Sorry, but your message is a bit too long
+        template_show_error(_("Sorry, but your message is a bit too long
         for our service.  Please make it shorter, or contact your
-        representative by some other means.");
+        representative by some other means."));
     }
 }
 
@@ -605,8 +591,7 @@ function check_message_id($msgid) {
      * be verifying all the data that we've retrieved from the browser with a
      * hash, but in this case it doesn't matter. */
     if (!preg_match("/^[0-9a-f]{20}$/i", $msgid)) {
-        template_show_error('Sorry, but your browser seems to be transmitting
-            erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.');
+        template_show_error(_('Sorry, but your browser seems to be transmitting erroneous data to us. Please try again, or <a href="/about-contact">contact us</a>.'));
     }
 
 }
@@ -911,8 +896,7 @@ function back_to_who() {
 function mismatch_error() {
     global $cobrand, $cocode;
     $url = cobrand_url($cobrand, "/", $cocode);
-    template_show_error("There’s been a mismatch error.  Sorry about
-        this, <a href=\"$url\">please start again</a>.");
+    template_show_error(sprintf(_('There’s been a mismatch error.  Sorry about this, <a href="%s">please start again</a>.'), $url));
 }
 
 function check_area_status($eb_area, $fyr_voting_area) {
