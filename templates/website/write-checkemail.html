@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Now check your email";
+$values['title'] = _("Now check your email");
 $values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
@@ -18,8 +18,8 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Now check your email!</h2>
-        <p>The confirmation email can take up to 10-15 minutes to arrive &mdash; please be patient.</p>
+        <h2><?= _('Now check your email!') ?></h2>
+        <p><?= _('The confirmation email can take up to 10-15 minutes to arrive &mdash; please be patient.') ?></p>
 
     </div>
 </div>
@@ -39,9 +39,9 @@ template_draw('header', $values);
 
         <hr>
 
-        <p>Before we can send your message to your <?php print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> we need to confirm your email address. We’ve sent you an email &mdash; when it arrives simply click the link in it and your message will be sent. If you don’t click the link your message <em>will not</em> be sent.</p>
+        <p><?= sprintf(_('Before we can send your message to your %s we need to confirm your email address. We’ve sent you an email &mdash; when it arrives simply click the link in it and your message will be sent. If you don’t click the link your message <em>will not</em> be sent.'), $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']) ?></p>
 
-        <p>If you use web-based email or have ‘junk mail’ filters, you may wish to check your bulk or spam mail folders. Sometimes our messages are marked that way.</p>
+        <p><?= _('If you use web-based email or have ‘junk mail’ filters, you may wish to check your bulk or spam mail folders. Sometimes our messages are marked that way.') ?></p>
 
     </div>
 </div>

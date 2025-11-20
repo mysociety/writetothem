@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Preview your message to " . $values['title_text'];
+$values['title'] = sprintf(_("Preview your message to %s"), $values['title_text']);
 $values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
@@ -18,7 +18,7 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns" role="heading">
 
-        <h2>Preview your message</h2>
+        <h2><?= _('Preview your message') ?></h2>
 
     </div>
 </div>
@@ -43,7 +43,7 @@ template_draw('header', $values);
 
         <?=$values['form']?>
 
-        <p>We’ll email you for confirmation before we send your message</p>
+        <p><?= _("We’ll email you for confirmation before we send your message") ?></p>
 
     </div>
 </div>

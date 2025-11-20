@@ -20,9 +20,9 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns" role="heading">
 
-        <h2>Write your message</h2>
+        <h2><?= _('Write your message') ?></h2>
 
-        <p>Writing to <?=$values['title_text']?>.</p>
+        <p><?= sprintf(_('Writing to %s.'), $values['title_text']) ?></p>
 
     </div>
 </div>
@@ -88,32 +88,31 @@ echo '<div id="bad_contact_warning">', $values['warning_text'], '</div>';
 
 if (!preg_match('#Order and Explanatory Memorandum#', $values['cobrand_letter_help'])) { ?>
 
-<h3>Instructions</h3>
+<h3><?= _('Instructions') ?></h3>
 
 <ul id="tips">
-<li>Please be polite, concise and to the point; if you abuse your <?php print $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name']; ?> you devalue the service for all users.</li>
+<li><?= sprintf(_('Please be polite, concise and to the point; if you abuse your %s you devalue the service for all users.'), $values['group_msg'] ? $values['voting_area']['rep_name_plural'] : $values['voting_area']['rep_name'] ) ?></li>
 
-<li><a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.</li>
+<li><?= _('<a class="fancybox" href="about-qa#formletters" target="_blank">Use your own words</a>; we block copied-and-pasted identical messages.') ?></li>
 
 <?php if (isset($values['representative']['type']) && $values['representative']['type'] != 'HOC'): ?>
 
-<li>It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to <?=$values['voting_area']['rep_name_plural']?> other than your own;
-your message will be ignored.</li>
+<li><?= sprintf( _('It&rsquo;s a <a class="fancybox" href="about-qa#onlyrep" target="_blank">waste of time</a> writing to %s other than your own;
+your message will be ignored.'), $values['voting_area']['rep_name_plural']) ?></li>
 
     <?php
         $hashref = strtolower($values['voting_area']['rep_name']);
         if ($hashref == 'london assembly member') $hashref = 'lam';
         if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
-        echo '<li><a class="fancybox" href="about-yourrep#' . $hashref . '" target="_blank">Read this<small></small></a> to learn when a ',
-            $values['voting_area']['rep_name'], ' can help you &ndash; and when they can&rsquo;t.</li>';
+        echo '<li>' . sprintf(_('<a class="fancybox" href="about-yourrep#%s" target="_blank">Read this<small></small></a> to learn when a %s can help you &ndash; and when they can&rsquo;t.'), $hashref, $values['voting_area']['rep_name'] ) . '</li>';
         ?>
 
     <?php else: ?>
-    <li>Lords vote on and amend UK bills before they become law. By writing to a
+    <li><?= _('Lords vote on and amend UK bills before they become law. By writing to a
     Lord you might be able to tell them about something you think they should care
     about, provide information to someone who you support, or provide counter
     evidence to someone you disagree with. For other matters, it might be better
-    to contact your MP or a local representative.</li>
+    to contact your MP or a local representative.') ?>'</li>
     <?php endif; ?>
 
 <?php
