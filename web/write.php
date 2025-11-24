@@ -346,7 +346,7 @@ function renderForm($form, $pageName, $options)
     }
 
     $prime_minister = false;
-    if ($fyr_values['who'] == 61943) { # Hardcoded
+    if ($fyr_values['who'] == 101793) { # Hardcoded
         $prime_minister = true;
     }
 
