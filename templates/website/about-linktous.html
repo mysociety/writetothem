@@ -1,8 +1,8 @@
 <?php
 
-$values['title'] = "How to link to us";
+$values['title'] = _("How to link to us");
 template_draw('header', $values);
-
+$pd = new Parsedown();
 ?>
 
 <div class="row">
@@ -10,7 +10,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>How to link to us</h2>
+                <h2><?= _('How to link to us') ?></h2>
             </div>
         </div>
 
@@ -18,21 +18,21 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>Wouldn’t it be great if you could put a little box on your website which would let your users get in touch with their elected representatives? Well, you can!
+<p><?= _('Wouldn’t it be great if you could put a little box on your website which would let your users get in touch with their elected representatives? Well, you can!') ?>
 </p>
 
 <ul class="side-nav">
-<li><a href="#envelope">Envelope-style box</a></li>
-<li><a href="#conventional">Conventional style box</a></li>
-<li><a href="#types">Limiting to specific types of representative</a></li>
-<li><a href="#prefill">Pre-filling name and address</a></li>
-<li><a href="#plugins">Plugins for WordPress</a></li>
+<li><a href="#envelope"><?= _('Envelope-style box') ?></a></li>
+<li><a href="#conventional"><?= _('Conventional style box') ?></a></li>
+<li><a href="#types"><?= _('Limiting to specific types of representative') ?></a></li>
+<li><a href="#prefill"><?= _('Pre-filling name and address') ?></a></li>
+<li><a href="#plugins"><?= _('Plugins for WordPress') ?></a></li>
 </ul>
 
-<p>Before you do so, make sure you read the <a
+<p><?= _('Before you do so, make sure you read the <a
 href="about-guidelines">guidelines for campaigners</a>.  You must not tell your
 users to send pre-written, identical letters &mdash; they are against our conditions of
-use and we will block them.</p>
+use and we will block them.') ?></p>
 
 <?php $signup_form_normal = <<<END
 <!-- WriteToThem conventional box, start -->
@@ -87,32 +87,32 @@ END;
 END;
 ?>
 
-<h2 id="envelope">Envelope-style box</h2>
+<h2 id="envelope"><?= _('Envelope-style box') ?></h2>
 <?=$signup_form_envelope ?>
-<p>To add the envelope-style postcode box to your site, just copy the HTML code below into your own webpage. </p>
+<p><?= _('To add the envelope-style postcode box to your site, just copy the HTML code below into your own webpage.') ?></p>
 <pre><code><?=htmlspecialchars($signup_form_envelope)?></code></pre>
 
-<h2 id="conventional">Conventional style box</h2>
+<h2 id="conventional"><?= _('Conventional style box') ?></h2>
 <?=$signup_form_normal ?>
-<p>To add the conventional postcode box to your site, copy the HTML code below into your own webpage. </p>
+<p><?= _('To add the conventional postcode box to your site, copy the HTML code below into your own webpage.') ?></p>
 <pre><code><?=htmlspecialchars($signup_form_normal)?></code></pre>
 
 
-<p>Feel free to hack around with the design as much as you like. If you have any questions, just <a href="/about-contact">drop us a line</a>.</p>
+<p><?= _('Feel free to hack around with the design as much as you like. If you have any questions, just <a href="/about-contact">drop us a line</a>.') ?></p>
 
-<h2 id="types">Limiting to specific types of representative</h2>
+<h2 id="types"><?= _('Limiting to specific types of representative') ?></h2>
 
-<p>If you only want to encourage people to write to one kind of representative - for example, only to their MP, link to WriteToThem using an address like this:</p>
+<p><?= _('If you only want to encourage people to write to one kind of representative - for example, only to their MP, link to WriteToThem using an address like this:') ?></p>
 
 <pre><code>https://www.writetothem.com/?a=westminstermp</code></pre>
 
-<p>Or if you are using one of the boxes, above, to link to us, add this code to your form. It
+<p><?= _('Or if you are using one of the boxes, above, to link to us, add this code to your form. It
 goes just after the postcode <code>&lt;input&gt;</code> field, and before the submit/go
-button one.</p>
+button one.') ?></p>
 
 <pre><code>&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;westminstermp&quot;&gt;</code></pre>
 
-<p>Possible values for "a" in both cases are:</p>
+<?= $pd->text(_('Possible values for "a" in both cases are:</p>
 <ul>
 <li><code>westminstermp</code> &mdash; just your MP</li>
 <li><code>council</code> &mdash; all local government councillors (in some areas this will return
@@ -120,7 +120,7 @@ district and county councillors, in others unitary authority councillors)</li>
 <li><code>regionalmp</code> &mdash; members of the Scottish Parliament, Senedd, Northern Ireland Assembly, or London Assembly</li>
 </ul>
 
-<p>There are some more detailed three letter codes that you can use instead.
+There are some more detailed three letter codes that you can use instead.
 Put these in a list as the value of "a", separated by commas ",".
 <ul>
 <li>District type councils: <code>DIW</code> &ndash; district council, <code>LBW</code> &ndash; London Borough</li>
@@ -134,23 +134,23 @@ Put these in a list as the value of "a", separated by commas ",".
 <li>House of Commons: <code>WMC</code></li>
 </ul>
 
-<p>So, for example, the link below would only show representatives of district type
+So, for example, the link below would only show representatives of district type
 councils.  For people entering postcodes in unitary areas, it would say there
 were no representatives of that type and offer to show them all their
-representatives:
+representatives:')) ?>
 
 <pre><code>&lt;input type=&quot;hidden&quot; name=&quot;a&quot; value=&quot;DIW,LBW&quot;&gt;</code></pre>
 
-<h2 id="prefill">Pre-filling name and address</h2>
+<h2 id="prefill"><?= _('Pre-filling name and address') ?></h2>
 
-<p>If you already know the name, address or email of the person using your website (ie if they are logged in) or reading your newsletter, you can send the values to WriteToThem. </p>
+<?= $pd->text(_('If you already know the name, address or email of the person using your website (ie if they are logged in) or reading your newsletter, you can send the values to WriteToThem.
 
-<p>Your supporters will be able to check or alter them before sending.</p>
+Your supporters will be able to check or alter them before sending.')) ?>
 
 <p>
 <pre><code>&lt;input type=&quot;hidden&quot; name=&quot;writer_email&quot; value=&quot;name@email.address&quot;&gt;</code></pre>
 
-<p>The fields available are:
+<p><?= _('The fields available are:') ?>
 
 <ul>
 <li><code>writer_name</code></li>
@@ -162,16 +162,17 @@ representatives:
 <li><code>writer_phone</code></li>
 </ul>
 
-<h2 id="plugins">Plugins for WordPress</h2>
+<h2 id="plugins"><?= _('Plugins for WordPress') ?></h2>
 
-<p>Philip John (not affiliated to WriteToThem, but working voluntarily) has made a
-<a href="https://wordpress.org/plugins/writetothem/">WordPress plugin</a>. </p>
-<p>It lets you add a WriteToThem form to your WordPress site as a standard WordPress widget - so it’s just drag-and-drop to install.</p>
+<?= $pd->text(_('Philip John (not affiliated to WriteToThem, but working voluntarily) has made a
+<a href="https://wordpress.org/plugins/writetothem/">WordPress plugin</a>.
 
-<p>There is also a much older <a href="/WriteToThem.com.zip">WordPress
-plugin</a>, written by Richard Pope. To use that, you will need to alter your PHP template.</p>
+It lets you add a WriteToThem form to your WordPress site as a standard WordPress widget - so it’s just drag-and-drop to install.
 
-<p>Please address support queries about these plug-ins to their authors, on the plug-ins’ pages.</p>
+There is also a much older <a href="/WriteToThem.com.zip">WordPress
+plugin</a>, written by Richard Pope. To use that, you will need to alter your PHP template.
+
+Please address support queries about these plug-ins to their authors, on the plug-ins’ pages.')) ?>
 
             </div>
 
