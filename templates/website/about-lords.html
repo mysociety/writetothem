@@ -1,7 +1,9 @@
 <?php
 
-$values['title'] = "House of Lords";
+$values['title'] = _("House of Lords");
 template_draw('header', $values);
+
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +12,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>House of Lords</h2>
+                <h2><?= _('House of Lords') ?></h2>
             </div>
         </div>
 
@@ -20,120 +22,119 @@ template_draw('header', $values);
 
 <dl>
 
-<dt><a name="what-is-a-lord"></a>What is a Lord?</dt>
+<dt><a name="what-is-a-lord"></a><?= _('What is a Lord?') ?></dt>
 
-<dd> <p>The UK Parliament is divided into two. </p>
-<p> On one side is the House of Commons where your MP sits; on the other is the House of Lords. Proposed new laws have to be considered by both Houses.</p>
-<p> MPs are, of course, elected by the nation. Lords, on the other hand, become members through a complex mixture of appointment, religion, hereditary entitlement, and self-election
-(<a href="http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/members-and-their-roles/how-members-are-appointed/">more details here</a>).
-</p>
+<dd><?= $pd->text(_('The UK Parliament is divided into two. 
 
-<dt>Can I write to my Lord?</dt>
+ On one side is the House of Commons where your MP sits; on the other is the House of Lords. Proposed new laws have to be considered by both Houses.
 
-<dd>
-<p>Yes. WriteToThem has a <a href="/lords">Write to Your Lord</a> section.</p>
+ MPs are, of course, elected by the nation. Lords, on the other hand, become members through a complex mixture of appointment, religion, hereditary entitlement, and self-election
+(<a href="http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/members-and-their-roles/how-members-are-appointed/">more details here</a>).')) ?>
+
+<dt><?= _('Can I write to my Lord?') ?></dt>
+
+<dd><?= _('Yes. WriteToThem has a <a href="/lords">Write to Your Lord</a> section.') ?></dd>
+
+<dt><a name="why"></a><?= _('Why write to your Lord?') ?></dt>
+
+<dd><?= $pd->text(_('Well, they may not be elected, but they still get to vote on, debate, and amend the bills that will affect us all when they become law.
+
+You might write to a Lord to tell them about something you think they should care about.
+
+Or, if a topic is soon to be under debate, you might provide information that will go towards forming their opinion on which way to vote.')) ?></dd>
+
+<dt><a name="which-lord"></a><?= _('Which Lord should I write to?') ?></dt>
+
+<dd><?= $pd->text(_('The main section of WriteToThem asks you to type in your postcode, so that we can match you with the people who represent you in your constituency.
+
+With Lords, it’s different. You may contact any Lord, so how on earth do you choose?
+Our <a href="/lords">Write to Your Lord</a> section tries to solve this issue in a few different ways:
+
+<ul><li><strong>Method 1</strong> Find a Lord who has a special interest in your issue.
+
+Enter the topic into the box as a word or a phrase. We’ll show you a list of the Lords who have mentioned it in Parliament the most times.
+
+Or, if your issue strongly relates to location, try the ‘find a Lord with an association to this place’ facility.</li>
+
+<li><strong>Method 2</strong> If your topic is of general human interest, then you might want to make use of the "Random Lord" button - which does exactly its name suggests.
+
+Believe in serendipity? Use the ‘Find a Lord who shares my birthday’ button, and find out whether your matching horoscopes also mean that your opinions align.</li></ul>
+
+Whatever method you choose, don’t feel you have to pick the top Lord: you can follow the links to read a bit about what they’ve said. 
+
+If they’re a minister, it’ll probably be very hard to influence their opinion, so it’s best to pick someone who’s not working directly for the Government.</li>')) ?>
+
 </dd>
 
-<dt><a name="why"></a>Why write to your Lord?</dt>
+<dt><a name="ukpostcode"></a><?= _('Why do I need a UK postcode to write to a Lord?') ?></dt>
 
-<dd><p>Well, they may not be elected, but they still get to vote on, debate, and amend the bills that will affect us all when they become law.</p>
-<p>You might write to a Lord to tell them about something you think they should care about.</p>
-<p>Or, if a topic is soon to be under debate, you might provide information that will go towards forming their opinion on which way to vote.</p></dd>
+<dd><?= $pd->text(_('Lords sit in the UK Parliament. Amongst other things, they vote on the
+passing of UK law.
 
-<dt><a name="which-lord"></a>Which Lord should I write to?</dt>
+Just as we only let people contact <a href="about-qa#onlyrep">their own MP</a>, we don’t let people from outside the UK contact Lords.
 
-<dd>
-<p>The main section of WriteToThem asks you to type in your postcode, so that we can match you with the people who represent you in your constituency.</p>
-
-<p>With Lords, it’s different. You may contact any Lord, so how on earth do you choose?</p>
-<p>Our <a href="/lords">Write to Your Lord</a> section tries to solve this issue in a few different ways:</p>
-
-<ul><li><p><strong>Method 1</strong> Find a Lord who has a special interest in your issue.</p>
-
-<p>Enter the topic into the box as a word or a phrase. We’ll show you a list of the Lords who have mentioned it in Parliament the most times.</p>
-
-<p>Or, if your issue strongly relates to location, try the ‘find a Lord with an association to this place’ facility.</p></li>
-
-<li><p><strong>Method 2</strong> If your topic is of general human interest, then you might want to make use of the "Random Lord" button - which does exactly its name suggests.</p>
-
-<p>Believe in serendipity? Use the ‘Find a Lord who shares my birthday’ button, and find out whether your matching horoscopes also mean that your opinions align.</p></li></ul>
-
-<p>Whatever method you choose, don’t feel you have to pick the top Lord: you can follow the links to read a bit about what they’ve said. </p>
-
-<p>If they’re a minister, it’ll probably be very hard to influence their opinion, so it’s best to pick someone who’s not working directly for the Government.</p></li>
-
+Please use the same postcode that you would use to contact your MP.  See <a href="/about-constituency">"What postcode should I use?"</a> if you’re not sure what postcode to use, for example if you are in the Armed Services.')) ?>
 </dd>
 
-<dt><a name="ukpostcode"></a>Why do I need a UK postcode to write to a Lord?</dt>
+<dt><a name="how-does-it-work"></a><?= _('How does it work? Do you have all the Lords email addresses?') ?></dt>
 
-<dd>
-<p>Lords sit in the UK Parliament. Amongst other things, they vote on the
-passing of UK law.</p>
+<dd><?= $pd->text(_('Not yet! For many Lords, we send your message to the House of Lords central
+email address, as the majority of peers don’t have offices.
 
-<p> Just as we only let people contact <a href="about-qa#onlyrep">their own MP</a>, we don’t let people from outside the UK contact Lords.</p>
+From there, it will be conveyed to your chosen Lord by the House’s internal mail systems.
 
-<p> Please use the same postcode that you would use to contact your MP.  See <a href="/about-constituency">"What postcode should I use?"</a> if you’re not sure what postcode to use, for example if you are in the Armed Services.</p>
-</dd>
+If you are a peer yourself, and would prefer to receive messages directly,
+please <a href="/about-contact">contact us</a>.')) ?></dd>
 
-<dt><a name="how-does-it-work"></a>How does it work? Do you have all the Lords email addresses?</dt>
+<dt><a name="how-many"></a><?= _('How many Lords can I write to?') ?></dt>
 
-<dd><p>Not yet! For many Lords, we send your message to the House of Lords central
-email address, as the majority of peers don’t have offices.</p>
-<p>From there, it will be conveyed to your chosen Lord by the House’s internal mail systems.</p>
-<p>If you are a peer yourself, and would prefer to receive messages directly,
-please <a href="/about-contact">contact us</a>.</p></dd>
-
-<dt><a name="how-many"></a>How many Lords can I write to?</dt>
-
-<dd><p>The Parliament website gives more details about <a
+<dd><?= $pd->text(_('The Parliament website gives more details about <a
 href="http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/get-in-touch-with-members/">different ways to contact Lords</a>, and the different limits on sending bulk messages to
 all Lords.
 
-<p>We also very aggressively prevent you from sending duplicate messages to Lords. This
+We also very aggressively prevent you from sending duplicate messages to Lords. This
 is because the House of Lords throw away bulk sent messages, so it is a waste
-of time. </p>
+of time. 
 
-<p>Do not tell people to copy and paste pre-written letters to Lords: get them to write in their own words. See our <a href="/about-guidelines">guidelines for campaigning</a> for more information on this.
+Do not tell people to copy and paste pre-written letters to Lords: get them to write in their own words. See our <a href="/about-guidelines">guidelines for campaigning</a> for more information on this.')) ?></dd>
 
-</p></dd>
+<dt><a name="why-reply"></a><?= _('Why should a Lord bother replying to my message?') ?></dt>
 
-<dt><a name="why-reply"></a>Why should a Lord bother replying to my message?</dt>
+<dd><?= $pd->text(_('Lords aren’t actually obliged to respond to letters, and unlike MPs, they don’t have constituents. Nor do they have the need to prove their worth in advance of a general election.
 
-<dd><p>Lords aren’t actually obliged to respond to letters, and unlike MPs, they don’t have constituents. Nor do they have the need to prove their worth in advance of a general election.</p>
-
-<p>That said, we believe that most politicians are actually decent people trying to do their best. So in short, while they don’t <em>have to</em> bother, if you take the time to compose a decent letter, there’s a better chance that they will.</p> 
+That said, we believe that most politicians are actually decent people trying to do their best. So in short, while they don’t <em>have to</em> bother, if you take the time to compose a decent letter, there’s a better chance that they will.')) ?>
 </dd>
 
-<dt><a name="lords-reform"></a>Do you have a Lords reform agenda? What do you think about an elected reform?</dt>
+<dt><a name="lords-reform"></a><?= _('Do you have a Lords reform agenda? What do you think about an elected reform?') ?></dt>
 
-<dd><p>Hah! Like we’ve got time to think about things like that with
-<a href="https://www.mysociety.org/projects/">all these pesky democratic websites</a> to run.</p></dd>
+<dd><p><?= _('Hah! Like we’ve got time to think about things like that with
+<a href="https://www.mysociety.org/projects/">all these pesky democratic websites</a> to run.') ?></p></dd>
 
-<dt><a name="when"></a>When should I write to a Lord, instead of, say, my MP?</dt>
+<dt><a name="when"></a><?= _('When should I write to a Lord, instead of, say, my MP?') ?></dt>
 
-<dd><p>There are various reasons you might want to write to a Lord.</p>
+<dd><?= $pd->text(_('There are various reasons you might want to write to a Lord.
 
-<p>They may be passionately involved with an issue you care about, or you might
-disagree with them on an issue that they speak about publicly.</p>
+They may be passionately involved with an issue you care about, or you might
+disagree with them on an issue that they speak about publicly.
 
-<p>Often you might find that a Bill on a topic you care about has been passed
+Often you might find that a Bill on a topic you care about has been passed
 from the Commons to the Lords for debate, amendment or approval. At that point,
-persuading a Lord might make a real difference to the outcome.</p>
+persuading a Lord might make a real difference to the outcome.
 
-<p>Here’s another thing: while democracy works in general, it does have some
+Here’s another thing: while democracy works in general, it does have some
 faults. For example, if your own MP has views very different to your own,
 contacting them isn’t always useful or satisfactory. Contacting a Lord instead
-may be a better way to influence policy.</p>
+may be a better way to influence policy.
 
-<p>Or, of course, you might just want to ask them what they do, or what they
+Or, of course, you might just want to ask them what they do, or what they
 think about something. Whatever, write to them: they’re <em>your</em>
-Lords.</p></dd>
+Lords.')) ?></dd>
 
-<dt><a name="can-i-help"></a>This is great &mdash; how can I help you guys?</dt>
 
-<dd><p><a href="https://www.mysociety.org/">mySociety</a>, the charity
-who built and maintain WriteToThem, are always in need of <a
-href="https://www.mysociety.org/donate/">donations</a>.</p>
+<dt><a name="can-i-help"></a><?= _('This is great &mdash; how can I help you guys?') ?></dt>
+
+<dd><p><?= _('<a href="https://www.mysociety.org/">mySociety</a>, the charity
+who built and maintain WriteToThem, are always in need of <a href="https://www.mysociety.org/donate/">donations</a>.') ?></p>
 
 </dd>
 
