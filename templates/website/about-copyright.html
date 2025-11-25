@@ -1,7 +1,8 @@
 <?php
 
-$values['title'] = "Copyright information";
+$values['title'] = _("Copyright information");
 template_draw('header', $values);
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +11,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>Copyright information</h2>
+                <h2><?= _('Copyright information') ?></h2>
             </div>
         </div>
 
@@ -20,15 +21,14 @@ template_draw('header', $values);
 
 <h3><a href="https://www.mysociety.org"><img src="/static/img/credits/ms.png" srcset="/static/img/credits/ms@2x.png 2x" alt="mySociety"></a></h3>
 
-<p>This site was built by <a href="https://www.mysociety.org">mySociety</a>:
+<?= $pd->text(_('This site was built by <a href="https://www.mysociety.org">mySociety</a>:
 here’s <a href="about-us">information about us and why we run this site</a>.
-</p>
 
-<p> Most of the site is Copyright &copy; <a
-href="https://www.mysociety.org/about/structure-and-governance/">UK Citizens
-Online Democracy</a> (the prior name of mySociety), but <a
-href="https://github.com/mysociety/writetothem">the source code is
-available</a> under an open source license.</p>
+Most of the site is Copyright &copy;
+<a href="https://www.mysociety.org/about/structure-and-governance/">UK Citizens
+Online Democracy</a> (the prior name of mySociety), but
+<a href="https://github.com/mysociety/writetothem">the source code is
+available</a> under an open source license.')) ?>
 
 <hr>
 
@@ -38,11 +38,11 @@ available</a> under an open source license.</p>
   <li><a href="http://www.locatoronline.co.uk/"><img src="/static/img/credits/lo.png" alt="Locator Online"></a></li>
 </ul>
 
-<p>Our database of local councillors is kindly supplied by <a
-href="http://www.goveval.com/">GovEval</a>. Postcode lookup uses <a
-href="https://mapit.mysociety.org/">MapIt</a>, our tool for doing that sort of
+<?= $pd->text(_('Our database of local councillors is kindly supplied by
+<a href="http://www.goveval.com/">GovEval</a>. Postcode lookup uses
+<a href="https://mapit.mysociety.org/">MapIt</a>, our tool for doing that sort of
 thing, and uses Ordnance Survey open data behind the scenes. Thanks to them
-both!</p>
+both!')) ?>
 
             </div>
 
