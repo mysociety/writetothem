@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Privacy";
+$values['title'] = _("Privacy");
 $contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
 template_draw('header', $values);
 
@@ -11,7 +11,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>Privacy</h2>
+                <h2><?= _('Privacy') ?></h2>
             </div>
         </div>
 
@@ -19,113 +19,113 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
                 <p>
-                    WriteToThem is run by the charity <a href="https://www.mysociety.org/">mySociety</a>.
+                    <?= _('WriteToThem is run by the charity <a href="https://www.mysociety.org/">mySociety</a>.') ?>
                 </p>
 
                 <p>
-                    Working in the fields of transparency and accountability, mySociety thinks
+                    <?= _('Working in the fields of transparency and accountability, mySociety thinks
                     hard and cares very much about the privacy and security of our users: the
                     length of this privacy policy is one result of that.  We know that no-one
                     reads privacy policies for fun, though, so we&rsquo;ve tried to keep it a clear
-                    and reasonably quick read.
+                    and reasonably quick read.') ?>
                 </p>
 
                 <p>
-                    We hope it covers everything you need to know, but if you still have any
-                    questions please feel free to <a href="/about-contact">contact us</a>.
+                    <?= _('We hope it covers everything you need to know, but if you still have any
+                    questions please feel free to <a href="/about-contact">contact us</a>.') ?>
                 </p>
 
                 <h3>
-                    What information we collect
+                    <?= _('What information we collect') ?>
                 </h3>
 
                 <p>
-                    When you use WriteToThem to contact a representative, you provide the
-                    following personal information:
+                    <?= _('When you use WriteToThem to contact a representative, you provide the
+                    following personal information:') ?>
                 </p>
 
                 <ul>
                     <li>
-                        Your name
+                        <?= _('Your name') ?>
                     </li>
                     <li>
-                        Your address
+                        <?= _('Your address') ?>
                     </li>
                     <li>
-                        Your email address
+                        <?= _('Your email address') ?>
                     </li>
                     <li>
-                        The body of your message 
+                        <?= _('The body of your message ') ?>
                     </li>
                     <li>
-                        Optionally, your telephone number
+                        <?= _('Optionally, your telephone number') ?>
                     </li>
                 </ul>
 
                 <h3>
-                    Who sees this information
+                    <?= _('Who sees this information') ?>
                 </h3>
 
                 <ul>
                     <li>
-                        We will pass on your message, name, email and postal address and (if
+                        <?= _('We will pass on your message, name, email and postal address and (if
                         given) telephone number either direct to the politician(s) you write to,
                         or, where we do not have a direct email address for the politician,
                         through an official channel (such as a council democratic services
                         department or parliamentary office) whose job it is to distribute mail
-                        to representatives.
+                        to representatives.') ?>
                     </li>
                     <li>
-                        Note that it is common for MPs and other busy representatives to employ
+                        <?= _('Note that it is common for MPs and other busy representatives to employ
                         staff who may read and respond to mail on their behalf.
                         Representatives&rsquo; offices will have and adhere to their own privacy
-                        protocols.
+                        protocols.') ?>
                     </li>
                     <li>
-                        No-one else views any of the information you provide, unless there is a
+                        <?= _('No-one else views any of the information you provide, unless there is a
                         problem with the delivery of your message. In such cases, WriteToThem
                         admin staff may access your message in order to understand what the
                         issue is. Admin staff have been trained to keep to the high levels  of
-                        confidentiality dictated by our moderation policies.
+                        confidentiality dictated by our moderation policies.') ?>
                     </li>
                     <li>
-                        The body of your message is included in the confirmation and survey
+                        <?= _('The body of your message is included in the confirmation and survey
                         emails we send you. These mails are sent through an automated process
                         and are unseen by humans. If you have concerns about messages which
                         contain sensitive content, please be careful in forwarding or sharing
-                        these emails.
+                        these emails.') ?>
                     </li>
                     <li>
-                        We sometimes use data from WriteToThem for research. This data does not
+                        <?= _('We sometimes use data from WriteToThem for research. This data does not
                         contain  identifying details such as names, addresses, email addresses
                         or the content of messages. Rather, we analyse aggregate data for
                         purposes such as our regular statistics on what percentage of users
                         receive a response from their representatives. Our Research Data Release
-                        policy may be seen on request.
+                        policy may be seen on request.') ?>
                     </li>
                     <li>
-                        We will never sell or otherwise distribute any information you give
+                        <?= _('We will never sell or otherwise distribute any information you give
                         WriteToThem to organisations or individuals outside of mySociety, except
-                        if required to do so by UK law.
+                        if required to do so by UK law.') ?>
                     </li>
                 </ul>
 
                 <h3>
-                    Consequences of using WriteToThem
+                    <?= _('Consequences of using WriteToThem') ?>
                 </h3>
 
                 <ul>
                     <li>
-                        When your representative responds to your message, their reply will go
+                        <?= _('When your representative responds to your message, their reply will go
                         directly to your email inbox. This response, and any subsequent
-                        correspondence, happens outside the WriteToThem system.
+                        correspondence, happens outside the WriteToThem system.') ?>
                     </li>
                     <li>
-                        WriteToThem does not operate a mailing list and there is no concept of
-                        accounts or registration on the site.
+                        <?= _('WriteToThem does not operate a mailing list and there is no concept of
+                        accounts or registration on the site.') ?>
                     </li>
                     <li>
-                        We will never send you unsolicited email except for the following:
+                        <?= _('We will never send you unsolicited email except for the following:
                         <ol type="a">
                             <li>If you submit a message but do not click the confirmation link, we
                             send you one reminder after 24 hours;</li>
@@ -135,38 +135,38 @@ template_draw('header', $values);
                             <li>On rare occasions, we pass on a message from a politician who is
                             concerned that they have mislaid emails from their constituents,
                             inviting you to re-establish contact.</li>
-                        </ul>
+                        </ul>') ?>
                     </li>
                 </ul>
 
                 <h3>
-                    Email opt-out
+                    <?= _('Email opt-out') ?>
                 </h3>
 
                 <p>
-                    As part of the process of sending your message to your representative we
+                    <?= _('As part of the process of sending your message to your representative we
                     will send you a limited number of emails, as described above. If during this
                     process you wish to stop receiving emails from us, or you are a
                     representative who no longer wishes to receive email via WriteToThem*,
-                    please <a href="/about-contact">contact us</a>.
+                    please <a href="/about-contact">contact us</a>.') ?>
                 </p>
 
                 <p>
-                    * If you are a representative wishing to opt out of WriteToThem, we
+                    <?= _('* If you are a representative wishing to opt out of WriteToThem, we
                     encourage you to think again! WriteToThem is a system which makes it simple
                     for your constituents to contact you, where they might find other channels
                     more difficult to access. We have measures in place that prevent bulk
                     mailings and contact with representatives other than the constituents&rsquo; own.
                     You may wish to read more about the service and how you can best use it at
-                    <a href="https://www.mysociety.org/mp-services/">https://www.mysociety.org/mp-services/</a>.
+                    <a href="https://www.mysociety.org/mp-services/">https://www.mysociety.org/mp-services/</a>.') ?>
                 </p>
 
                 <h3>
-                    Legal basis for processing
+                    <?= _('Legal basis for processing') ?>
                 </h3>
 
                 <p>
-                    When you use WriteToThem to contact your representative, we
+                    <?= _('When you use WriteToThem to contact your representative, we
                     are processing your data under the legal basis 6(1)(f) of
                     the General Data Protection Regulation – legitimate
                     interests. We believe we are pursuing a legitimate interest
@@ -174,91 +174,91 @@ template_draw('header', $values);
                     out who your representatives are at different levels and
                     giving you an easy way to contact them. This is also the
                     legitimate interest we have in processing the names and
-                    contact information for representatives.
+                    contact information for representatives.') ?>
                 </p>
 
                 <h3>
-                    Retention policies
+                    <?= _('Retention policies') ?>
                 </h3>
 
                 <ul>
                     <li>
-                        We store your IP address and the pages that you visited whilst on the
-                        site as part of our site logs. We keep these for one month.
+                        <?= _('We store your IP address and the pages that you visited whilst on the
+                        site as part of our site logs. We keep these for one month.') ?>
                     </li>
                     <li>
-                        We do not keep permanent copies of the letters you write to send to your
-                        representatives.
+                        <?= _('We do not keep permanent copies of the letters you write to send to your
+                        representatives.') ?>
                     </li>
                     <li>
-                        We store the content of your message for four weeks after it was
+                        <?= _('We store the content of your message for four weeks after it was
                         dispatched, and then it is automatically deleted. We keep a copy in
                         backup files for one additional week. Unless there is a technical
                         problem with your message, it is never viewed by WriteToThem staff. We
                         keep messages in our servers for this long to enable us to monitor and
                         prevent abuse of the service. It also means we can include a copy of
                         your message in the questionnaire which asks if your representative has
-                        responded yet, so you know which one we are talking about.
+                        responded yet, so you know which one we are talking about.') ?>
                     </li>
                     <li>
-                        If delivery of a message fails for a period of seven days, we keep the
+                        <?= _('If delivery of a message fails for a period of seven days, we keep the
                         message content for a further eight weeks, to give us time to diagnose
-                        the problem and where possible to resend the message.
+                        the problem and where possible to resend the message.') ?>
                     </li>
                     <li>
-                        We keep records of names, emails and addresses for two years in order to
+                        <?= _('We keep records of names, emails and addresses for two years in order to
                         provide an audit trail if a representative queries the accuracy of the
                         statistics on response rates we produce. We will never give these out to
                         a representative on any other occasion than when you send them your
-                        message.
+                        message.') ?>
                     </li>
                     <li>
-                        If you contact WriteToThem via our support email address we will keep
+                        <?= _('If you contact WriteToThem via our support email address we will keep
                         your message for two years. This is to aid continuity and so that we can
                         view any historic context which may have bearing on subsequent support
                         mail, even if members of the support staff change. Support staff adhere
-                        to strict internal privacy and security policies. 
+                        to strict internal privacy and security policies.') ?>
                     </li>
                 </ul>
 
                 <h3>
-                    Your right to access
+                    <?= _('Your right to access') ?>
                 </h3>
 
                 <p>
-                    You may <a href="/about-contact">contact us</a> at any time to ask to see what personal data we hold
-                    about you.
+                    <?= _('You may <a href="/about-contact">contact us</a> at any time to ask to see what personal data we hold
+                    about you.') ?>
                 </p>
                 <h3>
-                    Your right to object
+                    <?= _('Your right to object') ?>
                 </h3>
                 <p>
-                    The General Data Protection Regulation gives you the right to object to our
+                    <?= _('The General Data Protection Regulation gives you the right to object to our
                     processing of your personal information and to ask us to stop processing it.
                     However, it also gives us the right to continue to process it if we can demonstrate
                     compelling legitimate grounds for the processing that override your interests, rights
                     and freedoms. To exercise your right to object, you can <a href="/about-contact">
                     contact us</a>, giving specific reasons why you are objecting to the processing of
-                    your personal data. These reasons should be based upon your particular situation.
+                    your personal data. These reasons should be based upon your particular situation.') ?>
                 </p>
                 <h3>
-                    Your right to complain
+                    <?= _('Your right to complain') ?>
                 </h3>
 
                 <p>
-                    If you believe that we have mishandled your data, you have the right to
+                    <?= _('If you believe that we have mishandled your data, you have the right to
                     lodge a complaint with the Information Commissioner&rsquo;s Office.
                     <a href="https://ico.org.uk/concerns/handling/">You can report a concern here</a>
-                    (but do contact us first, so that we can try and help).
+                    (but do contact us first, so that we can try and help).') ?>
                 </p>
 
                 <h3>
-                    Who we are
+                    <?= _('Who we are') ?>
                 </h3>
 
                 <p>
-                    WriteToThem is run by <a href="https://www.mysociety.org/">mySociety</a>, a UK not-for-profit social enterprise. Our
-                    registered address is:
+                    <?= _('WriteToThem is run by <a href="https://www.mysociety.org/">mySociety</a>, a UK not-for-profit social enterprise. Our
+                    registered address is:') ?>
                 </p>
 
                 <p>
@@ -270,12 +270,12 @@ template_draw('header', $values);
                 </p>
 
                 <p>
-                    …and we can also be <a href="/about-contact">contacted here</a>.
+                    <?= _('…and we can also be <a href="/about-contact">contacted here</a>.') ?>
                 </p>
 
-                    <h2>Measuring website usage (Google Analytics)</h2>
+                    <h2><?= _('Measuring website usage (Google Analytics)') ?></h2>
 
-                        <p>We use Google Analytics software &ndash; without
+                        <?= _('<p>We use Google Analytics software &ndash; without
                         cookies &ndash; to collect information about how you
                         use this site. We do this to help make sure the site is
                         meeting the needs of its users and to help us make
@@ -305,12 +305,11 @@ template_draw('header', $values);
 
                         <p>Rest assured, we only track usage data for one reason: to help us
                         understand how we can make the site work better for you, our
-                        users.</p>
+                        users.</p>') ?>
 
-                <h2>Credits</h2>
+                <h2><?= _('Credits') ?></h2>
 
-                    <p>Bits of wording taken from the <a href="http://gov.uk/help/cookies">GOV.UK cookies page</a> (under the Open Government Licence).
-
+                    <p><?= _('Bits of wording taken from the <a href="http://gov.uk/help/cookies">GOV.UK cookies page</a> (under the Open Government Licence).') ?>
             </div>
 
             <div class="large-4 columns">
