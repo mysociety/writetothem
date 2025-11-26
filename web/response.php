@@ -21,7 +21,7 @@ $token = get_http_var('token');
 if (!$token) {
     $missing_token_message = cobrand_missing_token_message($cobrand);
     if (!$missing_token_message) {
-         $missing_token_message = "Please make sure you copy the URL from your email properly. The token was missing.";
+         $missing_token_message = _("Please make sure you copy the URL from your email properly. The token was missing.");
     }
     template_show_error($missing_token_message);
 }
@@ -29,7 +29,7 @@ $answer = get_http_var('answer');
 if ($answer != "yes" && $answer != "no" && $answer != "unsatisfactory" && $answer != "not_expected") {
     $missing_answer_message = cobrand_missing_answer_message($cobrand);
     if (!$missing_answer_message) {
-         $missing_answer_message = "Please make sure you copy the URL from your email properly. The answer type was missing.";
+         $missing_answer_message = _("Please make sure you copy the URL from your email properly. The answer type was missing.");
     }
     template_show_error($missing_answer_message);
 }
@@ -51,7 +51,7 @@ msg_check_error($msg_id);
 if (!$msg_id) {
     $unfound_token_message = cobrand_unfound_token_message($cobrand);
     if (!$unfound_token_message) {
-        $unfound_token_message = "Failed to look up message id for token";
+        $unfound_token_message = _("Failed to look up message id for token");
     }
     template_show_error($unfound_token_message);
 }
@@ -71,7 +71,7 @@ if ($answer == "yes") {
 } elseif ($answer == "no") {
     template_draw("response-no", $values);
 } else {
-    template_show_error("Unknown answer.");
+    template_show_error(_("Unknown answer."));
 }
 
 ?>
