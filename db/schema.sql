@@ -142,7 +142,10 @@ create table message (
     -- a group of messages can be sent at one time with the same text 
     -- to multiple representatives. A group_id identifies the group 
     -- that the message belongs to.
-    group_id char(20) 
+    group_id char(20),
+
+    -- message language
+    language text not null default('en')
 );
 
 -- Various indices to make the queue pages quicker.
