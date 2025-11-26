@@ -66,7 +66,7 @@ function bad_contact_error_msg($eb_area) {
     global $va_council_parent_types;
     $via_error = '';
     if (in_array($eb_area['type'], $va_council_parent_types))
-        $via_error = '; or we might only have a central contact for the council, which similarly might not be working';
+        $via_error = _('; or we might only have a central contact for the council, which similarly might not be working');
 
     $general_prep = array(
         'LBO' => "",
@@ -87,7 +87,7 @@ function bad_contact_error_msg($eb_area) {
     $type_display_name = $general_prep[$eb_area['type']] . " " . $eb_area['name'];
     $type_display_phone = '';
     if ($type_display_name == "the House of Commons") {
-        $type_display_name = ' the MP, the House of Commons';
+        $type_display_name = _(' the MP, the House of Commons');
         $type_display_phone = ', 020 7219 3000';
     }
     $error_msg = sprintf(_("Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is full) or incorrect%s.
@@ -106,12 +106,10 @@ function shame_error_msg($fyr_voting_area, $fyr_representative) {
 $fyr_voting_area['rep_prefix'], $fyr_representative['name'], $fyr_voting_area['rep_suffix'], $fyr_voting_area['name'], $url);
 
     } else {
-        $error_msg = <<<EOF
-$fyr_voting_area[rep_prefix] $fyr_representative[name] $fyr_voting_area[rep_suffix]
-has told us not to deliver any messages from the constituents of
-$fyr_voting_area[name].
-EOF;
-
+        $error_msg = sprintf(
+            _('%s %s %s has told us not to deliver any messages from the constituents of %s.'),
+                $fyr_voting_area['rep_prefix'], $fyr_representative['name'], $fyr_voting_area['rep_suffix'], $fyr_voting_area['name']
+            );
     }
     return $error_msg;
 }
@@ -166,7 +164,7 @@ function compare_email_addrs($F) {
     if (!isset($F['writer_email2']) || !isset($F['writer_email']) || $F['writer_email'] != $F['writer_email2']) {
         $error_message = cobrand_mismatched_emails_message($cobrand);
         if (!$error_message) {
-             $error_message = "The two email addresses you’ve entered differ; please check them carefully for mistakes";
+             $error_message = _("The two email addresses you’ve entered differ; please check them carefully for mistakes");
         }
         return array('writer_email' => $error_message);
     }
@@ -402,11 +400,11 @@ function submitFaxes() {
     // Set up some brief error descriptions
     $errors = cobrand_message_sending_errors($cobrand);
     if (!$errors) {
-        $errors = array("problem-generic" => "Message Rejected",
-                        "problem-lords" => "You have sent too many messages to Lords",
-                        "problem-lords-similar" => "Too many similar messages have been sent",
-                        "problem-postcodes" => "You seem to be sending messages with several different postcodes",
-                        "problem-similar" => "Your message is near-identical with others sent previously");
+        $errors = array("problem-generic" => _("Message Rejected"),
+                        "problem-lords" => _("You have sent too many messages to Lords"),
+                        "problem-lords-similar" => _("Too many similar messages have been sent"),
+                        "problem-postcodes" => _("You seem to be sending messages with several different postcodes"),
+                        "problem-similar" => _("Your message is near-identical with others sent previously"));
     }
 
     // send the message to each representative
@@ -485,9 +483,9 @@ function submitFaxes() {
                 if ($grpid) {
                     if (array_key_exists($abuse_res, $errors)) {
                         $error_msg .= "<p>" . $rep_name . ": " . $errors[$abuse_res]
-                            . " <a href=\"/"  . $abuse_res . "\">read more</a></p>";
+                            . " <a href=\"/"  . $abuse_res . "\">" . _('read more') . "</a></p>";
                     } else {
-                        $error_msg .= "<p>" .$rep_name . ": Message Rejected</p>";
+                        $error_msg .= "<p>" .$rep_name . ": " . _('Message Rejected') . "</p>";
                     }
                 } else {
                     template_draw($abuse_res,  $fyr_values);
@@ -506,8 +504,8 @@ function submitFaxes() {
     } elseif ($error_msg) {
         // Some problems
         $error_msg = "
-    <p style=\"text-align: center; color: #ff0000; \">Note:
-    Some of your messages could not be sent for the following reasons: </p>
+        <p style=\"text-align: center; color: #ff0000; \">"
+        . _('Note: Some of your messages could not be sent for the following reasons:') . " </p>
     " . $error_msg;
         show_check_email($error_msg);
     } else {
@@ -526,12 +524,12 @@ function rabx_mail_error_msg($code, $text) {
     $base_url = cobrand_url($cobrand, '/', $cocode);
     if ($code == FYR_QUEUE_MESSAGE_ALREADY_QUEUED) {
 
-        $error_msg = "You’ve already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.";
+        $error_msg = _("You’ve already sent this message.  To send a new message, please <a href=\"$base_url\">start again</a>.");
     } elseif ($code == FYR_QUEUE_GROUP_ALREADY_QUEUED) {
-        $error_msg = "You’ve already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>.";
+        $error_msg = _("You’ve already sent these messages.  To send a new message, please <a href=\"$base_url\">start again</a>.");
     } else {
         error_log("write.php msg_write error: ". $code . " " . $text);
-        $error_msg = "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>.";
+        $error_msg = _("Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>.");
     }
     return $error_msg;
 }
@@ -707,10 +705,10 @@ if ($stash['group_msg']) {
 
     if (!$any_contacts) {
         // None of the group of representatives can be contacted
-        template_show_error("Sorry, we are unable to contact any of these representatives for the following reasons: <br> " . $error_msg);
+        template_show_error(_("Sorry, we are unable to contact any of these representatives for the following reasons:") . " <br> " . $error_msg);
     } elseif ($error_msg) {
         // Some problems, but some reps can be contacted, proceed with a note
-        $stash['warning_text'] = "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons: <br> " . $error_msg;
+        $stash['warning_text'] = _("<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons:") . " <br> " . $error_msg;
     }
 
     // Assemble the name string
@@ -908,7 +906,7 @@ function check_area_status($eb_area, $fyr_voting_area) {
     if ($parent_status != 'none' || $status != 'none'){
         $election_error = cobrand_election_error_message($cobrand);
         if (!$election_error) {
-             $election_error = 'Sorry, an election is forthcoming or has recently happened here.';
+             $election_error = _('Sorry, an election is forthcoming or has recently happened here.');
         }
         template_show_error($election_error);
     }
