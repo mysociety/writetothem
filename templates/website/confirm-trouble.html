@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Oops... Something didn’t quite work.";
+$values['title'] = _("Oops... Something didn’t quite work.");
 $values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
@@ -10,7 +10,7 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Oops&hellip; Something didn’t quite work.</h2>
+        <h2><?= _('Oops&hellip; Something didn’t quite work.') ?></h2>
 
     </div>
 </div>
@@ -20,10 +20,11 @@ template_draw('header', $values);
 
         <hr>
 
-        <p>Thank you for trying to confirm your fax/email. We seem to have a
-        problem though, so please let us know what went on and send a copy of
-        the confirmation email to <a href="mailto:<?=OPTION_CONTACT_EMAIL?>"><?=OPTION_CONTACT_EMAIL?></a> and we’ll look into
-        it.</p>
+        <p><?= sprintf(
+            _('Thank you for trying to confirm your fax/email. We seem to have a problem though, so please let us know what went on and send a copy of the confirmation email to <a href="mailto:%s">%s</a> and we’ll look into it.'),
+            OPTION_CONTACT_EMAIL, OPTION_CONTACT_EMAIL
+            ) ?>
+        </p>
 
     </div>
 </div>
