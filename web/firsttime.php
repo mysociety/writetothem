@@ -20,7 +20,7 @@ fyr_rate_limit(array());
 
 $token = get_http_var('token');
 if (!$token) {
-    template_show_error("The token was missing.");
+    template_show_error(_("The token was missing."));
 }
 
 $preview = ($token === 'preview');
