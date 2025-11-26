@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($values['skip_header'])) {
-    $values['title'] = "Problem with your message";
+    $values['title'] = _("Problem with your message");
     $values['robots'] = 'noindex, nofollow';
     template_draw('header', $values);
 }
@@ -11,7 +11,7 @@ if (!isset($values['skip_header'])) {
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Message Rejected</h2>
+        <h2><?= _('Message Rejected') ?></h2>
 
     </div>
 </div>
@@ -19,9 +19,7 @@ if (!isset($values['skip_header'])) {
 <div class="row">
     <div class="large-8 large-centered columns" role="alert">
 
-        <p>Sorry, but we’ve had to reject your message. Please see if you have broken
-            any of our <a href="about-guidelines">Guidelines for Campaigning</a>. If you
-            don’t think that you have, then <a href="/about-contact">contact us</a>.
+        <p><?= _('Sorry, but we’ve had to reject your message. Please see if you have broken any of our <a href="about-guidelines">Guidelines for Campaigning</a>. If you don’t think that you have, then <a href="/about-contact">contact us</a>.') ?></p>
 
     </div>
 </div>

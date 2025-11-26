@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($values['skip_header'])) {
-    $values['title'] = "Problem with your message";
+    $values['title'] = _("Problem with your message");
     $values['robots'] = 'noindex, nofollow';
     template_draw('header', $values);
 }
@@ -11,7 +11,7 @@ if (!isset($values['skip_header'])) {
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Your message is near-identical to others sent previously</h2>
+        <h2><?= _('Your message is near-identical to others sent previously') ?></h2>
 
     </div>
 </div>
@@ -19,24 +19,15 @@ if (!isset($values['skip_header'])) {
 <div class="row">
     <div class="large-8 large-centered columns" role="alert">
 
-        <p>Please read <a href="/about-qa#formletters">our stance on this issue</a>
-            to understand why sending identikit "copied and pasted" messages
-            is detrimental to your campaign.</p>
+        <p><?= _('Please read <a href="/about-qa#formletters">our stance on this issue</a> to understand why sending identikit "copied and pasted" messages is detrimental to your campaign.') ?></p>
 
-        <p>Sorry to be so harsh, but representatives have made it clear that the
-            receipt of such "spam" could mean they bin <strong>all</strong> messages
-            sent via WriteToThem.com.</p>
+        <p><?= _('Sorry to be so harsh, but representatives have made it clear that the receipt of such "spam" could mean they bin <strong>all</strong> messages sent via WriteToThem.com.') ?></p>
 
-        <p>Which would be A Bad Thing.</p>
+        <p><?= _('Which would be A Bad Thing.') ?></p>
 
-        <p>You might like to let the person who asked you to do this know that they’ve
-            potentially sabotaged their own campaign too. Point them to our <a
-            href="/about-guidelines">Guidelines for campaigning</a>.</p>
+        <p><?= _('You might like to let the person who asked you to do this know that they’ve potentially sabotaged their own campaign too. Point them to our <a href="/about-guidelines">Guidelines for campaigning</a>.') ?></p>
 
-        <p>If you wish to rewrite your message, use the "back" button in your browser and
-            write it in your own, original, words. It’s better to send a short message
-            in your own words, than a long, mainly copy-and-pasted message with a
-            few amendments.</p>
+        <p><?= _('If you wish to rewrite your message, use the "back" button in your browser and write it in your own, original, words. It’s better to send a short message in your own words, than a long, mainly copy-and-pasted message with a few amendments.') ?></p>
 
     </div>
 </div>
