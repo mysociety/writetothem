@@ -85,7 +85,7 @@ function msg_recipient_test($recipient) {
     return $result;
 }
 
-/* msg_write_messages IDLIST SENDER RECIPIENTLIST TEXT [COBRAND] [COCODE]
+/* msg_write_messages IDLIST SENDER RECIPIENTLIST TEXT LANGUAGE [COBRAND] [COCODE]
   [GROUP_ID] [NO_QUESTIONNAIRE]
 
   Write details of a set of messages for sending in one transaction.
@@ -100,6 +100,9 @@ function msg_recipient_test($recipient) {
 
   RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of
   the message; and TEXT is the text of the message, with line breaks. 
+
+  LANGUAGE is the two letter code for the language that the front end was using when
+  the message was sent
 
   COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE
   is a reference code for them.
@@ -119,7 +122,7 @@ function msg_recipient_test($recipient) {
   'error_text'- FYR::Error text or undef
 
   This function is called remotely and commits its changes. */
-function msg_write_messages($idlist, $sender, $recipientlist, $text, $cobrand = null, $cocode = null, $group_id = null, $no_questionnaire = null) {
+function msg_write_messages($idlist, $sender, $recipientlist, $text, $language, $cobrand = null, $cocode = null, $group_id = null, $no_questionnaire = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.write_messages', $params, 1);

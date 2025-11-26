@@ -461,6 +461,7 @@ function submitFaxes() {
                                      $message_array,
                                      $repid_list,
                                      $fyr_values['signedbody'],
+                                     LANGUAGE,
                                      $cobrand, $cocode, $grpid, $no_questionnaire);
 
     #check for error

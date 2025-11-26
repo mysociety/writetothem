@@ -47,7 +47,7 @@ while ($req->Accept() >= 0) {
                 return FYR::Queue::check_group_unused($_[0]);
             },
             'FYR.Queue.write_messages' => sub {
-                return FYR::Queue::write_messages($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]);
+                return FYR::Queue::write_messages($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]);
             },
             'FYR.Queue.recipient_test' => sub {
                 return FYR::Queue::recipient_test($_[0]);
