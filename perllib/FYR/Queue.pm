@@ -265,7 +265,7 @@ sub recipient_test ($) {
 
 
 
-=item write_messages IDLIST SENDER RECIPIENTLIST TEXT [COBRAND] [COCODE] [GROUP_ID] [NO_QUESTIONNAIRE]
+=item write_messages IDLIST SENDER RECIPIENTLIST TEXT LANGUAGE [COBRAND] [COCODE] [GROUP_ID] [NO_QUESTIONNAIRE]
 
 Write details of a set of messages for sending in one transaction.
 
@@ -279,6 +279,9 @@ them to this one.
 
 RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of the message;
 and TEXT is the text of the message, with line breaks.
+
+LANGUAGE is the two letter code for the language that the front end was using when
+the message was sent
 
 COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
 a reference code for them.
@@ -301,9 +304,9 @@ with the following keys
 This function is called remotely and commits its changes.
 
 =cut
-sub write_messages($$$$;$$$$){
+sub write_messages($$$$$;$$$$){
 
-    my ($msgidlist, $sender, $recipient_list, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
+    my ($msgidlist, $sender, $recipient_list, $text, $language, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
     my %ret = ();
     my $recipient_id;
     my $id;
@@ -398,7 +401,8 @@ sub write_messages($$$$;$$$$){
                         state,
                         created, laststatechange,
                         numactions, dispatched,
-                        cobrand, cocode, group_id, no_questionnaire
+                        cobrand, cocode, group_id, no_questionnaire,
+                        language
                     ) values (
                         ?,
                         ?, ?, ?, ?, ?, ?, ?,
@@ -409,7 +413,8 @@ sub write_messages($$$$;$$$$){
                         'new',
                         ?, ?,
                         0, null,
-                        ?, ?, ?, ?
+                        ?, ?, ?, ?,
+                        ?
                     )#, {},
                         $id,
                         (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
@@ -418,7 +423,9 @@ sub write_messages($$$$;$$$$){
                         $recipient->{via} ? 't' : 'f',
                         $text,
                         FYR::DB::Time(), FYR::DB::Time(),
-                        $cobrand, $cocode, $group_id, $no_questionnaire);
+                        $cobrand, $cocode, $group_id, $no_questionnaire,
+                        $language
+                    );
 
                 # Log creation of message but don't commit yet
                 my $logaddr = $sender->{address};
