@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($values['skip_header'])) {
-    $values['title'] = "Problem with your message";
+    $values['title'] = _("Problem with your message");
     $values['robots'] = 'noindex, nofollow';
     template_draw('header', $values);
 }
@@ -11,7 +11,7 @@ if (!isset($values['skip_header'])) {
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Too many similar messages have been sent</h2>
+        <h2><?= _('Too many similar messages have been sent') ?></h2>
 
     </div>
 </div>
@@ -19,17 +19,11 @@ if (!isset($values['skip_header'])) {
 <div class="row">
     <div class="large-8 large-centered columns" role="alert">
 
-        <p>Sorry, but we have to limit the number of similar messages sent to members
-            of the House of Lords, as they have told us they simply disregard
-            more than a handful messages of substantially identical content arriving
-            within a couple of days.</p>
+        <p><?= _('Sorry, but we have to limit the number of similar messages sent to members of the House of Lords, as they have told us they simply disregard more than a handful messages of substantially identical content arriving within a couple of days.') ?></p>
 
-        <p>If you wish to try again, please use the "back" button in your browser
-            and rewrite your message.</p>
+        <p><?= _('If you wish to try again, please use the "back" button in your browser and rewrite your message.') ?></p>
 
-        <p>Please read our <a
-            href="/about-lords">Frequently Asked Questions</a> for more information about
-            WriteToThem Lords.</p>
+        <p><?= _('Please read our <a href="/about-lords">Frequently Asked Questions</a> for more information about WriteToThem Lords.') ?></p>
 
     </div>
 </div>
