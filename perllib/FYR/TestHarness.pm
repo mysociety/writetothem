@@ -231,8 +231,8 @@ sub check_delivered_to_rep {
     my $content = $wth->email_get_containing(
         [ -and =>
             '%Subject: Letter from %'.name_n($who).'%',
-            '%To: "%'.$repname.'%"[\n\r\s]*<'.$email.'>%',
-            '%Reply-To: "'.name_n($who).'"[\n\r\s]*<'.$email.'>%',
+            '%To: "%'.$repname.'%"[\n\r ]*<'.$email.'>%',
+            '%Reply-To: "'.name_n($who).'"[\n\r ]*<'.$email.'>%',
             '%'.$extra_check.'%',
             '%Signed with an electronic signature%'
         ], 1);
