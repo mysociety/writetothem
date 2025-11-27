@@ -326,6 +326,13 @@ sub write_messages($$$$$;$$$$){
         $no_questionnaire = 'f';
     }
 
+    # set cobrand to language as then we can use all the cobrand mechanisms for templates
+    # and links which simplifies language support. this assumes we are never doing a multi
+    # language cobrand but that seems like a safe assumption
+    if (!$cobrand && $language) {
+        $cobrand = $language;
+    }
+
     try{
 
         # Check that sender contains appropriate information.
