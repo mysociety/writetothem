@@ -1,7 +1,9 @@
 <?php
 
-$values['title'] = "Using  WriteToThem to run a campaign";
+$values['title'] = _("Using  WriteToThem to run a campaign");
 template_draw('header', $values);
+
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +12,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>Running a campaign</h2>
+                <h2><?= _('Running a campaign') ?></h2>
             </div>
         </div>
 
@@ -18,47 +20,47 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>Are you part of a campaigning organisation? If you ever ask your supporters to write to politicians, you should know that WriteToThem can be integrated into your website simply, and for free.</p>
-<p>All your supporters need do is input their postcode and compose their message, then we send it off to the correct representative. </p>
-<p> There are several different options when it comes to using WriteToThem for your campaign. But before we get onto that, a quick word about how WriteToThem <i>can&rsquo;t</i> be used.</p>
+<?= $pd->text(_('Are you part of a campaigning organisation? If you ever ask your supporters to write to politicians, you should know that WriteToThem can be integrated into your website simply, and for free.
+
+All your supporters need do is input their postcode and compose their message, then we send it off to the correct representative. 
+
+There are several different options when it comes to using WriteToThem for your campaign. But before we get onto that, a quick word about how WriteToThem <i>can&rsquo;t</i> be used.
 
 <ul>
 <li> WriteToThem is <b>not a petitioning site</b>. If you need to collect signatures on a petition and then send it to an MP, you&rsquo;d be better off with one of the many free online petition websites. </li>
 
-<li>We <b>don’t give out MPs’ contact details</b>. Direct email and postal
-addresses for most MPs can be found on <a
-href="http://www.parliament.uk/mps-lords-and-offices/mps/">Parliament’s
-website</a> or via the <a
-href="http://everypolitician.org/">EveryPolitician</a> project.</a>.</li>
+<li>We <b>don’t give out MPs’ contact details</b>. Direct email and postal addresses for most MPs can be found on
+<a href="http://www.parliament.uk/mps-lords-and-offices/mps/">Parliament’s website</a> or via the
+<a href="http://everypolitician.org/">EveryPolitician</a> project.</a>.</li>
 
 <li>WriteToThem cannot be used for sending out <b>identically-worded messages</b> from multiple supporters - our system will detect them and block them from being sent.</li>
 </ul>
 
-<p>Before making the decision to use WriteToThem for your campaign, we&rsquo;d urge you to <a href="/about-guidelines">read our guidelines</a>, and make sure that it fits your needs.</p>
+Before making the decision to use WriteToThem for your campaign, we&rsquo;d urge you to <a href="/about-guidelines">read our guidelines</a>, and make sure that it fits your needs.
 
-<p>With that said, we&rsquo;re more than happy to provide a free service for campaign groups to encourage people to write to their representatives on a particular issue, and there are a number of ways that you can integrate the WriteToThem experience with your campaign.</p>
+With that said, we&rsquo;re more than happy to provide a free service for campaign groups to encourage people to write to their representatives on a particular issue, and there are a number of ways that you can integrate the WriteToThem experience with your campaign.')) ?>
 
-<H2>A simple link</H2>
-<p>You don&rsquo;t need any technical expertise to provide your supporters with the link to www.WriteToThem.com.</p>
+<H2><?= _('A simple link') ?></H2>
+<?= $pd->text(_('You don&rsquo;t need any technical expertise to provide your supporters with the link to www.WriteToThem.com.
 
-<p>This link can also be modified, so that WriteToThem only presents one specific type of representative: <a href="/about-linktous#types">read more here</a>.</p>
+This link can also be modified, so that WriteToThem only presents one specific type of representative: <a href="/about-linktous#types">read more here</a>.
 
-<p>If you are sending out newsletters, you can even pre-fill the name, email and address fields of your supporters&rsquo; letters to their representative: <a href="/about-linktous#prefill">read more about that here</a>.</p>
+If you are sending out newsletters, you can even pre-fill the name, email and address fields of your supporters&rsquo; letters to their representative: <a href="/about-linktous#prefill">read more about that here</a>.')) ?>
 
-<H2>A  fancier link</H2>
-<p><a href="/about-linktous#envelope">Here&rsquo;s how to put a nifty little box on your site</a>:  when your users enter their postcode, they&rsquo;ll be taken to WriteToThem to send a message to their MP.</p>
+<H2><?= _('A  fancier link') ?></H2>
+<p><?= _('<a href="/about-linktous#envelope">Here&rsquo;s how to put a nifty little box on your site</a>:  when your users enter their postcode, they&rsquo;ll be taken to WriteToThem to send a message to their MP.') ?></p>
 
-<H2>Wordpress widget</H2>
+<H2><?= _('Wordpress widget') ?></H2>
 
-<p>There’s a very simple way to include WriteToThem on a WordPress site: <a
+<p><?= _('There’s a very simple way to include WriteToThem on a WordPress site: <a
 href="https://wordpress.org/plugins/writetothem/">through this plug-in</a>.
-Installing it is just a matter of drag and drop.</p>
+Installing it is just a matter of drag and drop.') ?></p>
 
-<H2>Using our code to make your own web page</H2>
+<H2><?= _('Using our code to make your own web page') ?></H2>
 
-<p>For a more seamless experience, you might want to <a href="/about-branded">create a branded webpage for your campaign</a>, and there&rsquo;s code available to help you do that. </p>
+<?= $pd->text(_('For a more seamless experience, you might want to <a href="/about-branded">create a branded webpage for your campaign</a>, and there&rsquo;s code available to help you do that. 
 
-<p>You will need only a little technical knowledge to install it, and there are step-by-step instructions.</p>
+You will need only a little technical knowledge to install it, and there are step-by-step instructions.')) ?>
 
             </div>
 

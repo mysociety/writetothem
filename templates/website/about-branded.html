@@ -1,7 +1,8 @@
 <?php
 
-$values['title'] = "WriteToThem for your website";
+$values['title'] = _("WriteToThem for your website");
 template_draw('header', $values);
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +11,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>WriteToThem for your website</h2>
+                <h2><?= _('WriteToThem for your website') ?></h2>
             </div>
         </div>
 
@@ -18,22 +19,24 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>If you just want to link to WriteToThem to tell other people about it, that&rsquo;s <a href="https://www.writetothem.com/about-linktous">easy</a>. </p>
-<p>But maybe you want something shinier than that &ndash; you&rsquo;ve designed a brand new website for your campaign, you want people to write to their MPs to encourage them to support it, and you&rsquo;d absolutely love this to happen without people needing to leave your website at all.</p>
+<?= $pd->text(_('If you just want to link to WriteToThem to tell other people about it, that&rsquo;s <a href="https://www.writetothem.com/about-linktous">easy</a>. 
 
-<p>Great news! Someone has written a little application that allows you to do
+But maybe you want something shinier than that &ndash; you&rsquo;ve designed a brand new website for your campaign, you want people to write to their MPs to encourage them to support it, and you&rsquo;d absolutely love this to happen without people needing to leave your website at all.
+
+Great news! Someone has written a little application that allows you to do
 this, called WriteToMP. It can look exactly like the campaign&rsquo;s website
 &ndash; it uses WriteToThem to send the message without the user ever needing
-to know what&rsquo;s making that happen.</p>
+to know what&rsquo;s making that happen.
 
-<p>Before you start, make sure you read our <a href="/about-guidelines">guidelines for campaigners</a>. You must not give your users pre-written messages to send &ndash; they are against our conditions of use and we will block them. </p>
+Before you start, make sure you read our <a href="/about-guidelines">guidelines for campaigners</a>. You must not give your users pre-written messages to send &ndash; they are against our conditions of use and we will block them. 
 
-<p>The great thing about this application is that it allows you to suggest the points that you&rsquo;d like people to make when they write their message, but also stresses that they must write in their own words and explains why this is important.</p>
+The great thing about this application is that it allows you to suggest the points that you&rsquo;d like people to make when they write their message, but also stresses that they must write in their own words and explains why this is important.
 
-<p>Ready to have a go? <a href="https://github.com/robinhouston/write-to-mp">Here&rsquo;s where you can get the code</a>. </p>
-<p>Make sure you read all the instructions on that page &ndash; it should be fairly self-explanatory and you don&rsquo;t need very much technical knowledge to get it working.</p>
+Ready to have a go? <a href="https://github.com/robinhouston/write-to-mp">Here&rsquo;s where you can get the code</a>. 
 
-<p>If you have any problems installing the code, <a href="/about-contact">contact us</a> and we&rsquo;ll give you a hand.</p>
+Make sure you read all the instructions on that page &ndash; it should be fairly self-explanatory and you don&rsquo;t need very much technical knowledge to get it working.
+
+If you have any problems installing the code, <a href="/about-contact">contact us</a> and we&rsquo;ll give you a hand.')) ?>
 
             </div>
 

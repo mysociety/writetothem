@@ -3,27 +3,27 @@
 
 $links = array(
     'WriteToThem.com Help' => array(
-        '/about-qa' => 'Questions and answers',
-        '/about-constituency' => 'What postcode should I use?',
-        '/about-yourrep' => 'Who should I write to?',
-        '/about-lords' => 'House of Lords',
-        '/about-feedback' => 'Does it work?'
+        '/about-qa' => _('Questions and answers'),
+        '/about-constituency' => _('What postcode should I use?'),
+        '/about-yourrep' => _('Who should I write to?'),
+        '/about-lords' => _('House of Lords'),
+        '/about-feedback' => _('Does it work?')
     ),
     'Running a campaign' => array(
-        '/about-campaigns' => 'Overview',
-        '/about-guidelines' => 'Guidelines for campaigning',
-        '/about-linktous' => 'Link to us',
-        '/about-branded' => 'WriteToThem for your website'
+        '/about-campaigns' => _('Overview'),
+        '/about-guidelines' => _('Guidelines for campaigning'),
+        '/about-linktous' => _('Link to us'),
+        '/about-branded' => _('WriteToThem for your website')
     ),
-    'Who runs WriteToThem.com?' => array(
-        '/about-us' => 'About us',
-        '/about-copyright' => 'Copyright',
-        '/about-contact' => 'Contact us'
+    'Who runs WriteToThem.com?'=> array(
+        '/about-us' => _('About us'),
+        '/about-copyright' => _('Copyright'),
+        '/about-contact' => _('Contact us')
 ) );
 
 foreach ($links as $title => $arr) {
 
-    print '<h5>' . $title . "</h5>\n";
+    print '<h5>' . _('title') . "</h5>\n";
     print "<ul class=\"side-nav\">\n";
     foreach ($arr as $uri=>$text) {
         print '<li>';

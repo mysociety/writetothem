@@ -3,6 +3,8 @@
 $values['title'] = "What postcode should I use?";
 template_draw('header', $values);
 
+$pd = new Parsedown();
+
 ?>
 
 <div class="row">
@@ -10,7 +12,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>What postcode should I use?</h2>
+                <h2><?= _('What postcode should I use?') ?></h2>
             </div>
         </div>
 
@@ -18,102 +20,101 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>WriteToThem asks for your postcode so that it knows which representatives you should write to. </p>
-<p>As a general rule, if you are registered to vote, you should use the postcode of the address where you are registered. This ensures that you contact the people who represent you in your constituency.</p>
-<p>If you’re not registered to vote, are not sure what postcode to use, or you don&rsquo;t know your postcode, this page will help. </p>
+<?= $pd->text(_('WriteToThem asks for your postcode so that it knows which representatives you should write to. 
+
+As a general rule, if you are registered to vote, you should use the postcode of the address where you are registered. This ensures that you contact the people who represent you in your constituency.
+
+If you’re not registered to vote, are not sure what postcode to use, or you don&rsquo;t know your postcode, this page will help. ')) ?>
 
 <a name="top"></a>
 <ul class="side-nav">
-<li><a href="#lookup">I know my address but not my postcode</a></li>
-<li><a href="#services">I’m a member of the armed forces</a></li>
-<li><a href="#expat">I’m an expatriate</a></li>
-<li><a href="#bot">I live in a British Overseas Territory</a></li>
-<li><a href="#crownserv">I’m a Crown Servant</a></li>
-<li><a href="#loccon">I’m homeless or of no fixed abode</a></li>
-<li><a href="#loccon">I’m a prisoner</a></li>
-<li><a href="#loccon">I’m a long-stay hospital patient</a></li>
+<li><a href="#lookup"><?= _('I know my address but not my postcode') ?></a></li>
+<li><a href="#services"><?= _('I’m a member of the armed forces') ?></a></li>
+<li><a href="#expat"><?= _('I’m an expatriate') ?></a></li>
+<li><a href="#bot"><?= _('I live in a British Overseas Territory') ?></a></li>
+<li><a href="#crownserv"><?= _('I’m a Crown Servant') ?></a></li>
+<li><a href="#loccon"><?= _('I’m homeless or of no fixed abode') ?></a></li>
+<li><a href="#loccon"><?= _('I’m a prisoner') ?></a></li>
+<li><a href="#loccon"><?= _('I’m a long-stay hospital patient') ?></a></li>
 </ul>
 
 <dl>
 
-<dt><a name="lookup"></a>I know my address but not my postcode</dt>
+<dt><a name="lookup"></a><?= _('I know my address but not my postcode') ?></dt>
 
-<dd><p>The Royal Mail website has a handy <a
-href="https://www.royalmail.com/find-a-postcode">Postcode Finder</a> - put in
-any UK address and it will tell you the postcode.</p>
-</dd>
+<dd><p><?= _('The Royal Mail website has a handy
+    <a href="https://www.royalmail.com/find-a-postcode">Postcode Finder</a> - put in
+any UK address and it will tell you the postcode.') ?></p></dd>
 
-<dt><a name="services"></a>I’m a member of the armed forces</dt>
+<dt><a name="services"></a><?= _('I’m a member of the armed forces') ?></dt>
 
-<dd><p><strong>How do I register to vote?</strong> As a member of the armed
-services, you are entitled to representation as a <strong>Service
-Voter</strong>. You can <a
-href="http://www.aboutmyvote.co.uk/frequently-asked-questions/service-voters">read
-more about how to register to vote here</a>.</p>
+<dd><?= $pd->text(_('<strong>How do I register to vote?</strong> As a member of the armed
+services, you are entitled to representation as a <strong>Service Voter</strong>. You can
+<a href="http://www.aboutmyvote.co.uk/frequently-asked-questions/service-voters">read
+more about how to register to vote here</a>.
 
-<p>When registering, you are asked for a UK address; you will be registered to vote in the constituency where that address lies.</p>
-<p><strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of your UK address on WriteToThem. This will ensure that you are contacting the representatives for your constituency.  </p>
+When registering, you are asked for a UK address; you will be registered to vote in the constituency where that address lies.
 
-<p class="toplink"><a href="#top">top</a></p> </dd>
-
-<dt><a name="expat"></a>I’m an expatriate</dt>
-
-<dd><p><strong>How do I register to vote?</strong> Expatriates are entitled to
-representation under certain circumstances: there is <a
-href="https://www.yourvotematters.co.uk/can-i-vote/overseas">more
-information for overseas voters here</a>.</p>
-
-<p><strong>Which postcode do I use on WriteToThem?</strong> To use WriteToThem, you should input the postcode of the address where you were last resident in the UK.</p>
-</p>
+<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of your UK address on WriteToThem. This will ensure that you are contacting the representatives for your constituency.')) ?>
 
 <p class="toplink"><a href="#top">top</a></p> </dd>
 
-<dt><a name="bot"></a>I live in a British Overseas Territory</dt>
+<dt><a name="expat"></a><?= _('I’m an expatriate') ?></dt>
 
-<dd><p>WriteToThem currently only holds contact details for representatives within the UK.</p>
-<p>If you live in a British Overseas Territory or Crown Dependency, such
-as the Falkland Islands or British Antarctic Territory, please <a href="about-elsewhere">read this page</a> to find out how to contact your representatives.</p>
+<dd><?= $pd->text(_('<strong>How do I register to vote?</strong> Expatriates are entitled to
+representation under certain circumstances: there is
+<a href="https://www.yourvotematters.co.uk/can-i-vote/overseas">more
+information for overseas voters here</a>.
+
+<strong>Which postcode do I use on WriteToThem?</strong> To use WriteToThem, you should input the postcode of the address where you were last resident in the UK.')) ?>
 
 <p class="toplink"><a href="#top">top</a></p> </dd>
 
-<dt><a name="crownserv"></a>I’m a Crown Servant</dt>
+<dt><a name="bot"></a><?= _('I live in a British Overseas Territory') ?></dt>
 
-<dd><p><strong>How do I register to vote?</strong> Crown Servants and employees
-of the British Council, and their spouses, are entitled to representation. To
-register, fill out the <a
-href="https://www.gov.uk/register-to-vote-crown-servants-british-council-employees">electoral
-registration form for Crown Servants and British Council employees</a>.</p>
-<p><strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of
+<dd><?= $pd->text(_('WriteToThem currently only holds contact details for representatives within the UK.
+
+If you live in a British Overseas Territory or Crown Dependency, such
+as the Falkland Islands or British Antarctic Territory, please <a href="about-elsewhere">read this page</a> to find out how to contact your representatives.')) ?>
+
+<p class="toplink"><a href="#top">top</a></p> </dd>
+
+<dt><a name="crownserv"></a><?= _('I’m a Crown Servant') ?></dt>
+
+<dd><?= $pd->text(_('<strong>How do I register to vote?</strong> Crown Servants and employees
+of the British Council, and their spouses, are entitled to representation. To register, fill out the
+<a href="https://www.gov.uk/register-to-vote-crown-servants-british-council-employees">electoral
+registration form for Crown Servants and British Council employees</a>.
+
+<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of
 the address where you would be living if you were in the UK, or your last
-registered UK address.
-</p>
+registered UK address.')) ?>
 
 <p class="toplink"><a href="#top">top</a></p> </dd>
 
-<dt><a name="loccon"></a>I’m homeless, of no fixed abode, a prisoner or a long-stay hospital patient</dt>
+<dt><a name="loccon"></a><?= _('I’m homeless, of no fixed abode, a prisoner or a long-stay hospital patient') ?></dt>
 
-<dd><p><strong>How do I register to vote?</strong> You can register at any address "where you would be living if it were not for your current situation, or an address where you have lived in the past. If you are homeless, you can give details of where you spend a substantial part of your time."</p>
+<dd><?= $pd->text(_('<strong>How do I register to vote?</strong> You can register at any address "where you would be living if it were not for your current situation, or an address where you have lived in the past. If you are homeless, you can give details of where you spend a substantial part of your time."
 
-<p>You will need to fill out a "Declaration of Local Connection", which you can
-get from your local electoral registration office; read more at <a
-href="http://www.aboutmyvote.co.uk/register-to-vote/registering-to-vote-with-no-fixed-address">aboutmyvote.co.uk</a>.
-</p>
+You will need to fill out a "Declaration of Local Connection", which you can
+get from your local electoral registration office; read more at <a href="http://www.aboutmyvote.co.uk/register-to-vote/registering-to-vote-with-no-fixed-address">aboutmyvote.co.uk</a>.
 
-<p><strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of the address as described above. This ensures that your message reaches the people who represent you.</p>
-<p>It may be important that any postal response from your representative goes to the address where you are now, so that it reaches you. In this case, you should note that in the body of your message.</p>
-</p>
+
+<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of the address as described above. This ensures that your message reaches the people who represent you.
+
+It may be important that any postal response from your representative goes to the address where you are now, so that it reaches you. In this case, you should note that in the body of your message.')) ?>
 
 <p class="toplink"><a href="#top">top</a></p> </dd>
 
 </dl>
 
-<p>(This page has been produced with assistance and advice from the
+<?= $pd->text(_('This page has been produced with assistance and advice from the
 <a href="https://www.electoralcommission.org.uk/">Electoral Commission</a>,
 and their
 <a href="http://www.aboutmyvote.co.uk/">aboutmyvote web site</a>. Please note
 that in Northern Ireland electoral registration is the responsibility of the
 <a href="http://www.electoralofficeni.gov.uk/">Electoral Office for Northern
-Ireland</a> who can give more specific advice.)</p>
+Ireland</a> who can give more specific advice.)')) ?>
 
             </div>
 

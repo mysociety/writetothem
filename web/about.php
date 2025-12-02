@@ -12,6 +12,7 @@
 
 require_once "../phplib/fyr.php";
 require_once "../phplib/emailform.php";
+require_once "../vendor/Parsedown.php";
 
 /* 
  * This page is called through a rewrite mechanism which maps

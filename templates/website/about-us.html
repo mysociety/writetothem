@@ -1,7 +1,10 @@
 <?php
 
-$values['title'] = "Who are you, and why are you doing this?";
+$values['title'] = _("Who are you, and why are you doing this?");
 template_draw('header', $values);
+
+
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +13,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>Who are you, and why are you doing this?</h2>
+                <h2><?= _('Who are you, and why are you doing this?') ?></h2>
             </div>
         </div>
 
@@ -18,51 +21,51 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>WriteToThem makes it easy for anyone to contact their representatives, even if they don’t know who they are. </p>
+<?= $pd->text(_('WriteToThem makes it easy for anyone to contact their representatives, even if they don’t know who they are. 
 
-<p>If you can’t name your MP, that doesn’t make you unusual. 78% of the UK
-population cannot name their representative in Parliament, according to <a
-href="https://www.hansardsociety.org.uk/projects/audit-of-political-engagement">the 2013
-report from the Hansard Society</a> (PDF).</p>
+If you can’t name your MP, that doesn’t make you unusual. 78% of the UK
+population cannot name their representative in Parliament, according to
+<a href="https://www.hansardsociety.org.uk/projects/audit-of-political-engagement">the 2013
+report from the Hansard Society</a> (PDF).
 
-<p>That’s the reason this website exists - but if you’re interested to know a bit more about the whys and wherefores, read on.</p>
+That’s the reason this website exists - but if you’re interested to know a bit more about the whys and wherefores, read on.
 
 <H2>Our history</H2>
 
-<p>The first version of WriteToThem was built in 2004, by a group of volunteers who thought that it should be easier for people to contact their MPs. Does that seem like a long time ago? It’ll seem even longer when you find out that it was, at that point, called FaxYourMP.com.</p>
+The first version of WriteToThem was built in 2004, by a group of volunteers who thought that it should be easier for people to contact their MPs. Does that seem like a long time ago? It’ll seem even longer when you find out that it was, at that point, called FaxYourMP.com.
 
-<p>That group of volunteers later grew into <a
-href="https://www.mysociety.org/">mySociety</a>, the project of a <a
-href="https://www.mysociety.org/about/structure-and-governance/">registered
-charity</a>. </p>
+That group of volunteers later grew into
+<a href="https://www.mysociety.org/">mySociety</a>, the project of a
+<a href="https://www.mysociety.org/about/structure-and-governance/">registered
+charity</a>. 
 
-<p>mySociety&rsquo;s mission is to build internet projects which give people simple,
-tangible benefits in the civic and community aspects of their lives. </p>
+mySociety&rsquo;s mission is to build internet projects which give people simple,
+tangible benefits in the civic and community aspects of their lives. 
 
-<p>Our first project was to take FaxYourMP and rebuild it so that it was bigger and better. As email became more prevalent, we adapted the site to work almost entirely via that form of communication. </p>
+Our first project was to take FaxYourMP and rebuild it so that it was bigger and better. As email became more prevalent, we adapted the site to work almost entirely via that form of communication. 
 
-<p>We’ve kept on working, adding more types of representative, improving the design - but at its core, WriteToThem has the same mission as its predecessor, FaxYourMP: we just want to lower the barrier to taking the first step, and writing to the people in power about the issues that matter to you.</p>
+We’ve kept on working, adding more types of representative, improving the design - but at its core, WriteToThem has the same mission as its predecessor, FaxYourMP: we just want to lower the barrier to taking the first step, and writing to the people in power about the issues that matter to you.
 
 <H2>Funding</H2>
 
-<p>We had funding for the initial work from the <a
-href="http://www.odpm.gov.uk">Office of the Deputy Prime Minister</a>&rsquo;s
-e-innovations fund, in partnership with <a
-href="https://www.westsussex.gov.uk">West Sussex County Council</a>. Many thanks
-to them.</p>
+We had funding for the initial work from the
+<a href="http://www.odpm.gov.uk">Office of the Deputy Prime Minister</a>&rsquo;s
+e-innovations fund, in partnership with
+<a href="https://www.westsussex.gov.uk">West Sussex County Council</a>. Many thanks
+to them.
 
-<p>
+
 <a href="http://www.goveval.com/"><img align="right" src="images/ge.png" alt="GovEval" border="0"></a>
 We also receive assistance from <a href="http://www.goveval.com/">GovEval</a>,
 who have kindly made available their database of local councillors; and from
 <a href="https://www.mythic-beasts.com/">Mythic Beasts</a>, who host this and
 other mySociety websites.
-</p>
 
-<p>Like many mySociety projects, <b>WriteToThem</b> combines the work of some
+
+Like many mySociety projects, <b>WriteToThem</b> combines the work of some
 core developers, who are paid to keep working even when everyone else gets
-bored, and volunteers. </p>
-<p>Here is a list of people who have helped build, maintain and support FaxYourMP or WriteToThem:</p>
+bored, and volunteers. 
+Here is a list of people who have helped build, maintain and support FaxYourMP or WriteToThem:')) ?>
 
 <ul>
 <li>Owen Blacker</li>

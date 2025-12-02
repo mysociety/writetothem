@@ -20,11 +20,11 @@ fyr_rate_limit(array());
 
 $token = get_http_var('token');
 if (!$token) {
-    template_show_error("The token was missing.");
+    template_show_error(_("The token was missing."));
 }
 $answer = get_http_var('answer');
 if ($answer != "yes" && $answer != "no") {
-    template_show_error("The answer type was missing.");
+    template_show_error(_("The answer type was missing."));
 }
 
 // 1 is the firsttime question

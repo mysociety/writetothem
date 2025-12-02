@@ -9,20 +9,20 @@
  */
 
 $attend_prep = array(
-    'LBO' => "on the",
-    'LAS' => "on the",
-    'CTY' => "on",
-    'DIS' => "on",
-    'UTA' => "on",
-    'MTD' => "on",
-    'COI' => "on",
-    'LGD' => "on",
-    'SPA' => "in the",
-    'WAS' => "in the",
-    'NIA' => "on the",
-    'WMP' => "in the",
-    'HOL' => "in the",
-    'EUP' => "in the",
+    'LBO' => _("on the"),
+    'LAS' => _("on the"),
+    'CTY' => _("on"),
+    'DIS' => _("on"),
+    'UTA' => _("on"),
+    'MTD' => _("on"),
+    'COI' => _("on"),
+    'LGD' => _("on"),
+    'SPA' => _("in the"),
+    'WAS' => _("in the"),
+    'NIA' => _("on the"),
+    'WMP' => _("in the"),
+    'HOL' => _("in the"),
+    'EUP' => _("in the"),
 );
 
 require_once "../phplib/fyr.php";
@@ -66,12 +66,12 @@ foreach ($va_display_order as $va_types) {
     }
 
     if ($rep_count > 1) {
-        $heading = "Your {$va_areas[0]['rep_name_plural']}";
+        $heading = sprintf(_("Your %s"), $va_areas[0]['rep_name_plural']);
     } else {
-        $heading = "Your {$va_areas[0]['rep_name']}";
+        $heading = sprintf(_("Your %s"), $va_areas[0]['rep_name']);
         if (count($representatives[0]) && $representatives_info[$representatives[0][0]]['name'] == 'Vacant Seat') {
-            $text = "<p>There’s an upcoming election.  We’ll be adding your new
-                    representative as soon as we can after the election.</p>";
+            $text = _("<p>There’s an upcoming election.  We’ll be adding your new
+                    representative as soon as we can after the election.</p>");
             $col_after = '';
             $heading = "<strike>$heading</strike>";
         }
@@ -101,9 +101,9 @@ if (isset($_GET['t'])) {
 // Inject extra content for Lords
 // A/B Testing Hack!
 if ($template == 'who' && !$area_types) {
-    array_push($fyr_headings, 'House of Lords');
-    array_push($fyr_blurbs, '<p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p>');
-    array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul>');
+    array_push($fyr_headings, _('House of Lords'));
+    array_push($fyr_blurbs, '<p>' . _('Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).') . '</p>');
+    array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">' . _('Write to a Lord') . '</a></li></ul>');
     array_push($fyr_more, '');
 }
 
@@ -230,10 +230,10 @@ function type_area($voting_areas, $va_types) {
     $va_area = array();
     foreach ($va_types as $vat) {
         $v = $voting_areas[$vat];
-        $v['rep_name'] = $va_rep_name[$vat];
-        $v['rep_name_long'] = $va_rep_name_long[$vat];
-        $v['rep_name_plural'] = $va_rep_name_plural[$vat];
-        $v['rep_name_long_plural'] = $va_rep_name_long_plural[$vat];
+        $v['rep_name'] = _($va_rep_name[$vat]);
+        $v['rep_name_long'] = _($va_rep_name_long[$vat]);
+        $v['rep_name_plural'] = _($va_rep_name_plural[$vat]);
+        $v['rep_name_long_plural'] = _($va_rep_name_long_plural[$vat]);
         $va_area[] = $v;
         // The voting area is the ward/division. e.g. West Chesterton Electoral Division
         debug("FRONTEND", "voting area is type $vat id $v[id]");
@@ -254,7 +254,7 @@ function elected_body_area($voting_areas, $va_types) {
         $eb_area = $voting_areas[$eb_type];
     }
     debug("FRONTEND", "electoral body is type $eb_type id $eb_area[id]");
-    $eb_area['description'] = $va_responsibility_description[$eb_type];
+    $eb_area['description'] = _($va_responsibility_description[$eb_type]);
     return $eb_area;
 }
 
@@ -320,15 +320,15 @@ function col_blurb($va_types, $va_area, $eb_area, $main_rep_count, $rep_count) {
     global $va_salaried, $attend_prep;
     $col_blurb = "<p>";
     if ($main_rep_count && $rep_count > 1) {
-        $col_blurb .= "Your $rep_count ${va_area['name']} ${va_area['rep_name_plural']} represent you";
+        $col_blurb .= sprintf(_("Your %d %s %s represent you"), $rep_count,  $va_area['name'], $va_area['rep_name_plural']);
     } else {
-        $col_blurb .= "Your ${va_area['name']} ${va_area['rep_name']} represents you";
+        $col_blurb .= sprintf(_("Your %s %s represents you"), $va_area['name'], $va_area['rep_name']);
     }
-    $col_blurb .= ' ' . $attend_prep[$eb_area['type']] . ' ';
-    $col_blurb .= "${eb_area['name']}.  ${eb_area['description']}";
+    $col_blurb .= ' ' . _($attend_prep[$eb_area['type']]) . ' ';
+    $col_blurb .= _($eb_area['name']) . ".  ${eb_area['description']}";
     if (count($va_types)==1) {
         if (!$va_salaried[$va_types[0]] && $va_area['country']!='S')
-            $col_blurb .= " Most ${va_area['rep_name_long_plural']} are not paid a salary, but get a basic allowance for the work they do.";
+            $col_blurb .= sprintf(_(" Most %s are not paid a salary, but get a basic allowance for the work they do."), $va_area['rep_name_long_plural']);
     }
     $col_blurb .= "</p>";
     return $col_blurb;
@@ -394,7 +394,7 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count)
 
     if (in_array($va_type, $va_council_child_types) && cobrand_display_councillor_correction_link($cobrand)) {
         // $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
-        $col_after .= '<p><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></p>';
+        $col_after .= '<p><a href="corrections?id='.$va_area['id'].'">' . _('Correct a mistake in this list') . '</a></p>';
     }
 
     return array($text, $col_after);
@@ -416,9 +416,9 @@ function display_reps_two_types($va_types, $va_area, $representatives, $rep_coun
     if ($va_types[1] == 'LAE') {
         $text .= "$rep_counts[1] London Assembly list members also represent you";
     } elseif ($rep_count && $rep_counts[1] > 1) {
-        $text .= "$rep_counts[1] {$va_area[1]['name']} {$va_area[1]['type_name']} {$va_area[1]['rep_name_plural']} also represent you";
+        $text .= sprintf(_("%d %s %s %s also represent you"), $rep_counts[1], $va_area[1]['name'], $va_area[1]['type_name'], $va_area[1]['rep_name_plural']);
     } else {
-        $text .= "One {$va_area[1]['name']} {$va_area[1]['type_name']} {$va_area[1]['rep_name']} also represents you";
+        $text .= sprintf(_("One %s %s %s also represents you"), $va_area[1]['name'], $va_area[1]['type_name'], $va_area[1]['rep_name']);
     }
     if ($va_types[1] == 'SPE') {
         $text .= '; if you are writing on a constituency matter or similar <strong>local or personal problem</strong>, please
@@ -457,16 +457,16 @@ function extra_mp_text($rep_count, $va_area, $representatives) {
     $text = '';
     if ($rep_count) {
         $name = $representatives_info[$representatives[0]]['name'];
-        $text = '<p><a href="https://www.theyworkforyou.com/mp/?c=' . urlencode($va_area['name']) . '">See ' . $name . '&rsquo;s voting record and speeches at TheyWorkForYou</a></p>';
+        $text = '<p><a href="https://www.theyworkforyou.com/mp/?c=' . urlencode($va_area['name']) . '">' . sprintf(_('See %s&rsquo;s voting record and speeches at TheyWorkForYou'), $name) . '</a></p>';
 
         // A/B Testing Hack!
         if (isset($_GET['t']) && $_GET['t'] == 'who-b' && !$area_types) {
 
             $text .= '</div>';
-            $text .= '<h3 class="rep-heading lords v-b">House of Lords</h3>';
-            $text .= '<div class="rep-blurb"><p>Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).</p></div>';
-            $text .= '<div class="rep-list v-b"><ul class="rep-list lords"><li><a href="/lords">Write to a Lord</a></li></ul></div>';
-            $text .= '<div class="rep-more">';
+            $text .= '<h3 class="rep-heading lords v-b">' . _('House of Lords') . '</h3>';
+            $text .= '<div class="rep-blurb"><p>' . _('Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).') . '</p></div>';
+            $text .= '<div class="rep-list v-b"><ul class="rep-list lords"><li><a href="/lords">' . _('Write to a Lord') . '</a></li></ul></div>';
+            $text .= _('<div class="rep-more">');
         }
     }
     return $text;
@@ -481,28 +481,28 @@ function check_area_status( $va_alone ) {
         return false;
     }
     if ($status == "boundary_changes" || $parent_status == "boundary_changes") {
-        $text = "<p>There have been boundary changes at the last election that
+        $text = _("<p>There have been boundary changes at the last election that
         means we can’t yet say who your representative is. We hope to get our
         boundary database updated as soon as we can, but at the moment we have no
-        definite time of completion.</p>";
+        definite time of completion.</p>");
     } elseif ($status == "recent_election" || $parent_status == "recent_election") {
-        $text = "<p>Due to the recent election, we don’t yet have details for
+        $text = _("<p>Due to the recent election, we don’t yet have details for
         this representative. We generally rely on data from external sources,
         and will be updating as soon as we can, but at the moment we have no
-        definite time of completion.</p>";
+        definite time of completion.</p>");
     } elseif ($status == "pending_election" || $parent_status == "pending_election") {
         /* Only around election time
         if ($va_alone['type'] == 'WMC') {
-            $text = "<p>Parliament has been dissolved, and so there are no MPs
+            $text = _("<p>Parliament has been dissolved, and so there are no MPs
 until after the upcoming election. We’ll be adding your new representative as
 soon as we can after the election. For more information, see
-<a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>";
+<a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
         } else { */
-            $text = "<p>There’s an upcoming election.  We’ll be adding your new
-                    representative as soon as we can after the election.</p>";
+            $text = _("<p>There’s an upcoming election.  We’ll be adding your new
+                    representative as soon as we can after the election.</p>");
         /* } */
     } else {
-        $text = "Representative details are not available for an unknown reason.";
+        $text = _("Representative details are not available for an unknown reason.");
     }
     return $text;
 }

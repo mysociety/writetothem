@@ -104,8 +104,8 @@ function fyr_display_error($num, $message, $file, $line) {
         template_show_error("<strong>$message</strong> in $file:$line");
     } else {
         /* Message will be in log file, don't display it for cleanliness */
-        template_show_error("Please try again later, or <a
-            href='/about-contact'>contact us</a> to let us know.");
+        template_show_error(_("Please try again later, or <a
+            href='/about-contact'>contact us</a> to let us know."));
     }
 }
 
@@ -165,7 +165,7 @@ function fyr_rate_limit($important_vars) {
     if (isset($ret)) {
         list($rule, $error_message, $title) = $ret;
         if ($error_message == "") {
-            $error_message = "Sorry, we are experiencing technical difficulties.  Please try again later.";
+            $error_message = _("Sorry, we are experiencing technical difficulties.  Please try again later.");
         }
         $error_message .= "\n<!-- ratty the rate limiter rule #$rule limit exceeded -->\n";
         template_show_error($error_message);
@@ -303,16 +303,16 @@ function fyr_describe_area_type_list($area_types) {
 function fyr_breadcrumbs($num, $type = 'default') {
     if ($type == 'default') {
         $steps = array(
-                    'Enter postcode',
-                    'Choose representative',
-                    'Write message',
-                    'Send message'
+                    _('Enter postcode'),
+                    _('Choose representative'),
+                    _('Write message'),
+                    _('Send message')
                 );
     } elseif ($type == 'lords') {
         $steps = array(
-                    'Choose a Lord',
-                    'Write message',
-                    'Send message'
+                    _('Choose a Lord'),
+                    _('Write message'),
+                    _('Send message')
                 );
     }
     /* Ideally we'd like the numbers to appear as a result of this being a

@@ -22,8 +22,8 @@ template_draw('header', $values);
 
         <div class="hero-text-container">
             <div class="card card-lg">
-                <h2>Thanks for your help</h2>
-                <p class="message">Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas.</p>
+                <h2><?= _('Thanks for your help') ?></h2>
+                <p class="message"><?= _("Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas.") ?></p>
             </div>
 
             <br><br><br>
@@ -34,5 +34,5 @@ template_draw('header', $values);
 </div>
 
 <?php
-$values['credit'] = '<a href="https://www.freeimages.com/photographer/hisks-57682">Photograph by Krzysztof Szkurlatowski</a>';
+$values['credit'] = '<a href="https://www.freeimages.com/photographer/hisks-57682">' . _('Photograph by Krzysztof Szkurlatowski') . '</a>';
 template_draw('footer', $values);

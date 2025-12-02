@@ -39,7 +39,7 @@ if (isset($values['cobrand']))
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?=OPTION_BASE_URL?>">
     <meta property="og:image" content="<?=OPTION_BASE_URL?>/static/img/favicon-256.png">
-    <meta property="og:description" content="WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives.">
+    <meta property="og:description" content="<?= _('WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives.') ?>">
 
     <script src="/static/js/vendor/custom.modernizr.js"></script>
     <script>
@@ -135,7 +135,7 @@ if (isset($values['cobrand']))
             <div class="row banner-top">
                 <div class="large-10 large-centered columns">
                     <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
-                    <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
+                    <a href="/about-qa" target="_blank" class="wtt-help" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
                 </div>
             </div>
           <?php endif; ?>

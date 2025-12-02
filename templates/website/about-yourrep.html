@@ -1,7 +1,8 @@
 <?php
 
-$values['title'] = "Who should I write to?";
+$values['title'] = _("Who should I write to?");
 template_draw('header', $values);
+$pd = new Parsedown();
 
 ?>
 
@@ -10,7 +11,7 @@ template_draw('header', $values);
 
         <div class="row">
             <div class="large-12 columns">
-                <h2>Who should I write to?</h2>
+                <h2><?= _('Who should I write to?') ?></h2>
             </div>
         </div>
 
@@ -18,30 +19,31 @@ template_draw('header', $values);
 
             <div class="large-8 columns">
 
-<p>As a UK citizen, you have many representatives, at several levels of government. </p>
-<p>Each of them has a different set of responsibilities, and it is worth making sure that your message goes to the person who is best placed to help you.</p>
+<?= $pd->text(_('As a UK citizen, you have many representatives, at several levels of government.
+
+Each of them has a different set of responsibilities, and it is worth making sure that your message goes to the person who is best placed to help you.')) ?>
 
 <ul class="side-nav">
-<li><a href="#mp">When should I contact my MP?</a></li>
-<li><a href="#councillor">When should I contact a councillor?</a></li>
-<li><a href="#msp">When should I contact an MSP?</a></li>
-<li><a href="#mla">When should I contact an MLA?</a></li>
-<li><a href="#welsh">When should I contact a Senedd Member?</a></li>
-<li><a href="#gla">When should I contact a Greater London Assembly Member?</a></li>
+<li><a href="#mp"><?= _('When should I contact my MP?') ?></a></li>
+<li><a href="#councillor"><?= _('When should I contact a councillor?') ?></a></li>
+<li><a href="#msp"><?= _('When should I contact an MSP?') ?></a></li>
+<li><a href="#mla"><?= _('When should I contact an MLA?') ?></a></li>
+<li><a href="#welsh"><?= _('When should I contact a Senedd Member?') ?></a></li>
+<li><a href="#gla"><?= _('When should I contact a Greater London Assembly Member?') ?></a></li>
 </ul>
 
 <A NAME="mp"></A>
 <?php include('yourrep/mp.html') ?>
 
 <A NAME="councillor"></A>
-<h2>When should I contact a councillor?</h2>
+<h2><?= _('When should I contact a councillor?') ?></h2>
 
-<p>Councillors have differing responsibilities depending on which council you
+<?= $pd->text(_('Councillors have differing responsibilities depending on which council you
 live in. Because of these variations we are only able to give you
-‘rule-of-thumb’ guidance here.</p>
+‘rule-of-thumb’ guidance here.
 
-<p>Firstly, in England you may have two levels of council: County and District, in
-which case their responsibilities are divided as follows:</p>
+Firstly, in England you may have two levels of council: County and District, in
+which case their responsibilities are divided as follows:
 
 <ul>
 <li><strong>District Councillors:</strong> If you have one or more District Councillor,
@@ -53,12 +55,12 @@ tend to deal with <strong>education, transport and roads, fire and social servic
 plus libraries</strong>.</li>
 </ul>
 
-<p>Otherwise, you will have only one council, whose responsibilities differ
+Otherwise, you will have only one council, whose responsibilities differ
 depending on exactly where you live. We describe these on the page which lists
-your councillors.</p>
+your councillors.
 
-<p>Don’t worry if you’re not absolutely sure who to pick! Whoever you write to
-should forward your letter to the most appropriate person, if you haven’t got it quite right.</p>
+Don’t worry if you’re not absolutely sure who to pick! Whoever you write to
+should forward your letter to the most appropriate person, if you haven’t got it quite right.')) ?>
 
 <A NAME="msp"></A>
 <?php include('yourrep/msp.html') ?>
