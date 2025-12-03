@@ -39,6 +39,7 @@ use FindBin;
 use Getopt::Long;
 use IO::Handle;
 use Test::Harness;
+use Encode qw(encode);
 
 use mySociety::EmailUtil;
 use mySociety::TempFiles;
@@ -93,7 +94,7 @@ our $admin_auth_user = mySociety::Config::get('ADMIN_AUTH_USER');
 our $admin_auth_password = mySociety::Config::get('ADMIN_AUTH_PASSWORD');
 
 my $CAMBRIDGE_MP = 'Daniel Zeichner';
-my $WELSH_MS = 'Rt. Hon. Elin Jones';
+my $WELSH_MS = 'Sarah Murphy';
 
 our @rep_names = ('Anthony Martinelli', 'Katie Porrer', 'Tim Bick');
 my $mep_rep_name = 'Katie Porrer';
@@ -251,7 +252,7 @@ sub do_send_welsh_message {
     $wth->browser_check_contents('Ysgrifennwch at eich');
 
     send_message_to_rep(90, 
-        'SA431JA', # Cardigan Castle
+        'CF314AF', # Bridgend Town Hall
         { 
             writer_address1 => '23 Welsh Street',
             writer_town => 'Someplace',
@@ -278,7 +279,7 @@ sub do_send_welsh_message {
         [ -and =>
             '%To: "'.name_n(90).'" <'.email_n(90).'>%',
             '%Subject: Did your MS reply to your letter?%',
-            "%Dau wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%"
+            encode("UTF-8", "%Dau wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%")
         ]);
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
@@ -290,7 +291,7 @@ sub do_send_welsh_message {
         [ -and =>
             '%To: "'.name_n(90).'" <'.email_n(90).'>%',
             '%Subject: Did your MS reply to your letter?%',
-            "%Dair wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%"
+            encode("UTF-8", "%Dair wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%")
         ]);
 
     # Get links from questionnaire email
