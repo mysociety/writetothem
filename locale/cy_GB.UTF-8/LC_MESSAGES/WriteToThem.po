@@ -49,11 +49,11 @@ msgstr "Yn anffodus, ni allem anfon eich neges at %s"
 
 #: perllib/FYR/Queue.pm:1445
 msgid "Three"
-msgstr ""
+msgstr "Dair"
 
 #: perllib/FYR/Queue.pm:1445
 msgid "Two"
-msgstr ""
+msgstr "Dau"
 
 #: perllib/FYR/Queue.pm:1486
 #, php-format
