@@ -1438,7 +1438,7 @@ sub make_questionnaire_email ($;$) {
         no_url => $no_url,
         unsatisfactory_url => $unsatisfactory_url,
         not_expected_url => $not_expected_url,
-        weeks_ago => $reminder ? 'Three' : 'Two',
+        weeks_ago => $reminder ? _('Three') : _('Two'),
         their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
     };
     my $params;

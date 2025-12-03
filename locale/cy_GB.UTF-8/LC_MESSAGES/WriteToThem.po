@@ -1504,11 +1504,11 @@ msgstr ""
 
 #: perllib/FYR/Queue.pm:1449
 msgid "Three"
-msgstr ""
+msgstr "Dair"
 
 #: perllib/FYR/Queue.pm:1449
 msgid "Two"
-msgstr ""
+msgstr "Dau"
 
 #. Message will be in log file, don't display it for cleanliness
 #: phplib/fyr.php:107
