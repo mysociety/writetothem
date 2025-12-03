@@ -290,7 +290,7 @@ sub do_send_welsh_message {
         [ -and =>
             '%To: "'.name_n(90).'" <'.email_n(90).'>%',
             '%Subject: Did your MS reply to your letter?%',
-            "%Three weeks ago we sent your letter to $WELSH_MS MS%"
+            "%Dair wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%"
         ]);
 
     # Get links from questionnaire email
