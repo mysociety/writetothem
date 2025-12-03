@@ -16,7 +16,7 @@ require_once "../phplib/queue.php";
 
 require_once "../commonlib/phplib/mapit.php";
 require_once "../commonlib/phplib/dadem.php";
-require_once "../commonlib/phplib/votingarea.php";
+require_once "../phplib/votingarea.php";
 require_once "../commonlib/phplib/utility.php";
 
 // Get all fyr_values

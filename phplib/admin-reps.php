@@ -10,7 +10,7 @@
 $dir = dirname(__FILE__);
 require_once $dir . "/../commonlib/phplib/dadem.php";
 require_once $dir . "/../phplib/mapit.php";
-require_once $dir . "/../commonlib/phplib/votingarea.php";
+require_once $dir . "/../phplib/votingarea.php";
 require_once $dir . "/../commonlib/phplib/utility.php";
 
 require_once $dir . "/../commonlib/phplib/HTML/QuickForm.php";
