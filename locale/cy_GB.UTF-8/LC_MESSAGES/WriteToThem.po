@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 12:24+0000\n"
+"POT-Creation-Date: 2025-12-03 10:51+0000\n"
 "PO-Revision-Date: 2023-03-20 17:59-0000\n"
 "Last-Translator: mySociety\n"
 "Language-Team: mySociety\n"
@@ -12,6 +12,4502 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: commonlib/phplib/countries.php:17
+msgid "Afghanistan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:18
+msgid "Åland Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:19
+msgid "Albania"
+msgstr ""
+
+#: commonlib/phplib/countries.php:20
+msgid "Algeria"
+msgstr ""
+
+#: commonlib/phplib/countries.php:21
+msgid "American Samoa"
+msgstr ""
+
+#: commonlib/phplib/countries.php:22
+msgid "Andorra"
+msgstr ""
+
+#: commonlib/phplib/countries.php:23
+msgid "Angola"
+msgstr ""
+
+#: commonlib/phplib/countries.php:24
+msgid "Anguilla"
+msgstr ""
+
+#: commonlib/phplib/countries.php:25
+msgid "Antarctica"
+msgstr ""
+
+#: commonlib/phplib/countries.php:26
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: commonlib/phplib/countries.php:27
+msgid "Argentina"
+msgstr ""
+
+#: commonlib/phplib/countries.php:28
+msgid "Armenia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:29
+msgid "Aruba"
+msgstr ""
+
+#: commonlib/phplib/countries.php:30
+msgid "Australia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:31
+msgid "Austria"
+msgstr ""
+
+#: commonlib/phplib/countries.php:32
+msgid "Azerbaijan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:33
+msgid "Bahamas"
+msgstr ""
+
+#: commonlib/phplib/countries.php:34
+msgid "Bahrain"
+msgstr ""
+
+#: commonlib/phplib/countries.php:35
+msgid "Bangladesh"
+msgstr ""
+
+#: commonlib/phplib/countries.php:36
+msgid "Barbados"
+msgstr ""
+
+#: commonlib/phplib/countries.php:37
+msgid "Belarus"
+msgstr ""
+
+#: commonlib/phplib/countries.php:38
+msgid "Belgium"
+msgstr ""
+
+#: commonlib/phplib/countries.php:39
+msgid "Belize"
+msgstr ""
+
+#: commonlib/phplib/countries.php:40
+msgid "Benin"
+msgstr ""
+
+#: commonlib/phplib/countries.php:41
+msgid "Bermuda"
+msgstr ""
+
+#: commonlib/phplib/countries.php:42
+msgid "Bhutan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:43
+msgid "Bolivia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:44
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr ""
+
+#: commonlib/phplib/countries.php:45
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: commonlib/phplib/countries.php:46
+msgid "Botswana"
+msgstr ""
+
+#: commonlib/phplib/countries.php:47
+msgid "Bouvet Island"
+msgstr ""
+
+#: commonlib/phplib/countries.php:48
+msgid "Brazil"
+msgstr ""
+
+#: commonlib/phplib/countries.php:49
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: commonlib/phplib/countries.php:50
+msgid "British Virgin Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:51
+msgid "Brunei"
+msgstr ""
+
+#: commonlib/phplib/countries.php:52
+msgid "Bulgaria"
+msgstr ""
+
+#: commonlib/phplib/countries.php:53
+msgid "Burkina Faso"
+msgstr ""
+
+#: commonlib/phplib/countries.php:54
+msgid "Burundi"
+msgstr ""
+
+#: commonlib/phplib/countries.php:55
+msgid "Cambodia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:56
+msgid "Cameroon"
+msgstr ""
+
+#: commonlib/phplib/countries.php:57
+msgid "Canada"
+msgstr ""
+
+#: commonlib/phplib/countries.php:58
+msgid "Cape Verde"
+msgstr ""
+
+#: commonlib/phplib/countries.php:59
+msgid "Cayman Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:60
+msgid "Central African Republic"
+msgstr ""
+
+#: commonlib/phplib/countries.php:61
+msgid "Chad"
+msgstr ""
+
+#: commonlib/phplib/countries.php:62
+msgid "Chile"
+msgstr ""
+
+#: commonlib/phplib/countries.php:63
+msgid "China"
+msgstr ""
+
+#: commonlib/phplib/countries.php:64
+msgid "Christmas Island"
+msgstr ""
+
+#: commonlib/phplib/countries.php:65
+msgid "Cocos (Keeling) Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:66
+msgid "Colombia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:67
+msgid "Comoros"
+msgstr ""
+
+#: commonlib/phplib/countries.php:68
+msgid "Congo"
+msgstr ""
+
+#: commonlib/phplib/countries.php:69
+msgid "Cook Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:70
+msgid "Costa Rica"
+msgstr ""
+
+#: commonlib/phplib/countries.php:71
+msgid "Côte d'Ivoire"
+msgstr ""
+
+#: commonlib/phplib/countries.php:72
+msgid "Croatia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:73
+msgid "Cuba"
+msgstr ""
+
+#: commonlib/phplib/countries.php:74
+msgid "Curacao"
+msgstr ""
+
+#: commonlib/phplib/countries.php:75
+msgid "Cyprus"
+msgstr ""
+
+#: commonlib/phplib/countries.php:76
+msgid "Czech Republic"
+msgstr ""
+
+#: commonlib/phplib/countries.php:77
+msgid "Democratic Republic of the Congo"
+msgstr ""
+
+#: commonlib/phplib/countries.php:78
+msgid "Denmark"
+msgstr ""
+
+#: commonlib/phplib/countries.php:79
+msgid "Djibouti"
+msgstr ""
+
+#: commonlib/phplib/countries.php:80
+msgid "Dominica"
+msgstr ""
+
+#: commonlib/phplib/countries.php:81
+msgid "Dominican Republic"
+msgstr ""
+
+#: commonlib/phplib/countries.php:82
+msgid "East Timor"
+msgstr ""
+
+#: commonlib/phplib/countries.php:83
+msgid "Ecuador"
+msgstr ""
+
+#: commonlib/phplib/countries.php:84
+msgid "Egypt"
+msgstr ""
+
+#: commonlib/phplib/countries.php:85
+msgid "El Salvador"
+msgstr ""
+
+#: commonlib/phplib/countries.php:86
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:87
+msgid "Eritrea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:88
+msgid "Estonia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:89
+msgid "Ethiopia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:90
+msgid "Falkland Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:91
+msgid "Faroe Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:92
+msgid "Federated States of Micronesia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:93
+msgid "Fiji"
+msgstr ""
+
+#: commonlib/phplib/countries.php:94
+msgid "Finland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:95
+msgid "France"
+msgstr ""
+
+#: commonlib/phplib/countries.php:96
+msgid "French Guiana"
+msgstr ""
+
+#: commonlib/phplib/countries.php:97
+msgid "French Polynesia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:98
+msgid "French Southern Territories"
+msgstr ""
+
+#: commonlib/phplib/countries.php:99
+msgid "Gabon"
+msgstr ""
+
+#: commonlib/phplib/countries.php:100
+msgid "Gambia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:101
+msgid "Georgia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:102
+msgid "Germany"
+msgstr ""
+
+#: commonlib/phplib/countries.php:103
+msgid "Ghana"
+msgstr ""
+
+#: commonlib/phplib/countries.php:104
+msgid "Gibraltar"
+msgstr ""
+
+#: commonlib/phplib/countries.php:105
+msgid "Greece"
+msgstr ""
+
+#: commonlib/phplib/countries.php:106
+msgid "Greenland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:107
+msgid "Grenada"
+msgstr ""
+
+#: commonlib/phplib/countries.php:108
+msgid "Guernsey"
+msgstr ""
+
+#: commonlib/phplib/countries.php:109
+msgid "Guadeloupe"
+msgstr ""
+
+#: commonlib/phplib/countries.php:110
+msgid "Guam"
+msgstr ""
+
+#: commonlib/phplib/countries.php:111
+msgid "Guatemala"
+msgstr ""
+
+#: commonlib/phplib/countries.php:112
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: commonlib/phplib/countries.php:113
+msgid "Guinea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:114
+msgid "Guyana"
+msgstr ""
+
+#: commonlib/phplib/countries.php:115
+msgid "Haiti"
+msgstr ""
+
+#: commonlib/phplib/countries.php:116
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:117
+msgid "Honduras"
+msgstr ""
+
+#: commonlib/phplib/countries.php:118
+msgid "Hong Kong"
+msgstr ""
+
+#: commonlib/phplib/countries.php:119
+msgid "Hungary"
+msgstr ""
+
+#: commonlib/phplib/countries.php:120
+msgid "Iceland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:121
+msgid "India"
+msgstr ""
+
+#: commonlib/phplib/countries.php:122
+msgid "Indonesia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:123
+msgid "Iran"
+msgstr ""
+
+#: commonlib/phplib/countries.php:124
+msgid "Iraq"
+msgstr ""
+
+#: commonlib/phplib/countries.php:125
+msgid "Ireland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:126
+msgid "Israel"
+msgstr ""
+
+#: commonlib/phplib/countries.php:127
+msgid "Isle of Man"
+msgstr ""
+
+#: commonlib/phplib/countries.php:128
+msgid "Italy"
+msgstr ""
+
+#: commonlib/phplib/countries.php:129
+msgid "Jersey"
+msgstr ""
+
+#: commonlib/phplib/countries.php:130
+msgid "Jamaica"
+msgstr ""
+
+#: commonlib/phplib/countries.php:131
+msgid "Japan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:132
+msgid "Jordan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:133
+msgid "Kazakhstan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:134
+msgid "Kenya"
+msgstr ""
+
+#: commonlib/phplib/countries.php:135
+msgid "Kiribati"
+msgstr ""
+
+#: commonlib/phplib/countries.php:136
+msgid "Kuwait"
+msgstr ""
+
+#: commonlib/phplib/countries.php:137
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:138
+msgid "Laos"
+msgstr ""
+
+#: commonlib/phplib/countries.php:139
+msgid "Latvia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:140
+msgid "Lebanon"
+msgstr ""
+
+#: commonlib/phplib/countries.php:141
+msgid "Lesotho"
+msgstr ""
+
+#: commonlib/phplib/countries.php:142
+msgid "Liberia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:143
+msgid "Libya"
+msgstr ""
+
+#: commonlib/phplib/countries.php:144
+msgid "Liechtenstein"
+msgstr ""
+
+#: commonlib/phplib/countries.php:145
+msgid "Lithuania"
+msgstr ""
+
+#: commonlib/phplib/countries.php:146
+msgid "Luxembourg"
+msgstr ""
+
+#: commonlib/phplib/countries.php:147
+msgid "Macao"
+msgstr ""
+
+#: commonlib/phplib/countries.php:148
+msgid "Madagascar"
+msgstr ""
+
+#: commonlib/phplib/countries.php:149
+msgid "Malawi"
+msgstr ""
+
+#: commonlib/phplib/countries.php:150
+msgid "Malaysia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:151
+msgid "Maldives"
+msgstr ""
+
+#: commonlib/phplib/countries.php:152
+msgid "Mali"
+msgstr ""
+
+#: commonlib/phplib/countries.php:153
+msgid "Malta"
+msgstr ""
+
+#: commonlib/phplib/countries.php:154
+msgid "Marshall Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:155
+msgid "Martinique"
+msgstr ""
+
+#: commonlib/phplib/countries.php:156
+msgid "Mauritania"
+msgstr ""
+
+#: commonlib/phplib/countries.php:157
+msgid "Mauritius"
+msgstr ""
+
+#: commonlib/phplib/countries.php:158
+msgid "Mayotte"
+msgstr ""
+
+#: commonlib/phplib/countries.php:159
+msgid "Mexico"
+msgstr ""
+
+#: commonlib/phplib/countries.php:160
+msgid "Moldova"
+msgstr ""
+
+#: commonlib/phplib/countries.php:161
+msgid "Monaco"
+msgstr ""
+
+#: commonlib/phplib/countries.php:162
+msgid "Mongolia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:163 commonlib/phplib/countries.php:165
+msgid "Montenegro"
+msgstr ""
+
+#: commonlib/phplib/countries.php:164
+msgid "Montserrat"
+msgstr ""
+
+#: commonlib/phplib/countries.php:166
+msgid "Morocco"
+msgstr ""
+
+#: commonlib/phplib/countries.php:167
+msgid "Mozambique"
+msgstr ""
+
+#: commonlib/phplib/countries.php:168
+msgid "Myanmar"
+msgstr ""
+
+#: commonlib/phplib/countries.php:169
+msgid "Namibia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:170
+msgid "Nauru"
+msgstr ""
+
+#: commonlib/phplib/countries.php:171
+msgid "Nepal"
+msgstr ""
+
+#: commonlib/phplib/countries.php:172
+msgid "Netherlands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:173
+msgid "New Caledonia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:174
+msgid "New Zealand"
+msgstr ""
+
+#: commonlib/phplib/countries.php:175
+msgid "Nicaragua"
+msgstr ""
+
+#: commonlib/phplib/countries.php:176
+msgid "Nigeria"
+msgstr ""
+
+#: commonlib/phplib/countries.php:177
+msgid "Niger"
+msgstr ""
+
+#: commonlib/phplib/countries.php:178
+msgid "Niue"
+msgstr ""
+
+#: commonlib/phplib/countries.php:179
+msgid "Norfolk Island"
+msgstr ""
+
+#: commonlib/phplib/countries.php:180
+msgid "North Korea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:181
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:182
+msgid "Norway"
+msgstr ""
+
+#: commonlib/phplib/countries.php:183
+msgid "Oman"
+msgstr ""
+
+#: commonlib/phplib/countries.php:184
+msgid "Pakistan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:185
+msgid "Palau"
+msgstr ""
+
+#: commonlib/phplib/countries.php:186
+msgid "Palestinian Territories"
+msgstr ""
+
+#: commonlib/phplib/countries.php:187
+msgid "Panama"
+msgstr ""
+
+#: commonlib/phplib/countries.php:188
+msgid "Papua New Guinea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:189
+msgid "Paraguay"
+msgstr ""
+
+#: commonlib/phplib/countries.php:190
+msgid "Peru"
+msgstr ""
+
+#: commonlib/phplib/countries.php:191
+msgid "Philippines"
+msgstr ""
+
+#: commonlib/phplib/countries.php:192
+msgid "Pitcairn Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:193
+msgid "Poland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:194
+msgid "Portugal"
+msgstr ""
+
+#: commonlib/phplib/countries.php:195
+msgid "Puerto Rico"
+msgstr ""
+
+#: commonlib/phplib/countries.php:196
+msgid "Qatar"
+msgstr ""
+
+#: commonlib/phplib/countries.php:197
+msgid "Réunion"
+msgstr ""
+
+#: commonlib/phplib/countries.php:198
+msgid "Republic of Macedonia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:199
+msgid "Romania"
+msgstr ""
+
+#: commonlib/phplib/countries.php:200
+msgid "Russia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:201
+msgid "Rwanda"
+msgstr ""
+
+#: commonlib/phplib/countries.php:202
+msgid "Saint Barthelemy"
+msgstr ""
+
+#: commonlib/phplib/countries.php:203
+msgid "Saint Helena"
+msgstr ""
+
+#: commonlib/phplib/countries.php:204
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: commonlib/phplib/countries.php:205
+msgid "Saint Lucia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:206
+msgid "Saint Martin"
+msgstr ""
+
+#: commonlib/phplib/countries.php:207
+msgid "Saint-Pierre and Miquelon"
+msgstr ""
+
+#: commonlib/phplib/countries.php:208
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: commonlib/phplib/countries.php:209
+msgid "Samoa"
+msgstr ""
+
+#: commonlib/phplib/countries.php:210
+msgid "San Marino"
+msgstr ""
+
+#: commonlib/phplib/countries.php:211
+msgid "São Tomé and Príncipe"
+msgstr ""
+
+#: commonlib/phplib/countries.php:212
+msgid "Saudi Arabia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:213
+msgid "Senegal"
+msgstr ""
+
+#: commonlib/phplib/countries.php:214
+msgid "Serbia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:215
+msgid "Seychelles"
+msgstr ""
+
+#: commonlib/phplib/countries.php:216
+msgid "Sierra Leone"
+msgstr ""
+
+#: commonlib/phplib/countries.php:217
+msgid "Singapore"
+msgstr ""
+
+#: commonlib/phplib/countries.php:218
+msgid "Sint Maarten"
+msgstr ""
+
+#: commonlib/phplib/countries.php:219
+msgid "Slovakia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:220
+msgid "Slovenia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:221
+msgid "Solomon Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:222
+msgid "Somalia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:223
+msgid "South Africa"
+msgstr ""
+
+#: commonlib/phplib/countries.php:224
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:225
+msgid "South Korea"
+msgstr ""
+
+#: commonlib/phplib/countries.php:226
+msgid "South Sudan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:227
+msgid "Spain"
+msgstr ""
+
+#: commonlib/phplib/countries.php:228
+msgid "Sri Lanka"
+msgstr ""
+
+#: commonlib/phplib/countries.php:229
+msgid "Sudan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:230
+msgid "Suriname"
+msgstr ""
+
+#: commonlib/phplib/countries.php:231
+msgid "Svalbard"
+msgstr ""
+
+#: commonlib/phplib/countries.php:232
+msgid "Swaziland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:233
+msgid "Sweden"
+msgstr ""
+
+#: commonlib/phplib/countries.php:234
+msgid "Switzerland"
+msgstr ""
+
+#: commonlib/phplib/countries.php:235
+msgid "Syria"
+msgstr ""
+
+#: commonlib/phplib/countries.php:236
+msgid "Taiwan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:237
+msgid "Tajikistan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:238
+msgid "Tanzania"
+msgstr ""
+
+#: commonlib/phplib/countries.php:239
+msgid "Thailand"
+msgstr ""
+
+#: commonlib/phplib/countries.php:240
+msgid "Togo"
+msgstr ""
+
+#: commonlib/phplib/countries.php:241
+msgid "Tokelau"
+msgstr ""
+
+#: commonlib/phplib/countries.php:242
+msgid "Tonga"
+msgstr ""
+
+#: commonlib/phplib/countries.php:243
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: commonlib/phplib/countries.php:244
+msgid "Tunisia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:245
+msgid "Turkey"
+msgstr ""
+
+#: commonlib/phplib/countries.php:246
+msgid "Turkmenistan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:247
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:248
+msgid "Tuvalu"
+msgstr ""
+
+#: commonlib/phplib/countries.php:249
+msgid "Uganda"
+msgstr ""
+
+#: commonlib/phplib/countries.php:250
+msgid "Ukraine"
+msgstr ""
+
+#: commonlib/phplib/countries.php:251
+msgid "United Arab Emirates"
+msgstr ""
+
+#: commonlib/phplib/countries.php:252
+msgid "United Kingdom"
+msgstr ""
+
+#: commonlib/phplib/countries.php:253
+msgid "United States"
+msgstr ""
+
+#: commonlib/phplib/countries.php:254
+msgid "United States Minor Outlying Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:255
+msgid "Uruguay"
+msgstr ""
+
+#: commonlib/phplib/countries.php:256
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#: commonlib/phplib/countries.php:257
+msgid "Uzbekistan"
+msgstr ""
+
+#: commonlib/phplib/countries.php:258
+msgid "Vanuatu"
+msgstr ""
+
+#: commonlib/phplib/countries.php:259
+msgid "Vatican City"
+msgstr ""
+
+#: commonlib/phplib/countries.php:260
+msgid "Venezuela"
+msgstr ""
+
+#: commonlib/phplib/countries.php:261
+msgid "Vietnam"
+msgstr ""
+
+#: commonlib/phplib/countries.php:262
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: commonlib/phplib/countries.php:263
+msgid "Western Sahara"
+msgstr ""
+
+#: commonlib/phplib/countries.php:264
+msgid "Yemen"
+msgstr ""
+
+#: commonlib/phplib/countries.php:265
+msgid "Zambia"
+msgstr ""
+
+#: commonlib/phplib/countries.php:266
+msgid "Zimbabwe"
+msgstr ""
+
+#: commonlib/phplib/importparams.php:140
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: commonlib/phplib/person.php:81
+msgid "Person has no name in name() function"
+msgstr ""
+
+#: commonlib/phplib/person.php:125
+msgid "Name expected in matches_name"
+msgstr ""
+
+#: commonlib/phplib/person.php:133
+msgid "PASSWORD must not be null in password method"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:81
+msgid "Close"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:83
+msgid "Social Web"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:84 commonlib/phplib/sharethis.php:111
+msgid "Email"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:114
+msgid "To: (up to 5 emails)"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:118
+msgid "Your name:"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:122
+msgid "Your email:"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:125
+msgid "Add a message, if you want:"
+msgstr ""
+
+#: commonlib/phplib/sharethis.php:129 phplib/fyr.php:312 phplib/fyr.php:318
+msgid "Send message"
+msgstr ""
+
+#: commonlib/phplib/stash.php:107 commonlib/phplib/stash.php:140
+msgid "If you got the email more than a year ago, then your request has probably expired.  Please try doing what you were doing from the beginning."
+msgstr ""
+
+#: commonlib/phplib/utility.php:368 commonlib/phplib/utility.php:376
+msgid "today"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:85
+msgid "London Borough Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:87
+msgid "London Assembly Constituency Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:88
+msgid "London Assembly Party List Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:90
+msgid "County Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:92
+msgid "District Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:94
+msgid "Unitary Authority ED Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:95
+msgid "Unitary Authority Ward Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:97
+msgid "Local Government District Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:99
+msgid "Councillors of the Isles"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:101
+msgid "Metropolitan District Councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:103
+msgid "Scottish Parliament Party List Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:104
+msgid "Scottish Parliament Constituency Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:106
+msgid "Senedd Party List Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:107
+msgid "Senedd Constituency Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:109
+msgid "Northern Ireland Assembly Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:111 commonlib/phplib/votingarea.php:312
+#: commonlib/phplib/votingarea.php:313
+msgid "Members of Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:112
+msgid "Members of the House of Lords"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:114 commonlib/phplib/votingarea.php:314
+msgid "Members of the European Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:177
+msgid "London Borough"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:178 commonlib/phplib/votingarea.php:190
+#: commonlib/phplib/votingarea.php:197 commonlib/phplib/votingarea.php:200
+msgid "ward"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:180
+msgid "Greater London Authority"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:182
+msgid "London Assembly"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:183 commonlib/phplib/votingarea.php:207
+#: commonlib/phplib/votingarea.php:211 commonlib/phplib/votingarea.php:214
+#: commonlib/phplib/votingarea.php:221 commonlib/phplib/votingarea.php:223
+msgid "constituency"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:184 commonlib/phplib/votingarea.php:206
+#: commonlib/phplib/votingarea.php:210
+msgid "Electoral Region"
+msgstr ""
+
+#. Call it state so that Google Toolbar (and presumably others) can auto-fill.
+#: commonlib/phplib/votingarea.php:186 web/write.php:253
+msgid "County"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:187 commonlib/phplib/votingarea.php:196
+msgid "Electoral Division"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:189
+msgid "District"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:192
+msgid "Local Council"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:193
+msgid "Electoral Area"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:195
+msgid "Unitary Authority"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:199
+msgid "Metropolitan District"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:202
+msgid "Council of the Isles"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:203
+msgid "parish"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:205
+msgid "Scottish Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:209
+msgid "Senedd"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:213
+msgid "Northern Ireland Assembly"
+msgstr ""
+
+#. These are the same as the Westminster
+#. constituencies but return several members
+#. using a proportional system. It looks like
+#. most people just refer to them as
+#. "constituencies".
+#: commonlib/phplib/votingarea.php:220
+msgid "House of Commons"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:222 templates/website/about-lords.html:3
+#: templates/website/about-lords.html:15 templates/website/about-sidebar.html:9
+#: web/who.php:151 web/who.php:513
+msgid "House of Lords"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:225
+msgid "European Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:226
+msgid "region"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:230 commonlib/phplib/votingarea.php:236
+#: commonlib/phplib/votingarea.php:237 commonlib/phplib/votingarea.php:238
+#: commonlib/phplib/votingarea.php:239 commonlib/phplib/votingarea.php:240
+#: commonlib/phplib/votingarea.php:252 commonlib/phplib/votingarea.php:258
+#: commonlib/phplib/votingarea.php:259 commonlib/phplib/votingarea.php:260
+#: commonlib/phplib/votingarea.php:261 commonlib/phplib/votingarea.php:262
+msgid "councillor"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:231 commonlib/phplib/votingarea.php:253
+#: commonlib/phplib/votingarea.php:331
+msgid "Mayor"
+msgstr ""
+
+#. "of London"?
+#: commonlib/phplib/votingarea.php:232 commonlib/phplib/votingarea.php:233
+#: commonlib/phplib/votingarea.php:254 commonlib/phplib/votingarea.php:255
+msgid "London Assembly Member"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:234 commonlib/phplib/votingarea.php:256
+msgid "county councillor"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:235 commonlib/phplib/votingarea.php:257
+msgid "district councillor"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:241 commonlib/phplib/votingarea.php:242
+#: commonlib/phplib/votingarea.php:320 commonlib/phplib/votingarea.php:321
+msgid "MSP"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:243 commonlib/phplib/votingarea.php:244
+#: commonlib/phplib/votingarea.php:322 commonlib/phplib/votingarea.php:323
+msgid "MS"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:245 commonlib/phplib/votingarea.php:324
+msgid "MLA"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:246 commonlib/phplib/votingarea.php:325
+msgid "MP"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:247
+msgid "Lord"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:248 commonlib/phplib/votingarea.php:326
+msgid "MEP"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:263 commonlib/phplib/votingarea.php:264
+msgid "Member of the Scottish Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:265 commonlib/phplib/votingarea.php:266
+msgid "Member of the Senedd"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:267
+msgid "Member of the Legislative Assembly"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:268 commonlib/phplib/votingarea.php:269
+msgid "Member of Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:270
+msgid "Member of the European Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:274 commonlib/phplib/votingarea.php:280
+#: commonlib/phplib/votingarea.php:281 commonlib/phplib/votingarea.php:282
+#: commonlib/phplib/votingarea.php:283 commonlib/phplib/votingarea.php:284
+#: commonlib/phplib/votingarea.php:296 commonlib/phplib/votingarea.php:302
+#: commonlib/phplib/votingarea.php:303 commonlib/phplib/votingarea.php:304
+#: commonlib/phplib/votingarea.php:305 commonlib/phplib/votingarea.php:306
+msgid "councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:275 commonlib/phplib/votingarea.php:297
+msgid "Mayors"
+msgstr ""
+
+#. "of London"?
+#: commonlib/phplib/votingarea.php:276 commonlib/phplib/votingarea.php:277
+#: commonlib/phplib/votingarea.php:298 commonlib/phplib/votingarea.php:299
+msgid "London Assembly Members"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:278 commonlib/phplib/votingarea.php:300
+msgid "county councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:279 commonlib/phplib/votingarea.php:301
+msgid "district councillors"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:285 commonlib/phplib/votingarea.php:286
+msgid "MSPs"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:287 commonlib/phplib/votingarea.php:288
+msgid "MSs"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:289
+msgid "MLAs"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:290
+msgid "MPs"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:291
+msgid "Lords"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:292
+msgid "MEPs"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:307 commonlib/phplib/votingarea.php:308
+msgid "Members of the Scottish Parliament"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:309 commonlib/phplib/votingarea.php:310
+msgid "Members of the Senedd"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:311
+msgid "Members of the Legislative Assembly"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:318 commonlib/phplib/votingarea.php:319
+msgid "AM"
+msgstr ""
+
+#. "of London"?
+#: commonlib/phplib/votingarea.php:330 commonlib/phplib/votingarea.php:332
+#: commonlib/phplib/votingarea.php:333 commonlib/phplib/votingarea.php:334
+#: commonlib/phplib/votingarea.php:335 commonlib/phplib/votingarea.php:336
+#: commonlib/phplib/votingarea.php:337 commonlib/phplib/votingarea.php:338
+msgid "Cllr"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:346
+msgid ""
+"The District Council is responsible for\n"
+"            <strong>local services</strong>, including <strong>planning</strong>, <strong>council housing</strong>, and\n"
+"            <strong>rubbish collection</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:349
+msgid ""
+"\n"
+"The Borough Council is responsible for <strong>local services</strong>,\n"
+"including <strong>planning</strong>, <strong>council housing</strong>,\n"
+"<strong>rubbish collection</strong>, <strong>local roads</strong>, and\n"
+"<strong>public paths</strong>.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:355
+msgid ""
+"\n"
+"Areas covered include the\n"
+"Mayor's budget, <strong>culture</strong>, <strong>sport and tourism</strong>,\n"
+"<strong>health</strong>, <strong>planning</strong>, <strong>transport</strong>,\n"
+"and <strong>trunk roads</strong>.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:362
+msgid ""
+"The Metropolitan District Council is\n"
+"responsible for all aspects of <strong>local services and policy</strong>, including\n"
+"<strong>planning</strong>, <strong>transport</strong>,\n"
+"<strong>roads</strong> (except trunk roads and motorways), public rights of way,\n"
+"<strong>education</strong>, <strong>social services</strong> and <strong>libraries</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:368
+msgid ""
+"The Unitary Authority is\n"
+"responsible for all aspects of <strong>local services and policy</strong>, including\n"
+"<strong>planning</strong>, <strong>transport</strong>,\n"
+"<strong>roads</strong> (except trunk roads and motorways), public rights of way,\n"
+"<strong>education</strong>, <strong>social services</strong> and <strong>libraries</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:373
+msgid ""
+"\n"
+"The Council of the Isles is responsible for <strong>education</strong>,\n"
+"<strong>housing</strong>, <strong>planning</strong>, <strong>water and\n"
+"sewage</strong> and various other local matters including\n"
+"<strong>tourism</strong>, <strong>development</strong> and running <strong>the\n"
+"airport</strong>.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:381
+msgid ""
+"The County Council is responsible for <strong>local\n"
+"services</strong>, including <strong>education</strong>, <strong>social services</strong>,\n"
+"<strong>transport</strong>, <strong>roads</strong>\n"
+"(except trunk roads and motorways), public rights of way, and\n"
+"<strong>libraries</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:387
+msgid ""
+"The Local Council is responsible for\n"
+"            <strong>local services</strong>, including \n"
+"            <strong>waste and recycling</strong>, \n"
+"            <strong>leisure and community</strong>, \n"
+"            <strong>building control</strong> and\n"
+"            <strong>local economic and cultural development</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:394
+msgid ""
+"The House of Commons is responsible for\n"
+"            <strong>making laws in the UK and for overall scrutiny of all aspects of\n"
+"            government</strong>."
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:397
+msgid ""
+"\n"
+"They <strong>scrutinise proposed European laws</strong> and the <strong>budget of the\n"
+"European Union</strong>, and provide <strong>oversight of its other\n"
+"decision-making bodies</strong>.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:402
+msgid ""
+"\n"
+"The Scottish Parliament is responsible for a wide range of <strong>devolved\n"
+"matters</strong> in which it sets policy independently of the London\n"
+"Parliament. Devolved matters include <strong>education</strong>,\n"
+"<strong>health</strong>, <strong>agriculture</strong>, <strong>justice</strong>\n"
+"and <strong>prisons</strong>. It also has some tax-raising powers.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:409
+msgid ""
+"\n"
+"The Senedd has a wide range of powers over areas including\n"
+"<strong>economic development</strong>, <strong>transport</strong>,\n"
+"<strong>finance</strong>, <strong>local government</strong>,\n"
+"<strong>health</strong>, <strong>housing</strong> and <strong>the Welsh\n"
+"Language</strong>.\n"
+msgstr ""
+
+#: commonlib/phplib/votingarea.php:416
+msgid ""
+"\n"
+"The Northern Ireland Assembly has full authority over \"transferred matters\",\n"
+"which include <strong>agriculture</strong>, <strong>education</strong>,\n"
+"<strong>employment</strong>, the <strong>environment</strong> and\n"
+"<strong>health</strong>.\n"
+msgstr ""
+
+#: perllib/FYR/Queue.pm:1449
+msgid "Three"
+msgstr ""
+
+#: perllib/FYR/Queue.pm:1449
+msgid "Two"
+msgstr ""
+
+#. Message will be in log file, don't display it for cleanliness
+#: phplib/fyr.php:107
+msgid ""
+"Please try again later, or <a\n"
+"            href='/about-contact'>contact us</a> to let us know."
+msgstr ""
+
+#: phplib/fyr.php:168
+msgid "Sorry, we are experiencing technical difficulties.  Please try again later."
+msgstr ""
+
+#: phplib/fyr.php:309
+msgid "Enter postcode"
+msgstr ""
+
+#: phplib/fyr.php:310
+msgid "Choose representative"
+msgstr ""
+
+#: phplib/fyr.php:311 phplib/fyr.php:317
+msgid "Write message"
+msgstr ""
+
+#: phplib/fyr.php:316
+msgid "Choose a Lord"
+msgstr ""
+
+#: templates/common_header.php:42
+msgid "WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives."
+msgstr ""
+
+#: templates/common_header.php:138
+msgid "Opens in a new window"
+msgstr ""
+
+#: templates/common_header.php:138 templates/website/footer.php:15
+msgid "Help"
+msgstr ""
+
+#: templates/website/about-branded.html:3
+#: templates/website/about-branded.html:14
+#: templates/website/about-sidebar.html:16
+msgid "WriteToThem for your website"
+msgstr ""
+
+#: templates/website/about-branded.html:22
+msgid ""
+"If you just want to link to WriteToThem to tell other people about it, that&rsquo;s <a href=\"https://www.writetothem.com/about-linktous\">easy</a>. \n"
+"\n"
+"But maybe you want something shinier than that &ndash; you&rsquo;ve designed a brand new website for your campaign, you want people to write to their MPs to encourage them to support it, and you&rsquo;d absolutely love this to happen without people needing to leave your website at all.\n"
+"\n"
+"Great news! Someone has written a little application that allows you to do\n"
+"this, called WriteToMP. It can look exactly like the campaign&rsquo;s website\n"
+"&ndash; it uses WriteToThem to send the message without the user ever needing\n"
+"to know what&rsquo;s making that happen.\n"
+"\n"
+"Before you start, make sure you read our <a href=\"/about-guidelines\">guidelines for campaigners</a>. You must not give your users pre-written messages to send &ndash; they are against our conditions of use and we will block them. \n"
+"\n"
+"The great thing about this application is that it allows you to suggest the points that you&rsquo;d like people to make when they write their message, but also stresses that they must write in their own words and explains why this is important.\n"
+"\n"
+"Ready to have a go? <a href=\"https://github.com/robinhouston/write-to-mp\">Here&rsquo;s where you can get the code</a>. \n"
+"\n"
+"Make sure you read all the instructions on that page &ndash; it should be fairly self-explanatory and you don&rsquo;t need very much technical knowledge to get it working.\n"
+"\n"
+"If you have any problems installing the code, <a href=\"/about-contact\">contact us</a> and we&rsquo;ll give you a hand."
+msgstr ""
+
+#: templates/website/about-campaigns.html:3
+msgid "Using  WriteToThem to run a campaign"
+msgstr ""
+
+#: templates/website/about-campaigns.html:15
+msgid "Running a campaign"
+msgstr ""
+
+#: templates/website/about-campaigns.html:23
+msgid ""
+"Are you part of a campaigning organisation? If you ever ask your supporters to write to politicians, you should know that WriteToThem can be integrated into your website simply, and for free.\n"
+"\n"
+"All your supporters need do is input their postcode and compose their message, then we send it off to the correct representative. \n"
+"\n"
+"There are several different options when it comes to using WriteToThem for your campaign. But before we get onto that, a quick word about how WriteToThem <i>can&rsquo;t</i> be used.\n"
+"\n"
+"<ul>\n"
+"<li> WriteToThem is <b>not a petitioning site</b>. If you need to collect signatures on a petition and then send it to an MP, you&rsquo;d be better off with one of the many free online petition websites. </li>\n"
+"\n"
+"<li>We <b>don’t give out MPs’ contact details</b>. Direct email and postal addresses for most MPs can be found on\n"
+"<a href=\"http://www.parliament.uk/mps-lords-and-offices/mps/\">Parliament’s website</a> or via the\n"
+"<a href=\"http://everypolitician.org/\">EveryPolitician</a> project.</a>.</li>\n"
+"\n"
+"<li>WriteToThem cannot be used for sending out <b>identically-worded messages</b> from multiple supporters - our system will detect them and block them from being sent.</li>\n"
+"</ul>\n"
+"\n"
+"Before making the decision to use WriteToThem for your campaign, we&rsquo;d urge you to <a href=\"/about-guidelines\">read our guidelines</a>, and make sure that it fits your needs.\n"
+"\n"
+"With that said, we&rsquo;re more than happy to provide a free service for campaign groups to encourage people to write to their representatives on a particular issue, and there are a number of ways that you can integrate the WriteToThem experience with your campaign."
+msgstr ""
+
+#: templates/website/about-campaigns.html:43
+msgid "A simple link"
+msgstr ""
+
+#: templates/website/about-campaigns.html:44
+msgid ""
+"You don&rsquo;t need any technical expertise to provide your supporters with the link to www.WriteToThem.com.\n"
+"\n"
+"This link can also be modified, so that WriteToThem only presents one specific type of representative: <a href=\"/about-linktous#types\">read more here</a>.\n"
+"\n"
+"If you are sending out newsletters, you can even pre-fill the name, email and address fields of your supporters&rsquo; letters to their representative: <a href=\"/about-linktous#prefill\">read more about that here</a>."
+msgstr ""
+
+#: templates/website/about-campaigns.html:50
+msgid "A  fancier link"
+msgstr ""
+
+#: templates/website/about-campaigns.html:51
+msgid "<a href=\"/about-linktous#envelope\">Here&rsquo;s how to put a nifty little box on your site</a>:  when your users enter their postcode, they&rsquo;ll be taken to WriteToThem to send a message to their MP."
+msgstr ""
+
+#: templates/website/about-campaigns.html:53
+msgid "Wordpress widget"
+msgstr ""
+
+#: templates/website/about-campaigns.html:55
+msgid ""
+"There’s a very simple way to include WriteToThem on a WordPress site: <a\n"
+"href=\"https://wordpress.org/plugins/writetothem/\">through this plug-in</a>.\n"
+"Installing it is just a matter of drag and drop."
+msgstr ""
+
+#: templates/website/about-campaigns.html:59
+msgid "Using our code to make your own web page"
+msgstr ""
+
+#: templates/website/about-campaigns.html:61
+msgid ""
+"For a more seamless experience, you might want to <a href=\"/about-branded\">create a branded webpage for your campaign</a>, and there&rsquo;s code available to help you do that. \n"
+"\n"
+"You will need only a little technical knowledge to install it, and there are step-by-step instructions."
+msgstr ""
+
+#: templates/website/about-constituency.html:15
+#: templates/website/about-sidebar.html:7 web/index.php:89
+msgid "What postcode should I use?"
+msgstr ""
+
+#: templates/website/about-constituency.html:23
+msgid ""
+"WriteToThem asks for your postcode so that it knows which representatives you should write to. \n"
+"\n"
+"As a general rule, if you are registered to vote, you should use the postcode of the address where you are registered. This ensures that you contact the people who represent you in your constituency.\n"
+"\n"
+"If you’re not registered to vote, are not sure what postcode to use, or you don&rsquo;t know your postcode, this page will help. "
+msgstr ""
+
+#: templates/website/about-constituency.html:31
+#: templates/website/about-constituency.html:43
+msgid "I know my address but not my postcode"
+msgstr ""
+
+#: templates/website/about-constituency.html:32
+#: templates/website/about-constituency.html:49
+msgid "I’m a member of the armed forces"
+msgstr ""
+
+#: templates/website/about-constituency.html:33
+#: templates/website/about-constituency.html:62
+msgid "I’m an expatriate"
+msgstr ""
+
+#: templates/website/about-constituency.html:34
+#: templates/website/about-constituency.html:73
+msgid "I live in a British Overseas Territory"
+msgstr ""
+
+#: templates/website/about-constituency.html:35
+#: templates/website/about-constituency.html:82
+msgid "I’m a Crown Servant"
+msgstr ""
+
+#: templates/website/about-constituency.html:36
+msgid "I’m homeless or of no fixed abode"
+msgstr ""
+
+#: templates/website/about-constituency.html:37
+msgid "I’m a prisoner"
+msgstr ""
+
+#: templates/website/about-constituency.html:38
+msgid "I’m a long-stay hospital patient"
+msgstr ""
+
+#: templates/website/about-constituency.html:45
+msgid ""
+"The Royal Mail website has a handy\n"
+"    <a href=\"https://www.royalmail.com/find-a-postcode\">Postcode Finder</a> - put in\n"
+"any UK address and it will tell you the postcode."
+msgstr ""
+
+#: templates/website/about-constituency.html:51
+msgid ""
+"<strong>How do I register to vote?</strong> As a member of the armed\n"
+"services, you are entitled to representation as a <strong>Service Voter</strong>. You can\n"
+"<a href=\"http://www.aboutmyvote.co.uk/frequently-asked-questions/service-voters\">read\n"
+"more about how to register to vote here</a>.\n"
+"\n"
+"When registering, you are asked for a UK address; you will be registered to vote in the constituency where that address lies.\n"
+"\n"
+"<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of your UK address on WriteToThem. This will ensure that you are contacting the representatives for your constituency."
+msgstr ""
+
+#: templates/website/about-constituency.html:64
+msgid ""
+"<strong>How do I register to vote?</strong> Expatriates are entitled to\n"
+"representation under certain circumstances: there is\n"
+"<a href=\"https://www.yourvotematters.co.uk/can-i-vote/overseas\">more\n"
+"information for overseas voters here</a>.\n"
+"\n"
+"<strong>Which postcode do I use on WriteToThem?</strong> To use WriteToThem, you should input the postcode of the address where you were last resident in the UK."
+msgstr ""
+
+#: templates/website/about-constituency.html:75
+msgid ""
+"WriteToThem currently only holds contact details for representatives within the UK.\n"
+"\n"
+"If you live in a British Overseas Territory or Crown Dependency, such\n"
+"as the Falkland Islands or British Antarctic Territory, please <a href=\"about-elsewhere\">read this page</a> to find out how to contact your representatives."
+msgstr ""
+
+#: templates/website/about-constituency.html:84
+msgid ""
+"<strong>How do I register to vote?</strong> Crown Servants and employees\n"
+"of the British Council, and their spouses, are entitled to representation. To register, fill out the\n"
+"<a href=\"https://www.gov.uk/register-to-vote-crown-servants-british-council-employees\">electoral\n"
+"registration form for Crown Servants and British Council employees</a>.\n"
+"\n"
+"<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of\n"
+"the address where you would be living if you were in the UK, or your last\n"
+"registered UK address."
+msgstr ""
+
+#: templates/website/about-constituency.html:95
+msgid "I’m homeless, of no fixed abode, a prisoner or a long-stay hospital patient"
+msgstr ""
+
+#: templates/website/about-constituency.html:97
+msgid ""
+"<strong>How do I register to vote?</strong> You can register at any address \"where you would be living if it were not for your current situation, or an address where you have lived in the past. If you are homeless, you can give details of where you spend a substantial part of your time.\"\n"
+"\n"
+"You will need to fill out a \"Declaration of Local Connection\", which you can\n"
+"get from your local electoral registration office; read more at <a href=\"http://www.aboutmyvote.co.uk/register-to-vote/registering-to-vote-with-no-fixed-address\">aboutmyvote.co.uk</a>.\n"
+"\n"
+"\n"
+"<strong>Which postcode do I use on WriteToThem?</strong> Use the postcode of the address as described above. This ensures that your message reaches the people who represent you.\n"
+"\n"
+"It may be important that any postal response from your representative goes to the address where you are now, so that it reaches you. In this case, you should note that in the body of your message."
+msgstr ""
+
+#: templates/website/about-constituency.html:111
+msgid ""
+"This page has been produced with assistance and advice from the\n"
+"<a href=\"https://www.electoralcommission.org.uk/\">Electoral Commission</a>,\n"
+"and their\n"
+"<a href=\"http://www.aboutmyvote.co.uk/\">aboutmyvote web site</a>. Please note\n"
+"that in Northern Ireland electoral registration is the responsibility of the\n"
+"<a href=\"http://www.electoralofficeni.gov.uk/\">Electoral Office for Northern\n"
+"Ireland</a> who can give more specific advice.)"
+msgstr ""
+
+#: templates/website/about-contact.html:3
+msgid "Contact technical support"
+msgstr ""
+
+#: templates/website/about-contact.html:12
+msgid "How can we help?"
+msgstr ""
+
+#: templates/website/about-contact.html:21
+msgid "I just want to contact my MP or local representative"
+msgstr ""
+
+#: templates/website/about-contact.html:25
+msgid "Enter your UK postcode to begin a message to your local councillors, MP, MSPs, or Northern Irish, Welsh, or London Assembly Members."
+msgstr ""
+
+#: templates/website/about-contact.html:27
+#: templates/website/about-contact.html:53
+#: templates/website/about-contact.html:80
+msgid "Enter your UK postcode"
+msgstr ""
+
+#: templates/website/about-contact.html:33
+#: templates/website/about-contact.html:60
+#: templates/website/about-contact.html:87 web/index.php:68
+msgid "Go"
+msgstr ""
+
+#: templates/website/about-contact.html:37
+#: templates/website/about-contact.html:64
+#: templates/website/about-contact.html:91
+msgid "What if I don’t have a postcode?"
+msgstr ""
+
+#: templates/website/about-contact.html:43
+msgid ""
+"I’ve been treated unfairly by a government agency\n"
+"                                <small>\n"
+"                                    e.g. benefits, visas and immigration, HMRC,\n"
+"                                    or Work and Pensions\n"
+"                                </small>"
+msgstr ""
+
+#: templates/website/about-contact.html:51
+msgid "This is something to contact your MP about. Enter your UK postcode to begin a message to them."
+msgstr ""
+
+#: templates/website/about-contact.html:70
+msgid ""
+"I’m having a problem locally\n"
+"                                <small>\n"
+"                                    e.g. disputes with neighbours and landlords,\n"
+"                                    or issues with council services\n"
+"                                </small>"
+msgstr ""
+
+#: templates/website/about-contact.html:78
+msgid "Your Local Councillor can help with this kind of issue. Enter your UK postcode to begin a message to them."
+msgstr ""
+
+#: templates/website/about-contact.html:97
+msgid "I’ve contacted my MP, but they won’t help me"
+msgstr ""
+
+#: templates/website/about-contact.html:102
+msgid ""
+"If it’s been more than two weeks, and your MP\n"
+"                                or other representative still hasn’t responded\n"
+"                                to you, <a href=\"/about-qa#noreply\">there are\n"
+"                                a few things you can try</a>."
+msgstr ""
+
+#: templates/website/about-contact.html:108
+msgid ""
+"Alternatively, if you did get a reply, but it\n"
+"                                was unsatisfactory, <a href=\"/about-qa#unsatis\">\n"
+"                                here is our advice on what to do next</a>."
+msgstr ""
+
+#: templates/website/about-contact.html:117
+msgid ""
+"I’ve noticed a problem with this website\n"
+"                                <small>\n"
+"                                    e.g. missing or incorrect contact details,\n"
+"                                    broken pages, or technical questions\n"
+"                                </small>"
+msgstr ""
+
+#: templates/website/about-contact.html:126
+msgid ""
+"WriteToThem.com is run by a charity called\n"
+"                                <a href=\"https://www.mysociety.org\">mySociety</a>.\n"
+"                                If you’ve spotted something wrong with the\n"
+"                                website, or have a question about how it works,\n"
+"                                you should contact us using the form below."
+msgstr ""
+
+#: templates/website/about-copyright.html:3
+#: templates/website/about-copyright.html:14
+msgid "Copyright information"
+msgstr ""
+
+#: templates/website/about-copyright.html:24
+msgid ""
+"This site was built by <a href=\"https://www.mysociety.org\">mySociety</a>:\n"
+"here’s <a href=\"about-us\">information about us and why we run this site</a>.\n"
+"\n"
+"Most of the site is Copyright &copy;\n"
+"<a href=\"https://www.mysociety.org/about/structure-and-governance/\">UK Citizens\n"
+"Online Democracy</a> (the prior name of mySociety), but\n"
+"<a href=\"https://github.com/mysociety/writetothem\">the source code is\n"
+"available</a> under an open source license."
+msgstr ""
+
+#: templates/website/about-copyright.html:41
+msgid ""
+"Our database of local councillors is kindly supplied by\n"
+"<a href=\"http://www.goveval.com/\">GovEval</a>. Postcode lookup uses\n"
+"<a href=\"https://mapit.mysociety.org/\">MapIt</a>, our tool for doing that sort of\n"
+"thing, and uses Ordnance Survey open data behind the scenes. Thanks to them\n"
+"both!"
+msgstr ""
+
+#: templates/website/about-guidelines.html:3
+#: templates/website/about-sidebar.html:14
+msgid "Guidelines for campaigning"
+msgstr ""
+
+#: templates/website/about-guidelines.html:14
+msgid "Campaigning: terms and conditions"
+msgstr ""
+
+#: templates/website/about-guidelines.html:22
+msgid ""
+"If you&rsquo;re encouraging people to use WriteToThem.com to talk to their representatives about a particular issue, you must adhere to the following terms and conditions. \n"
+"\n"
+"Note that wilfully ignoring these terms constitutes an abuse of our service, and will automatically trigger filters which will ‘freeze’ your supporters’ messages. \n"
+"\n"
+"These terms exist for a reason. If you didn’t adhere to them, the only effect it’d have on representatives is annoying them  - and that won’t do your campaign any good.\n"
+"\n"
+"\n"
+"<ol>\n"
+"<li><strong>Do not give people text to paste into their messages.</strong>\n"
+"\n"
+"Spamming lots of representatives with near-identical messages is definitely bad\n"
+"behaviour in our book. \n"
+"\n"
+"Please be aware that if you do this, most of the duplicate messages will be filtered out automatically and will never get to the representatives.\n"
+"\n"
+" We will let all the people who sent identikit messages know that their messages have been blocked, and we will tell them that it is because you broke our terms and conditions. All you will achieve is irritation amongst your own supporters (<a href=\"/about-qa#formletters\">here’s more information about why we do that</a>) .\n"
+"\n"
+"\n"
+"It’s better to provide a short list of points which people can then make in their own words. Messages written by individuals will never be blocked by our systems unless they are clearly abusive or break our conditions of use.\n"
+"</li>\n"
+"\n"
+"<li><strong>Don&rsquo;t spam people either.</strong>\n"
+"\n"
+"If you&rsquo;re gathering the troops by email, only gather those who have already\n"
+"committed to your cause. \n"
+"\n"
+"In the past, we’ve seen people using professional spammers (sorry, \"email marketers\") to get the word out. Once again, this kind of practice is only going to irritate people. We don’t want to\n"
+"be associated with that kind of behaviour, thankyouverymuch.\n"
+"</li>\n"
+"\n"
+"<li><strong>If you&rsquo;re talking to a <em>very</em> large audience, please try to <a href=\"/about-contact\">let us know</a> in advance.</strong><br>\n"
+"If you&rsquo;re going to mention WriteToThem.com in a campaign which reaches tens of\n"
+"thousands of people at once, <em>please</em> tell us first! \n"
+"\n"
+"If our servers can&rsquo;t cope, it breaks your campaign. With a few days notice, we can make this much less likely.\n"
+"</li>\n"
+"\n"
+"<li><strong>Don&rsquo;t supply people with a postcode to use.</strong>\n"
+"\n"
+"People should be writing to their <em>own</em> representatives, not anyone else&rsquo;s. \n"
+"\n"
+"Otherwise one poor representative will end up with a whole load of messages and the others, who may have been able to help, will get none. <a href=\"/about-qa#onlyrep\">Read more about that here</a>.\n"
+"</li>\n"
+"\n"
+"<li><strong>If you&rsquo;re talking to an international audience, stress that only\n"
+"people living in the UK should use our service.</strong><br>\n"
+"We’ve seen too many large campaigns that have inadvertently encouraged non-UK residents to dig up a UK address to use as their own when contacting a representative.\n"
+"</li>\n"
+"\n"
+"\n"
+"\n"
+"<li><strong>Be considerate.</strong>\n"
+"\n"
+"By now, the common pattern to the above guidelines should be clear: if you irritate representatives, users or us, you&rsquo;re not helping anyone. \n"
+"</li>\n"
+"\n"
+"<li><strong>When linking to us</strong>, either link to our <a href=\"https://www.writetothem.com/\">front page</a> or use our <a href=\"/about-linktous\">handy linking form</a>.\n"
+"\n"
+"You can also use the WriteToMP tool described in <a href=\"/about-branded\">WriteToThem for your website</a>.\n"
+"\n"
+"</li>\n"
+"\n"
+"<li><strong>If in doubt, <a href=\"/about-contact\">ask us first</a>.</strong></li>\n"
+"</ol>"
+msgstr ""
+
+#: templates/website/about-linktous.html:3
+#: templates/website/about-linktous.html:13
+msgid "How to link to us"
+msgstr ""
+
+#: templates/website/about-linktous.html:21
+msgid "Wouldn’t it be great if you could put a little box on your website which would let your users get in touch with their elected representatives? Well, you can!"
+msgstr ""
+
+#: templates/website/about-linktous.html:25
+#: templates/website/about-linktous.html:90
+msgid "Envelope-style box"
+msgstr ""
+
+#: templates/website/about-linktous.html:26
+#: templates/website/about-linktous.html:95
+msgid "Conventional style box"
+msgstr ""
+
+#: templates/website/about-linktous.html:27
+#: templates/website/about-linktous.html:103
+msgid "Limiting to specific types of representative"
+msgstr ""
+
+#: templates/website/about-linktous.html:28
+#: templates/website/about-linktous.html:144
+msgid "Pre-filling name and address"
+msgstr ""
+
+#: templates/website/about-linktous.html:29
+#: templates/website/about-linktous.html:165
+msgid "Plugins for WordPress"
+msgstr ""
+
+#: templates/website/about-linktous.html:32
+msgid ""
+"Before you do so, make sure you read the <a\n"
+"href=\"about-guidelines\">guidelines for campaigners</a>.  You must not tell your\n"
+"users to send pre-written, identical letters &mdash; they are against our conditions of\n"
+"use and we will block them."
+msgstr ""
+
+#: templates/website/about-linktous.html:92
+msgid "To add the envelope-style postcode box to your site, just copy the HTML code below into your own webpage."
+msgstr ""
+
+#: templates/website/about-linktous.html:97
+msgid "To add the conventional postcode box to your site, copy the HTML code below into your own webpage."
+msgstr ""
+
+#: templates/website/about-linktous.html:101
+msgid "Feel free to hack around with the design as much as you like. If you have any questions, just <a href=\"/about-contact\">drop us a line</a>."
+msgstr ""
+
+#: templates/website/about-linktous.html:105
+msgid "If you only want to encourage people to write to one kind of representative - for example, only to their MP, link to WriteToThem using an address like this:"
+msgstr ""
+
+#: templates/website/about-linktous.html:109
+msgid ""
+"Or if you are using one of the boxes, above, to link to us, add this code to your form. It\n"
+"goes just after the postcode <code>&lt;input&gt;</code> field, and before the submit/go\n"
+"button one."
+msgstr ""
+
+#: templates/website/about-linktous.html:115
+msgid ""
+"Possible values for \"a\" in both cases are:</p>\n"
+"<ul>\n"
+"<li><code>westminstermp</code> &mdash; just your MP</li>\n"
+"<li><code>council</code> &mdash; all local government councillors (in some areas this will return\n"
+"district and county councillors, in others unitary authority councillors)</li>\n"
+"<li><code>regionalmp</code> &mdash; members of the Scottish Parliament, Senedd, Northern Ireland Assembly, or London Assembly</li>\n"
+"</ul>\n"
+"\n"
+"There are some more detailed three letter codes that you can use instead.\n"
+"Put these in a list as the value of \"a\", separated by commas \",\".\n"
+"<ul>\n"
+"<li>District type councils: <code>DIW</code> &ndash; district council, <code>LBW</code> &ndash; London Borough</li>\n"
+"<li>Unitary type councils: <code>MTW</code> &ndash; metropolitan district, <code>UTW</code> and <code>UTE</code> &ndash; Unitary authority,\n"
+"<code>LGE</code> &ndash; Local government district (Northern Ireland), <code>COP</code> &ndash; Council of the Isles (Scilly)</li>\n"
+"<li>County councils: <code>CED</code></li>\n"
+"<li>London Assembly: <code>LAC</code> &ndash; constituency members, <code>LAE</code> &ndash; list members</li>\n"
+"<li>The Senedd: <code>WAC</code> &ndash; constituency members, <code>WAE</code> &ndash; list members</li>\n"
+"<li>Scottish Parliament: <code>SPC</code> &ndash; constituency members, <code>SPE</code> &ndash; list members</li>\n"
+"<li>Northern Ireland Assembly: <code>NIE</code></li>\n"
+"<li>House of Commons: <code>WMC</code></li>\n"
+"</ul>\n"
+"\n"
+"So, for example, the link below would only show representatives of district type\n"
+"councils.  For people entering postcodes in unitary areas, it would say there\n"
+"were no representatives of that type and offer to show them all their\n"
+"representatives:"
+msgstr ""
+
+#: templates/website/about-linktous.html:146
+msgid ""
+"If you already know the name, address or email of the person using your website (ie if they are logged in) or reading your newsletter, you can send the values to WriteToThem.\n"
+"\n"
+"Your supporters will be able to check or alter them before sending."
+msgstr ""
+
+#: templates/website/about-linktous.html:153
+msgid "The fields available are:"
+msgstr ""
+
+#: templates/website/about-linktous.html:167
+msgid ""
+"Philip John (not affiliated to WriteToThem, but working voluntarily) has made a\n"
+"<a href=\"https://wordpress.org/plugins/writetothem/\">WordPress plugin</a>.\n"
+"\n"
+"It lets you add a WriteToThem form to your WordPress site as a standard WordPress widget - so it’s just drag-and-drop to install.\n"
+"\n"
+"There is also a much older <a href=\"/WriteToThem.com.zip\">WordPress\n"
+"plugin</a>, written by Richard Pope. To use that, you will need to alter your PHP template.\n"
+"\n"
+"Please address support queries about these plug-ins to their authors, on the plug-ins’ pages."
+msgstr ""
+
+#: templates/website/about-lords.html:25
+msgid "What is a Lord?"
+msgstr ""
+
+#: templates/website/about-lords.html:27
+msgid ""
+"The UK Parliament is divided into two. \n"
+"\n"
+" On one side is the House of Commons where your MP sits; on the other is the House of Lords. Proposed new laws have to be considered by both Houses.\n"
+"\n"
+" MPs are, of course, elected by the nation. Lords, on the other hand, become members through a complex mixture of appointment, religion, hereditary entitlement, and self-election\n"
+"(<a href=\"http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/members-and-their-roles/how-members-are-appointed/\">more details here</a>)."
+msgstr ""
+
+#: templates/website/about-lords.html:34
+msgid "Can I write to my Lord?"
+msgstr ""
+
+#: templates/website/about-lords.html:36
+msgid "Yes. WriteToThem has a <a href=\"/lords\">Write to Your Lord</a> section."
+msgstr ""
+
+#: templates/website/about-lords.html:38
+msgid "Why write to your Lord?"
+msgstr ""
+
+#: templates/website/about-lords.html:40
+msgid ""
+"Well, they may not be elected, but they still get to vote on, debate, and amend the bills that will affect us all when they become law.\n"
+"\n"
+"You might write to a Lord to tell them about something you think they should care about.\n"
+"\n"
+"Or, if a topic is soon to be under debate, you might provide information that will go towards forming their opinion on which way to vote."
+msgstr ""
+
+#: templates/website/about-lords.html:46
+msgid "Which Lord should I write to?"
+msgstr ""
+
+#: templates/website/about-lords.html:48
+msgid ""
+"The main section of WriteToThem asks you to type in your postcode, so that we can match you with the people who represent you in your constituency.\n"
+"\n"
+"With Lords, it’s different. You may contact any Lord, so how on earth do you choose?\n"
+"Our <a href=\"/lords\">Write to Your Lord</a> section tries to solve this issue in a few different ways:\n"
+"\n"
+"<ul><li><strong>Method 1</strong> Find a Lord who has a special interest in your issue.\n"
+"\n"
+"Enter the topic into the box as a word or a phrase. We’ll show you a list of the Lords who have mentioned it in Parliament the most times.\n"
+"\n"
+"Or, if your issue strongly relates to location, try the ‘find a Lord with an association to this place’ facility.</li>\n"
+"\n"
+"<li><strong>Method 2</strong> If your topic is of general human interest, then you might want to make use of the \"Random Lord\" button - which does exactly its name suggests.\n"
+"\n"
+"Believe in serendipity? Use the ‘Find a Lord who shares my birthday’ button, and find out whether your matching horoscopes also mean that your opinions align.</li></ul>\n"
+"\n"
+"Whatever method you choose, don’t feel you have to pick the top Lord: you can follow the links to read a bit about what they’ve said. \n"
+"\n"
+"If they’re a minister, it’ll probably be very hard to influence their opinion, so it’s best to pick someone who’s not working directly for the Government.</li>"
+msgstr ""
+
+#: templates/website/about-lords.html:69
+msgid "Why do I need a UK postcode to write to a Lord?"
+msgstr ""
+
+#: templates/website/about-lords.html:71
+msgid ""
+"Lords sit in the UK Parliament. Amongst other things, they vote on the\n"
+"passing of UK law.\n"
+"\n"
+"Just as we only let people contact <a href=\"about-qa#onlyrep\">their own MP</a>, we don’t let people from outside the UK contact Lords.\n"
+"\n"
+"Please use the same postcode that you would use to contact your MP.  See <a href=\"/about-constituency\">\"What postcode should I use?\"</a> if you’re not sure what postcode to use, for example if you are in the Armed Services."
+msgstr ""
+
+#: templates/website/about-lords.html:79
+msgid "How does it work? Do you have all the Lords email addresses?"
+msgstr ""
+
+#: templates/website/about-lords.html:81
+msgid ""
+"Not yet! For many Lords, we send your message to the House of Lords central\n"
+"email address, as the majority of peers don’t have offices.\n"
+"\n"
+"From there, it will be conveyed to your chosen Lord by the House’s internal mail systems.\n"
+"\n"
+"If you are a peer yourself, and would prefer to receive messages directly,\n"
+"please <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: templates/website/about-lords.html:89
+msgid "How many Lords can I write to?"
+msgstr ""
+
+#: templates/website/about-lords.html:91
+msgid ""
+"The Parliament website gives more details about <a\n"
+"href=\"http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/get-in-touch-with-members/\">different ways to contact Lords</a>, and the different limits on sending bulk messages to\n"
+"all Lords.\n"
+"\n"
+"We also very aggressively prevent you from sending duplicate messages to Lords. This\n"
+"is because the House of Lords throw away bulk sent messages, so it is a waste\n"
+"of time. \n"
+"\n"
+"Do not tell people to copy and paste pre-written letters to Lords: get them to write in their own words. See our <a href=\"/about-guidelines\">guidelines for campaigning</a> for more information on this."
+msgstr ""
+
+#: templates/website/about-lords.html:101
+msgid "Why should a Lord bother replying to my message?"
+msgstr ""
+
+#: templates/website/about-lords.html:103
+msgid ""
+"Lords aren’t actually obliged to respond to letters, and unlike MPs, they don’t have constituents. Nor do they have the need to prove their worth in advance of a general election.\n"
+"\n"
+"That said, we believe that most politicians are actually decent people trying to do their best. So in short, while they don’t <em>have to</em> bother, if you take the time to compose a decent letter, there’s a better chance that they will."
+msgstr ""
+
+#: templates/website/about-lords.html:108
+msgid "Do you have a Lords reform agenda? What do you think about an elected reform?"
+msgstr ""
+
+#: templates/website/about-lords.html:110
+msgid ""
+"Hah! Like we’ve got time to think about things like that with\n"
+"<a href=\"https://www.mysociety.org/projects/\">all these pesky democratic websites</a> to run."
+msgstr ""
+
+#: templates/website/about-lords.html:113
+msgid "When should I write to a Lord, instead of, say, my MP?"
+msgstr ""
+
+#: templates/website/about-lords.html:115
+msgid ""
+"There are various reasons you might want to write to a Lord.\n"
+"\n"
+"They may be passionately involved with an issue you care about, or you might\n"
+"disagree with them on an issue that they speak about publicly.\n"
+"\n"
+"Often you might find that a Bill on a topic you care about has been passed\n"
+"from the Commons to the Lords for debate, amendment or approval. At that point,\n"
+"persuading a Lord might make a real difference to the outcome.\n"
+"\n"
+"Here’s another thing: while democracy works in general, it does have some\n"
+"faults. For example, if your own MP has views very different to your own,\n"
+"contacting them isn’t always useful or satisfactory. Contacting a Lord instead\n"
+"may be a better way to influence policy.\n"
+"\n"
+"Or, of course, you might just want to ask them what they do, or what they\n"
+"think about something. Whatever, write to them: they’re <em>your</em>\n"
+"Lords."
+msgstr ""
+
+#: templates/website/about-lords.html:134
+msgid "This is great &mdash; how can I help you guys?"
+msgstr ""
+
+#: templates/website/about-lords.html:136
+msgid ""
+"<a href=\"https://www.mysociety.org/\">mySociety</a>, the charity\n"
+"who built and maintain WriteToThem, are always in need of <a href=\"https://www.mysociety.org/donate/\">donations</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:3
+#: templates/website/about-privacy.html:14 templates/website/about-qa.html:58
+#: templates/website/about-qa.html:424 templates/website/footer.php:21
+msgid "Privacy"
+msgstr ""
+
+#: templates/website/about-privacy.html:22
+msgid "WriteToThem is run by the charity <a href=\"https://www.mysociety.org/\">mySociety</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:26
+msgid ""
+"Working in the fields of transparency and accountability, mySociety thinks\n"
+"                    hard and cares very much about the privacy and security of our users: the\n"
+"                    length of this privacy policy is one result of that.  We know that no-one\n"
+"                    reads privacy policies for fun, though, so we&rsquo;ve tried to keep it a clear\n"
+"                    and reasonably quick read."
+msgstr ""
+
+#: templates/website/about-privacy.html:34
+msgid ""
+"We hope it covers everything you need to know, but if you still have any\n"
+"                    questions please feel free to <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:39
+msgid "What information we collect"
+msgstr ""
+
+#: templates/website/about-privacy.html:43
+msgid ""
+"When you use WriteToThem to contact a representative, you provide the\n"
+"                    following personal information:"
+msgstr ""
+
+#: templates/website/about-privacy.html:49 web/write.php:210
+msgid "Your name"
+msgstr ""
+
+#: templates/website/about-privacy.html:52
+msgid "Your address"
+msgstr ""
+
+#: templates/website/about-privacy.html:55
+msgid "Your email address"
+msgstr ""
+
+#: templates/website/about-privacy.html:58
+msgid "The body of your message "
+msgstr ""
+
+#: templates/website/about-privacy.html:61
+msgid "Optionally, your telephone number"
+msgstr ""
+
+#: templates/website/about-privacy.html:66
+msgid "Who sees this information"
+msgstr ""
+
+#: templates/website/about-privacy.html:71
+msgid ""
+"We will pass on your message, name, email and postal address and (if\n"
+"                        given) telephone number either direct to the politician(s) you write to,\n"
+"                        or, where we do not have a direct email address for the politician,\n"
+"                        through an official channel (such as a council democratic services\n"
+"                        department or parliamentary office) whose job it is to distribute mail\n"
+"                        to representatives."
+msgstr ""
+
+#: templates/website/about-privacy.html:79
+msgid ""
+"Note that it is common for MPs and other busy representatives to employ\n"
+"                        staff who may read and respond to mail on their behalf.\n"
+"                        Representatives&rsquo; offices will have and adhere to their own privacy\n"
+"                        protocols."
+msgstr ""
+
+#: templates/website/about-privacy.html:85
+msgid ""
+"No-one else views any of the information you provide, unless there is a\n"
+"                        problem with the delivery of your message. In such cases, WriteToThem\n"
+"                        admin staff may access your message in order to understand what the\n"
+"                        issue is. Admin staff have been trained to keep to the high levels  of\n"
+"                        confidentiality dictated by our moderation policies."
+msgstr ""
+
+#: templates/website/about-privacy.html:92
+msgid ""
+"The body of your message is included in the confirmation and survey\n"
+"                        emails we send you. These mails are sent through an automated process\n"
+"                        and are unseen by humans. If you have concerns about messages which\n"
+"                        contain sensitive content, please be careful in forwarding or sharing\n"
+"                        these emails."
+msgstr ""
+
+#: templates/website/about-privacy.html:99
+msgid ""
+"We sometimes use data from WriteToThem for research. This data does not\n"
+"                        contain  identifying details such as names, addresses, email addresses\n"
+"                        or the content of messages. Rather, we analyse aggregate data for\n"
+"                        purposes such as our regular statistics on what percentage of users\n"
+"                        receive a response from their representatives. Our Research Data Release\n"
+"                        policy may be seen on request."
+msgstr ""
+
+#: templates/website/about-privacy.html:107
+msgid ""
+"We will never sell or otherwise distribute any information you give\n"
+"                        WriteToThem to organisations or individuals outside of mySociety, except\n"
+"                        if required to do so by UK law."
+msgstr ""
+
+#: templates/website/about-privacy.html:114
+msgid "Consequences of using WriteToThem"
+msgstr ""
+
+#: templates/website/about-privacy.html:119
+msgid ""
+"When your representative responds to your message, their reply will go\n"
+"                        directly to your email inbox. This response, and any subsequent\n"
+"                        correspondence, happens outside the WriteToThem system."
+msgstr ""
+
+#: templates/website/about-privacy.html:124
+msgid ""
+"WriteToThem does not operate a mailing list and there is no concept of\n"
+"                        accounts or registration on the site."
+msgstr ""
+
+#: templates/website/about-privacy.html:128
+msgid ""
+"We will never send you unsolicited email except for the following:\n"
+"                        <ol type=\"a\">\n"
+"                            <li>If you submit a message but do not click the confirmation link, we\n"
+"                            send you one reminder after 24 hours;</li>\n"
+"                            <li>Two weeks after you send your message, we send you an automated email\n"
+"                            to ask whether you received a response. If you do not respond, we send\n"
+"                            you a single reminder.</li>\n"
+"                            <li>On rare occasions, we pass on a message from a politician who is\n"
+"                            concerned that they have mislaid emails from their constituents,\n"
+"                            inviting you to re-establish contact.</li>\n"
+"                        </ul>"
+msgstr ""
+
+#: templates/website/about-privacy.html:143
+msgid "Email opt-out"
+msgstr ""
+
+#: templates/website/about-privacy.html:147
+msgid ""
+"As part of the process of sending your message to your representative we\n"
+"                    will send you a limited number of emails, as described above. If during this\n"
+"                    process you wish to stop receiving emails from us, or you are a\n"
+"                    representative who no longer wishes to receive email via WriteToThem*,\n"
+"                    please <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:155
+msgid ""
+"* If you are a representative wishing to opt out of WriteToThem, we\n"
+"                    encourage you to think again! WriteToThem is a system which makes it simple\n"
+"                    for your constituents to contact you, where they might find other channels\n"
+"                    more difficult to access. We have measures in place that prevent bulk\n"
+"                    mailings and contact with representatives other than the constituents&rsquo; own.\n"
+"                    You may wish to read more about the service and how you can best use it at\n"
+"                    <a href=\"https://www.mysociety.org/mp-services/\">https://www.mysociety.org/mp-services/</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:165
+msgid "Legal basis for processing"
+msgstr ""
+
+#: templates/website/about-privacy.html:169
+msgid ""
+"When you use WriteToThem to contact your representative, we\n"
+"                    are processing your data under the legal basis 6(1)(f) of\n"
+"                    the General Data Protection Regulation – legitimate\n"
+"                    interests. We believe we are pursuing a legitimate interest\n"
+"                    in benefitting you and society by helping you easily find\n"
+"                    out who your representatives are at different levels and\n"
+"                    giving you an easy way to contact them. This is also the\n"
+"                    legitimate interest we have in processing the names and\n"
+"                    contact information for representatives."
+msgstr ""
+
+#: templates/website/about-privacy.html:181
+msgid "Retention policies"
+msgstr ""
+
+#: templates/website/about-privacy.html:186
+msgid ""
+"We store your IP address and the pages that you visited whilst on the\n"
+"                        site as part of our site logs. We keep these for one month."
+msgstr ""
+
+#: templates/website/about-privacy.html:190
+msgid ""
+"We do not keep permanent copies of the letters you write to send to your\n"
+"                        representatives."
+msgstr ""
+
+#: templates/website/about-privacy.html:194
+msgid ""
+"We store the content of your message for four weeks after it was\n"
+"                        dispatched, and then it is automatically deleted. We keep a copy in\n"
+"                        backup files for one additional week. Unless there is a technical\n"
+"                        problem with your message, it is never viewed by WriteToThem staff. We\n"
+"                        keep messages in our servers for this long to enable us to monitor and\n"
+"                        prevent abuse of the service. It also means we can include a copy of\n"
+"                        your message in the questionnaire which asks if your representative has\n"
+"                        responded yet, so you know which one we are talking about."
+msgstr ""
+
+#: templates/website/about-privacy.html:204
+msgid ""
+"If delivery of a message fails for a period of seven days, we keep the\n"
+"                        message content for a further eight weeks, to give us time to diagnose\n"
+"                        the problem and where possible to resend the message."
+msgstr ""
+
+#: templates/website/about-privacy.html:209
+msgid ""
+"We keep records of names, emails and addresses for two years in order to\n"
+"                        provide an audit trail if a representative queries the accuracy of the\n"
+"                        statistics on response rates we produce. We will never give these out to\n"
+"                        a representative on any other occasion than when you send them your\n"
+"                        message."
+msgstr ""
+
+#: templates/website/about-privacy.html:216
+msgid ""
+"If you contact WriteToThem via our support email address we will keep\n"
+"                        your message for two years. This is to aid continuity and so that we can\n"
+"                        view any historic context which may have bearing on subsequent support\n"
+"                        mail, even if members of the support staff change. Support staff adhere\n"
+"                        to strict internal privacy and security policies."
+msgstr ""
+
+#: templates/website/about-privacy.html:225
+msgid "Your right to access"
+msgstr ""
+
+#: templates/website/about-privacy.html:229
+msgid ""
+"You may <a href=\"/about-contact\">contact us</a> at any time to ask to see what personal data we hold\n"
+"                    about you."
+msgstr ""
+
+#: templates/website/about-privacy.html:233
+msgid "Your right to object"
+msgstr ""
+
+#: templates/website/about-privacy.html:236
+msgid ""
+"The General Data Protection Regulation gives you the right to object to our\n"
+"                    processing of your personal information and to ask us to stop processing it.\n"
+"                    However, it also gives us the right to continue to process it if we can demonstrate\n"
+"                    compelling legitimate grounds for the processing that override your interests, rights\n"
+"                    and freedoms. To exercise your right to object, you can <a href=\"/about-contact\">\n"
+"                    contact us</a>, giving specific reasons why you are objecting to the processing of\n"
+"                    your personal data. These reasons should be based upon your particular situation."
+msgstr ""
+
+#: templates/website/about-privacy.html:245
+msgid "Your right to complain"
+msgstr ""
+
+#: templates/website/about-privacy.html:249
+msgid ""
+"If you believe that we have mishandled your data, you have the right to\n"
+"                    lodge a complaint with the Information Commissioner&rsquo;s Office.\n"
+"                    <a href=\"https://ico.org.uk/concerns/handling/\">You can report a concern here</a>\n"
+"                    (but do contact us first, so that we can try and help)."
+msgstr ""
+
+#: templates/website/about-privacy.html:256
+msgid "Who we are"
+msgstr ""
+
+#: templates/website/about-privacy.html:260
+msgid ""
+"WriteToThem is run by <a href=\"https://www.mysociety.org/\">mySociety</a>, a UK not-for-profit social enterprise. Our\n"
+"                    registered address is:"
+msgstr ""
+
+#: templates/website/about-privacy.html:273
+msgid "…and we can also be <a href=\"/about-contact\">contacted here</a>."
+msgstr ""
+
+#: templates/website/about-privacy.html:276
+msgid "Measuring website usage (Google Analytics)"
+msgstr ""
+
+#: templates/website/about-privacy.html:278
+msgid ""
+"<p>We use Google Analytics software &ndash; without\n"
+"                        cookies &ndash; to collect information about how you\n"
+"                        use this site. We do this to help make sure the site is\n"
+"                        meeting the needs of its users and to help us make\n"
+"                        improvements.\n"
+"\n"
+"                        <p>Google Analytics stores information such as what\n"
+"                        pages you visit, how you got here, what you click on,\n"
+"                        and information about your web browser. IP addresses\n"
+"                        are masked (only a portion is stored) and personal\n"
+"                        information is only reported in aggregate. We do not\n"
+"                        allow Google to use or share our analytics data for any\n"
+"                        purpose besides providing us with analytics\n"
+"                        information, and we recommend that any user of Google\n"
+"                        Analytics does the same. We do not use cookies to track\n"
+"                        usage across a session.</p>\n"
+"\n"
+"                        <h4>Opting out</h4>\n"
+"                        <p>You can <a href=\"https://tools.google.com/dlpage/gaoptout\">opt out of Google\n"
+"                        Analytics</a>.\n"
+"\n"
+"                        <p>If you want to disable advertising-based tracking, you can\n"
+"                        <a href=\"https://www.google.com/settings/ads\">adjust your Google Ads\n"
+"                        Settings</a>, or opt out of advertising-based tracking across a\n"
+"                        number of providers in one go using the\n"
+"                        <a href=\"http://www.networkadvertising.org/choices/\">Network\n"
+"                        Advertising Initiative’s opt-out form</a>.\n"
+"\n"
+"                        <p>Rest assured, we only track usage data for one reason: to help us\n"
+"                        understand how we can make the site work better for you, our\n"
+"                        users.</p>"
+msgstr ""
+
+#: templates/website/about-privacy.html:310
+msgid "Credits"
+msgstr ""
+
+#: templates/website/about-privacy.html:312
+msgid "Bits of wording taken from the <a href=\"http://gov.uk/help/cookies\">GOV.UK cookies page</a> (under the Open Government Licence)."
+msgstr ""
+
+#: templates/website/about-qa.html:3 templates/website/about-qa.html:15
+#: templates/website/about-sidebar.html:6
+msgid "Questions and answers"
+msgstr ""
+
+#: templates/website/about-qa.html:25 templates/website/about-qa.html:90
+msgid "About WriteToThem"
+msgstr ""
+
+#: templates/website/about-qa.html:26 templates/website/about-qa.html:92
+msgid "Is this a government website?"
+msgstr ""
+
+#: templates/website/about-qa.html:27 templates/website/about-qa.html:102
+msgid "Then who are you, and why are you doing this?"
+msgstr ""
+
+#: templates/website/about-qa.html:28 templates/website/about-qa.html:113
+msgid "Does it cost money to send a message?"
+msgstr ""
+
+#: templates/website/about-qa.html:30 templates/website/about-qa.html:122
+msgid "How WriteToThem works"
+msgstr ""
+
+#: templates/website/about-qa.html:31 templates/website/about-qa.html:126
+msgid "How do I send a message to my representative?"
+msgstr ""
+
+#: templates/website/about-qa.html:32 templates/website/about-qa.html:145
+msgid "How are messages sent to all the councillors, MPs etc.?"
+msgstr ""
+
+#: templates/website/about-qa.html:33 templates/website/about-qa.html:157
+msgid "Can I send an attachment with my message?"
+msgstr ""
+
+#: templates/website/about-qa.html:34 templates/website/about-qa.html:169
+msgid "I want to edit my message"
+msgstr ""
+
+#: templates/website/about-qa.html:35 templates/website/about-qa.html:179
+msgid "How do I cancel my message?"
+msgstr ""
+
+#: templates/website/about-qa.html:36 templates/website/about-qa.html:189
+msgid "Why do I have to confirm my message?"
+msgstr ""
+
+#: templates/website/about-qa.html:37 templates/website/about-qa.html:205
+#: templates/website/confirm-accept.html:68
+msgid "Can you guarantee my message will be sent?"
+msgstr ""
+
+#: templates/website/about-qa.html:38 templates/website/about-qa.html:217
+msgid "How do I know if my message has been sent?"
+msgstr ""
+
+#: templates/website/about-qa.html:39 templates/website/about-qa.html:227
+msgid "I want a copy of my letter for my own records"
+msgstr ""
+
+#: templates/website/about-qa.html:40 templates/website/about-qa.html:239
+msgid "Why shouldn&rsquo;t I copy and paste &ldquo;form&rdquo; letters?"
+msgstr ""
+
+#: templates/website/about-qa.html:41 templates/website/about-qa.html:246
+msgid "Can’t you just give me the direct email address of my MP?"
+msgstr ""
+
+#: templates/website/about-qa.html:42 templates/website/about-qa.html:265
+msgid "What’s the point of this site, when most representatives publish their email addresses these days?"
+msgstr ""
+
+#: templates/website/about-qa.html:44 templates/website/about-qa.html:282
+msgid "Representatives"
+msgstr ""
+
+#: templates/website/about-qa.html:45
+msgid "Why can&rsquo;t I write to any representative I like?"
+msgstr ""
+
+#: templates/website/about-qa.html:46 templates/website/about-qa.html:291
+msgid "Why can&rsquo;t I write to a Minister through the site?"
+msgstr ""
+
+#: templates/website/about-qa.html:47 templates/website/about-qa.html:309
+msgid "How can I write to a Lord through the site?"
+msgstr ""
+
+#: templates/website/about-qa.html:48 templates/website/about-qa.html:323
+msgid "Will you add Police Commissioners or Parish Councillors to the site?"
+msgstr ""
+
+#: templates/website/about-qa.html:50 templates/website/about-qa.html:335
+msgid "Problems"
+msgstr ""
+
+#: templates/website/about-qa.html:51 templates/website/about-qa.html:338
+msgid "WriteToThem doesn’t recognise my postcode"
+msgstr ""
+
+#: templates/website/about-qa.html:52 templates/website/about-qa.html:353
+msgid "WriteToThem is showing me the wrong representatives"
+msgstr ""
+
+#: templates/website/about-qa.html:53 templates/website/about-qa.html:369
+msgid "I want to write to my representative, but I got a message saying you don’t have their email address"
+msgstr ""
+
+#: templates/website/about-qa.html:54 templates/website/about-qa.html:379
+msgid "I did not receive my confirmation email"
+msgstr ""
+
+#: templates/website/about-qa.html:55 templates/website/about-qa.html:394
+msgid "Please stop sending me all these emails!"
+msgstr ""
+
+#: templates/website/about-qa.html:56 templates/website/about-qa.html:411
+msgid "What do I do if I think something went wrong, or if I see an error on the site?"
+msgstr ""
+
+#: templates/website/about-qa.html:59 templates/website/about-qa.html:427
+msgid "Why do you want my address, name, email address and phone number?"
+msgstr ""
+
+#: templates/website/about-qa.html:60 templates/website/about-qa.html:437
+msgid "What will you do with the personal information used by this site?"
+msgstr ""
+
+#: templates/website/about-qa.html:61 templates/website/about-qa.html:445
+msgid "How private is my correspondence?"
+msgstr ""
+
+#: templates/website/about-qa.html:63 templates/website/about-qa.html:458
+msgid "Next steps"
+msgstr ""
+
+#: templates/website/about-qa.html:64 templates/website/about-qa.html:461
+msgid "How long should I wait for a reply?"
+msgstr ""
+
+#: templates/website/about-qa.html:65 templates/website/about-qa.html:473
+msgid "What should I do if my MP (or other representative) doesn’t reply?"
+msgstr ""
+
+#: templates/website/about-qa.html:66 templates/website/about-qa.html:499
+msgid "I got a reply, but it was unsatisfactory"
+msgstr ""
+
+#: templates/website/about-qa.html:67 templates/website/about-qa.html:508
+msgid "I got a reply, but I don’t agree with it"
+msgstr ""
+
+#: templates/website/about-qa.html:68 templates/website/about-qa.html:515
+msgid "Can you help me get my problem fixed?"
+msgstr ""
+
+#: templates/website/about-qa.html:70 templates/website/about-qa.html:523
+msgid "Questionnaire and responsiveness"
+msgstr ""
+
+#: templates/website/about-qa.html:71 templates/website/about-qa.html:526
+msgid "Why do you send a follow-up email?"
+msgstr ""
+
+#: templates/website/about-qa.html:72 templates/website/about-qa.html:535
+msgid "What is the responsiveness league table?"
+msgstr ""
+
+#: templates/website/about-qa.html:73 templates/website/about-qa.html:548
+msgid "None of the options in the questionnaire is suitable for my situation"
+msgstr ""
+
+#: templates/website/about-qa.html:74 templates/website/about-qa.html:562
+msgid "I’m trying to register my response, but the link doesn’t work"
+msgstr ""
+
+#: templates/website/about-qa.html:75 templates/website/about-qa.html:574
+msgid "I need to change my response to the questionnaire"
+msgstr ""
+
+#: templates/website/about-qa.html:77 templates/website/about-qa.html:582
+msgid "Feedback"
+msgstr ""
+
+#: templates/website/about-qa.html:78 templates/website/about-qa.html:583
+msgid "WriteToThem really helped me. How can I help you back?"
+msgstr ""
+
+#: templates/website/about-qa.html:79 templates/website/about-qa.html:596
+msgid "I’ve got a suggestion for improving WriteToThem"
+msgstr ""
+
+#: templates/website/about-qa.html:81 templates/website/about-qa.html:610
+msgid "Conditions of use"
+msgstr ""
+
+#: templates/website/about-qa.html:82 templates/website/about-qa.html:612
+msgid "What types of message are not allowed?"
+msgstr ""
+
+#: templates/website/about-qa.html:85 templates/website/about-qa.html:634
+msgid "Code"
+msgstr ""
+
+#: templates/website/about-qa.html:86
+msgid "I have an idea for a service similar to  WriteToThem. How would I set it up? Can I use your software?"
+msgstr ""
+
+#: templates/website/about-qa.html:87 templates/website/about-qa.html:645
+msgid "I’d like to use WriteToThem for a campaign. How do I do that?"
+msgstr ""
+
+#: templates/website/about-qa.html:95
+msgid ""
+"No. WriteToThem is an independent website with no affiliation to any government, national or local.\n"
+"\n"
+"It covers the whole of the UK and you can use it to write to any of your representatives, from your councillors to your MPs."
+msgstr ""
+
+#: templates/website/about-qa.html:99 templates/website/about-qa.html:110
+#: templates/website/about-qa.html:118 templates/website/about-qa.html:143
+#: templates/website/about-qa.html:154 templates/website/about-qa.html:166
+#: templates/website/about-qa.html:176 templates/website/about-qa.html:186
+#: templates/website/about-qa.html:202 templates/website/about-qa.html:214
+#: templates/website/about-qa.html:224 templates/website/about-qa.html:236
+#: templates/website/about-qa.html:243 templates/website/about-qa.html:262
+#: templates/website/about-qa.html:278 templates/website/about-qa.html:289
+#: templates/website/about-qa.html:306 templates/website/about-qa.html:320
+#: templates/website/about-qa.html:331 templates/website/about-qa.html:350
+#: templates/website/about-qa.html:366 templates/website/about-qa.html:376
+#: templates/website/about-qa.html:391 templates/website/about-qa.html:408
+#: templates/website/about-qa.html:420 templates/website/about-qa.html:435
+#: templates/website/about-qa.html:442 templates/website/about-qa.html:454
+#: templates/website/about-qa.html:469 templates/website/about-qa.html:496
+#: templates/website/about-qa.html:505 templates/website/about-qa.html:512
+#: templates/website/about-qa.html:519 templates/website/about-qa.html:532
+#: templates/website/about-qa.html:544 templates/website/about-qa.html:559
+#: templates/website/about-qa.html:571 templates/website/about-qa.html:579
+#: templates/website/about-qa.html:593 templates/website/about-qa.html:606
+#: templates/website/about-qa.html:630
+msgid "top"
+msgstr ""
+
+#: templates/website/about-qa.html:105
+msgid ""
+"The short answer is that WriteToThem is run by the charity <a href=\"https://www.mysociety.org/about/\">mySociety</a>, with the aim of making\n"
+"it easier to contact your representatives.\n"
+"\n"
+"For the longer answer, please see WriteToThem’s <a href=\"/about-us\">About Us</a> page."
+msgstr ""
+
+#: templates/website/about-qa.html:116
+msgid "No. WriteToThem is a free service, and always will be."
+msgstr ""
+
+#: templates/website/about-qa.html:129
+msgid ""
+"Begin on <a href=\"https://www.writetothem.com\">WriteToThem’s homepage</a>.Type in your postcode and press the \"Go\" button. \n"
+"\n"
+"We’ll show you  a list of everyone who represents you, from your local councillors to your MPs.\n"
+"\n"
+"Select the one you want to write to, and you will be taken to a simple form in which you can start writing your message straight away.\n"
+"\n"
+"Once you are ready to send your letter, click \"preview and send\". This will take you to a screen where you can see exactly what your message will look like when we send it.\n"
+"\n"
+"If everything is in order, click \"I’m happy, send it\" - or, if there’s something you want to change, choose the \"edit some more\" button.\n"
+"\n"
+"After that, there’s just one more step - you must check your email inbox for our confirmation mail, and click on the link it contains.\n"
+"\n"
+"Any response from your representative will come directly to your own email inbox - so make sure you have entered your email address correctly!"
+msgstr ""
+
+#: templates/website/about-qa.html:148
+msgid ""
+"Most messages are sent directly to representatives’ email addresses.\n"
+"\n"
+"Messages to local councillors often go to the Democratic Services offices of that council, who will then forward it on to the right person.\n"
+"\n"
+"When WriteToThem first started, we frequently faxed messages through, but this is much rarer these days."
+msgstr ""
+
+#: templates/website/about-qa.html:160
+msgid ""
+"No, WriteToThem does not provide this option.\n"
+"\n"
+"If you need to send a photograph or documents  to your representative, you can refer to them in your initial message.\n"
+"\n"
+"Then wait until your representative responds to you. You’ll be able to reply to their email directly, and attach whatever you need to via your own email account."
+msgstr ""
+
+#: templates/website/about-qa.html:172
+msgid ""
+"Before you click the \"I’m happy, send it\" button, you can edit your message as many times as you like, by clicking \"Edit some more\".\n"
+"\n"
+"Once your message has been sent, it can no longer be edited. Think of WriteToThem like an email program - you can keep editing until you press \"send\", but once you do, your message is on its way."
+msgstr ""
+
+#: templates/website/about-qa.html:182
+msgid ""
+"If you would like to cancel your message and <em>not</em> send it, please just do <strong>not</strong> click on the link in the confirmation email that will be sent to you.\n"
+"\n"
+"Once you have confirmed your message by clicking that link, it will probably have been sent pretty much instantly. Our best advice is to read your message carefully before confirming it."
+msgstr ""
+
+#: templates/website/about-qa.html:192
+msgid ""
+"We’d love to create a one-click service where your message went off to your representative as soon as you submitted it.\n"
+"\n"
+"But we have to ask you to visit your email inbox, and click the link in our confirmation email, for a number of unavoidable reasons.\n"
+"\n"
+"We need to verify that the message is coming from a real person; this step also helps prevent anyone else from using your email address to send a message that you didn’t authorise.\n"
+"\n"
+"Additionally, when you click the confirmation link, it shows us that your email address is valid, and that you’ll receive any response that your representative sends.\n"
+"\n"
+"This step is also a good opportunity for us to send you a copy of your message for your own records."
+msgstr ""
+
+#: templates/website/about-qa.html:208
+msgid ""
+"Sadly, no. There are more than 24,000 representatives in our database. Email addresses can change; inboxes can become overfull; representatives can retire; council or parliament (or our!) servers can fail. \n"
+"\n"
+"We do everything we can to spot and eliminate problems though, so please let us know if you have found any issues. \n"
+"\n"
+"Of course, if your message doesn’t get through for any reason, we’ll let you know."
+msgstr ""
+
+#: templates/website/about-qa.html:220
+msgid ""
+"When you click on the link in our confirmation email, you’ll see a message in your browser to tell you that it’s on its way. \n"
+"\n"
+"If you hear no more, you can be pretty certain that it has reached its destination. If there is any issue - for example, your mail has bounced back from the representative’s email - we will let you know."
+msgstr ""
+
+#: templates/website/about-qa.html:230
+msgid ""
+"You’ll find a copy of your message automatically included in our confirmation email, and in our follow-up email two weeks later which asks whether you received a reply.\n"
+"\n"
+"If you wish to search for these in your email, the titles include the phrases:\n"
+"\n"
+"\"Please confirm that you want to send a message\" and \"Did your MP reply to your letter?\"."
+msgstr ""
+
+#: templates/website/about-qa.html:249
+msgid ""
+"There are several reasons we don’t just publish representatives’ email addresses on WriteToThem.\n"
+"\n"
+"<ul>\n"
+"<li>We have safeguards in place to prevent spam, or other abusive mass emailed messages, from being sent to representatives. </li>\n"
+"<li>Strict parliamentary protocols mean that MPs can only help their own constituents; for that reason, our system only allows you to write to your own representatives. If we published all the addresses, we wouldn’t be able to ensure that users were writing to the representatives who were actually permitted to help them.\n"
+"<li>The WritetoThem system monitors - as best we can - whether the emails get to their destination. This means we can fix bad contact details, rather than leaving them not working.</li>\n"
+"<li>We check whether users receive a reply, and <a href=\"https://www.writetothem.com/stats/\">hold representatives to account</a> if they never respond.</li>\n"
+"</ul>\n"
+"\n"
+"However, if you do need an email address for legitimate reasons, you can\n"
+"generally find MPs’ addresses on the <a href=\"https://members.parliament.uk/\">Parliament website</a>, and\n"
+"councillors’ addresses on your own council’s site."
+msgstr ""
+
+#: templates/website/about-qa.html:268
+#, php-format
+msgid ""
+"One of the primary reasons for WriteToThem’s existence is to help people write to their representatives, even if they don’t know who they are. \n"
+"\n"
+"It’s easy enough to find your MP’s email address if you happen to know who\n"
+"he or she is, but 78% of the UK population cannot name their representative in\n"
+"Parliament (figure comes from the <a href=\"https://www.hansardsociety.org.uk/projects/audit-of-political-engagement\">Hansard Society Audit of Public Engagement 2013</a> [PDF]).\n"
+"\n"
+"If you know you want to write to someone in power, but you have no idea how to, then we hope that WriteToThem removes that barrier.\n"
+"\n"
+"Similarly, you might think it is relatively easy to visit your council website and discover who your local councillors are. We’d say that it depends on the council website. In <em>some</em> cases, it’s a wee bit easier to put your postcode into WriteToThem’s homepage."
+msgstr ""
+
+#: templates/website/about-qa.html:285
+msgid "Why can’t I write to any representative I like?"
+msgstr ""
+
+#: templates/website/about-qa.html:293
+msgid ""
+"Ministers are often best contacted via your MP.\n"
+"\n"
+"Ask your MP to pass on your concern to the relevant Minister. They will do this even if they disagree with you, although you should ask them to add their own support if they do agree. \n"
+"\n"
+"Your MP will return the response that they get from the Minister. If necessary, your MP can also chase the Minister, on your behalf, through Questions in Parliament.\n"
+"\n"
+"If you would like to contact a Minister directly, you may find a list of\n"
+"their contact details on this <a href=\"https://members.parliament.uk/Government/Cabinet\">list of departments and ministers on the Parliament website</a>.\n"
+"\n"
+"For now, WriteToThem concentrates on being a way for you to contact your elected representatives. If your MP happens to also be a Minister, you can still of course contact them using WriteToThem. \n"
+"\n"
+"Please do not try to write to a Minister who is not your MP using WriteToThem. Your message may go to their constituency office as an MP, and that’s not the right place to handle it."
+msgstr ""
+
+#: templates/website/about-qa.html:312
+msgid ""
+"Lords aren’t tied to any constituency - you may write to any of them.\n"
+"\n"
+"But, as there is no correlation between your postcode and any specific Lord, how do you know which one to contact? That’s where our <a href=\"/lords\">special Write To A Lord section</a> comes in - it suggests a Lord for you, via a number of means.\n"
+"\n"
+"Need to get in touch with one Lord in particular? Go to another of our sites, www.TheyWorkForYou.com, and find the Lord you need there. On each Lord’s profile page there is a link to contact them via WriteToThem. \n"
+"\n"
+"<a href=\"/about-lords\">See more information about writing to Lords here</a>."
+msgstr ""
+
+#: templates/website/about-qa.html:326
+msgid ""
+"We might! It’s been requested a few times, and every time someone makes the request, it pushes it up our list of priorities. So if this something you’d like to see, <a href=\"/about-contact\">let us know</a>.\n"
+"\n"
+"Or, if you have the skills, feel free to help us add this functionality.\n"
+"WriteToThem is open source: <a href=\"/about-contact\">let us know</a> if you think you can help."
+msgstr ""
+
+#: templates/website/about-qa.html:341
+msgid ""
+"Please check our <a href=\"/?pc=POSTCODE\">advice on common reasons why\n"
+"postcodes aren’t recognised by our system</a>. Don’t forget to \n"
+"<a href=\"https://www.royalmail.com/find-a-postcode\">check your postcode on the\n"
+"Royal Mail site</a>. \n"
+"\n"
+"If that doesn’t help, please <a href=\"/about-contact\">get in touch</a> and let us know the postcode that’s causing trouble.\n"
+"\n"
+"Meanwhile, if you need to contact your representative urgently, we would suggest, with caution, inputting a postcode from a neighbouring street. It is more than likely that this will bring up your representatives, but please be aware that if your postcode falls close to a constituency boundary, there is a small chance of error."
+msgstr ""
+
+#: templates/website/about-qa.html:356
+msgid ""
+"WriteToThem depends on a piece of software (named\n"
+"<a href=\"https://mapit.mysociety.org/\">MapIt</a>) which works by matching\n"
+"postcodes to constituencies.\n"
+"\n"
+"Your postcode may be one of the few that straddles two constituencies - this does create problems for MapIt, and for those who live in such postcode areas.\n"
+"\n"
+"In this situation MapIt can’t assign two constituencies to the same postcode, and so we recommend that people in your situation use our site by inputting a nearby postcode in the correct constituency.\n"
+"\n"
+"It’s a bit of a workaround, but in cases like this we’re afraid it’s the best we can suggest."
+msgstr ""
+
+#: templates/website/about-qa.html:372
+msgid ""
+"With over 24,000 representatives in our database, this does sometimes happen. Perhaps your chosen representative has changed their email address; or perhaps the email address we had for them bounced back.\n"
+"\n"
+"In any case, you can help. If you have a few minutes to Google for an active email address, and then <a href=\"/about-contact\">send it to us</a>, we can put it into the system, and you’ll have helped everyone else who wants to mail that person. Consider it your good deed for the day."
+msgstr ""
+
+#: templates/website/about-qa.html:382
+msgid ""
+"The most common reasons for this are:\n"
+"\n"
+"<ul><li>Our mail has gone into your spam folder. Please check there. Unfortunately this is something that is hard to prevent at our end, but may be avoided in the future by adding the WriteToThem email address to your email whitelist.\n"
+"</li>\n"
+"<li>You made a typo when you input your email address, so our confirmation email has gone to the wrong place.</li>\n"
+"<li>You used a different email address from the one you are checking for our mail. You’d be surprised how often this happens!</li></ul>\n"
+"\n"
+"If you cannot find our message in your spam folder, and you have looked in any alternative email accounts that you might have used, please <a href=\"/about-contact\">let us know</a> - we can track down your original message and send it off from our end."
+msgstr ""
+
+#: templates/website/about-qa.html:397
+#, php-format
+msgid ""
+"WriteToThem’s system sends out a limited number of automated emails, and we’ve worked hard to strike a balance between keeping the site functional, and bothering our users.\n"
+"\n"
+"<ul><li>When you submit your message, we issue an email with a confirmation link that you must click if you want it to be sent. This email also contains a copy of your message.</li>\n"
+"<li>If you do not click on this link, 24 hours later, we send one further reminder.</li>\n"
+"<li>Two weeks after you use WriteToThem, we send you an email to check whether or not you received a response from your representative. Your answer to this query goes to make up the <a href=\"https://www.writetothem.com/stats/\">WriteToThem Responsiveness League Tables</a>, as well as helping us to check that the service is working. </li>\n"
+"<li>If you do not click on this link, 24 hours later, we send one further reminder.</li></ul>\n"
+"\n"
+"If at any point in this process you decide that you don&rsquo;t want to receive any more emails from us, please email <a href=\"mailto:%s\">%s</a>.\n"
+"\n"
+"We understand that it can be a nuisance to receive automated emails, but we do try to keep the balance right."
+msgstr ""
+
+#: templates/website/about-qa.html:414
+msgid ""
+"Please <a href=\"/about-contact\">let us know</a>. Include the text of any error message you received, and please let us know if you are on a desktop or mobile device and what browser you are using (eg Internet Explorer, Firefox, Chrome, etc).\n"
+"\n"
+"You may also like to check <a href=\"https://twitter.com/mysociety\">our\n"
+"Twitter feed</a> to see if we’ve flagged up any current problems with the\n"
+"site."
+msgstr ""
+
+#: templates/website/about-qa.html:429
+msgid ""
+"<ul> <li>Firstly to enable your chosen elected representative to get in touch with you, and to help the message that is sent look more like a formal letter.  Note that entering your phone number is optional, but advisable. Sometimes representatives would rather call you than write back to\n"
+"you.</li>\n"
+"<li>Secondly, to enable us to send you a copy of your message for your records, and to tell you if there was a delivery problem. </li>\n"
+"<li>Thirdly, to enable you to confirm who you are, and that you live in a particular area.  WriteToThem is concerned that this service is used in a responsible way by everyone.  Which is why we built it responsibly.  </li>\n"
+"</ul>"
+msgstr ""
+
+#: templates/website/about-qa.html:440
+msgid "Please see our separate <a href=\"/about-privacy\">Privacy</a> page."
+msgstr ""
+
+#: templates/website/about-qa.html:448
+msgid ""
+"If everything goes smoothly with your message, it will be seen only by you and its recipient. Some representatives also have staff to help them with their mail; councillors’ emails often go through a Democratic Services office.\n"
+"\n"
+"If there is an issue with your message, for example, it bounces back, or our system flags that it is a potential abuse of the site, WriteToThem support staff may view it. Under these circumstances, we read as little of the content as possible in order to fix the problem and, if appropriate, get your message on its way.\n"
+"\n"
+"As per our <a href=\"/about-privacy\">privacy policy</a>, your message is completely scrubbed from our system after five weeks."
+msgstr ""
+
+#: templates/website/about-qa.html:463
+msgid ""
+"We email our users to ask whether or not they’ve received a response from their representative just two weeks after their message is sent. \n"
+"\n"
+"We consider this to be a reasonable timeframe, and we certainly receive a good number of ‘yes’ replies. \n"
+"\n"
+"If you haven’t heard back within this amount of time, see the next question."
+msgstr ""
+
+#: templates/website/about-qa.html:476
+msgid ""
+"There are lots of things you can do to follow up your enquiry if you get no reply from your representative.\n"
+"\n"
+"<ul>\n"
+"\n"
+"<li>See your MP or other representative in person, raise your issue with them at their local surgery.  Call your MP’s local constituency office or your representative’s party office to arrange this. You can find the number in your local phone book, or on your MP’s website.</li>\n"
+"\n"
+"<li>Make sure you have taken all other courses of action to raise your issue,\n"
+"or to get your problem solved. For example, contact the relevant central\n"
+"Government department, and relevant officers at your local councils. Ask your\n"
+"local Citizens Advice Bureau for advice.</li>\n"
+"\n"
+"<li> Write a letter to your local newspaper about your issue, and your\n"
+"dissatisfaction with your MP or councillor.</li>\n"
+"\n"
+"<li> Write a letter to your other representatives, such as your MP, your local councillors, or regional representatives, if appropriate. You can, of course, do this for free using  WriteToThem.</li>\n"
+"\n"
+"<li> Complain about your representative to their local party. Contact the local party office. The local party has the power not to select your MP as a candidate for the next General Election.</li>\n"
+"\n"
+"</ul>"
+msgstr ""
+
+#: templates/website/about-qa.html:501
+msgid ""
+"If you are dissatisfied with a response, we would encourage a follow-up message, phone call, or face to face visit at a local surgery.\n"
+"\n"
+"If email is your preferred route, you can of course send a further message via WriteToThem. It’s only if constituents tell their representatives what they expect from them, in communications as in all things, that they will know that they are considered unsatisfactory by some."
+msgstr ""
+
+#: templates/website/about-qa.html:510
+msgid "Your representative is (of course) not obliged to agree with your views, but he or she is obliged to listen to them and to take them into consideration even if they disagree. "
+msgstr ""
+
+#: templates/website/about-qa.html:517
+msgid "Sorry, no. WriteToThem is a means for you to contact the people who are there to help you. We’ll do everything we can to help get your message through, but after that it’s up to your representatives."
+msgstr ""
+
+#: templates/website/about-qa.html:528
+msgid ""
+"Two weeks after you use WriteToThem, we email you to ask whether you received a reply from your representative. \n"
+"\n"
+"The results from this questionnaire allow us to be sure that the service is continuing to work for people."
+msgstr ""
+
+#: templates/website/about-qa.html:538
+msgid ""
+"The responsiveness league table was an annual ranking of representatives\n"
+"according to how responsive they were to constituent contact. We discontinued\n"
+"this in 2017, and\n"
+"<a href=\"https://www.mysociety.org/2020/11/16/publishing-less-our-current-thinking-about-comparative-statistics/\">have\n"
+"blogged about this and our research into replacement measures</a>."
+msgstr ""
+
+#: templates/website/about-qa.html:551
+msgid ""
+"Our questionnaire asks, simply, whether you received a response (other than a mere acknowledgement).\n"
+"\n"
+"We know that things can sometimes be more complicated than this: perhaps your message didn’t require a response. Perhaps you got a response but it didn’t actually answer your question.\n"
+"\n"
+"However, we keep this question simple because its answer informs the metric we care most about: is WriteToThem still working?\n"
+"\n"
+"If you feel that your response will not contribute usefully to our results, don’t worry - we have plenty of data to work with. Maybe you can respond next time. "
+msgstr ""
+
+#: templates/website/about-qa.html:565
+msgid ""
+"Unfortunately, our links break in some email programs. \n"
+"\n"
+"Please try copying and pasting the link into the address bar of your browser. If that doesn’t work, check for any obvious problems in the link, for example, a space or a line break between characters. \n"
+"\n"
+"If neither of these tips help, please forward the entire email to <a href=\"mailto:support@writetothem.com\">us</a>, including the link, and we will try to get to the bottom of it."
+msgstr ""
+
+#: templates/website/about-qa.html:577
+msgid "You can return to the questionnaire mail at any time and click on the relevant link - the last click will always override any previous ones"
+msgstr ""
+
+#: templates/website/about-qa.html:586
+msgid ""
+"We’re very glad to hear it!\n"
+"\n"
+"If you would like to show your appreciation, please consider <a href=\"https://www.mysociety.org/donate/\">making a donation to mySociety</a>,\n"
+"who built and maintain WriteToThem.\n"
+"\n"
+"You can also help us greatly by spreading the word about the site. Tell all your friends, write to the local paper, or put a message on your library’s noticeboard. It all helps."
+msgstr ""
+
+#: templates/website/about-qa.html:599
+msgid ""
+"Then we want to hear from you. Don’t hesitate to <a href=\"/about-contact\">contact us</a>.\n"
+"\n"
+"You may be interested in browsing our\n"
+"<a href=\"https://github.com/mysociety/writetothem/issues?direction=desc&sort=created&state=open\">development\n"
+"list</a> to see what we’re already working on, or have planned for the\n"
+"future."
+msgstr ""
+
+#: templates/website/about-qa.html:615
+msgid ""
+"See above for our guidance around using WriteToThem only to contact to your own representatives.\n"
+"Additionally, you may not use WriteToThem for sending messages that are abusive or threatening.\n"
+"\n"
+"You should not use the service to bombard a representative with several messages over a short period of time.\n"
+"\n"
+"On discovery of such usage we may, at our discretion, ban you from further use of WriteToThem.\n"
+"\n"
+"As with all mySociety services and activities, users of WriteToThem must abide by the organisation&rsquo;s <a href=\"https://www.mysociety.org/code-of-conduct/\">Code of Conduct</a>.\n"
+"This code applies to all activity related to the service, including correspondence with mySociety staff.\n"
+"\n"
+"Where a user sends a message that is intended to harass, threaten, abuse or distress a member of mySociety staff,\n"
+"we will, at our discretion, cease communication. We may also ban the correspondent from future use of the site.\n"
+"\n"
+"Where a message is of particular concern, we will forward details of the correspondence to the police."
+msgstr ""
+
+#: templates/website/about-qa.html:637
+msgid "I would like to run a service like WriteToThem. How would I set it up? Can I use your software?"
+msgstr ""
+
+#: templates/website/about-qa.html:640
+msgid ""
+"Like most mySociety projects, WriteToThem’s code is open source, and free for anyone to use. However, we currently advise people that the newer WriteIt software fulfils the same functions and  is a lot easier to install.\n"
+"\n"
+"WriteIt is part of the Poplus Project, an initiative which encourages\n"
+"shared, collaborative coding for democratic purposes. <a href=\"https://www.mysociety.org/projects/components/\">Read more about it, and WriteIt</a>."
+msgstr ""
+
+#: templates/website/about-qa.html:648
+msgid ""
+"Please see <a href=\"/about-campaigns\">our pages on running a campaign</a>.\n"
+"Or, for a quick introduction to the options available,\n"
+"<a href=\"https://www.mysociety.org/2014/03/04/writetothem-simple-campaigning-software/\">this\n"
+"blog post</a>. "
+msgstr ""
+
+#: templates/website/about-sidebar.html:8
+#: templates/website/about-yourrep.html:3
+#: templates/website/about-yourrep.html:14
+msgid "Who should I write to?"
+msgstr ""
+
+#: templates/website/about-sidebar.html:10
+msgid "Does it work?"
+msgstr ""
+
+#: templates/website/about-sidebar.html:13
+msgid "Overview"
+msgstr ""
+
+#: templates/website/about-sidebar.html:15
+msgid "Link to us"
+msgstr ""
+
+#: templates/website/about-sidebar.html:19
+msgid "About us"
+msgstr ""
+
+#: templates/website/about-sidebar.html:20 templates/website/footer.php:20
+msgid "Copyright"
+msgstr ""
+
+#: templates/website/about-sidebar.html:21
+msgid "Contact us"
+msgstr ""
+
+#: templates/website/about-sidebar.html:26
+msgid "title"
+msgstr ""
+
+#: templates/website/about-us.html:3 templates/website/about-us.html:16
+msgid "Who are you, and why are you doing this?"
+msgstr ""
+
+#: templates/website/about-us.html:24
+#, php-format
+msgid ""
+"WriteToThem makes it easy for anyone to contact their representatives, even if they don’t know who they are. \n"
+"\n"
+"If you can’t name your MP, that doesn’t make you unusual. 78% of the UK\n"
+"population cannot name their representative in Parliament, according to\n"
+"<a href=\"https://www.hansardsociety.org.uk/projects/audit-of-political-engagement\">the 2013\n"
+"report from the Hansard Society</a> (PDF).\n"
+"\n"
+"That’s the reason this website exists - but if you’re interested to know a bit more about the whys and wherefores, read on.\n"
+"\n"
+"<H2>Our history</H2>\n"
+"\n"
+"The first version of WriteToThem was built in 2004, by a group of volunteers who thought that it should be easier for people to contact their MPs. Does that seem like a long time ago? It’ll seem even longer when you find out that it was, at that point, called FaxYourMP.com.\n"
+"\n"
+"That group of volunteers later grew into\n"
+"<a href=\"https://www.mysociety.org/\">mySociety</a>, the project of a\n"
+"<a href=\"https://www.mysociety.org/about/structure-and-governance/\">registered\n"
+"charity</a>. \n"
+"\n"
+"mySociety&rsquo;s mission is to build internet projects which give people simple,\n"
+"tangible benefits in the civic and community aspects of their lives. \n"
+"\n"
+"Our first project was to take FaxYourMP and rebuild it so that it was bigger and better. As email became more prevalent, we adapted the site to work almost entirely via that form of communication. \n"
+"\n"
+"We’ve kept on working, adding more types of representative, improving the design - but at its core, WriteToThem has the same mission as its predecessor, FaxYourMP: we just want to lower the barrier to taking the first step, and writing to the people in power about the issues that matter to you.\n"
+"\n"
+"<H2>Funding</H2>\n"
+"\n"
+"We had funding for the initial work from the\n"
+"<a href=\"http://www.odpm.gov.uk\">Office of the Deputy Prime Minister</a>&rsquo;s\n"
+"e-innovations fund, in partnership with\n"
+"<a href=\"https://www.westsussex.gov.uk\">West Sussex County Council</a>. Many thanks\n"
+"to them.\n"
+"\n"
+"\n"
+"<a href=\"http://www.goveval.com/\"><img align=\"right\" src=\"images/ge.png\" alt=\"GovEval\" border=\"0\"></a>\n"
+"We also receive assistance from <a href=\"http://www.goveval.com/\">GovEval</a>,\n"
+"who have kindly made available their database of local councillors; and from\n"
+"<a href=\"https://www.mythic-beasts.com/\">Mythic Beasts</a>, who host this and\n"
+"other mySociety websites.\n"
+"\n"
+"\n"
+"Like many mySociety projects, <b>WriteToThem</b> combines the work of some\n"
+"core developers, who are paid to keep working even when everyone else gets\n"
+"bored, and volunteers. \n"
+"Here is a list of people who have helped build, maintain and support FaxYourMP or WriteToThem:"
+msgstr ""
+
+#: templates/website/about-yourrep.html:22
+msgid ""
+"As a UK citizen, you have many representatives, at several levels of government.\n"
+"\n"
+"Each of them has a different set of responsibilities, and it is worth making sure that your message goes to the person who is best placed to help you."
+msgstr ""
+
+#: templates/website/about-yourrep.html:27 templates/website/yourrep/mp.html:1
+msgid "When should I contact my MP?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:28
+#: templates/website/about-yourrep.html:39
+msgid "When should I contact a councillor?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:29 templates/website/yourrep/msp.html:1
+msgid "When should I contact an MSP?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:30
+msgid "When should I contact an MLA?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:31 templates/website/yourrep/am.html:1
+msgid "When should I contact a Senedd Member?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:32
+msgid "When should I contact a Greater London Assembly Member?"
+msgstr ""
+
+#: templates/website/about-yourrep.html:41
+msgid ""
+"Councillors have differing responsibilities depending on which council you\n"
+"live in. Because of these variations we are only able to give you\n"
+"‘rule-of-thumb’ guidance here.\n"
+"\n"
+"Firstly, in England you may have two levels of council: County and District, in\n"
+"which case their responsibilities are divided as follows:\n"
+"\n"
+"<ul>\n"
+"<li><strong>District Councillors:</strong> If you have one or more District Councillor,\n"
+"they tend to deal with issues around <strong>council housing, planning, rubbish\n"
+"collection, the local environment, and the administration of\n"
+"elections.</strong></li>\n"
+"<li><strong>County Councillors:</strong> If you have one or more county councillors, they\n"
+"tend to deal with <strong>education, transport and roads, fire and social services\n"
+"plus libraries</strong>.</li>\n"
+"</ul>\n"
+"\n"
+"Otherwise, you will have only one council, whose responsibilities differ\n"
+"depending on exactly where you live. We describe these on the page which lists\n"
+"your councillors.\n"
+"\n"
+"Don’t worry if you’re not absolutely sure who to pick! Whoever you write to\n"
+"should forward your letter to the most appropriate person, if you haven’t got it quite right."
+msgstr ""
+
+#: templates/website/can-you-help.html:4
+msgid "Can you help other people who need to send a message?"
+msgstr ""
+
+#: templates/website/can-you-help.html:6
+msgid "With your support, we can help more people get their message to the right place."
+msgstr ""
+
+#: templates/website/can-you-help.html:7 templates/website/footer.php:30
+msgid "Donate now"
+msgstr ""
+
+#: templates/website/confirm-accept.html:3
+msgid "We’ll send your message now"
+msgstr ""
+
+#: templates/website/confirm-accept.html:28
+msgid "Your message is on its way"
+msgstr ""
+
+#: templates/website/confirm-accept.html:30
+msgid "If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit back and relax."
+msgstr ""
+
+#: templates/website/confirm-accept.html:36
+msgid "If you have time could you answer a couple of questions?"
+msgstr ""
+
+#: templates/website/confirm-accept.html:38
+msgid "We use this information in combination with your postcode to understand what people in different parts of the country are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas."
+msgstr ""
+
+#: templates/website/confirm-accept.html:64
+msgid "Common Questions"
+msgstr ""
+
+#: templates/website/confirm-accept.html:67
+#, php-format
+msgid "What should I do if %s reply?"
+msgstr ""
+
+#: templates/website/confirm-accept.html:67
+msgid "my representatives don’t"
+msgstr ""
+
+#: templates/website/confirm-accept.html:67
+#, php-format
+msgid "%s doesn’t"
+msgstr ""
+
+#: templates/website/confirm-accept.html:69
+msgid "How are messages sent?"
+msgstr ""
+
+#: templates/website/confirm-accept.html:76
+msgid "Potholes, broken lights or graffiti?"
+msgstr ""
+
+#: templates/website/confirm-accept.html:77
+#, php-format
+msgid "You can quickly and easily report common street-side problems to your council using <a href=\"https://www.fixmystreet.com/around?pc=%s\">FixMyStreet</a>."
+msgstr ""
+
+#: templates/website/confirm-accept.html:87
+#: templates/website/survey-thanks.html:37
+msgid "Photograph by Krzysztof Szkurlatowski"
+msgstr ""
+
+#: templates/website/confirm-trouble.html:3
+msgid "Oops... Something didn’t quite work."
+msgstr ""
+
+#: templates/website/confirm-trouble.html:13
+msgid "Oops&hellip; Something didn’t quite work."
+msgstr ""
+
+#: templates/website/confirm-trouble.html:24
+#, php-format
+msgid "Thank you for trying to confirm your fax/email. We seem to have a problem though, so please let us know what went on and send a copy of the confirmation email to <a href=\"mailto:%s\">%s</a> and we’ll look into it."
+msgstr ""
+
+#: templates/website/error-general.html:3
+msgid "Sorry! Something’s gone wrong."
+msgstr ""
+
+#: templates/website/error-general.html:35
+msgid ""
+"Here are the contents of your message</strong> &ndash;\n"
+"please copy and paste into a different application such as Word or Notepad\n"
+"to be sure you do not lose your message."
+msgstr ""
+
+#: templates/website/footer.php:6
+msgid "WriteToThem"
+msgstr ""
+
+#: templates/website/footer.php:8
+msgid "Making it easy to write to the politicians who represent you &ndash; even if you don&rsquo;t know who they are."
+msgstr ""
+
+#: templates/website/footer.php:16
+msgid "Contact Us"
+msgstr ""
+
+#: templates/website/footer.php:17
+msgid "Link To Us"
+msgstr ""
+
+#: templates/website/footer.php:29
+msgid "Your donations keep this site and others like it running"
+msgstr ""
+
+#: templates/website/footer.php:42
+msgid ""
+"Built by\n"
+"                        <a href=\"https://www.mysociety.org?utm_source=writetothem.com&amp;utm_content=footer+logo&amp;utm_medium=link&amp;utm_campaign=mysoc_footer\" class=\"mysoc-footer__org__logo mysoc-footer__org__logo--mysociety\">mySociety</a>"
+msgstr ""
+
+#: templates/website/footer.php:51
+msgid "Data by GovEval"
+msgstr ""
+
+#: templates/website/footer.php:52
+msgid "Hosted by Mythic Beasts"
+msgstr ""
+
+#: templates/website/footer.php:56
+msgid ""
+"<a href=\"https://www.mysociety.org?utm_source=writetothem.com&amp;utm_content=footer+full+legal+details&amp;utm_medium=link&amp;utm_campaign=mysoc_footer\">mySociety</a>\n"
+"                        is a registered charity in England and Wales (1076346)\n"
+"                        and a limited company (03277032). We provide commercial\n"
+"                        services through our wholly owned subsidiary\n"
+"                        <a href=\"https://www.societyworks.org?utm_source=writetothem.com&amp;utm_content=footer+full+legal+details&amp;utm_medium=link&amp;utm_campaign=mysoc_footer\">SocietyWorks Ltd</a>\n"
+"                        (05798215)."
+msgstr ""
+
+#: templates/website/index-advice.html:35
+#: templates/website/index-advice.html:38
+msgid "Did you type the letter "
+msgstr ""
+
+#: templates/website/index-advice.html:36
+msgid "This is an easy mistake to make. The most likely culprit is the first digit in the second part of the code. You need to put, for example: <code>N8 0NP</code>  rather than <code>N8 ONP</code>."
+msgstr ""
+
+#: templates/website/index-advice.html:39
+msgid "Like the error above, this is easy enough to do. Again, the most likely culprit is the first digit in the second part of the code. You need to put, for example: <code>BD3 1RF</code> rather than <code>BD3 IRF</code>."
+msgstr ""
+
+#: templates/website/index-advice.html:41
+msgid "If neither of the above applies, but you’re still having no luck, try these tips:"
+msgstr ""
+
+#: templates/website/index-advice.html:43
+msgid "It is quite possible the Royal Mail has changed this postcode (it is surprisingly common). You can check by using <a href=\"https://www.royalmail.com/find-a-postcode\">the Royal Mail postcode finder site</a>."
+msgstr ""
+
+#: templates/website/index-advice.html:44
+msgid "If you aren’t sure what postcode to use, for example you are an expat, in the armed forces, are homeless or a prisoner, read \"<a href=\"/about-constituency\">What postcode should I use?</a>\"."
+msgstr ""
+
+#: templates/website/index-advice.html:47
+msgid "Worries you can rule out:"
+msgstr ""
+
+#: templates/website/index-advice.html:49
+msgid "It makes no difference whether you leave a space between the two parts of the postcode: we will recognise it either way."
+msgstr ""
+
+#: templates/website/index-advice.html:50
+msgid "It makes no difference whether you use capital letters or not."
+msgstr ""
+
+#: templates/website/index-index.html:53
+msgid "You may also have representatives at other levels of government."
+msgstr ""
+
+#: templates/website/index-index.html:64
+msgid "<a href=\"https://www.fortybelowzero.com/\">Photograph by Rick Harrison</a>"
+msgstr ""
+
+#: templates/website/problem-generic.html:4
+#: templates/website/problem-lords.html:4
+#: templates/website/problem-lords-similar.html:4
+#: templates/website/problem-postcodes.html:4
+#: templates/website/problem-similar.html:4
+msgid "Problem with your message"
+msgstr ""
+
+#: templates/website/problem-generic.html:14 web/write.php:413
+#: web/write.php:500
+msgid "Message Rejected"
+msgstr ""
+
+#: templates/website/problem-generic.html:22
+msgid "Sorry, but we’ve had to reject your message. Please see if you have broken any of our <a href=\"about-guidelines\">Guidelines for Campaigning</a>. If you don’t think that you have, then <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: templates/website/problem-lords.html:14 web/write.php:414
+msgid "You have sent too many messages to Lords"
+msgstr ""
+
+#: templates/website/problem-lords.html:22
+msgid "Sorry, but we have to limit the number of messages sent to members of the House of Lords, as they have told us they simply disregard more than a handful of messages from one person within a couple of days."
+msgstr ""
+
+#: templates/website/problem-lords.html:24
+#: templates/website/problem-lords-similar.html:26
+msgid "Please read our <a href=\"/about-lords\">Frequently Asked Questions</a> for more information about WriteToThem Lords."
+msgstr ""
+
+#: templates/website/problem-lords-similar.html:14 web/write.php:415
+msgid "Too many similar messages have been sent"
+msgstr ""
+
+#: templates/website/problem-lords-similar.html:22
+msgid "Sorry, but we have to limit the number of similar messages sent to members of the House of Lords, as they have told us they simply disregard more than a handful messages of substantially identical content arriving within a couple of days."
+msgstr ""
+
+#: templates/website/problem-lords-similar.html:24
+msgid "If you wish to try again, please use the \"back\" button in your browser and rewrite your message."
+msgstr ""
+
+#: templates/website/problem-postcodes.html:14 web/write.php:416
+msgid "You seem to be sending messages with several different postcodes"
+msgstr ""
+
+#: templates/website/problem-postcodes.html:22
+msgid "Sorry, but please read <a href=\"/about-qa#onlyrep\">this</a> to understand why our site only lets you write to <em>your own elected representatives</em>, not those for other parts of the country."
+msgstr ""
+
+#: templates/website/problem-postcodes.html:24
+msgid "If we didn’t do this, then representatives would be snowed under with mail from all and sundry, and that would mean they ignored the important mail from their own constituents. They might even bin <strong>all</strong> messages sent via WriteToThem.com."
+msgstr ""
+
+#: templates/website/problem-postcodes.html:26
+msgid "Either of which would be A Bad Thing."
+msgstr ""
+
+#: templates/website/problem-postcodes.html:28
+msgid "If somebody else suggested that you do this to get their message across, you might want to let them know potentially sabotaged their own campaign too. Perhaps you might ask them to read the <a href=\"/about-guidelines\">instructions</a> on the site next time?"
+msgstr ""
+
+#: templates/website/problem-postcodes.html:30
+msgid "If you wish to send a message, please <a href=\"/\">start again from the beginning</a> and give only your own, real address and postcode when asked."
+msgstr ""
+
+#: templates/website/problem-similar.html:14
+msgid "Your message is near-identical to others sent previously"
+msgstr ""
+
+#: templates/website/problem-similar.html:22
+msgid "Please read <a href=\"/about-qa#formletters\">our stance on this issue</a> to understand why sending identikit \"copied and pasted\" messages is detrimental to your campaign."
+msgstr ""
+
+#: templates/website/problem-similar.html:24
+msgid "Sorry to be so harsh, but representatives have made it clear that the receipt of such \"spam\" could mean they bin <strong>all</strong> messages sent via WriteToThem.com."
+msgstr ""
+
+#: templates/website/problem-similar.html:26
+msgid "Which would be A Bad Thing."
+msgstr ""
+
+#: templates/website/problem-similar.html:28
+msgid "You might like to let the person who asked you to do this know that they’ve potentially sabotaged their own campaign too. Point them to our <a href=\"/about-guidelines\">Guidelines for campaigning</a>."
+msgstr ""
+
+#: templates/website/problem-similar.html:30
+msgid "If you wish to rewrite your message, use the \"back\" button in your browser and write it in your own, original, words. It’s better to send a short message in your own words, than a long, mainly copy-and-pasted message with a few amendments."
+msgstr ""
+
+#: templates/website/qa/formletters.html:1
+msgid ""
+"It’s much more powerful to write in your own words, telling your\n"
+"representative about your own beliefs and experiences.  We want to make the\n"
+"voice of the individual more powerful, so we block \"identikit\" letters. \n"
+"\n"
+"It would be easy to help people send lots of identical messages with one\n"
+"click. But then MPs would be drowned out by automated emailings organised by\n"
+"large campaigns groups and corporations. We prefer that representatives can trust\n"
+"messages from WriteToThem as being from real individuals, giving their own story.\n"
+"\n"
+"If you’re a pressure group, think about what you’re doing. Ask your\n"
+"supporters to write to their own representative in their own words. Your\n"
+"message will be much more powerful. Even though your supporters may send fewer\n"
+"messages, their impact will be ahead of the game.\n"
+"\n"
+"Still not convinced? Here’s a quote from a Parliamentary researcher, whose\n"
+"job is to make the MP he/she works for as accessible as possible (such people\n"
+"are the hidden gems of our democracy):\n"
+"\n"
+"<blockquote>\n"
+"MPs rather naturally take a sudden influx of identical or similar messages\n"
+"with a large pinch of salt, since they know that what they are seeing is stuff\n"
+"from a minority of constituents who are either impassioned/neurotic about the\n"
+"topic concerned or who are easily gulled into agreeing with some plausible\n"
+"story and sending the message, since it takes minimum effort to do so.\n"
+"\n"
+"Given a daily mailbag of (say) 50 individual messages from individual\n"
+"constituents, on a wide range of topics, when the mailbag suddenly rises to 100\n"
+"a day, 50 of which are much the same as each other, the representative has no\n"
+"way at all of knowing whether the message concerned is representative of\n"
+"opinion in the constituency.\n"
+"\n"
+"All he or she knows is that 50 constituents have been persuaded to mail them\n"
+"about \"topic X\". Much more notice is taken of trends within the regular flow of\n"
+"messages from clearly identified constituents. If in a month 50 people write in\n"
+"different ways and through different routes with similar views on a subject,\n"
+"this is much more likely to raise the profile of the topic with the MP.\n"
+"</blockquote>\n"
+"\n"
+"So please don’t copy and paste the same message as everyone else. And don’t\n"
+"encourage others to do so. It’s worse than useless as we’ll automatically stop\n"
+"your messages before they get through. Ask people to write in their own words.\n"
+"If they care enough about your issue, they’ll do so."
+msgstr ""
+
+#: templates/website/qa/onlyrep.html:1
+msgid ""
+"Elected representatives have a duty to listen and respond to those who\n"
+"live in their areas of responsibility &mdash; but they can’t possibly cope with\n"
+"regular communication from the entire UK population.  We try to strike a\n"
+"balance between getting people listened to, and filling their inboxes with\n"
+"problems which it is not their job to solve.\n"
+"\n"
+"We don’t let anyone write to any representative &mdash; our service is only\n"
+"to enable people to write to their own elected representatives (or \n"
+"<a href=\"/about-lords\">any lord</a>). If we did let anyone write to any\n"
+"representative in the country, professional lobbyists would\n"
+"use us to mail every one of the representatives, in the same way as marketeers\n"
+"junk-mail as many people as they can. Eventually, representatives would ignore\n"
+"<em>every</em> message sent through our service, instead of trusting it as a\n"
+"source of genuine letters from genuine constituents. And the main losers in\n"
+"this would be real constituents with real problems."
+msgstr ""
+
+#: templates/website/response-no.html:3
+#: templates/website/response-not-expected.html:3
+#: templates/website/response-unsatisfactory.html:3
+#: templates/website/response-yes.html:3
+msgid "Thanks for your feedback... and one last question"
+msgstr ""
+
+#: templates/website/response-no.html:12
+#: templates/website/response-not-expected.html:12
+#: templates/website/response-unsatisfactory.html:12
+#: templates/website/response-yes.html:12
+msgid "Thanks for your feedback&hellip; and another question"
+msgstr ""
+
+#: templates/website/response-no.html:20
+msgid "We hope your representative gets back to you with a full answer soon."
+msgstr ""
+
+#: templates/website/response-no.html:22
+msgid "If they don&rsquo;t then see <a href=\"/about-qa#noreply\" target=\"_blank\">What should I do if my MP (or other representative) doesn&rsquo;t reply?</a> (opens in new window)."
+msgstr ""
+
+#: templates/website/response-no.html:24
+#: templates/website/response-not-expected.html:22
+#: templates/website/response-unsatisfactory.html:23
+#: templates/website/response-yes.html:23
+msgid "One more question ..."
+msgstr ""
+
+#: templates/website/response-no.html:26
+#: templates/website/response-not-expected.html:24
+#: templates/website/response-unsatisfactory.html:25
+#: templates/website/response-yes.html:25
+msgid ""
+"Is this the first time you&rsquo;ve ever contacted one of your\n"
+"            political representatives, by any means?"
+msgstr ""
+
+#: templates/website/response-no.html:29
+#: templates/website/response-not-expected.html:27
+#: templates/website/response-unsatisfactory.html:28
+#: templates/website/response-yes.html:28
+msgid "Yes"
+msgstr ""
+
+#: templates/website/response-no.html:30
+#: templates/website/response-not-expected.html:28
+#: templates/website/response-unsatisfactory.html:29
+#: templates/website/response-yes.html:29
+msgid "No"
+msgstr ""
+
+#: templates/website/response-no.html:32
+#: templates/website/response-not-expected.html:30
+#: templates/website/response-unsatisfactory.html:38
+#: templates/website/response-yes.html:31
+msgid ""
+"Why are we being so nosey? Well, one of our aims is to convince\n"
+"            politicians that, used wisely, the Web can encourage much greater\n"
+"            participation in the democratic process."
+msgstr ""
+
+#: templates/website/response-not-expected.html:20
+msgid "Many, many thanks for your feedback."
+msgstr ""
+
+#: templates/website/response-not-expected.html:34
+#: templates/website/response-unsatisfactory.html:42
+#: templates/website/response-yes.html:35
+msgid "Thanks again for your feedback."
+msgstr ""
+
+#: templates/website/response-not-expected.html:36
+#: templates/website/response-unsatisfactory.html:44
+#: templates/website/response-yes.html:37
+msgid "&mdash; The WriteToThem.com team"
+msgstr ""
+
+#: templates/website/response-unsatisfactory.html:20
+msgid ""
+"Sorry to hear that your representative&rsquo;s response wasn&rsquo;t all you&rsquo;d\n"
+"           hoped for."
+msgstr ""
+
+#: templates/website/response-unsatisfactory.html:31
+msgid ""
+"WriteToThem is an independent service, and unfortunately we don&rsquo;t\n"
+"           have any control over how representatives respond."
+msgstr ""
+
+#: templates/website/response-unsatisfactory.html:34
+msgid ""
+"But if you&rsquo;d like to take things further\n"
+"           <a href=\"/about-qa#unsatis\" target=\"_blank\">we have a few suggestions here</a>\n"
+"           (opens in new window)."
+msgstr ""
+
+#: templates/website/response-yes.html:20
+msgid ""
+"Great! Many, many thanks for your feedback. We’re delighted that your\n"
+"            representative got back to you."
+msgstr ""
+
+#: templates/website/survey-done.html:3
+msgid "Thanks, and we hope it’s not the last"
+msgstr ""
+
+#: templates/website/survey-done.html:13
+msgid "Many thanks - We hope you enjoyed the experience"
+msgstr ""
+
+#: templates/website/survey-done.html:21
+msgid ""
+"Thanks for that - the statistics should help us convince politicians that\n"
+"            they could do more on the Web to encourage greater participation in the\n"
+"            democratic process."
+msgstr ""
+
+#: templates/website/survey-done.html:25
+msgid "If you&rsquo;ve got any questions, feel free to <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: templates/website/survey-thanks.html:25
+msgid "Thanks for your help"
+msgstr ""
+
+#: templates/website/survey-thanks.html:26
+msgid "Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas."
+msgstr ""
+
+#: templates/website/who.html:3
+msgid "Choose your representative"
+msgstr ""
+
+#: templates/website/who.html:26 templates/website/who.html:30
+msgid "You have several elected representatives at different levels of government."
+msgstr ""
+
+#: templates/website/who.html:31
+msgid "Not sure who to contact?"
+msgstr ""
+
+#: templates/website/who.html:50
+msgid ""
+"Sorry, but we’ve not got any data for your area. Please\n"
+"                    <a href=\"/about-contact\">contact us</a> and let us know that this matters\n"
+"                    to you."
+msgstr ""
+
+#: templates/website/write-checkemail.html:3
+msgid "Now check your email"
+msgstr ""
+
+#: templates/website/write-checkemail.html:21
+msgid "Now check your email!"
+msgstr ""
+
+#: templates/website/write-checkemail.html:22
+msgid "The confirmation email can take up to 10-15 minutes to arrive &mdash; please be patient."
+msgstr ""
+
+#: templates/website/write-checkemail.html:42
+#, php-format
+msgid "Before we can send your message to your %s we need to confirm your email address. We’ve sent you an email &mdash; when it arrives simply click the link in it and your message will be sent. If you don’t click the link your message <em>will not</em> be sent."
+msgstr ""
+
+#: templates/website/write-checkemail.html:44
+msgid "If you use web-based email or have ‘junk mail’ filters, you may wish to check your bulk or spam mail folders. Sometimes our messages are marked that way."
+msgstr ""
+
+#: templates/website/write-preview.html:3
+#, php-format
+msgid "Preview your message to %s"
+msgstr ""
+
+#: templates/website/write-preview.html:21
+msgid "Preview your message"
+msgstr ""
+
+#: templates/website/write-preview.html:46
+msgid "We’ll email you for confirmation before we send your message"
+msgstr ""
+
+#: templates/website/write-write.html:23
+msgid "Write your message"
+msgstr ""
+
+#: templates/website/write-write.html:25
+#, php-format
+msgid "Writing to %s."
+msgstr ""
+
+#: templates/website/write-write.html:91
+msgid "Instructions"
+msgstr ""
+
+#: templates/website/write-write.html:94
+#, php-format
+msgid "Please be polite, concise and to the point; if you abuse your %s you devalue the service for all users."
+msgstr ""
+
+#: templates/website/write-write.html:96
+msgid "<a class=\"fancybox\" href=\"about-qa#formletters\" target=\"_blank\">Use your own words</a>; we block copied-and-pasted identical messages."
+msgstr ""
+
+#: templates/website/write-write.html:100
+#, php-format
+msgid ""
+"It&rsquo;s a <a class=\"fancybox\" href=\"about-qa#onlyrep\" target=\"_blank\">waste of time</a> writing to %s other than your own;\n"
+"your message will be ignored."
+msgstr ""
+
+#: templates/website/write-write.html:107
+#, php-format
+msgid "<a class=\"fancybox\" href=\"about-yourrep#%s\" target=\"_blank\">Read this<small></small></a> to learn when a %s can help you &ndash; and when they can&rsquo;t."
+msgstr ""
+
+#: templates/website/write-write.html:111
+msgid ""
+"Lords vote on and amend UK bills before they become law. By writing to a\n"
+"    Lord you might be able to tell them about something you think they should care\n"
+"    about, provide information to someone who you support, or provide counter\n"
+"    evidence to someone you disagree with. For other matters, it might be better\n"
+"    to contact your MP or a local representative."
+msgstr ""
+
+#: templates/website/yourrep/am.html:3
+msgid ""
+"The Welsh Government is responsible for:\n"
+"\n"
+"<ul>\n"
+"    <li>Agriculture, fisheries, forestry and rural development</li>\n"
+"    <li>Ancient monuments and historic buildings</li>\n"
+"    <li>Culture</li>\n"
+"    <li>Economic development</li>\n"
+"    <li>Education and training</li>\n"
+"    <li>Environment</li>\n"
+"    <li>Fire and rescue services and promotion of fire safety</li>\n"
+"    <li>Food</li>\n"
+"    <li>Health and health services</li>\n"
+"    <li>Highways and transport</li>\n"
+"    <li>Housing</li>\n"
+"    <li>Local government</li>\n"
+"    <li>Public administration</li>\n"
+"    <li>Social welfare</li>\n"
+"    <li>Sport and recreation</li>\n"
+"    <li>Tourism</li>\n"
+"    <li>Town and county planning</li>\n"
+"    <li>Water and flood defence</li>\n"
+"    <li>Welsh language</li>\n"
+"</ul>\n"
+"\n"
+"\n"
+"Issues for which you should contact your Westminster MP, rather than your Senedd Member, include police, prisons, the justice system, tax and benefits, defence, national security and foreign affairs."
+msgstr ""
+
+#: templates/website/yourrep/lam.html:1
+msgid "When should I contact a London Assembly Member?"
+msgstr ""
+
+#: templates/website/yourrep/lam.html:3
+msgid ""
+"The Greater London Authority’s main areas of responsibility are:\n"
+"\n"
+"<ul>\n"
+"    <li>Transport</li>\n"
+"    <li>Policing</li>\n"
+"    <li>Fire and emergency planning</li>\n"
+"    <li>Economic development</li>\n"
+"    <li>Planning</li>\n"
+"    <li>Culture</li>\n"
+"    <li>Environment</li>\n"
+"    <li>Health</li>\n"
+"</ul>\n"
+"Assembly Members can also hold the Mayor of London to account.\n"
+"For local issues which fall outside those topics, you should contact your local councillor."
+msgstr ""
+
+#: templates/website/yourrep/mla.html:1
+msgid "When should I contact a Northern Ireland Assembly Member?"
+msgstr ""
+
+#: templates/website/yourrep/mla.html:3
+msgid ""
+"The Northern Ireland Assembly can help you with the following matters:\n"
+"\n"
+"<ul>\n"
+"    <li>Agriculture and Rural Development</li>\n"
+"    <li>Culture, Arts and Leisure</li>\n"
+"    <li>Education</li>\n"
+"    <li>Employment and Learning</li>\n"
+"    <li>Enterprise, Trade and Investment</li>\n"
+"    <li>Environment</li>\n"
+"    <li>Finance and Personnel</li>\n"
+"    <li>Health, Social Services and Public Safety</li>\n"
+"    <li>Justice</li>\n"
+"    <li>Regional Development</li>\n"
+"    <li>Social Development</li>\n"
+"</ul>\n"
+"\n"
+"Issues for which you should contact your Westminster MP, rather than your Assembly Member, include navigation and civil aviation, financial services, telecommunications, postal services, the national minimum wage, defence, immigration, taxation, and elections."
+msgstr ""
+
+#: templates/website/yourrep/mp.html:3
+msgid ""
+"You’ll often hear people say, \"I’m going to write to my MP\" when something upsets them. It’s a wide-held belief that MPs are there to solve every type of problem.\n"
+"\n"
+"In fact, Parliament and central government are only responsible for certain matters. Those are the issues with which your MP can help. If your problem does not fall within one of the following areas, then you should consider contacting one of your other representatives. \n"
+"\n"
+"<strong> MPs can help you with matters such as:</strong>\n"
+"<ul>\n"
+"    <li><strong>Tax problems</strong> involving HM Revenue &amp; Customs\n"
+"        (but not issues with, for example, the council tax, which is administered by your local authority).</li>\n"
+"    <li>Problems with <strong>hospitals and the NHS</strong>, if you are in England. The Scottish\n"
+"        and Welsh Parliaments are responsible for health matters in Scotland and Wales respectively.</li>\n"
+"    <li>Problems with <strong>benefits, pensions and national insurance</strong> (but not problems with the social services department of your local authority).</li>\n"
+"    <li>Issues dealt with by the Home Office, such as <strong>immigration</strong>.</li>\n"
+"    <li>In England, matters such as <strong>school closures and grants</strong> (but not day to day\n"
+"        problems involving schools, which are overseen by their governors and your local\n"
+"        education authority). In Scotland and Wales the devolved Parliaments\n"
+"        are responsible for education issues.</li>\n"
+"</ul>\n"
+"\n"
+"Your MP <strong>cannot</strong> help you in private disputes with other <strong>individuals</strong> or with <strong>companies</strong> who have sold you faulty goods, nor, for example, can they interfere with decisions made by <strong>courts</strong>.\n"
+"\n"
+"<a target=\"_blank\" href=\"http://www.parliament.uk/documents/commons-information-office/fymp/yaympenglish.pdf\">You and Your MP</a> [PDF],\n"
+"a factsheet produced by Parliament, has more information about what your MP can\n"
+"do for you."
+msgstr ""
+
+#: templates/website/yourrep/msp.html:3
+msgid ""
+"MSPs deal with any issues for which the Scottish Parliament is responsible. They include:\n"
+"\n"
+"<ul>\n"
+"    <li>health</li>\n"
+"    <li>education and training</li>\n"
+"    <li>local government</li>\n"
+"    <li>social work</li>\n"
+"    <li>housing</li>\n"
+"    <li>planning</li>\n"
+"    <li>tourism, economic development and financial assistance to industry</li>\n"
+"    <li>some aspects of transport, including the Scottish road network, bus policy and ports and harbours</li>\n"
+"    <li>law and home affairs, including most aspects of criminal and civil law, the prosecution system and the courts</li>\n"
+"    <li>police and fire services</li>\n"
+"    <li>environment</li>\n"
+"    <li>natural and built heritage</li>\n"
+"    <li>agriculture, forestry and fishing</li>\n"
+"    <li>sport and the arts</li>\n"
+"    <li>statistics, public registers and records</li>\n"
+"</ul>\n"
+"\n"
+"For constituency matters, you can approach any one of the MSPs who represent you. Do not contact more than one MSP on a constituency matter, as this will cause potential delays. \n"
+"Only contact all your regional MSPs about issues that apply to all of them &ndash; for example, if you wish them to cast a particular vote in the Scottish Parliament."
+msgstr ""
+
+#: web/confirm.php:28
+msgid "Can you tell us in a sentence what your message was about?"
+msgstr ""
+
+#. Creates a fieldset with radio options and legend
+#: web/confirm.php:40
+msgid "Which of the following best describes why you are writing to your representative?"
+msgstr ""
+
+#: web/confirm.php:44
+msgid "Casework"
+msgstr ""
+
+#: web/confirm.php:44
+msgid "Trying to resolve a problem you or another person is having"
+msgstr ""
+
+#: web/confirm.php:48
+msgid "Campaigning"
+msgstr ""
+
+#: web/confirm.php:48
+msgid "Seeking to persuade or inform your representative about a wider issue"
+msgstr ""
+
+#: web/confirm.php:54
+msgid "Submit"
+msgstr ""
+
+#: web/confirm.php:79 web/response.php:29
+msgid "Please make sure you copy the URL from your email properly. The token was missing."
+msgstr ""
+
+#: web/firsttime.php:23
+msgid "The token was missing."
+msgstr ""
+
+#: web/firsttime.php:27
+msgid "The answer type was missing."
+msgstr ""
+
+#: web/index.php:40
+msgid "First, enter your UK postcode"
+msgstr ""
+
+#: web/index.php:106
+msgid "Postcode that's been typed in"
+msgstr ""
+
+#: web/index.php:278
+msgid "Sorry, we need your complete UK postcode to identify your elected representatives."
+msgstr ""
+
+#: web/index.php:285
+msgid "We’re not quite sure why, but we can’t seem to recognise your postcode."
+msgstr ""
+
+#: web/index.php:301
+msgid "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free"
+msgstr ""
+
 #: web/index.php:304
 msgid "<h2 id=\"title\">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>"
 msgstr "<h2 id=\"title\">Ysgrifennwch at eich gwleidyddion, cenedlaethol neu leol, am ddim.</h2><p>Anfonwyd dros 200,000 o negeseuon y llynedd.</p>"
+
+#: web/response.php:37
+msgid "Please make sure you copy the URL from your email properly. The answer type was missing."
+msgstr ""
+
+#: web/response.php:59
+msgid "Failed to look up message id for token"
+msgstr ""
+
+#: web/response.php:79
+msgid "Unknown answer."
+msgstr ""
+
+#: web/stats.php:58
+msgid "We don’t have statistics for that year"
+msgstr ""
+
+#: web/stats.php:157
+msgid "Unknown report type"
+msgstr ""
+
+#: web/stats.php:435
+msgid "MP did not accept messages via WriteToThem"
+msgstr ""
+
+#: web/stats.php:436
+msgid "Too little data for valid analysis"
+msgstr ""
+
+#: web/stats.php:437
+msgid "We need to manually check this MP"
+msgstr ""
+
+#: web/stats.php:438
+msgid "<a href=\"https://www.writetothem.com/about-ilg\">MP attempted to improve their response rate by sending themselves messages</a>"
+msgstr ""
+
+#: web/stats.php:439
+msgid "WriteToThem had possibly bad contact details for this MP"
+msgstr ""
+
+#: web/stats.php:440
+msgid "Unknown MP categorisation"
+msgstr ""
+
+#: web/who.php:12 web/who.php:13 web/who.php:22
+msgid "on the"
+msgstr ""
+
+#: web/who.php:14 web/who.php:15 web/who.php:16 web/who.php:17 web/who.php:18
+#: web/who.php:19
+msgid "on"
+msgstr ""
+
+#: web/who.php:20 web/who.php:21 web/who.php:23 web/who.php:24 web/who.php:25
+msgid "in the"
+msgstr ""
+
+#: web/who.php:116 web/who.php:118
+#, php-format
+msgid "Your %s"
+msgstr ""
+
+#. Only around election time
+#. if ($va_alone['type'] == 'WMC') {
+#. $text = _("<p>Parliament has been dissolved, and so there are no MPs
+#. until after the upcoming election. We’ll be adding your new representative as
+#. soon as we can after the election. For more information, see
+#. <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
+#. } else {
+#: web/who.php:120 web/who.php:548
+msgid ""
+"<p>There’s an upcoming election.  We’ll be adding your new\n"
+"                    representative as soon as we can after the election.</p>"
+msgstr ""
+
+#: web/who.php:152 web/who.php:514
+msgid "Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href=\"about-lords\">more info</a>)."
+msgstr ""
+
+#: web/who.php:153 web/who.php:515
+msgid "Write to a Lord"
+msgstr ""
+
+#: web/who.php:370
+#, php-format
+msgid "Your %d %s %s represent you"
+msgstr ""
+
+#: web/who.php:372
+#, php-format
+msgid "Your %s %s represents you"
+msgstr ""
+
+#: web/who.php:378
+#, php-format
+msgid " Most %s are not paid a salary, but get a basic allowance for the work they do."
+msgstr ""
+
+#. $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
+#: web/who.php:444
+msgid "Correct a mistake in this list"
+msgstr ""
+
+#: web/who.php:466
+#, php-format
+msgid "%d %s %s %s also represent you"
+msgstr ""
+
+#: web/who.php:468
+#, php-format
+msgid "One %s %s %s also represents you"
+msgstr ""
+
+#: web/who.php:507
+#, php-format
+msgid "See %s&rsquo;s voting record and speeches at TheyWorkForYou"
+msgstr ""
+
+#: web/who.php:516
+msgid "<div class=\"rep-more\">"
+msgstr ""
+
+#: web/who.php:531
+msgid ""
+"<p>There have been boundary changes at the last election that\n"
+"        means we can’t yet say who your representative is. We hope to get our\n"
+"        boundary database updated as soon as we can, but at the moment we have no\n"
+"        definite time of completion.</p>"
+msgstr ""
+
+#: web/who.php:536
+msgid ""
+"<p>Due to the recent election, we don’t yet have details for\n"
+"        this representative. We generally rely on data from external sources,\n"
+"        and will be updating as soon as we can, but at the moment we have no\n"
+"        definite time of completion.</p>"
+msgstr ""
+
+#: web/who.php:552
+msgid "Representative details are not available for an unknown reason."
+msgstr ""
+
+#: web/write.php:69
+msgid "; or we might only have a central contact for the council, which similarly might not be working"
+msgstr ""
+
+#: web/write.php:90
+msgid " the MP, the House of Commons"
+msgstr ""
+
+#: web/write.php:93
+#, php-format
+msgid ""
+"\n"
+"    Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send\n"
+"    them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is\n"
+"    full) or incorrect%s.\n"
+"\n"
+"    We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of\n"
+"    %s</strong> (or even the phone%s), finding out the contact details.\n"
+"    Then <a href='/about-contact'>contact us</a> with the email address or fax number of\n"
+"    your representative.\n"
+"    "
+msgstr ""
+
+#: web/write.php:112
+#, php-format
+msgid ""
+"%s %s %s has told us not to deliver any messages from the constituents of %s.\n"
+"Instead you can try looking them up on <a href=\"%s\">the Parliament website</a>. There you will get a phone number, a\n"
+"postal address, and for some MPs a website or way to contact them by email."
+msgstr ""
+
+#: web/write.php:119
+#, php-format
+msgid "%s %s %s has told us not to deliver any messages from the constituents of %s."
+msgstr ""
+
+#: web/write.php:141 web/write.php:145
+msgid "Dear"
+msgstr ""
+
+#: web/write.php:141 web/write.php:145 web/write.php:149
+msgid "Yours sincerely"
+msgstr ""
+
+#: web/write.php:176
+msgid "The two email addresses you’ve entered differ; please check them carefully for mistakes"
+msgstr ""
+
+#: web/write.php:200 web/write.php:201
+msgid "Please enter your message"
+msgstr ""
+
+#: web/write.php:202
+msgid "Please sign at the bottom with your name, or alter the \"Yours sincerely\" signature"
+msgstr ""
+
+#: web/write.php:203
+msgid "Your message is a bit too long for us to send"
+msgstr ""
+
+#: web/write.php:208
+msgid "About You"
+msgstr ""
+
+#: web/write.php:211
+msgid "Please enter your name"
+msgstr ""
+
+#: web/write.php:214
+msgid "Your email"
+msgstr ""
+
+#: web/write.php:215
+msgid "Please enter your email address"
+msgstr ""
+
+#: web/write.php:218
+msgid "Choose a valid email address"
+msgstr ""
+
+#: web/write.php:223
+msgid "Confirm email"
+msgstr ""
+
+#: web/write.php:224
+msgid "Please re-enter your email address"
+msgstr ""
+
+#: web/write.php:230
+msgid "Phone"
+msgstr ""
+
+#: web/write.php:230 web/write.php:242 web/write.php:253
+msgid "optional"
+msgstr ""
+
+#: web/write.php:236
+msgid "Your Address"
+msgstr ""
+
+#: web/write.php:238
+msgid "Address Line 1"
+msgstr ""
+
+#: web/write.php:239
+msgid "Please enter your address"
+msgstr ""
+
+#: web/write.php:242
+msgid "Address Line 2"
+msgstr ""
+
+#: web/write.php:245
+msgid "Town/City"
+msgstr ""
+
+#: web/write.php:246
+msgid "Please enter your town/city"
+msgstr ""
+
+#. House of Lords
+#. All other representatives (postcode fixed as must be in constituency)
+#: web/write.php:261 web/write.php:267
+msgid "UK postcode"
+msgstr ""
+
+#: web/write.php:262
+msgid "Please enter a UK postcode (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
+msgstr ""
+
+#: web/write.php:263
+msgid "Please enter a valid UK postcode (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
+msgstr ""
+
+#: web/write.php:288
+msgid "All the information you provide here will be sent to your representatives or their offices"
+msgstr ""
+
+#: web/write.php:290
+msgid "All the information you provide here will be sent to your representative or their office"
+msgstr ""
+
+#: web/write.php:293
+msgid "Any response from them will come directly to you via email or letter. After you use WriteToThem, you will receive a maximum of two follow-up messages from us, checking whether you received a response."
+msgstr ""
+
+#: web/write.php:294
+msgid "<a href=\"/about-privacy\" target=\"_blank\">Read about how we keep your data private</a> (opens in a new window)."
+msgstr ""
+
+#: web/write.php:301
+msgid "Preview and send"
+msgstr ""
+
+#: web/write.php:316
+msgid "Edit some more"
+msgstr ""
+
+#: web/write.php:317
+msgid "I&apos;m happy, send it"
+msgstr ""
+
+#: web/write.php:391
+#, php-format
+msgid ""
+"Sorry. An error has occurred: pageName \"%s\". Please <a href=\"/about-contact\">get in touch with us</a>,\n"
+"                quoting this message. You can <a href=\"/\">try again from the beginning</a>."
+msgstr ""
+
+#: web/write.php:417
+msgid "Your message is near-identical with others sent previously"
+msgstr ""
+
+#: web/write.php:431 web/write.php:605
+msgid ""
+"Sorry, but your browser seems to be transmitting\n"
+"            erroneous data to us. Please try again, or <a href=\"/about-contact\">contact us</a>."
+msgstr ""
+
+#: web/write.php:441
+msgid "Sorry, we were unable to send your messages for the following reasons:"
+msgstr ""
+
+#: web/write.php:498
+msgid "read more"
+msgstr ""
+
+#. None of the messages could be sent
+#: web/write.php:515
+msgid "Sorry, we were unable to send your messages for the following reasons: <br>"
+msgstr ""
+
+#: web/write.php:520
+msgid "Note: Some of your messages could not be sent for the following reasons:"
+msgstr ""
+
+#: web/write.php:544
+msgid "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>."
+msgstr ""
+
+#: web/write.php:577
+msgid ""
+"Sorry, but your message is a bit too long\n"
+"        for our service.  Please make it shorter, or contact your\n"
+"        representative by some other means."
+msgstr ""
+
+#. None of the group of representatives can be contacted
+#: web/write.php:722
+msgid "Sorry, we are unable to contact any of these representatives for the following reasons:"
+msgstr ""
+
+#. Some problems, but some reps can be contacted, proceed with a note
+#: web/write.php:725
+msgid "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons:"
+msgstr ""
+
+#: web/write.php:923
+msgid "Sorry, an election is forthcoming or has recently happened here."
+msgstr ""
