@@ -19,9 +19,10 @@
  */
 
 // Where the DaDem, MaPit and Ratty services are.
-define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
+define('OPTION_DADEM_URL', 'http://localhost/dev/dadem.cgi');
 define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org/');
-define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
+define('OPTION_RATTY_URL', 'http://localhost/dev/dadem.cgi');
+define('OPTION_GAZE_URL', 'http://localhost/dev/dadem.cgi');
 
 // If MapIt calls should use a particular generation
 define('OPTION_MAPIT_GENERATION', null);
