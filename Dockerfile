@@ -10,3 +10,5 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:$PATH"
       
 RUN a2enmod rewrite
+
+WORKDIR /var/www/html/writetothem

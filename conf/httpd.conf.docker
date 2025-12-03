@@ -1,3 +1,8 @@
+<Directory "/var/www/html/writetothem/web">
+Options +ExecCGI
+AddHandler fcgid-script .cgi
+</Directory>
+
 <VirtualHost *:80>
 
     ServerAdmin webmaster@localhost
