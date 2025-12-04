@@ -6,7 +6,7 @@ RUN apt-get update \
       && xargs -a /tmp/packages apt-get install -y --no-install-recommends \
       && rm -r /var/lib/apt/lists/*
 
-RUN apt-get install libcache-fastmmap-perl
+RUN apt-get install libcache-fastmmap-perl liblocale-gettext-perl
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:$PATH"
