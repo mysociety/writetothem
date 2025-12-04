@@ -1,3 +1,13 @@
+<Directory "/var/www/html/writetothem/web">
+Options +ExecCGI
+AddHandler fcgid-script .cgi
+</Directory>
+
+<Directory "/var/www/html/writetothem/dev">
+Options +ExecCGI
+AddHandler fcgid-script .cgi
+</Directory>
+
 <VirtualHost *:80>
 
     ServerAdmin webmaster@localhost
@@ -12,6 +22,8 @@
     ErrorDocument 403 /403.html
     ErrorDocument 404 /404.html
     ErrorDocument 500 /500.html
+
+    Alias /dev/ /var/www/html/writetothem/dev/
 
     RewriteEngine on
 

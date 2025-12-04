@@ -19,15 +19,16 @@
  */
 
 // Where the DaDem, MaPit and Ratty services are.
-define('OPTION_DADEM_URL', 'http://services.mysociety.org/dadem');
+define('OPTION_DADEM_URL', 'http://localhost/dev/dadem.cgi');
 define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org/');
-define('OPTION_RATTY_URL', 'http://services.mysociety.org/ratty');
+define('OPTION_RATTY_URL', 'http://localhost/dev/dadem.cgi');
+define('OPTION_GAZE_URL', 'http://localhost/dev/dadem.cgi');
 
 // If MapIt calls should use a particular generation
 define('OPTION_MAPIT_GENERATION', null);
 
 // Where the FYR queue service is.
-define('OPTION_FYR_QUEUE_URL', 'http://sometestdomain.writetothem.com/services/queue');
+define('OPTION_FYR_QUEUE_URL', 'http://localhost/services/queue');
 define('OPTION_FYR_QUEUE_USERPWD', null);
 
 // Name of SMTP server. This host must allow relaying from the machine on which
@@ -51,7 +52,7 @@ define('OPTION_FYR_MARK_CONTACTS_FAILING', 0);
 
 // Base domain of the website. This is used to distinguish internal from
 // external referrers, for instance.
-define('OPTION_WEB_DOMAIN', 'writetothem.com');
+define('OPTION_WEB_DOMAIN', 'localhost:8085');
 
 // Top-level URL of current website
 define('OPTION_BASE_URL', 'http://sometesthost.' . OPTION_WEB_DOMAIN);
