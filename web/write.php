@@ -97,7 +97,7 @@ function bad_contact_error_msg($eb_area) {
 
     We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of
     $type_display_name</strong> (or even the phone$type_display_phone), finding out the contact details.
-    Then <a href='/about-contact'>contact us</a> with the email address or fax number of
+    Then <a href='/about-contact'>contact us</a> with the email address of
     your representative.
     ";
     return $error_msg;
