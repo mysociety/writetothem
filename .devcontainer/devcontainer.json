@@ -1,8 +1,13 @@
 {
     "name":"theyworkforyou",
+    	"secrets": {
+		"MAPIT_API_KEY": {
+			"description": "API key for the MapIt API - optional for small numbers of queries"
+		}
+   },
     "dockerComposeFile":"../docker-compose.yml",
     "service":"fyr",
-    "workspaceFolder":"/workspaces/writetothem",
+    "workspaceFolder":"/var/www/html/writetothem",
     "initializeCommand":[
        ".devcontainer/initializeCommand"
     ],
