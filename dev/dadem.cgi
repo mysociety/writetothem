@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w -I../perllib -I../commonlib/perllib
 #
-# queue.cgi:
-# RABX server for FYR queue.
+# dadem.cgi:
+# RABX server for FYR queue - Development version to pass dummy data back.
 #
 # Copyright (c) 2004 UK Citizens Online Democracy. All rights reserved.
 # Email: chris@mysociety.org; WWW: http://www.mysociety.org/
@@ -14,12 +14,15 @@ use strict;
 
 BEGIN {
     use mySociety::Config;
-    mySociety::Config::set_file('../../conf/general');
+    mySociety::Config::set_file('/var/www/html/writetothem/conf/general');
 }
 
 use FCGI;
 use RABX;
 use Cache::FastMmap;
+use LWP::UserAgent;
+use HTTP::Request;
+use JSON;
 
 use mySociety::DaDem;
 use mySociety::WatchUpdate;
@@ -38,56 +41,104 @@ my $CACHE = Cache::FastMmap->new(
  cache_size => '10m',
 );
 
-my $all_reps = {
-    1 => {
-        'id' => 1, 'name' => 'John Smith MP', 'type' => 'WMC', voting_area => 169516, email => 'email@example.org', 'method' => 'email',
-    },
-    2 => {
-        'id' => 2, 'name' => 'Jane Smith councillor', 'type' => 'UTE', voting_area => '166032', email => 'email@example.org', 'method' => 'email',
-    },
-    3 => {
-        'id' => 3, 'name' => 'Mark Smith Senedd Member', 'type' => 'WAE', voting_area => '144304', email => 'email@example.org', 'method' => 'email',
-    },
-    4 => {
-        'id' => 4, 'name' => 'Mandy Smith Area Senedd Member', 'type' => 'WAC', voting_area => '148026', email => 'email@example.org', 'method' => 'email',
-    },
-    5 => {
-        'id' => 5, 'name' => 'James Jones MSP', 'type' => 'SPC', voting_area => '134935', email => 'email@example.org', 'method' => 'email',
-    },
-    6 => {
-        'id' => 6, 'name' => 'Tony Andrews Councillor', 'type' => 'DIW', voting_area => '145297', email => 'email@example.org', 'method' => 'email',
-    },
-    7 => {
-        'id' => 7, 'name' => 'Tim Smith Councillor', 'type' => 'DIW', voting_area => '145297', email => 'email@example.org', 'method' => 'email',
+my $ua = LWP::UserAgent->new;
+my $mapit_api_key = mySociety::Config::get('MAPIT_API_KEY', '');
+my $mapit_url = mySociety::Config::get('MAPIT_URL', '');
+
+sub get_area_type_from_mapit {
+    my $area_id = shift;
+        
+    # Check cache first
+    my $cache_key = "area_type_$area_id";
+    if (my $type = $CACHE->get($cache_key)) {
+        return $type;
     }
+    
+    # Call MapIt API to get area info
+    my $url = "https://mapit.mysociety.org/area/$area_id";
+        
+    # Create request with API key header
+    my $request = HTTP::Request->new('GET', $url);
+    if ($mapit_api_key) {
+        $request->header('X-Api-Key' => $mapit_api_key);
+    }
+    
+    my $response = $ua->request($request);
+    if ($response->is_success) {
+        my $data = eval { JSON::decode_json($response->content) };
+        if ($@) {
+        } elsif ($data && $data->{type}) {
+            my $type = $data->{type};
+            $CACHE->set($cache_key, $type, 3600);  # Cache for 1 hour
+            return $type;
+        } else {
+        }
+    }
+    
+    # Default to LBW if we can't determine type
+    return 'LBW';
+}
+
+# Template representatives by area type for generating dynamic dummy data
+my $rep_templates = {
+    'WMC' => { 'title' => 'MP', 'first_names' => ['Sarah', 'John', 'Emma', 'David'], 'surnames' => ['Wilson', 'Smith', 'Brown', 'Jones'] },
+    'LBW' => { 'title' => 'Councillor', 'first_names' => ['Jane', 'Michael', 'Lisa', 'Robert'], 'surnames' => ['Taylor', 'Davis', 'Wilson', 'Miller'] },
+    'LAC' => { 'title' => 'Assembly Member', 'first_names' => ['Mark', 'Sophie', 'James', 'Helen'], 'surnames' => ['Evans', 'Clarke', 'Lewis', 'Walker'] },
+    'LAE' => { 'title' => 'Assembly Member', 'first_names' => ['Mark', 'Sophie', 'James', 'Helen'], 'surnames' => ['Evans', 'Clarke', 'Lewis', 'Walker'] },
+    'LAS' => { 'title' => 'Assembly Member', 'first_names' => ['Mark', 'Sophie', 'James', 'Helen'], 'surnames' => ['Evans', 'Clarke', 'Lewis', 'Walker'] },
+    'SPC' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
+    'SPE' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
+    'WAC' => { 'title' => 'MS', 'first_names' => ['Gareth', 'Cerys', 'Dylan', 'Sian'], 'surnames' => ['Williams', 'Davies', 'Thomas', 'Roberts'] },
+    'WAE' => { 'title' => 'MS', 'first_names' => ['Gareth', 'Cerys', 'Dylan', 'Sian'], 'surnames' => ['Williams', 'Davies', 'Thomas', 'Roberts'] },
+    'NIA' => { 'title' => 'MLA', 'first_names' => ['Connor', 'Siobhan', 'Patrick', 'Aoife'], 'surnames' => ['Murphy', 'Kelly', 'ONeill', 'Lynch'] },
+    'EUP' => { 'title' => 'MEP', 'first_names' => ['Edward', 'Catherine', 'William', 'Margaret'], 'surnames' => ['Harrison', 'Thompson', 'White', 'Green'] },
 };
 
-our $default_rep = {
-    'id' => 7, 'name' => 'Default Councillor', 'type' => 'UTE', voting_area => '166032',
-};
+sub generate_representative {
+    my ($area_id, $area_type) = @_;
+    
+    # Get template for this area type, default to councillor if unknown
+    my $template = $rep_templates->{$area_type} || $rep_templates->{'LBW'};
+    
+    # Generate deterministic but varied names based on area_id
+    srand($area_id);
+    my $first_name = $template->{first_names}->[rand(@{$template->{first_names}})];
+    my $surname = $template->{surnames}->[rand(@{$template->{surnames}})];
+    
+    # Generate unique rep ID based on area
+    my $rep_id = int($area_id / 10) + ($area_id % 1000);
+    
+    return {
+        'id' => $rep_id,
+        'name' => "$first_name $surname $template->{title}",
+        'type' => $area_type,
+        'voting_area' => $area_id,
+        'email' => lc("$first_name.$surname\@example.org"),
+        'method' => 'email',
+    };
+}
 
 our $rep_responses = {};
 
 sub get_rep_id_for_area {
-    my $id = shift;
-    my $key = "area_$id";
+    my $area_id = shift;
+    
+    # Look up area type from MapIt
+    my $area_type = get_area_type_from_mapit($area_id);
+    
+    my $key = "area_${area_id}_type_${area_type}";
     if (my $rep_id = $CACHE->get($key)) {
         return $rep_id;
     } else {
-        my $rep_id = int rand(10000);
-        my $rep_key = "rep_$rep_id";
-        while ($CACHE->get($rep_key)) {
-            $rep_id = int rand(10000);
-            $rep_key = "rep_$rep_id";
-        }
-
-        my $pick = int rand(7) + 1;
-        my $rep = $all_reps->{$pick};
-        $rep->{id} = $rep_id;
-        $rep->{voting_area} = $id;
+        # Generate representative for this area
+        my $rep = generate_representative($area_id, $area_type);
+        my $rep_key = "rep_$rep->{id}";
+        
+        # Cache both the representative and the area->rep mapping
         $CACHE->set($rep_key, $rep);
-
-        return $rep_id;
+        $CACHE->set($key, $rep->{id});
+        
+        return $rep->{id};
     }
 }
 
@@ -110,10 +161,10 @@ while ($req->Accept() >= 0) {
                 },
             ],
             'DaDem.get_area_status' => [
-                sub { return []; return DaDem::get_area_status($_[0]); },
+                sub { return 'none'; },
             ],
             'DaDem.get_area_statuses' => [
-                sub { return []; return DaDem::get_area_statuses(); },
+                sub { return {}; },
             ],
             'DaDem.search_representatives' => [
                 sub { return []; return DaDem::search_representatives($_[0]); },
