@@ -250,7 +250,7 @@ $headers = array(
 
     if ($realrun) {
         verbose("sending email to $dest");
-        mail($dest, $subject, $mail, $headers);
+        mail($dest, $subject, $mail, $headers, "-f $from");
     } else {
         verbose("printing email");
         print "To: $dest\n\n"; 
