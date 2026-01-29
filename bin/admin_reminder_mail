@@ -243,12 +243,14 @@ $dest = $from;
 if ($email_to) {
     $dest = $email_to;
 }
+$headers = array(
+    'From'     => "The Quality Deity <$from>",
+    'X-Mailer' => 'PHP/' . phpversion()
+);
 
     if ($realrun) {
         verbose("sending email to $dest");
-        mail($dest, $subject, $mail,
-            "From: The Quality Deity <$from>\n".
-            "X-Mailer: PHP/" . phpversion());
+        mail($dest, $subject, $mail, $headers);
     } else {
         verbose("printing email");
         print "To: $dest\n\n"; 
