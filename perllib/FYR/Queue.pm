@@ -177,7 +177,7 @@ sub check_group_unused($){
     my ($group_id) = @_;
     my $ret = undef;
     if (my $msg = dbh()->selectrow_hashref("select * from message where group_id = ?", {}, $group_id)){
-        throw FYR::Error("You've already sent these messages, there's no need to send them twice.", FYR::Error::GROUP_ALREADY_QUEUED);
+        throw FYR::Error(_("You've already sent these messages, there's no need to send them twice."), FYR::Error::GROUP_ALREADY_QUEUED);
     }
     return $ret;
 }
@@ -191,11 +191,11 @@ sub get_via_representative ($) {
     my $ainfo = mySociety::MaPit::call('area', $aid);
     my $vainfo = mySociety::DaDem::get_representatives($ainfo->{parent_area});
 
-    throw FYR::Error("Bad return from DaDem looking up contact via info", FYR::Error::BAD_DATA_PROVIDED)
+    throw FYR::Error(_("Bad return from DaDem looking up contact via info"), FYR::Error::BAD_DATA_PROVIDED)
         unless (ref($vainfo) eq 'ARRAY');
-    throw FYR::Error("More than one via contact (shouldn't happen)", FYR::Error::BAD_DATA_PROVIDED)
+    throw FYR::Error(_("More than one via contact (shouldn't happen)"), FYR::Error::BAD_DATA_PROVIDED)
         if (@$vainfo > 1);
-    throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
+    throw FYR::Error(_("Sorry, no contact details."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA)
         if (!@$vainfo);
 
     my $viainfo = mySociety::DaDem::get_representative_info($vainfo->[0]);
@@ -222,26 +222,26 @@ sub work_out_destination ($) {
 
     # Decide how to send the message.
     if ($recipient->{method} eq "either") {
-        throw FYR::Error("Either contact method specified, but fax not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
-        throw FYR::Error("Either contact method specified, but email not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
+        throw FYR::Error(_("Either contact method specified, but fax not defined."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
+        throw FYR::Error(_("Either contact method specified, but email not defined."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
         if (rand(1) < 0.5) {
             $recipient->{fax} = undef;
         } else {
             $recipient->{email} = undef;
         }
     } elsif ($recipient->{method} eq "fax") {
-        throw FYR::Error("Fax contact method specified, but not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
+        throw FYR::Error(_("Fax contact method specified, but not defined."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{fax}));
         $recipient->{email} = undef;
     } elsif ($recipient->{method} eq "email") {
-        throw FYR::Error("Email contact method specified, but not defined.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
+        throw FYR::Error(_("Email contact method specified, but not defined."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA) if (!defined($recipient->{email}));
         $recipient->{fax} = undef;
     } elsif ($recipient->{method} eq "shame") {
-        throw FYR::Error("Representative has told us they do not want WriteToThem.com to deliver messages for them.", FYR::Error::MESSAGE_SHAME);
+        throw FYR::Error(_("Representative has told us they do not want WriteToThem.com to deliver messages for them."), FYR::Error::MESSAGE_SHAME);
     } elsif ($recipient->{method} eq "via") {
         # Representative should be contacted via the elected body on which they
         # sit.
         my $viainfo = get_via_representative($recipient->{voting_area});
-        throw FYR::Error("Bad contact method for via contact (shouldn't happen)", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Bad contact method for via contact (shouldn't happen)"), FYR::Error::BAD_DATA_PROVIDED)
             if ($viainfo->{method} eq 'via');
 
         foreach (qw(method fax email)) {
@@ -250,9 +250,9 @@ sub work_out_destination ($) {
         $recipient->{via} = 1;
         work_out_destination($recipient);
     } elsif ($recipient->{method} eq "unknown") {
-        throw FYR::Error("Sorry, no contact details.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
+        throw FYR::Error(_("Sorry, no contact details."), FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
     } else {
-        throw FYR::Error("Unknown contact method '" .  $recipient->{method} . "'.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
+        throw FYR::Error(_("Unknown contact method '") .  $recipient->{method} . "'.", FYR::Error::MESSAGE_BAD_ADDRESS_DATA);
     }
 }
 
@@ -267,10 +267,10 @@ sub recipient_test ($) {
     my ($recipient_id) = @_;
 
     # Get details of the recipient.
-    throw FYR::Error("No RECIPIENT specified", FYR::Error::BAD_DATA_PROVIDED)
+    throw FYR::Error(_("No RECIPIENT specified"), FYR::Error::BAD_DATA_PROVIDED)
         if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
     my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-    throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem", FYR::Error::BAD_DATA_PROVIDED)
+    throw FYR::Error(_("Bad RECIPIENT or error ($recipient) in DaDem"), FYR::Error::BAD_DATA_PROVIDED)
         if (!$recipient or ref($recipient) ne 'HASH');
     throw FYR::Error('This is a deleted representative', FYR::Error::REPRESENTATIVE_DELETED)
         if $recipient->{deleted};
@@ -331,11 +331,11 @@ sub write_messages($$$$$;$$$$){
 
     # should have the same number of msgids as recipients
     if (scalar(@$msgidlist) != scalar(@$recipient_list)) {
-        throw FYR::Error("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params", FYR::Error::BAD_DATA_PROVIDED);
+        throw FYR::Error(_("Mismatch in MSG_ID_LIST and RECIPIENT_LIST params"), FYR::Error::BAD_DATA_PROVIDED);
     }
     # If there are multiple messages, there should be a group id
     if (scalar(@$msgidlist) > 1 && !defined($group_id)) {
-        throw FYR::Error("No group ID supplied for multiple messages", FYR::Error::BAD_DATA_PROVIDED);
+        throw FYR::Error(_("No group ID supplied for multiple messages"), FYR::Error::BAD_DATA_PROVIDED);
     }
 
     if ($no_questionnaire){
@@ -358,15 +358,15 @@ sub write_messages($$$$$;$$$$){
     try{
 
         # Check that sender contains appropriate information.
-        throw FYR::Error("Bad SENDER (not reference-to-hash", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Bad SENDER (not reference-to-hash"), FYR::Error::BAD_DATA_PROVIDED)
             unless (ref($sender) eq 'HASH');
         foreach (qw(name email address postcode)) {
-            throw FYR::Error("Missing required '$_' element in SENDER", FYR::Error::BAD_DATA_PROVIDED)
+            throw FYR::Error(_("Missing required '$_' element in SENDER"), FYR::Error::BAD_DATA_PROVIDED)
                 unless (exists($sender->{$_}));
         }
-        throw FYR::Error("Email address '$sender->{email}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Email address '$sender->{email}' for SENDER is not valid"), FYR::Error::BAD_DATA_PROVIDED)
             unless $sender->{email} =~ $Email::Address::addr_spec;
-        throw FYR::Error("Postcode '$sender->{postcode}' for SENDER is not valid", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Postcode '$sender->{postcode}' for SENDER is not valid"), FYR::Error::BAD_DATA_PROVIDED)
             unless (mySociety::PostcodeUtil::is_valid_postcode($sender->{postcode}));
 
         foreach $id (@$msgidlist){
@@ -380,13 +380,13 @@ sub write_messages($$$$$;$$$$){
                              error_text   => undef};
 
                 #pre insertion checks
-                throw FYR::Error("Bad ID specified", FYR::Error::BAD_DATA_PROVIDED)
+                throw FYR::Error(_("Bad ID specified"), FYR::Error::BAD_DATA_PROVIDED)
                     unless ($id =~ m/^[0-9a-f]{20}$/i);
                 # Get details of the recipient.
-                throw FYR::Error("No RECIPIENT specified", FYR::Error::BAD_DATA_PROVIDED)
+                throw FYR::Error(_("No RECIPIENT specified"), FYR::Error::BAD_DATA_PROVIDED)
                     if (!defined($recipient_id) or $recipient_id =~ /[^\d]/ or $recipient_id eq '');
                 my $recipient = mySociety::DaDem::get_representative_info($recipient_id);
-                throw FYR::Error("Bad RECIPIENT or error ($recipient) in DaDem", FYR::Error::BAD_DATA_PROVIDED)
+                throw FYR::Error(_("Bad RECIPIENT or error ($recipient) in DaDem"), FYR::Error::BAD_DATA_PROVIDED)
                     if (!$recipient or ref($recipient) ne 'HASH');
 
                 $recipient->{position} = $mySociety::VotingArea::rep_name{$recipient->{type}};
@@ -411,7 +411,7 @@ sub write_messages($$$$$;$$$$){
 
                 #check for existing message with this ID
                 if (my $msg = dbh()->selectrow_hashref("select * from message where id = ?", {}, $id)){
-                    throw FYR::Error("You've already sent this message, there's no need to send it twice.", FYR::Error::MESSAGE_ALREADY_QUEUED);
+                    throw FYR::Error(_("You've already sent this message, there's no need to send it twice."), FYR::Error::MESSAGE_ALREADY_QUEUED);
                 }
 
                 # XXX should also check that the text bits are valid UTF-8.
@@ -751,7 +751,7 @@ sub message ($;$$) {
             $msg->{recipient_position_plural} = $recipient_position_plural;
             return $msg;
         } else {
-            throw FYR::Error("No message '$id'.", FYR::Error::BAD_DATA_PROVIDED);
+            throw FYR::Error(_("No message '$id'."), FYR::Error::BAD_DATA_PROVIDED);
         }
     } catch mySociety::DBHandle::Error with {
         my $E = shift;
@@ -769,7 +769,7 @@ sub lock_group($) {
     my ($group_id) = @_;
     my $memberid;
     my $msgs = group_messages($group_id);
-    throw FYR::Error("No group '$group_id'.", FYR::Error::BAD_DATA_PROVIDED) unless ($msgs > 0);
+    throw FYR::Error(_("No group '$group_id'."), FYR::Error::BAD_DATA_PROVIDED) unless ($msgs > 0);
     foreach $memberid (@$msgs){
         my $sth = dbh()->prepare("select * from message where id = ? for update");
         $sth->execute($memberid);
@@ -1574,7 +1574,7 @@ sub confirm_email ($) {
         # Has it been so long that the message has in fact timed out?
         # If so, return an error message
         if (grep {$_ eq state($id)} ('failed', 'failed_closed')) {
-            throw FYR::Error("This message has expired", FYR::Error::MESSAGE_EXPIRED);
+            throw FYR::Error(_("This message has expired"), FYR::Error::MESSAGE_EXPIRED);
         }
         return $id if (state($id) ne 'pending');
         # Check to see if this message belongs to a group - if it does,
@@ -1618,16 +1618,16 @@ Returns 0 upon failure, or msgid upon success.
 =cut
 sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
-    throw FYR::Error("Bad QUESTION (should be 0-5)", FYR::Error::BAD_DATA_PROVIDED)
+    throw FYR::Error(_("Bad QUESTION (should be 0-5)"), FYR::Error::BAD_DATA_PROVIDED)
         if ($qn !~ /^[0-5]$/);
     if ($qn <= 1) {
-        throw FYR::Error("Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')"), FYR::Error::BAD_DATA_PROVIDED)
             if ($answer !~ /^(yes|no|unsatisfactory|not_expected)$/i);
     } elsif ($qn == 5) {
-        throw FYR::Error("Bad RESPONSE (should be an integer 0-10)", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Bad RESPONSE (should be an integer 0-10)"), FYR::Error::BAD_DATA_PROVIDED)
             if ($answer !~ /^([0-9]|10)$/);
     } else {
-        throw FYR::Error("Bad RESPONSE (should be 'strongly_agree', 'agree', 'neutral', 'disagree' or 'strongly_disagree')", FYR::Error::BAD_DATA_PROVIDED)
+        throw FYR::Error(_("Bad RESPONSE (should be 'strongly_agree', 'agree', 'neutral', 'disagree' or 'strongly_disagree')"), FYR::Error::BAD_DATA_PROVIDED)
             if ($answer !~ /^(strongly_agree|agree|neutral|disagree|strongly_disagree)$/i);
     }
     if (my $id = check_token("questionnaire", $token)) {
