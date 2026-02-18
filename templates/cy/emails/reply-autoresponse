@@ -1,0 +1,10 @@
+This is an automatic response, we have NOT read your email.
+
+If you are trying to confirm a message, or answer our questionnaire,
+please click the link in the email that we sent you, or copy-and-paste it into
+your web browser.
+
+If you have a question or comment about the site, please send an email to
+<?=$values['contact_email']?>
+
+-- the WriteToThem.com team
