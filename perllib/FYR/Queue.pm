@@ -864,8 +864,8 @@ sub format_email_body_hdr {
     my ($msg) = @_;
 
     my $addr = "$msg->{sender_name}\n$msg->{sender_addr}";
-    $addr .= "\n\n" . "Phone: $msg->{sender_phone}" if (defined($msg->{sender_phone}));
-    $addr .= "\n\n" . "Email: $msg->{sender_email}";
+    $addr .= "\n\n" . sprintf( _("Phone: %s"), $msg->{sender_phone}) if (defined($msg->{sender_phone}));
+    $addr .= "\n\n" . sprintf( _("Email: %s"), $msg->{sender_email});
 
     # Also stick the date in, formatted under the address as it would be in a
     # real letter. Of course, it'll be in the Date: header too, but we may as
@@ -904,15 +904,15 @@ sub make_representative_email ($$) {
     my ($msg, $sender) = @_;
 
     my $subject = $msg->{recipient_type} eq 'HOC'
-                        ? "Letter from $msg->{sender_name}"
-                        : "Letter from your constituent $msg->{sender_name}";
+                        ? sprintf( _("Letter from %s"), $msg->{sender_name} )
+                        : sprintf( _("Letter from your constituent %s"), $msg->{sender_name} );
 
     my $bodytext = '';
 
     # If this is being sent via some contact, we need to add blurb to the top
     # to that effect.
     if ($msg->{recipient_via} && $msg->{recipient_type} ne 'HOC') {
-        $subject = "Letter from constituent $msg->{sender_name} to $msg->{recipient_name}";
+        $subject = sprintf( _("Letter from constituent %s to %s"), $msg->{sender_name}, $msg->{recipient_name} );
         $bodytext = FYR::EmailTemplate::format(
                 email_template('via-coversheet', $msg->{cobrand}),
                 email_template_params($msg, representative_url => '')
