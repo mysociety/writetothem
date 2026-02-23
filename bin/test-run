@@ -53,10 +53,11 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('example', 'welsh', 'mistype', 'bounce', 'lords', 'group', 'unit');
+my @actions = ('example', 'welsh', 'error_translations', 'mistype', 'bounce', 'lords', 'group', 'unit');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'welsh' => 'send example message in Welsh successfully',
+    'error_translations' => 'check that queue errors are translated to Welsh successfully',
     'mistype' => 'check mistyped postcodes work',
     'bounce' => 'test autoresponder (TODO: doesn\'t test rep email failure bounces)',
     'lords' => 'send example message to a Lord',
@@ -143,6 +144,7 @@ foreach (@actions) {
     do_test_mistyped_postcode() if $_ eq 'mistype';
     do_test_bounce_stuff() if $_ eq 'bounce';
     do_send_welsh_message() if $_ eq 'welsh';
+    do_check_error_translations() if $_ eq 'error_translations';
     do_send_lords_message() if $_ eq 'lords';
     if ($_ eq 'group') {
         do_send_group_message();
@@ -831,6 +833,67 @@ sub do_admin_confirm_group_message {
         check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $options);
     }
     $wth->email_check_none_left();
+}
+
+#############################################################################
+
+sub do_check_error_translations {
+    set_base_url("cy.");
+    set_fyr_date('1990-01-01', undef, $verbose);
+
+    $options->{base_url} = $base_url;
+    my $repinfo = {repname => $WELSH_MS};
+    $options->{do_post_confirm_survey} = 1;
+
+    $wth->browser_get($base_url);
+    $wth->browser_check_contents('Ysgrifennwch at eich');
+
+    send_message_to_rep(90, 
+        'CF314AF', # Bridgend Town Hall
+        { 
+            writer_address1 => '23 Welsh Street',
+            writer_town => 'Someplace',
+            state => 'Someshire',
+            writer_phone => undef,
+            body => "Dear Tester, this message is being sent in Welsh because we are on the Welsh language version on WriteToThem so all the templates etc should be in Welsh"
+        },
+	    $repinfo,
+        $options
+    );
+    call_fyrqd($wth, $verbose, $multispawn);
+    my $confirmation_email = $wth->email_get_containing(
+        [ -and =>
+            '%To: "'.name_n(90).'" <'.email_n(90).'>%',
+            '%Subject: Please confirm that you want to send a message to %'.$WELSH_MS.'%',
+            '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF%',
+            '%to confirm that you wish%'
+        ]);
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link( text_regex => qr/Message Queue/ );
+    $wth->browser_follow_link( text_regex => qr/Recent Changed/ );
+
+    warn $wth->{useragent}->content;
+    warn("XXXXXXXXX\n");
+    $wth->{useragent}->form_number(2);
+    my @checks = $wth->{useragent}->find_all_inputs(
+        type       => 'checkbox',
+        name_regex => qr/^check/,
+    );
+    warn @checks;
+    my $check = $checks[-1];
+    warn $check->name;
+    $wth->browser_submit_form( form_number => 2, fields => { $check->name => 1 }, button => 'failed' );
+    warn $wth->{useragent}->content;
+
+    die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*(${base_url}[^ ]*)\n\n#m);
+    print "Message confirm URL is $1\n" if $verbose > 1;
+    my $url = $1;
+    $url =~ s/\s//gs;
+    $wth->email_check_url($url);
+    $wth->browser_get($url);
+    warn $url;
+    warn $wth->{useragent}->content;
+    $wth->browser_check_contents("This message has expired");
 }
 
 #############################################################################
