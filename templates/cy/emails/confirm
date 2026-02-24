@@ -1,5 +1,5 @@
-Please click on the link below to confirm that you wish WriteToThem to send
-your letter to
+Cliciwch ar y ddolen isod i gadarnhau eich bod am i WriteToThem anfon
+eich llythyr at
 <?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
 
 A copy of your letter is at the end of this email.
