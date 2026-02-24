@@ -26,6 +26,7 @@ define('OPTION_GAZE_URL', 'http://localhost/dev/dadem.cgi');
 
 // If MapIt calls should use a particular generation
 define('OPTION_MAPIT_GENERATION', null);
+define('OPTION_MAPIT_API_KEY', '');
 
 // Where the FYR queue service is.
 define('OPTION_FYR_QUEUE_URL', 'http://localhost/services/queue');

@@ -19,6 +19,8 @@ services:
 
   postgres:
     image: postgres:13
+    build:
+      dockerfile: ./postgres.Dockerfile
     environment:
       - POSTGRES_USER=fyr
       - POSTGRES_PASSWORD=fyr
