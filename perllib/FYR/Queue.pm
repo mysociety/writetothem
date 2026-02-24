@@ -1295,7 +1295,7 @@ sub make_confirmation_email ($;$) {
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
             To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => "Please confirm that you want to send a message to $subject_text",
+            Subject => sprintf( _("Please confirm that you want to send a message to %s"), $subject_text),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
@@ -1394,7 +1394,7 @@ sub make_failure_email ($) {
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
             To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => "Unfortunately, we couldn't send your message to $msg->{recipient_name}",
+            Subject => sprintf( _("Unfortunately, we couldn't send your message to %s"), $msg->{recipient_name} ),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
@@ -1483,7 +1483,7 @@ sub make_questionnaire_email ($;$) {
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
             To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => "Did your $msg->{recipient_position} reply to your letter?",
+            Subject => sprintf( _("Did your %s reply to your letter?"), $msg->{recipient_position} ),
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
