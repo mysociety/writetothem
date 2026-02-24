@@ -24,6 +24,7 @@ AddHandler fcgid-script .cgi
     ErrorDocument 500 /500.html
 
     Alias /dev/ /var/www/html/writetothem/dev/
+    Alias /admin/ /var/www/html/writetothem/web-admin/
 
     RewriteEngine on
 
