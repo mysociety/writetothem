@@ -1,4 +1,4 @@
-We're very sorry, but it wasn't possible to send your letter to
+Mae'n ddrwg iawn gennym, ond nid oedd yn bosibl anfon eich llythyr at
 <?=$values['recipient_name']?>, your <?=$values['recipient_position']?>.
 
 Unfortunately, sometimes emails can't get through. It might be down to a server
