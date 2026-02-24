@@ -162,6 +162,7 @@ sub confirm_message {
     my $wth = $options->{wth};
     my $base_url = $options->{base_url};
     my $do_survey = $options->{do_post_confirm_survey};
+    my $is_welsh = $options->{is_welsh};
 
     my $reptype = $repinfo->{reptype};
     my $repname = $repinfo->{repname};
@@ -184,12 +185,19 @@ sub confirm_message {
             $conf_name = $repname;
         }
         $conf_name =~ s/ /%/g;
+
+        my $subject = 'Please confirm that you want to send a message to %'.$conf_name.'%';
+        $subject = 'Cadarnhewch eich bod am anfon neges at %'.$conf_name.'%' if $is_welsh;
+
+        my $body_text = '%to confirm that you wish%';
+        $body_text = '%i gadarnhau eich bod am i%' if $is_welsh;
+
         my $confirmation_email = $wth->email_get_containing(
             [ -and =>
                 '%To: "'.name_n($who).'" <'.email_n($who).'>%',
-                '%Subject: Please confirm that you want to send a message to %'.$conf_name.'%',
+                '%Subject: ' . $subject,
                 '%THIS IS A TEST SITE, THE MESSAGE WILL BE SENT TO YOURSELF%',
-                '%to confirm that you wish%'
+                $body_text
             ]);
         die "Message confirmation link not found" if ($confirmation_email !~ m#^\s*(${base_url}[^ ]*)\n\n#m);
         print "Message confirm URL is $1\n" if $verbose > 1;
