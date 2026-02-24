@@ -4,7 +4,7 @@
 # if '--test' is added as a command parameter, this script should fail if there are any untranslated strings
 
 # Find all PHP files
-find ./ -regex '.*\.\(html\|php\)' |grep -v commonlib|grep -v vendor |sort > POTFILES
+find ./ -regex '.*\.\(html\|php\|pm\)' |grep -v commonlib|grep -v vendor |sort > POTFILES
 # Use that list to generate .pot file.
 # NB: forces PHP as otherwise it errors about .html files
 xgettext -c -L PHP --from-code=UTF-8 --files-from=POTFILES -d WriteToThem -o locale/WriteToThem.pot
