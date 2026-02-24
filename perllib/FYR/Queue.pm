@@ -2717,6 +2717,8 @@ failure, questionnaire or questionnaire-reminder.
 sub admin_get_wire_email ($$) {
     my ($id, $type) = @_;
     my $msg = message($id);
+    set_language($msg->{language});
+
 
     if ($type eq 'representative') {
         return make_representative_email($msg, 'unknown');
