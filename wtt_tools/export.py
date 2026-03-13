@@ -42,17 +42,29 @@ select
     ms.recipient_id,
 	qa0.answer as got_response,
 	qa1.answer as first_time,
-	ad.message_summary,
-	ad.analysis_data->>'reason' as reason,
-	ad.analysis_data->>'lsoa_2010' as lsoa_2010,
-	ad.analysis_data->>'gender_from_name' as gender_from_name
+        qa2.answer as service_q_informed,
+        qa3.answer as service_q_easy_to_identify,
+        qa4.answer as service_q_better_message,
+        qa5.answer as nps,
+        ad.message_summary,
+        ad.analysis_data->>'reason' as reason,
+        ad.analysis_data->>'lsoa_2010' as lsoa_2010,
+        ad.analysis_data->>'gender_from_name' as gender_from_name
 from message ms 
 left join
-	(select * from questionnaire_answer where question_id = 0) qa0  on qa0.message_id = ms.id
+        (select * from questionnaire_answer where question_id = 0) qa0  on qa0.message_id = ms.id
 left join
-	(select * from questionnaire_answer where question_id = 1) qa1 on qa1.message_id = ms.id
+        (select * from questionnaire_answer where question_id = 1) qa1 on qa1.message_id = ms.id
 left join
-	analysis_data ad on ad.message_id = ms.id
+        (select * from questionnaire_answer where question_id = 2) qa2 on qa2.message_id = ms.id
+left join
+        (select * from questionnaire_answer where question_id = 3) qa3 on qa3.message_id = ms.id
+left join
+        (select * from questionnaire_answer where question_id = 4) qa4 on qa4.message_id = ms.id
+left join
+        (select * from questionnaire_answer where question_id = 5) qa5 on qa5.message_id = ms.id
+left join
+    analysis_data ad on ad.message_id = ms.id
 where
 	confirmed is not null
 and
