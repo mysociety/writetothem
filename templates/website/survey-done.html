@@ -1,6 +1,6 @@
 <?php
 
-$values['title'] = "Thanks, and we hope it’s not the last";
+$values['title'] = _("Thanks");
 $values['robots'] = 'noindex, nofollow';
 
 template_draw('header', $values);
@@ -10,7 +10,7 @@ template_draw('header', $values);
 <div class="row write-header">
     <div class="large-8 large-centered columns">
 
-        <h2>Many thanks - We hope you enjoyed the experience</h2>
+        <h2><?= _("Many thanks") ?></h2>
 
     </div>
 </div>
@@ -18,11 +18,9 @@ template_draw('header', $values);
 <div class="row">
     <div class="large-10 large-centered columns">
 
-        <p>Thanks for that - the statistics should help us convince politicians that
-            they could do more on the Web to encourage greater participation in the
-            democratic process.</p>
+        <p><?= _("Thanks for helping us understand more about who is using WriteToThem, so we can improve it for future users.") ?></p>
 
-        <p>If you&rsquo;ve got any questions, feel free to <a href="/about-contact">contact us</a>.</p>
+        <p><?= _("If you’ve got any questions, feel free to") ?> <a href="/about-contact"><?= _("contact us") ?></a>.</p>
 
         <?=fyr_display_advert($values)?>
 
