@@ -1658,3 +1658,58 @@ $radio-card-circle-size: 24px;
 .text-muted {
   color: transparentize($body-font-color, 0.2)
 }
+
+// Survey / questionnaire page
+.survey-row {
+  padding-bottom: 2.5em;
+}
+
+.survey-divider {
+  margin: 1.5em 0;
+}
+
+.survey-fieldset {
+  margin-bottom: 2em;
+
+  label {
+    display: block;
+    margin-bottom: 0.6em;
+  }
+
+  &--separated {
+    padding-bottom: 2em;
+    border-bottom: 1px solid #e9e9e9;
+  }
+}
+
+.nps-scale-labels {
+  margin: 0.75em 0 0.25em;
+  font-size: 0.875em;
+  color: #666;
+  overflow: hidden;
+
+  .nps-low  { float: left; }
+  .nps-high { float: right; }
+}
+
+.nps-scale {
+  display: flex;
+  gap: 0.25em;
+  flex-wrap: wrap;
+
+  label {
+    flex: 1;
+    min-width: 2.5em;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 0.5em 0.25em;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  input {
+    display: block;
+    margin: 0 auto 0.25em;
+  }
+}
