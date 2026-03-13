@@ -231,7 +231,7 @@ sub do_send_example_message {
     print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
 
     $wth->browser_get($yes_link);
-    $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
+    $wth->browser_check_contents('Great &mdash; we&rsquo;re glad your representative replied!');
 }
 
 #############################################################################

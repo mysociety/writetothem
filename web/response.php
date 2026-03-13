@@ -34,17 +34,6 @@ if ($answer != "yes" && $answer != "no" && $answer != "unsatisfactory" && $answe
     template_show_error($missing_answer_message);
 }
 
-$yes_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&amp;answer=yes", $cocode);
-$no_url = cobrand_url($cobrand, "/firsttime?token=" . urlencode($token) .  "&amp;answer=no", $cocode);
-
-$values = array(
-    'first_time_yes' => "\"$yes_url\"",
-    'first_time_no' => "\"$no_url\"",
-    'cobrand' => $cobrand, 
-    'cocode' => $cocode,
-    'host' => fyr_get_host()
-    );
-
 // Look up info about the message
 $msg_id = msg_get_questionnaire_message($token);
 msg_check_error($msg_id);
@@ -55,24 +44,19 @@ if (!$msg_id) {
     }
     template_show_error($unfound_token_message);
 }
-$msg_info = msg_admin_get_message($msg_id);
-msg_check_error($msg_info);
-$values = array_merge($msg_info, $values);
 
 // 0 is the responsiveness question
 $result = msg_record_questionnaire_answer($token, 0, $answer);
 msg_check_error($result);
-if ($answer == "yes") {
-    template_draw("response-yes", $values);
-} elseif ($answer == "unsatisfactory") {
-    template_draw("response-unsatisfactory", $values);
-} elseif ($answer == "not_expected") {
-    template_draw("response-not-expected", $values);
-} elseif ($answer == "no") {
-    template_draw("response-no", $values);
-} else {
-    template_show_error("Unknown answer.");
-}
+
+// Go straight to the service questions form, passing the answer for context
+$firsttime_url = cobrand_url(
+    $cobrand,
+    "/firsttime?token=" . urlencode($token) . "&response=" . urlencode($answer),
+    $cocode
+);
+header("Location: $firsttime_url");
+exit;
 
 ?>
 
