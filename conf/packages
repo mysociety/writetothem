@@ -29,3 +29,6 @@ libwww-perl
 libcgi-pm-perl
 libfcgi-perl
 libapache2-mod-fcgid
+mariadb-client
+pkg-config
+default-libmysqlclient-dev

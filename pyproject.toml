@@ -24,6 +24,8 @@ psycopg2 = "^2.9.10"
 probablepeople = "^0.5.6"
 gender-detect = {git = "https://github.com/mysociety/gender-detect"}
 scipy = "^1.16.1"
+rich = "^14.3.3"
+mysqlclient = "^2.2.8"
 
 [tool.poetry]
 

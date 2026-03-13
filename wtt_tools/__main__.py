@@ -21,7 +21,7 @@ def analysis(option: AnalysisOptions = AnalysisOptions.ALL):
     """
     Run analysis to store extra calculated information in the database
     """
-    from .analysis import add_gender, add_lsoas
+    from .analysis import add_lsoas
 
     if option in [AnalysisOptions.ALL, AnalysisOptions.LSOA]:
         add_lsoas()
