@@ -1572,18 +1572,28 @@ sub confirm_email ($) {
 =item record_questionnaire_answer TOKEN QUESTION RESPONSE
 
 Record a user's response to a questionnaire question. TOKEN is the token sent
-them in the questionnaire email; QUESTION must be 0 or 1 and RESPONSE
-must be "YES", indicating that they have received a reply, or "NO",
-indicating that they have not. Returns 0 upon failure, or msgid upon
-success.
+them in the questionnaire email; QUESTION must be 0-5. For questions 0 and 1,
+RESPONSE must be "YES", "NO", "UNSATISFACTORY" or "NOT_EXPECTED". For questions
+2, 3, and 4 (Likert scale service questions), RESPONSE must be one of
+"strongly_agree", "agree", "neutral", "disagree", or "strongly_disagree".
+For question 5 (NPS), RESPONSE must be an integer 0-10.
+Returns 0 upon failure, or msgid upon success.
 
 =cut
 sub record_questionnaire_answer ($$$) {
     my ($token, $qn, $answer) = @_;
-    throw FYR::Error("Bad QUESTION (should be '0' or '1')", FYR::Error::BAD_DATA_PROVIDED)
-        if ($qn ne '0' and $qn ne '1');
-    throw FYR::Error("Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')", FYR::Error::BAD_DATA_PROVIDED)
-        if ($answer !~ /^(yes|no|unsatisfactory|not_expected)$/i);
+    throw FYR::Error("Bad QUESTION (should be 0-5)", FYR::Error::BAD_DATA_PROVIDED)
+        if ($qn !~ /^[0-5]$/);
+    if ($qn <= 1) {
+        throw FYR::Error("Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')", FYR::Error::BAD_DATA_PROVIDED)
+            if ($answer !~ /^(yes|no|unsatisfactory|not_expected)$/i);
+    } elsif ($qn == 5) {
+        throw FYR::Error("Bad RESPONSE (should be an integer 0-10)", FYR::Error::BAD_DATA_PROVIDED)
+            if ($answer !~ /^([0-9]|10)$/);
+    } else {
+        throw FYR::Error("Bad RESPONSE (should be 'strongly_agree', 'agree', 'neutral', 'disagree' or 'strongly_disagree')", FYR::Error::BAD_DATA_PROVIDED)
+            if ($answer !~ /^(strongly_agree|agree|neutral|disagree|strongly_disagree)$/i);
+    }
     if (my $id = check_token("questionnaire", $token)) {
         my $msg = message($id);
 

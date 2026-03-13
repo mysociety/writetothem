@@ -1,0 +1,108 @@
+<?php
+
+$values['title'] = _("A few more questions");
+$values['robots'] = 'noindex, nofollow';
+template_draw('header', $values);
+
+?>
+
+<div class="row write-header">
+    <div class="large-8 large-centered columns" role="heading">
+
+        <h2><?= _('A few more questions') ?></h2>
+
+    </div>
+</div>
+
+<div class="row survey-row">
+    <div class="large-8 large-centered columns">
+
+        <div class="card card-md">
+
+            <?php
+                $response = isset($values['response']) ? $values['response'] : '';
+                if ($response === 'yes') {
+                    echo '<p>' . _('Great &mdash; we&rsquo;re glad your representative replied!') . '</p>';
+                } elseif ($response === 'unsatisfactory') {
+                    echo '<p>' . _('Sorry to hear your question wasn&rsquo;t fully answered.') . '</p>';
+                } elseif ($response === 'no') {
+                    echo '<p>' . _('We hope your representative gets back to you soon.') . '</p>';
+                } elseif ($response === 'not_expected') {
+                    echo '<p>' . _('Thanks for letting us know.') . '</p>';
+                }
+            ?>
+            <p><?= _('We&rsquo;d like to ask a few more quick questions about your experience with WriteToThem.') ?></p>
+            <p><?= _('These questions will help us understand more about how people are using our service.') ?></p>
+
+            <hr class="survey-divider">
+
+            <form action="/firsttime" method="post">
+                <input type="hidden" name="token" value="<?=htmlspecialchars($values['token'])?>">
+                <input type="hidden" name="submitted" value="1">
+
+                <fieldset class="survey-fieldset survey-fieldset--separated">
+                    <legend><strong><?= _('Is this the first time you&rsquo;ve ever contacted one of your elected representatives?') ?></strong></legend>
+                    <label><input type="radio" name="answer" value="yes" required> <?= _('Yes, this is the first time') ?></label>
+                    <label><input type="radio" name="answer" value="no"> <?= _('No, I&rsquo;ve done it before') ?></label>
+                </fieldset>
+
+                <?php if (in_array(2, $values['service_questions'])): ?>
+                <fieldset class="survey-fieldset survey-fieldset--separated">
+                    <legend><?= _('Do you agree or disagree with the statement:') ?> <strong><?= _('WriteToThem made me more informed about what different layers of government do') ?></strong></legend>
+                    <label><input type="radio" name="q2" value="strongly_disagree"> <?= _('Strongly disagree') ?></label>
+                    <label><input type="radio" name="q2" value="disagree"> <?= _('Disagree') ?></label>
+                    <label><input type="radio" name="q2" value="neutral"> <?= _('Neither agree nor disagree') ?></label>
+                    <label><input type="radio" name="q2" value="agree"> <?= _('Agree') ?></label>
+                    <label><input type="radio" name="q2" value="strongly_agree"> <?= _('Strongly agree') ?></label>
+                </fieldset>
+                <?php endif; ?>
+
+                <?php if (in_array(3, $values['service_questions'])): ?>
+                <fieldset class="survey-fieldset survey-fieldset--separated">
+                    <legend><?= _('Do you agree or disagree with the statement:') ?> <strong><?= _('WriteToThem made it easy to identify the representative I wanted to write to') ?></strong></legend>
+                    <label><input type="radio" name="q3" value="strongly_disagree"> <?= _('Strongly disagree') ?></label>
+                    <label><input type="radio" name="q3" value="disagree"> <?= _('Disagree') ?></label>
+                    <label><input type="radio" name="q3" value="neutral"> <?= _('Neither agree nor disagree') ?></label>
+                    <label><input type="radio" name="q3" value="agree"> <?= _('Agree') ?></label>
+                    <label><input type="radio" name="q3" value="strongly_agree"> <?= _('Strongly agree') ?></label>
+                </fieldset>
+                <?php endif; ?>
+
+                <?php if (in_array(4, $values['service_questions'])): ?>
+                <fieldset class="survey-fieldset survey-fieldset--separated">
+                    <legend><?= _('Do you agree or disagree with the statement:') ?> <strong><?= _('WriteToThem helped me write a better message') ?></strong></legend>
+                    <label><input type="radio" name="q4" value="strongly_disagree"> <?= _('Strongly disagree') ?></label>
+                    <label><input type="radio" name="q4" value="disagree"> <?= _('Disagree') ?></label>
+                    <label><input type="radio" name="q4" value="neutral"> <?= _('Neither agree nor disagree') ?></label>
+                    <label><input type="radio" name="q4" value="agree"> <?= _('Agree') ?></label>
+                    <label><input type="radio" name="q4" value="strongly_agree"> <?= _('Strongly agree') ?></label>
+                </fieldset>
+                <?php endif; ?>
+
+                <?php if (in_array(5, $values['service_questions'])): ?>
+                <fieldset class="survey-fieldset survey-fieldset--separated">
+                    <legend><strong><?= _('How likely are you to recommend WriteToThem to a friend or colleague?') ?></strong></legend>
+                    <p class="nps-scale-labels">
+                        <span class="nps-low"><?= _('Not at all likely') ?></span>
+                        <span class="nps-high"><?= _('Extremely likely') ?></span>
+                    </p>
+                    <div class="nps-scale">
+                        <?php for ($i = 0; $i <= 10; $i++): ?>
+                        <label>
+                            <input type="radio" name="q5" value="<?= $i ?>"> <?= $i ?>
+                        </label>
+                        <?php endfor; ?>
+                    </div>
+                </fieldset>
+                <?php endif; ?>
+
+                <button type="submit" class="button success"><?= _('Submit answers') ?></button>
+
+            </form>
+
+        </div><!-- /.card -->
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>
