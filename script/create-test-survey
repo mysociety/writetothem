@@ -1,0 +1,70 @@
+#!/usr/bin/perl -w
+#
+# create-test-survey:
+# Insert a dummy message row (if one doesn't already exist) and print
+# survey test URLs using a valid questionnaire token.
+#
+# Usage: script/create-test-survey [--base-url URL]
+#
+
+use strict;
+require 5.8.0;
+
+use FindBin;
+use lib "$FindBin::Bin/../perllib";
+use lib "$FindBin::Bin/../commonlib/perllib";
+
+use Getopt::Long;
+use mySociety::Config;
+BEGIN {
+    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
+}
+use mySociety::DBHandle qw(dbh);
+use FYR::Queue;
+
+my $base_url = "http://localhost:8085";
+GetOptions('base-url=s' => \$base_url) or die "Usage: $0 [--base-url URL]\n";
+
+my $msg_id = "deadbeef01234567dead";  # fixed 20 hex-char ID so reruns are idempotent
+my $now = time();
+
+# Only insert if the test message doesn't already exist (to preserve
+# any questionnaire_answer rows from previous test runs)
+my $existing = dbh()->selectrow_array(
+    "SELECT 1 FROM message WHERE id = ?", {}, $msg_id
+);
+if (!$existing) {
+    dbh()->do(q{
+        INSERT INTO message (
+            id, sender_name, sender_email, sender_addr, sender_postcode,
+            sender_ipaddr, recipient_id, recipient_name, recipient_type,
+            recipient_email,
+            message, state, created, confirmed, laststatechange
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    }, {},
+        $msg_id,
+        "Test User", "test\@example.com", "1 Test Street\nTestville", "SW1A 1AA",
+        "127.0.0.1", 1, "Test Representative", "WMC",
+        "test-rep\@example.com",
+        "This is a test message.", "finished", $now, $now, $now,
+    );
+    dbh()->commit();
+    print "Created dummy message: $msg_id\n";
+} else {
+    print "Dummy message already exists: $msg_id\n";
+}
+
+my $token = FYR::Queue::make_token("questionnaire", $msg_id);
+
+print "\nQuestionnaire token: $token\n";
+print "\nTest URLs (via /response -- records Q0 then redirects to /firsttime):\n\n";
+
+my $sep = "+" . ("-" x 18) . "+" . ("-" x 80) . "+";
+print "$sep\n";
+printf "| %-16s | %-78s |\n", "answer=", "URL";
+print "$sep\n";
+for my $answer (qw(yes no unsatisfactory not_expected)) {
+    my $url = "$base_url/response?token=$token&answer=$answer";
+    printf "| %-16s | %-78s |\n", $answer, $url;
+    print "$sep\n";
+}
