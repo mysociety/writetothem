@@ -64,7 +64,7 @@ if ($page == 'write-checkemail') {
 }
 
 $whole_page_translations = [
-    'about-qa',
+    'about-campaigns', 'about-constituency', 'about-guidelines', 'about-lords', 'about-privacy', 'about-qa', 'about-us',
 ];
 
 if (in_array($page, $whole_page_translations)) {
