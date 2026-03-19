@@ -63,6 +63,17 @@ if ($page == 'write-checkemail') {
     $values['group_msg'] = '';
 }
 
+$whole_page_translations = [
+    'about-qa',
+];
+
+if (in_array($page, $whole_page_translations)) {
+    $locale = setlocale(LC_ALL, 0);
+    if ($locale == 'cy_GB.UTF-8') {
+        $page = "cy/$page";
+    }
+}
+
 /* Don't want problem pages to be indexed, really. */
 if (preg_match('/^problem-/', $page))
     $values['robots'] = 'noindex, nofollow';
