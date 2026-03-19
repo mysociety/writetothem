@@ -1,0 +1,125 @@
+<?php
+
+$values['title'] = _("Contact technical support");
+$contact_email = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
+template_draw('header', $values);
+
+?>
+
+<div class="row">
+    <div class="large-10 large-centered columns">
+
+        <h2><?= _('How can we help?') ?></h2>
+
+        <div class="row">
+            <div class="large-8 columns">
+
+                <div class="contact-options js-contact-options-accordion">
+                    <div class="contact-option">
+                        <h3>
+                            <button>
+                                <?= _('I just want to contact my MP or local representative') ?>
+                            </button>
+                        </h3>
+                        <form action="/" method="get" class="contact-option__detail">
+                            <p><?= _('Enter your UK postcode to begin a message to your local councillors, MP, MSPs, or Northern Irish, Welsh, or London Assembly Members.') ?></p>
+                            <div class="postcodebox">
+                                <label for="pc1"><?= _('Enter your UK postcode') ?></label>
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input type="text" id="pc1" name="pc" value="" placeholder="SW1H 9NB">
+                                    </div>
+                                    <div class="small-2 columns">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
+                        </form>
+                    </div>
+                    <div class="contact-option">
+                        <h3>
+                            <button>
+                                <?= _('I’ve been treated unfairly by a government agency <small> e.g. benefits, visas and immigration, HMRC, or Work and Pensions </small>') ?>
+                            </button>
+                        </h3>
+                        <form action="/" method="get" class="contact-option__detail">
+                            <p><?= _('This is something to contact your MP about. Enter your UK postcode to begin a message to them.') ?></p>
+                            <div class="postcodebox">
+                                <label for="pc2"><?= _('Enter your UK postcode') ?></label>
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input type="text" id="pc2" name="pc" value="" placeholder="SW1H 9NB">
+                                    </div>
+                                    <div class="small-2 columns">
+                                        <input type="hidden" name="a" value="westminstermp">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
+                        </form>
+                    </div>
+                    <div class="contact-option">
+                        <h3>
+                            <button>
+                                <?= _('I’m having a problem locally <small> e.g. disputes with neighbours and landlords, or issues with council services </small>') ?>
+                            </button>
+                        </h3>
+                        <form action="/" method="get" class="contact-option__detail">
+                            <p><?= _('Your Local Councillor can help with this kind of issue. Enter your UK postcode to begin a message to them.') ?></p>
+                            <div class="postcodebox">
+                                <label for="pc3"><?= _('Enter your UK postcode') ?></label>
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input type="text" id="pc3" name="pc" value="" placeholder="SW1H 9NB">
+                                    </div>
+                                    <div class="small-2 columns">
+                                        <input type="hidden" name="a" value="council">
+                                        <input type="submit" class="button success prefix" value="<?= _('Go') ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <p><a href="/about-constituency" class="help-text"><?= _("What if I don’t have a postcode?") ?></a></p>
+                        </form>
+                    </div>
+                    <div class="contact-option">
+                        <h3>
+                            <button>
+                                <?= _('I’ve contacted my MP, but they won’t help me') ?>
+                            </button>
+                        </h3>
+                        <div class="contact-option__detail">
+                            <p>
+                                <?= _('If it’s been more than two weeks, and your MP or other representative still hasn’t responded to you, <a href="/about-qa#noreply">there are a few things you can try</a>.') ?>
+                            </p>
+                            <p>
+                                <?= _('Alternatively, if you did get a reply, but it was unsatisfactory, <a href="/about-qa#unsatis"> here is our advice on what to do next</a>.') ?>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-option">
+                        <h3>
+                            <button>
+                                <?= _('I’ve noticed a problem with this website <small> e.g. missing or incorrect contact details, broken pages, or technical questions </small>') ?>
+                            </button>
+                        </h3>
+                        <div class="contact-option__detail">
+                            <p>
+                                <?= _('WriteToThem.com is run by a charity called <a href="https://www.mysociety.org">mySociety</a>. If you’ve spotted something wrong with the website, or have a question about how it works, you should contact us using the form below.') ?>
+                            </p>
+                            <?php fyr_display_emailform($values); ?>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="large-4 columns">
+                <?php template_draw('about-sidebar'); ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php template_draw('footer', $values);
