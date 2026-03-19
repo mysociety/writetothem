@@ -659,6 +659,14 @@ There's a copy of your message below, so you can send it another way, if you lik
                         print "Reply within two/three weeks:";
                     } elseif ($q['question_id'] == 1) {
                         print "First time contacted any representative:";
+                    } elseif ($q['question_id'] == 2) {
+                        print "More informed about layers of government:";
+                    } elseif ($q['question_id'] == 3) {
+                        print "Easy to identify rep to write to:";
+                    } elseif ($q['question_id'] == 4) {
+                        print "Helped write a better message:";
+                    } elseif ($q['question_id'] == 5) {
+                        print "Would recommend:";
                     } else {
                         print $q['question_id'] . ":";
                     }
