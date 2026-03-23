@@ -51,6 +51,7 @@ use mySociety::Random;
 use mySociety::VotingArea;
 use mySociety::StringUtils qw(trim merge_spaces string_diff);
 use mySociety::SystemMisc qw(print_log);
+use mySociety::Locale;
 
 use FYR;
 use FYR::AbuseChecks;
@@ -138,6 +139,23 @@ sub logmsg_handler ($$$$$) {
     print_log('info',
             "last message delayed by " . (time() - $time) . " seconds")
                 if ($time > time() + 5);
+}
+
+=item set_language LANGUAGE
+
+Sets up locale etc for LANGUAGE
+
+=cut
+sub set_language($) {
+    my $language = shift;
+
+    my @languages = ('en-gb,English,en_GB', 'cy,Cymraeg,cy_GB');
+    my $languages = join('|', @languages);
+
+    my $set_lang = mySociety::Locale::negotiate_language($languages, $language);
+
+    mySociety::Locale::gettext_domain('WriteToThem', );
+    mySociety::Locale::change();
 }
 
 =item create_group
@@ -265,7 +283,7 @@ sub recipient_test ($) {
 
 
 
-=item write_messages IDLIST SENDER RECIPIENTLIST TEXT [COBRAND] [COCODE] [GROUP_ID] [NO_QUESTIONNAIRE]
+=item write_messages IDLIST SENDER RECIPIENTLIST TEXT LANGUAGE [COBRAND] [COCODE] [GROUP_ID] [NO_QUESTIONNAIRE]
 
 Write details of a set of messages for sending in one transaction.
 
@@ -279,6 +297,9 @@ them to this one.
 
 RECIPIENTLIST is a list of is the DaDem ID numbers of the recipients of the message;
 and TEXT is the text of the message, with line breaks.
+
+LANGUAGE is the two letter code for the language that the front end was using when
+the message was sent
 
 COBRAND is the name of cobranding partner (e.g. "cheltenham"), and COCODE is
 a reference code for them.
@@ -301,9 +322,9 @@ with the following keys
 This function is called remotely and commits its changes.
 
 =cut
-sub write_messages($$$$;$$$$){
+sub write_messages($$$$$;$$$$){
 
-    my ($msgidlist, $sender, $recipient_list, $text, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
+    my ($msgidlist, $sender, $recipient_list, $text, $language, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
     my %ret = ();
     my $recipient_id;
     my $id;
@@ -322,6 +343,17 @@ sub write_messages($$$$;$$$$){
     }else{
         $no_questionnaire = 'f';
     }
+
+    # set cobrand to language as then we can use all the cobrand mechanisms for templates
+    # and links which simplifies language support. this assumes we are never doing a multi
+    # language cobrand but that seems like a safe assumption
+    if (!$cobrand && $language ne 'en') {
+        $cobrand = $language;
+    }
+
+    # make sure we have a language and set it so that error messages are translated
+    $language = 'en' unless $language;
+    set_language($language);
 
     try{
 
@@ -398,7 +430,8 @@ sub write_messages($$$$;$$$$){
                         state,
                         created, laststatechange,
                         numactions, dispatched,
-                        cobrand, cocode, group_id, no_questionnaire
+                        cobrand, cocode, group_id, no_questionnaire,
+                        language
                     ) values (
                         ?,
                         ?, ?, ?, ?, ?, ?, ?,
@@ -409,7 +442,8 @@ sub write_messages($$$$;$$$$){
                         'new',
                         ?, ?,
                         0, null,
-                        ?, ?, ?, ?
+                        ?, ?, ?, ?,
+                        ?
                     )#, {},
                         $id,
                         (map { $sender->{$_} || undef } qw(name email address phone postcode ipaddr referrer)),
@@ -418,7 +452,9 @@ sub write_messages($$$$;$$$$){
                         $recipient->{via} ? 't' : 'f',
                         $text,
                         FYR::DB::Time(), FYR::DB::Time(),
-                        $cobrand, $cocode, $group_id, $no_questionnaire);
+                        $cobrand, $cocode, $group_id, $no_questionnaire,
+                        $language
+                    );
 
                 # Log creation of message but don't commit yet
                 my $logaddr = $sender->{address};
@@ -2043,7 +2079,7 @@ sub process_queue ($$;$$) {
         $stmt->execute($msgid);
     } elsif ($email) {
         $stmt = dbh()->prepare(
-            'select id, state, group_id from message where ('
+            'select id, state, group_id, language from message where ('
                 . join(' or ', map { sprintf(q#state = '%s'#, $_); } keys %state_action)
             . ') and (lastaction is null or '
                 . join(' or ',
@@ -2054,7 +2090,7 @@ sub process_queue ($$;$$) {
         $stmt->execute();
     } else {
         $stmt = dbh()->prepare(sprintf(q#
-                select id, state, group_id from message
+                select id, state, group_id, language from message
                 where state = 'ready' and not frozen
                     and recipient_fax is not null
                     and (lastaction is null or lastaction < %d)
@@ -2063,12 +2099,14 @@ sub process_queue ($$;$$) {
         $stmt->execute();
     }
     my $process_msg = 0;
-    while (my ($id, $state, $group_id) = $stmt->fetchrow_array()) {
+    while (my ($id, $state, $group_id, $language) = $stmt->fetchrow_array()) {
         # Now we need to lock the row. Once it's locked, check that the message
         # still meets the criteria for sending. Do things this way round so
         # that we can have several queue-running daemons operating
         # simultaneously.
         try {
+            # use the message language to set locale etc
+            set_language($language);
             # If the email belongs to a group and we are sending confirmation emails,
             # lock every email in the group - we are going to update all their states
             # as a result of the action
@@ -2679,6 +2717,8 @@ failure, questionnaire or questionnaire-reminder.
 sub admin_get_wire_email ($$) {
     my ($id, $type) = @_;
     my $msg = message($id);
+    set_language($msg->{language});
+
 
     if ($type eq 'representative') {
         return make_representative_email($msg, 'unknown');
