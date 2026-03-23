@@ -123,7 +123,7 @@ my $expected_messages = { enter_postcode => 'First, enter your UK postcode',
                           select_lord    => 'Which Lord would you like to write to?',
                           write_message  => 'Write your message',
                           preview        => 'Preview your message',
-                          check_email    => 'Now check your email!'};
+                          check_email    => 'Now check your email'};
 our $options = { wth               => $wth,
                  verbose           => $verbose,
                  multispawn        => $multispawn, 
@@ -316,7 +316,7 @@ sub do_send_welsh_message {
     print "Questionnaire 'not expected' URL is $not_expected_link\n" if $verbose > 1;
 
     $wth->browser_get($yes_link);
-    $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
+    $wth->browser_check_contents('Great &mdash; we&rsquo;re glad your representative replied!');
     $options->{is_welsh} = 0;
 }
 
