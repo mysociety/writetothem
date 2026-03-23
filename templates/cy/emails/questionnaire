@@ -1,0 +1,33 @@
+<?=$values['weeks_ago']?> wythnosau yn ôl anfonon ni eich llythyr at <?=$values['recipient_name']?>, your
+<?=$values['recipient_position']?>. (For reference, there's a copy of your
+letter at the bottom of this email.)
+
+Helpwch ni i ddeall pa mor dda mae cynrychiolwyr yn ymateb i'w hetholwyr.
+
+Did your <?=$values['recipient_position']?> reply to your message?
+
+YES, they replied! - please click here:
+<?=$values['yes_url']?>
+
+YES, but I don't think my question was answered! - please click here:
+<?=$values['unsatisfactory_url']?>
+
+YES, but it was only an acknowledgement! - please click here:
+<?=$values['no_url']?>
+
+NO, but I didn't expect/require a response! - please click here:
+<?=$values['not_expected_url']?>
+
+NO, they did not reply! - please click here:
+<?=$values['no_url']?>
+
+Your feedback allows us to analyse the responsiveness of politicians in the UK.
+ We use this information to check that the service is working, alert us to
+ potential issues, and perform research into how responsive politicians
+ are to contact from constituents.
+
+Please do not reply to this mail. If you have a question or comment about the
+site, please send an email to <?=$values['contact_email']?>
+
+-- the WriteToThem.com team
+

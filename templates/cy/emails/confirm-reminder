@@ -1,0 +1,21 @@
+This is a second and final confirmation mail from WriteToThem. You have not yet
+clicked the confirmation link, so your email to <?=$values['recipient_name']?>
+has not yet been sent. Please click on the link below to send your message.
+
+    <?=$values['confirm_url']?>
+
+If your email program does not let you click on this link, copy and paste
+it into your web browser and press return.
+
+Once you click on the link, we'll send your letter to
+<?=$values['recipient_name']?>.
+
+If you do not wish to send this message, please ignore this email. Your message
+will remain unsent; subsequently it will be wiped off our servers.
+
+Please do not reply to this mail. Feel free to email us on
+<?=$values['contact_email']?> with any comments, problems or suggestions.
+
+-- the WriteToThem.com team
+
+

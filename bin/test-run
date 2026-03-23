@@ -53,10 +53,11 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('example', 'welsh', 'mistype', 'bounce', 'lords', 'group', 'unit');
+my @actions = ('example', 'welsh', 'error_translations', 'mistype', 'bounce', 'lords', 'group', 'unit');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'welsh' => 'send example message in Welsh successfully',
+    'error_translations' => 'check that error emails from admin are translated to Welsh successfully',
     'mistype' => 'check mistyped postcodes work',
     'bounce' => 'test autoresponder (TODO: doesn\'t test rep email failure bounces)',
     'lords' => 'send example message to a Lord',
@@ -143,6 +144,7 @@ foreach (@actions) {
     do_test_mistyped_postcode() if $_ eq 'mistype';
     do_test_bounce_stuff() if $_ eq 'bounce';
     do_send_welsh_message() if $_ eq 'welsh';
+    do_check_admin_emails_translated() if $_ eq 'error_translations';
     do_send_lords_message() if $_ eq 'lords';
     if ($_ eq 'group') {
         do_send_group_message();
@@ -247,6 +249,7 @@ sub do_send_welsh_message {
     $options->{base_url} = $base_url;
     my $repinfo = {repname => $WELSH_MS};
     $options->{do_post_confirm_survey} = 1;
+    $options->{is_welsh} = 1;
 
     $wth->browser_get($base_url);
     $wth->browser_check_contents('Ysgrifennwch at eich');
@@ -278,8 +281,8 @@ sub do_send_welsh_message {
     my $questionnaire_email = $wth->email_get_containing(
         [ -and =>
             '%To: "'.name_n(90).'" <'.email_n(90).'>%',
-            '%Subject: Did your MS reply to your letter?%',
-            encode("UTF-8", "%Dau wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%")
+            '%Subject: A wnaeth eich MS ateb eich llythyr?%',
+            encode("UTF-8", "%Dau wythnosau yn%anfonon ni eich llythyr at $WELSH_MS MS%")
         ]);
     # 6 days more, no reminder
     spin_queue('1990-01-%02d', 16, 22, $wth, $verbose, $multispawn);
@@ -290,8 +293,8 @@ sub do_send_welsh_message {
     $questionnaire_email = $wth->email_get_containing(
         [ -and =>
             '%To: "'.name_n(90).'" <'.email_n(90).'>%',
-            '%Subject: Did your MS reply to your letter?%',
-            encode("UTF-8", "%Dair wythnosau yn ôl anfonon ni eich llythyr at $WELSH_MS MS%")
+            '%Subject: A wnaeth eich MS ateb eich llythyr?%',
+            encode("UTF-8", "%Dair wythnosau yn%anfonon ni eich llythyr at $WELSH_MS MS%")
         ]);
 
     # Get links from questionnaire email
@@ -314,6 +317,7 @@ sub do_send_welsh_message {
 
     $wth->browser_get($yes_link);
     $wth->browser_check_contents('Great! Many, many thanks for your feedback.');
+    $options->{is_welsh} = 0;
 }
 
 #############################################################################
@@ -831,6 +835,60 @@ sub do_admin_confirm_group_message {
         check_delivered_to_rep(7, $rep_name, '44 Multiple Street', $options);
     }
     $wth->email_check_none_left();
+}
+
+#############################################################################
+
+sub do_check_admin_emails_translated {
+    set_base_url("cy.");
+    set_fyr_date('1990-01-01', undef, $verbose);
+
+    $options->{base_url} = $base_url;
+    my $repinfo = {repname => $WELSH_MS};
+    $options->{do_post_confirm_survey} = 0;
+    $options->{is_welsh} = 1;
+
+    $wth->browser_get($base_url);
+    $wth->browser_check_contents('Ysgrifennwch at eich');
+
+    send_message_to_rep(90, 
+        'CF314AF', # Bridgend Town Hall
+        { 
+            writer_address1 => '23 Welsh Street',
+            writer_town => 'Someplace',
+            state => 'Someshire',
+            writer_phone => undef,
+            body => "Dear Tester, this message is being sent in Welsh because we are on the Welsh language version on WriteToThem so all the templates etc should be in Welsh"
+        },
+	    $repinfo,
+        $options
+    );
+    confirm_message(90, $repinfo, $options);
+
+    $wth->browser_get($admin_url);
+    $wth->browser_follow_link( text_regex => qr/Message Queue/ );
+    $wth->browser_follow_link( text_regex => qr/Recent Changed/ );
+
+    $wth->{useragent}->form_number(2);
+    my @checks = $wth->{useragent}->find_all_inputs(
+        type       => 'checkbox',
+        name_regex => qr/^check/,
+    );
+    my $check = $checks[-1];
+    # warn $check->name;
+    # warn $wth->{useragent}->content;
+    $wth->browser_submit_form( form_number => 2, fields => { $check->name => 1 }, button => 'freeze' );
+    $wth->browser_submit_form( form_number => 2, fields => { $check->name => 1 }, button => 'error' );
+    call_fyrqd($wth, $verbose, $multispawn);
+
+    my $error_email = $wth->email_get_containing(
+        [ -and =>
+            '%To: "'.name_n(90).'" <'.email_n(90).'>%',
+            '%Subject: Yn anffodus, ni allem anfon eich neges at%'.$WELSH_MS.'%',
+            '%ddrwg iawn gennym, ond nid oedd yn bosibl anfon eich llythyr at%'
+        ]);
+
+    $options->{is_welsh} = 0;
 }
 
 #############################################################################

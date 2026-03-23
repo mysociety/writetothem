@@ -1,0 +1,58 @@
+<th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
+
+  <h1 style="<?= $values['h1_style'] ?>">Has <?= $values['recipient_name'] ?> replied to your message?</h1>
+  <p style="<?= $values['p_style'] ?>"><?= $values['weeks_ago'] ?> weeks ago, you used <a href="https://www.writetothem.com/">WriteToThem.com</a> to send a message to <?= $values['recipient_name'] ?>.</p>
+
+  <p style="<?= $values['p_style'] ?>">Did <?= $values['recipient_name'] ?> reply to your message?</p>
+
+  <br>
+
+  <table <?= $values['table_reset'] ?> class="nofold" style="border-collapse: collapse;">
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_good'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['yes_url']?>"><strong>Yes</strong>, they replied</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['unsatisfactory_url']?>"><strong>Yes</strong>, but I don't think my question was answered</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['no_url']?>"><strong>Yes</strong>, but it was only an acknowledgement</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_medium'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['not_expected_url']?>"><strong>No</strong>, but I didn't expect/require a response</a>
+      </th>
+    </tr>
+    <tr>
+      <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_bad'] ?></th>
+      <th style="<?= $values['questionnaire_option_td_style'] ?>">
+          <a style="display: block;" href="<?=$values['no_url']?>"><strong>No</strong>, they have not replied</a>
+      </th>
+    </tr>
+  </table>
+
+  <br>
+
+  <p style="<?= $values['p_style'] ?>">Your feedback allows us to analyse the responsiveness of politicians in the UK. We use this information to check that the service is working, alert us to potential issues, and perform research into how responsive politicians are to contact from constituents.</p>
+
+  <p style="<?= $values['p_style'] ?>">A copy of your letter is below. <b>Note that we do not keep a copy of your letter on file, so please keep this email for your records.</b></p>
+
+</th>
+
+</tr><tr>
+  <th style="<?= $values['td_style'] ?> <?= $values['column_separator_style'] ?>"></th>
+</tr><tr>
+
+<th style="<?= $values['td_style'] ?> <?= $values['secondary_column_style'] ?>">
+  <h2 style="<?= $values['h2_style'] ?>">Your letter to <?= $values['recipient_name'] ?></h2>
+  <?= $values['email_text'] ?>
+</th>
