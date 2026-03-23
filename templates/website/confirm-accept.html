@@ -55,7 +55,7 @@ template_draw('header', $values);
             <?php if ( $values['group_id'] ) { ?>
                 <?= _('Your message may be slow to deliver, because we do not have a direct contact address for your representatives. Instead we are sending the message via the body to which they were elected.') ?>
             <?php } else { ?>
-                <?= sprintf(_('Your message may be slow to deliver, because we do not have a direct contact address for %s. Instead we are sending the message via the body to which they were elected.', $values['recipient_name'])) ?>
+                <?= sprintf(_('Your message may be slow to deliver, because we do not have a direct contact address for %s. Instead we are sending the message via the body to which they were elected.'), $values['recipient_name']) ?>
             <?php } ?>
         </p>
         <?php } ?>
