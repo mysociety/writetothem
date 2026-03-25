@@ -322,26 +322,38 @@ function col_blurb($va_types, $va_area, $eb_area, $main_rep_count, $rep_count) {
     $how_in = $attend_prep[$eb_area['type']];
     if ($main_rep_count && $rep_count > 1) {
         if ($how_in == 'on the') {
-            $col_blurb .= sprintf(_("Your %d %s %s represent you on the %s %s"), $rep_count,  $va_area['name'], $va_area['rep_name_plural'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {rep_count} {area_name} {rep_name} represent you on the {chamber_name}.");
         } else if ($how_in == 'in the') {
-            $col_blurb .= sprintf(_("Your %d %s %s represent you in the %s %s"), $rep_count,  $va_area['name'], $va_area['rep_name_plural'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {rep_count} {area_name} {rep_name} represent you in the {chamber_name}.");
         } else {
-            $col_blurb .= sprintf(_("Your %d %s %s represent you on %s %s"), $rep_count,  $va_area['name'], $va_area['rep_name_plural'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {rep_count} {area_name} {rep_name} represent you on {chamber_name}.");
         }
+        $col_blurb .= strtr($template, array(
+            '{rep_count}'    => $rep_count,
+            '{area_name}'    => $va_area['name'],
+            '{rep_name}'     => $va_area['rep_name_plural'],
+            '{chamber_name}' => $eb_area['name'],
+        ));
     } else {
         if ($how_in == 'on the') {
-            $col_blurb .= sprintf(_("Your %s %s represents you on the %s %s"), $va_area['name'], $va_area['rep_name'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {area_name} {rep_name} represents you on the {chamber_name}.");
         } else if ($how_in == 'in the') {
-            $col_blurb .= sprintf(_("Your %s %s represents you in the %s %s"), $va_area['name'], $va_area['rep_name'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {area_name} {rep_name} represents you in the {chamber_name}.");
         } else {
-            $col_blurb .= sprintf(_("Your %s %s represents you on %s %s"), $va_area['name'], $va_area['rep_name'], $eb_area['name'], $eb_area['description']);
+            $template = _("Your {area_name} {rep_name} represents you on {chamber_name}.");
         }
+        $col_blurb .= strtr($template, array(
+            '{area_name}'    => $va_area['name'],
+            '{rep_name}'     => $va_area['rep_name'],
+            '{chamber_name}' => $eb_area['name'],
+        ));
     }
     if (count($va_types)==1) {
         if (!$va_salaried[$va_types[0]] && $va_area['country']!='S')
             $col_blurb .= sprintf(_(" Most %s are not paid a salary, but get a basic allowance for the work they do."), $va_area['rep_name_long_plural']);
     }
     $col_blurb .= "</p>";
+    $col_blurb .= "<p>" . $eb_area['description'] . "</p>";
     return $col_blurb;
 }
 
