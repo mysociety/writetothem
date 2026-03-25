@@ -301,7 +301,10 @@ if ($title == ''){
     $title = _("Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free");
 }
 
-$blurb_top = _('<h2 id="title">Write to your politicians, national or local, for free.</h2><p>Over 200,000 messages sent last year.</p>');
+$blurb_title = _('Get the right message to the right place.');
+$blurb_subtitle = _('Write to your politicians, national or local, for free.');
+
+$blurb_top = '<h2 id="title">' . $blurb_title . '</h2><p>' . $blurb_subtitle . '</p>';
 
 $fyr_all_url = null;
 $area_types = null;
@@ -316,7 +319,7 @@ if ($a_forward) {
                         'fyr_extref', fyr_external_referrer(),
                         'cocode', get_http_var('cocode')));
         }
-        $blurb_top = _("<h2>Write to your $area_type_desc</h2><p>Over 200,000 messages sent last year.</p>");
+        $blurb_top = '<h2 id="title">' . sprintf(_("Write to your %s"), $area_type_desc) . '</h2><p>' . $blurb_subtitle . '</p>';
     }
 }
 
