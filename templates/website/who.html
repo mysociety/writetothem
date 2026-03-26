@@ -56,7 +56,7 @@ template_draw('header', $values);
 
                 <?php foreach ($values['reps'] as $key => $rep): ?>
 
-                    <h3 class="rep-heading"><?=$values['headings'][$key]?></h3>
+                    <h3 class="rep-heading" id="<?= htmlspecialchars($values['anchors'][$key]) ?>"><?=$values['headings'][$key]?></h3>
 
                     <div class="row">
 
