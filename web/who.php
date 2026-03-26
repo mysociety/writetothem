@@ -46,6 +46,7 @@ $fyr_representatives = array();
 $fyr_headings = array();
 $fyr_blurbs = array();
 $fyr_more = array();
+$fyr_anchors = array();
 
 foreach ($va_display_order as $va_types) {
     $has_list_reps = is_array($va_types); # e.g. Welsh Parliament, Scottish Parliament, London Assembly
@@ -87,6 +88,7 @@ foreach ($va_display_order as $va_types) {
     array_push($fyr_blurbs, $col_blurb);
     array_push($fyr_more, $col_after);
     array_push($fyr_headings, $heading);
+    array_push($fyr_anchors, strtolower($va_types[0]));
     debug_timestamp();
 }
 
@@ -104,6 +106,7 @@ if ($template == 'who' && !$area_types) {
     array_push($fyr_blurbs, '<p>' . _('Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href="about-lords">more info</a>).') . '</p>');
     array_push($fyr_representatives, '<ul class="rep-list lords"><li><a href="/lords">' . _('Write to a Lord') . '</a></li></ul>');
     array_push($fyr_more, '');
+    array_push($fyr_anchors, 'lords');
 }
 
 // Display page, using all the fyr_* variables set above.
@@ -113,6 +116,7 @@ template_draw($template, array(
     "headings" => $fyr_headings,
     "blurbs" => $fyr_blurbs,
     "more" => $fyr_more,
+    "anchors" => $fyr_anchors,
     "all_url" => $fyr_all_url,
     "postcode" => $fyr_postcode,
     "cobrand" => $cobrand,

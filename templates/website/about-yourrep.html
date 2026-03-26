@@ -21,8 +21,18 @@ function yourrep_md($filename, $pd) {
     return $pd->text(file_get_contents($path));
 }
 
+/**
+ * Generate a link back to the who page anchored to the right section.
+ */
+function yourrep_who_link($postcode, $anchor, $label) {
+    if (!$postcode) return '';
+    $url = 'who?pc=' . urlencode($postcode) . '#' . htmlspecialchars($anchor);
+    return '<p class="yourrep-write-link"><a href="' . $url . '">' . htmlspecialchars($label) . ' &rarr;</a></p>';
+}
+
 global $va_council_child_types;
 $area_types = isset($values['area_types']) ? $values['area_types'] : null;
+$postcode = isset($values['postcode']) ? $values['postcode'] : null;
 $show_all = !$area_types;
 $show_mp          = $show_all || isset($area_types['WMC']);
 $show_councillor  = $show_all || (bool) array_intersect(array_keys($area_types), $va_council_child_types);
@@ -96,6 +106,7 @@ if ($area_types) {
             } else {
                 echo yourrep_md('councillor.md', $pd);
             }
+            echo yourrep_who_link($postcode, strtolower($ctype), _('Write to your councillor'));
         }
     }
 } ?>
@@ -103,21 +114,25 @@ if ($area_types) {
 <?php if ($show_msp) {
     echo '<A NAME="msp"></A>';
     echo yourrep_md('msp.md', $pd);
+    echo yourrep_who_link($postcode, 'spc', _('Write to your MSP'));
 } ?>
 
 <?php if ($show_mla) {
     echo '<A NAME="mla"></A>';
     echo yourrep_md('mla.md', $pd);
+    echo yourrep_who_link($postcode, 'nie', _('Write to your MLA'));
 } ?>
 
 <?php if ($show_welsh) {
     echo '<A NAME="welsh"></A>';
     echo yourrep_md('am.md', $pd);
+    echo yourrep_who_link($postcode, 'wac', _('Write to your Senedd Member'));
 } ?>
 
 <?php if ($show_gla) {
     echo '<A NAME="gla"></A>';
     echo yourrep_md('lam.md', $pd);
+    echo yourrep_who_link($postcode, 'lac', _('Write to your London Assembly Member'));
 } ?>
     
 
