@@ -18,4 +18,6 @@ MSPs deal with any issues for which the Scottish Parliament is responsible. They
 - sport and the arts
 - statistics, public registers and records
 
-For constituency matters, you can approach any one of the MSPs who represent you. Do not contact more than one MSP on a constituency matter, as this will cause potential delays. Only contact all your regional MSPs about issues that apply to all of them – for example, if you wish them to cast a particular vote in the Scottish Parliament.
+You have a constituency MSP representing you, and a further 7 regional MSPs. You can choose to write to your constituency MSP, or to any of the regional MSPs.
+
+The constituency MSP should be the first point of contact for a local issue, but one of the regional members may be better aligned with your politics if campaigning on an issue. 
