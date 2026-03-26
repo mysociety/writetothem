@@ -28,7 +28,7 @@ template_draw('header', $values);
                 <a href="<?=$values['all_url']?>">see all your representatives.</p>
             <?php else: ?>
                 <p><?= _('You have several elected representatives at different levels of government.') ?></p>
-                <p class="help-text"><a href="about-yourrep"><?= _('Not sure who to contact?') ?></a></p>
+                <p class="help-text"><a href="about-yourrep<?= $values['postcode'] ? '?pc=' . urlencode($values['postcode']) : '' ?>"><?= _('Not sure who to contact?') ?></a></p>
             <?php endif; ?>
 
         <?php endif; ?>

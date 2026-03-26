@@ -4,6 +4,39 @@ $values['title'] = _("Who should I write to?");
 template_draw('header', $values);
 $pd = new Parsedown();
 
+/**
+ * Load a markdown file with language awareness.
+ * Tries LANGUAGE first (e.g. cy), falls back to en.
+ */
+function yourrep_md($filename, $pd) {
+    $base = __DIR__ . '/yourrep-md';
+    $lang = defined('LANGUAGE') ? LANGUAGE : 'en';
+    $path = "$base/$lang/$filename";
+    if ($lang !== 'en' && !file_exists($path)) {
+        $path = "$base/en/$filename";
+    }
+    if (!file_exists($path)) {
+        return '';
+    }
+    return $pd->text(file_get_contents($path));
+}
+
+global $va_council_child_types;
+$area_types = isset($values['area_types']) ? $values['area_types'] : null;
+$show_all = !$area_types;
+$show_mp          = $show_all || isset($area_types['WMC']);
+$show_councillor  = $show_all || (bool) array_intersect(array_keys($area_types), $va_council_child_types);
+$show_msp         = $show_all || isset($area_types['SPC']) || isset($area_types['SPE']);
+$show_mla         = $show_all || isset($area_types['NIE']);
+$show_welsh       = $show_all || isset($area_types['WAC']) || isset($area_types['WAE']);
+$show_gla         = $show_all || isset($area_types['LAC']) || isset($area_types['LAE']);
+
+// Determine which specific councillor types are present
+$councillor_types_present = array();
+if ($area_types) {
+    $councillor_types_present = array_values(array_intersect(array_keys($area_types), $va_council_child_types));
+}
+
 ?>
 
 <div class="row">
@@ -19,60 +52,89 @@ $pd = new Parsedown();
 
             <div class="large-8 columns">
 
-<?= $pd->text(_('As a UK citizen, you have many representatives, at several levels of government.
+                <form method="get" action="about-yourrep" class="about-yourrep-postcode">
+                    <div class="row collapse">
+                        <?php if (isset($values['postcode']) && $values['postcode']) { ?>
+                            <p class="help-text"><?= sprintf(_('Showing advice for representatives in <strong>%s</strong>. Enter a different postcode to see advice for another area.'), htmlspecialchars($values['postcode'])) ?></p>
+                        <?php } else { ?>
+                            <p class="help-text"><?= _('Enter your postcode to see advice tailored to your representatives.') ?></p>
+                        <?php } ?>
+                        <div class="small-8 columns">
+                            <input type="text" id="pc" name="pc" placeholder="e.g. SW1A 1AA"
+                                value="<?= htmlspecialchars($values['postcode'] ?? '') ?>"
+                                size="10">
+                        </div>
+                        <div class="small-4 columns">
+                            <input type="submit" class="button postfix" value="<?= _('Update') ?>">
+                        </div>
+                    </div>
+                </form>
 
-Each of them has a different set of responsibilities, and it is worth making sure that your message goes to the person who is best placed to help you.')) ?>
+<?= yourrep_md('preamble.md', $pd) ?>
 
 <ul class="side-nav">
-<li><a href="#mp"><?= _('When should I contact my MP?') ?></a></li>
-<li><a href="#councillor"><?= _('When should I contact a councillor?') ?></a></li>
-<li><a href="#msp"><?= _('When should I contact an MSP?') ?></a></li>
-<li><a href="#mla"><?= _('When should I contact an MLA?') ?></a></li>
-<li><a href="#welsh"><?= _('When should I contact a Senedd Member?') ?></a></li>
-<li><a href="#gla"><?= _('When should I contact a Greater London Assembly Member?') ?></a></li>
+<?php if ($show_mp) { ?><li><a href="#mp"><?= _('When should I contact my MP?') ?></a></li><?php } ?>
+<?php if ($show_councillor) { ?><li><a href="#councillor"><?= _('When should I contact a councillor?') ?></a></li><?php } ?>
+<?php if ($show_msp) { ?><li><a href="#msp"><?= _('When should I contact an MSP?') ?></a></li><?php } ?>
+<?php if ($show_mla) { ?><li><a href="#mla"><?= _('When should I contact an MLA?') ?></a></li><?php } ?>
+<?php if ($show_welsh) { ?><li><a href="#welsh"><?= _('When should I contact a Senedd Member?') ?></a></li><?php } ?>
+<?php if ($show_gla) { ?><li><a href="#gla"><?= _('When should I contact a Greater London Assembly Member?') ?></a></li><?php } ?>
 </ul>
+
+
+<?php if ($show_councillor) {
+    echo '<A NAME="councillor"></A>';
+    if ($show_all || count($councillor_types_present) === 0) {
+        // No specific location — show the generic councillor guidance
+        echo yourrep_md('councillor.md', $pd);
+    } else {
+        // Show type-specific councillor guidance for each type present
+        foreach ($councillor_types_present as $ctype) {
+            $specific = yourrep_md("councillor-$ctype.md", $pd);
+            if ($specific) {
+                echo $specific;
+            } else {
+                echo yourrep_md('councillor.md', $pd);
+            }
+        }
+    }
+} ?>
+
+<?php if ($show_msp) {
+    echo '<A NAME="msp"></A>';
+    echo yourrep_md('msp.md', $pd);
+} ?>
+
+<?php if ($show_mla) {
+    echo '<A NAME="mla"></A>';
+    echo yourrep_md('mla.md', $pd);
+} ?>
+
+<?php if ($show_welsh) {
+    echo '<A NAME="welsh"></A>';
+    echo yourrep_md('am.md', $pd);
+} ?>
+
+<?php if ($show_gla) {
+    echo '<A NAME="gla"></A>';
+    echo yourrep_md('lam.md', $pd);
+} ?>
+    
 
 <A NAME="mp"></A>
-<?php include('yourrep/mp.html') ?>
+<?php if ($show_mp) {
+    if ($show_welsh) {
+        echo yourrep_md('mp-wales.md', $pd);
+    } elseif ($show_msp) {
+        echo yourrep_md('mp-scotland.md', $pd);
+    } elseif ($show_mla) {
+        echo yourrep_md('mp-ni.md', $pd);
+    } else {
+        echo yourrep_md('mp.md', $pd);
+    }
+    echo yourrep_who_link($postcode, 'wmc', _('Write to your MP'));
+} ?>
 
-<A NAME="councillor"></A>
-<h2><?= _('When should I contact a councillor?') ?></h2>
-
-<?= $pd->text(_('Councillors have differing responsibilities depending on which council you
-live in. Because of these variations we are only able to give you
-‘rule-of-thumb’ guidance here.
-
-Firstly, in England you may have two levels of council: County and District, in
-which case their responsibilities are divided as follows:
-
-<ul>
-<li><strong>District Councillors:</strong> If you have one or more District Councillor,
-they tend to deal with issues around <strong>council housing, planning, rubbish
-collection, the local environment, and the administration of
-elections.</strong></li>
-<li><strong>County Councillors:</strong> If you have one or more county councillors, they
-tend to deal with <strong>education, transport and roads, fire and social services
-plus libraries</strong>.</li>
-</ul>
-
-Otherwise, you will have only one council, whose responsibilities differ
-depending on exactly where you live. We describe these on the page which lists
-your councillors.
-
-Don’t worry if you’re not absolutely sure who to pick! Whoever you write to
-should forward your letter to the most appropriate person, if you haven’t got it quite right.')) ?>
-
-<A NAME="msp"></A>
-<?php include('yourrep/msp.html') ?>
-
-<A NAME="mla"></A>
-<?php include('yourrep/mla.html') ?>
-
-<A NAME="welsh"></A>
-<?php include('yourrep/am.html') ?>
-
-<A NAME="gla"></A>
-<?php include('yourrep/lam.html') ?>
 
             </div>
 

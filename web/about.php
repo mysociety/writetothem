@@ -78,6 +78,25 @@ if (in_array($page, $whole_page_translations)) {
 if (preg_match('/^problem-/', $page))
     $values['robots'] = 'noindex, nofollow';
 
+if ($page == 'about-yourrep') {
+    require_once "../phplib/mapit.php";
+    $pc = get_http_var('pc');
+    if ($pc) {
+        $pc = canonicalise_postcode($pc);
+        if ($pc) {
+            $voting_areas = mapit_postcode($pc);
+            if (!rabx_is_error($voting_areas)) {
+                $area_types = array();
+                foreach ($voting_areas['areas'] as $area) {
+                    $area_types[$area['type']] = true;
+                }
+                $values['area_types'] = $area_types;
+                $values['postcode'] = $pc;
+            }
+        }
+    }
+}
+
 template_draw($page, $values);
 
 ?>

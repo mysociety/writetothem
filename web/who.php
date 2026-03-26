@@ -114,6 +114,7 @@ template_draw($template, array(
     "blurbs" => $fyr_blurbs,
     "more" => $fyr_more,
     "all_url" => $fyr_all_url,
+    "postcode" => $fyr_postcode,
     "cobrand" => $cobrand,
     "host" => fyr_get_host(),
     ));
