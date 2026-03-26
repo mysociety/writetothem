@@ -1,5 +1,7 @@
 #!/bin/sh
-# Watch SASS files for changes and recompile
+# Run linting and code fixes
 
+./vendor/bin/php-cs-fixer fix
+./vendor/bin/php-cs-fixer check
 poetry run ruff format .
 poetry run ruff check . --fix

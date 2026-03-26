@@ -3,3 +3,5 @@ Cities*
 .sass-cache
 *.pyc
 data
+vendor
+.php-cs-fixer.cache
