@@ -1,17 +1,17 @@
 # When should I contact my MP?
 
-You’ll often hear people say, "I’m going to write to my MP" when something upsets them. It’s a wide-held belief that MPs are there to solve every type of problem.
+Your MP represents you in the UK Parliament, which is responsible for making laws and supporting/scrutinising the UK Government. 
 
-In fact, Parliament and central government are only responsible for certain matters. Those are the issues with which your MP can help. If your problem does not fall within one of the following areas, then you should consider contacting one of your other representatives.
+You might write to your MP to raise a local or national campaigning issue, or for helping with a personal problem with a government service. 
 
-**MPs can help you with matters such as:**
+MPs may be able to assist you with issues with central government departments, such as:
 
-- **Tax problems** involving HM Revenue & Customs (but not issues with, for example, the council tax, which is administered by your local authority).
-- Problems with **hospitals and the NHS**, if you are in England. The Scottish and Welsh Parliaments are responsible for health matters in Scotland and Wales respectively.
-- Problems with **benefits, pensions and national insurance** (but not problems with the social services department of your local authority).
-- Issues dealt with by the Home Office, such as **immigration**.
-- In England, matters such as **school closures and grants** (but not day to day problems involving schools, which are overseen by their governors and your local education authority). In Scotland and Wales the devolved Parliaments are responsible for education issues.
+- tax queries
+- benefits, pensions and national insurance
+- immigration
+- health, hospitals and NHS queries
+- education, such as school closures and grants
 
-Your MP **cannot** help you in private disputes with other **individuals** or with **companies** who have sold you faulty goods, nor, for example, can they interfere with decisions made by **courts**.
+Your MP may also be able to work with your local councillors to help with local issues, such as problems with your local council or local services - although your local councillors will be the first point of contact for these issues.
 
-[You and Your MP](http://www.parliament.uk/documents/commons-information-office/fymp/yaympenglish.pdf) [PDF], a factsheet produced by Parliament, has more information about what your MP can do for you.
+Your MP **cannot** help you in private disputes with other **individuals** or with **companies** who have sold you faulty goods, nor can they interfere with decisions made by **courts**.
