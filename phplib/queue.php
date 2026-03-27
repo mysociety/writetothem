@@ -251,6 +251,17 @@ function msg_get_questionnaire_message($token) {
     return $result;
 }
 
+/* msg_is_multi_questionnaire_message TOKEN
+
+  Return 1 if the questionnaire message associated with TOKEN is part of a
+  multi-recipient group, 0 otherwise. */
+function msg_is_multi_questionnaire_message($token) {
+    global $msg_client;
+    $params = func_get_args();
+    $result = $msg_client->call('FYR.Queue.is_multi_questionnaire_message', $params);
+    return $result;
+}
+
 /* msg_admin_recent_events COUNT [IMPORTANT]
 
   Returns an array of hashes of information about the most recent COUNT

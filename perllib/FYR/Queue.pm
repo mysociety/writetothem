@@ -73,9 +73,9 @@ use FYR::Cobrand;
 our $message_calculated_values = "
     length(message) as message_length,
     (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
-        and question_id = 0 and answer = 'no') as questionnaire_0_no,
+        and question_id = 0 and answer in ('no', 'no_m')) as questionnaire_0_no,
     (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
-        and question_id = 0 and answer = 'yes') as questionnaire_0_yes,
+        and question_id = 0 and answer in ('yes', 'yes_m')) as questionnaire_0_yes,
     (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
         and question_id = 1 and answer = 'no') as questionnaire_1_no,
     (select count(*) from questionnaire_answer where questionnaire_answer.message_id = message.id
@@ -501,6 +501,16 @@ sub write_messages($$$$$;$$$$){
         dbh()->rollback();
         throw $E;
     }finally{
+        # For group messages, mark all but the first message as no_questionnaire
+        # so only one survey is sent per multi-recipient batch
+        if (defined($group_id) && scalar(@$msgidlist) > 1) {
+            my @sorted_ids = sort @$msgidlist;
+            my $first_id = $sorted_ids[0];
+            foreach my $mid (@sorted_ids) {
+                next if $mid eq $first_id;
+                dbh()->do("update message set no_questionnaire = 't' where id = ?", {}, $mid);
+            }
+        }
         dbh()->commit();
     };
 
@@ -1447,13 +1457,16 @@ sub make_questionnaire_email ($;$) {
     my $not_expected_url = $base_url . '/E/' . $token;
     my $no_url = $base_url . '/N/' . $token;
 
+    my $is_multi = $msg->{group_id} ? 1 : 0;
+
     my $settings = {
         yes_url => $yes_url,
         no_url => $no_url,
         unsatisfactory_url => $unsatisfactory_url,
         not_expected_url => $not_expected_url,
         weeks_ago => $reminder ? _('Three') : _('Two'),
-        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents'
+        their_constituents => $msg->{recipient_type} eq 'HOC' ? 'the public' : 'their constituents',
+        is_multi => $is_multi,
     };
     my $params;
     try {
@@ -1489,11 +1502,18 @@ sub make_questionnaire_email ($;$) {
 
     $text = build_text_email($text);
 
+    my $subject;
+    if ($is_multi) {
+        $subject = sprintf(_('Did any of your %s reply to your letter?'), $msg->{recipient_position_plural});
+    } else {
+        $subject = sprintf(_('Did your %s reply to your letter?'), $msg->{recipient_position});
+    }
+
     return Email::MIME->create(
         header_str => [
             From => mySociety::Email::format_email_address(email_sender_name($msg->{cobrand}, $msg->{cocode}), do_not_reply_sender($msg->{cobrand})),
             To => mySociety::Email::format_email_address($msg->{sender_name}, $msg->{sender_email}),
-            Subject => sprintf(_('Did your %s reply to your letter?'), $msg->{recipient_position}),
+            Subject => $subject,
             Date => strftime('%a, %e %b %Y %H:%M:%S %z', localtime(FYR::DB::Time())),
             'Message-ID' => email_message_id($msg->{id}),
         ],
@@ -1652,9 +1672,18 @@ sub record_questionnaire_answer ($$$) {
             return $id;
         }
 
+        # For multi-recipient messages, append _m suffix to distinguish
+        # responses about groups of representatives from single-rep responses
+        # this is deducable from the message but this prevents misinterpretation
+
+        my $stored_answer = $answer;
+        if ($msg->{group_id} && $qn == 0) {
+            $stored_answer = $answer . '_m';
+        }
+
         # record response, replacing existing response to same question
         dbh()->do('delete from questionnaire_answer where message_id = ? and question_id = ?', {}, $id, $qn);
-        dbh()->do('insert into questionnaire_answer (message_id, question_id, answer, whenanswered) values (?, ?, ?, ?)', {}, $id, $qn, $answer, time());
+        dbh()->do('insert into questionnaire_answer (message_id, question_id, answer, whenanswered) values (?, ?, ?, ?)', {}, $id, $qn, $stored_answer, time());
         logmsg($id, 1, "answer of \"$answer\" received for questionnaire qn #$qn");
         dbh()->commit();
         return $id;
@@ -1674,6 +1703,23 @@ sub get_questionnaire_message ($) {
     if (my $id = check_token("questionnaire", $token)) {
         return $id;
     }
+}
+
+=item is_multi_questionnaire_message TOKEN
+
+Return 1 if the questionnaire message associated with TOKEN is part of a
+multi-recipient group, 0 otherwise.
+
+=cut
+sub is_multi_questionnaire_message ($) {
+    my ($token) = @_;
+    if (my $id = check_token("questionnaire", $token)) {
+        my $group_id = dbh()->selectrow_array(
+            "select group_id from message where id = ?", {}, $id
+        );
+        return $group_id ? 1 : 0;
+    }
+    return 0;
 }
 
 =item record_analysis_data MSGID MSG_SUMMARY ANALYSIS_DATA
@@ -1967,7 +2013,8 @@ my %state_action = (
                 }
             }
             if ($msg->{no_questionnaire}) {
-                # don't send questionnaire for test messages
+                # don't send questionnaire for no_questionnaire messages
+                # (includes non-primary messages in a group)
                 $dosend = 0;
             }
 

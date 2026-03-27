@@ -413,8 +413,8 @@ function submitFaxes() {
 
     if ($grpid) {
 
-        // No questionnaire for group mails
-        $no_questionnaire = true;
+        // Questionnaire will be sent once per group (for the first message)
+        $no_questionnaire = false;
 
         // check the group id
         if (!preg_match("/^[0-9a-f]{20}$/i", $grpid)) {
