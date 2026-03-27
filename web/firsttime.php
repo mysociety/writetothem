@@ -73,10 +73,17 @@ shuffle($service_question_pool);
 $service_questions = array_slice($service_question_pool, 0, 2);
 sort($service_questions);
 
+// Check if this is a multi-recipient message
+$is_multi = false;
+if (!$preview) {
+    $is_multi = msg_is_multi_questionnaire_message($token) ? true : false;
+}
+
 $values = array(
     'token' => $token,
     'response' => get_http_var('response'),
     'service_questions' => $service_questions,
+    'is_multi' => $is_multi,
     'cobrand' => $cobrand,
     'cocode' => $cocode,
     'host' => fyr_get_host(),

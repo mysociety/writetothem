@@ -21,12 +21,21 @@ template_draw('header', $values);
 
             <?php
                 $response = isset($values['response']) ? $values['response'] : '';
+                $is_multi = !empty($values['is_multi']);
                 if ($response === 'yes') {
-                    echo '<p>' . _('Great &mdash; we&rsquo;re glad your representative replied!') . '</p>';
+                    if ($is_multi) {
+                        echo '<p>' . _('Great &mdash; we&rsquo;re glad at least one of your representatives replied!') . '</p>';
+                    } else {
+                        echo '<p>' . _('Great &mdash; we&rsquo;re glad your representative replied!') . '</p>';
+                    }
                 } elseif ($response === 'unsatisfactory') {
                     echo '<p>' . _('Sorry to hear your question wasn&rsquo;t fully answered.') . '</p>';
                 } elseif ($response === 'no') {
-                    echo '<p>' . _('We hope your representative gets back to you soon.') . '</p>';
+                    if ($is_multi) {
+                        echo '<p>' . _('We hope your representatives get back to you soon.') . '</p>';
+                    } else {
+                        echo '<p>' . _('We hope your representative gets back to you soon.') . '</p>';
+                    }
                 } elseif ($response === 'not_expected') {
                     echo '<p>' . _('Thanks for letting us know.') . '</p>';
                 }
@@ -41,7 +50,7 @@ template_draw('header', $values);
                 <input type="hidden" name="submitted" value="1">
 
                 <fieldset class="survey-fieldset survey-fieldset--separated">
-                    <legend><strong><?= _('Is this the first time you&rsquo;ve ever contacted one of your elected representatives?') ?></strong></legend>
+                    <legend><strong><?php if ($is_multi) { ?><?= _('Is this the first time you&rsquo;ve ever contacted your elected representatives?') ?><?php } else { ?><?= _('Is this the first time you&rsquo;ve ever contacted one of your elected representatives?') ?><?php } ?></strong></legend>
                     <label><input type="radio" name="answer" value="yes" required> <?= _('Yes, this is the first time') ?></label>
                     <label><input type="radio" name="answer" value="no"> <?= _('No, I&rsquo;ve done it before') ?></label>
                 </fieldset>
