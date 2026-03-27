@@ -1,11 +1,27 @@
-<?=$values['weeks_ago']?> weeks ago we sent your letter to <?=$values['recipient_name']?>, your
-<?=$values['recipient_position']?>. (For reference, there's a copy of your
+<?=$values['weeks_ago']?> weeks ago we sent your letter to <?php if ($values['is_multi']) { ?>your <?=$values['recipient_position_plural']?><?php } else { ?><?=$values['recipient_name']?>, your
+<?=$values['recipient_position']?><?php } ?>. (For reference, there's a copy of your
 letter at the bottom of this email.)
 
 Please help us understand how well representatives are doing at
-responding to their constituents.
+responding to <?=$values['their_constituents']?>.
 
-Did your <?=$values['recipient_position']?> reply to your message?
+<?php if ($values['is_multi']) { ?>Did any of your <?=$values['recipient_position_plural']?> reply to your message?
+
+YES, at least one replied! - please click here:
+<?=$values['yes_url']?>
+
+YES, but I don't think my question was answered! - please click here:
+<?=$values['unsatisfactory_url']?>
+
+YES, but it was only an acknowledgement! - please click here:
+<?=$values['no_url']?>
+
+NO, but I didn't expect/require a response! - please click here:
+<?=$values['not_expected_url']?>
+
+NO, none of them replied! - please click here:
+<?=$values['no_url']?>
+<?php } else { ?>Did your <?=$values['recipient_position']?> reply to your message?
 
 YES, they replied! - please click here:
 <?=$values['yes_url']?>
@@ -21,7 +37,7 @@ NO, but I didn't expect/require a response! - please click here:
 
 NO, they did not reply! - please click here:
 <?=$values['no_url']?>
-
+<?php } ?>
 Your feedback allows us to analyse the responsiveness of politicians in the UK.
  We use this information to check that the service is working, alert us to
  potential issues, and perform research into how responsive politicians
