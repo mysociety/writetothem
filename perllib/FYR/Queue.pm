@@ -53,16 +53,6 @@ use mySociety::StringUtils qw(trim merge_spaces string_diff);
 use mySociety::SystemMisc qw(print_log);
 use mySociety::Locale;
 
-# Import _() from mySociety::Locale for user-facing strings (email subjects,
-# body text, public error messages). Falls back to returning the untranslated
-# string if set_language() hasn't been called yet.
-sub _ {
-    # $gettext in mySociety::Locale is set by set_language()/gettext_domain().
-    # If it hasn't been initialised, just return the string as-is.
-    eval { return mySociety::Locale::_($_[0]); };
-    return $_[0];
-}
-
 use FYR;
 use FYR::AbuseChecks;
 use FYR::EmailTemplate;
