@@ -1,9 +1,16 @@
 <th style="<?= $values['td_style'] ?> <?= $values['primary_column_style'] ?>">
 
+<?php if ($values['is_multi']) { ?>
+  <h1 style="<?= $values['h1_style'] ?>">Did any of your <?= $values['recipient_position_plural'] ?> reply to your message?</h1>
+  <p style="<?= $values['p_style'] ?>"><?= $values['weeks_ago'] ?> weeks ago, you used <a href="https://www.writetothem.com/">WriteToThem.com</a> to send a message to your <?= $values['recipient_position_plural'] ?>.</p>
+
+  <p style="<?= $values['p_style'] ?>">Did any of your <?= $values['recipient_position_plural'] ?> reply to your message?</p>
+<?php } else { ?>
   <h1 style="<?= $values['h1_style'] ?>">Has <?= $values['recipient_name'] ?> replied to your message?</h1>
   <p style="<?= $values['p_style'] ?>"><?= $values['weeks_ago'] ?> weeks ago, you used <a href="https://www.writetothem.com/">WriteToThem.com</a> to send a message to <?= $values['recipient_name'] ?>.</p>
 
   <p style="<?= $values['p_style'] ?>">Did <?= $values['recipient_name'] ?> reply to your message?</p>
+<?php } ?>
 
   <br>
 
@@ -11,7 +18,11 @@
     <tr>
       <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_good'] ?></th>
       <th style="<?= $values['questionnaire_option_td_style'] ?>">
+<?php if ($values['is_multi']) { ?>
+          <a style="display: block;" href="<?=$values['yes_url']?>"><strong>Yes</strong>, at least one replied</a>
+<?php } else { ?>
           <a style="display: block;" href="<?=$values['yes_url']?>"><strong>Yes</strong>, they replied</a>
+<?php } ?>
       </th>
     </tr>
     <tr>
@@ -35,14 +46,18 @@
     <tr>
       <th style="<?= $values['questionnaire_option_td_style'] ?> width: 0%;"><?= $values['questionnaire_dot_bad'] ?></th>
       <th style="<?= $values['questionnaire_option_td_style'] ?>">
+<?php if ($values['is_multi']) { ?>
+          <a style="display: block;" href="<?=$values['no_url']?>"><strong>No</strong>, none of them replied</a>
+<?php } else { ?>
           <a style="display: block;" href="<?=$values['no_url']?>"><strong>No</strong>, they have not replied</a>
+<?php } ?>
       </th>
     </tr>
   </table>
 
   <br>
 
-  <p style="<?= $values['p_style'] ?>">Your feedback allows us to analyse the responsiveness of politicians in the UK. We use this information to check that the service is working, alert us to potential issues, and perform research into how responsive politicians are to contact from constituents.</p>
+  <p style="<?= $values['p_style'] ?>">Your feedback allows us to analyse the responsiveness of politicians in the UK. We use this information to check that the service is working, alert us to potential issues, and perform research into how responsive politicians are to contact from <?= $values['their_constituents'] ?>.</p>
 
   <p style="<?= $values['p_style'] ?>">A copy of your letter is below. <b>Note that we do not keep a copy of your letter on file, so please keep this email for your records.</b></p>
 
@@ -53,6 +68,10 @@
 </tr><tr>
 
 <th style="<?= $values['td_style'] ?> <?= $values['secondary_column_style'] ?>">
+<?php if ($values['is_multi']) { ?>
+  <h2 style="<?= $values['h2_style'] ?>">Your letter to your <?= $values['recipient_position_plural'] ?></h2>
+<?php } else { ?>
   <h2 style="<?= $values['h2_style'] ?>">Your letter to <?= $values['recipient_name'] ?></h2>
+<?php } ?>
   <?= $values['email_text'] ?>
 </th>

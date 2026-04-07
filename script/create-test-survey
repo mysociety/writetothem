@@ -4,7 +4,7 @@
 # Insert a dummy message row (if one doesn't already exist) and print
 # survey test URLs using a valid questionnaire token.
 #
-# Usage: script/create-test-survey [--base-url URL]
+# Usage: script/create-test-survey [--base-url URL] [--multi]
 #
 
 use strict;
@@ -23,9 +23,15 @@ use mySociety::DBHandle qw(dbh);
 use FYR::Queue;
 
 my $base_url = "http://localhost:8085";
-GetOptions('base-url=s' => \$base_url) or die "Usage: $0 [--base-url URL]\n";
+my $multi = 0;
+GetOptions(
+    'base-url=s' => \$base_url,
+    'multi'      => \$multi,
+) or die "Usage: $0 [--base-url URL] [--multi]\n";
 
-my $msg_id = "deadbeef01234567dead";  # fixed 20 hex-char ID so reruns are idempotent
+my $msg_id = $multi ? "deadbeef01234567aaa1" : "deadbeef01234567dead";
+my $msg_id_2 = "deadbeef01234567aaa2";  # second message for multi group
+my $group_id = "abcdef0123456789abcd";
 my $now = time();
 
 # Only insert if the test message doesn't already exist (to preserve
@@ -39,17 +45,43 @@ if (!$existing) {
             id, sender_name, sender_email, sender_addr, sender_postcode,
             sender_ipaddr, recipient_id, recipient_name, recipient_type,
             recipient_email,
-            message, state, created, confirmed, laststatechange
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            message, state, created, confirmed, laststatechange,
+            group_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     }, {},
         $msg_id,
         "Test User", "test\@example.com", "1 Test Street\nTestville", "SW1A 1AA",
         "127.0.0.1", 1, "Test Representative", "WMC",
         "test-rep\@example.com",
         "This is a test message.", "finished", $now, $now, $now,
+        $multi ? $group_id : undef,
     );
+
+    # For multi mode, create a second message in the same group
+    if ($multi) {
+        dbh()->do(q{
+            INSERT INTO message (
+                id, sender_name, sender_email, sender_addr, sender_postcode,
+                sender_ipaddr, recipient_id, recipient_name, recipient_type,
+                recipient_email,
+                message, state, created, confirmed, laststatechange,
+                group_id, no_questionnaire
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        }, {},
+            $msg_id_2,
+            "Test User", "test\@example.com", "1 Test Street\nTestville", "SW1A 1AA",
+            "127.0.0.1", 2, "Test Representative 2", "WMC",
+            "test-rep2\@example.com",
+            "This is a test message.", "finished", $now, $now, $now,
+            $group_id, 't',
+        );
+    }
+
     dbh()->commit();
-    print "Created dummy message: $msg_id\n";
+    print "Created dummy " . ($multi ? "multi-recipient " : "") . "message: $msg_id\n";
+    if ($multi) {
+        print "Created second group message: $msg_id_2 (group: $group_id)\n";
+    }
 } else {
     print "Dummy message already exists: $msg_id\n";
 }
@@ -57,6 +89,9 @@ if (!$existing) {
 my $token = FYR::Queue::make_token("questionnaire", $msg_id);
 
 print "\nQuestionnaire token: $token\n";
+if ($multi) {
+    print "Mode: MULTI (answers will be recorded with _m suffix)\n";
+}
 print "\nTest URLs (via /response -- records Q0 then redirects to /firsttime):\n\n";
 
 my $sep = "+" . ("-" x 18) . "+" . ("-" x 80) . "+";

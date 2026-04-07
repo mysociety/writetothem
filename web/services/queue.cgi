@@ -127,6 +127,9 @@ while ($req->Accept() >= 0) {
             'FYR.Queue.admin_update_recipient' => sub {
                 return FYR::Queue::admin_update_recipient($_[0], $_[1], $_[2]);
             },
+            'FYR.Queue.is_multi_questionnaire_message' => sub {
+                return FYR::Queue::is_multi_questionnaire_message($_[0]);
+            },
           );
     $W->exit_if_changed();
     last if $exit_requested;
