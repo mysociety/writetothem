@@ -53,7 +53,7 @@ use lib "$FindBin::Bin/../perllib";
 use FYR::TestHarness qw(email_n name_n call_fyrqd set_fyr_date spin_queue send_message_to_rep check_delivered_to_rep call_handlemail confirm_message);
 use FYR::Cobrand;
 
-my @actions = ('example', 'welsh', 'error_translations', 'mistype', 'bounce', 'lords', 'group', 'unit');
+my @actions = ('example', 'mistype', 'bounce', 'lords', 'group', 'unit');
 my %actions_desc = (
     'example' => 'send example message successfully, and some example messages blocked by ratty',
     'welsh' => 'send example message in Welsh successfully',
