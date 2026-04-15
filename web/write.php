@@ -129,11 +129,18 @@ function correct_address() {
 }
 
 function default_body_text() {
-    return _('Dear') . " " . correct_address() . ",\n\n\n\n" . _('Yours sincerely') . ",\n\n";
+    global $fyr_values;
+    $body = _('Dear') . " " . correct_address() . ",\n\n\n\n";
+    if (isset($fyr_values['message_type']) && $fyr_values['message_type'] == 'casework') {
+        $body .= _('I consent to you sharing details of my case with other relevant organisations on my behalf.') . "\n\n";
+    }
+    $body .= _('Yours sincerely') . ",\n\n";
+    return $body;
 }
 
 function default_body_regex() {
-    return '^' . _('Dear') . ' .*?,\s*' . _('Yours sincerely') . ',';
+    $consent = preg_quote(_('I consent to you sharing details of my case with other relevant organisations on my behalf.'), '#');
+    return '^' . _('Dear') . ' .*?,\s*(' . $consent . '\s*)?' . _('Yours sincerely') . ',';
 }
 
 function default_body_notsigned() {
@@ -446,12 +453,14 @@ function submitFaxes() {
     if (!$cocode)
         $cocode = null;
     $message_array = prepare_message_array($address);
+    $message_type = isset($fyr_values['message_type']) ? $fyr_values['message_type'] : null;
     $result = msg_write_messages($msgid_list,
                                      $message_array,
                                      $repid_list,
                                      $fyr_values['signedbody'],
                                      LANGUAGE,
-                                     $cobrand, $cocode, $grpid, $no_questionnaire);
+                                     $cobrand, $cocode, $grpid, $no_questionnaire,
+                                     $message_type);
 
     #check for error
     if (rabx_is_error($result)) {
