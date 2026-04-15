@@ -122,7 +122,7 @@ function msg_recipient_test($recipient) {
   'error_text'- FYR::Error text or undef
 
   This function is called remotely and commits its changes. */
-function msg_write_messages($idlist, $sender, $recipientlist, $text, $language, $cobrand = null, $cocode = null, $group_id = null, $no_questionnaire = null) {
+function msg_write_messages($idlist, $sender, $recipientlist, $text, $language, $cobrand = null, $cocode = null, $group_id = null, $no_questionnaire = null, $message_type = null) {
     global $msg_client;
     $params = func_get_args();
     $result = $msg_client->call('FYR.Queue.write_messages', $params, 1);

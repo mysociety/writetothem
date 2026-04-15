@@ -322,9 +322,9 @@ with the following keys
 This function is called remotely and commits its changes.
 
 =cut
-sub write_messages($$$$$;$$$$){
+sub write_messages($$$$$;$$$$$){
 
-    my ($msgidlist, $sender, $recipient_list, $text, $language, $cobrand, $cocode, $group_id, $no_questionnaire) = @_;
+    my ($msgidlist, $sender, $recipient_list, $text, $language, $cobrand, $cocode, $group_id, $no_questionnaire, $message_type) = @_;
     my %ret = ();
     my $recipient_id;
     my $id;
@@ -431,7 +431,8 @@ sub write_messages($$$$$;$$$$){
                         created, laststatechange,
                         numactions, dispatched,
                         cobrand, cocode, group_id, no_questionnaire,
-                        language
+                        language,
+                        message_type
                     ) values (
                         ?,
                         ?, ?, ?, ?, ?, ?, ?,
@@ -443,6 +444,7 @@ sub write_messages($$$$$;$$$$){
                         ?, ?,
                         0, null,
                         ?, ?, ?, ?,
+                        ?,
                         ?
                     )#, {},
                         $id,
@@ -453,7 +455,8 @@ sub write_messages($$$$$;$$$$){
                         $text,
                         FYR::DB::Time(), FYR::DB::Time(),
                         $cobrand, $cocode, $group_id, $no_questionnaire,
-                        $language
+                        $language,
+                        $message_type
                     );
 
                 # Log creation of message but don't commit yet

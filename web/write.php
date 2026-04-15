@@ -445,13 +445,14 @@ function submitFaxes() {
     $cocode = $fyr_values['cocode'];
     if (!$cocode)
         $cocode = null;
+    $message_type = $fyr_values['message_type'] ?? null;
     $message_array = prepare_message_array($address);
     $result = msg_write_messages($msgid_list,
                                      $message_array,
                                      $repid_list,
                                      $fyr_values['signedbody'],
                                      LANGUAGE,
-                                     $cobrand, $cocode, $grpid, $no_questionnaire);
+                                     $cobrand, $cocode, $grpid, $no_questionnaire, $message_type);
 
     #check for error
     if (rabx_is_error($result)) {
