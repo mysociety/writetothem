@@ -102,6 +102,14 @@ your message will be ignored.'), $values['voting_area']['rep_name_plural']) ?></
 
     <?php
         $hashref = strtolower($values['voting_area']['rep_name']);
+        if ($hashref == 'mp') {
+            $country = $values['voting_area']['country_name'];
+            if ($country == 'Wales' || $country == 'Scotland') {
+                $hashref = 'mp-' . strtolower($country);
+            } elseif ($country == 'Northern Ireland') {
+                $hashref = 'mp-ni';
+            }
+        }
         if ($hashref == 'london assembly member') $hashref = 'lam';
         if (strstr($hashref, 'councillor')) $hashref = strtolower($values['voting_area']['type']);
         echo '<li>' . sprintf(_('<a class="fancybox" href="about-yourrep#%s" target="_blank">Read this<small></small></a> to learn when a %s can help you &ndash; and when they can&rsquo;t.'), $hashref, $values['voting_area']['rep_name'] ) . '</li>';

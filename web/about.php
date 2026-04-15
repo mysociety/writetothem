@@ -97,6 +97,13 @@ if ($page == 'about-yourrep') {
     }
 }
 
+if (str_starts_with($page, 'yourrep/')) {
+    $rep = str_replace('yourrep/', '', $page);
+
+    $page = 'about-yourrep-mini';
+    $values['rep'] = $rep;
+}
+
 template_draw($page, $values);
 
 ?>

@@ -1,0 +1,32 @@
+<?php
+
+include 'about-yourrep-shared.php';
+
+$rep = $values['rep'];
+global $va_council_child_types;
+$show_mp          = (bool) in_array($rep, ['mp', 'mp-wales', 'mp-scotland', 'mp-ni']);
+$show_councillor  = (bool) in_array(strtoupper($rep), $va_council_child_types);
+$show_msp         = $rep == 'msp';
+$show_mla         = $rep == 'mla';
+$show_welsh       = $rep == 'ms';
+$show_gla         = $rep == 'lam';
+
+
+if ($show_councillor) {
+    $specific = yourrep_md("councillor-" . strtoupper($rep) . ".md", $pd);
+    if ($specific) {
+        echo $specific;
+    } else {
+        echo yourrep_md('councillor.md', $pd);
+    }
+} elseif ($show_msp) {
+    echo yourrep_md('msp.md', $pd);
+} elseif ($show_mla) {
+    echo yourrep_md('mla.md', $pd);
+} elseif ($show_welsh) {
+    echo yourrep_md('am.md', $pd);
+} elseif ($show_gla) {
+    echo yourrep_md('lam.md', $pd);
+} elseif ($show_mp) {
+    echo yourrep_md("$rep.md", $pd);
+} ?>
