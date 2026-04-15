@@ -1,0 +1,79 @@
+<?php
+
+$values['title'] = _("What is your message about?");
+$values['robots'] = 'noindex, nofollow';
+
+template_draw('header', $values);
+
+?>
+
+<div class="row flow-breadcrumbs">
+    <div class="large-8 large-centered columns">
+
+        <?=fyr_breadcrumbs(3)?>
+
+    </div>
+</div>
+
+<div class="row write-header">
+    <div class="large-8 large-centered columns" role="heading">
+
+        <h2><?= _('What is your message about?') ?></h2>
+
+        <p><?= _('This helps us give you the best guidance for writing your message.') ?></p>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-8 large-centered columns">
+        <div class="panel radius write-content">
+
+            <form method="get" action="<?= htmlspecialchars($values['write_url']) ?>">
+                <?php foreach ($values['write_params'] as $key => $val): ?>
+                    <?php if ($val): ?>
+                        <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($val) ?>">
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                <fieldset>
+                    <div class="input-card-grid">
+
+                        <div class="radio-card">
+                            <input type="radio" name="message_type" id="message_type_casework" value="casework" required>
+                            <label for="message_type_casework">
+                                <?= _('I need help with a problem') ?>
+                                <span class="label-hint"><?= _('A personal issue you\'d like your representative to help with, such as housing, benefits, or a local concern.') ?></span>
+                            </label>
+                        </div>
+
+                        <div class="radio-card">
+                            <input type="radio" name="message_type" id="message_type_campaigning" value="campaigning">
+                            <label for="message_type_campaigning">
+                                <?= _('I want to talk about a policy or campaign') ?>
+                                <span class="label-hint"><?= _('You want to persuade your representative to support or oppose a policy, law, or campaign.') ?></span>
+                            </label>
+                        </div>
+
+                        <div class="radio-card">
+                            <input type="radio" name="message_type" id="message_type_other" value="other">
+                            <label for="message_type_other">
+                                <?= _('Something else') ?>
+                                <span class="label-hint"><?= _('A thank you, a general question, or anything that doesn\'t fit the categories above.') ?></span>
+                            </label>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <div style="margin-top: 1.5em; text-align: center;">
+                    <input type="submit" class="button radius success" value="<?= _('Continue') ?>">
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<?php template_draw('footer', $values); ?>
