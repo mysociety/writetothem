@@ -27,29 +27,37 @@ function buildAnalysisForm($values) {
     $form->setAttribute('class', 'analysis-form');
     $form->addElement('textarea', 'msg_summary', _("Can you tell us in a sentence what your message was about?"), array('class' => 'msg-summary'));
 
-    $casework_element = $form->createElement('radio', 'reason', null, '', 'casework');
-    $campaigning_element = $form->createElement('radio', 'reason', null, '', 'campainging');
+    $message_type = $values['message_type'] ?? null;
 
-    $casework_id = $casework_element->getAttribute('id');
-    $campaigning_id = $campaigning_element->getAttribute('id');
-    $legend_id = 'reason_legend';
+    if ($message_type) {
+        // Message type was already captured during the writing flow,
+        // so skip the reason radio cards and pass it as a hidden field.
+        $form->addElement('hidden', 'reason', $message_type);
+    } else {
+        $casework_element = $form->createElement('radio', 'reason', null, '', 'casework');
+        $campaigning_element = $form->createElement('radio', 'reason', null, '', 'campainging');
 
-    // Creates a fieldset with radio options and legend
-    $form->addElement('html', "
-    <fieldset>
-        <legend id=\"{$legend_id}\">" . _('Which of the following best describes why you are writing to your representative?') . "</legend>
-        <div class=\"input-card-grid\">
-            <div class=\"radio-card\">
-                <input name=\"reason\" value=\"casework\" type=\"radio\" id=\"{$casework_id}\" aria-labelledby=\"{$legend_id}\">
-                <label for=\"{$casework_id}\">" . _('Casework') . "<span class=\"label-hint\">" . _('Trying to resolve a problem you or another person is having') . "</span></label>
+        $casework_id = $casework_element->getAttribute('id');
+        $campaigning_id = $campaigning_element->getAttribute('id');
+        $legend_id = 'reason_legend';
+
+        // Creates a fieldset with radio options and legend
+        $form->addElement('html', "
+        <fieldset>
+            <legend id=\"{$legend_id}\">" . _('Which of the following best describes why you are writing to your representative?') . "</legend>
+            <div class=\"input-card-grid\">
+                <div class=\"radio-card\">
+                    <input name=\"reason\" value=\"casework\" type=\"radio\" id=\"{$casework_id}\" aria-labelledby=\"{$legend_id}\">
+                    <label for=\"{$casework_id}\">" . _('I need help with a problem') . "<span class=\"label-hint\">" . _('A personal issue you\'d like your representative to help with, such as housing, benefits, or a local concern.') . "</span></label>
+                </div>
+                <div class=\"radio-card\">
+                    <input name=\"reason\" value=\"campainging\" type=\"radio\" id=\"{$campaigning_id}\" aria-labelledby=\"{$legend_id}\">
+                    <label for=\"{$campaigning_id}\">" . _('I want to talk about a policy or campaign') . "<span class=\"label-hint\">" . _('You want to persuade your representative to support or oppose a policy, law, or campaign.') . "</span></label>
+                </div>
             </div>
-            <div class=\"radio-card\">
-                <input name=\"reason\" value=\"campainging\" type=\"radio\" id=\"{$campaigning_id}\" aria-labelledby=\"{$legend_id}\">
-                <label for=\"{$campaigning_id}\">" . _('Campaigning') . "<span class=\"label-hint\">" . _('Seeking to persuade or inform your representative about a wider issue') . "</span></label>
-            </div>
-        </div>
-    </fieldset>
-    ");
+        </fieldset>
+        ");
+    }
 
     $form->addElement('html', '<input class="button radius success" name="submit" value="' . _('Submit') . '" type="submit">');
     add_all_variables_hidden($form, $values, $options);
@@ -108,7 +116,7 @@ if (!$result) {
     } else {
         $values['cobrand'] = $cobrand;
         $values['host'] = fyr_get_host();
-        $values['form'] = buildAnalysisForm(array("msg_id" => $result));
+        $values['form'] = buildAnalysisForm(array("msg_id" => $result, "message_type" => $values['message_type']));
         template_draw("confirm-accept", $values);
     }
 }
