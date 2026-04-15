@@ -147,6 +147,33 @@ echo '</strong></li>';
 
 echo '</ul>';
 
+if (isset($values['message_type']) && $values['message_type'] == 'casework') {
+    $tips_heading = _('Casework tips');
+    $tips = array(
+        _('Explain your situation clearly and include relevant details such as dates, reference numbers, or addresses.'),
+        _('Give your consent for your representative to contact any relevant third parties, such as government departments or local authorities.'),
+        _('Let your representative know what outcome you are hoping for.'),
+    );
+} elseif (isset($values['message_type']) && $values['message_type'] == 'campaigning') {
+    $tips_heading = _('Campaign tips');
+    $tips = array(
+        _('Explain why this issue matters to you personally &ndash; personal stories are more effective than form letters.'),
+        _('Be specific about what action you would like your representative to take.'),
+    );
+} else {
+    $tips_heading = null;
+    $tips = array();
+}
+
+if ($tips_heading) {
+    echo '<h3>' . $tips_heading . '</h3>';
+    echo '<ul>';
+    foreach ($tips as $tip) {
+        echo '<li>' . $tip . '</li>';
+    }
+    echo '</ul>';
+}
+
 }
 
 ?>
