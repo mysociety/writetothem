@@ -304,7 +304,7 @@ function write_all_link($va_type, $rep_desc_plural) {
 
 function general_write_all_url($va_type, $fyr_postcode){
     global $cocode;
-    return htmlspecialchars(url_new('/write', true,
+    return htmlspecialchars(url_new('/message-type', true,
                                     'who', 'all',
                                     'type', $va_type,
                                     'pc', $fyr_postcode,
@@ -314,7 +314,7 @@ function general_write_all_url($va_type, $fyr_postcode){
 
 function general_write_rep_url($rep_specificid, $fyr_postcode){
     global $cocode;
-    return htmlspecialchars(url_new('/write', true,
+    return htmlspecialchars(url_new('/message-type', true,
                                     'who', $rep_specificid,
                                     'pc', $fyr_postcode,
                                     'fyr_extref', fyr_external_referrer(),
