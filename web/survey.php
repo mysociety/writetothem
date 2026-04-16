@@ -30,7 +30,7 @@ if (array_key_exists('msg_summary', $values) && array_key_exists('msg_id', $valu
         $values['msg_id'],
         $values['msg_summary'],
         array(
-            'reason' => $values['reason']
+            'reason' => array_key_exists('reason', $values) ? $values['reason'] : ''
         )
     );
 }
