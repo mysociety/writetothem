@@ -145,7 +145,10 @@ create table message (
     group_id char(20),
 
     -- message language
-    language text not null default('en')
+    language text not null default('en'),
+
+    -- message type selected by the sender (casework, campaigning, other)
+    message_type text
 );
 
 -- Various indices to make the queue pages quicker.

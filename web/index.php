@@ -117,7 +117,7 @@ if ($person) {
     // TODO: Fix up case when a person is a representative multiple times
     // (for now we just take the most recent made one, i.e. last in list)
     $id = $ids[count($ids)-1];
-    header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
+    header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
     exit;
 }
 
@@ -262,7 +262,7 @@ if ($pc) {
 
             if ($id)
                 /* Single representative */
-                header('Location: ' . url_new('write', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
+                header('Location: ' . url_new('message-type', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
             else
                 /* Several */
                 header('Location: ' . url_new('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));

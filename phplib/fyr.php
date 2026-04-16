@@ -305,12 +305,14 @@ function fyr_breadcrumbs($num, $type = 'default') {
         $steps = array(
                     _('Enter postcode'),
                     _('Choose representative'),
+                    _('Message type'),
                     _('Write message'),
                     _('Send message')
                 );
     } elseif ($type == 'lords') {
         $steps = array(
                     _('Choose a Lord'),
+                    _('Message type'),
                     _('Write message'),
                     _('Send message')
                 );
