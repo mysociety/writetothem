@@ -26,8 +26,10 @@
             <?php if (!array_key_exists('donate_shown', $values)) { ?>
             <div class="large-3 columns">
                 <div class="mysoc-footer__donate">
-                    <p><?= _('Your donations keep this site and others like it running') ?></p>
-                    <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate now') ?></a>
+                    <p>
+                    <strong><?= _('Support WriteToThem') ?></strong><br>
+                    <?= _('We are a charity – donate today to invest in making UK politics more accessible. Even £5 goes a long way!') ?></p>
+                    <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate Now ♥️') ?></a>
                 </div>
             </div>
             <?php } ?>
