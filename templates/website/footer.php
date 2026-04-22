@@ -27,7 +27,7 @@
             <div class="large-3 columns">
                 <div class="mysoc-footer__donate">
                     <p><?= _('Your donations keep this site and others like it running') ?></p>
-                    <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate now') ?></a>
+                    <a href="https://www.mysociety.org/donate/support-writetothem-and-mysociety/?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate now') ?></a>
                 </div>
             </div>
             <?php } ?>
