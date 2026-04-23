@@ -26,7 +26,7 @@ template_draw('header', $values);
 </div>
 
 <div class="row">
-    <div class="large-8 large-centered columns">
+    <div class="large-3 large-centered columns">
         <div class="panel radius write-content">
 
             <form method="get" action="<?= htmlspecialchars($values['write_url']) ?>">
@@ -37,7 +37,7 @@ template_draw('header', $values);
                 <?php endforeach; ?>
 
                 <fieldset>
-                    <div class="input-card-grid">
+                    <div class="input-card-grid" style="--input-card-grid-cols-md: 1; --input-card-grid-cols-lg: 1;">
 
                         <div class="radio-card">
                             <input type="radio" name="message_type" id="message_type_casework" value="casework" required>
