@@ -1535,20 +1535,20 @@ h2 {
 */
 
 .input-card-grid {
+  --input-card-grid-cols-sm: 1;
+  --input-card-grid-cols-md: 2;
+  --input-card-grid-cols-lg: 2;
+
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(var(--input-card-grid-cols-sm), 1fr);
 
-
-  @media #{$small} {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 45%), 1fr));
-    justify-content: center;
+  @media #{$medium} {
+    grid-template-columns: repeat(var(--input-card-grid-cols-md), 1fr);
   }
 
-  &-narrow-card {
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 30%), 1fr));
-    }
+  @media #{$large} {
+    grid-template-columns: repeat(var(--input-card-grid-cols-lg), 1fr);
   }
 }
 
