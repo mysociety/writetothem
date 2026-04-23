@@ -65,12 +65,12 @@ $body-font-family: 'Merriweather', Georgia, Times, 'Times New Roman', serif;
 
 // $text-direction: ltr;
 
-// Colors
+// Colors (Pass AA contrast test)
 
-$primary-color: #4695b3;
+$primary-color: #11769d;
 // $secondary-color: #e9e9e9;
 $alert-color: #c63a3a;
-$success-color: #32b353;
+$success-color: #4b7e45;
 
 // We can use CSS variables for svg icon on the HTML templates
 :root {
