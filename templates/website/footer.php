@@ -29,7 +29,7 @@
                     <p>
                     <strong><?= _('Support WriteToThem') ?></strong><br>
                     <?= _('We are a charity – donate today to invest in making UK politics more accessible. Even £5 goes a long way!') ?></p>
-                    <a href="https://www.mysociety.org/donate?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate Now ♥️') ?></a>
+                    <a href="https://www.mysociety.org/donate/support-writetothem-and-mysociety/?utm_source=writetothem.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button"><?= _('Donate now') ?></a>
                 </div>
             </div>
             <?php } ?>
