@@ -19,7 +19,7 @@ if (get_http_var("random_lord")) {
     $all_lords = dadem_get_representatives($HOC_AREA_ID);
     dadem_check_error($all_lords);
     $random_lord = $all_lords[rand(0, count($all_lords) - 1)];
-    header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $random_lord));
+    header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $random_lord));
     exit;
 }
 
@@ -27,7 +27,7 @@ if ($pid = get_http_var('pid')) {
     $ids = dadem_get_same_person('uk.org.publicwhip/person/' . $pid);
     dadem_check_error($ids);
     $id = $ids[count($ids)-1];
-    header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
+    header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id));
     exit;
 }
 
@@ -92,14 +92,14 @@ if ($date = get_http_var('d')) {
 			$error = 'No Lord shares that date, I\'m afraid. Pick another date!';
 			lords_form(array('date'=>$error));
 		} elseif (count($matches)==1) {
-    			header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
+    			header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
 			exit;
 		} else {
 			print '<p>There is more than one Lord who shares your birthday. Please pick from the list below:</p> <ul>';
 			$reps_info = dadem_get_representatives_info($matches);
 			dadem_check_error($reps_info);
 			foreach ($matches as $id) {
-    				$url = url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
+    				$url = url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
 				print '<li><a href="' . $url . '">' . $reps_info[$id]['name'] . '</a></li>'."\n";
 			}
 			print '</ul>';
@@ -128,14 +128,14 @@ if ($date = get_http_var('d')) {
 		$error = 'No Lords went to that college, I\'m afraid. Pick another college!';
 		lords_form(array('college'=>$error));
 	} elseif (count($matches)==1) {
-    		header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
+    		header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
 		exit;
 	} else {
 		print '<p>There is more than one Lord who went to that college. Please pick from the list below:</p> <ul>';
 		$reps_info = dadem_get_representatives_info($matches);
 		dadem_check_error($reps_info);
 		foreach ($matches as $i => $id) {
-			$url = url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
+			$url = url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
 			print '<li><a href="' . $url . '">' . $reps_info[$id]['name'] . '</a> ('.$colleges[$i].')</li>'."\n";
 		}
 		print '</ul>';
@@ -203,7 +203,7 @@ if ($date = get_http_var('d')) {
 		$error = 'No Lords associated with that place, I\'m afraid. Pick another place.';
 		lords_form(array('place'=>$error));
 #	} elseif (count($matches)==1) {
-#    		header('Location: ' . url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
+#    		header('Location: ' . url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $matches[0]));
 #		exit;
 	} else {
 		$reps_info = dadem_get_representatives_info($matches);
@@ -216,7 +216,7 @@ if ($date = get_http_var('d')) {
 		}
 		print '</p> <ul>';
 		foreach ($matches as $i => $id) {
-			$url = url_new('write', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
+			$url = url_new('message-type', false, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode'), 'who', $id);
 			print '<li><a href="' . $url . '">' . $reps_info[$id]['name'] . '</a> <small>' . $reason[$i] . '</small></li>'."\n";
 		}
 		print '</ul>';
