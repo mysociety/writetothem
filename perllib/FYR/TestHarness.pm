@@ -84,7 +84,7 @@ sub spin_queue {
 
 
 sub send_message_to_rep {
-    my ($who, $postcode, $fields, $repinfo, $options) = @_;
+    my ($who, $postcode, $fields, $repinfo, $options, $message_type) = @_;
     my $verbose = $options->{verbose};
     my $multispawn = $options->{multispawn};
     my $base_url = $options->{base_url};
@@ -92,6 +92,7 @@ sub send_message_to_rep {
     my $cobrand = $options->{cobrand};
     my $birthday = $options->{birthday};
     my $expected_messages = $options->{expected_messages};
+    $message_type ||= 'casework';
 
     my $reptype = $repinfo->{reptype};
     my $repname = $repinfo->{repname};
@@ -130,6 +131,10 @@ sub send_message_to_rep {
         $fields->{pc} = $postcode;
     }
 
+    $wth->browser_check_contents("What is your message about?"); 
+    $wth->browser_submit_form(form_name => 'messageAboutForm',
+        fields => { message_type => $message_type},
+    );
     # Fill in a test letter
     $wth->browser_check_contents($expected_messages->{write_message});
     $wth->browser_check_contents("This is a test version"); # Make sure mail will loop back rather than go to rep
@@ -151,6 +156,9 @@ sub send_message_to_rep {
     $wth->browser_submit_form(form_name => 'previewForm', button => 'submitSendFax');
     $wth->browser_check_contents($expected_messages->{check_email});
 
+    my $data = dbh()->selectrow_hashref("select message_type from message
+            order by created desc limit 1", {});
+    die "Did not store message type" unless $data->{message_type} eq $message_type;
 } 
 
 sub confirm_message {
