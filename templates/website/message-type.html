@@ -29,7 +29,7 @@ template_draw('header', $values);
     <div class="large-3 large-centered columns">
         <div class="panel radius write-content">
 
-            <form method="get" action="<?= htmlspecialchars($values['write_url']) ?>">
+            <form method="get" name="messageAboutForm" action="<?= htmlspecialchars($values['write_url']) ?>">
                 <?php foreach ($values['write_params'] as $key => $val): ?>
                     <?php if ($val): ?>
                         <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($val) ?>">
