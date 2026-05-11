@@ -400,11 +400,15 @@ class ADMIN_PAGE_REPS
 
         $readonly = $this->vainfo['editable_here'] ? null : "readonly";
 
+        $area_type = $va_type_name[$this->vainfo['type']] ?? $this->vainfo['type'];
         $office = htmlspecialchars($this->vainfo['rep_type']) . " for " .
-            htmlspecialchars($this->vainfo['name']) . " " . htmlspecialchars($va_type_name[$this->vainfo['type']]) .
-            ($this->vainfo['parent_area'] ? " in " .
-            htmlspecialchars($this->vainfo['parent_area']['name']) . " " .
-            htmlspecialchars($va_type_name[$this->vainfo['parent_area']['type']]) : "" );
+            htmlspecialchars($this->vainfo['name']) . " " . htmlspecialchars($area_type);
+        if ($this->vainfo['parent_area']) {
+            $parent_area_type = $va_type_name[$this->vainfo['parent_area']['type']] ?? $this->vainfo['parent_area']['type'];
+            $office .= " in " .
+                htmlspecialchars($this->vainfo['parent_area']['name']) . " " .
+                htmlspecialchars($parent_area_type);
+        }
 
         $form->addElement('static', 'office', 'Office:', $office);
         $form->addElement('text', 'name', "Full name:", array('size' => 60, $readonly => 1));
