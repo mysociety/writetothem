@@ -252,7 +252,7 @@ function fyr_describe_area_type_list($area_types) {
         'Councillors' => $va_aliases['council'],
         '<abbr title="Member of Parliament">MP</abbr>' => array('WMC'),
         '<abbr title="Members of the Scottish Parliament">MSPs</abbr>' => array('SPE', 'SPC'),
-        '<abbr title="Members of the Senedd">MSs</abbr>' => array('WAE', 'WAC'),
+        '<abbr title="Members of the Senedd">MSs</abbr>' => array('WAC'),
     );
     foreach ($ordered_descs_array as $k => $v) {
         if (count(array_diff($v, $area_types)) == 0) {

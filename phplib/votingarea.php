@@ -38,7 +38,6 @@ $va_inside = array(
         'SPE' => 'SPA',
         'SPC' => 'SPA',
 
-        'WAE' => 'WAS',
         'WAC' => 'WAS',
 
         'NIE' => 'NIA',
@@ -74,7 +73,7 @@ $va_aliases = array(
     /* MPs */
     'westminstermp' => array('WMC'),
     /* Devolved assembly members / MSPs */
-    'regionalmp' => array('SPC','SPE','WAC','WAE','LAC','LAE','NIE'),
+    'regionalmp' => array('SPC','SPE','WAC','LAC','LAE','NIE'),
     /* MEPs */
     'mep' => array('EUR')
 );
@@ -103,7 +102,6 @@ $va_precise_names = array(
         'SPE' => _('Scottish Parliament Party List Members'),
         'SPC' => _('Scottish Parliament Constituency Members'),
 
-        'WAE' => _('Senedd Party List Members'),
         'WAC' => _('Senedd Constituency Members'),
 
         'NIE' => _('Northern Ireland Assembly Members'),
@@ -129,7 +127,7 @@ $va_display_order = array(
         'CED',
         /* various devolved assemblies */
         array('LAC', 'LAE'),
-        array('WAC', 'WAE'),
+        'WAC',
         array('SPC', 'SPE'),
         'NIE',
         /* Westminster Parliament */
@@ -161,7 +159,6 @@ $va_salaried = array(
         'SPE' => 1,
         'SPC' => 1,
 
-        'WAE' => 1,
         'WAC' => 1,
 
         'NIE' => 1,
@@ -207,7 +204,6 @@ $va_type_name = array(
         'SPC' => _("constituency"),
 
         'WAS' => _("Senedd"),
-        'WAE' => _("Electoral Region"),
         'WAC' => _("constituency"),
 
         'NIA' => _("Northern Ireland Assembly"),
@@ -240,7 +236,6 @@ $va_rep_name = array(
     'COP' => _('councillor'),
     'SPE' => _('MSP'),
     'SPC' => _('MSP'),
-    'WAE' => _('MS'),
     'WAC' => _('MS'),
     'NIE' => _('MLA'),
     'WMC' => _('MP'),
@@ -262,7 +257,6 @@ $va_rep_name_long = array(
     'COP' => _('councillor'),
     'SPE' => _('Member of the Scottish Parliament'),
     'SPC' => _('Member of the Scottish Parliament'),
-    'WAE' => _('Member of the Senedd'),
     'WAC' => _('Member of the Senedd'),
     'NIE' => _('Member of the Legislative Assembly'),
     'WMC' => _('Member of Parliament'),
@@ -284,7 +278,6 @@ $va_rep_name_plural = array(
     'COP' => _('councillors'),
     'SPE' => _('MSPs'),
     'SPC' => _('MSPs'),
-    'WAE' => _('MSs'),
     'WAC' => _('MSs'),
     'NIE' => _('MLAs'),
     'WMC' => _('MPs'),
@@ -306,7 +299,6 @@ $va_rep_name_long_plural = array(
     'COP' => _('councillors'),
     'SPE' => _('Members of the Scottish Parliament'),
     'SPC' => _('Members of the Scottish Parliament'),
-    'WAE' => _('Members of the Senedd'),
     'WAC' => _('Members of the Senedd'),
     'NIE' => _('Members of the Legislative Assembly'),
     'WMC' => _('Members of Parliament'),
@@ -319,7 +311,6 @@ $va_rep_suffix = array(
     'LAE' => _('AM'),
     'SPE' => _('MSP'),
     'SPC' => _('MSP'),
-    'WAE' => _('MS'),
     'WAC' => _('MS'),
     'NIE' => _('MLA'),
     'WMC' => _('MP'),

@@ -89,7 +89,6 @@ my $rep_templates = {
     'SPC' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
     'SPE' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
     'WAC' => { 'title' => 'MS', 'first_names' => ['Gareth', 'Cerys', 'Dylan', 'Sian'], 'surnames' => ['Williams', 'Davies', 'Thomas', 'Roberts'] },
-    'WAE' => { 'title' => 'MS', 'first_names' => ['Gareth', 'Cerys', 'Dylan', 'Sian'], 'surnames' => ['Williams', 'Davies', 'Thomas', 'Roberts'] },
     'NIA' => { 'title' => 'MLA', 'first_names' => ['Connor', 'Siobhan', 'Patrick', 'Aoife'], 'surnames' => ['Murphy', 'Kelly', 'ONeill', 'Lynch'] },
     'EUP' => { 'title' => 'MEP', 'first_names' => ['Edward', 'Catherine', 'William', 'Margaret'], 'surnames' => ['Harrison', 'Thompson', 'White', 'Green'] },
 };
