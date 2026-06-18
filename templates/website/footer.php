@@ -7,6 +7,21 @@
                 <div class="mysoc-footer__site-description">
                 <p><?= _('Making it easy to write to the politicians who represent you &ndash; even if you don’t know who they are.') ?></p>
                 </div>
+                <form action="https://mysociety.us9.list-manage.com/subscribe/post?u=53d0d2026dea615ed488a8834&amp;id=287dc28511&amp;f_id=002244e1f0" method="post" class="footer__newsletter-form">
+                    <h3><?= _('Sign up to mySociety’s newsletter') ?></h3>
+                    <div class="row collapse">
+                        <div class="small-8 columns">
+                            <input type="email" name="EMAIL" placeholder="<?= _('Your email address') ?>" required>
+                        </div>
+                        <div class="small-4 columns">
+                            <input type="submit" name="subscribe" class="button success prefix" value="<?= _('Subscribe') ?>">
+                        </div>
+                    </div>
+                    <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                        <input type="text" name="b_53d0d2026dea615ed488a8834_287dc28511" tabindex="-1" value="">
+                    </div>
+                    <a href="https://www.mysociety.org/privacy#newsletter"><?= _('Your data') ?></a>
+                </form>
             </div>
 
             <div class="large-4 columns">
