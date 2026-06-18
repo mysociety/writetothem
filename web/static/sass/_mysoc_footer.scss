@@ -81,6 +81,27 @@ $high-dpi-screen: '-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi
   color: $mysoc-footer-site-name-text-color;
 }
 
+.footer__newsletter-form {
+  h3 {
+    color: $mysoc-footer-text-color;
+  }
+
+  .row.collapse {
+    max-width: 22.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="email"] {
+    border-radius: 3px 0 0 3px;
+    margin-bottom: 0;
+  }
+
+  .button {
+    border-radius: 0 3px 3px 0;
+    margin-bottom: 0;
+  }
+}
+
 .mysoc-footer__links {
   @media (min-width: $mysoc-footer-breakpoint-sm){
     overflow: auto;
