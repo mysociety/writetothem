@@ -11,7 +11,10 @@ template_draw('header', $values);
             <img class="badge-mobile" src="/static/img/badge-mysociety-mobile@2x.png" width="48" height="60" alt="A service from mySociety">
         </a>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
-        <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
+        <div class="header-content">
+            <a href="/about-qa" target="_blank" class="header-link" title="Opens in a new window">Help</a>
+            <a href="https://www.mysociety.org/donate/support-writetothem-and-mysociety/?utm_source=writetothem.com&amp;utm_content=header+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_header" class="button red small radius">Donate now</a>
+        </div>
         <div style="text-align:center;">
             <?=$values['blurb-top'] ?>
             <?php if ($values['num_messages']) {
