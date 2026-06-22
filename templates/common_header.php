@@ -134,6 +134,9 @@ if (isset($values['cobrand']))
           <?php if ( ! isset($values['skip_header']) ): ?>
             <div class="row banner-top">
                 <div class="large-10 large-centered columns">
+                    <a href="https://www.mysociety.org/" id="mysociety-badge" aria-label="20 years of mySociety">
+                        <img class="badge-desktop" src="/static/img/badge-mysociety-desktop@2x.png" width="60" height="80" alt="A service from mySociety">
+                    </a>
                     <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
                     <div class="header-content">
                         <a href="/about-qa" target="_blank" class="header-link" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
