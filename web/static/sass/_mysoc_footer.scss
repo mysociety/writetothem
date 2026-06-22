@@ -182,11 +182,7 @@ $high-dpi-screen: '-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi
 
 .mysoc-footer__org__logo--mysociety {
   width: 152px;
-  background: transparent url('#{$mysoc-footer-image-path}logo-mysociety.png') 0 0 no-repeat;
   background-size: 152px 32px;
-  @media ($high-dpi-screen) {
-    background-image: url('#{$mysoc-footer-image-path}logo-mysociety@2x.png');
-  }
   background-image: url('#{$mysoc-footer-image-path}logo-mysociety.svg'), none;
 }
 
@@ -218,31 +214,39 @@ $high-dpi-screen: '-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi
   padding-top: 32px;
   overflow: hidden;
   border-radius: 100%;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:focus {
+    transform: scale(1.2);
+    outline: 0;
+    box-shadow: 0 0 0 2px #000, 0 0 0 4px #fc0;
+  }
 }
 
 .mysoc-footer__badge--github {
-  background: transparent url('#{$mysoc-footer-image-path}icon-github.png') 0 0 no-repeat;
-  background-size: 32px 32px;
-  @media ($high-dpi-screen) {
-    background-image: url('#{$mysoc-footer-image-path}icon-github@2x.png');
-  }
   background-image: url('#{$mysoc-footer-image-path}icon-github.svg'), none;
 }
 
-.mysoc-footer__badge--twitter {
-  background: transparent url('#{$mysoc-footer-image-path}icon-twitter.png') 0 0 no-repeat;
-  background-size: 32px 32px;
-  @media ($high-dpi-screen) {
-    background-image: url('#{$mysoc-footer-image-path}icon-twitter@2x.png');
-  }
-  background-image: url('#{$mysoc-footer-image-path}icon-twitter.svg'), none;
+.mysoc-footer__badge--facebook {
+  background-image: url('#{$mysoc-footer-image-path}icon-facebook.svg'), none;
 }
 
-.mysoc-footer__badge--facebook {
-  background: transparent url('#{$mysoc-footer-image-path}icon-facebook.png') 0 0 no-repeat;
-  background-size: 32px 32px;
-  @media ($high-dpi-screen) {
-    background-image: url('#{$mysoc-footer-image-path}icon-facebook@2x.png');
-  }
-  background-image: url('#{$mysoc-footer-image-path}icon-facebook.svg'), none;
+.mysoc-footer__badge--linkedin {
+  background-image: url('#{$mysoc-footer-image-path}icon-linkedin.svg'), none;
+}
+
+.mysoc-footer__badge--bluesky {
+  background-image: url('#{$mysoc-footer-image-path}icon-bluesky.svg'), none;
+}
+
+.mysoc-footer__badge--instagram {
+  background-image: url('#{$mysoc-footer-image-path}icon-instagram.svg'), none;
+}
+
+.mysoc-footer__badge--tiktok {
+  background-image: url('#{$mysoc-footer-image-path}icon-tiktok.svg'), none;
 }

@@ -84,8 +84,11 @@
             <div class="large-3 columns">
                 <ul class="mysoc-footer__badges">
                     <li role="presentation"><a href="https://github.com/mysociety/writetothem/" class="mysoc-footer__badge mysoc-footer__badge--github">Github</a></li>
-                    <li role="presentation"><a href="https://twitter.com/mysociety" class="mysoc-footer__badge mysoc-footer__badge--twitter">Twitter</a></li>
+                    <li role="presentation"><a href="https://bsky.app/profile/mysociety.org" class="mysoc-footer__badge mysoc-footer__badge--bluesky">Bluesky</a></li>
+                    <li role="presentation"><a href="https://www.linkedin.com/company/mysociety" class="mysoc-footer__badge mysoc-footer__badge--linkedin">LinkedIn</a></li>
                     <li role="presentation"><a href="https://www.facebook.com/mysociety" class="mysoc-footer__badge mysoc-footer__badge--facebook">Facebook</a></li>
+                    <li role="presentation"><a href="https://www.instagram.com/mysociety_org/" class="mysoc-footer__badge mysoc-footer__badge--instagram">Instagram</a></li>
+                    <li role="presentation"><a href="https://www.tiktok.com/@mysociety_org" class="mysoc-footer__badge mysoc-footer__badge--tiktok">Tiktok</a></li>
                 </ul>
             </div>
 
