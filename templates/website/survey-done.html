@@ -2,29 +2,21 @@
 
 $values['title'] = _("Thanks");
 $values['robots'] = 'noindex, nofollow';
+$values['utm_campaign'] = 'survey_done_page';
 
 template_draw('header', $values);
 
 ?>
 
-<div class="row write-header">
-    <div class="large-8 large-centered columns">
+<div class="survey-thanks-wrapper">
+    <h2><?= _("Many thanks") ?></h2>
 
-        <h2><?= _("Many thanks") ?></h2>
+    <p><?= _("WriteToThem is run by the charity mySociety. It's just one of our websites which help to break down barriers to democratic participation.") ?></p>
 
-    </div>
-</div>
+    <?=fyr_display_advert($values)?>
 
-<div class="row">
-    <div class="large-10 large-centered columns">
-
-        <p><?= _("Thanks for helping us understand more about who is using WriteToThem, so we can improve it for future users.") ?></p>
-
-        <p><?= _("If you’ve got any questions, feel free to") ?> <a href="/about-contact"><?= _("contact us") ?></a>.</p>
-
-        <?=fyr_display_advert($values)?>
-
-    </div>
+    <?php template_draw('can-you-help', $values) ?>
+    <?php template_draw('newsletter-signup', $values) ?>
 </div>
 
 <?php template_draw('footer', $values);

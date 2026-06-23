@@ -2,37 +2,28 @@
 
 $values['title'] = "Thanks for your help";
 $values['robots'] = 'noindex, nofollow';
-$values['skip_header'] = TRUE;
 $values['utm_campaign'] = 'survey_thanks';
 
 template_draw('header', $values);
 
 ?>
 
-<div class="row hero hero-transparent">
-    <div class="large-8 large-centered columns">
-        <div class="ms_header_nav">
-            <nav>
-                <ul class="menu">
-                    <li id="ms_logo"><a class="ms_header_nav-logo" href="https://www.mysociety.org">&nbsp;</a></li>
-                </ul>
-            </nav>
+<div class="row">
+    <div class="large-6 large-centered columns">
+
+        <div class="card card-lg card-text-center">
+            <h2><?= _('Thanks for your help') ?></h2>
+            <p><?= _("Thank you for telling us more about your message.") ?></p>
+            <p><?= _("We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about.") ?></p>
+            <p><?= _("We do not publish the raw responses/postcodes, only summaries of the general topics and areas.") ?></p>
         </div>
-        <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
 
-        <div class="hero-text-container">
-            <div class="card card-lg">
-                <h2><?= _('Thanks for your help') ?></h2>
-                <p class="message"><?= _("Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas.") ?></p>
-            </div>
+        <br><br>
 
-            <br><br><br>
-            <?php template_draw('can-you-help', $values) ?>
+        <?php template_draw('can-you-help', $values) ?>
+        <?php template_draw('newsletter-signup', $values) ?>
     </div>
-    </div>
-
 </div>
 
 <?php
-$values['credit'] = '<a href="https://www.freeimages.com/photographer/hisks-57682">' . _('Photograph by Krzysztof Szkurlatowski') . '</a>';
 template_draw('footer', $values);

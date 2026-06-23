@@ -1731,3 +1731,22 @@ $radio-card-circle-size: 24px;
 h2#title {
     text-wrap: balance;
 }
+
+.inline-newsletter-form {
+    max-width: 22rem;
+    margin: 0 auto;
+
+    input[type="email"] {
+        border-radius: 3px 0 0 3px;
+    }
+
+    input[type="submit"] {
+        border-radius: 0 3px 3px 0;
+    }
+}
+
+.survey-thanks-wrapper {
+    max-width: 38rem;
+    margin: 0 auto;
+    text-align: center;
+}
