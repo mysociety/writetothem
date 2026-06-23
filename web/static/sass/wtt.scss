@@ -162,6 +162,17 @@ textarea {
         background-color: transparent;
         @include transition(border $transition-timing ease-in, background-color $transition-timing ease-in);
     }
+
+    &.red {
+        background-color: #dc3545;
+        color: #fff;
+        border-color: darken(#dc3545, 10%);
+
+        &:hover {
+            background-color: darken(#dc3545, 15%);
+            text-decoration: none;
+        }
+    }
 }
 
 input.error,
@@ -1011,13 +1022,18 @@ a[href="#top"] {
         margin-bottom: 0;
     }
 
-    .newsletter-wrapper {
+    .newsletter-wrapper, .donation-wrapper {
         max-width: 20.5rem;
         padding: 1rem;
         background: #fff;
         border-radius: 3px;
         overflow: hidden;
         box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+        margin-bottom: 1rem;
+
+        > :last-child {
+            margin-bottom: 0;
+        }
 
         form {
             margin-bottom: 0;
