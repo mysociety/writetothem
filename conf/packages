@@ -30,3 +30,4 @@ libwww-perl
 libcgi-pm-perl
 libfcgi-perl
 libapache2-mod-fcgid
+liblocale-gettext-perl
