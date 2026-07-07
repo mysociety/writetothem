@@ -34,6 +34,12 @@ require_once "../phplib/votingarea.php";
 $fyr_postcode = get_postcode();
 $area_types = get_area_types();
 $voting_areas = postcode_to_areas($fyr_postcode);
+
+// Is this postcode in Wales? Each MapIt area carries a country code ('W' =
+$is_wales = false;
+foreach ($voting_areas as $area) {
+    if (($area['country'] ?? '') === 'W') { $is_wales = true; break; }
+}
 $fyr_all_url = limit_areas($area_types, $voting_areas); # Might alter voting_areas
 $va_ids = area_ids($voting_areas);
 $area_representatives = get_reps($va_ids);
@@ -121,6 +127,7 @@ template_draw($template, array(
     "postcode" => $fyr_postcode,
     "cobrand" => $cobrand,
     "host" => fyr_get_host(),
+    "is_wales" => $is_wales,
     ));
 
 debug_timestamp();
