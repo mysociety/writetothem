@@ -563,17 +563,25 @@ $badge-horizontal-shadow-desktop: 8px;
     }
 }
 
-.wtt-help {
+.header-top-links {
   position: absolute;
   right: 1em * (15/16); // this is the default Foundation gutter width (0.9375em)
   top: 0.5em;
-  color: #fff;
-  padding: 0.6em 0;
 
-  &:hover,
-  &:focus {
+  a {
     color: #fff;
-    opacity: 0.9;
+    padding: 0.6em 0;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      opacity: 0.9;
+    }
+
+    // Space between adjacent links
+    + a {
+      margin-left: 1em;
+    }
   }
 
   @media #{$small} {
