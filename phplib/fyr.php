@@ -123,6 +123,18 @@ function fyr_get_host() {
      return $host;
 }
 
+/* fyr_other_language_url
+ * URL for the current page on the other-language site, preserving path and
+ * query string. The Welsh site lives on the `cy.` subdomain of
+ * OPTION_WEB_DOMAIN (recognised by the cobrand detection above); the English
+ * site on `www.`. */
+function fyr_other_language_url() {
+    $current = defined('LANGUAGE') ? LANGUAGE : 'en';
+    $target = ($current === 'cy' ? 'www.' : 'cy.') . OPTION_WEB_DOMAIN;
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    return $scheme . '://' . $target . $_SERVER['REQUEST_URI'];
+}
+
 /* fyr_format_message_body_for_preview MESSAGE_BODY
  * Format a message body for HTML preview - handle leading spaces,
  * add HTML linebreaks and convert special characters to entities. */

@@ -135,7 +135,10 @@ if (isset($values['cobrand']))
             <div class="row banner-top">
                 <div class="large-10 large-centered columns">
                     <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
+                    <div class="header-top-links">
+                        <a href="<?= fyr_other_language_url() ?>" class="wtt-lang-switch" lang="<?= LANGUAGE === 'cy' ? 'en' : 'cy' ?>"><?= LANGUAGE === 'cy' ? 'English' : 'Cymraeg' ?></a>
                     <a href="/about-qa" target="_blank" class="wtt-help" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
+                    </div>
                 </div>
             </div>
           <?php endif; ?>

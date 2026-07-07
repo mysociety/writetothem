@@ -11,7 +11,10 @@ template_draw('header', $values);
             <img class="badge-mobile" src="/static/img/badge-mysociety-mobile@2x.png" width="48" height="60" alt="<?= _('A service from mySociety') ?>">
         </a>
         <a href="/" class="wtt-logo"><img src="/static/img/logo.png" width="250" height="70" alt="WriteToThem"></a>
+        <div class="header-top-links">
+            <a href="<?= fyr_other_language_url() ?>" class="wtt-lang-switch" lang="<?= LANGUAGE === 'cy' ? 'en' : 'cy' ?>"><?= LANGUAGE === 'cy' ? 'English' : 'Cymraeg' ?></a>
         <a href="/about-qa" target="_blank" class="wtt-help" title="Opens in a new window">Help</a>
+        </div>
         <div style="text-align:center;">
             <?=$values['blurb-top'] ?>
             <?php if ($values['num_messages']) {
