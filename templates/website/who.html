@@ -36,6 +36,16 @@ template_draw('header', $values);
     </div>
 </div>
 
+<?php if (!empty($values['is_wales']) && LANGUAGE !== 'cy') { ?>
+<div class="row">
+    <div class="large-8 large-centered columns">
+        <div class="panel radius" lang="cy">
+            <a href="<?= fyr_other_language_url() ?>">Hoffech chi ysgrifennu eich neges yn Gymraeg?</a>
+        </div>
+    </div>
+</div>
+<?php }; ?>
+
 <div class="row">
     <div class="large-10 large-centered columns">
         <div class="panel radius write-content">
