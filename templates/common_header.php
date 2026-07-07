@@ -8,8 +8,8 @@ if (isset($values['cobrand']))
 }
 
 ?><!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="<?= LANGUAGE ?>"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="<?= LANGUAGE ?>"><!--<![endif]-->
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -137,7 +137,7 @@ if (isset($values['cobrand']))
                     <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
                     <div class="header-top-links">
                         <a href="<?= fyr_other_language_url() ?>" class="wtt-lang-switch" lang="<?= LANGUAGE === 'cy' ? 'en' : 'cy' ?>"><?= LANGUAGE === 'cy' ? 'English' : 'Cymraeg' ?></a>
-                    <a href="/about-qa" target="_blank" class="wtt-help" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
+                        <a href="/about-qa" target="_blank" class="wtt-help" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
                     </div>
                 </div>
             </div>
