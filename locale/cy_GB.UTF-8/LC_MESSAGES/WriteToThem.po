@@ -1,8 +1,9 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 16:23+0000\n"
+"POT-Creation-Date: 2026-07-08 14:09+0000\n"
 "PO-Revision-Date: 2023-03-20 17:59-0000\n"
 "Last-Translator: mySociety\n"
 "Language-Team: mySociety\n"
@@ -12,67 +13,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: perllib/FYR/Queue.pm:867
+#: perllib/FYR/Queue.pm:870
 #, php-format
 msgid "Phone: %s"
-msgstr ""
+msgstr "Ffôn: %s"
 
-#: perllib/FYR/Queue.pm:868
+#: perllib/FYR/Queue.pm:871
 #, php-format
 msgid "Email: %s"
-msgstr ""
+msgstr "E-bost: %s"
 
-#: perllib/FYR/Queue.pm:907
+#: perllib/FYR/Queue.pm:910
 #, php-format
 msgid "Letter from %s"
-msgstr ""
+msgstr "Llythyr oddi wrth %s"
 
-#: perllib/FYR/Queue.pm:908
+#: perllib/FYR/Queue.pm:911
 #, php-format
 msgid "Letter from your constituent %s"
-msgstr ""
+msgstr "Llythyr oddi wrth eich etholydd %s"
 
-#: perllib/FYR/Queue.pm:915
+#: perllib/FYR/Queue.pm:918
 #, php-format
 msgid "Letter from constituent %s to %s"
-msgstr ""
+msgstr "Llythyr o etholydd %s at %s"
 
-#: perllib/FYR/Queue.pm:1298
+#: perllib/FYR/Queue.pm:1301
 #, php-format
 msgid "Please confirm that you want to send a message to %s"
 msgstr "Cadarnhewch eich bod am anfon neges at %s"
 
-#: perllib/FYR/Queue.pm:1397
+#: perllib/FYR/Queue.pm:1400
 #, php-format
 msgid "Unfortunately, we couldn't send your message to %s"
-msgstr "Yn anffodus, ni allem anfon eich neges at %s"
+msgstr "Yn anffodus, ni allwn anfon eich neges at %s"
 
-#: perllib/FYR/Queue.pm:1445
+#: perllib/FYR/Queue.pm:1448
 msgid "Three"
-msgstr "Dair"
+msgstr "Tri"
 
-#: perllib/FYR/Queue.pm:1445
+#: perllib/FYR/Queue.pm:1448
 msgid "Two"
 msgstr "Dau"
 
-#: perllib/FYR/Queue.pm:1486
+#: perllib/FYR/Queue.pm:1489
 #, php-format
 msgid "Did your %s reply to your letter?"
-msgstr "A wnaeth eich %s ateb eich llythyr?"
+msgstr "A wnaeth eich %s ymateb i'ch llythyr?"
 
-#: perllib/FYR/Queue.pm:1621
+#: perllib/FYR/Queue.pm:1624
 msgid "Bad QUESTION (should be 0-5)"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1624
+#: perllib/FYR/Queue.pm:1627
 msgid "Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1627
+#: perllib/FYR/Queue.pm:1630
 msgid "Bad RESPONSE (should be an integer 0-10)"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1630
+#: perllib/FYR/Queue.pm:1633
 msgid "Bad RESPONSE (should be 'strongly_agree', 'agree', 'neutral', 'disagree' or 'strongly_disagree')"
 msgstr ""
 
@@ -81,361 +82,360 @@ msgstr ""
 msgid ""
 "Please try again later, or <a\n"
 "            href='/about-contact'>contact us</a> to let us know."
-msgstr ""
+msgstr "Ceisiwch eto nes ymlaen, neu <a href='/about-contact'>cysylltwch â ni</a> i roi gwybod i ni."
 
-#: phplib/fyr.php:168
+#: phplib/fyr.php:180
 msgid "Sorry, we are experiencing technical difficulties.  Please try again later."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, rydym yn profi anawsterau technegol. Ceisiwch eto nes ymlaen."
 
-#: phplib/fyr.php:306
+#: phplib/fyr.php:318
 msgid "Enter postcode"
-msgstr ""
+msgstr "Nodwch god post"
 
-#: phplib/fyr.php:307
+#: phplib/fyr.php:319
 msgid "Choose representative"
+msgstr "Dewiswch gynrychiolydd"
+
+#: phplib/fyr.php:320 phplib/fyr.php:327
+#, fuzzy
+msgid "Message type"
 msgstr ""
 
-#: phplib/fyr.php:308 phplib/fyr.php:314
+#: phplib/fyr.php:321 phplib/fyr.php:328
 msgid "Write message"
-msgstr ""
+msgstr "Ysgrifennu neges"
 
-#: phplib/fyr.php:309 phplib/fyr.php:315
+#: phplib/fyr.php:322 phplib/fyr.php:329
 msgid "Send message"
-msgstr ""
+msgstr "Anfon neges"
 
-#: phplib/fyr.php:313
+#: phplib/fyr.php:326
 msgid "Choose a Lord"
-msgstr ""
+msgstr "Dewiswch Arglwydd"
 
-#: phplib/votingarea.php:85
+#: phplib/votingarea.php:84
 msgid "London Borough Councillors"
-msgstr ""
+msgstr "Cynghorwyr Bwrdeistref Llundain"
+
+#: phplib/votingarea.php:86
+msgid "London Assembly Constituency Members"
+msgstr "Aelodau Etholaeth Cynulliad Llundain"
 
 #: phplib/votingarea.php:87
-msgid "London Assembly Constituency Members"
-msgstr ""
-
-#: phplib/votingarea.php:88
 msgid "London Assembly Party List Members"
-msgstr ""
+msgstr "Aelodau rhestr plaid Cynulliad Llundain"
 
-#: phplib/votingarea.php:90
+#: phplib/votingarea.php:89
 msgid "County Councillors"
-msgstr ""
+msgstr "Cynghorwyr Sir"
 
-#: phplib/votingarea.php:92
+#: phplib/votingarea.php:91
 msgid "District Councillors"
-msgstr ""
+msgstr "Cynghorwyr Dosbarth"
+
+#: phplib/votingarea.php:93
+msgid "Unitary Authority ED Councillors"
+msgstr "Cynghorwyr adrannau etholiadol yr Awdurdod Unedol"
 
 #: phplib/votingarea.php:94
-msgid "Unitary Authority ED Councillors"
-msgstr ""
-
-#: phplib/votingarea.php:95
 msgid "Unitary Authority Ward Councillors"
-msgstr ""
+msgstr "Cynghorwyr Ward yr Awdurdod Unedol"
 
-#: phplib/votingarea.php:97
+#: phplib/votingarea.php:96
 msgid "Local Government District Councillors"
-msgstr ""
+msgstr "Cynghorwyr Dosbarth Llywodraeth Leol"
 
-#: phplib/votingarea.php:99
+#: phplib/votingarea.php:98
 msgid "Councillors of the Isles"
-msgstr ""
+msgstr "Cynghorwyr yr Ynysoedd"
 
-#: phplib/votingarea.php:101
+#: phplib/votingarea.php:100
 msgid "Metropolitan District Councillors"
-msgstr ""
+msgstr "Cynghorwyr Dosbarth Prifddinesig"
+
+#: phplib/votingarea.php:102
+msgid "Scottish Parliament Party List Members"
+msgstr "Aelodau rhestr plaid Senedd yr Alban"
 
 #: phplib/votingarea.php:103
-msgid "Scottish Parliament Party List Members"
-msgstr ""
-
-#: phplib/votingarea.php:104
 msgid "Scottish Parliament Constituency Members"
-msgstr ""
+msgstr "Aelodau etholaeth Senedd yr Alban"
 
-#: phplib/votingarea.php:106
-msgid "Senedd Party List Members"
-msgstr ""
+#: phplib/votingarea.php:105
+msgid "Senedd Constituency Members"
+msgstr "Aelodau Etholaeth y Senedd"
 
 #: phplib/votingarea.php:107
-msgid "Senedd Constituency Members"
-msgstr ""
-
-#: phplib/votingarea.php:109
 msgid "Northern Ireland Assembly Members"
-msgstr ""
+msgstr "Aelodau Cynulliad Gogledd Iwerddon"
 
-#: phplib/votingarea.php:111 phplib/votingarea.php:312
-#: phplib/votingarea.php:313
+#: phplib/votingarea.php:109 phplib/votingarea.php:304
+#: phplib/votingarea.php:305
 msgid "Members of Parliament"
-msgstr ""
+msgstr "Aelodau Seneddol"
 
-#: phplib/votingarea.php:112
+#: phplib/votingarea.php:110
 msgid "Members of the House of Lords"
-msgstr ""
+msgstr "Aelodau Tŷ'r Arglwyddi"
 
-#: phplib/votingarea.php:114 phplib/votingarea.php:314
+#: phplib/votingarea.php:112 phplib/votingarea.php:306
 msgid "Members of the European Parliament"
-msgstr ""
+msgstr "Aelodau Senedd Ewrop"
+
+#: phplib/votingarea.php:174
+msgid "London Borough"
+msgstr "Bwrdeistref Llundain"
+
+#: phplib/votingarea.php:175 phplib/votingarea.php:187
+#: phplib/votingarea.php:194 phplib/votingarea.php:197
+msgid "ward"
+msgstr "ward"
 
 #: phplib/votingarea.php:177
-msgid "London Borough"
-msgstr ""
-
-#: phplib/votingarea.php:178 phplib/votingarea.php:190
-#: phplib/votingarea.php:197 phplib/votingarea.php:200
-msgid "ward"
-msgstr ""
-
-#: phplib/votingarea.php:180
 msgid "Greater London Authority"
-msgstr ""
+msgstr "Awdurdod Llundain Fwyaf"
 
-#: phplib/votingarea.php:182
+#: phplib/votingarea.php:179
 msgid "London Assembly"
-msgstr ""
+msgstr "Cynulliad Llundain"
 
-#: phplib/votingarea.php:183 phplib/votingarea.php:207
-#: phplib/votingarea.php:211 phplib/votingarea.php:214
-#: phplib/votingarea.php:221 phplib/votingarea.php:223
+#: phplib/votingarea.php:180 phplib/votingarea.php:204
+#: phplib/votingarea.php:207 phplib/votingarea.php:210
+#: phplib/votingarea.php:217 phplib/votingarea.php:219
 msgid "constituency"
-msgstr ""
+msgstr "etholaeth"
 
-#: phplib/votingarea.php:184 phplib/votingarea.php:206
-#: phplib/votingarea.php:210
+#: phplib/votingarea.php:181 phplib/votingarea.php:203
 msgid "Electoral Region"
-msgstr ""
+msgstr "Rhanbarth Etholiadol"
 
 #. Call it state so that Google Toolbar (and presumably others) can auto-fill.
-#: phplib/votingarea.php:186 web/write.php:244
+#: phplib/votingarea.php:183 web/write.php:244
 msgid "County"
-msgstr ""
+msgstr "Sir"
 
-#: phplib/votingarea.php:187 phplib/votingarea.php:196
+#: phplib/votingarea.php:184 phplib/votingarea.php:193
 msgid "Electoral Division"
-msgstr ""
+msgstr "Adran Etholiadol"
+
+#: phplib/votingarea.php:186
+msgid "District"
+msgstr "Dosbarth"
 
 #: phplib/votingarea.php:189
-msgid "District"
-msgstr ""
+msgid "Local Council"
+msgstr "Cyngor Lleol"
+
+#: phplib/votingarea.php:190
+msgid "Electoral Area"
+msgstr "Ardal Etholiadol"
 
 #: phplib/votingarea.php:192
-msgid "Local Council"
-msgstr ""
-
-#: phplib/votingarea.php:193
-msgid "Electoral Area"
-msgstr ""
-
-#: phplib/votingarea.php:195
 msgid "Unitary Authority"
-msgstr ""
+msgstr "Awdurdod Unedol"
+
+#: phplib/votingarea.php:196
+msgid "Metropolitan District"
+msgstr "Dosbarth Prifddinesig"
 
 #: phplib/votingarea.php:199
-msgid "Metropolitan District"
-msgstr ""
+msgid "Council of the Isles"
+msgstr "Cyngor yr Ynysoedd"
+
+#: phplib/votingarea.php:200
+msgid "parish"
+msgstr "plwyf"
 
 #: phplib/votingarea.php:202
-msgid "Council of the Isles"
-msgstr ""
-
-#: phplib/votingarea.php:203
-msgid "parish"
-msgstr ""
-
-#: phplib/votingarea.php:205
 msgid "Scottish Parliament"
-msgstr ""
+msgstr "Senedd yr Alban"
+
+#: phplib/votingarea.php:206
+msgid "Senedd"
+msgstr "Y Senedd"
 
 #: phplib/votingarea.php:209
-msgid "Senedd"
-msgstr ""
-
-#: phplib/votingarea.php:213
 msgid "Northern Ireland Assembly"
-msgstr ""
+msgstr "Cynulliad Gogledd Iwerddon"
 
 #. These are the same as the Westminster
 #. constituencies but return several members
 #. using a proportional system. It looks like
 #. most people just refer to them as
 #. "constituencies".
-#: phplib/votingarea.php:220
+#: phplib/votingarea.php:216
 msgid "House of Commons"
-msgstr ""
+msgstr "Tŷ'r Cyffredin"
 
-#: phplib/votingarea.php:222 templates/website/about-sidebar.html:9
-#: web/who.php:105 web/who.php:494
+#: phplib/votingarea.php:218 templates/website/about-sidebar.html:9
+#: web/who.php:111 web/who.php:501
 msgid "House of Lords"
-msgstr ""
+msgstr "Tŷ'r Arglwyddi"
 
-#: phplib/votingarea.php:225
+#: phplib/votingarea.php:221
 msgid "European Parliament"
-msgstr ""
+msgstr "Senedd Ewrop"
 
-#: phplib/votingarea.php:226
+#: phplib/votingarea.php:222
 msgid "region"
-msgstr ""
+msgstr "rhanbarth"
 
-#: phplib/votingarea.php:230 phplib/votingarea.php:236
-#: phplib/votingarea.php:237 phplib/votingarea.php:238
-#: phplib/votingarea.php:239 phplib/votingarea.php:240
-#: phplib/votingarea.php:252 phplib/votingarea.php:258
-#: phplib/votingarea.php:259 phplib/votingarea.php:260
-#: phplib/votingarea.php:261 phplib/votingarea.php:262
-msgid "councillor"
-msgstr ""
-
-#: phplib/votingarea.php:231 phplib/votingarea.php:253
-#: phplib/votingarea.php:331
-msgid "Mayor"
-msgstr ""
-
-#. "of London"?
-#: phplib/votingarea.php:232 phplib/votingarea.php:233
+#: phplib/votingarea.php:226 phplib/votingarea.php:232
+#: phplib/votingarea.php:233 phplib/votingarea.php:234
+#: phplib/votingarea.php:235 phplib/votingarea.php:236
+#: phplib/votingarea.php:247 phplib/votingarea.php:253
 #: phplib/votingarea.php:254 phplib/votingarea.php:255
+#: phplib/votingarea.php:256 phplib/votingarea.php:257
+msgid "councillor"
+msgstr "cynghorydd"
+
+#: phplib/votingarea.php:227 phplib/votingarea.php:248
+#: phplib/votingarea.php:322
+msgid "Mayor"
+msgstr "Meiri"
+
+#. "of London"?
+#: phplib/votingarea.php:228 phplib/votingarea.php:229
+#: phplib/votingarea.php:249 phplib/votingarea.php:250
 msgid "London Assembly Member"
-msgstr ""
+msgstr "Aelod Cynulliad Llundain"
 
-#: phplib/votingarea.php:234 phplib/votingarea.php:256
+#: phplib/votingarea.php:230 phplib/votingarea.php:251
 msgid "county councillor"
-msgstr ""
+msgstr "cynghorydd sir"
 
-#: phplib/votingarea.php:235 phplib/votingarea.php:257
+#: phplib/votingarea.php:231 phplib/votingarea.php:252
 msgid "district councillor"
-msgstr ""
+msgstr "cynghorydd dosbarth"
 
-#: phplib/votingarea.php:241 phplib/votingarea.php:242
-#: phplib/votingarea.php:320 phplib/votingarea.php:321
+#: phplib/votingarea.php:237 phplib/votingarea.php:238
+#: phplib/votingarea.php:312 phplib/votingarea.php:313
 msgid "MSP"
-msgstr ""
+msgstr "ASA"
 
-#: phplib/votingarea.php:243 phplib/votingarea.php:244
-#: phplib/votingarea.php:322 phplib/votingarea.php:323
+#: phplib/votingarea.php:239 phplib/votingarea.php:314
 msgid "MS"
-msgstr ""
+msgstr "AS"
 
-#: phplib/votingarea.php:245 phplib/votingarea.php:324
+#: phplib/votingarea.php:240 phplib/votingarea.php:315
 msgid "MLA"
-msgstr ""
+msgstr "ACD"
 
-#: phplib/votingarea.php:246 phplib/votingarea.php:325
+#: phplib/votingarea.php:241 phplib/votingarea.php:316
 msgid "MP"
-msgstr ""
+msgstr "AS"
 
-#: phplib/votingarea.php:247
+#: phplib/votingarea.php:242
 msgid "Lord"
-msgstr ""
+msgstr "Arglwydd"
 
-#: phplib/votingarea.php:248 phplib/votingarea.php:326
+#: phplib/votingarea.php:243 phplib/votingarea.php:317
 msgid "MEP"
-msgstr ""
+msgstr "ASE"
 
-#: phplib/votingarea.php:263 phplib/votingarea.php:264
+#: phplib/votingarea.php:258 phplib/votingarea.php:259
 msgid "Member of the Scottish Parliament"
-msgstr ""
+msgstr "Aelod Senedd yr Alban"
 
-#: phplib/votingarea.php:265 phplib/votingarea.php:266
+#: phplib/votingarea.php:260
 msgid "Member of the Senedd"
-msgstr ""
+msgstr "Aelod o'r Senedd"
 
-#: phplib/votingarea.php:267
+#: phplib/votingarea.php:261
 msgid "Member of the Legislative Assembly"
-msgstr ""
+msgstr "Aelod o'r Cynulliad Deddfwriaethol"
 
-#: phplib/votingarea.php:268 phplib/votingarea.php:269
+#: phplib/votingarea.php:262 phplib/votingarea.php:263
 msgid "Member of Parliament"
-msgstr ""
+msgstr "Aelod Seneddol"
 
-#: phplib/votingarea.php:270
+#: phplib/votingarea.php:264
 msgid "Member of the European Parliament"
-msgstr ""
+msgstr "Aelod o Senedd Ewrop"
 
-#: phplib/votingarea.php:274 phplib/votingarea.php:280
-#: phplib/votingarea.php:281 phplib/votingarea.php:282
-#: phplib/votingarea.php:283 phplib/votingarea.php:284
-#: phplib/votingarea.php:296 phplib/votingarea.php:302
-#: phplib/votingarea.php:303 phplib/votingarea.php:304
-#: phplib/votingarea.php:305 phplib/votingarea.php:306
-msgid "councillors"
-msgstr ""
-
-#: phplib/votingarea.php:275 phplib/votingarea.php:297
-msgid "Mayors"
-msgstr ""
-
-#. "of London"?
-#: phplib/votingarea.php:276 phplib/votingarea.php:277
+#: phplib/votingarea.php:268 phplib/votingarea.php:274
+#: phplib/votingarea.php:275 phplib/votingarea.php:276
+#: phplib/votingarea.php:277 phplib/votingarea.php:278
+#: phplib/votingarea.php:289 phplib/votingarea.php:295
+#: phplib/votingarea.php:296 phplib/votingarea.php:297
 #: phplib/votingarea.php:298 phplib/votingarea.php:299
-msgid "London Assembly Members"
-msgstr ""
+msgid "councillors"
+msgstr "Cynghorwyr"
 
-#: phplib/votingarea.php:278 phplib/votingarea.php:300
-msgid "county councillors"
-msgstr ""
-
-#: phplib/votingarea.php:279 phplib/votingarea.php:301
-msgid "district councillors"
-msgstr ""
-
-#: phplib/votingarea.php:285 phplib/votingarea.php:286
-msgid "MSPs"
-msgstr ""
-
-#: phplib/votingarea.php:287 phplib/votingarea.php:288
-msgid "MSs"
-msgstr ""
-
-#: phplib/votingarea.php:289
-msgid "MLAs"
-msgstr ""
-
-#: phplib/votingarea.php:290
-msgid "MPs"
-msgstr ""
-
-#: phplib/votingarea.php:291
-msgid "Lords"
-msgstr ""
-
-#: phplib/votingarea.php:292
-msgid "MEPs"
-msgstr ""
-
-#: phplib/votingarea.php:307 phplib/votingarea.php:308
-msgid "Members of the Scottish Parliament"
-msgstr ""
-
-#: phplib/votingarea.php:309 phplib/votingarea.php:310
-msgid "Members of the Senedd"
-msgstr ""
-
-#: phplib/votingarea.php:311
-msgid "Members of the Legislative Assembly"
-msgstr ""
-
-#: phplib/votingarea.php:318 phplib/votingarea.php:319
-msgid "AM"
-msgstr ""
+#: phplib/votingarea.php:269 phplib/votingarea.php:290
+msgid "Mayors"
+msgstr "Maer"
 
 #. "of London"?
-#: phplib/votingarea.php:330 phplib/votingarea.php:332
-#: phplib/votingarea.php:333 phplib/votingarea.php:334
-#: phplib/votingarea.php:335 phplib/votingarea.php:336
-#: phplib/votingarea.php:337 phplib/votingarea.php:338
-msgid "Cllr"
-msgstr ""
+#: phplib/votingarea.php:270 phplib/votingarea.php:271
+#: phplib/votingarea.php:291 phplib/votingarea.php:292
+msgid "London Assembly Members"
+msgstr "Aelodau Cynulliad Llundain"
 
-#: phplib/votingarea.php:346
+#: phplib/votingarea.php:272 phplib/votingarea.php:293
+msgid "county councillors"
+msgstr "Cynghorwyr Sir"
+
+#: phplib/votingarea.php:273 phplib/votingarea.php:294
+msgid "district councillors"
+msgstr "Cynghorwyr Dosbarth"
+
+#: phplib/votingarea.php:279 phplib/votingarea.php:280
+msgid "MSPs"
+msgstr "Aelodau Seneddol"
+
+#: phplib/votingarea.php:281
+msgid "MSs"
+msgstr "ASau"
+
+#: phplib/votingarea.php:282
+msgid "MLAs"
+msgstr "MLAu"
+
+#: phplib/votingarea.php:283
+msgid "MPs"
+msgstr "ASau"
+
+#: phplib/votingarea.php:284
+msgid "Lords"
+msgstr "Arglwyddi"
+
+#: phplib/votingarea.php:285
+msgid "MEPs"
+msgstr "ASEau"
+
+#: phplib/votingarea.php:300 phplib/votingarea.php:301
+msgid "Members of the Scottish Parliament"
+msgstr "Aelodau Senedd yr Alban"
+
+#: phplib/votingarea.php:302
+msgid "Members of the Senedd"
+msgstr "Aelodau'r Senedd"
+
+#: phplib/votingarea.php:303
+msgid "Members of the Legislative Assembly"
+msgstr "Aelodau'r Cynulliad Deddfwriaethol"
+
+#: phplib/votingarea.php:310 phplib/votingarea.php:311
+msgid "AM"
+msgstr "AC"
+
+#. "of London"?
+#: phplib/votingarea.php:321 phplib/votingarea.php:323
+#: phplib/votingarea.php:324 phplib/votingarea.php:325
+#: phplib/votingarea.php:326 phplib/votingarea.php:327
+#: phplib/votingarea.php:328 phplib/votingarea.php:329
+msgid "Cllr"
+msgstr "Y Cynghorydd"
+
+#: phplib/votingarea.php:337
 msgid ""
 "The District Council is responsible for\n"
 "            <strong>local services</strong>, including <strong>planning</strong>, <strong>council housing</strong>, and\n"
 "            <strong>rubbish collection</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Dosbarth yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>tai cyngor</strong>, a <strong>chasglu sbwriel</strong>."
 
-#: phplib/votingarea.php:349
+#: phplib/votingarea.php:340
 msgid ""
 "\n"
 "The Borough Council is responsible for <strong>local services</strong>,\n"
@@ -443,8 +443,10 @@ msgid ""
 "<strong>rubbish collection</strong>, <strong>local roads</strong>, and\n"
 "<strong>public paths</strong>.\n"
 msgstr ""
+"\n"
+"Mae'r Cyngor Bwrdeistrefol yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>tai cyngor</strong>, <strong>casglu ysbwriel</strong>, <strong>ffyrdd lleol</strong>, a <strong>llwybrau cyhoeddus</strong>.\n"
 
-#: phplib/votingarea.php:355
+#: phplib/votingarea.php:346
 msgid ""
 "\n"
 "Areas covered include the\n"
@@ -452,26 +454,28 @@ msgid ""
 "<strong>health</strong>, <strong>planning</strong>, <strong>transport</strong>,\n"
 "and <strong>trunk roads</strong>.\n"
 msgstr ""
+"\n"
+"Dyma’r meysydd a gwmpesir yn cynnwys cyllideb y Maer, <strong>diwylliant</strong>, <strong>chwaraeon a thwristiaeth</strong>, <strong>iechyd</strong>, <strong>cynllunio</strong>, <strong>trafnidiaeth</strong>, a <strong>phriffyrdd</strong>.\n"
 
-#: phplib/votingarea.php:362
+#: phplib/votingarea.php:353
 msgid ""
 "The Metropolitan District Council is\n"
 "responsible for all aspects of <strong>local services and policy</strong>, including\n"
 "<strong>planning</strong>, <strong>transport</strong>,\n"
 "<strong>roads</strong> (except trunk roads and motorways), public rights of way,\n"
 "<strong>education</strong>, <strong>social services</strong> and <strong>libraries</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Dosbarth Prifddinesig yn gyfrifol am bob agwedd o <strong>bolisi a gwasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>trafnidiaeth</strong>, <strong>ffyrdd</strong> (heblaw priffyrdd a thraffyrdd), hawliau tramwy cyhoeddus, <strong>addysg</strong>, <strong>gwasanaethau cymdeithasol</strong> a <strong>llyfrgelloedd</strong>."
 
-#: phplib/votingarea.php:368
+#: phplib/votingarea.php:359
 msgid ""
 "The Unitary Authority is\n"
 "responsible for all aspects of <strong>local services and policy</strong>, including\n"
 "<strong>planning</strong>, <strong>transport</strong>,\n"
 "<strong>roads</strong> (except trunk roads and motorways), public rights of way,\n"
 "<strong>education</strong>, <strong>social services</strong> and <strong>libraries</strong>."
-msgstr ""
+msgstr "Mae'r Awdurdod Unedol yn gyfrifol am bob agwedd o <strong>bolisi a gwasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>trafnidiaeth</strong>, <strong>ffyrdd</strong> (heblaw priffyrdd a thraffyrdd), hawliau tramwy cyhoeddus, <strong>addysg</strong>, <strong>gwasanaethau cymdeithasol</strong> a <strong>llyfrgelloedd</strong>."
 
-#: phplib/votingarea.php:373
+#: phplib/votingarea.php:364
 msgid ""
 "\n"
 "The Council of the Isles is responsible for <strong>education</strong>,\n"
@@ -480,17 +484,19 @@ msgid ""
 "<strong>tourism</strong>, <strong>development</strong> and running <strong>the\n"
 "airport</strong>.\n"
 msgstr ""
+"\n"
+"Mae Cyngor yr Ynysoedd yn gyfrifol am <strong>addysg</strong>, <strong>tai</strong>, <strong>cynllunio</strong>, <strong>dŵr a charthffosiaeth</strong> ac amryw o faterion lleol eraill gan gynnwys <strong>twristiaeth</strong>, <strong>datblygu</strong> a rheoli’r <strong>maes awyr</strong>.\n"
 
-#: phplib/votingarea.php:381 templates/website/yourrep/ced.html:1
+#: phplib/votingarea.php:372 templates/website/yourrep/ced.html:1
 msgid ""
 "The County Council is responsible for <strong>local\n"
 "services</strong>, including <strong>education</strong>, <strong>social services</strong>,\n"
 "<strong>transport</strong>, <strong>roads</strong>\n"
 "(except trunk roads and motorways), public rights of way, and\n"
 "<strong>libraries</strong>."
-msgstr ""
+msgstr "Y Cyngor Sir sy'n gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>addysg</strong>, <strong>gwasanaethau cymdeithasol</strong>, <strong>trafnidiaeth</strong>, <strong>ffyrdd</strong> (heblaw priffyrdd a thraffyrdd), hawliau tramwy cyhoeddus, a <strong>llyfrgelloedd</strong>."
 
-#: phplib/votingarea.php:387
+#: phplib/votingarea.php:378
 msgid ""
 "The Local Council is responsible for\n"
 "            <strong>local services</strong>, including \n"
@@ -498,24 +504,26 @@ msgid ""
 "            <strong>leisure and community</strong>, \n"
 "            <strong>building control</strong> and\n"
 "            <strong>local economic and cultural development</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Lleol yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>gwastraff ac ailgylchu</strong>, <strong>hamdden a chymuned</strong>, <strong>rheoli adeiladu</strong> a <strong>datblygu economaidd a diwylliannol lleol</strong>."
 
-#: phplib/votingarea.php:394
+#: phplib/votingarea.php:385
 msgid ""
 "The House of Commons is responsible for\n"
 "            <strong>making laws in the UK and for overall scrutiny of all aspects of\n"
 "            government</strong>."
-msgstr ""
+msgstr "Mae Tŷ'r Cyffredin yn gyfrifol am <strong>greu cyfraith yn y DU ac am graffu cyffredinol ar bob agwedd ar lywodraeth</strong>."
 
-#: phplib/votingarea.php:397
+#: phplib/votingarea.php:388
 msgid ""
 "\n"
 "They <strong>scrutinise proposed European laws</strong> and the <strong>budget of the\n"
 "European Union</strong>, and provide <strong>oversight of its other\n"
 "decision-making bodies</strong>.\n"
 msgstr ""
+"\n"
+"Maent yn <strong>gwyntyllu cyfreithiau Ewropeaidd arfaethedig</strong> a <strong>chyllideb yr Undeb Ewropeaidd</strong>, ac yn darparu <strong>goruchwyliaeth o'i gyrff sy’n gyfrifol am benderfyniadau eraill</strong>.\n"
 
-#: phplib/votingarea.php:402
+#: phplib/votingarea.php:393
 msgid ""
 "\n"
 "The Scottish Parliament is responsible for a wide range of <strong>devolved\n"
@@ -524,8 +532,10 @@ msgid ""
 "<strong>health</strong>, <strong>agriculture</strong>, <strong>justice</strong>\n"
 "and <strong>prisons</strong>. It also has some tax-raising powers.\n"
 msgstr ""
+"\n"
+"Mae Senedd yr Alban yn gyfrifol am ystod eang o <strong>faterion datganoledig</strong> lle mae'n gosod polisi yn annibynnol o Senedd San Steffan yn Llundain. Mae materion datganoledig yn cynnwys <strong>addysg</strong>, <strong>iechyd</strong>, <strong>amaethyddiaeth</strong>, <strong>cyfiawnder</strong> a <strong>charchardai</strong>. Mae ganddi hefyd rai pwerau codi trethi.\n"
 
-#: phplib/votingarea.php:409
+#: phplib/votingarea.php:400
 msgid ""
 "\n"
 "The Senedd has a wide range of powers over areas including\n"
@@ -534,8 +544,10 @@ msgid ""
 "<strong>health</strong>, <strong>housing</strong> and <strong>the Welsh\n"
 "Language</strong>.\n"
 msgstr ""
+"\n"
+"Mae gan Y Senedd ystod eang o rymoedd dros feysydd gan gynnwys <strong>datblygiad economaidd</strong>, <strong>trafnidiaeth</strong>, <strong>cyllid</strong>, <strong>llywodraeth leol</strong>, <strong>iechyd</strong>, <strong>tai</strong> a’r <strong>iaith Gymraeg</strong>.\n"
 
-#: phplib/votingarea.php:416
+#: phplib/votingarea.php:407
 msgid ""
 "\n"
 "The Northern Ireland Assembly has full authority over \"transferred matters\",\n"
@@ -543,18 +555,20 @@ msgid ""
 "<strong>employment</strong>, the <strong>environment</strong> and\n"
 "<strong>health</strong>.\n"
 msgstr ""
+"\n"
+"Mae gan Gynulliad Gogledd Iwerddon awdurdod llawn dros \"faterion a drosglwyddwyd\", sy'n cynnwys <strong>amaethyddiaeth</strong>, <strong>addysg</strong>, <strong>cyflogaeth</strong>, yr <strong>amgylchledd</strong> ac <strong>iechyd</strong>.\n"
 
 #: templates/common_header.php:42
 msgid "WriteToThem is a website which provides an easy way to contact MPs, councillors and other elected representatives."
-msgstr ""
+msgstr "Mae WriteToThem yn wefan sy'n darparu ffordd hawdd o gysylltu ag ASau, cynghorwyr a chynrychiolwyr etholedig eraill."
 
-#: templates/common_header.php:138
+#: templates/common_header.php:140
 msgid "Opens in a new window"
-msgstr ""
+msgstr "Yn agor mewn ffenestr newydd"
 
-#: templates/common_header.php:138 templates/website/footer.php:15
+#: templates/common_header.php:140 templates/website/footer.php:15
 msgid "Help"
-msgstr ""
+msgstr "Cymorth"
 
 #: templates/website/about-branded.html:3
 #: templates/website/about-branded.html:14
@@ -831,8 +845,8 @@ msgid "What postcode should I use?"
 msgstr ""
 
 #: templates/website/about-sidebar.html:8
-#: templates/website/about-yourrep.html:3
-#: templates/website/about-yourrep.html:57
+#: templates/website/about-yourrep.html:5
+#: templates/website/about-yourrep.html:41
 msgid "Who should I write to?"
 msgstr ""
 
@@ -864,317 +878,317 @@ msgstr ""
 msgid "Contact us"
 msgstr ""
 
-#: templates/website/about-yourrep.html:68
+#: templates/website/about-yourrep.html:52
 #, php-format
 msgid "Showing advice for representatives in <strong>%s</strong>. Enter a different postcode to see advice for another area."
-msgstr ""
+msgstr "Yn dangos cyngor i gynrychiolwyr yn <strong>%s</strong>. Nodwch god post gwahanol i weld cyngor ar gyfer ardal arall."
 
-#: templates/website/about-yourrep.html:70
+#: templates/website/about-yourrep.html:54
 msgid "Enter your postcode to see advice tailored to your representatives."
-msgstr ""
+msgstr "Nodwch eich cod post i weld cyngor parthed eich cynrychiolwyr chi."
 
-#: templates/website/about-yourrep.html:78
+#: templates/website/about-yourrep.html:62
 msgid "Update"
-msgstr ""
+msgstr "Diweddariad"
 
-#: templates/website/about-yourrep.html:86 templates/website/yourrep/mp.html:1
+#: templates/website/about-yourrep.html:70 templates/website/yourrep/mp.html:1
 msgid "When should I contact my MP?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu â'm AS?"
 
-#: templates/website/about-yourrep.html:87
+#: templates/website/about-yourrep.html:71
 msgid "When should I contact a councillor?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu â chynghorydd?"
 
-#: templates/website/about-yourrep.html:88 templates/website/yourrep/msp.html:1
+#: templates/website/about-yourrep.html:72 templates/website/yourrep/msp.html:1
 msgid "When should I contact an MSP?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu ag ASA?"
 
-#: templates/website/about-yourrep.html:89
+#: templates/website/about-yourrep.html:73
 msgid "When should I contact an MLA?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu ag ACD?"
 
-#: templates/website/about-yourrep.html:90 templates/website/yourrep/am.html:1
+#: templates/website/about-yourrep.html:74 templates/website/yourrep/am.html:1
 msgid "When should I contact a Senedd Member?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu ag Aelod o'r Senedd?"
 
-#: templates/website/about-yourrep.html:91
+#: templates/website/about-yourrep.html:75
 msgid "When should I contact a Greater London Assembly Member?"
-msgstr ""
+msgstr "Pryd ddylwn i gysylltu ag Aelod Cynulliad Llundain Fwyaf?"
 
-#: templates/website/about-yourrep.html:109
+#: templates/website/about-yourrep.html:93
 msgid "Write to your councillor"
-msgstr ""
+msgstr "Ysgrifennwch at eich cynghorydd"
 
-#: templates/website/about-yourrep.html:117
+#: templates/website/about-yourrep.html:101
 msgid "Write to your MSP"
-msgstr ""
+msgstr "Ysgrifennwch at eich ASA"
 
-#: templates/website/about-yourrep.html:123
+#: templates/website/about-yourrep.html:107
 msgid "Write to your MLA"
-msgstr ""
+msgstr "Ysgrifennwch at eich ACD"
 
-#: templates/website/about-yourrep.html:129
+#: templates/website/about-yourrep.html:113
 msgid "Write to your Senedd Member"
-msgstr ""
+msgstr "Ysgrifennwch at eich Aelod o'r Senedd"
 
-#: templates/website/about-yourrep.html:135
+#: templates/website/about-yourrep.html:119
 msgid "Write to your London Assembly Member"
-msgstr ""
+msgstr "Ysgrifennwch at eich Aelod Cynulliad Llundain"
 
-#: templates/website/about-yourrep.html:150
+#: templates/website/about-yourrep.html:134
 msgid "Write to your MP"
-msgstr ""
+msgstr "Ysgrifennwch at eich AS"
 
 #: templates/website/can-you-help.html:4
 msgid "Can you help other people who need to send a message?"
-msgstr ""
+msgstr "Allwch chi helpu pobl eraill sydd angen anfon neges?"
 
 #: templates/website/can-you-help.html:6
 msgid "With your support, we can help more people get their message to the right place."
-msgstr ""
+msgstr "Gyda'ch cefnogaeth chi, gallwn helpu mwy o bobl i gael eu neges i'r lle iawn."
 
-#: templates/website/can-you-help.html:7 templates/website/footer.php:30
+#: templates/website/can-you-help.html:7 templates/website/footer.php:32
 msgid "Donate now"
-msgstr ""
+msgstr "Cyfrannu nawr"
 
 #: templates/website/confirm-accept.html:3
 msgid "We’ll send your message now"
-msgstr ""
+msgstr "Byddwn yn anfon eich neges nawr"
 
 #: templates/website/confirm-accept.html:28
 msgid "Your message is on its way"
-msgstr ""
+msgstr "Mae eich neges ar ei ffordd"
 
 #: templates/website/confirm-accept.html:30
 msgid "If there is a problem getting your message through, we will email you to tell you. Otherwise, you can sit back and relax."
-msgstr ""
+msgstr "Os oes problem o ran danfon eich neges, byddwn yn anfon e-bost atoch i ddweud wrthych. Fel arall, gallwch eistedd yn ôl ac ymlacio."
 
 #: templates/website/confirm-accept.html:36
 msgid "If you have time could you answer a couple of questions?"
-msgstr ""
+msgstr "Os oes gennych amser, allech chi ateb cwpl o gwestiynau?"
 
 #: templates/website/confirm-accept.html:38
 msgid "We use this information in combination with your postcode to understand what people in different parts of the country are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas."
-msgstr ""
+msgstr "Rydym yn defnyddio'r wybodaeth hon ar y cyd â'ch cod post i ddeall beth mae pobl mewn gwahanol rannau o'r wlad yn ysgrifennu at eu cynrychiolwyr amdano. Nid ydym yn cyhoeddi'r ymatebion / codau post amrwd, dim ond crynodebau o'r pynciau a'r meysydd cyffredinol."
 
 #: templates/website/confirm-accept.html:56
 msgid "Your message may be slow to deliver, because we do not have a direct contact address for your representatives. Instead we are sending the message via the body to which they were elected."
-msgstr ""
+msgstr "Efallai y bydd eich neges yn araf i'w chyflwyno, oherwydd nid oes gennym gyfeiriad cyswllt uniongyrchol ar gyfer eich cynrychiolwyr. Yn hytrach, rydym yn anfon y neges trwy'r corff y cawsant eu hethol iddo."
 
 #: templates/website/confirm-accept.html:58
 #, php-format
 msgid "Your message may be slow to deliver, because we do not have a direct contact address for %s. Instead we are sending the message via the body to which they were elected."
-msgstr ""
+msgstr "Mae'n bosib bod eich neges yn araf i'w chyflwyno, am nad oes gennym gyfeiriad cyswllt uniongyrchol ar gyfer %s. Yn hytrach, rydym yn anfon y neges trwy'r corff y cawsant eu hethol iddo."
 
 #: templates/website/confirm-accept.html:67
 msgid "Common Questions"
-msgstr ""
+msgstr "Cwestiynau Cyffredin"
 
 #: templates/website/confirm-accept.html:72
 msgid "What should I do if my representatives don’t reply?"
-msgstr ""
+msgstr "Beth ddylwn i ei wneud os nad yw fy nghynrychiolwyr yn ymateb?"
 
 #: templates/website/confirm-accept.html:74
 #, php-format
 msgid "What should I do if %s doesn’t reply?"
-msgstr ""
+msgstr "Beth ddylwn i ei wneud os nad yw %s yn ateb?"
 
 #: templates/website/confirm-accept.html:77
 #: templates/website/cy/about-qa.html:39 templates/website/cy/about-qa.html:207
 msgid "Can you guarantee my message will be sent?"
-msgstr ""
+msgstr "Allwch chi warantu y bydd fy neges yn cael ei hanfon?"
 
 #: templates/website/confirm-accept.html:78
 msgid "How are messages sent?"
-msgstr ""
+msgstr "Sut mae negeseuon yn cael eu hanfon?"
 
 #: templates/website/confirm-accept.html:86
 msgid "Potholes, broken lights or graffiti?"
-msgstr ""
+msgstr "Tyllau ffordd, goleuadau wedi torri neu graffiti?"
 
 #: templates/website/confirm-accept.html:87
 #, php-format
 msgid "You can quickly and easily report common street-side problems to your council using <a href=\"%s\">FixMyStreet</a>."
-msgstr ""
+msgstr "Gallwch roi gwybod i'ch cyngor broblemau cyffredin ar ochr y stryd yn gyflym ac yn hawdd gan ddefnyddio <a href=\"%s\">FixMyStreet</a>."
 
 #: templates/website/confirm-accept.html:97
 #: templates/website/survey-thanks.html:37
 msgid "Photograph by Krzysztof Szkurlatowski"
-msgstr ""
+msgstr "Llun gan Krzysztof Szkurlatowski"
 
 #: templates/website/confirm-trouble.html:3
 msgid "Oops... Something didn’t quite work."
-msgstr ""
+msgstr "Wps...Doedd rhywbeth ddim yn gweithio"
 
 #: templates/website/confirm-trouble.html:13
 msgid "Oops&hellip; Something didn’t quite work."
-msgstr ""
+msgstr "Wps&hellip; Doedd rhywbeth ddim yn gweithio."
 
 #: templates/website/confirm-trouble.html:24
 #, php-format
 msgid "Thank you for trying to confirm your fax/email. We seem to have a problem though, so please let us know what went on and send a copy of the confirmation email to <a href=\"mailto:%s\">%s</a> and we’ll look into it."
-msgstr ""
+msgstr "Diolch am geisio cadarnhau eich ffacs/e-bost. Mae'n ymddangos bod gennym broblem serch hynny, felly rhowch wybod i ni beth ddigwyddodd ac anfonwch gopi o'r e-bost cadarnhau at <a href=\"mailto:%s\">%s</a> a byddwn yn edrych i mewn iddo."
 
 #: templates/website/cy/about-qa.html:27 templates/website/cy/about-qa.html:92
 msgid "About WriteToThem"
-msgstr ""
+msgstr "Ynglŷn â WriteToThem"
 
 #: templates/website/cy/about-qa.html:28 templates/website/cy/about-qa.html:94
 msgid "Is this a government website?"
-msgstr ""
+msgstr "A yw hon yn wefan y llywodraeth?"
 
 #: templates/website/cy/about-qa.html:29 templates/website/cy/about-qa.html:104
 msgid "Then who are you, and why are you doing this?"
-msgstr ""
+msgstr "Yna pwy ydych chi, a pham ydych chi'n gwneud hyn?"
 
 #: templates/website/cy/about-qa.html:30 templates/website/cy/about-qa.html:115
 msgid "Does it cost money to send a message?"
-msgstr ""
+msgstr "A yw'n costio arian i anfon neges?"
 
 #: templates/website/cy/about-qa.html:32 templates/website/cy/about-qa.html:124
 msgid "How WriteToThem works"
-msgstr ""
+msgstr "Sut mae WriteToThem yn gweithio"
 
 #: templates/website/cy/about-qa.html:33 templates/website/cy/about-qa.html:128
 msgid "How do I send a message to my representative?"
-msgstr ""
+msgstr "Sut ydw i'n anfon neges at fy nghynrychiolydd?"
 
 #: templates/website/cy/about-qa.html:34 templates/website/cy/about-qa.html:147
 msgid "How are messages sent to all the councillors, MPs etc.?"
-msgstr ""
+msgstr "Sut mae negeseuon yn cael eu hanfon at yr holl gynghorwyr, ASau ac ati?"
 
 #: templates/website/cy/about-qa.html:35 templates/website/cy/about-qa.html:159
 msgid "Can I send an attachment with my message?"
-msgstr ""
+msgstr "A allaf anfon atodiad gyda'm neges?"
 
 #: templates/website/cy/about-qa.html:36 templates/website/cy/about-qa.html:171
 msgid "I want to edit my message"
-msgstr ""
+msgstr "Dwi eisiau golygu fy neges"
 
 #: templates/website/cy/about-qa.html:37 templates/website/cy/about-qa.html:181
 msgid "How do I cancel my message?"
-msgstr ""
+msgstr "Sut mae canslo fy neges?"
 
 #: templates/website/cy/about-qa.html:38 templates/website/cy/about-qa.html:191
 msgid "Why do I have to confirm my message?"
-msgstr ""
+msgstr "Pam mae'n rhaid i mi gadarnhau fy neges?"
 
 #: templates/website/cy/about-qa.html:40 templates/website/cy/about-qa.html:219
 msgid "How do I know if my message has been sent?"
-msgstr ""
+msgstr "Sut ydw i'n gwybod a yw fy neges wedi'i hanfon?"
 
 #: templates/website/cy/about-qa.html:41 templates/website/cy/about-qa.html:229
 msgid "I want a copy of my letter for my own records"
-msgstr ""
+msgstr "Rwyf eisiau copi o fy llythyr ar gyfer fy nghofnodion fy hun"
 
 #: templates/website/cy/about-qa.html:42 templates/website/cy/about-qa.html:241
 msgid "Why shouldn&rsquo;t I copy and paste &ldquo;form&rdquo; letters?"
-msgstr ""
+msgstr "Why shouldn’t I copy and paste ‘form’ letters?"
 
 #: templates/website/cy/about-qa.html:43 templates/website/cy/about-qa.html:248
 msgid "Can’t you just give me the direct email address of my MP?"
-msgstr ""
+msgstr "Allwch chi ddim rhoi cyfeiriad e-bost uniongyrchol fy AS i mi?"
 
 #: templates/website/cy/about-qa.html:44 templates/website/cy/about-qa.html:267
 msgid "What’s the point of this site, when most representatives publish their email addresses these days?"
-msgstr ""
+msgstr "Beth yw pwynt y wefan hon, pan mae y rhan fwyaf o gynrychiolwyr yn cyhoeddi eu cyfeiriadau e-bost?"
 
 #: templates/website/cy/about-qa.html:46 templates/website/cy/about-qa.html:284
 msgid "Representatives"
-msgstr ""
+msgstr "Cynrychiolwyr"
 
 #: templates/website/cy/about-qa.html:47
 msgid "Why can&rsquo;t I write to any representative I like?"
-msgstr ""
+msgstr "Pam na allaf i ysgrifennu at unrhyw gynrychiolydd?"
 
 #: templates/website/cy/about-qa.html:48 templates/website/cy/about-qa.html:293
 msgid "Why can&rsquo;t I write to a Minister through the site?"
-msgstr ""
+msgstr "Pam na allaf i ysgrifennu at Weinidog trwy’r wefan?"
 
 #: templates/website/cy/about-qa.html:49 templates/website/cy/about-qa.html:311
 msgid "How can I write to a Lord through the site?"
-msgstr ""
+msgstr "Sut alla i ysgrifennu at Arglwydd drwy'r wefan?"
 
 #: templates/website/cy/about-qa.html:50 templates/website/cy/about-qa.html:325
 msgid "Will you add Police Commissioners or Parish Councillors to the site?"
-msgstr ""
+msgstr "A wnewch chi ychwanegu Comisiynwyr Heddlu neu Gynghorwyr Plwyf i'r safle?"
 
 #: templates/website/cy/about-qa.html:52 templates/website/cy/about-qa.html:337
 msgid "Problems"
-msgstr ""
+msgstr "Problemau"
 
 #: templates/website/cy/about-qa.html:53 templates/website/cy/about-qa.html:340
 msgid "WriteToThem doesn’t recognise my postcode"
-msgstr ""
+msgstr "Nid yw WriteToThem yn adnabod fy nghod post"
 
 #: templates/website/cy/about-qa.html:54 templates/website/cy/about-qa.html:355
 msgid "WriteToThem is showing me the wrong representatives"
-msgstr ""
+msgstr "Mae WriteToThem yn dangos y cynrychiolwyr anghywir i mi"
 
 #: templates/website/cy/about-qa.html:55 templates/website/cy/about-qa.html:371
 msgid "I want to write to my representative, but I got a message saying you don’t have their email address"
-msgstr ""
+msgstr "Rwyf am ysgrifennu at fy nghynrychiolydd, ond cefais neges yn dweud nad oes gennych eu cyfeiriad e-bost"
 
 #: templates/website/cy/about-qa.html:56 templates/website/cy/about-qa.html:381
 msgid "I did not receive my confirmation email"
-msgstr ""
+msgstr "Ni dderbyniais fy e-bost cadarnhau"
 
 #: templates/website/cy/about-qa.html:57 templates/website/cy/about-qa.html:396
 msgid "Please stop sending me all these emails!"
-msgstr ""
+msgstr "Peidiwch ag anfon yr holl negeseuon e-bost i mi!"
 
 #: templates/website/cy/about-qa.html:58 templates/website/cy/about-qa.html:413
 msgid "What do I do if I think something went wrong, or if I see an error on the site?"
-msgstr ""
+msgstr "Beth ydw i'n ei wneud os ydw i'n meddwl bod rhywbeth wedi mynd o'i le, neu os ydw i'n gweld gwall ar y wefan?"
 
 #: templates/website/cy/about-qa.html:60 templates/website/cy/about-qa.html:426
 #: templates/website/footer.php:21
 msgid "Privacy"
-msgstr ""
+msgstr "Preifatrwydd"
 
 #: templates/website/cy/about-qa.html:61 templates/website/cy/about-qa.html:429
 msgid "Why do you want my address, name, email address and phone number?"
-msgstr ""
+msgstr "Pam ydych chi eisiau fy nghyfeiriad, enw, cyfeiriad e-bost a rhif ffôn?"
 
 #: templates/website/cy/about-qa.html:62 templates/website/cy/about-qa.html:439
 msgid "What will you do with the personal information used by this site?"
-msgstr ""
+msgstr "Beth fyddwch chi'n ei wneud gyda'r wybodaeth bersonol a ddefnyddir gan y wefan hon?"
 
 #: templates/website/cy/about-qa.html:63 templates/website/cy/about-qa.html:447
 msgid "How private is my correspondence?"
-msgstr ""
+msgstr "Pa mor breifat yw fy ngohebiaeth?"
 
 #: templates/website/cy/about-qa.html:65 templates/website/cy/about-qa.html:460
 msgid "Next steps"
-msgstr ""
+msgstr "Camau nesaf"
 
 #: templates/website/cy/about-qa.html:66 templates/website/cy/about-qa.html:463
 msgid "How long should I wait for a reply?"
-msgstr ""
+msgstr "Pa mor hir ddylwn i aros am ateb?"
 
 #: templates/website/cy/about-qa.html:67 templates/website/cy/about-qa.html:475
 msgid "What should I do if my MP (or other representative) doesn’t reply?"
-msgstr ""
+msgstr "Beth ddylwn i ei wneud os nad yw fy AS (neu gynrychiolydd arall) yn ateb?"
 
 #: templates/website/cy/about-qa.html:68 templates/website/cy/about-qa.html:501
 msgid "I got a reply, but it was unsatisfactory"
-msgstr ""
+msgstr "Cefais ateb, ond roedd yn anfoddhaol"
 
 #: templates/website/cy/about-qa.html:69 templates/website/cy/about-qa.html:510
 msgid "I got a reply, but I don’t agree with it"
-msgstr ""
+msgstr "Cefais ateb, ond dydw i ddim yn cytuno ag ef"
 
 #: templates/website/cy/about-qa.html:70 templates/website/cy/about-qa.html:517
 msgid "Can you help me get my problem fixed?"
-msgstr ""
+msgstr "Allwch chi fy helpu i ddatrys fy mhroblem?"
 
 #: templates/website/cy/about-qa.html:72 templates/website/cy/about-qa.html:525
 msgid "Questionnaire and responsiveness"
-msgstr ""
+msgstr "Holiadur ac ymateboldeb"
 
 #: templates/website/cy/about-qa.html:73 templates/website/cy/about-qa.html:528
 msgid "Why do you send a follow-up email?"
-msgstr ""
+msgstr "Pam ydych chi'n anfon e-bost dilynol?"
 
 #: templates/website/cy/about-qa.html:74 templates/website/cy/about-qa.html:537
 msgid "What is the responsiveness league table?"
@@ -1182,39 +1196,39 @@ msgstr ""
 
 #: templates/website/cy/about-qa.html:75 templates/website/cy/about-qa.html:550
 msgid "None of the options in the questionnaire is suitable for my situation"
-msgstr ""
+msgstr "Nid oes unrhyw un o'r opsiynau yn yr holiadur yn addas ar gyfer fy sefyllfa"
 
 #: templates/website/cy/about-qa.html:76 templates/website/cy/about-qa.html:564
 msgid "I’m trying to register my response, but the link doesn’t work"
-msgstr ""
+msgstr "Rwy'n ceisio cofrestru fy ymateb, ond nid yw'r ddolen yn gweithio"
 
 #: templates/website/cy/about-qa.html:77 templates/website/cy/about-qa.html:576
 msgid "I need to change my response to the questionnaire"
-msgstr ""
+msgstr "Mae angen i mi newid fy ymateb i'r holiadur"
 
 #: templates/website/cy/about-qa.html:79 templates/website/cy/about-qa.html:584
 msgid "Feedback"
-msgstr ""
+msgstr "Adborth"
 
 #: templates/website/cy/about-qa.html:80 templates/website/cy/about-qa.html:585
 msgid "WriteToThem really helped me. How can I help you back?"
-msgstr ""
+msgstr "Roedd WriteToThem wedi yn gymorth mawr imi. Sut alla i eich helpu chi?"
 
 #: templates/website/cy/about-qa.html:81 templates/website/cy/about-qa.html:598
 msgid "I’ve got a suggestion for improving WriteToThem"
-msgstr ""
+msgstr "Mae gen i awgrym ar gyfer gwella WriteToThem"
 
 #: templates/website/cy/about-qa.html:83 templates/website/cy/about-qa.html:612
 msgid "Conditions of use"
-msgstr ""
+msgstr "Amodau defnyddio"
 
 #: templates/website/cy/about-qa.html:84 templates/website/cy/about-qa.html:614
 msgid "What types of message are not allowed?"
-msgstr ""
+msgstr "Pa fathau o negeseuon na chaniateir?"
 
 #: templates/website/cy/about-qa.html:87 templates/website/cy/about-qa.html:636
 msgid "Code"
-msgstr ""
+msgstr "Cod"
 
 #: templates/website/cy/about-qa.html:88
 msgid "I have an idea for a service similar to  WriteToThem. How would I set it up? Can I use your software?"
@@ -1624,7 +1638,7 @@ msgstr ""
 msgid ""
 "We’re very glad to hear it!\n"
 "\n"
-"If you would like to show your appreciation, please consider <a href=\"https://www.mysociety.org/donate/\">making a donation to mySociety</a>,\n"
+"If you would like to show your appreciation, please consider <a href=\"https://www.mysociety.org/donate/support-writetothem-and-mysociety/\">making a donation to mySociety</a>,\n"
 "who built and maintain WriteToThem.\n"
 "\n"
 "You can also help us greatly by spreading the word about the site. Tell all your friends, write to the local paper, or put a message on your library’s noticeboard. It all helps."
@@ -1752,89 +1766,132 @@ msgid ""
 "Here are the contents of your message</strong> &ndash;\n"
 "please copy and paste into a different application such as Word or Notepad\n"
 "to be sure you do not lose your message."
-msgstr ""
+msgstr "Dyma gynnwys eich neges</strong> &ndash; copïwch a gludwch i mewn i raglen wahanol megis Word neu Notepad i fod yn siŵr nad ydych chi'n colli eich neges."
 
 #: templates/website/footer.php:6
 msgid "WriteToThem"
-msgstr ""
+msgstr "WriteToThem"
 
 #: templates/website/footer.php:8
 msgid "Making it easy to write to the politicians who represent you &ndash; even if you don’t know who they are."
-msgstr ""
+msgstr "Gwneud hi'n hawdd ysgrifennu at y gwleidyddion sy'n eich cynrychioli chi &ndash; hyd yn oed os nad ydych chi'n gwybod pwy ydyn nhw."
 
 #: templates/website/footer.php:16
 msgid "Contact Us"
-msgstr ""
+msgstr "Cysylltu â ni"
 
 #: templates/website/footer.php:17
 msgid "Link To Us"
-msgstr ""
+msgstr "Link To Us"
 
-#: templates/website/footer.php:29
-msgid "Your donations keep this site and others like it running"
-msgstr ""
+#: templates/website/footer.php:30
+msgid "Support WriteToThem"
+msgstr "Cefnogi WriteToThem"
 
-#: templates/website/footer.php:44
+#: templates/website/footer.php:31
+msgid "We are a charity – donate today to invest in making UK politics more accessible. Even £5 goes a long way!"
+msgstr "Rydym yn elusen – cyfrannwch heddiw i fuddsoddi mewn gwneud gwleidyddiaeth y DU yn fwy hygyrch. Mae pob £5 o fudd!"
+
+#: templates/website/footer.php:46
 #, php-format
 msgid "Built by <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-footer__org__logo--mysociety\">mySociety</a>"
-msgstr ""
+msgstr "Adeiladwyd gan <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-footer__org__logo--mysociety\">mySociety</a>"
 
-#: templates/website/footer.php:53
+#: templates/website/footer.php:55
 msgid "Data by GovEval"
-msgstr ""
+msgstr "Data gan GovEval"
 
-#: templates/website/footer.php:54
+#: templates/website/footer.php:56
 msgid "Hosted by Mythic Beasts"
-msgstr ""
+msgstr "Gwe-letya gan Mythic Beasts"
 
-#: templates/website/footer.php:61
+#: templates/website/footer.php:63
 #, php-format
 msgid "<a href=\"%s\">mySociety</a> is a registered charity in England and Wales (1076346) and a limited company (03277032). We provide commercial services through our wholly owned subsidiary <a href=\"%s\">SocietyWorks Ltd</a> (05798215)."
-msgstr ""
+msgstr "Mae <a href=\"%s\">mySociety</a> yn elusen gofrestredig yng Nghymru a Lloegr (1076346) ac yn gwmni cyfyngedig (03277032). Rydym yn darparu gwasanaethau masnachol drwy ein his-gwmni sy'n eiddo’n llwyr i<a href=\"%s\">SocietyWorks Ltd</a> (05798215)."
 
 #: templates/website/index-advice.html:35
-#: templates/website/index-advice.html:38
-msgid "Did you type the letter "
-msgstr ""
+msgid "Did you type the letter ‘O’ instead of a zero?"
+msgstr "A wnaethoch chi deipio'r llythyren 'O' yn lle sero?"
 
 #: templates/website/index-advice.html:36
 msgid "This is an easy mistake to make. The most likely culprit is the first digit in the second part of the code. You need to put, for example: <code>N8 0NP</code>  rather than <code>N8 ONP</code>."
-msgstr ""
+msgstr "Mae hwn yn gamgymeriad hawdd i'w wneud. Y broblem fwyaf tebygol yw'r digid cyntaf yn ail ran y cod. Mae angen i chi roi, er enghraifft: <code>N8 0NP</code> yn hytrach na <code>N8 ONP</code>."
+
+#: templates/website/index-advice.html:38
+msgid "Did you type the letter ‘I’ instead of a figure 1?"
+msgstr "A wnaethoch chi deipio'r llythyren 'I' yn lle ffigur 1?"
 
 #: templates/website/index-advice.html:39
 msgid "Like the error above, this is easy enough to do. Again, the most likely culprit is the first digit in the second part of the code. You need to put, for example: <code>BD3 1RF</code> rather than <code>BD3 IRF</code>."
-msgstr ""
+msgstr "Fel y gwall uchod, mae hyn yn ddigon hawdd i'w wneud. Unwaith eto, y broblem fwyaf tebygol yw'r digid cyntaf yn ail ran y cod. Mae angen i chi roi, er enghraifft: <code>BD3 1RF</code> yn hytrach na <code>BD3 IRF</code>."
 
 #: templates/website/index-advice.html:41
 msgid "If neither of the above applies, but you’re still having no luck, try these tips:"
-msgstr ""
+msgstr "Os nad yw'r naill na'r llall o'r uchod yn berthnasol, ond nad ydych chi'n dal i gael llwyddiant, rhowch gynnig ar yr awgrymiadau hyn:"
 
 #: templates/website/index-advice.html:43
 msgid "It is quite possible the Royal Mail has changed this postcode (it is surprisingly common). You can check by using <a href=\"https://www.royalmail.com/find-a-postcode\">the Royal Mail postcode finder site</a>."
-msgstr ""
+msgstr "Mae'n ddigon posibl bod y Post Brenhinol wedi newid y cod post hwn (mae'n rhyfeddol o gyffredin). Gallwch wirio trwy ddefnyddio <a href=\"https://www.royalmail.com/find-a-postcode\">safle darganfod cod post y Post Brenhinol</a>."
 
 #: templates/website/index-advice.html:44
 msgid "If you aren’t sure what postcode to use, for example you are an expat, in the armed forces, are homeless or a prisoner, read \"<a href=\"/about-constituency\">What postcode should I use?</a>\"."
-msgstr ""
+msgstr "Os nad ydych chi'n siŵr pa god post i'w ddefnyddio, er enghraifft rydych chi'n alltud, yn y lluoedd arfog, yn ddigartref neu'n garcharor, darllenwch \"<a href=\"/about-constituency\">Pa god post ddylwn i ei ddefnyddio?</a>\"."
 
 #: templates/website/index-advice.html:47
 msgid "Worries you can rule out:"
-msgstr ""
+msgstr "Pryderon y gallwch eu diystyru:"
 
 #: templates/website/index-advice.html:49
 msgid "It makes no difference whether you leave a space between the two parts of the postcode: we will recognise it either way."
-msgstr ""
+msgstr "Nid yw'n gwneud unrhyw wahaniaeth os ydych chi'n gadael gofod rhwng y ddwy ran o'r cod post: byddwn yn ei adnabod y naill ffordd neu'r llall."
 
 #: templates/website/index-advice.html:50
 msgid "It makes no difference whether you use capital letters or not."
-msgstr ""
+msgstr "Nid yw'n gwneud unrhyw wahaniaeth a ydych chi'n defnyddio priflythrennau ai peidio."
 
-#: templates/website/index-index.html:53
+#: templates/website/index-index.html:61
 msgid "You may also have representatives at other levels of government."
-msgstr ""
+msgstr "Efallai y bydd gennych hefyd gynrychiolwyr ar lefelau eraill o lywodraeth."
 
-#: templates/website/index-index.html:64
+#: templates/website/index-index.html:72
 msgid "Photograph by Rick Harrison"
+msgstr "Llun gan Rick Harrison"
+
+#: templates/website/message-type.html:3 templates/website/message-type.html:21
+msgid "What is your message about?"
+msgstr "Beth yw eich neges?"
+
+#: templates/website/message-type.html:23
+msgid "This helps us give you the best guidance for writing your message."
+msgstr "Mae hyn yn ein helpu i roi'r arweiniad gorau i chi ar gyfer ysgrifennu eich neges."
+
+#: templates/website/message-type.html:45 web/confirm.php:51
+msgid "I need help with a problem"
+msgstr "Mae angen help arnaf gyda phroblem"
+
+#: templates/website/message-type.html:46 web/confirm.php:51
+msgid "A personal issue you'd like your representative to help with, such as housing, benefits, or a local concern."
+msgstr "Mater personol yr hoffech i'ch cynrychiolydd helpu gydag ef, fel tai, budd-daliadau, neu bryder lleol."
+
+#: templates/website/message-type.html:53 web/confirm.php:55
+msgid "I want to talk about a policy or campaign"
+msgstr "Rydw i eisiau siarad am bolisi neu ymgyrch"
+
+#: templates/website/message-type.html:54 web/confirm.php:55
+msgid "You want to persuade your representative to support or oppose a policy, law, or campaign."
+msgstr "Rydych chi eisiau perswadio'ch cynrychiolydd i gefnogi neu wrthwynebu polisi, cyfraith neu ymgyrch."
+
+#: templates/website/message-type.html:61
+msgid "Something else"
+msgstr "Rhywbeth arall"
+
+#: templates/website/message-type.html:62
+msgid "A thank you, a general question, or anything that doesn't fit the categories above."
+msgstr "'Diolch, cwestiwn cyffredinol, neu unrhyw beth nad yw'n cyd-fynd â'r categorïau uchod."
+
+#: templates/website/message-type.html:70
+msgid "Continue"
 msgstr ""
 
 #: templates/website/problem-generic.html:4
@@ -1843,91 +1900,91 @@ msgstr ""
 #: templates/website/problem-postcodes.html:4
 #: templates/website/problem-similar.html:4
 msgid "Problem with your message"
-msgstr ""
+msgstr "Problem gyda'ch neges"
 
 #: templates/website/problem-generic.html:14 web/write.php:403
-#: web/write.php:489
+#: web/write.php:490
 msgid "Message Rejected"
-msgstr ""
+msgstr "Neges wedi'i gwrthod"
 
 #: templates/website/problem-generic.html:22
 msgid "Sorry, but we’ve had to reject your message. Please see if you have broken any of our <a href=\"about-guidelines\">Guidelines for Campaigning</a>. If you don’t think that you have, then <a href=\"/about-contact\">contact us</a>."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond rydym wedi gorfod gwrthod eich neges. Edrychwch os ydych chi wedi torri unrhyw un o'n <a href=\"about-guidelines\">Canllawiau Ymgyrchu</a>. Os nad ydych chi'n meddwl bod gennych chi, yna <a href=\"/about-contact\">cysylltwch â ni</a>."
 
 #: templates/website/problem-lords.html:14 web/write.php:404
 msgid "You have sent too many messages to Lords"
-msgstr ""
+msgstr "Rydych wedi anfon gormod o negeseuon at yr Arglwyddi"
 
 #: templates/website/problem-lords.html:22
 msgid "Sorry, but we have to limit the number of messages sent to members of the House of Lords, as they have told us they simply disregard more than a handful of messages from one person within a couple of days."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond mae'n rhaid i ni gyfyngu ar nifer y negeseuon a anfonir at aelodau o Dŷ'r Arglwyddi, gan eu bod wedi dweud wrthym eu bod yn anwybyddu mwy na llond llaw o negeseuon gan un person o fewn ychydig ddyddiau."
 
 #: templates/website/problem-lords.html:24
 #: templates/website/problem-lords-similar.html:26
 msgid "Please read our <a href=\"/about-lords\">Frequently Asked Questions</a> for more information about WriteToThem Lords."
-msgstr ""
+msgstr "Darllenwch ein <a href=\"/about-lords\">Cwestiynau Cyffredin</a> i gael rhagor o wybodaeth am WriteToThem Lords."
 
 #: templates/website/problem-lords-similar.html:14 web/write.php:405
 msgid "Too many similar messages have been sent"
-msgstr ""
+msgstr "Anfonwyd gormod o negeseuon tebyg"
 
 #: templates/website/problem-lords-similar.html:22
 msgid "Sorry, but we have to limit the number of similar messages sent to members of the House of Lords, as they have told us they simply disregard more than a handful messages of substantially identical content arriving within a couple of days."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond mae'n rhaid i ni gyfyngu ar nifer y negeseuon tebyg a anfonir at aelodau o Dŷ'r Arglwyddi, gan eu bod wedi dweud wrthym eu bod yn anwybyddu mwy na llond llaw o negeseuon sydd â chynnwys sy’n arbennig o debyg ac yn cyrraedd mewn ychydig ddyddiau."
 
 #: templates/website/problem-lords-similar.html:24
 msgid "If you wish to try again, please use the \"back\" button in your browser and rewrite your message."
-msgstr ""
+msgstr "Os hoffech geisio eto, defnyddiwch y botwm \"yn ôl\" yn eich porwr ac ail-ysgrifennwch eich neges."
 
 #: templates/website/problem-postcodes.html:14 web/write.php:406
 msgid "You seem to be sending messages with several different postcodes"
-msgstr ""
+msgstr "Mae'n ymddangos eich bod chi'n anfon negeseuon gyda sawl cod post gwahanol"
 
 #: templates/website/problem-postcodes.html:22
 msgid "Sorry, but please read <a href=\"/about-qa#onlyrep\">this</a> to understand why our site only lets you write to <em>your own elected representatives</em>, not those for other parts of the country."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond darllenwch <a href=\"/about-qa#onlyrep\">this</a> i ddeall pam mae ein gwefan ond yn gadael i chi ysgrifennu at <em>eich cynrychiolwyr etholedig eich hun</em>, nid y rhai ar gyfer rhannau eraill o'r wlad."
 
 #: templates/website/problem-postcodes.html:24
 msgid "If we didn’t do this, then representatives would be snowed under with mail from all and sundry, and that would mean they ignored the important mail from their own constituents. They might even bin <strong>all</strong> messages sent via WriteToThem.com."
-msgstr ""
+msgstr "Os na wnaethom hyn, yna byddai cynrychiolwyr yn cael post gan bawb, a buasai hynny'n golygu eu bod yn anwybyddu'r post pwysig gan eu hetholwyr eu hunain. Efallai y byddant hyd yn oed yn anwybyddu’r <cryf>holl</cryf> negeseuon a anfonir trwy WriteToThem.com."
 
 #: templates/website/problem-postcodes.html:26
 msgid "Either of which would be A Bad Thing."
-msgstr ""
+msgstr "Buasai’r naill neu'r llall yn beth drwg."
 
 #: templates/website/problem-postcodes.html:28
 msgid "If somebody else suggested that you do this to get their message across, you might want to let them know potentially sabotaged their own campaign too. Perhaps you might ask them to read the <a href=\"/about-guidelines\">instructions</a> on the site next time?"
-msgstr ""
+msgstr "Os yw rhywun arall yn awgrymu eich bod chi'n gwneud hyn i gyfleu eu neges, efallai yr hoffech chi roi gwybod iddynt o bosibl fod wedi niweidio eu hymgyrch eu hunain hefyd. Efallai gallwch ofyn iddyn nhw ddarllen y <a href=\"/about-guidelines\">cyfarwyddiadau</a> ar y wefan y tro nesaf?"
 
 #: templates/website/problem-postcodes.html:30
 msgid "If you wish to send a message, please <a href=\"/\">start again from the beginning</a> and give only your own, real address and postcode when asked."
-msgstr ""
+msgstr "Os hoffech anfon neges, <a href=\"/\">dechrau o'r dechrau</a> a rhowch eich cyfeiriad a'ch cod post eich hun yn unig"
 
 #: templates/website/problem-similar.html:14
 msgid "Your message is near-identical to others sent previously"
-msgstr ""
+msgstr "Mae eich neges bron yn union yr un fath ag eraill sydd eisoes wedi eu danfon"
 
 #: templates/website/problem-similar.html:22
 msgid "Please read <a href=\"/about-qa#formletters\">our stance on this issue</a> to understand why sending identikit \"copied and pasted\" messages is detrimental to your campaign."
-msgstr ""
+msgstr "Darllenwch <a href=\"/about-qa#formletters\">ein safbwynt ar y mater hwn</a> i ddeall pam mae anfon negeseuon \"torri a gludo\" yn niweidiol i'ch ymgyrch."
 
 #: templates/website/problem-similar.html:24
 msgid "Sorry to be so harsh, but representatives have made it clear that the receipt of such \"spam\" could mean they bin <strong>all</strong> messages sent via WriteToThem.com."
-msgstr ""
+msgstr "Mae'n ddrwg gennym fod mor llym, ond mae cynrychiolwyr wedi ei gwneud hi’n glir y gallai derbyn \"sbam\" o'r fath olygu eu bod yn anwybyddu yr <strong>holl</strong> negeseuon a anfonir trwy WriteToThem.com."
 
 #: templates/website/problem-similar.html:26
 msgid "Which would be A Bad Thing."
-msgstr ""
+msgstr "A buasai hynny’n beth drwg."
 
 #: templates/website/problem-similar.html:28
 msgid "You might like to let the person who asked you to do this know that they’ve potentially sabotaged their own campaign too. Point them to our <a href=\"/about-guidelines\">Guidelines for campaigning</a>."
-msgstr ""
+msgstr "Efallai yr hoffech adael i'r person a ofynnodd i chi wneud hyn wybod eu bod o bosibl wedi niweidio eu hymgyrch eu hunain hefyd. Rhowch wybod i nhw am ein <a href=\"/about-guidelines\">Canllawiau ar gyfer ymgyrchu</a>."
 
 #: templates/website/problem-similar.html:30
 msgid "If you wish to rewrite your message, use the \"back\" button in your browser and write it in your own, original, words. It’s better to send a short message in your own words, than a long, mainly copy-and-pasted message with a few amendments."
-msgstr ""
+msgstr "Os hoffech ailysgrifennu'ch neges, defnyddiwch y botwm \"yn ôl\" yn eich porwr a'i ysgrifennu yn eich geiriau gwreiddiol eich hun. Mae'n well anfon neges fer yn eich geiriau eich hun, na neges hir wedi’i thorri a gludo ac yna wedi’i addasu."
 
-#: templates/website/qa/formletters.html:1
+#: templates/website/qa/formletters.html:5
 msgid ""
 "It’s much more powerful to write in your own words, telling your\n"
 "representative about your own beliefs and experiences.  We want to make the\n"
@@ -1960,9 +2017,9 @@ msgid ""
 "</blockquote>\n"
 "\n"
 "So please don’t copy and paste the same message as everyone else. Ask people to write in their own words."
-msgstr ""
+msgstr "Mae'n llawer mwy pwerus ysgrifennu yn eich geiriau eich hun, gan ddweud wrth eich cynrychiolydd am eich credoau a'ch profiadau eich hun. Rydyn ni eisiau gwneud llais yr unigolyn yn fwy pwerus, felly rydyn ni'n blocio llythyrau \"identikit\". Mae'n well gennym fod cynrychiolwyr yn gallu ymddiried yn negeseuon gan WriteToThem fel rhai gan unigolion go iawn, gan roi eu stori eu hunain. Dyma ddyfyniad gan ymchwilydd Seneddol, sef swydd i sicrhau bod yr AS y mae'n gweithio i mor hygyrch â phosibl: <blockquote> Mae ASau yn eithaf naturiol yn cymryd mewnlifiad sydyn o negeseuon yr un fath neu debyg gyda phinsiad mawr o halen, gan eu bod yn gwybod bod yr hyn maen nhw'n ei weld yw stwff gan leiafrif o etholwyr sydd naill ai'n angerddol neu yn niwrotig am y pwnc dan sylw sydd wedi gweld rhyw stori gredadwy a wedi rhannu’r neges, gan ei fod yn cymryd lleiafswm o ymdrech i wneud hynny. O ystyried bag post dyddiol o (dyweder) 50 o negeseuon unigol gan etholwyr unigol ar ystod eang o bynciau, pan fydd y bag post yn sydyn yn codi i 100 y dydd, 50 ohonynt yn llawer yr un fath â'i gilydd, nid oes gan y cynrychiolydd unrhyw ffordd o wybod a yw'r neges dan sylw yn gynrychioliadol o farn yn yr etholaeth. Y cyfan y mae'n ei wybod yw bod 50 o etholwyr wedi cael eu perswadio i'w postio am \"bwnc X\". Cymerir llawer mwy o sylw o dueddiadau o fewn y llif rheolaidd o negeseuon gan etholwyr a nodwyd yn glir. Os mewn mis mae 50 o bobl yn ysgrifennu mewn gwahanol ffyrdd a thrwy wahanol lwybrau gyda safbwyntiau tebyg ar bwnc, mae hyn yn llawer mwy tebygol o godi proffil y pwnc gyda'r AS. </blockquote> Felly peidiwch â chopïo a gludo'r un neges â phawb arall. Gofynnwch i bobl ysgrifennu yn eu geiriau eu hunain."
 
-#: templates/website/qa/onlyrep.html:1
+#: templates/website/qa/onlyrep.html:4
 msgid ""
 "\n"
 "Our service is only\n"
@@ -1972,212 +2029,263 @@ msgid ""
 "We want messages from WriteToThem to be a trusted\n"
 "source of genuine letters from genuine constituents."
 msgstr ""
+"\n"
+"Mae ein gwasanaeth yn galluogi pobl i ysgrifennu at eu cynrychiolwyr etholedig eu hunain (neu <a href=\"/about-lords\">unrhyw Arglwydd</a>). Rydym am i negeseuon gan WriteToThem fod yn ffynhonnell ddibynadwy o lythyrau dilys gan etholwyr dilys."
 
 #: templates/website/service-questions.html:3
 #: templates/website/service-questions.html:12
 msgid "A few more questions"
-msgstr ""
+msgstr "Ychydig mwy o gwestiynau"
 
 #: templates/website/service-questions.html:25
 msgid "Great &mdash; we&rsquo;re glad your representative replied!"
-msgstr ""
+msgstr "Gwych, rydyn ni'n falch bod eich cynrychiolydd wedi ateb!"
 
 #: templates/website/service-questions.html:27
 msgid "Sorry to hear your question wasn&rsquo;t fully answered."
-msgstr ""
+msgstr "Mae'n ddrwg gennyf glywed nad oedd eich cwestiwn wedi’i ateb yn llawn."
 
 #: templates/website/service-questions.html:29
 msgid "We hope your representative gets back to you soon."
-msgstr ""
+msgstr "Gobeithio y bydd eich cynrychiolydd yn dod yn ôl atoch yn fuan."
 
 #: templates/website/service-questions.html:31
 msgid "Thanks for letting us know."
-msgstr ""
+msgstr "Diolch am roi gwybod i ni."
 
 #: templates/website/service-questions.html:34
 msgid "We&rsquo;d like to ask a few more quick questions about your experience with WriteToThem."
-msgstr ""
+msgstr "Hoffwn ni ofyn ychydig mwy o gwestiynau cyflym am eich profiad gyda WriteToThem."
 
 #: templates/website/service-questions.html:35
 msgid "These questions will help us understand more about how people are using our service."
-msgstr ""
+msgstr "Bydd y cwestiynau hyn yn ein helpu i ddeall mwy am sut mae pobl yn defnyddio ein gwasanaeth."
 
 #: templates/website/service-questions.html:44
 msgid "Is this the first time you&rsquo;ve ever contacted one of your elected representatives?"
-msgstr ""
+msgstr "Ai dyma'r tro cyntaf erioed i chi gysylltu ag un o'ch cynrychiolwyr etholedig?"
 
 #: templates/website/service-questions.html:45
 msgid "Yes, this is the first time"
-msgstr ""
+msgstr "Ie, dyma'r tro cyntaf"
 
 #: templates/website/service-questions.html:46
 msgid "No, I&rsquo;ve done it before"
-msgstr ""
+msgstr "Nage, rydw i wedi gwneud o'r blaen"
 
 #: templates/website/service-questions.html:51
 #: templates/website/service-questions.html:62
 #: templates/website/service-questions.html:73
 msgid "Do you agree or disagree with the statement:"
-msgstr ""
+msgstr "Ydych chi'n cytuno neu'n anghytuno â'r datganiad:"
 
 #: templates/website/service-questions.html:51
 msgid "WriteToThem made me more informed about what different layers of government do"
-msgstr ""
+msgstr "Fe wnaeth WriteToThem fy ngwneud yn fwy gwybodus am yr hyn y mae gwahanol haenau o lywodraeth yn ei wneud"
 
 #: templates/website/service-questions.html:52
 #: templates/website/service-questions.html:63
 #: templates/website/service-questions.html:74
 msgid "Strongly disagree"
-msgstr ""
+msgstr "Anghytuno'n gryf"
 
 #: templates/website/service-questions.html:53
 #: templates/website/service-questions.html:64
 #: templates/website/service-questions.html:75
 msgid "Disagree"
-msgstr ""
+msgstr "Anghytuno"
 
 #: templates/website/service-questions.html:54
 #: templates/website/service-questions.html:65
 #: templates/website/service-questions.html:76
 msgid "Neither agree nor disagree"
-msgstr ""
+msgstr "Ddim yn cytuno nac yn anghytuno"
 
 #: templates/website/service-questions.html:55
 #: templates/website/service-questions.html:66
 #: templates/website/service-questions.html:77
 msgid "Agree"
-msgstr ""
+msgstr "Cytuno"
 
 #: templates/website/service-questions.html:56
 #: templates/website/service-questions.html:67
 #: templates/website/service-questions.html:78
 msgid "Strongly agree"
-msgstr ""
+msgstr "Cytuno'n gryf"
 
 #: templates/website/service-questions.html:62
 msgid "WriteToThem made it easy to identify the representative I wanted to write to"
-msgstr ""
+msgstr "Roedd WriteToThem yn ei gwneud hi'n hawdd adnabod y cynrychiolydd roeddwn i eisiau ysgrifennu ato"
 
 #: templates/website/service-questions.html:73
 msgid "WriteToThem helped me write a better message"
-msgstr ""
+msgstr "Roedd WriteToThem wedi fy nghefnogi i ysgrifennu neges well"
 
 #: templates/website/service-questions.html:84
 msgid "How likely are you to recommend WriteToThem to a friend or colleague?"
-msgstr ""
+msgstr "Pa mor debygol yw hi, y byddwch yn argymell WriteToThem i ffrind neu gydweithiwr?"
 
 #: templates/website/service-questions.html:86
 msgid "Not at all likely"
-msgstr ""
+msgstr "Ddim yn debygol o gwbl"
 
 #: templates/website/service-questions.html:87
 msgid "Extremely likely"
-msgstr ""
+msgstr "Tebygol iawn"
 
 #: templates/website/service-questions.html:99
 msgid "Submit answers"
-msgstr ""
+msgstr "Cyflwyno atebion"
+
+#: templates/website/survey-done.html:3
+msgid "Thanks"
+msgstr "Diolch"
+
+#: templates/website/survey-done.html:13
+msgid "Many thanks"
+msgstr "Llawer o ddiolch"
+
+#: templates/website/survey-done.html:21
+msgid "Thanks for helping us understand more about who is using WriteToThem, so we can improve it for future users."
+msgstr "Diolch am ein helpu i ddeall mwy am bwy sy'n defnyddio WriteToThem, fel y gallwn gwella ar gyfer defnyddwyr y dyfodol."
+
+#: templates/website/survey-done.html:23
+msgid "If you’ve got any questions, feel free to"
+msgstr "Os oes gennych unrhyw gwestiynau, mae croeso i chi cysylltu â ni"
+
+#: templates/website/survey-done.html:23
+msgid "contact us"
+msgstr "Contact us"
 
 #: templates/website/survey-thanks.html:25
 msgid "Thanks for your help"
-msgstr ""
+msgstr "Diolch am eich help"
 
 #: templates/website/survey-thanks.html:26
 msgid "Thank you for telling us more about your message. We'll use this in combination with other people's responses to build a better picture on what people are writing to their representatives about. We do not publish the raw responses/postcodes, only summaries of the general topics and areas."
-msgstr ""
+msgstr "Diolch am ddweud mwy wrthym am eich neges. Byddwn yn defnyddio hyn mewn cyfuniad ag ymatebion pobl eraill i adeiladu gwell darlun ar yr hyn y mae pobl yn ysgrifennu at eu cynrychiolwyr amdano. Nid ydym yn cyhoeddi'r ymatebion / codau post amrwd, dim ond crynodebau o'r pynciau a'r meysydd cyffredinol."
 
 #: templates/website/who.html:3
 msgid "Choose your representative"
-msgstr ""
+msgstr "Dewiswch eich cynrychiolydd"
 
 #: templates/website/who.html:26 templates/website/who.html:30
 msgid "You have several elected representatives at different levels of government."
-msgstr ""
+msgstr "Mae gennych sawl cynrychiolydd etholedig ar wahanol lefelau llywodraeth."
 
 #: templates/website/who.html:31
 msgid "Not sure who to contact?"
-msgstr ""
+msgstr "Ddim yn siŵr pwy i gysylltu â nhw?"
 
-#: templates/website/who.html:50
+#: templates/website/who.html:60
 msgid ""
 "Sorry, but we’ve not got any data for your area. Please\n"
 "                    <a href=\"/about-contact\">contact us</a> and let us know that this matters\n"
 "                    to you."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond nid oes gennym unrhyw ddata ar gyfer eich ardal. Os gwelwch yn dda <a href=\"/about-contact\">cysylltwch â ni</a> a rhowch wybod i ni fod hyn yn bwysig i chi."
 
 #: templates/website/write-checkemail.html:3
 #: templates/website/write-checkemail.html:21
 msgid "Now check your email"
-msgstr ""
+msgstr "Nawr gwiriwch eich e-bost"
 
 #: templates/website/write-checkemail.html:22
 msgid "The confirmation email can take up to 10-15 minutes to arrive &mdash; please be patient."
-msgstr ""
+msgstr "Gall yr e-bost cadarnhau gymryd hyd at 10-15 munud i gyrraedd felly byddwch yn amyneddgar."
 
 #: templates/website/write-checkemail.html:42
 #, php-format
 msgid "Before we can send your message to your %s we need to confirm your email address. We’ve sent you an email &mdash; when it arrives simply click the link in it and your message will be sent. If you don’t click the link your message <em>will not</em> be sent."
-msgstr ""
+msgstr "Cyn i ni allu anfon eich neges at eich %s, mae angen i ni gadarnhau eich cyfeiriad e-bost. Rydyn ni wedi anfon e-bost atoch &mdash; pan fydd yn cyrraedd, cliciwch ar y ddolen ynddo a bydd eich neges yn cael ei hanfon. Os na fyddwch chi'n clicio'r ddolen, <em>ni fydd</em> eich neges yn cael ei hanfon."
 
 #: templates/website/write-checkemail.html:44
 msgid "If you use web-based email or have ‘junk mail’ filters, you may wish to check your bulk or spam mail folders. Sometimes our messages are marked that way."
-msgstr ""
+msgstr "Os ydych chi'n defnyddio blwch e-bost ar y we, neu os oes gennych hidlwyr 'post sothach', efallai yr hoffech wirio'ch ffolder e-bost sbam gan fod ein negeseuon yn cael eu marcio megis hynny ambell waith."
 
 #: templates/website/write-preview.html:3
 #, php-format
 msgid "Preview your message to %s"
-msgstr ""
+msgstr "Rhagolwg eich neges at %s"
 
 #: templates/website/write-preview.html:21
 msgid "Preview your message"
-msgstr ""
+msgstr "Rhagolwg eich neges"
 
 #: templates/website/write-preview.html:46
 msgid "We’ll email you for confirmation before we send your message"
-msgstr ""
+msgstr "Byddwn yn anfon e-bost atoch am gadarnhad cyn i ni anfon eich neges"
 
 #: templates/website/write-write.html:23
 msgid "Write your message"
-msgstr ""
+msgstr "Ysgrifennwch eich neges"
 
 #: templates/website/write-write.html:25
 #, php-format
 msgid "Writing to %s."
-msgstr ""
+msgstr "Wrthi'n ysgrifennu at %s."
 
 #: templates/website/write-write.html:91
 msgid "Instructions"
-msgstr ""
+msgstr "Cyfarwyddiadau"
 
 #: templates/website/write-write.html:94
 #, php-format
 msgid "Please be polite, concise and to the point; if you abuse your %s you devalue the service for all users."
-msgstr ""
+msgstr "Byddwch yn gwrtais, yn gryno ac i'r pwynt; os ydych chi'n dilorni eich %s rydych chi'n dibrisio'r gwasanaeth ar gyfer pob defnyddiwr."
 
 #: templates/website/write-write.html:96
 msgid "<a class=\"fancybox\" href=\"about-qa#formletters\" target=\"_blank\">Use your own words</a>; we block copied-and-pasted identical messages."
-msgstr ""
+msgstr "<a class=\"fancybox\" href=\"about-qa#formletters\" target=\"_blank\">Defnyddiwch eich geiriau eich hun<a>; rydym yn gwrthod negeseuon sydd yn gopi ac wedi’u torri a gludo."
 
 #: templates/website/write-write.html:100
 #, php-format
 msgid ""
 "It&rsquo;s a <a class=\"fancybox\" href=\"about-qa#onlyrep\" target=\"_blank\">waste of time</a> writing to %s other than your own;\n"
 "your message will be ignored."
-msgstr ""
+msgstr "Mae’n <a class=\"fancybox\" href=\"about-qa#onlyrep\" target=\"_blank\">gwastraff amser</a> ysgrifennu at unrhyw %s heblaw eich un chi; bydd eich neges yn cael ei hanwybyddu."
 
-#: templates/website/write-write.html:107
+#: templates/website/write-write.html:115
 #, php-format
 msgid "<a class=\"fancybox\" href=\"about-yourrep#%s\" target=\"_blank\">Read this<small></small></a> to learn when a %s can help you &ndash; and when they can&rsquo;t."
-msgstr ""
+msgstr "<a class=\"fancybox\" href=\"about-yourrep#%s\" target=\"_blank\">Darllenwch hwn<small></small></a> i ddysgu pryd y gall %s eich helpu &ndash; a phryd nad yw hynny’n bosib."
 
-#: templates/website/write-write.html:111
+#: templates/website/write-write.html:119
 msgid ""
 "Lords vote on and amend UK bills before they become law. By writing to a\n"
 "    Lord you might be able to tell them about something you think they should care\n"
 "    about, provide information to someone who you support, or provide counter\n"
 "    evidence to someone you disagree with. For other matters, it might be better\n"
 "    to contact your MP or a local representative."
-msgstr ""
+msgstr "Mae Arglwyddi yn pleidleisio ar ac yn diwygio biliau'r DU cyn iddynt ddod yn gyfraith. Trwy ysgrifennu at Arglwydd efallai y byddwch chi'n gallu dweud wrthynt am rywbeth rydych chi'n meddwl y dylent ofalu amdano, darparu gwybodaeth i rywun rydych chi'n ei gefnogi, neu ddarparu gwrthdystiolaeth i rywun rydych chi'n anghytuno ag ef. Ar gyfer materion eraill, efallai y byddai'n well cysylltu â'ch AS neu gynrychiolydd lleol."
+
+#: templates/website/write-write.html:159
+msgid "Casework tips"
+msgstr "Awgrymiadau gwaith achos"
+
+#: templates/website/write-write.html:161
+msgid "Explain your situation clearly and include relevant details such as dates, reference numbers, or addresses."
+msgstr "Esboniwch eich sefyllfa yn glir a chofiwch i gynnwys manylion perthnasol fel dyddiadau, rhifau cyfeirnod neu gyfeiriadau."
+
+#: templates/website/write-write.html:162
+msgid "Give your consent for your representative to contact any relevant third parties, such as government departments or local authorities."
+msgstr "Rhowch eich caniatâd i'ch cynrychiolydd gysylltu ag unrhyw drydydd parti perthnasol, fel adrannau'r llywodraeth neu awdurdodau lleol."
+
+#: templates/website/write-write.html:163
+msgid "Let your representative know what outcome you are hoping for."
+msgstr "Rhowch wybod i'ch cynrychiolydd pa ganlyniad rydych chi'n gobeithio amdano."
+
+#: templates/website/write-write.html:166
+#
+msgid "Campaign tips"
+msgstr "Ymgyrchu"
+
+#: templates/website/write-write.html:168
+msgid "Explain why this issue matters to you personally &ndash; personal stories are more effective than form letters."
+msgstr "Esboniwch pam mae'r mater hwn yn bwysig i chi yn bersonol &ndash; mae straeon personol yn fwy effeithiol na llythyrau ffurflen."
+
+#: templates/website/write-write.html:169
+msgid "Be specific about what action you would like your representative to take."
+msgstr "Byddwch yn benodol ynglŷn â pha gamau yr hoffech i'ch cynrychiolydd eu cymryd."
 
 #: templates/website/yourrep/am.html:3
 msgid ""
@@ -2216,14 +2324,14 @@ msgid ""
 "sewage</strong> and various other local matters including\n"
 "<strong>tourism</strong>, <strong>development</strong> and running <strong>the\n"
 "airport</strong>."
-msgstr ""
+msgstr "Mae Cyngor yr Ynysoedd yn gyfrifol am <strong>addysg</strong>, <strong>tai</strong>, <strong>cynllunio</strong>, <strong>dŵr a charthffosiaeth</strong> ac amryw o faterion lleol eraill gan gynnwys <strong>twristiaeth</strong>, <strong>datblygu</strong> a rheoli’r <strong>maes awyr</strong>."
 
 #: templates/website/yourrep/diw.html:1
 msgid ""
 "The District Council is responsible for <strong>local services</strong>,\n"
 "including <strong>planning</strong>, <strong>council housing</strong>, and\n"
 "<strong>rubbish collection</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Dosbarth yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>tai cyngor</strong>, a <strong>chasglu sbwriel</strong>."
 
 #: templates/website/yourrep/lam.html:1
 msgid "When should I contact a London Assembly Member?"
@@ -2253,7 +2361,7 @@ msgid ""
 "including <strong>planning</strong>, <strong>council housing</strong>,\n"
 "<strong>rubbish collection</strong>, <strong>local roads</strong>, and\n"
 "<strong>public paths</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Bwrdeistrefol yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>tai cyngor</strong>, <strong>casglu ysbwriel</strong>, <strong>ffyrdd lleol</strong>, a <strong>llwybrau cyhoeddus</strong>."
 
 #: templates/website/yourrep/lge.html:1
 msgid ""
@@ -2261,7 +2369,7 @@ msgid ""
 "including <strong>waste and recycling</strong>, <strong>leisure and\n"
 "community</strong>, <strong>building control</strong> and <strong>local\n"
 "economic and cultural development</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Lleol yn gyfrifol am <strong>wasanaethau lleol</strong>, gan gynnwys <strong>gwastraff ac ailgylchu</strong>, <strong>hamdden a chymuned</strong>, <strong>rheoli adeiladu</strong> a <strong>datblygu economaidd a diwylliannol lleol</strong>."
 
 #: templates/website/yourrep/mla.html:1
 msgid "When should I contact a Northern Ireland Assembly Member?"
@@ -2349,7 +2457,7 @@ msgid ""
 "(except trunk roads and motorways), public rights of way,\n"
 "<strong>education</strong>, <strong>social services</strong> and\n"
 "<strong>libraries</strong>."
-msgstr ""
+msgstr "Mae'r Cyngor Dosbarth Prifddinesig yn gyfrifol am bob agwedd o <strong>bolisi a gwasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>trafnidiaeth</strong>, <strong>ffyrdd</strong> (heblaw priffyrdd a thraffyrdd), hawliau tramwy cyhoeddus, <strong>addysg</strong>, <strong>gwasanaethau cymdeithasol</strong> a <strong>llyfrgelloedd</strong>."
 
 #: templates/website/yourrep/ute.html:1 templates/website/yourrep/utw.html:1
 msgid ""
@@ -2358,90 +2466,74 @@ msgid ""
 "<strong>transport</strong>, <strong>roads</strong> (except trunk roads and\n"
 "motorways), public rights of way, <strong>education</strong>, <strong>social\n"
 "services</strong> and <strong>libraries</strong>."
-msgstr ""
+msgstr "Mae'r Awdurdod Unedol yn gyfrifol am bob agwedd o <strong>bolisi a gwasanaethau lleol</strong>, gan gynnwys <strong>cynllunio</strong>, <strong>trafnidiaeth</strong>, <strong>ffyrdd</strong> (heblaw priffyrdd a thraffyrdd), hawliau tramwy cyhoeddus, <strong>addysg</strong>, <strong>gwasanaethau cymdeithasol</strong> a <strong>llyfrgelloedd</strong>."
 
 #: web/confirm.php:28
 msgid "Can you tell us in a sentence what your message was about?"
-msgstr ""
+msgstr "Allwch chi ddweud wrthym mewn brawddeg beth oedd eich neges?"
 
 #. Creates a fieldset with radio options and legend
-#: web/confirm.php:40
+#: web/confirm.php:47
 msgid "Which of the following best describes why you are writing to your representative?"
-msgstr ""
+msgstr "Pa un o'r canlynol sy'n disgrifio orau pam rydych chi'n ysgrifennu at eich cynrychiolydd?"
 
-#: web/confirm.php:44
-msgid "Casework"
-msgstr ""
-
-#: web/confirm.php:44
-msgid "Trying to resolve a problem you or another person is having"
-msgstr ""
-
-#: web/confirm.php:48
-msgid "Campaigning"
-msgstr ""
-
-#: web/confirm.php:48
-msgid "Seeking to persuade or inform your representative about a wider issue"
-msgstr ""
-
-#: web/confirm.php:54
+#: web/confirm.php:62
 msgid "Submit"
-msgstr ""
+msgstr "Cyflwyno"
 
-#: web/confirm.php:79 web/response.php:24
+#: web/confirm.php:87 web/response.php:24
 msgid "Please make sure you copy the URL from your email properly. The token was missing."
-msgstr ""
+msgstr "Gwnewch yn siŵr eich bod chi'n copïo'r URL o'ch e-bost yn iawn. Roedd y tocyn ar goll."
 
 #: web/firsttime.php:23
 msgid "The token was missing."
-msgstr ""
+msgstr "Roedd y tocyn ar goll."
 
 #: web/index.php:40
 msgid "First, enter your UK postcode"
-msgstr ""
+msgstr "Yn gyntaf, rhowch god post eich DU"
 
 #: web/index.php:106
 msgid "Postcode that's been typed in"
-msgstr ""
+msgstr "Cod post sydd wedi'i deipio i mewn"
 
 #: web/index.php:278
 msgid "Sorry, we need your complete UK postcode to identify your elected representatives."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, mae angen eich cod post cyflawn yn y DU arnom i adnabod eich cynrychiolwyr etholedig."
 
 #: web/index.php:285
 msgid "We’re not quite sure why, but we can’t seem to recognise your postcode."
-msgstr ""
+msgstr "Nid ydym yn hollol siŵr pam, ond ni allwn ymddangos i adnabod eich cod post."
 
 #: web/index.php:301
 msgid "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free"
-msgstr ""
+msgstr "E-bostiwch eich Cynghorydd, Aelod o’r Senedd, ASA, Aelod Seneddol, ACD neu Aelod Cynulliad Llundain am ddim"
 
 #: web/index.php:304
 msgid "Get the right message to the right place."
-msgstr ""
+msgstr "Cael y neges gywir i'r lle iawn."
 
 #: web/index.php:305
 msgid "Write to your politicians, national or local, for free."
-msgstr "Ysgrifennwch at eich gwleidyddion, cenedlaethol neu leol, am ddim"
+msgstr "Ysgrifennwch at eich gwleidyddion, cenedlaethol neu leol, am ddim."
 
 #: web/index.php:322
 #, php-format
 msgid "Write to your %s"
-msgstr ""
+msgstr "Ysgrifennwch at eich %s"
 
 #: web/response.php:32
 msgid "Please make sure you copy the URL from your email properly. The answer type was missing."
-msgstr ""
+msgstr "Gwnewch yn siŵr eich bod chi'n copïo'r URL o'ch e-bost yn iawn. Roedd y math o ateb ar goll."
 
 #: web/response.php:43
 msgid "Failed to look up message id for token"
-msgstr ""
+msgstr "Wedi methu edrych am gyfeirnod y neges"
 
-#: web/who.php:70 web/who.php:72
+#: web/who.php:76 web/who.php:78
 #, php-format
 msgid "Your %s"
-msgstr ""
+msgstr "Eich %s"
 
 #. Only around election time
 #. if ($va_alone['type'] == 'WMC') {
@@ -2450,94 +2542,94 @@ msgstr ""
 #. soon as we can after the election. For more information, see
 #. <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
 #. } else {
-#: web/who.php:74 web/who.php:523
+#: web/who.php:80 web/who.php:530
 msgid "<p>There’s an upcoming election.  We’ll be adding your new representative as soon as we can after the election.</p>"
-msgstr ""
+msgstr "<p>Mae yna etholiad ar y gweill. Byddwn yn ychwanegu eich cynrychiolydd newydd cyn gynted ag y gallwn ar ôl yr etholiad.</p>"
 
-#: web/who.php:106 web/who.php:495
+#: web/who.php:112 web/who.php:502
 msgid "Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href=\"about-lords\">more info</a>)."
-msgstr ""
+msgstr "Nid yw Arglwyddi yn cael eu hethol gennych chi, ond serch hynny maent yn pleidleisio yn y Senedd yn union fel eich AS. Efallai yr hoffech ysgrifennu at Arglwydd (<a href=\"about-lords\">mwy o wybodaeth</a>)."
 
-#: web/who.php:107 web/who.php:496
+#: web/who.php:113 web/who.php:503
 msgid "Write to a Lord"
-msgstr ""
+msgstr "Ysgrifennu at Arglwydd"
 
-#: web/who.php:294
+#: web/who.php:301
 msgid "Write to all your regional MSs"
 msgstr ""
 
-#: web/who.php:330
+#: web/who.php:337
 msgid "Your {rep_count} {area_name} {rep_name} represent you on the {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi ar y {chamber_name}."
 
-#: web/who.php:332
+#: web/who.php:339
 msgid "Your {rep_count} {area_name} {rep_name} represent you in the {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi yn {chamber_name}."
 
-#: web/who.php:334
+#: web/who.php:341
 msgid "Your {rep_count} {area_name} {rep_name} represent you on {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi ar {chamber_name}."
 
-#: web/who.php:344
+#: web/who.php:351
 msgid "Your {area_name} {rep_name} represents you on the {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_name} {area_name} yn eich cynrychioli chi ar y {chamber_name}."
 
-#: web/who.php:346
+#: web/who.php:353
 msgid "Your {area_name} {rep_name} represents you in the {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_name} {area_name}  yn eich cynrychioli chi ar yn {chamber_name}."
 
-#: web/who.php:348
+#: web/who.php:355
 msgid "Your {area_name} {rep_name} represents you on {chamber_name}."
-msgstr ""
+msgstr "Mae eich {rep_name} {area_name}  yn eich cynrychioli chi ar {chamber_name}."
 
-#: web/who.php:358
+#: web/who.php:365
 #, php-format
 msgid " Most %s are not paid a salary, but get a basic allowance for the work they do."
-msgstr ""
+msgstr "Nid yw'r rhan fwyaf o %s yn cael cyflog, ond yn derbyn lwfans sylfaenol am y gwaith maen nhw'n ei wneud."
 
 #. $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
-#: web/who.php:425
+#: web/who.php:432
 msgid "Correct a mistake in this list"
-msgstr ""
+msgstr "Cywiro gwall yn y rhestr hon"
 
-#: web/who.php:447
+#: web/who.php:454
 #, php-format
 msgid "%d %s %s %s also represent you"
-msgstr ""
+msgstr "Mae %d %s %s %s hefyd yn eich cynrychioli chi"
 
-#: web/who.php:449
+#: web/who.php:456
 #, php-format
 msgid "One %s %s %s also represents you"
-msgstr ""
+msgstr "Mae un %s %s %s hefyd yn eich cynrychioli chi"
 
-#: web/who.php:488
+#: web/who.php:495
 #, php-format
 msgid "See %s’s voting record and speeches at TheyWorkForYou"
-msgstr ""
+msgstr "Gweld cofnod pleidleisio ac areithiau %s yn TheyWorkForYou"
 
-#: web/who.php:497
+#: web/who.php:504
 msgid "<div class=\"rep-more\">"
-msgstr ""
+msgstr "<div class=\"rep-more\">"
 
-#: web/who.php:512
+#: web/who.php:519
 msgid "<p>There have been boundary changes at the last election that means we can’t yet say who your representative is. We hope to get our boundary database updated as soon as we can, but at the moment we have no definite time of completion.</p>"
-msgstr ""
+msgstr "<p>Bu newidiadau i'r ffiniau yn yr etholiad diwethaf sy'n golygu na allwn ddweud eto pwy yw eich cynrychiolydd. Rydym yn gobeithio diweddaru ein cronfa ddata ffiniau cyn gynted ag y gallwn, ond ar hyn o bryd nid oes gennym dyddiad pendant o ran cwblhau hynny.</p>"
 
-#: web/who.php:514
+#: web/who.php:521
 msgid "<p>Due to the recent election, we don’t yet have details for this representative. We generally rely on data from external sources, and will be updating as soon as we can, but at the moment we have no definite time of completion.</p>"
-msgstr ""
+msgstr "<p>Oherwydd yr etholiad diweddar, nid oes gennym fanylion am y cynrychiolydd yma eto. Yn gyffredinol, rydym yn dibynnu ar ddata o ffynonellau allanol, a byddwn yn diweddaru cyn gynted ag y gallwn, ond ar hyn o bryd nid oes gennym dyddiad pendant o ran cwblhau hynny.<p>"
 
-#: web/who.php:526
+#: web/who.php:533
 msgid "Representative details are not available for an unknown reason."
-msgstr ""
+msgstr "Nid yw manylion y cynrychiolydd ar gael am reswm anhysbys."
 
 #: web/write.php:69
 msgid "; or we might only have a central contact for the council, which similarly might not be working"
-msgstr ""
+msgstr "; neu efallai mai dim ond cyswllt canolog sydd gennym ar gyfer y cyngor, sydd o bosib ddim yn gweithredu"
 
 #: web/write.php:90
 msgid " the MP, the House of Commons"
-msgstr ""
+msgstr "yr Aelod Seneddol, Tŷ'r Cyffredin"
 
 #: web/write.php:93
 #, php-format
@@ -2545,200 +2637,209 @@ msgid ""
 "Sorry, we <strong>do not currently have contact details for this representative</strong>, and are unable to send them a message. We may have had details in the past, which are currently not working (perhaps their mailbox is full) or incorrect%s.\n"
 "\n"
 "    We’d be <em>really</em> grateful if you could <strong>spend five minutes on the website of %s</strong> (or even the phone%s), finding out the contact details. Then <a href='/about-contact'>contact us</a> with the email address of your representative."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ar hyn o bryd <strong>nid oes gennym fanylion cyswllt ar gyfer y cynrychiolydd yma</strong>, ac yn methu anfon neges atynt.  Mae’n bosib roedd gennym fanylion yn y gorffennol nad sydd yn gweithio ar hyn o bryd (efallai bod eu blwch e-bost yn llawn) neu sydd yn anghywir%s. Byddem yn ddiolchgar <em>iawn</em> petai gennych amser i <strong>dreulio pum munud ar wefan %s</strong> (neu’r teleffon%s hyd yn oed),  i ddod o hyd i fanylion cyswllt. Os hynny <a href='/about-contact'>cysylltwch gyda ni</a> gyda chyfeiriad e-bost eich cynrychiolydd."
 
 #: web/write.php:105
 #, php-format
 msgid "%s %s %s has told us not to deliver any messages from the constituents of %s. Instead you can try looking them up on <a href=\"%s\">the Parliament website</a>. There you will get a phone number, a postal address, and for some MPs a website or way to contact them by email."
-msgstr ""
+msgstr "Mae %s %s %s wedi dweud wrthym am beidio â chyflwyno unrhyw negeseuon oddi wrth etholwyr %s. Yn lle hynny, gallwch geisio edrych amdanynt <a href=\"%s\">gwefan Senedd San Steffan</a>. Yno cewch rif ffôn, cyfeiriad post, ac i ambell i AS gwefan neu ffordd o gysylltu â nhw drwy e-bost."
 
 #: web/write.php:110
 #, php-format
 msgid "%s %s %s has told us not to deliver any messages from the constituents of %s."
-msgstr ""
+msgstr "Mae %s %s %s wedi dweud wrthym am beidio â chyflwyno unrhyw negeseuon oddi wrth etholwyr %s."
 
 #: web/write.php:132 web/write.php:136
 msgid "Dear"
-msgstr ""
+msgstr "Annwyl"
 
 #: web/write.php:132 web/write.php:136 web/write.php:140
 msgid "Yours sincerely"
-msgstr ""
+msgstr "Yn gywir"
 
 #: web/write.php:167
 msgid "The two email addresses you’ve entered differ; please check them carefully for mistakes"
-msgstr ""
+msgstr "Mae'r ddau gyfeiriad e-bost rydych chi wedi'u nodi yn wahanol; gwiriwch nhw'n ofalus am gamgymeriadau"
 
 #: web/write.php:191 web/write.php:192
 msgid "Please enter your message"
-msgstr ""
+msgstr "Nodwch eich neges os gwelwch yn dda"
 
 #: web/write.php:193
 msgid "Please sign at the bottom with your name, or alter the \"Yours sincerely\" signature"
-msgstr ""
+msgstr "Llofnodwch ar y gwaelod gyda'ch enw, neu newidiwch y llofnod \"Yn gywir\""
 
 #: web/write.php:194
 msgid "Your message is a bit too long for us to send"
-msgstr ""
+msgstr "Mae eich neges ychydig yn rhy hir i ni ei hanfon"
 
 #: web/write.php:199
 msgid "About You"
-msgstr ""
+msgstr "Amdanoch chi"
 
 #: web/write.php:201
 msgid "Your name"
-msgstr ""
+msgstr "Eich enw"
 
 #: web/write.php:202
 msgid "Please enter your name"
-msgstr ""
+msgstr "Nodwch eich enw os gwelwch yn dda"
 
 #: web/write.php:205
 msgid "Your email"
-msgstr ""
+msgstr "Eich e-bost"
 
 #: web/write.php:206
 msgid "Please enter your email address"
-msgstr ""
+msgstr "Nodwch eich cyfeiriad e-bost os gwelwch yn dda"
 
 #: web/write.php:209
 msgid "Choose a valid email address"
-msgstr ""
+msgstr "Dewiswch gyfeiriad e-bost dilys"
 
 #: web/write.php:214
 msgid "Confirm email"
-msgstr ""
+msgstr "Cadarnhau e-bost"
 
 #: web/write.php:215
 msgid "Please re-enter your email address"
-msgstr ""
+msgstr "Ail-nodwch eich cyfeiriad e-bost os gwelwch yn dda"
 
 #: web/write.php:221
 msgid "Phone"
-msgstr ""
+msgstr "Ffôn"
 
 #: web/write.php:221 web/write.php:233 web/write.php:244
 msgid "optional"
-msgstr ""
+msgstr "Dewisol"
 
 #: web/write.php:227
 msgid "Your Address"
-msgstr ""
+msgstr "Eich Cyfeiriad"
 
 #: web/write.php:229
 msgid "Address Line 1"
-msgstr ""
+msgstr "Cyfeiriad Llinell 1"
 
 #: web/write.php:230
 msgid "Please enter your address"
-msgstr ""
+msgstr "Nodwch eich cyfeiriad os gwelwch yn dda"
 
 #: web/write.php:233
 msgid "Address Line 2"
-msgstr ""
+msgstr "Llinell Cyfeiriad 2"
 
 #: web/write.php:236
 msgid "Town/City"
-msgstr ""
+msgstr "Tref/Dinas"
 
 #: web/write.php:237
 msgid "Please enter your town/city"
-msgstr ""
+msgstr "Nodwch eich tref/dinas"
 
 #. House of Lords
 #. All other representatives (postcode fixed as must be in constituency)
 #: web/write.php:252 web/write.php:258
 msgid "UK postcode"
-msgstr ""
+msgstr "Cod post y DU"
 
 #: web/write.php:253
 msgid "Please enter a UK postcode (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
-msgstr ""
+msgstr "Rhowch god post yn y DU os gwelwch yn dda (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
 
 #: web/write.php:254
 msgid "Please enter a valid UK postcode (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
-msgstr ""
+msgstr "Nodwch god post DU dilys (<a href=\"/about-lords#ukpostcode\" target=\"_blank\">why?</a>)"
 
 #: web/write.php:279
 msgid "All the information you provide here will be sent to your representatives or their offices"
-msgstr ""
+msgstr "Bydd yr holl wybodaeth a ddarperir yma yn cael ei hanfon at eich cynrychiolwyr neu eu swyddfeydd"
 
 #: web/write.php:281
 msgid "All the information you provide here will be sent to your representative or their office"
-msgstr ""
+msgstr "Bydd yr holl wybodaeth a ddarperir yma yn cael ei hanfon at eich cynrychiolydd neu eu swyddfa"
 
 #: web/write.php:284
 msgid "Any response from them will come directly to you via email or letter. After you use WriteToThem, you will receive a maximum of two follow-up messages from us, checking whether you received a response."
-msgstr ""
+msgstr "Bydd unrhyw ymateb ganddynt yn dod yn uniongyrchol atoch trwy e-bost neu lythyr. Ar ôl i chi ddefnyddio WriteToThem, byddwch yn derbyn uchafswm o ddwy neges ddilynol gennym ni, i wirio a gawsoch ymateb."
 
 #: web/write.php:285
 msgid "<a href=\"/about-privacy\" target=\"_blank\">Read about how we keep your data private</a> (opens in a new window)."
-msgstr ""
+msgstr "<a href=\"/about-privacy\" target=\"_blank\">Darllenwch am sut rydym yn cadw eich data yn breifat</a> (opens in a new window)."
 
 #: web/write.php:292
 msgid "Preview and send"
-msgstr ""
+msgstr "Dangos rhagolwg ac anfon"
 
 #: web/write.php:307
 msgid "Edit some more"
-msgstr ""
+msgstr "Golygu ychydig mwy"
 
 #: web/write.php:308
 msgid "I’m happy, send it"
-msgstr ""
+msgstr "Rwy'n hapus, danfonwch"
 
 #: web/write.php:382
 #, php-format
 msgid "Sorry. An error has occurred: pageName \"%s\". Please <a href=\"/about-contact\">get in touch with us</a>, quoting this message. You can <a href=\"/\">try again from the beginning</a>."
-msgstr ""
+msgstr "Ymddiheuriadau, mae gwall wedi digwydd: pageName \"%s\". Os gwelwch yn dda <a href=\"/about-contact\">cysylltwch gyda ni</a>, gan ddyfynnu’r neges hon. Gallwch <a href=\"/\">geisio eto o’r cychwyn</a>."
 
 #: web/write.php:407
 msgid "Your message is near-identical with others sent previously"
-msgstr ""
+msgstr "Mae eich neges bron yn union yr un fath ag eraill a anfonwyd o'r blaen"
 
-#: web/write.php:421 web/write.php:593
+#: web/write.php:421 web/write.php:594
 msgid "Sorry, but your browser seems to be transmitting erroneous data to us. Please try again, or <a href=\"/about-contact\">contact us</a>."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond mae'n ymddangos bod eich porwr yn trosglwyddo data anghywir i ni. Ceisiwch eto, neu <a href=\"/about-contact\">cysylltwch â ni</a>."
 
 #. None of the messages could be sent
-#: web/write.php:430 web/write.php:504
+#: web/write.php:430 web/write.php:505
 msgid "Sorry, we were unable to send your messages for the following reasons:"
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ni allwn anfon eich negeseuon am y rhesymau canlynol:"
 
-#: web/write.php:487
+#: web/write.php:488
 msgid "read more"
-msgstr ""
+msgstr "Darllen mwy"
 
-#: web/write.php:509
+#: web/write.php:510
 msgid "Note: Some of your messages could not be sent for the following reasons:"
-msgstr ""
+msgstr "Nodyn: Methwyd anfon rhai o'ch negeseuon am y rhesymau canlynol:"
 
-#: web/write.php:533
+#: web/write.php:534
 msgid "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, mae gwall wedi digwydd. Os gwelwch yn dda <a href='/about-contact'> cysylltwch â ni</a>."
 
-#: web/write.php:566
+#: web/write.php:567
 msgid ""
 "Sorry, but your message is a bit too long\n"
 "        for our service.  Please make it shorter, or contact your\n"
 "        representative by some other means."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, ond mae eich neges ychydig yn rhy hir i'n gwasanaeth. Gwnewch hi'n fyrrach, neu cysylltwch â'ch cynrychiolydd mewn modd arall."
 
 #. None of the group of representatives can be contacted
-#: web/write.php:709
+#: web/write.php:710
 msgid "Sorry, we are unable to contact any of these representatives for the following reasons:"
-msgstr ""
+msgstr "Mae'n ddrwg gennym, nid ydym yn gallu cysylltu ag unrhyw un o'r cynrychiolwyr hyn am y rhesymau canlynol:"
 
 #. Some problems, but some reps can be contacted, proceed with a note
-#: web/write.php:712
+#: web/write.php:713
 msgid "<strong>Note:</strong> Some of these representatives cannot be contacted for the following reasons:"
-msgstr ""
+msgstr "<strong>Nodyn:</strong> Ni ellir cysylltu â rhai o'r cynrychiolwyr hyn am y rhesymau canlynol:"
 
-#: web/write.php:898
+#: web/write.php:899
 #, php-format
 msgid "There’s been a mismatch error.  Sorry about this, <a href=\"%s\">please start again</a>."
-msgstr ""
+msgstr "Bu gwall anghysondeb. Ymddiheuriadau am hyn, <a href=\"%s\">dechreuwch eto os gwelwch yn dda</a>."
 
-#: web/write.php:910
+#: web/write.php:911
 msgid "Sorry, an election is forthcoming or has recently happened here."
-msgstr ""
+msgstr "Mae'n ddrwg gennym, mae etholiad ar y gweill neu wedi digwydd yn ddiweddar yma."
+
+#~ msgid "Senedd Party List Members"
+#~ msgstr "Aelodau rhestr pleidiau'r Senedd"
+
+#~ msgid "Trying to resolve a problem you or another person is having"
+#~ msgstr "Ceisio datrys problem rydych chi neu berson arall yn ei chael"
+
+#~ msgid "Seeking to persuade or inform your representative about a wider issue"
+#~ msgstr "Ceisio perswadio neu roi gwybod i'ch cynrychiolydd am fater ehangach"

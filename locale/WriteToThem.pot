@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 16:23+0000\n"
+"POT-Creation-Date: 2026-07-08 14:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,68 +17,68 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: perllib/FYR/Queue.pm:867
+#: perllib/FYR/Queue.pm:870
 #, php-format
 msgid "Phone: %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:868
+#: perllib/FYR/Queue.pm:871
 #, php-format
 msgid "Email: %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:907
+#: perllib/FYR/Queue.pm:910
 #, php-format
 msgid "Letter from %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:908
+#: perllib/FYR/Queue.pm:911
 #, php-format
 msgid "Letter from your constituent %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:915
+#: perllib/FYR/Queue.pm:918
 #, php-format
 msgid "Letter from constituent %s to %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1298
+#: perllib/FYR/Queue.pm:1301
 #, php-format
 msgid "Please confirm that you want to send a message to %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1397
+#: perllib/FYR/Queue.pm:1400
 #, php-format
 msgid "Unfortunately, we couldn't send your message to %s"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1445
+#: perllib/FYR/Queue.pm:1448
 msgid "Three"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1445
+#: perllib/FYR/Queue.pm:1448
 msgid "Two"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1486
+#: perllib/FYR/Queue.pm:1489
 #, php-format
 msgid "Did your %s reply to your letter?"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1621
+#: perllib/FYR/Queue.pm:1624
 msgid "Bad QUESTION (should be 0-5)"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1624
+#: perllib/FYR/Queue.pm:1627
 msgid ""
 "Bad RESPONSE (should be 'YES', 'NO', 'UNSATISFACTORY' or 'NOT_EXPECTED')"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1627
+#: perllib/FYR/Queue.pm:1630
 msgid "Bad RESPONSE (should be an integer 0-10)"
 msgstr ""
 
-#: perllib/FYR/Queue.pm:1630
+#: perllib/FYR/Queue.pm:1633
 msgid ""
 "Bad RESPONSE (should be 'strongly_agree', 'agree', 'neutral', 'disagree' or "
 "'strongly_disagree')"
@@ -91,178 +91,177 @@ msgid ""
 "            href='/about-contact'>contact us</a> to let us know."
 msgstr ""
 
-#: phplib/fyr.php:168
+#: phplib/fyr.php:180
 msgid ""
 "Sorry, we are experiencing technical difficulties.  Please try again later."
 msgstr ""
 
-#: phplib/fyr.php:306
+#: phplib/fyr.php:318
 msgid "Enter postcode"
 msgstr ""
 
-#: phplib/fyr.php:307
+#: phplib/fyr.php:319
 msgid "Choose representative"
 msgstr ""
 
-#: phplib/fyr.php:308 phplib/fyr.php:314
+#: phplib/fyr.php:320 phplib/fyr.php:327
+msgid "Message type"
+msgstr ""
+
+#: phplib/fyr.php:321 phplib/fyr.php:328
 msgid "Write message"
 msgstr ""
 
-#: phplib/fyr.php:309 phplib/fyr.php:315
+#: phplib/fyr.php:322 phplib/fyr.php:329
 msgid "Send message"
 msgstr ""
 
-#: phplib/fyr.php:313
+#: phplib/fyr.php:326
 msgid "Choose a Lord"
 msgstr ""
 
-#: phplib/votingarea.php:85
+#: phplib/votingarea.php:84
 msgid "London Borough Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:87
+#: phplib/votingarea.php:86
 msgid "London Assembly Constituency Members"
 msgstr ""
 
-#: phplib/votingarea.php:88
+#: phplib/votingarea.php:87
 msgid "London Assembly Party List Members"
 msgstr ""
 
-#: phplib/votingarea.php:90
+#: phplib/votingarea.php:89
 msgid "County Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:92
+#: phplib/votingarea.php:91
 msgid "District Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:94
+#: phplib/votingarea.php:93
 msgid "Unitary Authority ED Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:95
+#: phplib/votingarea.php:94
 msgid "Unitary Authority Ward Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:97
+#: phplib/votingarea.php:96
 msgid "Local Government District Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:99
+#: phplib/votingarea.php:98
 msgid "Councillors of the Isles"
 msgstr ""
 
-#: phplib/votingarea.php:101
+#: phplib/votingarea.php:100
 msgid "Metropolitan District Councillors"
 msgstr ""
 
-#: phplib/votingarea.php:103
+#: phplib/votingarea.php:102
 msgid "Scottish Parliament Party List Members"
 msgstr ""
 
-#: phplib/votingarea.php:104
+#: phplib/votingarea.php:103
 msgid "Scottish Parliament Constituency Members"
 msgstr ""
 
-#: phplib/votingarea.php:106
-msgid "Senedd Party List Members"
-msgstr ""
-
-#: phplib/votingarea.php:107
+#: phplib/votingarea.php:105
 msgid "Senedd Constituency Members"
 msgstr ""
 
-#: phplib/votingarea.php:109
+#: phplib/votingarea.php:107
 msgid "Northern Ireland Assembly Members"
 msgstr ""
 
-#: phplib/votingarea.php:111 phplib/votingarea.php:312
-#: phplib/votingarea.php:313
+#: phplib/votingarea.php:109 phplib/votingarea.php:304
+#: phplib/votingarea.php:305
 msgid "Members of Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:112
+#: phplib/votingarea.php:110
 msgid "Members of the House of Lords"
 msgstr ""
 
-#: phplib/votingarea.php:114 phplib/votingarea.php:314
+#: phplib/votingarea.php:112 phplib/votingarea.php:306
 msgid "Members of the European Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:177
+#: phplib/votingarea.php:174
 msgid "London Borough"
 msgstr ""
 
-#: phplib/votingarea.php:178 phplib/votingarea.php:190
-#: phplib/votingarea.php:197 phplib/votingarea.php:200
+#: phplib/votingarea.php:175 phplib/votingarea.php:187
+#: phplib/votingarea.php:194 phplib/votingarea.php:197
 msgid "ward"
 msgstr ""
 
-#: phplib/votingarea.php:180
+#: phplib/votingarea.php:177
 msgid "Greater London Authority"
 msgstr ""
 
-#: phplib/votingarea.php:182
+#: phplib/votingarea.php:179
 msgid "London Assembly"
 msgstr ""
 
-#: phplib/votingarea.php:183 phplib/votingarea.php:207
-#: phplib/votingarea.php:211 phplib/votingarea.php:214
-#: phplib/votingarea.php:221 phplib/votingarea.php:223
+#: phplib/votingarea.php:180 phplib/votingarea.php:204
+#: phplib/votingarea.php:207 phplib/votingarea.php:210
+#: phplib/votingarea.php:217 phplib/votingarea.php:219
 msgid "constituency"
 msgstr ""
 
-#: phplib/votingarea.php:184 phplib/votingarea.php:206
-#: phplib/votingarea.php:210
+#: phplib/votingarea.php:181 phplib/votingarea.php:203
 msgid "Electoral Region"
 msgstr ""
 
 #. Call it state so that Google Toolbar (and presumably others) can auto-fill.
-#: phplib/votingarea.php:186 web/write.php:244
+#: phplib/votingarea.php:183 web/write.php:244
 msgid "County"
 msgstr ""
 
-#: phplib/votingarea.php:187 phplib/votingarea.php:196
+#: phplib/votingarea.php:184 phplib/votingarea.php:193
 msgid "Electoral Division"
 msgstr ""
 
-#: phplib/votingarea.php:189
+#: phplib/votingarea.php:186
 msgid "District"
 msgstr ""
 
-#: phplib/votingarea.php:192
+#: phplib/votingarea.php:189
 msgid "Local Council"
 msgstr ""
 
-#: phplib/votingarea.php:193
+#: phplib/votingarea.php:190
 msgid "Electoral Area"
 msgstr ""
 
-#: phplib/votingarea.php:195
+#: phplib/votingarea.php:192
 msgid "Unitary Authority"
 msgstr ""
 
-#: phplib/votingarea.php:199
+#: phplib/votingarea.php:196
 msgid "Metropolitan District"
 msgstr ""
 
-#: phplib/votingarea.php:202
+#: phplib/votingarea.php:199
 msgid "Council of the Isles"
 msgstr ""
 
-#: phplib/votingarea.php:203
+#: phplib/votingarea.php:200
 msgid "parish"
 msgstr ""
 
-#: phplib/votingarea.php:205
+#: phplib/votingarea.php:202
 msgid "Scottish Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:209
+#: phplib/votingarea.php:206
 msgid "Senedd"
 msgstr ""
 
-#: phplib/votingarea.php:213
+#: phplib/votingarea.php:209
 msgid "Northern Ireland Assembly"
 msgstr ""
 
@@ -271,173 +270,172 @@ msgstr ""
 #. using a proportional system. It looks like
 #. most people just refer to them as
 #. "constituencies".
-#: phplib/votingarea.php:220
+#: phplib/votingarea.php:216
 msgid "House of Commons"
 msgstr ""
 
-#: phplib/votingarea.php:222 templates/website/about-sidebar.html:9
-#: web/who.php:105 web/who.php:494
+#: phplib/votingarea.php:218 templates/website/about-sidebar.html:9
+#: web/who.php:111 web/who.php:501
 msgid "House of Lords"
 msgstr ""
 
-#: phplib/votingarea.php:225
+#: phplib/votingarea.php:221
 msgid "European Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:226
+#: phplib/votingarea.php:222
 msgid "region"
 msgstr ""
 
-#: phplib/votingarea.php:230 phplib/votingarea.php:236
-#: phplib/votingarea.php:237 phplib/votingarea.php:238
-#: phplib/votingarea.php:239 phplib/votingarea.php:240
-#: phplib/votingarea.php:252 phplib/votingarea.php:258
-#: phplib/votingarea.php:259 phplib/votingarea.php:260
-#: phplib/votingarea.php:261 phplib/votingarea.php:262
+#: phplib/votingarea.php:226 phplib/votingarea.php:232
+#: phplib/votingarea.php:233 phplib/votingarea.php:234
+#: phplib/votingarea.php:235 phplib/votingarea.php:236
+#: phplib/votingarea.php:247 phplib/votingarea.php:253
+#: phplib/votingarea.php:254 phplib/votingarea.php:255
+#: phplib/votingarea.php:256 phplib/votingarea.php:257
 msgid "councillor"
 msgstr ""
 
-#: phplib/votingarea.php:231 phplib/votingarea.php:253
-#: phplib/votingarea.php:331
+#: phplib/votingarea.php:227 phplib/votingarea.php:248
+#: phplib/votingarea.php:322
 msgid "Mayor"
 msgstr ""
 
 #. "of London"?
-#: phplib/votingarea.php:232 phplib/votingarea.php:233
-#: phplib/votingarea.php:254 phplib/votingarea.php:255
+#: phplib/votingarea.php:228 phplib/votingarea.php:229
+#: phplib/votingarea.php:249 phplib/votingarea.php:250
 msgid "London Assembly Member"
 msgstr ""
 
-#: phplib/votingarea.php:234 phplib/votingarea.php:256
+#: phplib/votingarea.php:230 phplib/votingarea.php:251
 msgid "county councillor"
 msgstr ""
 
-#: phplib/votingarea.php:235 phplib/votingarea.php:257
+#: phplib/votingarea.php:231 phplib/votingarea.php:252
 msgid "district councillor"
 msgstr ""
 
-#: phplib/votingarea.php:241 phplib/votingarea.php:242
-#: phplib/votingarea.php:320 phplib/votingarea.php:321
+#: phplib/votingarea.php:237 phplib/votingarea.php:238
+#: phplib/votingarea.php:312 phplib/votingarea.php:313
 msgid "MSP"
 msgstr ""
 
-#: phplib/votingarea.php:243 phplib/votingarea.php:244
-#: phplib/votingarea.php:322 phplib/votingarea.php:323
+#: phplib/votingarea.php:239 phplib/votingarea.php:314
 msgid "MS"
 msgstr ""
 
-#: phplib/votingarea.php:245 phplib/votingarea.php:324
+#: phplib/votingarea.php:240 phplib/votingarea.php:315
 msgid "MLA"
 msgstr ""
 
-#: phplib/votingarea.php:246 phplib/votingarea.php:325
+#: phplib/votingarea.php:241 phplib/votingarea.php:316
 msgid "MP"
 msgstr ""
 
-#: phplib/votingarea.php:247
+#: phplib/votingarea.php:242
 msgid "Lord"
 msgstr ""
 
-#: phplib/votingarea.php:248 phplib/votingarea.php:326
+#: phplib/votingarea.php:243 phplib/votingarea.php:317
 msgid "MEP"
 msgstr ""
 
-#: phplib/votingarea.php:263 phplib/votingarea.php:264
+#: phplib/votingarea.php:258 phplib/votingarea.php:259
 msgid "Member of the Scottish Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:265 phplib/votingarea.php:266
+#: phplib/votingarea.php:260
 msgid "Member of the Senedd"
 msgstr ""
 
-#: phplib/votingarea.php:267
+#: phplib/votingarea.php:261
 msgid "Member of the Legislative Assembly"
 msgstr ""
 
-#: phplib/votingarea.php:268 phplib/votingarea.php:269
+#: phplib/votingarea.php:262 phplib/votingarea.php:263
 msgid "Member of Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:270
+#: phplib/votingarea.php:264
 msgid "Member of the European Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:274 phplib/votingarea.php:280
-#: phplib/votingarea.php:281 phplib/votingarea.php:282
-#: phplib/votingarea.php:283 phplib/votingarea.php:284
-#: phplib/votingarea.php:296 phplib/votingarea.php:302
-#: phplib/votingarea.php:303 phplib/votingarea.php:304
-#: phplib/votingarea.php:305 phplib/votingarea.php:306
+#: phplib/votingarea.php:268 phplib/votingarea.php:274
+#: phplib/votingarea.php:275 phplib/votingarea.php:276
+#: phplib/votingarea.php:277 phplib/votingarea.php:278
+#: phplib/votingarea.php:289 phplib/votingarea.php:295
+#: phplib/votingarea.php:296 phplib/votingarea.php:297
+#: phplib/votingarea.php:298 phplib/votingarea.php:299
 msgid "councillors"
 msgstr ""
 
-#: phplib/votingarea.php:275 phplib/votingarea.php:297
+#: phplib/votingarea.php:269 phplib/votingarea.php:290
 msgid "Mayors"
 msgstr ""
 
 #. "of London"?
-#: phplib/votingarea.php:276 phplib/votingarea.php:277
-#: phplib/votingarea.php:298 phplib/votingarea.php:299
+#: phplib/votingarea.php:270 phplib/votingarea.php:271
+#: phplib/votingarea.php:291 phplib/votingarea.php:292
 msgid "London Assembly Members"
 msgstr ""
 
-#: phplib/votingarea.php:278 phplib/votingarea.php:300
+#: phplib/votingarea.php:272 phplib/votingarea.php:293
 msgid "county councillors"
 msgstr ""
 
-#: phplib/votingarea.php:279 phplib/votingarea.php:301
+#: phplib/votingarea.php:273 phplib/votingarea.php:294
 msgid "district councillors"
 msgstr ""
 
-#: phplib/votingarea.php:285 phplib/votingarea.php:286
+#: phplib/votingarea.php:279 phplib/votingarea.php:280
 msgid "MSPs"
 msgstr ""
 
-#: phplib/votingarea.php:287 phplib/votingarea.php:288
+#: phplib/votingarea.php:281
 msgid "MSs"
 msgstr ""
 
-#: phplib/votingarea.php:289
+#: phplib/votingarea.php:282
 msgid "MLAs"
 msgstr ""
 
-#: phplib/votingarea.php:290
+#: phplib/votingarea.php:283
 msgid "MPs"
 msgstr ""
 
-#: phplib/votingarea.php:291
+#: phplib/votingarea.php:284
 msgid "Lords"
 msgstr ""
 
-#: phplib/votingarea.php:292
+#: phplib/votingarea.php:285
 msgid "MEPs"
 msgstr ""
 
-#: phplib/votingarea.php:307 phplib/votingarea.php:308
+#: phplib/votingarea.php:300 phplib/votingarea.php:301
 msgid "Members of the Scottish Parliament"
 msgstr ""
 
-#: phplib/votingarea.php:309 phplib/votingarea.php:310
+#: phplib/votingarea.php:302
 msgid "Members of the Senedd"
 msgstr ""
 
-#: phplib/votingarea.php:311
+#: phplib/votingarea.php:303
 msgid "Members of the Legislative Assembly"
 msgstr ""
 
-#: phplib/votingarea.php:318 phplib/votingarea.php:319
+#: phplib/votingarea.php:310 phplib/votingarea.php:311
 msgid "AM"
 msgstr ""
 
 #. "of London"?
-#: phplib/votingarea.php:330 phplib/votingarea.php:332
-#: phplib/votingarea.php:333 phplib/votingarea.php:334
-#: phplib/votingarea.php:335 phplib/votingarea.php:336
-#: phplib/votingarea.php:337 phplib/votingarea.php:338
+#: phplib/votingarea.php:321 phplib/votingarea.php:323
+#: phplib/votingarea.php:324 phplib/votingarea.php:325
+#: phplib/votingarea.php:326 phplib/votingarea.php:327
+#: phplib/votingarea.php:328 phplib/votingarea.php:329
 msgid "Cllr"
 msgstr ""
 
-#: phplib/votingarea.php:346
+#: phplib/votingarea.php:337
 msgid ""
 "The District Council is responsible for\n"
 "            <strong>local services</strong>, including <strong>planning</"
@@ -445,7 +443,7 @@ msgid ""
 "            <strong>rubbish collection</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:349
+#: phplib/votingarea.php:340
 msgid ""
 "\n"
 "The Borough Council is responsible for <strong>local services</strong>,\n"
@@ -454,7 +452,7 @@ msgid ""
 "<strong>public paths</strong>.\n"
 msgstr ""
 
-#: phplib/votingarea.php:355
+#: phplib/votingarea.php:346
 msgid ""
 "\n"
 "Areas covered include the\n"
@@ -465,7 +463,7 @@ msgid ""
 "and <strong>trunk roads</strong>.\n"
 msgstr ""
 
-#: phplib/votingarea.php:362
+#: phplib/votingarea.php:353
 msgid ""
 "The Metropolitan District Council is\n"
 "responsible for all aspects of <strong>local services and policy</strong>, "
@@ -477,7 +475,7 @@ msgid ""
 "<strong>libraries</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:368
+#: phplib/votingarea.php:359
 msgid ""
 "The Unitary Authority is\n"
 "responsible for all aspects of <strong>local services and policy</strong>, "
@@ -489,7 +487,7 @@ msgid ""
 "<strong>libraries</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:373
+#: phplib/votingarea.php:364
 msgid ""
 "\n"
 "The Council of the Isles is responsible for <strong>education</strong>,\n"
@@ -500,7 +498,7 @@ msgid ""
 "airport</strong>.\n"
 msgstr ""
 
-#: phplib/votingarea.php:381 templates/website/yourrep/ced.html:1
+#: phplib/votingarea.php:372 templates/website/yourrep/ced.html:1
 msgid ""
 "The County Council is responsible for <strong>local\n"
 "services</strong>, including <strong>education</strong>, <strong>social "
@@ -510,7 +508,7 @@ msgid ""
 "<strong>libraries</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:387
+#: phplib/votingarea.php:378
 msgid ""
 "The Local Council is responsible for\n"
 "            <strong>local services</strong>, including \n"
@@ -520,7 +518,7 @@ msgid ""
 "            <strong>local economic and cultural development</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:394
+#: phplib/votingarea.php:385
 msgid ""
 "The House of Commons is responsible for\n"
 "            <strong>making laws in the UK and for overall scrutiny of all "
@@ -528,7 +526,7 @@ msgid ""
 "            government</strong>."
 msgstr ""
 
-#: phplib/votingarea.php:397
+#: phplib/votingarea.php:388
 msgid ""
 "\n"
 "They <strong>scrutinise proposed European laws</strong> and the "
@@ -537,7 +535,7 @@ msgid ""
 "decision-making bodies</strong>.\n"
 msgstr ""
 
-#: phplib/votingarea.php:402
+#: phplib/votingarea.php:393
 msgid ""
 "\n"
 "The Scottish Parliament is responsible for a wide range of <strong>devolved\n"
@@ -548,7 +546,7 @@ msgid ""
 "and <strong>prisons</strong>. It also has some tax-raising powers.\n"
 msgstr ""
 
-#: phplib/votingarea.php:409
+#: phplib/votingarea.php:400
 msgid ""
 "\n"
 "The Senedd has a wide range of powers over areas including\n"
@@ -558,7 +556,7 @@ msgid ""
 "Language</strong>.\n"
 msgstr ""
 
-#: phplib/votingarea.php:416
+#: phplib/votingarea.php:407
 msgid ""
 "\n"
 "The Northern Ireland Assembly has full authority over \"transferred "
@@ -574,11 +572,11 @@ msgid ""
 "councillors and other elected representatives."
 msgstr ""
 
-#: templates/common_header.php:138
+#: templates/common_header.php:140
 msgid "Opens in a new window"
 msgstr ""
 
-#: templates/common_header.php:138 templates/website/footer.php:15
+#: templates/common_header.php:140 templates/website/footer.php:15
 msgid "Help"
 msgstr ""
 
@@ -931,8 +929,8 @@ msgid "What postcode should I use?"
 msgstr ""
 
 #: templates/website/about-sidebar.html:8
-#: templates/website/about-yourrep.html:3
-#: templates/website/about-yourrep.html:57
+#: templates/website/about-yourrep.html:5
+#: templates/website/about-yourrep.html:41
 msgid "Who should I write to?"
 msgstr ""
 
@@ -964,66 +962,66 @@ msgstr ""
 msgid "Contact us"
 msgstr ""
 
-#: templates/website/about-yourrep.html:68
+#: templates/website/about-yourrep.html:52
 #, php-format
 msgid ""
 "Showing advice for representatives in <strong>%s</strong>. Enter a different "
 "postcode to see advice for another area."
 msgstr ""
 
-#: templates/website/about-yourrep.html:70
+#: templates/website/about-yourrep.html:54
 msgid "Enter your postcode to see advice tailored to your representatives."
 msgstr ""
 
-#: templates/website/about-yourrep.html:78
+#: templates/website/about-yourrep.html:62
 msgid "Update"
 msgstr ""
 
-#: templates/website/about-yourrep.html:86 templates/website/yourrep/mp.html:1
+#: templates/website/about-yourrep.html:70 templates/website/yourrep/mp.html:1
 msgid "When should I contact my MP?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:87
+#: templates/website/about-yourrep.html:71
 msgid "When should I contact a councillor?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:88 templates/website/yourrep/msp.html:1
+#: templates/website/about-yourrep.html:72 templates/website/yourrep/msp.html:1
 msgid "When should I contact an MSP?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:89
+#: templates/website/about-yourrep.html:73
 msgid "When should I contact an MLA?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:90 templates/website/yourrep/am.html:1
+#: templates/website/about-yourrep.html:74 templates/website/yourrep/am.html:1
 msgid "When should I contact a Senedd Member?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:91
+#: templates/website/about-yourrep.html:75
 msgid "When should I contact a Greater London Assembly Member?"
 msgstr ""
 
-#: templates/website/about-yourrep.html:109
+#: templates/website/about-yourrep.html:93
 msgid "Write to your councillor"
 msgstr ""
 
-#: templates/website/about-yourrep.html:117
+#: templates/website/about-yourrep.html:101
 msgid "Write to your MSP"
 msgstr ""
 
-#: templates/website/about-yourrep.html:123
+#: templates/website/about-yourrep.html:107
 msgid "Write to your MLA"
 msgstr ""
 
-#: templates/website/about-yourrep.html:129
+#: templates/website/about-yourrep.html:113
 msgid "Write to your Senedd Member"
 msgstr ""
 
-#: templates/website/about-yourrep.html:135
+#: templates/website/about-yourrep.html:119
 msgid "Write to your London Assembly Member"
 msgstr ""
 
-#: templates/website/about-yourrep.html:150
+#: templates/website/about-yourrep.html:134
 msgid "Write to your MP"
 msgstr ""
 
@@ -1037,7 +1035,7 @@ msgid ""
 "place."
 msgstr ""
 
-#: templates/website/can-you-help.html:7 templates/website/footer.php:30
+#: templates/website/can-you-help.html:7 templates/website/footer.php:32
 msgid "Donate now"
 msgstr ""
 
@@ -1925,8 +1923,8 @@ msgid ""
 "We’re very glad to hear it!\n"
 "\n"
 "If you would like to show your appreciation, please consider <a "
-"href=\"https://www.mysociety.org/donate/\">making a donation to mySociety</"
-"a>,\n"
+"href=\"https://www.mysociety.org/donate/support-writetothem-and-mysociety/"
+"\">making a donation to mySociety</a>,\n"
 "who built and maintain WriteToThem.\n"
 "\n"
 "You can also help us greatly by spreading the word about the site. Tell all "
@@ -2115,26 +2113,32 @@ msgstr ""
 msgid "Link To Us"
 msgstr ""
 
-#: templates/website/footer.php:29
-msgid "Your donations keep this site and others like it running"
+#: templates/website/footer.php:30
+msgid "Support WriteToThem"
 msgstr ""
 
-#: templates/website/footer.php:44
+#: templates/website/footer.php:31
+msgid ""
+"We are a charity – donate today to invest in making UK politics more "
+"accessible. Even £5 goes a long way!"
+msgstr ""
+
+#: templates/website/footer.php:46
 #, php-format
 msgid ""
 "Built by <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-"
 "footer__org__logo--mysociety\">mySociety</a>"
 msgstr ""
 
-#: templates/website/footer.php:53
+#: templates/website/footer.php:55
 msgid "Data by GovEval"
 msgstr ""
 
-#: templates/website/footer.php:54
+#: templates/website/footer.php:56
 msgid "Hosted by Mythic Beasts"
 msgstr ""
 
-#: templates/website/footer.php:61
+#: templates/website/footer.php:63
 #, php-format
 msgid ""
 "<a href=\"%s\">mySociety</a> is a registered charity in England and Wales "
@@ -2144,8 +2148,7 @@ msgid ""
 msgstr ""
 
 #: templates/website/index-advice.html:35
-#: templates/website/index-advice.html:38
-msgid "Did you type the letter "
+msgid "Did you type the letter ‘O’ instead of a zero?"
 msgstr ""
 
 #: templates/website/index-advice.html:36
@@ -2153,6 +2156,10 @@ msgid ""
 "This is an easy mistake to make. The most likely culprit is the first digit "
 "in the second part of the code. You need to put, for example: <code>N8 0NP</"
 "code>  rather than <code>N8 ONP</code>."
+msgstr ""
+
+#: templates/website/index-advice.html:38
+msgid "Did you type the letter ‘I’ instead of a figure 1?"
 msgstr ""
 
 #: templates/website/index-advice.html:39
@@ -2196,12 +2203,54 @@ msgstr ""
 msgid "It makes no difference whether you use capital letters or not."
 msgstr ""
 
-#: templates/website/index-index.html:53
+#: templates/website/index-index.html:61
 msgid "You may also have representatives at other levels of government."
 msgstr ""
 
-#: templates/website/index-index.html:64
+#: templates/website/index-index.html:72
 msgid "Photograph by Rick Harrison"
+msgstr ""
+
+#: templates/website/message-type.html:3 templates/website/message-type.html:21
+msgid "What is your message about?"
+msgstr ""
+
+#: templates/website/message-type.html:23
+msgid "This helps us give you the best guidance for writing your message."
+msgstr ""
+
+#: templates/website/message-type.html:45 web/confirm.php:51
+msgid "I need help with a problem"
+msgstr ""
+
+#: templates/website/message-type.html:46 web/confirm.php:51
+msgid ""
+"A personal issue you'd like your representative to help with, such as "
+"housing, benefits, or a local concern."
+msgstr ""
+
+#: templates/website/message-type.html:53 web/confirm.php:55
+msgid "I want to talk about a policy or campaign"
+msgstr ""
+
+#: templates/website/message-type.html:54 web/confirm.php:55
+msgid ""
+"You want to persuade your representative to support or oppose a policy, law, "
+"or campaign."
+msgstr ""
+
+#: templates/website/message-type.html:61
+msgid "Something else"
+msgstr ""
+
+#: templates/website/message-type.html:62
+msgid ""
+"A thank you, a general question, or anything that doesn't fit the categories "
+"above."
+msgstr ""
+
+#: templates/website/message-type.html:70
+msgid "Continue"
 msgstr ""
 
 #: templates/website/problem-generic.html:4
@@ -2213,7 +2262,7 @@ msgid "Problem with your message"
 msgstr ""
 
 #: templates/website/problem-generic.html:14 web/write.php:403
-#: web/write.php:489
+#: web/write.php:490
 msgid "Message Rejected"
 msgstr ""
 
@@ -2335,7 +2384,7 @@ msgid ""
 "a few amendments."
 msgstr ""
 
-#: templates/website/qa/formletters.html:1
+#: templates/website/qa/formletters.html:5
 msgid ""
 "It’s much more powerful to write in your own words, telling your\n"
 "representative about your own beliefs and experiences.  We want to make the\n"
@@ -2380,7 +2429,7 @@ msgid ""
 "to write in their own words."
 msgstr ""
 
-#: templates/website/qa/onlyrep.html:1
+#: templates/website/qa/onlyrep.html:4
 msgid ""
 "\n"
 "Our service is only\n"
@@ -2505,6 +2554,28 @@ msgstr ""
 msgid "Submit answers"
 msgstr ""
 
+#: templates/website/survey-done.html:3
+msgid "Thanks"
+msgstr ""
+
+#: templates/website/survey-done.html:13
+msgid "Many thanks"
+msgstr ""
+
+#: templates/website/survey-done.html:21
+msgid ""
+"Thanks for helping us understand more about who is using WriteToThem, so we "
+"can improve it for future users."
+msgstr ""
+
+#: templates/website/survey-done.html:23
+msgid "If you’ve got any questions, feel free to"
+msgstr ""
+
+#: templates/website/survey-done.html:23
+msgid "contact us"
+msgstr ""
+
 #: templates/website/survey-thanks.html:25
 msgid "Thanks for your help"
 msgstr ""
@@ -2530,7 +2601,7 @@ msgstr ""
 msgid "Not sure who to contact?"
 msgstr ""
 
-#: templates/website/who.html:50
+#: templates/website/who.html:60
 msgid ""
 "Sorry, but we’ve not got any data for your area. Please\n"
 "                    <a href=\"/about-contact\">contact us</a> and let us "
@@ -2612,7 +2683,7 @@ msgid ""
 "your message will be ignored."
 msgstr ""
 
-#: templates/website/write-write.html:107
+#: templates/website/write-write.html:115
 #, php-format
 msgid ""
 "<a class=\"fancybox\" href=\"about-yourrep#%s\" target=\"_blank\">Read "
@@ -2620,7 +2691,7 @@ msgid ""
 "they can&rsquo;t."
 msgstr ""
 
-#: templates/website/write-write.html:111
+#: templates/website/write-write.html:119
 msgid ""
 "Lords vote on and amend UK bills before they become law. By writing to a\n"
 "    Lord you might be able to tell them about something you think they "
@@ -2630,6 +2701,41 @@ msgid ""
 "    evidence to someone you disagree with. For other matters, it might be "
 "better\n"
 "    to contact your MP or a local representative."
+msgstr ""
+
+#: templates/website/write-write.html:159
+msgid "Casework tips"
+msgstr ""
+
+#: templates/website/write-write.html:161
+msgid ""
+"Explain your situation clearly and include relevant details such as dates, "
+"reference numbers, or addresses."
+msgstr ""
+
+#: templates/website/write-write.html:162
+msgid ""
+"Give your consent for your representative to contact any relevant third "
+"parties, such as government departments or local authorities."
+msgstr ""
+
+#: templates/website/write-write.html:163
+msgid "Let your representative know what outcome you are hoping for."
+msgstr ""
+
+#: templates/website/write-write.html:166
+msgid "Campaign tips"
+msgstr ""
+
+#: templates/website/write-write.html:168
+msgid ""
+"Explain why this issue matters to you personally &ndash; personal stories "
+"are more effective than form letters."
+msgstr ""
+
+#: templates/website/write-write.html:169
+msgid ""
+"Be specific about what action you would like your representative to take."
 msgstr ""
 
 #: templates/website/yourrep/am.html:3
@@ -2854,33 +2960,17 @@ msgid "Can you tell us in a sentence what your message was about?"
 msgstr ""
 
 #. Creates a fieldset with radio options and legend
-#: web/confirm.php:40
+#: web/confirm.php:47
 msgid ""
 "Which of the following best describes why you are writing to your "
 "representative?"
 msgstr ""
 
-#: web/confirm.php:44
-msgid "Casework"
-msgstr ""
-
-#: web/confirm.php:44
-msgid "Trying to resolve a problem you or another person is having"
-msgstr ""
-
-#: web/confirm.php:48
-msgid "Campaigning"
-msgstr ""
-
-#: web/confirm.php:48
-msgid "Seeking to persuade or inform your representative about a wider issue"
-msgstr ""
-
-#: web/confirm.php:54
+#: web/confirm.php:62
 msgid "Submit"
 msgstr ""
 
-#: web/confirm.php:79 web/response.php:24
+#: web/confirm.php:87 web/response.php:24
 msgid ""
 "Please make sure you copy the URL from your email properly. The token was "
 "missing."
@@ -2936,7 +3026,7 @@ msgstr ""
 msgid "Failed to look up message id for token"
 msgstr ""
 
-#: web/who.php:70 web/who.php:72
+#: web/who.php:76 web/who.php:78
 #, php-format
 msgid "Your %s"
 msgstr ""
@@ -2948,55 +3038,55 @@ msgstr ""
 #. soon as we can after the election. For more information, see
 #. <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
 #. } else {
-#: web/who.php:74 web/who.php:523
+#: web/who.php:80 web/who.php:530
 msgid ""
 "<p>There’s an upcoming election.  We’ll be adding your new representative as "
 "soon as we can after the election.</p>"
 msgstr ""
 
-#: web/who.php:106 web/who.php:495
+#: web/who.php:112 web/who.php:502
 msgid ""
 "Lords are not elected by you, but they still get to vote in Parliament just "
 "like your MP. You may want to write to a Lord (<a href=\"about-lords\">more "
 "info</a>)."
 msgstr ""
 
-#: web/who.php:107 web/who.php:496
+#: web/who.php:113 web/who.php:503
 msgid "Write to a Lord"
 msgstr ""
 
-#: web/who.php:294
+#: web/who.php:301
 msgid "Write to all your regional MSs"
 msgstr ""
 
-#: web/who.php:330
+#: web/who.php:337
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you on the {chamber_name}."
 msgstr ""
 
-#: web/who.php:332
+#: web/who.php:339
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you in the {chamber_name}."
 msgstr ""
 
-#: web/who.php:334
+#: web/who.php:341
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you on {chamber_name}."
 msgstr ""
 
-#: web/who.php:344
+#: web/who.php:351
 msgid "Your {area_name} {rep_name} represents you on the {chamber_name}."
 msgstr ""
 
-#: web/who.php:346
+#: web/who.php:353
 msgid "Your {area_name} {rep_name} represents you in the {chamber_name}."
 msgstr ""
 
-#: web/who.php:348
+#: web/who.php:355
 msgid "Your {area_name} {rep_name} represents you on {chamber_name}."
 msgstr ""
 
-#: web/who.php:358
+#: web/who.php:365
 #, php-format
 msgid ""
 " Most %s are not paid a salary, but get a basic allowance for the work they "
@@ -3004,30 +3094,30 @@ msgid ""
 msgstr ""
 
 #. $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
-#: web/who.php:425
+#: web/who.php:432
 msgid "Correct a mistake in this list"
 msgstr ""
 
-#: web/who.php:447
+#: web/who.php:454
 #, php-format
 msgid "%d %s %s %s also represent you"
 msgstr ""
 
-#: web/who.php:449
+#: web/who.php:456
 #, php-format
 msgid "One %s %s %s also represents you"
 msgstr ""
 
-#: web/who.php:488
+#: web/who.php:495
 #, php-format
 msgid "See %s’s voting record and speeches at TheyWorkForYou"
 msgstr ""
 
-#: web/who.php:497
+#: web/who.php:504
 msgid "<div class=\"rep-more\">"
 msgstr ""
 
-#: web/who.php:512
+#: web/who.php:519
 msgid ""
 "<p>There have been boundary changes at the last election that means we can’t "
 "yet say who your representative is. We hope to get our boundary database "
@@ -3035,7 +3125,7 @@ msgid ""
 "completion.</p>"
 msgstr ""
 
-#: web/who.php:514
+#: web/who.php:521
 msgid ""
 "<p>Due to the recent election, we don’t yet have details for this "
 "representative. We generally rely on data from external sources, and will be "
@@ -3043,7 +3133,7 @@ msgid ""
 "completion.</p>"
 msgstr ""
 
-#: web/who.php:526
+#: web/who.php:533
 msgid "Representative details are not available for an unknown reason."
 msgstr ""
 
@@ -3245,32 +3335,32 @@ msgstr ""
 msgid "Your message is near-identical with others sent previously"
 msgstr ""
 
-#: web/write.php:421 web/write.php:593
+#: web/write.php:421 web/write.php:594
 msgid ""
 "Sorry, but your browser seems to be transmitting erroneous data to us. "
 "Please try again, or <a href=\"/about-contact\">contact us</a>."
 msgstr ""
 
 #. None of the messages could be sent
-#: web/write.php:430 web/write.php:504
+#: web/write.php:430 web/write.php:505
 msgid "Sorry, we were unable to send your messages for the following reasons:"
 msgstr ""
 
-#: web/write.php:487
+#: web/write.php:488
 msgid "read more"
 msgstr ""
 
-#: web/write.php:509
+#: web/write.php:510
 msgid ""
 "Note: Some of your messages could not be sent for the following reasons:"
 msgstr ""
 
-#: web/write.php:533
+#: web/write.php:534
 msgid ""
 "Sorry, an error has occurred. Please <a href='/about-contact'>contact us</a>."
 msgstr ""
 
-#: web/write.php:566
+#: web/write.php:567
 msgid ""
 "Sorry, but your message is a bit too long\n"
 "        for our service.  Please make it shorter, or contact your\n"
@@ -3278,26 +3368,26 @@ msgid ""
 msgstr ""
 
 #. None of the group of representatives can be contacted
-#: web/write.php:709
+#: web/write.php:710
 msgid ""
 "Sorry, we are unable to contact any of these representatives for the "
 "following reasons:"
 msgstr ""
 
 #. Some problems, but some reps can be contacted, proceed with a note
-#: web/write.php:712
+#: web/write.php:713
 msgid ""
 "<strong>Note:</strong> Some of these representatives cannot be contacted for "
 "the following reasons:"
 msgstr ""
 
-#: web/write.php:898
+#: web/write.php:899
 #, php-format
 msgid ""
 "There’s been a mismatch error.  Sorry about this, <a href=\"%s\">please "
 "start again</a>."
 msgstr ""
 
-#: web/write.php:910
+#: web/write.php:911
 msgid "Sorry, an election is forthcoming or has recently happened here."
 msgstr ""
