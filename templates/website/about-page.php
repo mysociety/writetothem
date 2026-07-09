@@ -54,6 +54,15 @@ $about_pages = [
         'title' => _('Privacy'),
         'heading' => _('Privacy'),
     ],
+    'about-elsewhere' => [
+        'title' => _('British Overseas Territories and Crown Dependencies'),
+        'heading' => _('British Overseas Territories and Crown Dependencies'),
+    ],
+    'about-feedback' => [
+        'title' => _('What people said about WriteToThem.com'),
+        'heading' => _('What people said about WriteToThem.com'),
+        'class' => 'feedback',
+    ],
 ];
 
 $md_page = $values['md_page'];
@@ -66,12 +75,20 @@ $meta = $about_pages[$md_page];
 $context = about_md_context($md_page);
 
 $values['title'] = $meta['title'];
+
+// A page may request an extra class on its content column (e.g. 'feedback',
+// which styles the testimonial blockquotes).
+$col_class = 'large-10 large-centered columns';
+if (!empty($meta['class'])) {
+    $col_class .= ' ' . $meta['class'];
+}
+
 template_draw('header', $values);
 
 ?>
 
 <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="<?= $col_class ?>">
 
         <div class="row">
             <div class="large-12 columns">
