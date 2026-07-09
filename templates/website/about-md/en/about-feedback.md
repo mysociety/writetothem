@@ -1,33 +1,35 @@
-> "I am writing to say that I have now used the site to contact my local Councillors on two occasions. On each occasion I had an immediate response and my complaints were looked into and remedied. I must say that I find the response time quite amazing and it is by far the easiest and quickest way to get hold of whoever is responsible for dealing with council problems."
+Every year, hundreds of thousands of people use WriteToThem to contact the people who represent them — from local councillors to MPs.
 
-> "This is a great website, thanks to you I have entered into correspondence with a number of MPs in the last year, something that I had previously thought would not be possible."
+WriteToThem gets used in two ways: **casework**, where an individual is trying to solve a problem, and **campaigning**, where lots of people write about a shared issue. In both cases, people have used WriteToThem to get a response from their representative, and to make a difference on the issues that matter to them.
 
-> "I would like to say how impressed I am by this website. After writing to my MP I received an almost immediate response from him. Now I receive a follow-up email to check whether he has replied to my letter or not. It has long since been my impression that MPs do not listen to their constituents but my experience here dispels that assumption entirely."
+[TOC]
 
-> "Great idea. Well done, at last I feel that I might have a voice that could be listened to. "
+## What people tell us {#feedback}
 
-> "Thanks for your help and think this site is great as it is so easy to contact "them" in power."
+These are a few of the messages we’ve received from users about how they’ve used WriteToThem to get in touch with their representatives:
 
-> "I really like this website! It makes it quick and simple to contact the people who you think are out of reach. Very impressed. Got a very quick response from my MP’s office. Very Happy!"
+> “I am writing to say that I have now used the site to contact my local Councillors on two occasions. On each occasion I had an immediate response and my complaints were looked into and remedied. I must say that I find the response time quite amazing and it is by far the easiest and quickest way to get hold of whoever is responsible for dealing with council problems.”
 
-> "I really enjoyed getting that high density paper and cream envelope with the house of commons stamp on it in response"
+> “It has long since been my impression that MPs do not listen to their constituents but my experience here dispels that assumption entirely.”
 
-> "Just want to say that this service is great and made it really easy to contact my MP who responded with a brilliant and well considered reply."
+> “Well done, at last I feel that I might have a voice that could be listened to.”
 
-> "An excellent service, and an easy to read and use website. Thank goodness for sites like yours. Someone using this site is usually pretty stressed so needs a quick and easy to use website that is easy to find. Yours has it all in abundance. It has proved to be effective twice for me. A big thumbs up and thanks from me."
+> “I think your website is brilliant. I’m calling it the lazy activist’s new power tool because it makes it so easy to get in touch with district and county councillors, your local MP, the House of Lords and your MEP… (I got a response through my letterbox, so I know it really works!)”
 
-> "I am so grateful to you for making my writing to him possible and easy. I found the whole experience very positive.Thank you so much for enabling the first time I have contacted an MP and on an issue which is so important to me."
+> “I really enjoyed getting that high density paper and cream envelope with the house of commons stamp on it in response.”
 
-> "I think your website is brilliant. I’m calling it the lazy activist’s new power tool because it makes it so easy to get in touch with district and county councillors, your local MP, the House of Lords and your MEP…(I got a response through my letterbox, so I know it really works!)"
+> “I have just discovered this website and used it for the first time to contact my MP. I had a response within seven days by means of a letter, which referred me to information in Hansard concerning the issue I was concerned about. I have forwarded your website address to a number of friends. Many thanks for providing a very useful service.”
 
-> "Just a quick note. I sent, through your website, a message to my local MP. I received a full response by e-mail the following day. Brilliant service from both you and him!"
+To protect those representatives who do get in touch with their constituents, we’ve taken out their names and replaced them with “my MP”. Other than that, all these quotes are genuine, and from constituents rather like yourself.
 
-> "I have just discovered this website and used it for the first time to contact my MP. I had a response within seven days by means of a letter, which referred me to information in Hansard concerning the issue I was concerned about. I have forwarded your website address to a number of friends. Many thanks for providing a very useful service."
+We can’t guarantee that your representative will get in touch with you about your query, but many of them do respond promptly.
 
-> "Brilliant I’ve got a meeting with my mp. Thanks for the service"
+It’s always inspiring to hear about your successes — do keep [telling us about them](/about-contact).
 
-It’s always inspiring to hear about your successes - do keep [keep telling us about them](/about-contact).
+## Campaigns and organisations {#campaigns}
 
-To protect those representatives who do get in touch with their constituents we have taken out their names and replaced them with "my MP". Other than that, all these quotes are genuine, and from constituents rather like yourself.
+WriteToThem has also helped people work together for change.
 
-We can’t guarantee that your MP will get in touch with you about your query, but many of them do respond promptly.
+**Power for People** built support for the Local Electricity Bill this way, using WriteToThem as the final step in their campaign. Rather than push identical, copy-and-pasted emails — which our system blocks — they gave supporters the facts and encouraged them to write in their own words and keep up the conversation with their MP. The campaign went on to win the backing of hundreds of MPs and local authorities. mySociety wrote up [how they did it](https://www.mysociety.org/2023/09/07/mass-mobilisation-of-supporters-with-writetothem/).
+
+The issues people write about go well beyond “big politics”, too. The band [**Iron Maiden**](https://www.mysociety.org/democracy/writetothem-for-campaigners/writetothem/) rallied fans to contact representatives about ticket touting, and [national newspapers across the political spectrum](https://www.mysociety.org/files/2011/06/WriteToThem_research_report-2011-Tobias-Escher.pdf) have used the site to mobilise readers on the story of the day.

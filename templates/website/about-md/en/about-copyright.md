@@ -1,8 +1,8 @@
 <h3><a href="https://www.mysociety.org"><img src="/static/img/credits/ms.png" srcset="/static/img/credits/ms@2x.png 2x" alt="mySociety"></a></h3>
 
-This site was built by [mySociety](https://www.mysociety.org): here’s [information about us and why we run this site](about-us).
+This site was built by [mySociety](https://www.mysociety.org): here’s [information about us and why we run this site](/about-us).
 
-Most of the site is Copyright &copy; [UK Citizens Online Democracy](https://www.mysociety.org/about/structure-and-governance/) (the prior name of mySociety), but [the source code is available](https://github.com/mysociety/writetothem) under an open source license.
+Most of the site is Copyright © [UK Citizens Online Democracy](https://www.mysociety.org/about/structure-and-governance/) (the former name of mySociety), but [the source code is available](https://github.com/mysociety/writetothem) under an open source licence.
 
 <hr>
 

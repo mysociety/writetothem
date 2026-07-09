@@ -15,8 +15,8 @@ require_once __DIR__ . '/about-markdown.php';
 
 $about_pages = [
     'about-us' => [
-        'title' => _('Who are you, and why are you doing this?'),
-        'heading' => _('Who are you, and why are you doing this?'),
+        'title' => _('About WriteToThem and mySociety'),
+        'heading' => _('About WriteToThem and mySociety'),
     ],
     'about-campaigns' => [
         'title' => _('Using WriteToThem to run a campaign'),
@@ -44,8 +44,8 @@ $about_pages = [
         'heading' => _('Questions and answers'),
     ],
     'about-lords' => [
-        'title' => _('House of Lords'),
-        'heading' => _('House of Lords'),
+        'title' => _('Writing to the House of Lords'),
+        'heading' => _('Writing to the House of Lords'),
     ],
     'about-privacy' => [
         'title' => _('Privacy'),
@@ -56,8 +56,8 @@ $about_pages = [
         'heading' => _('British Overseas Territories and Crown Dependencies'),
     ],
     'about-feedback' => [
-        'title' => _('What people said about WriteToThem.com'),
-        'heading' => _('What people said about WriteToThem.com'),
+        'title' => _('WriteToThem: successes and impact'),
+        'heading' => _('Successes and impact'),
         'class' => 'feedback',
     ],
 ];
