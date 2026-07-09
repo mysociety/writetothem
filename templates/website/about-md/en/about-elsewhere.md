@@ -26,9 +26,9 @@ Similarly, **Sark** also has its own legislature, Chief Pleas; its members can b
 
 ### Anguilla {#anguilla}
 
-Anguilla has a House of Assembly with eleven members – seven elected for a five year term, two ex officio members, and two nominated members.
+Anguilla has a House of Assembly with eleven members – seven elected for a five-year term, two ex officio members, and two nominated members.
 
-The Government of Anguilla’s website contains [contact details for the House of Assembly as a whole, and an email address for the Department Head](http://www.gov.ai/department.php?id=4&dept=26) - this should probably be your first point of contact .
+The Government of Anguilla’s website contains [contact details for the House of Assembly as a whole, and an email address for the Department Head](http://www.gov.ai/department.php?id=4&dept=26) — this should probably be your first point of contact.
 
 ### Bermuda {#bermuda}
 
@@ -48,7 +48,7 @@ The British Indian Ocean Territory has no native inhabitants: it is home only to
 
 ### British Virgin Islands {#virgin}
 
-The British Virgin Islands have a Legislative Council with fifteen members – thirteen elected for a four year term, one ex-officio member and one speaker.
+The British Virgin Islands have a Legislative Council with fifteen members – thirteen elected for a four-year term, one ex officio member and one speaker.
 
 A list of cabinet members can be found [here](http://www.bvi.gov.vg/cabinet-members), along with contact details for their departments.
 
@@ -68,7 +68,7 @@ The Falkland Islands government’s web site is at [http://www.falklands.gov.fk/
 
 There are fifteen members of Gibraltar’s legislature, the [House of Assembly](http://www.parliament.gi/), elected by popular vote.
 
-The Gibraltarian Parliament’s site a list of the [current members of the House](http://www.parliament.gi/history/composition-of-parliament) (at the bottom of the page).
+The Gibraltarian Parliament’s site has a list of the [current members of the House](http://www.parliament.gi/history/composition-of-parliament) (at the bottom of the page).
 
 You can write to members at this address:
 
@@ -78,7 +78,7 @@ or contact them by phone on +350 78420, or by fax to +350 42849.
 
 ### Montserrat {#montserrat}
 
-Montserrat has a Legislative Council of nine members, elected for a five year term.
+Montserrat has a Legislative Council of nine members, elected for a five-year term.
 
 A Governor and an Executive Council (ExCo) are responsible for day-to-day administration. Members of the ExCo are partly drawn from the members of the Legislative Council.
 
@@ -88,7 +88,7 @@ There is [a little information on the Montserrat government website](http://www.
 
 The Pitcairn Islands have an Island Council made up of ten members, four of whom are elected directly and serve one-year terms.
 
-However, it does not have an online presence: perhaps with such a small population (a ten member Council represents about a fifth of all residents), one is not required.
+However, it does not have an online presence: perhaps with such a small population (a ten-member Council represents about a fifth of all residents), one is not required.
 
 ### St Helena, Ascension Island, and Tristan da Cunha {#sthelena}
 
@@ -108,4 +108,4 @@ There are no elected representatives for the islands, as there are no permanent 
 
 ### Turks and Caicos Islands {#turksandcaicos}
 
-The [government website is here](http://www.gov.tc/), but at the time of writing, the contacts page is 'under construction'.
+The [government website is here](http://www.gov.tc/), but at the time of writing, the contacts page is ‘under construction’.
