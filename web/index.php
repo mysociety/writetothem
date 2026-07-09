@@ -155,7 +155,7 @@ if ($pc) {
                are all the same, though they are thousands of miles apart.... */
             'ASCN1ZZ' => 'sthelena',
             'BBND1ZZ' => 'biot',
-            'BIQQ1ZZ' => 'antarctica',
+            'BIQQ1ZZ' => 'antarctic',
             'FIQQ1ZZ' => 'falklands',
             'PCRN1ZZ' => 'pitcairn',
             'SIQQ1ZZ' => 'southgeorgia',

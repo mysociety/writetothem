@@ -1,0 +1,87 @@
+## What is a Lord? {#what-is-a-lord}
+
+The UK Parliament is divided into two.
+
+On one side is the House of Commons where your MP sits; on the other is the House of Lords. Proposed new laws have to be considered by both Houses.
+
+MPs are elected by the nation. Lords, on the other hand, become members through a complex mixture of appointment, religion, hereditary entitlement, and self-election ([more details here](http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/members-and-their-roles/how-members-are-appointed/)).
+
+## Can I write to my Lord?
+
+Yes. WriteToThem has a [Write to Your Lord](/lords) section.
+
+## Why write to your Lord? {#why}
+
+They may not be elected, but they still get to vote on, debate, and amend the bills that will affect us all when they become law.
+
+You might write to a Lord to tell them about something you think they should care about.
+
+Or, if a topic is soon to be under debate, you might provide information that will go towards forming their opinion on which way to vote.
+
+## Which Lord should I write to? {#which-lord}
+
+The main section of WriteToThem asks you to type in your postcode, so that we can match you with the people who represent you in your constituency.
+
+With Lords, it’s different. You may contact any Lord, so how do you choose?
+
+Our [Write to Your Lord](/lords) section tries to solve this issue in a few different ways:
+
+- **Method 1** Find a Lord who has a special interest in your issue.
+
+    Enter the topic into the box as a word or a phrase. We’ll show you a list of the Lords who have mentioned it in Parliament the most times.
+
+    Or, if your issue strongly relates to location, try the ‘find a Lord with an association to this place’ facility.
+
+- **Method 2** If your topic is of general human interest, you might want to use the "Random Lord" button, which does exactly what its name suggests.
+
+    You can also use the 'Find a Lord who shares my birthday' button to find a Lord with the same birthday as you.
+
+Whatever method you choose, don’t feel you have to pick the top Lord: you can follow the links to read a bit about what they’ve said.
+
+If they’re a minister, it’ll probably be very hard to influence their opinion, so it’s best to pick someone who’s not working directly for the Government.
+
+## Why do I need a UK postcode to write to a Lord? {#ukpostcode}
+
+Lords sit in the UK Parliament. Amongst other things, they vote on the passing of UK law.
+
+Just as we only let people contact [their own MP](about-qa#onlyrep), we don’t let people from outside the UK contact Lords.
+
+Please use the same postcode that you would use to contact your MP. See ["What postcode should I use?"](/about-constituency) if you’re not sure what postcode to use, for example if you are in the Armed Services.
+
+## How does it work? Do you have all the Lords email addresses? {#how-does-it-work}
+
+Not all Lords have individual email addresses. For many Lords, we send your message to the House of Lords central email address, as the majority of peers don’t have offices.
+
+From there, it will be conveyed to your chosen Lord by the House’s internal mail systems.
+
+If you are a peer yourself, and would prefer to receive messages directly, please [contact us](/about-contact).
+
+## How many Lords can I write to? {#how-many}
+
+The Parliament website gives more details about [different ways to contact Lords](http://www.parliament.uk/business/lords/whos-in-the-house-of-lords/get-in-touch-with-members/), and the different limits on sending bulk messages to all Lords.
+
+We also prevent you from sending duplicate messages to Lords. This is because the House of Lords throw away bulk sent messages, so it is a waste of time.
+
+Do not tell people to copy and paste pre-written letters to Lords: get them to write in their own words. See our [guidelines for campaigning](/about-guidelines) for more information on this.
+
+## Why should a Lord bother replying to my message? {#why-reply}
+
+Lords aren’t actually obliged to respond to letters, and unlike MPs, they don’t have constituents. Nor do they have the need to prove their worth in advance of a general election.
+
+That said, we believe that most politicians are actually decent people trying to do their best. So in short, while they don’t *have to* bother, if you take the time to compose a decent letter, there’s a better chance that they will.
+
+## When should I write to a Lord instead of my MP? {#when}
+
+There are various reasons you might want to write to a Lord.
+
+They may be passionately involved with an issue you care about, or you might disagree with them on an issue that they speak about publicly.
+
+Often you might find that a Bill on a topic you care about has been passed from the Commons to the Lords for debate, amendment or approval. At that point, persuading a Lord might make a real difference to the outcome.
+
+Here’s another thing: while democracy works in general, it does have some faults. For example, if your own MP has views very different to your own, contacting them isn’t always useful or satisfactory. Contacting a Lord instead may be a better way to influence policy.
+
+Or you might simply want to ask them what they do, or what they think about something. Write to them: they’re *your* Lords.
+
+## How can I support WriteToThem? {#can-i-help}
+
+[mySociety](https://www.mysociety.org/), the charity who built and maintain WriteToThem, are always in need of [donations](https://www.mysociety.org/donate/support-writetothem-and-mysociety/).
