@@ -13,20 +13,20 @@ $show_gla         = $rep == 'lam';
 
 
 if ($show_councillor) {
-    $specific = yourrep_md("councillor-" . strtoupper($rep) . ".md", $pd);
+    $specific = yourrep_md("councillor-" . strtoupper($rep) . ".md");
     if ($specific) {
         echo $specific;
     } else {
-        echo yourrep_md('councillor.md', $pd);
+        echo yourrep_md('councillor.md');
     }
 } elseif ($show_msp) {
-    echo yourrep_md('msp.md', $pd);
+    echo yourrep_md('msp.md');
 } elseif ($show_mla) {
-    echo yourrep_md('mla.md', $pd);
+    echo yourrep_md('mla.md');
 } elseif ($show_welsh) {
-    echo yourrep_md('am.md', $pd);
+    echo yourrep_md('am.md');
 } elseif ($show_gla) {
-    echo yourrep_md('lam.md', $pd);
+    echo yourrep_md('lam.md');
 } elseif ($show_mp) {
-    echo yourrep_md("$rep.md", $pd);
+    echo yourrep_md("$rep.md");
 } ?>

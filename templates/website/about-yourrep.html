@@ -64,7 +64,7 @@ if ($area_types) {
                     </div>
                 </form>
 
-<?= yourrep_md('preamble.md', $pd) ?>
+<?= yourrep_md('preamble.md') ?>
 
 <ul class="side-nav">
 <?php if ($show_mp) { ?><li><a href="#mp"><?= _('When should I contact my MP?') ?></a></li><?php } ?>
@@ -80,15 +80,15 @@ if ($area_types) {
     echo '<A NAME="councillor"></A>';
     if ($show_all || count($councillor_types_present) === 0) {
         // No specific location — show the generic councillor guidance
-        echo yourrep_md('councillor.md', $pd);
+        echo yourrep_md('councillor.md');
     } else {
         // Show type-specific councillor guidance for each type present
         foreach ($councillor_types_present as $ctype) {
-            $specific = yourrep_md("councillor-$ctype.md", $pd);
+            $specific = yourrep_md("councillor-$ctype.md");
             if ($specific) {
                 echo $specific;
             } else {
-                echo yourrep_md('councillor.md', $pd);
+                echo yourrep_md('councillor.md');
             }
             echo yourrep_who_link($postcode, strtolower($ctype), _('Write to your councillor'));
         }
@@ -97,25 +97,25 @@ if ($area_types) {
 
 <?php if ($show_msp) {
     echo '<A NAME="msp"></A>';
-    echo yourrep_md('msp.md', $pd);
+    echo yourrep_md('msp.md');
     echo yourrep_who_link($postcode, 'spc', _('Write to your MSP'));
 } ?>
 
 <?php if ($show_mla) {
     echo '<A NAME="mla"></A>';
-    echo yourrep_md('mla.md', $pd);
+    echo yourrep_md('mla.md');
     echo yourrep_who_link($postcode, 'nie', _('Write to your MLA'));
 } ?>
 
 <?php if ($show_welsh) {
     echo '<A NAME="welsh"></A>';
-    echo yourrep_md('am.md', $pd);
+    echo yourrep_md('am.md');
     echo yourrep_who_link($postcode, 'wac', _('Write to your Senedd Member'));
 } ?>
 
 <?php if ($show_gla) {
     echo '<A NAME="gla"></A>';
-    echo yourrep_md('lam.md', $pd);
+    echo yourrep_md('lam.md');
     echo yourrep_who_link($postcode, 'lac', _('Write to your London Assembly Member'));
 } ?>
     
@@ -123,13 +123,13 @@ if ($area_types) {
 <A NAME="mp"></A>
 <?php if ($show_mp) {
     if ($show_welsh) {
-        echo yourrep_md('mp-wales.md', $pd);
+        echo yourrep_md('mp-wales.md');
     } elseif ($show_msp) {
-        echo yourrep_md('mp-scotland.md', $pd);
+        echo yourrep_md('mp-scotland.md');
     } elseif ($show_mla) {
-        echo yourrep_md('mp-ni.md', $pd);
+        echo yourrep_md('mp-ni.md');
     } else {
-        echo yourrep_md('mp.md', $pd);
+        echo yourrep_md('mp.md');
     }
     echo yourrep_who_link($postcode, 'wmc', _('Write to your MP'));
 } ?>
