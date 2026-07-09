@@ -13,7 +13,7 @@
  *   - headings may carry an explicit anchor with `## Heading {#anchor}`,
  *     falling back to a slug of the heading text. This keeps deep-links such
  *     as /about-qa#formletters stable.
- *   - a `[TOC]` line is replaced with a side-nav menu built from the page's
+ *   - a `[TOC]` line is replaced with an in-page TOC built from the page's
  *     headings, and a "back to top" link is appended after each section.
  */
 
@@ -113,7 +113,7 @@ function render_md_parts(string $filename, string $subdir, array $context = []):
     // value can appear anywhere (text, an href, ...) and be parsed in context.
     $text = file_get_contents($path);
     foreach ($context as $key => $value) {
-        $text = str_replace('{{' . $key . '}}', $value, $text);
+        $text = str_replace('{{' . $key . '}}', htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $text);
     }
 
     $pd = new AboutParsedown();
@@ -129,8 +129,8 @@ function render_md_parts(string $filename, string $subdir, array $context = []):
  * when the current language has no translation. $context supplies {{KEY}}
  * placeholders substituted into the source before it is parsed, which lets
  * pages inject dynamic values (e.g. an obfuscated contact address) into
- * otherwise-static content. A `[TOC]` line becomes an auto-generated side-nav
- * menu (see about_side_nav / about_insert_toplinks).
+ * otherwise-static content. A `[TOC]` line becomes an auto-generated in-page
+ * TOC (see about_page_toc / about_insert_toplinks).
  */
 function render_md(string $filename, string $subdir, $context = []) {
     $parts = render_md_parts($filename, $subdir, $context);
@@ -145,7 +145,7 @@ function render_md(string $filename, string $subdir, $context = []) {
     // menu markup we substitute in next is never mistaken for section content.
     if (strpos($html, '[TOC]') !== false) {
         $html = about_insert_toplinks($html);
-        $menu = about_side_nav($parts['headings'], $parts['pd']);
+        $menu = about_page_toc($parts['headings'], $parts['pd']);
         $html = str_replace(['<p>[TOC]</p>', '[TOC]'], $menu, $html);
     }
 
@@ -165,7 +165,7 @@ function about_md(string $filename, $context = []) {
 function about_md_context(string $md_page): array {
     $context = [];
     if ($md_page === 'about-qa') {
-        $context['CONTACT_EMAIL'] = str_replace('@', '&#64;', OPTION_CONTACT_EMAIL);
+        $context['CONTACT_EMAIL'] = OPTION_CONTACT_EMAIL;
     }
     return $context;
 }
@@ -200,12 +200,12 @@ function about_md_section(string $filename, ?string $anchor, array $context = []
 }
 
 /**
- * Build the "side-nav" menu from a page's headings. Level-2 headings with
+ * Build the in-page TOC from a page's headings. Level-2 headings with
  * level-3 headings beneath them act as (unlinked) group labels, matching the
  * hand-written menus these pages used to carry; a page with only level-2
  * headings produces a flat list of links.
  */
-function about_side_nav(array $headings, Parsedown $pd): string {
+function about_page_toc(array $headings, Parsedown $pd): string {
     // "Grouped" pages (e.g. about-qa) use level-2 headings as section labels
     // and level-3 headings as the linked items; "flat" pages (e.g.
     // about-constituency) have only level-2 headings, which become the links.
@@ -219,7 +219,7 @@ function about_side_nav(array $headings, Parsedown $pd): string {
         // entities in the heading text come out the same as in the body.
         $label = $pd->line($h['text']);
         if ($grouped && $h['level'] === 2) {
-            $out .= "<h3>$label</h3>\n";           // unlinked group label
+            $out .= "<li class=\"heading\">$label</li>\n";  // unlinked group label
         } elseif ($h['level'] === $itemLevel) {
             $out .= '<li><a href="#' . $h['id'] . "\">$label</a></li>\n";
         }

@@ -63,17 +63,6 @@ if ($page == 'write-checkemail') {
     $values['group_msg'] = '';
 }
 
-$whole_page_translations = [
-    'about-campaigns', 'about-constituency', 'about-guidelines', 'about-lords', 'about-privacy', 'about-qa', 'about-us',
-];
-
-if (in_array($page, $whole_page_translations)) {
-    $locale = setlocale(LC_ALL, 0);
-    if ($locale == 'cy_GB.UTF-8') {
-        $page = "cy/$page";
-    }
-}
-
 /* Don't want problem pages to be indexed, really. */
 if (preg_match('/^problem-/', $page))
     $values['robots'] = 'noindex, nofollow';
@@ -102,6 +91,13 @@ if (str_starts_with($page, 'yourrep/')) {
 
     $page = 'about-yourrep-mini';
     $values['rep'] = $rep;
+}
+
+/* Any about-* page with a markdown body is rendered through the single
+ * about-page template (see templates/website/about-page.php). */
+if (file_exists("../templates/website/about-md/en/$page.md")) {
+    $values['md_page'] = $page;
+    $page = 'about-page';
 }
 
 template_draw($page, $values);

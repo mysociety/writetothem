@@ -113,6 +113,11 @@ a, .side-nav li a {
     }
 }
 
+.side-nav li.heading {
+    font-size: emCalc(18);
+    font-weight: 600;
+}
+
 p a,
 .rep-list a {
   border-bottom: 1px solid $link-underline-color;
