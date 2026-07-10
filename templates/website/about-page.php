@@ -30,10 +30,6 @@ $about_pages = [
         'title' => _('What postcode should I use?'),
         'heading' => _('What postcode should I use?'),
     ],
-    'about-branded' => [
-        'title' => _('WriteToThem for your website'),
-        'heading' => _('WriteToThem for your website'),
-    ],
     'about-copyright' => [
         'title' => _('Copyright information'),
         'heading' => _('Copyright information'),
