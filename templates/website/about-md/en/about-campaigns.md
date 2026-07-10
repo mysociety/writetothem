@@ -23,3 +23,7 @@ If you are sending out newsletters, you can even pre-fill the name, email and ad
 ## A fancier link
 
 [Here’s how to put a nifty little box on your site](/about-linktous#envelope): when your users enter their postcode, they’ll be taken to WriteToThem to send a message to their MP.
+
+## More campaigning advice
+
+Once your campaign is up and running, we have guides to help your supporters make an impact: [Building big impact locally](/about-localimpact) has advice for campaigning organisations coordinating messages across the country, and [Evidence-informed campaigning](/about-evidence) explains how to build an evidence base for your campaign.

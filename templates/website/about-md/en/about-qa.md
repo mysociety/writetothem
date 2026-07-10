@@ -98,7 +98,7 @@ Here’s a quote from a parliamentary researcher, whose job is to make the MP th
 >
 > All he or she knows is that 50 constituents have been persuaded to mail them about ‘topic X’. Much more notice is taken of trends within the regular flow of messages from clearly identified constituents. If in a month 50 people write in different ways and through different routes with similar views on a subject, this is much more likely to raise the profile of the topic with the MP.
 
-So please don’t send the same message as everyone else. Ask people to write in their own words.
+So please don’t send the same message as everyone else. Ask people to write in their own words. For more on how to write a message your representative will engage with, see [Communicating for change](/about-communicating).
 
 ### Can’t you just give me the direct email address of my MP? {#directemail}
 
@@ -267,6 +267,8 @@ There are lots of things you can do to follow up if you get no reply.
 - Write to your other representatives — your MP, your local councillors, or regional representatives — where appropriate. You can do this for free using WriteToThem.
 
 - Complain about your representative to their local party by contacting the local party office. The local party can decide not to select your MP as a candidate at the next general election.
+
+If your issue is a personal case with a government department or public body — such as immigration or benefits — see [What can your representative do for you?](/about-personal) for how to ask them to chase it up on your behalf.
 
 ### What if I get an unsatisfactory reply? {#unsatis}
 
