@@ -16,6 +16,14 @@ $(function() {
 
     $('.js-fixed-thead').fixedThead();
 
+    $('.js-write-random-link').on('click', function(){
+        if (typeof gtag === 'function') {
+            try {
+                gtag('event', 'random_rep_click', {'rep_type': $(this).data('rep-type')});
+            } catch(err){}
+        }
+    });
+
     var toggleContactOption = function( $option, show ) {
         var $siblings = $option.siblings('.contact-option');
         var $btn = $option.find('h3 button');

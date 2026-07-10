@@ -89,56 +89,87 @@ my $rep_templates = {
     'SPC' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
     'SPE' => { 'title' => 'MSP', 'first_names' => ['Fiona', 'Andrew', 'Nicola', 'Malcolm'], 'surnames' => ['MacDonald', 'Campbell', 'Stewart', 'Fraser'] },
     'WAC' => { 'title' => 'MS', 'first_names' => ['Gareth', 'Cerys', 'Dylan', 'Sian'], 'surnames' => ['Williams', 'Davies', 'Thomas', 'Roberts'] },
-    'NIA' => { 'title' => 'MLA', 'first_names' => ['Connor', 'Siobhan', 'Patrick', 'Aoife'], 'surnames' => ['Murphy', 'Kelly', 'ONeill', 'Lynch'] },
+    'NIE' => { 'title' => 'MLA', 'first_names' => ['Connor', 'Siobhan', 'Patrick', 'Aoife'], 'surnames' => ['Murphy', 'Kelly', 'ONeill', 'Lynch'] },
     'EUP' => { 'title' => 'MEP', 'first_names' => ['Edward', 'Catherine', 'William', 'Margaret'], 'surnames' => ['Harrison', 'Thompson', 'White', 'Green'] },
 };
 
+# Number of representatives to generate per area, by area type. Types not
+# listed here get exactly one (e.g. a single MP or county councillor per
+# area), which is correct for those types in reality.
+my $rep_seats = {
+    # Fixed multi-member counts, accurate for every area of these types:
+    'WAC' => 6,  # Senedd constituencies, since the 2026 Senedd Cymru reform
+    'SPE' => 7,  # Scottish Parliament regional list members, per region
+    'NIE' => 5,  # Northern Ireland Assembly members, per constituency (since 2016)
+    'LAE' => 11, # London Assembly list members (London-wide, not per-ward)
+
+    # English/Welsh council wards:
+    'LBW' => 3,
+    'DIW' => 3,
+    'UTE' => 3,
+    'UTW' => 3,
+    'MTW' => 3,
+    'COP' => 3,
+    'LGE' => 5, # NI local government District Electoral Areas typically elect 5-7
+};
+
 sub generate_representative {
-    my ($area_id, $area_type) = @_;
-    
+    my ($area_id, $area_type, $seat_index) = @_;
+    $seat_index ||= 0;
+
     # Get template for this area type, default to councillor if unknown
     my $template = $rep_templates->{$area_type} || $rep_templates->{'LBW'};
-    
-    # Generate deterministic but varied names based on area_id
-    srand($area_id);
+
+    # Generate deterministic but varied names based on area_id and seat
+    srand($area_id * 100 + $seat_index);
     my $first_name = $template->{first_names}->[rand(@{$template->{first_names}})];
     my $surname = $template->{surnames}->[rand(@{$template->{surnames}})];
-    
-    # Generate unique rep ID based on area
+
+    # Generate unique rep ID based on area and seat
     my $rep_id = int($area_id / 10) + ($area_id % 1000);
-    
+    $rep_id += $seat_index * 100_000 if $seat_index;
+
+    my $email_local = "$first_name.$surname";
+    $email_local .= "-$seat_index" if $seat_index;
+
     return {
         'id' => $rep_id,
         'name' => "$first_name $surname $template->{title}",
         'type' => $area_type,
         'voting_area' => $area_id,
-        'email' => lc("$first_name.$surname\@example.org"),
+        'email' => lc("$email_local\@example.org"),
         'method' => 'email',
     };
 }
 
 our $rep_responses = {};
 
-sub get_rep_id_for_area {
+sub get_rep_ids_for_area {
     my $area_id = shift;
-    
+
     # Look up area type from MapIt
     my $area_type = get_area_type_from_mapit($area_id);
-    
-    my $key = "area_${area_id}_type_${area_type}";
-    if (my $rep_id = $CACHE->get($key)) {
-        return $rep_id;
-    } else {
-        # Generate representative for this area
-        my $rep = generate_representative($area_id, $area_type);
-        my $rep_key = "rep_$rep->{id}";
-        
-        # Cache both the representative and the area->rep mapping
-        $CACHE->set($rep_key, $rep);
-        $CACHE->set($key, $rep->{id});
-        
-        return $rep->{id};
+    my $seats = $rep_seats->{$area_type} || 1;
+
+    my @rep_ids;
+    for my $seat_index (0 .. $seats - 1) {
+        my $key = "area_${area_id}_type_${area_type}_seat_${seat_index}";
+        my $rep_id = $CACHE->get($key);
+        unless ($rep_id) {
+            # Generate representative for this area/seat
+            my $rep = generate_representative($area_id, $area_type, $seat_index);
+            my $rep_key = "rep_$rep->{id}";
+
+            # Cache both the representative and the area->rep mapping
+            $CACHE->set($rep_key, $rep);
+            $CACHE->set($key, $rep->{id});
+
+            $rep_id = $rep->{id};
+        }
+        push @rep_ids, $rep_id;
     }
+
+    return \@rep_ids;
 }
 
 while ($req->Accept() >= 0) {
@@ -148,12 +179,12 @@ while ($req->Accept() >= 0) {
                   my $id = shift;
 
                   unless (ref $id) {
-                      return [get_rep_id_for_area($id)];
+                      return get_rep_ids_for_area($id);
                   }
 
                   my $ret = {};
                   for my $id (@$id) {
-                    $ret->{$id} = [get_rep_id_for_area($id)];
+                    $ret->{$id} = get_rep_ids_for_area($id);
                   }
 
                   return $ret;
