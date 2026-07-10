@@ -293,7 +293,7 @@ function write_all_link($va_type, $rep_desc_plural) {
         // only translate things for the Welsh assembly currently
         $text = 'Write to all your ' . $rep_desc_plural;
         if ($rep_desc_plural == 'regional MSs') {
-            $text = _('Write to all your regional MSs');
+            $text = _('Write to all your MSs');
         }
         $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">' . $text . '</a>';
         if ($va_type == 'SPE') {
