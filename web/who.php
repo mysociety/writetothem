@@ -275,16 +275,18 @@ function get_rep_counts($va_areas, $area_representatives) {
     return array($representatives, $rep_counts);
 }
 
+function rep_desc_plural_adjusted(string $rep_desc_plural): string {
+    if ($rep_desc_plural == 'London Assembly Members')
+        return 'London Assembly list members';
+    if ($rep_desc_plural == 'MSPs')
+        return 'regional MSPs';
+    return $rep_desc_plural;
+}
+
 function write_all_link($va_type, $rep_desc_plural) {
     global $cobrand, $cocode;
     global $fyr_postcode;
-    if ($rep_desc_plural == 'London Assembly Members')
-        $rep_desc_plural = 'London Assembly list members';
-    if ($rep_desc_plural == 'MSPs')
-        $rep_desc_plural = 'regional MSPs';
-    if ($rep_desc_plural == 'MSs') {
-        $rep_desc_plural = 'regional MSs';
-    }
+    $rep_desc_plural = rep_desc_plural_adjusted($rep_desc_plural);
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
