@@ -22,9 +22,25 @@ $about_pages = [
         'title' => _('Using WriteToThem to run a campaign'),
         'heading' => _('Running a campaign'),
     ],
+    'about-localimpact' => [
+        'title' => _('Building big impact locally'),
+        'heading' => _('Building big impact locally'),
+    ],
+    'about-evidence' => [
+        'title' => _('Evidence-informed campaigning'),
+        'heading' => _('Evidence-informed campaigning'),
+    ],
     'about-guidelines' => [
         'title' => _('Guidelines for campaigning'),
         'heading' => _('Campaigning: terms and conditions'),
+    ],
+    'about-communicating' => [
+        'title' => _('Communicating for change'),
+        'heading' => _('Communicating for change'),
+    ],
+    'about-personal' => [
+        'title' => _('What can your representative do for you?'),
+        'heading' => _('What can your representative do for you?'),
     ],
     'about-constituency' => [
         'title' => _('What postcode should I use?'),
