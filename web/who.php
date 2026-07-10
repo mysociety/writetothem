@@ -290,7 +290,7 @@ function write_all_link($va_type, $rep_desc_plural) {
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
-        // only translate things for the Welsh assembly currently
+       // only translate things for the Welsh assembly currently
         $text = 'Write to all your ' . $rep_desc_plural;
         if ($rep_desc_plural == 'regional MSs') {
             $text = _('Write to all your MSs');
@@ -302,6 +302,16 @@ function write_all_link($va_type, $rep_desc_plural) {
     }
     return $a;
 
+}
+
+function write_random_link(string $va_type, string $rep_desc_plural, array $representatives): string {
+    global $cobrand, $cocode;
+    global $fyr_postcode;
+    $rep_desc_plural = rep_desc_plural_adjusted($rep_desc_plural);
+    $random_rep = $representatives[array_rand($representatives)];
+    $url = general_write_rep_url($random_rep, $fyr_postcode);
+    $text = sprintf(_('Write to one of your %s at random'), $rep_desc_plural);
+    return '<a class="js-write-random-link" data-rep-type="' . htmlspecialchars($va_type) . '" href="' . cobrand_url($cobrand, $url, $cocode) . '">' . $text . '</a>';
 }
 
 function general_write_all_url($va_type, $fyr_postcode){
@@ -411,6 +421,7 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count)
     if ($rep_count > 1 && !skip_write_all()) {
         // $text .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
         $col_after .= '<p>' . write_all_link($va_type, $va_area['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_random_link($va_type, $va_area['rep_name_plural'], $representatives) . '</p>';
     }
 
     if($va_type == 'WMC' && $rep_count > 0 && file_exists('mpphotos/'.$representatives[0].'.jpg')) {
@@ -438,6 +449,7 @@ function display_reps_two_types($va_types, $va_area, $representatives, $rep_coun
     if ($rep_count && $rep_counts[0]>1 && !$skip_write_all) {
         // $text .= write_all_link($va_types[0], $va_area[0]['rep_name_plural']);
         $col_after .= '<p>' . write_all_link($va_types[0], $va_area[0]['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_random_link($va_types[0], $va_area[0]['rep_name_plural'], $representatives[0]) . '</p>';
     }
     if ($rep_count) {
         $text .= display_reps($va_types[0], $representatives[0], $va_area[0], array());
@@ -460,6 +472,7 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
     if ($rep_count && $rep_counts[1]>1 && $va_types[1] != 'SPE' && $va_types[1] != 'LAE' && !$skip_write_all) {
         // $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
         $col_after .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_random_link($va_types[1], $va_area[1]['rep_name_plural'], $representatives[1]) . '</p>';
     }
 
     if ($rep_count) {
@@ -469,6 +482,7 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
     if ($rep_count && $rep_counts[1]>1 && ($va_types[1] == 'SPE' || $va_types[1] == 'LAE') && !$skip_write_all) {
         // $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
         $col_after .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
+        $col_after .= '<p>' . write_random_link($va_types[1], $va_area[1]['rep_name_plural'], $representatives[1]) . '</p>';
     }
     return array($text, $col_after);
 }
