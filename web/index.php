@@ -260,11 +260,13 @@ if ($pc) {
                 }
             }
 
-            if ($id)
-                /* Single representative */
+            if ($id && get_http_var('purpose') !== 'find')
+                /* Single representative: skip straight to writing. A "find out
+                 * who represents you" embed (purpose=find) opts out of this
+                 * shortcut so the visitor always sees the who list. */
                 header('Location: ' . url_new('message-type', true, 'a', null, 'who', $id, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
             else
-                /* Several */
+                /* Several, or a single rep the visitor asked to see listed */
                 header('Location: ' . url_new('who', true, 'a', implode(',', array_keys($area_types)), 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
         } else {
             header('Location: ' . url_new('who', true, 'a', null, 'fyr_extref', fyr_external_referrer(), 'cocode', get_http_var('cocode')));
