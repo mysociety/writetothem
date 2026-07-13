@@ -122,7 +122,7 @@ Because we’re the only place you can see all your representatives at once, we 
 
 ### I have multiple representatives — who should I write to? {#multireps}
 
-WriteToThem lets you write to an individual representative, some, or all of your representatives. 
+WriteToThem lets you write to an individual representative or all of your representatives at once.
 
 Which option is best depends on whether you’re asking for help with a personal problem (casework), or campaigning to change policy.
 
@@ -132,7 +132,7 @@ For the Scottish Parliament or London Assembly, you’ll have a constituency rep
 
 For the Senedd, the Northern Ireland Assembly and local councils, there’s no single constituency representative, so you can write to any of your representatives for assistance.
 
-If you have an existing association with a particular party, you may prefer to write to a representative from that party - but you are free to write to any of your representatives. 
+If you have an existing association with a particular party, you may prefer to write to a representative from that party — but you are free to write to any of your representatives.
 
 You can also write to all your representatives at once, but if you’re asking them to take up your case with a public authority, it’s usually better to write to one at a time.
 
@@ -140,7 +140,7 @@ For more, see [What can your representative do for you?](/about-personal).
 
 **If you’re campaigning to change policy**
 
-You have the option to email all your representatives at once to raise an issue. We’d recommend doing some research first though to see if there are representatives who are particularly relevant to your issue. You can investigate their areas of interest (have they spoken about an issue, are they on a relevant committee) etc. 
+You have the option to email all your representatives at once to raise an issue. We’d recommend doing some research first though to see if there are representatives who are particularly relevant to your issue. You can investigate their areas of interest — have they spoken about the issue before, or do they sit on a relevant committee?
 
 Representatives can play different roles depending on their position. Members of the governing party may be able to act differently from those in opposition, and it’s worth raising your issue in different ways with MPs who already support your cause compared with those who do not.
 
