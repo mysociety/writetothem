@@ -1,0 +1,98 @@
+// Styling for the embed builders on about-linktous (see linktous.js and
+// linktous_builder_context() in templates/website/about-markdown.php).
+
+.wtt-builder {
+    .wtt-field { margin: 0 0 1em; }
+    label { display: block; font-weight: bold; margin-bottom: 0.3em; }
+    select, input[type=url] { max-width: 26em; }
+    .wtt-help { margin: 0.35em 0 0; font-size: 0.85em; color: #666; }
+}
+
+.wtt-toggle {
+    display: inline-flex;
+    border: 1px solid $primary-color;
+    border-radius: 6px;
+    overflow: hidden;
+
+    button {
+        margin: 0;
+        padding: 0.4em 1em;
+        border: 0;
+        background: #fff;
+        color: $primary-color;
+        font-weight: bold;
+        cursor: pointer;
+
+        &.is-active {
+            background: $primary-color;
+            color: #fff;
+        }
+    }
+}
+
+.wtt-code {
+    margin: 0.5em 0 1em;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1b2733;
+
+    &__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.45em 0.5em 0.45em 0.9em;
+        background: #14202b;
+    }
+
+    &__label {
+        color: #9fb3c8;
+        font-size: 0.72em;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__copy {
+        padding: 0.35em 0.85em;
+        border: 0;
+        border-radius: 5px;
+        background: #2a3a4a;
+        color: #e6edf3;
+        font-size: 0.8em;
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover { background: #37516a; }
+    }
+
+    pre {
+        margin: 0;
+        padding: 0.9em 1em;
+        background: transparent;
+        border: 0;
+        overflow-x: auto;
+    }
+
+    code {
+        display: block;
+        color: #e6edf3;
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-size: 0.82em;
+        line-height: 1.55;
+        white-space: pre;
+    }
+}
+
+.wtt-go {
+    display: inline-block;
+    padding: 0.4em 1.1em;
+    background: #5f9f57;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 4px;
+
+    &:hover { background: #4f8a48; color: #fff; }
+}
+
+#fm-preview { margin-top: 0.3em; }

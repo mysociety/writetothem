@@ -41,6 +41,7 @@ $about_pages = [
     'about-linktous' => [
         'title' => _('How to link to us'),
         'heading' => _('How to link to us'),
+        'extra_js' => '/static/js/linktous.js',
     ],
     'about-qa' => [
         'title' => _('Questions and answers'),
@@ -75,6 +76,9 @@ $meta = $about_pages[$md_page];
 $context = about_md_context($md_page);
 
 $values['title'] = $meta['title'];
+if (!empty($meta['extra_js'])) {
+    $values['extra_js'] = $meta['extra_js'];
+}
 
 // A page may request an extra class on its content column (e.g. 'feedback',
 // which styles the testimonial blockquotes).

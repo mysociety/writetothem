@@ -104,6 +104,9 @@
 <script src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <script src="/static/js/jquery.fixedthead.js"></script>
 <script src="/static/js/main.js"></script>
+<?php if (array_key_exists('extra_js', $values)) { ?>
+<script src="<?=$values['extra_js']?>"></script>
+<?php } ?>
 
 </body>
 </html>

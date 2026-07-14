@@ -1,0 +1,37 @@
+<div class="wtt-builder" id="wtt-form-b">
+    <div class="wtt-field">
+        <label for="fm-type">Who should people be able to write to?</label>
+        <select id="fm-type">
+            {{REP_OPTIONS}}
+        </select>
+    </div>
+    <div class="wtt-field">
+        <label for="fm-mode">Languages</label>
+        <select id="fm-mode">
+            <option value="en">English only</option>
+            <option value="toggle-en">Language toggle (English default)</option>
+            <option value="toggle-cy">Language toggle (Welsh default)</option>
+        </select>
+    </div>
+    <div class="wtt-field">
+        <label id="fm-purpose-label">Purpose</label>
+        <div class="wtt-toggle" role="group" aria-labelledby="fm-purpose-label">
+            <button type="button" id="fm-purpose-write" class="is-active" aria-pressed="true">Write to&hellip;</button>
+            <button type="button" id="fm-purpose-find" aria-pressed="false">Find out your&hellip;</button>
+        </div>
+    </div>
+    <div class="wtt-code">
+        <div class="wtt-code__bar"><span class="wtt-code__label">Paste this into your page</span><button type="button" class="wtt-code__copy" data-target="fm-out">Copy</button></div>
+        <pre><code id="fm-out">&lt;wtt-postcode-box&gt;
+  &lt;form action=&quot;https://www.writetothem.com/&quot; method=&quot;get&quot;&gt;
+    &lt;input name=&quot;pc&quot; placeholder=&quot;Your postcode&quot; autocomplete=&quot;postal-code&quot; required&gt;
+    &lt;button type=&quot;submit&quot;&gt;Go&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/wtt-postcode-box&gt;
+&lt;script async src=&quot;https://www.writetothem.com/static/js/postcode-embed.js&quot;&gt;&lt;/script&gt;</code></pre>
+    </div>
+    <div class="wtt-field">
+        <label>Preview</label>
+        <div id="fm-preview"></div>
+    </div>
+</div>
