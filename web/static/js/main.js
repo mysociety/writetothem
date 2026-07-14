@@ -1,7 +1,15 @@
 $(function() {
     $('.fancybox').each(function(){
+        //   about-qa#multireps -> about-qa?fragment=multireps   (one section)
+        //   about-personal     -> about-personal?fragment=wholepage
+        var href = $(this).prop('href');
+        if (href.indexOf('#') !== -1) {
+            href = href.replace('#', (href.indexOf('?') === -1 ? '?' : '&') + 'fragment=');
+        } else {
+            href += (href.indexOf('?') === -1 ? '?' : '&') + 'fragment=wholepage';
+        }
         $(this).fancybox({
-            href: $(this).prop('href').replace('#', '-')
+            href: href
         });
     });
 

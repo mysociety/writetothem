@@ -173,12 +173,17 @@ function about_md_context(string $md_page): array {
 /**
  * Render a single section of an about-md page: the heading whose id is $anchor
  * plus the body beneath it, as a fragment for the write-page
- * lightbox. A null $anchor returns the page intro.
+ * lightbox. A null $anchor returns the whole page body, without the [TOC]
+ * menu (whose in-page anchor links only make sense on the full page).
  */
 function about_md_section(string $filename, ?string $anchor, array $context = []): string {
     $parts = render_md_parts($filename, 'about-md', $context);
     if ($parts === null) {
         return '';
+    }
+
+    if ($anchor === null) {
+        return str_replace('<p>[TOC]</p>', '', $parts['html']);
     }
 
     // Split on heading tags
@@ -187,10 +192,6 @@ function about_md_section(string $filename, ?string $anchor, array $context = []
         '/(<h[1-6]\b[^>]*>.*?<\/h[1-6]>)/s',
         $parts['html'], -1, PREG_SPLIT_DELIM_CAPTURE
     );
-
-    if ($anchor === null) {
-        return $split[0];   // page intro (may be '' if the page opens on a heading)
-    }
     for ($k = 1; $k < count($split); $k += 2) {
         if (strpos($split[$k], 'id="' . $anchor . '"') !== false) {
             return $split[$k] . ($split[$k + 1] ?? '');
