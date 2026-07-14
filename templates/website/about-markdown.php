@@ -161,6 +161,26 @@ function about_md(string $filename, $context = []) {
     return render_md($filename, 'about-md', $context);
 }
 
+
+/**
+ * Build the {{...}} substitutions for the about-linktous embed builders.
+ * The builders' CSS and JS live in the normal site-wide assets (see
+ * web/static/sass/_linktous.scss and web/static/js/linktous.js).
+ *
+ * @return array<string,string> extra context entries for render_md()
+ */
+function linktous_builder_context(): array {
+    $frag = __DIR__ . '/about-md/fragments';
+    $options = file_get_contents("$frag/linktous-rep-options.html");
+
+    return [
+        'FORM_BUILDER' => str_replace('{{REP_OPTIONS}}', $options,
+            file_get_contents("$frag/linktous-form-builder.html")),
+        'LINK_BUILDER' => str_replace('{{REP_OPTIONS}}', $options,
+            file_get_contents("$frag/linktous-link-builder.html")),
+    ];
+}
+
 /**
  * The dynamic {{KEY}} context for an about-md page.
  */
@@ -168,6 +188,9 @@ function about_md_context(string $md_page): array {
     $context = [];
     if ($md_page === 'about-qa') {
         $context['CONTACT_EMAIL'] = OPTION_CONTACT_EMAIL;
+    }
+    if ($md_page === "about-linktous") {
+        $context += linktous_builder_context();
     }
     return $context;
 }
