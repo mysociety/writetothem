@@ -38,16 +38,28 @@ if ($page == 'about-pledgebank') {
     exit;
 }
 
-$t = 'about-qa-';
-if (substr($page, 0, strlen($t)) == $t) {
-    $page = substr_replace($page, 'qa/', 0, strlen($t));
-}
+$values = array('cobrand' => $cobrand);
+
 $t = 'about-yourrep-';
 if (substr($page, 0, strlen($t)) == $t) {
     $page = substr_replace($page, 'yourrep/', 0, strlen($t));
 }
 
-$values = array('cobrand' => $cobrand);
+/* Lightbox fragments (see main.js): "<page>?fragment=<anchor>" renders one
+ * section of a markdown about page without the site menus, and
+ * "?fragment=wholepage" renders the whole page that way. about-yourrep
+ * fragments are per-rep-type snippets with their own template. */
+$fragment = get_http_var('fragment');
+if ($fragment) {
+    if ($page == 'about-yourrep') {
+        $page = 'yourrep/' . $fragment;
+    } elseif (file_exists("../templates/website/about-md/en/$page.md")) {
+        $values['md_page'] = $page;
+        $values['md_anchor'] = ($fragment === 'wholepage') ? null : $fragment;
+        $page = 'about-fragment';
+    }
+}
+
 
 if ($page == 'write-checkemail')
     /* Fill in some other values as required. */
