@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 08:47+0000\n"
+"POT-Creation-Date: 2026-07-17 09:54+0000\n"
 "PO-Revision-Date: 2023-03-20 17:59-0000\n"
 "Last-Translator: mySociety\n"
 "Language-Team: mySociety\n"
@@ -565,7 +565,7 @@ msgstr "Mae WriteToThem yn wefan sy'n darparu ffordd hawdd o gysylltu ag ASau, c
 msgid "Opens in a new window"
 msgstr "Yn agor mewn ffenestr newydd"
 
-#: templates/common_header.php:138 templates/website/footer.php:15
+#: templates/common_header.php:138 templates/website/footer.php:30
 msgid "Help"
 msgstr "Cymorth"
 
@@ -869,7 +869,7 @@ msgstr ""
 msgid "About us"
 msgstr ""
 
-#: templates/website/about-sidebar.html:20 templates/website/footer.php:20
+#: templates/website/about-sidebar.html:20 templates/website/footer.php:35
 msgid "Copyright"
 msgstr ""
 
@@ -946,7 +946,7 @@ msgstr "Allwch chi helpu pobl eraill sydd angen anfon neges?"
 msgid "With your support, we can help more people get their message to the right place."
 msgstr "Gyda'ch cefnogaeth chi, gallwn helpu mwy o bobl i gael eu neges i'r lle iawn."
 
-#: templates/website/can-you-help.html:7 templates/website/footer.php:32
+#: templates/website/can-you-help.html:7 templates/website/footer.php:47
 msgid "Donate now"
 msgstr "Cyfrannwch nawr"
 
@@ -1141,7 +1141,7 @@ msgid "What do I do if I think something went wrong, or if I see an error on the
 msgstr "Beth ydw i'n ei wneud os ydw i'n meddwl bod rhywbeth wedi mynd o'i le, neu os ydw i'n gweld gwall ar y wefan?"
 
 #: templates/website/cy/about-qa.html:60 templates/website/cy/about-qa.html:426
-#: templates/website/footer.php:21
+#: templates/website/footer.php:36
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
@@ -1775,36 +1775,52 @@ msgstr "WriteToThem"
 msgid "Making it easy to write to the politicians who represent you &ndash; even if you don’t know who they are."
 msgstr "Gwneud hi'n hawdd ysgrifennu at y gwleidyddion sy'n eich cynrychioli chi &ndash; hyd yn oed os nad ydych chi'n gwybod pwy ydyn nhw."
 
-#: templates/website/footer.php:16
+#: templates/website/footer.php:11
+msgid "Sign up to mySociety’s newsletter"
+msgstr "Tanysgrifio i gylchlythyr mySociety"
+
+#: templates/website/footer.php:14
+msgid "Your email address"
+msgstr "Eich cyfeiriad e-bost"
+
+#: templates/website/footer.php:17
+msgid "Subscribe"
+msgstr "Tanysgrifiwch"
+
+#: templates/website/footer.php:23
+msgid "Your data"
+msgstr "Eich data"
+
+#: templates/website/footer.php:31
 msgid "Contact Us"
 msgstr "Cysylltu â ni"
 
-#: templates/website/footer.php:17
+#: templates/website/footer.php:32
 msgid "Link To Us"
 msgstr "Ein dolen we"
 
-#: templates/website/footer.php:30
+#: templates/website/footer.php:45
 msgid "Support WriteToThem"
 msgstr "Cefnogi WriteToThem"
 
-#: templates/website/footer.php:31
+#: templates/website/footer.php:46
 msgid "We are a charity – donate today to invest in making UK politics more accessible. Even £5 goes a long way!"
 msgstr "Rydym yn elusen – cyfrannwch heddiw i fuddsoddi mewn gwneud gwleidyddiaeth y DU yn fwy hygyrch. Mae pob £5 o fudd!"
 
-#: templates/website/footer.php:46
+#: templates/website/footer.php:61
 #, php-format
 msgid "Built by <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-footer__org__logo--mysociety\">mySociety</a>"
 msgstr "Adeiladwyd gan <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-footer__org__logo--mysociety\">mySociety</a>"
 
-#: templates/website/footer.php:55
+#: templates/website/footer.php:70
 msgid "Data by GovEval"
 msgstr "Data gan GovEval"
 
-#: templates/website/footer.php:56
+#: templates/website/footer.php:71
 msgid "Hosted by Mythic Beasts"
 msgstr "Gwe-letya gan Mythic Beasts"
 
-#: templates/website/footer.php:63
+#: templates/website/footer.php:78
 #, php-format
 msgid "<a href=\"%s\">mySociety</a> is a registered charity in England and Wales (1076346) and a limited company (03277032). We provide commercial services through our wholly owned subsidiary <a href=\"%s\">SocietyWorks Ltd</a> (05798215)."
 msgstr "Mae <a href=\"%s\">mySociety</a> yn elusen gofrestredig yng Nghymru a Lloegr (1076346) ac yn gwmni cyfyngedig (03277032). Rydym yn darparu gwasanaethau masnachol drwy ein his-gwmni sy'n eiddo’n llwyr i<a href=\"%s\">SocietyWorks Ltd</a> (05798215)."
@@ -1848,6 +1864,10 @@ msgstr "Nid yw'n gwneud unrhyw wahaniaeth os ydych chi'n gadael gofod rhwng y dd
 #: templates/website/index-advice.html:50
 msgid "It makes no difference whether you use capital letters or not."
 msgstr "Nid yw'n gwneud unrhyw wahaniaeth a ydych chi'n defnyddio priflythrennau ai peidio."
+
+#: templates/website/index-index.html:10 templates/website/index-index.html:11
+msgid "A service from mySociety"
+msgstr "Gwasanaeth gan mySociety"
 
 #: templates/website/index-index.html:53
 msgid "You may also have representatives at other levels of government."
