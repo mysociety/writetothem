@@ -21,20 +21,28 @@ $links = array(
         '/about-contact' => _('Contact us')
 ) );
 
+$group = 0;
 foreach ($links as $title => $arr) {
 
-    print '<h5>' . _($title) . "</h5>\n";
+    // Each group is its own labelled navigation landmark, named by its heading,
+    // so screen-reader users can tell the three help menus apart.
+    $group++;
+    $heading_id = 'about-nav-' . $group;
+    print '<nav aria-labelledby="' . $heading_id . "\">\n";
+    print '<h5 id="' . $heading_id . '">' . _($title) . "</h5>\n";
     print "<ul class=\"side-nav\">\n";
     foreach ($arr as $uri=>$text) {
-        print '<li>';
-        if ($_SERVER['REQUEST_URI'] != $uri)
+        $current = $_SERVER['REQUEST_URI'] == $uri;
+        print '<li' . ($current ? ' aria-current="page"' : '') . '>';
+        if (!$current)
             print '<a href="' . $uri . '">';
         print $text;
-        if ($_SERVER['REQUEST_URI'] != $uri)
+        if (!$current)
             print '</a>';
         print "</li>\n";
     }
     print "</ul>\n";
+    print "</nav>\n";
 }
 
 ?>
