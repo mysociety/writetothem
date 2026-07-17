@@ -116,6 +116,15 @@ a, .side-nav li a {
 .side-nav li.heading {
     font-size: emCalc(18);
     font-weight: 600;
+
+    // The nested list of links under a group label 
+    > ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 1rem;
+        font-weight: 400;
+    }
 }
 
 p a,

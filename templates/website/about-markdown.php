@@ -70,8 +70,10 @@ class AboutParsedown extends Parsedown {
             $id = $this->slug($text);
         }
 
-        // Emit id="..." on the rendered <hN>, and remember the heading for the menu.
+        // Emit id="..." on the rendered <hN>, and remember the heading for the
+        // menu. tabindex="-1" makes the heading a focusable jump target.
         $Block['element']['attributes']['id'] = $id;
+        $Block['element']['attributes']['tabindex'] = '-1';
         $this->headings[] = ['level' => $level, 'text' => $text, 'id' => $id];
 
         return $Block;
@@ -211,21 +213,48 @@ function about_page_toc(array $headings, Parsedown $pd): string {
     // and level-3 headings as the linked items; "flat" pages (e.g.
     // about-constituency) have only level-2 headings, which become the links.
     $grouped = in_array(3, array_column($headings, 'level'), true);
-    $itemLevel = $grouped ? 3 : 2;
 
-    // <a name="top"> is the target for the "back to top" links (see below).
-    $out = '<a name="top"></a>' . "\n" . '<ul class="side-nav">' . "\n";
-    foreach ($headings as $h) {
-        // Render the label through Parsedown's inline parser so any markdown or
-        // entities in the heading text come out the same as in the body.
-        $label = $pd->line($h['text']);
-        if ($grouped && $h['level'] === 2) {
-            $out .= "<li class=\"heading\">$label</li>\n";  // unlinked group label
-        } elseif ($h['level'] === $itemLevel) {
-            $out .= '<li><a href="#' . $h['id'] . "\">$label</a></li>\n";
+    // The empty <span id="top"> is the target for the "back to top" links (see
+    // below); tabindex="-1" makes it focusable so keyboard/AT focus actually
+    // lands there when the link is followed, rather than only scrolling.
+    // The whole menu is a labelled <nav> landmark so it is announced as the
+    // page contents and kept distinct from the site's inter-page sidebar.
+    $out = '<span id="top" tabindex="-1"></span>' . "\n";
+    $out .= '<nav class="page-contents" aria-label="'
+        . htmlspecialchars(_('On this page'), ENT_QUOTES) . '">' . "\n";
+    $out .= '<ul class="side-nav">' . "\n";
+
+    if ($grouped) {
+        // Group label + a nested <ul> of its links, so the parent/child
+        // relationship is conveyed to assistive tech, not just by styling.
+        $open = false;
+        foreach ($headings as $h) {
+            $label = $pd->line($h['text']);
+            if ($h['level'] === 2) {
+                if ($open) {
+                    $out .= "</ul></li>\n";
+                }
+                $out .= '<li class="heading">' . $label . "\n<ul>\n";
+                $open = true;
+            } elseif ($h['level'] === 3) {
+                $out .= '<li><a href="#' . $h['id'] . "\">$label</a></li>\n";
+            }
+        }
+        if ($open) {
+            $out .= "</ul></li>\n";
+        }
+    } else {
+        foreach ($headings as $h) {
+            if ($h['level'] === 2) {
+                // Render the label through Parsedown's inline parser so any
+                // markdown or entities come out the same as in the body.
+                $label = $pd->line($h['text']);
+                $out .= '<li><a href="#' . $h['id'] . "\">$label</a></li>\n";
+            }
         }
     }
-    $out .= "</ul>\n";
+
+    $out .= "</ul>\n</nav>\n";
 
     return $out;
 }
@@ -236,7 +265,7 @@ function about_page_toc(array $headings, Parsedown $pd): string {
  * these pages used to carry. 
  */
 function about_insert_toplinks(string $html): string {
-    $top = '<p class="toplink"><a href="#top">top</a></p>' . "\n";
+    $top = '<p class="toplink"><a href="#top">' . _('Back to top') . '</a></p>' . "\n";
 
     // Split on <h2>/<h3> tags, keeping them (DELIM_CAPTURE). The result
     // alternates body/heading/body/heading/...: even indexes are the text
