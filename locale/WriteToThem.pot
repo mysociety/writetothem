@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-17 08:47+0000\n"
+"POT-Creation-Date: 2026-07-17 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -576,7 +576,7 @@ msgstr ""
 msgid "Opens in a new window"
 msgstr ""
 
-#: templates/common_header.php:138 templates/website/footer.php:15
+#: templates/common_header.php:138 templates/website/footer.php:30
 msgid "Help"
 msgstr ""
 
@@ -954,7 +954,7 @@ msgstr ""
 msgid "About us"
 msgstr ""
 
-#: templates/website/about-sidebar.html:20 templates/website/footer.php:20
+#: templates/website/about-sidebar.html:20 templates/website/footer.php:35
 msgid "Copyright"
 msgstr ""
 
@@ -1035,7 +1035,7 @@ msgid ""
 "place."
 msgstr ""
 
-#: templates/website/can-you-help.html:7 templates/website/footer.php:32
+#: templates/website/can-you-help.html:7 templates/website/footer.php:47
 msgid "Donate now"
 msgstr ""
 
@@ -1253,7 +1253,7 @@ msgid ""
 msgstr ""
 
 #: templates/website/cy/about-qa.html:60 templates/website/cy/about-qa.html:426
-#: templates/website/footer.php:21
+#: templates/website/footer.php:36
 msgid "Privacy"
 msgstr ""
 
@@ -2105,40 +2105,56 @@ msgid ""
 "you don’t know who they are."
 msgstr ""
 
-#: templates/website/footer.php:16
-msgid "Contact Us"
+#: templates/website/footer.php:11
+msgid "Sign up to mySociety’s newsletter"
+msgstr ""
+
+#: templates/website/footer.php:14
+msgid "Your email address"
 msgstr ""
 
 #: templates/website/footer.php:17
-msgid "Link To Us"
+msgid "Subscribe"
 msgstr ""
 
-#: templates/website/footer.php:30
-msgid "Support WriteToThem"
+#: templates/website/footer.php:23
+msgid "Your data"
 msgstr ""
 
 #: templates/website/footer.php:31
+msgid "Contact Us"
+msgstr ""
+
+#: templates/website/footer.php:32
+msgid "Link To Us"
+msgstr ""
+
+#: templates/website/footer.php:45
+msgid "Support WriteToThem"
+msgstr ""
+
+#: templates/website/footer.php:46
 msgid ""
 "We are a charity – donate today to invest in making UK politics more "
 "accessible. Even £5 goes a long way!"
 msgstr ""
 
-#: templates/website/footer.php:46
+#: templates/website/footer.php:61
 #, php-format
 msgid ""
 "Built by <a href=\"%s\" class=\"mysoc-footer__org__logo mysoc-"
 "footer__org__logo--mysociety\">mySociety</a>"
 msgstr ""
 
-#: templates/website/footer.php:55
+#: templates/website/footer.php:70
 msgid "Data by GovEval"
 msgstr ""
 
-#: templates/website/footer.php:56
+#: templates/website/footer.php:71
 msgid "Hosted by Mythic Beasts"
 msgstr ""
 
-#: templates/website/footer.php:63
+#: templates/website/footer.php:78
 #, php-format
 msgid ""
 "<a href=\"%s\">mySociety</a> is a registered charity in England and Wales "
@@ -2201,6 +2217,10 @@ msgstr ""
 
 #: templates/website/index-advice.html:50
 msgid "It makes no difference whether you use capital letters or not."
+msgstr ""
+
+#: templates/website/index-index.html:10 templates/website/index-index.html:11
+msgid "A service from mySociety"
 msgstr ""
 
 #: templates/website/index-index.html:53
