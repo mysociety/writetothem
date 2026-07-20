@@ -339,9 +339,13 @@ $colour_violet: #a94ca6;
         min-height: 52px;
         margin-bottom: emCalc(20);
 
-        .red {
+        .button.red {
             // Avoid the clashing colours between blue and red
             border-color: #fff;
+            display: none;
+            @media #{$small} {
+                display:inline-block;
+            }
         }
 
         @media #{$small} {

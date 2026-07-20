@@ -140,7 +140,7 @@ if (isset($values['cobrand']))
                     <a href="/" class="wtt-logo"><img src="/static/img/logo.png" style="max-width:250px;max-height:100%;" alt="WriteToThem"></a>
                     <div class="header-content">
                         <a href="/about-qa" target="_blank" class="header-link" title="<?= _('Opens in a new window') ?>"><?= _('Help') ?></a>
-                        <a href="https://www.mysociety.org/donate/support-writetothem-and-mysociety/?utm_source=writetothem.com&amp;utm_content=header+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_header" class="button red small radius">Donate now</a>
+                        <a href="https://www.mysociety.org/donate/support-writetothem-and-mysociety/?utm_source=writetothem.com&amp;utm_content=header+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_header" class="button red small radius">Donate</a>
                     </div>
                 </div>
             </div>
