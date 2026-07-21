@@ -313,6 +313,27 @@ function general_write_all_url($va_type, $fyr_postcode){
                                     'cocode', $cocode));
 }
 
+// A link to the relevant devolved-body section of the representative's
+// TheyWorkForYou postcode page. Only the Senedd, Scottish Parliament and
+// Northern Ireland Assembly have such sections, so returns '' for any other
+// voting area type.
+function twfy_postcode_link(string $va_type, string $rep_name_plural): string {
+    global $fyr_postcode;
+    $anchors = array(
+        'WAC' => 'senedd',   # Senedd
+        'SPC' => 'scotland', # Scottish Parliament
+        'SPE' => 'scotland',
+        'NIE' => 'ni',       # Northern Ireland Assembly
+    );
+    if (!array_key_exists($va_type, $anchors)) {
+        return '';
+    }
+    $url = 'https://www.theyworkforyou.com/postcode/?pc='
+        . urlencode($fyr_postcode) . '#' . $anchors[$va_type];
+    $text = sprintf(_('View your %s on TheyWorkForYou'), $rep_name_plural);
+    return '<p><a href="' . htmlspecialchars($url) . '">' . $text . '</a></p>';
+}
+
 function general_write_rep_url($rep_specificid, $fyr_postcode){
     global $cocode;
     return htmlspecialchars(url_new('/message-type', true,
@@ -430,6 +451,8 @@ function display_reps_one_type($va_type, $va_area, $representatives, $rep_count)
         $col_after .= '<p><a href="corrections?id='.$va_area['id'].'">' . _('Correct a mistake in this list') . '</a></p>';
     }
 
+    $col_after .= twfy_postcode_link($va_type, $va_area['rep_name_plural']);
+
     return array($text, $col_after);
 }
 
@@ -473,6 +496,11 @@ Only <strong>one</strong> MSP is allowed to help you at a time';
         // $text .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
         $col_after .= '<p>' . write_all_link($va_types[1], $va_area[1]['rep_name_plural']) . '</p>';
     }
+
+    // The Scottish Parliament section covers both constituency and regional
+    // MSPs on a single TheyWorkForYou postcode page.
+    $col_after .= twfy_postcode_link($va_types[0], $va_area[0]['rep_name_plural']);
+
     return array($text, $col_after);
 }
 
