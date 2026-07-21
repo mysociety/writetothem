@@ -113,9 +113,10 @@ function render_md_parts(string $filename, string $subdir, array $context = []):
 
     // Substitute {{KEY}} placeholders in the raw markdown, before parsing, so a
     // value can appear anywhere (text, an href, ...) and be parsed in context.
+    // Values need to be escaped elsewhere if required. 
     $text = file_get_contents($path);
     foreach ($context as $key => $value) {
-        $text = str_replace('{{' . $key . '}}', htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $text);
+        $text = str_replace('{{' . $key . '}}', $value, $text);
     }
 
     $pd = new AboutParsedown();
@@ -187,7 +188,8 @@ function linktous_builder_context(): array {
 function about_md_context(string $md_page): array {
     $context = [];
     if ($md_page === 'about-qa') {
-        $context['CONTACT_EMAIL'] = OPTION_CONTACT_EMAIL;
+        $context['CONTACT_EMAIL'] = htmlspecialchars(
+            OPTION_CONTACT_EMAIL, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
     if ($md_page === "about-linktous") {
         $context += linktous_builder_context();
