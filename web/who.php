@@ -360,6 +360,10 @@ function col_blurb($va_types, $va_area, $eb_area, $main_rep_count, $rep_count) {
     }
     $col_blurb .= "</p>";
     $col_blurb .= "<p>" . $eb_area['description'] . "</p>";
+    if ($main_rep_count > 1) {
+        $col_blurb .= '<p><a class="fancybox" href="about-qa#multireps" target="_blank">'
+            . _('Not sure which one to write to?') . '</a></p>';
+    }
     return $col_blurb;
 }
 
