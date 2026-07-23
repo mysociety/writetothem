@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-23 07:40+0000\n"
+"POT-Creation-Date: 2026-07-23 09:38+0000\n"
 "PO-Revision-Date: 2023-03-20 17:59-0000\n"
 "Last-Translator: mySociety\n"
 "Language-Team: mySociety\n"
@@ -266,9 +266,7 @@ msgstr "Cynulliad Gogledd Iwerddon"
 msgid "House of Commons"
 msgstr "Tŷ'r Cyffredin"
 
-#: phplib/votingarea.php:218 templates/website/about-page.php:51
-#: templates/website/about-page.php:52 templates/website/about-sidebar.html:9
-#: web/who.php:111 web/who.php:496
+#: phplib/votingarea.php:218 web/who.php:111 web/who.php:499
 msgid "House of Lords"
 msgstr "Tŷ'r Arglwyddi"
 
@@ -676,8 +674,8 @@ msgid "Back to top"
 msgstr ""
 
 #: templates/website/about-page.php:18 templates/website/about-page.php:19
-msgid "Who are you, and why are you doing this?"
-msgstr "Yna pwy ydych chi, a pham ydych chi'n gwneud hyn?"
+msgid "About WriteToThem and mySociety"
+msgstr "Ynglŷn â WriteToThem"
 
 #: templates/website/about-page.php:22
 msgid "Using WriteToThem to run a campaign"
@@ -687,83 +685,113 @@ msgstr ""
 msgid "Running a campaign"
 msgstr ""
 
-#: templates/website/about-page.php:26 templates/website/about-sidebar.html:14
-msgid "Guidelines for campaigning"
-msgstr ""
-
-#: templates/website/about-page.php:27
-msgid "Campaigning: terms and conditions"
+#: templates/website/about-page.php:26 templates/website/about-page.php:27
+#: templates/website/about-sidebar.html:19
+#: templates/website/write-write.html:177
+msgid "Building big impact locally"
 msgstr ""
 
 #: templates/website/about-page.php:30 templates/website/about-page.php:31
-#: templates/website/about-sidebar.html:7 web/index.php:89
-msgid "What postcode should I use?"
-msgstr "Pa god post ddylwn i ei ddefnyddio?"
+#: templates/website/about-sidebar.html:20
+#: templates/website/write-write.html:176
+msgid "Evidence-informed campaigning"
+msgstr ""
 
-#: templates/website/about-page.php:34 templates/website/about-page.php:35
-#: templates/website/about-sidebar.html:16
-msgid "WriteToThem for your website"
+#: templates/website/about-page.php:34 templates/website/about-sidebar.html:21
+msgid "Guidelines for campaigning"
+msgstr ""
+
+#: templates/website/about-page.php:35
+msgid "Campaigning: terms and conditions"
 msgstr ""
 
 #: templates/website/about-page.php:38 templates/website/about-page.php:39
-msgid "Copyright information"
+#: templates/website/about-sidebar.html:13
+#: templates/website/write-write.html:175
+msgid "Communicating for change"
 msgstr ""
 
 #: templates/website/about-page.php:42 templates/website/about-page.php:43
+msgid "What can your representative do for you?"
+msgstr "Beth all eich cynrychiolydd ei wneud i chi?"
+
+#: templates/website/about-page.php:46 templates/website/about-page.php:47
+#: templates/website/about-sidebar.html:8 web/index.php:89
+msgid "What postcode should I use?"
+msgstr "Pa god post ddylwn i ei ddefnyddio?"
+
+#: templates/website/about-page.php:50 templates/website/about-page.php:51
+msgid "Copyright information"
+msgstr ""
+
+#: templates/website/about-page.php:54 templates/website/about-page.php:55
 msgid "How to link to us"
 msgstr ""
 
-#: templates/website/about-page.php:47 templates/website/about-page.php:48
+#: templates/website/about-page.php:59 templates/website/about-page.php:60
 #: templates/website/about-sidebar.html:6
 msgid "Questions and answers"
 msgstr "Cwestiynau ac atebion"
 
-#: templates/website/about-page.php:55 templates/website/about-page.php:56
-#: templates/website/footer.php:36
+#: templates/website/about-page.php:63 templates/website/about-page.php:64
+#: templates/website/about-sidebar.html:9
+msgid "Writing to the House of Lords"
+msgstr ""
+
+#: templates/website/about-page.php:67 templates/website/about-page.php:68
+#: templates/website/about-sidebar.html:27 templates/website/footer.php:36
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: templates/website/about-page.php:59 templates/website/about-page.php:60
+#: templates/website/about-page.php:71 templates/website/about-page.php:72
 msgid "British Overseas Territories and Crown Dependencies"
 msgstr ""
 
-#: templates/website/about-page.php:63 templates/website/about-page.php:64
-msgid "What people said about WriteToThem.com"
+#: templates/website/about-page.php:75
+msgid "WriteToThem: successes and impact"
 msgstr ""
 
-#: templates/website/about-page.php:72
+#: templates/website/about-page.php:76 templates/website/about-sidebar.html:15
+msgid "Successes and impact"
+msgstr ""
+
+#: templates/website/about-page.php:84
 msgid "Page not found."
 msgstr ""
 
-#: templates/website/about-sidebar.html:8
+#: templates/website/about-sidebar.html:7
 #: templates/website/about-yourrep.html:5
 #: templates/website/about-yourrep.html:41
 msgid "Who should I write to?"
 msgstr "At bwy ddylwn i ysgrifennu?"
 
 #: templates/website/about-sidebar.html:10
-msgid "Does it work?"
+msgid "Overseas territories &amp; Crown Dependencies"
 msgstr ""
 
-#: templates/website/about-sidebar.html:13
-msgid "Overview"
+#: templates/website/about-sidebar.html:14
+msgid "What your representative can do"
+msgstr "Beth all eich cynrychiolydd ei wneud i chi"
+
+#: templates/website/about-sidebar.html:18
+msgid "How to run a campaign"
 msgstr ""
 
-#: templates/website/about-sidebar.html:15
+#: templates/website/about-sidebar.html:22
 msgid "Link to us"
 msgstr ""
 
-#: templates/website/about-sidebar.html:19
+#: templates/website/about-sidebar.html:25
 msgid "About us"
 msgstr ""
 
-#: templates/website/about-sidebar.html:20 templates/website/footer.php:35
-msgid "Copyright"
-msgstr ""
-
-#: templates/website/about-sidebar.html:21
+#: templates/website/about-sidebar.html:26
 msgid "Contact us"
 msgstr "Cysylltu â ni"
+
+#: templates/website/about-sidebar.html:28 templates/website/footer.php:35
+msgid "Copyright"
+msgstr ""
 
 #: templates/website/about-yourrep.html:52
 #, php-format
@@ -1403,18 +1431,26 @@ msgstr "Rhowch eich caniatâd i'ch cynrychiolydd gysylltu ag unrhyw drydydd part
 msgid "Let your representative know what outcome you are hoping for."
 msgstr "Rhowch wybod i'ch cynrychiolydd pa ganlyniad rydych chi'n gobeithio amdano."
 
-#
 #: templates/website/write-write.html:166
+msgid "What your representative can do for you"
+msgstr "Beth all eich cynrychiolydd ei wneud i chi"
+
+#
+#: templates/website/write-write.html:169
 msgid "Campaign tips"
 msgstr "Ymgyrchu"
 
-#: templates/website/write-write.html:168
+#: templates/website/write-write.html:171
 msgid "Explain why this issue matters to you personally &ndash; personal stories are more effective than form letters."
 msgstr "Esboniwch pam mae'r mater hwn yn bwysig i chi yn bersonol &ndash; mae straeon personol yn fwy effeithiol na llythyrau ffurflen."
 
-#: templates/website/write-write.html:169
+#: templates/website/write-write.html:172
 msgid "Be specific about what action you would like your representative to take."
 msgstr "Byddwch yn benodol ynglŷn â pha gamau yr hoffech i'ch cynrychiolydd eu cymryd."
+
+#: templates/website/write-write.html:195
+msgid "Further guidance"
+msgstr "Darllenwch y canllawiau llawn"
 
 #: templates/website/yourrep/am.html:3
 msgid ""
@@ -1671,87 +1707,90 @@ msgstr "Eich %s"
 #. soon as we can after the election. For more information, see
 #. <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
 #. } else {
-#: web/who.php:80 web/who.php:525
+#: web/who.php:80 web/who.php:528
 msgid "<p>There’s an upcoming election.  We’ll be adding your new representative as soon as we can after the election.</p>"
 msgstr "<p>Mae yna etholiad ar y gweill. Byddwn yn ychwanegu eich cynrychiolydd newydd cyn gynted ag y gallwn ar ôl yr etholiad.</p>"
 
-#: web/who.php:112 web/who.php:497
+#: web/who.php:112 web/who.php:500
 msgid "Lords are not elected by you, but they still get to vote in Parliament just like your MP. You may want to write to a Lord (<a href=\"about-lords\">more info</a>)."
 msgstr "Nid yw Arglwyddi yn cael eu hethol gennych chi, ond serch hynny maent yn pleidleisio yn y Senedd yn union fel eich AS. Efallai yr hoffech ysgrifennu at Arglwydd (<a href=\"about-lords\">mwy o wybodaeth</a>)."
 
-#: web/who.php:113 web/who.php:498
+#: web/who.php:113 web/who.php:501
 msgid "Write to a Lord"
 msgstr "Ysgrifennu at Arglwydd"
 
-#. $rep_desc_plural is already localised (see type_area()), so the noun
-#. is dropped into the translated frame as-is.
-#: web/who.php:297
+#. $rep_desc_plural is already localised
+#: web/who.php:296
 #, php-format
 msgid "Write to all your %s"
 msgstr "Ysgrifennu at eich holl %s"
 
-#: web/who.php:332
+#: web/who.php:331
 msgid "Your {rep_count} {area_name} {rep_name} represent you on the {chamber_name}."
 msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi ar y {chamber_name}."
 
-#: web/who.php:334
+#: web/who.php:333
 msgid "Your {rep_count} {area_name} {rep_name} represent you in the {chamber_name}."
 msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi yn {chamber_name}."
 
-#: web/who.php:336
+#: web/who.php:335
 msgid "Your {rep_count} {area_name} {rep_name} represent you on {chamber_name}."
 msgstr "Mae eich {rep_count} {rep_name} {area_name} yn eich cynrychioli chi ar {chamber_name}."
 
-#: web/who.php:346
+#: web/who.php:345
 msgid "Your {area_name} {rep_name} represents you on the {chamber_name}."
 msgstr "Mae eich {rep_name} {area_name} yn eich cynrychioli chi ar y {chamber_name}."
 
-#: web/who.php:348
+#: web/who.php:347
 msgid "Your {area_name} {rep_name} represents you in the {chamber_name}."
 msgstr "Mae eich {rep_name} {area_name}  yn eich cynrychioli chi ar yn {chamber_name}."
 
-#: web/who.php:350
+#: web/who.php:349
 msgid "Your {area_name} {rep_name} represents you on {chamber_name}."
 msgstr "Mae eich {rep_name} {area_name}  yn eich cynrychioli chi ar {chamber_name}."
 
-#: web/who.php:360
+#: web/who.php:359
 #, php-format
 msgid " Most %s are not paid a salary, but get a basic allowance for the work they do."
 msgstr "Nid yw'r rhan fwyaf o %s yn cael cyflog, ond yn derbyn lwfans sylfaenol am y gwaith maen nhw'n ei wneud."
 
+#: web/who.php:365
+msgid "Not sure which one to write to?"
+msgstr "Ddim yn siŵr pwy i gysylltu â nhw?"
+
 #. $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
-#: web/who.php:427
+#: web/who.php:430
 msgid "Correct a mistake in this list"
 msgstr "Cywiro gwall yn y rhestr hon"
 
-#: web/who.php:449
+#: web/who.php:452
 #, php-format
 msgid "%d %s %s %s also represent you"
 msgstr "Mae %d %s %s %s hefyd yn eich cynrychioli chi"
 
-#: web/who.php:451
+#: web/who.php:454
 #, php-format
 msgid "One %s %s %s also represents you"
 msgstr "Mae un %s %s %s hefyd yn eich cynrychioli chi"
 
-#: web/who.php:490
+#: web/who.php:493
 #, php-format
 msgid "See %s’s voting record and speeches at TheyWorkForYou"
 msgstr "Gweld cofnod pleidleisio ac areithiau %s yn TheyWorkForYou"
 
-#: web/who.php:499
+#: web/who.php:502
 msgid "<div class=\"rep-more\">"
 msgstr "<div class=\"rep-more\">"
 
-#: web/who.php:514
+#: web/who.php:517
 msgid "<p>There have been boundary changes at the last election that means we can’t yet say who your representative is. We hope to get our boundary database updated as soon as we can, but at the moment we have no definite time of completion.</p>"
 msgstr "<p>Bu newidiadau i'r ffiniau yn yr etholiad diwethaf sy'n golygu na allwn ddweud eto pwy yw eich cynrychiolydd. Rydym yn gobeithio diweddaru ein cronfa ddata ffiniau cyn gynted ag y gallwn, ond ar hyn o bryd nid oes gennym dyddiad pendant o ran cwblhau hynny.</p>"
 
-#: web/who.php:516
+#: web/who.php:519
 msgid "<p>Due to the recent election, we don’t yet have details for this representative. We generally rely on data from external sources, and will be updating as soon as we can, but at the moment we have no definite time of completion.</p>"
 msgstr "<p>Oherwydd yr etholiad diweddar, nid oes gennym fanylion am y cynrychiolydd yma eto. Yn gyffredinol, rydym yn dibynnu ar ddata o ffynonellau allanol, a byddwn yn diweddaru cyn gynted ag y gallwn, ond ar hyn o bryd nid oes gennym dyddiad pendant o ran cwblhau hynny.<p>"
 
-#: web/who.php:528
+#: web/who.php:531
 msgid "Representative details are not available for an unknown reason."
 msgstr "Nid yw manylion y cynrychiolydd ar gael am reswm anhysbys."
 
@@ -1967,8 +2006,8 @@ msgstr "Bu gwall anghysondeb. Ymddiheuriadau am hyn, <a href=\"%s\">dechreuwch e
 msgid "Sorry, an election is forthcoming or has recently happened here."
 msgstr "Mae'n ddrwg gennym, mae etholiad ar y gweill neu wedi digwydd yn ddiweddar yma."
 
-#~ msgid "About WriteToThem"
-#~ msgstr "Ynglŷn â WriteToThem"
+#~ msgid "Who are you, and why are you doing this?"
+#~ msgstr "Yna pwy ydych chi, a pham ydych chi'n gwneud hyn?"
 
 #~ msgid "Is this a government website?"
 #~ msgstr "A yw hon yn wefan y llywodraeth?"
