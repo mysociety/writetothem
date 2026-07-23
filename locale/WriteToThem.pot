@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 15:05+0000\n"
+"POT-Creation-Date: 2026-07-23 07:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,9 +274,9 @@ msgstr ""
 msgid "House of Commons"
 msgstr ""
 
-#: phplib/votingarea.php:218 templates/website/about-page.php:50
-#: templates/website/about-page.php:51 templates/website/about-sidebar.html:9
-#: web/who.php:111 web/who.php:501
+#: phplib/votingarea.php:218 templates/website/about-page.php:51
+#: templates/website/about-page.php:52 templates/website/about-sidebar.html:9
+#: web/who.php:111 web/who.php:496
 msgid "House of Lords"
 msgstr ""
 
@@ -699,11 +699,11 @@ msgstr ""
 msgid "Read the full guidance"
 msgstr ""
 
-#: templates/website/about-markdown.php:224
+#: templates/website/about-markdown.php:249
 msgid "On this page"
 msgstr ""
 
-#: templates/website/about-markdown.php:268
+#: templates/website/about-markdown.php:293
 msgid "Back to top"
 msgstr ""
 
@@ -745,25 +745,25 @@ msgstr ""
 msgid "How to link to us"
 msgstr ""
 
-#: templates/website/about-page.php:46 templates/website/about-page.php:47
+#: templates/website/about-page.php:47 templates/website/about-page.php:48
 #: templates/website/about-sidebar.html:6
 msgid "Questions and answers"
 msgstr ""
 
-#: templates/website/about-page.php:54 templates/website/about-page.php:55
+#: templates/website/about-page.php:55 templates/website/about-page.php:56
 #: templates/website/footer.php:36
 msgid "Privacy"
 msgstr ""
 
-#: templates/website/about-page.php:58 templates/website/about-page.php:59
+#: templates/website/about-page.php:59 templates/website/about-page.php:60
 msgid "British Overseas Territories and Crown Dependencies"
 msgstr ""
 
-#: templates/website/about-page.php:62 templates/website/about-page.php:63
+#: templates/website/about-page.php:63 templates/website/about-page.php:64
 msgid "What people said about WriteToThem.com"
 msgstr ""
 
-#: templates/website/about-page.php:71
+#: templates/website/about-page.php:72
 msgid "Page not found."
 msgstr ""
 
@@ -1837,30 +1837,30 @@ msgstr ""
 msgid "Postcode that's been typed in"
 msgstr ""
 
-#: web/index.php:278
+#: web/index.php:280
 msgid ""
 "Sorry, we need your complete UK postcode to identify your elected "
 "representatives."
 msgstr ""
 
-#: web/index.php:285
+#: web/index.php:287
 msgid "We’re not quite sure why, but we can’t seem to recognise your postcode."
 msgstr ""
 
-#: web/index.php:301
+#: web/index.php:303
 msgid ""
 "Email your Councillor, MP, MSP, MS, MLA or London Assembly Member for free"
 msgstr ""
 
-#: web/index.php:304
+#: web/index.php:306
 msgid "Get the right message to the right place."
 msgstr ""
 
-#: web/index.php:305
+#: web/index.php:307
 msgid "Write to your politicians, national or local, for free."
 msgstr ""
 
-#: web/index.php:322
+#: web/index.php:324
 #, php-format
 msgid "Write to your %s"
 msgstr ""
@@ -1887,55 +1887,58 @@ msgstr ""
 #. soon as we can after the election. For more information, see
 #. <a href='http://www.parliament.uk/get-involved/contact-your-mp/contacting-your-mp/'>Parliament’s website</a>.</p>");
 #. } else {
-#: web/who.php:80 web/who.php:530
+#: web/who.php:80 web/who.php:525
 msgid ""
 "<p>There’s an upcoming election.  We’ll be adding your new representative as "
 "soon as we can after the election.</p>"
 msgstr ""
 
-#: web/who.php:112 web/who.php:502
+#: web/who.php:112 web/who.php:497
 msgid ""
 "Lords are not elected by you, but they still get to vote in Parliament just "
 "like your MP. You may want to write to a Lord (<a href=\"about-lords\">more "
 "info</a>)."
 msgstr ""
 
-#: web/who.php:113 web/who.php:503
+#: web/who.php:113 web/who.php:498
 msgid "Write to a Lord"
 msgstr ""
 
-#: web/who.php:301
-msgid "Write to all your regional MSs"
+#. $rep_desc_plural is already localised (see type_area()), so the noun
+#. is dropped into the translated frame as-is.
+#: web/who.php:297
+#, php-format
+msgid "Write to all your %s"
 msgstr ""
 
-#: web/who.php:337
+#: web/who.php:332
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you on the {chamber_name}."
 msgstr ""
 
-#: web/who.php:339
+#: web/who.php:334
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you in the {chamber_name}."
 msgstr ""
 
-#: web/who.php:341
+#: web/who.php:336
 msgid ""
 "Your {rep_count} {area_name} {rep_name} represent you on {chamber_name}."
 msgstr ""
 
-#: web/who.php:351
+#: web/who.php:346
 msgid "Your {area_name} {rep_name} represents you on the {chamber_name}."
 msgstr ""
 
-#: web/who.php:353
+#: web/who.php:348
 msgid "Your {area_name} {rep_name} represents you in the {chamber_name}."
 msgstr ""
 
-#: web/who.php:355
+#: web/who.php:350
 msgid "Your {area_name} {rep_name} represents you on {chamber_name}."
 msgstr ""
 
-#: web/who.php:365
+#: web/who.php:360
 #, php-format
 msgid ""
 " Most %s are not paid a salary, but get a basic allowance for the work they "
@@ -1943,30 +1946,30 @@ msgid ""
 msgstr ""
 
 #. $text .= '<p><small><a href="corrections?id='.$va_area['id'].'">Correct a mistake in this list</a></small></p>';
-#: web/who.php:432
+#: web/who.php:427
 msgid "Correct a mistake in this list"
 msgstr ""
 
-#: web/who.php:454
+#: web/who.php:449
 #, php-format
 msgid "%d %s %s %s also represent you"
 msgstr ""
 
-#: web/who.php:456
+#: web/who.php:451
 #, php-format
 msgid "One %s %s %s also represents you"
 msgstr ""
 
-#: web/who.php:495
+#: web/who.php:490
 #, php-format
 msgid "See %s’s voting record and speeches at TheyWorkForYou"
 msgstr ""
 
-#: web/who.php:504
+#: web/who.php:499
 msgid "<div class=\"rep-more\">"
 msgstr ""
 
-#: web/who.php:519
+#: web/who.php:514
 msgid ""
 "<p>There have been boundary changes at the last election that means we can’t "
 "yet say who your representative is. We hope to get our boundary database "
@@ -1974,7 +1977,7 @@ msgid ""
 "completion.</p>"
 msgstr ""
 
-#: web/who.php:521
+#: web/who.php:516
 msgid ""
 "<p>Due to the recent election, we don’t yet have details for this "
 "representative. We generally rely on data from external sources, and will be "
@@ -1982,7 +1985,7 @@ msgid ""
 "completion.</p>"
 msgstr ""
 
-#: web/who.php:533
+#: web/who.php:528
 msgid "Representative details are not available for an unknown reason."
 msgstr ""
 
