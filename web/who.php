@@ -289,17 +289,11 @@ function write_all_link($va_type, $rep_desc_plural) {
         $rep_desc_plural = 'London Assembly list members';
     if ($rep_desc_plural == 'MSPs')
         $rep_desc_plural = 'regional MSPs';
-    if ($rep_desc_plural == 'MSs') {
-        $rep_desc_plural = 'regional MSs';
-    }
     $url = general_write_all_url($va_type, $fyr_postcode);
     $a = cobrand_write_all_link($cobrand, $url, $rep_desc_plural, $cocode);
     if (!$a) {
-        // only translate things for the Welsh assembly currently
-        $text = 'Write to all your ' . $rep_desc_plural;
-        if ($rep_desc_plural == 'regional MSs') {
-            $text = _('Write to all your regional MSs');
-        }
+        // $rep_desc_plural is already localised
+        $text = sprintf(_('Write to all your %s'), $rep_desc_plural);
         $a = '<a href="' . cobrand_url($cobrand, $url, $cocode) . '">' . $text . '</a>';
         if ($va_type == 'SPE') {
             $a .= ' <small>(only use this option if you are writing to your MSPs about <strong>voting issues or other issues concerning matters in the Scottish Parliament</strong>. If you have a constituency matter or similar local or personal problem, please write to your constituency MSP above, or pick just one of your regional MSPs.)</small>';

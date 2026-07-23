@@ -42,9 +42,9 @@
             name: 'Cymraeg',
             langLabel: 'Iaith',
             writeTo: 'Ysgrifennwch at eich %s',
-            findYour: 'Find your %s', // to update
-            writeAll: 'Write to your representatives', // to update
-            findAll: 'Find out who represents you' // to update
+            findYour: 'Canfod eich %s',
+            writeAll: 'Ysgrifennwch at eich cynrychiolwyr',
+            findAll: "Darganfyddwch pwy sy'n eich cynrychioli"
         }
     };
 
@@ -58,7 +58,7 @@
         'MSs': "Aelodau'r Senedd",
         'MLAs': 'ACDau',
         'London Assembly Members': 'Aelodau Cynulliad Llundain',
-        'devolved representative': 'devolved representative' // to update
+        'devolved representative': "Cynrychiolydd o'r gwledydd datganoledig"
     };
 
     var CSS = `
