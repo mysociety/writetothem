@@ -1,6 +1,6 @@
-At the moment, **WriteToThem.com** only works for contacting UK representatives.
+ **WriteToThem.com** only works for contacting UK representatives.
 
-If you live in an Overseas Territory or Crown Dependency, we can, however, give you the following advice on how to contact your own representatives:
+If you live in an Overseas Territory or Crown Dependency, we can igive you the following advice on how to contact your own representatives:
 
 [TOC]
 
@@ -8,104 +8,98 @@ If you live in an Overseas Territory or Crown Dependency, we can, however, give 
 
 ### Isle of Man {#isleofman}
 
-Twenty-four members are elected to the [House of Keys](http://www.tynwald.org.im/about/hok/Pages/default.aspx), the lower house of the [Tynwald](http://www.tynwald.org.im/), the Parliament of the Isle of Man.
+Members of the House of Keys (MHKs) are elected to the lower house of [Tynwald](https://www.tynwald.org.im/), the Parliament of the Isle of Man.
 
-You can find their [contact details here](http://www.tynwald.org.im/memoff/member/Pages/default.aspx#HKMembers).
+You can find [contact details for all Members here](https://www.tynwald.org.im/members-officers/members), and look up which constituency you are in by entering your postcode at [gov.im/maps](https://www.gov.im/maps).
 
 ### Channel Islands {#channel}
 
-The **Jersey** legislature is the [States Assembly](http://www.statesassembly.gov.je/); if you need to contact your representative, here is a [list of its members](http://www.statesassembly.gov.je/members.asp), including email addresses.
+The **Jersey** legislature is the [States Assembly](https://statesassembly.je/); if you need to contact your representative, here is a [list of its members](https://statesassembly.je/members), including email addresses.
 
-The **Guernsey** legislature (which legally covers Alderney and Sark as the Bailiwick of Guernsey) is the States of Deliberation. Find its members, and their contact details, on a document which can be downloaded [here](http://www.gov.gg/states_members).
+The **Guernsey** legislature (which legally covers Alderney and Sark as the Bailiwick of Guernsey) is the States of Deliberation. Its site has [contact details for every Deputy](https://parliament.gg/members-and-constitution/deputies-and-representatives).
 
-**Alderney** is in many respects self-governing (apart from some issues such as policing, taxes, and social security) and has its own legislature; their members and contact details can be downloaded [from this page](http://www.alderney.gov.gg/article/4077/States-Members).
+**Alderney** has its own legislature; you can find [its members here](https://alderney.gov.gg/article/171208/Your-States-Members).
 
-Similarly, **Sark** also has its own legislature, Chief Pleas; its members can be found [here](http://www.gov.sark.gg/Conseillers.html), along with email addresses.
+**Sark** has its own legislature, Chief Pleas; its members are [listed here](https://sarkgov.co.uk/conseillers-%26-committees-1).
 
 ## British Overseas Territories
 
 ### Anguilla {#anguilla}
 
-Anguilla has a House of Assembly with eleven members – seven elected for a five-year term, two ex officio members, and two nominated members.
+Anguilla’s legislature is the [House of Assembly](https://houseofassembly.ai/).
 
-The Government of Anguilla’s website contains [contact details for the House of Assembly as a whole, and an email address for the Department Head](http://www.gov.ai/department.php?id=4&dept=26) — this should probably be your first point of contact.
+Its site has a [list of Members](https://houseofassembly.ai/members) — this should probably be your first point of contact.
 
 ### Bermuda {#bermuda}
 
 Bermuda’s Parliament held its first session in 1620, and consists of two houses: the elected House of Assembly, and an appointed Senate.
 
-Contact details are available on [the Government of Bermuda website](http://www.gov.bm/portal/server.pt?open=512&objID=897&&PageID=232433&mode=2).
+Contact details for both are available on [the Parliament of Bermuda website](https://www.parliament.bm/about/view/7).
 
 ### British Antarctic Territory {#antarctic}
 
-The British Antarctic Territory has no indigenous population, and therefore no elected representatives. It is administered by the Foreign and Commonwealth Office.
+The British Antarctic Territory has no indigenous population, and therefore no elected representatives. It is administered by the Foreign, Commonwealth & Development Office.
 
-You can read more at the website for the [British Antarctic Survey](http://www.antarctica.ac.uk/about_antarctica/geopolitical/bat.php).
+You can read more at the website for the [British Antarctic Survey](https://www.bas.ac.uk/).
 
 ### British Indian Ocean Territory {#biot}
 
-The British Indian Ocean Territory has no native inhabitants: it is home only to those currently stationed at the [US Navy Support Facility at Diego Garcia](http://www.cnic.navy.mil/regions/cnrj/installations/nsf_diego_garcia.html).
+The British Indian Ocean Territory has no native inhabitants: it is home only to those currently stationed at the [US Navy Support Facility at Diego Garcia](https://www.cnic.navy.mil/regions/cnrj/installations/nsf_diego_garcia.html).
 
 ### British Virgin Islands {#virgin}
 
-The British Virgin Islands have a Legislative Council with fifteen members – thirteen elected for a four-year term, one ex officio member and one speaker.
+The British Virgin Islands have a [House of Assembly](https://gov.vg/office-house-assembly), whose members are elected from thirteen districts.
 
-A list of cabinet members can be found [here](http://www.bvi.gov.vg/cabinet-members), along with contact details for their departments.
+The Office of the House of Assembly can be contacted by phone or by email at HOA@gov.vg; [details are on its page](https://gov.vg/office-house-assembly).
 
 ### Cayman Islands {#cayman}
 
-Daily administration of the Islands is conducted by the Executive Council, five of whose eight members are elected by the Assembly. Elections to the eighteen-seat Assembly are usually every four years.
+The Cayman Islands legislature is [Parliament](https://parliament.ky/), whose members are elected from constituencies across the Islands.
 
-Members of the Assembly are listed [on its website](http://www.legislativeassembly.ky/portal/page?_pageid=4242,7282274&_dad=portal&_schema=PORTAL), although it appears that the only [contact address is a centralised one](http://www.legislativeassembly.ky/portal/page?_pageid=4242,7282866&_dad=portal&_schema=PORTAL).
+Members are [listed on Parliament’s website](https://parliament.ky/members/), along with contact details.
 
 ### The Falkland Islands {#falklands}
 
-Eight representatives are elected to the Legislative Council of the Falkland Islands every four years, five from Stanley and three from the remainder of the Islands.
+Members are elected to the [Legislative Assembly of the Falkland Islands](https://www.assembly.gov.fk/) from Stanley and from the rest of the Islands.
 
-The Falkland Islands government’s web site is at [http://www.falklands.gov.fk/](http://www.falklands.gov.fk/); there’s a [list of the current members of the Council](http://www.falklands.gov.fk/self-governance/legislative/assembly-members/), with generic contact details at the foot of the page.
+The Falkland Islands government’s web site is at [https://www.falklands.gov.fk/](https://www.falklands.gov.fk/).
 
 ### Gibraltar {#gibraltar}
 
-There are fifteen members of Gibraltar’s legislature, the [House of Assembly](http://www.parliament.gi/), elected by popular vote.
+Members of [the Gibraltar Parliament](https://www.parliament.gi/) are elected by popular vote.
 
-The Gibraltarian Parliament’s site has a list of the [current members of the House](http://www.parliament.gi/history/composition-of-parliament) (at the bottom of the page).
-
-You can write to members at this address:
-
-<address>House of Assembly, 156 Main Street, Gibraltar</address>
-
-or contact them by phone on +350 78420, or by fax to +350 42849.
+The Parliament’s site has a list of the [current members](https://www.parliament.gi/history/composition-of-parliament) (at the bottom of the page).
 
 ### Montserrat {#montserrat}
 
-Montserrat has a Legislative Council of nine members, elected for a five-year term.
+Montserrat has a [Legislative Assembly](https://parliament.ms/), whose elected members also make up part of the Cabinet responsible for day-to-day administration.
 
-A Governor and an Executive Council (ExCo) are responsible for day-to-day administration. Members of the ExCo are partly drawn from the members of the Legislative Council.
-
-There is [a little information on the Montserrat government website](http://www.gov.ms/govinfo/), but no contact details.
+Its site has a [list of members](https://parliament.ms/parliamentarians/).
 
 ### Pitcairn Islands {#pitcairn}
 
-The Pitcairn Islands have an Island Council made up of ten members, four of whom are elected directly and serve one-year terms.
+The Pitcairn Islands have an Island Council, some of whose members are elected directly by the Islands’ small population.
 
-However, it does not have an online presence: perhaps with such a small population (a ten-member Council represents about a fifth of all residents), one is not required.
+The Council can be reached through the [contact page of the Pitcairn Islands government website](https://www.government.pn/contact).
 
 ### St Helena, Ascension Island, and Tristan da Cunha {#sthelena}
 
-The website of the government of **St Helena** is at [http://www.sainthelena.gov.sh/](http://www.sainthelena.gov.sh/).
+The website of the government of **St Helena** is at [https://www.sainthelena.gov.sh/](https://www.sainthelena.gov.sh/).
 
-Twelve members are elected to a Legislative Council every four years; a [list of the members of the Council](http://www.sainthelena.gov.sh/your-council/) includes contact details.
+Members are elected to a Legislative Council; a [list of the members of the Council](https://www.sainthelena.gov.sh/st-helena/government/legislative-council/your-council/) includes contact details.
 
-**Ascension Island** has [an elected Islands Council](http://www.ascension-island.gov.ac/island-council/) who can be contacted via that page.
+**Ascension Island** has [an elected Island Council](https://www.ascension.gov.ac/government/island-council) who can be contacted via that page.
 
-**Tristan da Cunha** is governed by an Administrator, appointed by the Governor of St Helena. The Administrator is advised by an Island Council of eight elected members, [listed here](http://www.tristandc.com/council.php). Some [general contact details can be found here](http://www.tristandc.com/links.php).
+**Tristan da Cunha** is governed by an Administrator, appointed by the Governor of St Helena. The Administrator is advised by an Island Council of elected members, [listed here](https://www.tristandc.com/council.php). Some [general contact details can be found here](https://www.tristandc.com/links.php).
 
 ### South Georgia and the South Sandwich Islands {#southgeorgia}
 
 South Georgia and the South Sandwich Islands are governed from the Falkland Islands by a Commissioner (who is also Governor of the Falklands).
 
-There are no elected representatives for the islands, as there are no permanent inhabitants.
+There are no elected representatives for the islands, as there are no permanent inhabitants, but the [government’s website is here](https://gov.gs/).
 
 ### Turks and Caicos Islands {#turksandcaicos}
 
-The [government website is here](http://www.gov.tc/), but at the time of writing, the contacts page is ‘under construction’.
+The Turks and Caicos Islands legislature is Parliament, which includes an elected [House of Assembly](https://www.gov.tc/hoa).
+
+Its members are listed on that page, and the [government website is here](https://www.gov.tc/).
